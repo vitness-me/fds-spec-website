@@ -1,0 +1,60 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "atlas.body.v1",
+  "canonical": {
+    "name": "FDS Body Atlas v1",
+    "slug": "body-atlas-v1",
+    "aliases": ["Standard Body Atlas"],
+    "localized": [
+      { "lang": "sr", "name": "Atlas tela v1" }
+    ]
+  },
+  "views": [
+    { "id": "anterior", "kind": "anterior", "asset": { "type": "svg", "uri": "https://cdn.example.com/atlas/body-v1/anterior.svg" } },
+    { "id": "posterior", "kind": "posterior", "asset": { "type": "svg", "uri": "https://cdn.example.com/atlas/body-v1/posterior.svg" } }
+  ],
+  "areas": [
+    {
+      "id": "thigh.left.anterior",
+      "canonical": {
+        "name": "Left Anterior Thigh",
+        "slug": "thigh-left-anterior",
+        "localized": [ { "lang": "sr", "name": "Levo prednje bedro" } ]
+      },
+      "bindings": [ { "viewId": "anterior", "selector": "#area-thigh-left" } ]
+    },
+    {
+      "id": "thigh.right.anterior",
+      "canonical": {
+        "name": "Right Anterior Thigh",
+        "slug": "thigh-right-anterior",
+        "localized": [ { "lang": "sr", "name": "Desno prednje bedro" } ]
+      },
+      "bindings": [ { "viewId": "anterior", "selector": "#area-thigh-right" } ]
+    },
+    {
+      "id": "back.lower.posterior",
+      "canonical": {
+        "name": "Lower Back",
+        "slug": "lower-back",
+        "localized": [ { "lang": "sr", "name": "Donja leđa" } ]
+      },
+      "bindings": [ { "viewId": "posterior", "selector": "#area-lower-back" } ]
+    },
+    {
+      "id": "back.mid.posterior",
+      "canonical": {
+        "name": "Mid Back",
+        "slug": "mid-back",
+        "localized": [ { "lang": "sr", "name": "Srednja leđa" } ]
+      },
+      "bindings": [ { "viewId": "posterior", "selector": "#area-mid-back" } ]
+    }
+  ],
+  "metadata": {
+    "createdAt": "2025-09-03T12:00:00Z",
+    "updatedAt": "2025-09-03T12:00:00Z",
+    "source": "vitness.atlas",
+    "status": "active"
+  }
+}

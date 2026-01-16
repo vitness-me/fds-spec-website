@@ -1,0 +1,44 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "eq.barbell",
+  "canonical": { 
+    "name": "Barbell", 
+    "slug": "barbell",
+    "description": "A metal bar with weights attached to both ends, essential equipment for free weight training",
+    "aliases": ["Olympic Bar"],
+    "abbreviation" : "BB",
+    "localized": [
+      { 
+        "lang": "sr", 
+        "name": "Sipka",
+        "description": "Метални штап са утегом на оба краја, основни део опреме за вежбање са слободним теговима"
+      }
+    ]
+  },
+  "classification": { 
+    "tags": ["free-weight"]
+  },
+  "media": [
+    {
+      "type": "image",
+      "uri": "https://example.com/barbell.jpg"
+    }
+  ],
+  "attributes": {
+    "standardWeight": "20kg",
+    "material": "steel",
+    "length": "7ft"
+  },
+  "extensions": {
+    "x:gym-management": {
+      "inventory": {"count": 5, "location": "free-weight-area"},
+      "maintenance": {"lastInspection": "2025-08-15", "nextDue": "2025-11-15"}
+    }
+  },
+  "metadata": {
+    "createdAt": "2025-01-01T00:00:00Z",
+    "updatedAt": "2025-09-03T00:00:00Z",
+    "source": "vitness.registry",
+    "status": "active"
+  }
+}

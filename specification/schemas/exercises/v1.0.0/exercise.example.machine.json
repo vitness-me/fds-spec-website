@@ -1,0 +1,42 @@
+{
+  "schemaVersion": "1.0.0",
+  "exerciseId": "00000000-0000-4000-8000-000000000003",
+  "canonical": {
+    "name": "Lat Pulldown",
+    "slug": "lat-pulldown",
+    "aliases": ["Cable Pulldown"],
+    "localized": [ { "lang": "en", "name": "Lat Pulldown" } ]
+  },
+  "classification": {
+    "exerciseType": "strength",
+    "movement": "pull-vertical",
+    "mechanics": "compound",
+    "force": "pull",
+    "level": "beginner",
+    "unilateral": false,
+    "kineticChain": "open",
+    "tags": ["machine", "upper-body"]
+  },
+  "targets": {
+    "primary": [ { "id": "mus.lats", "name": "Latissimus Dorsi", "categoryId": "cat.back" } ],
+    "secondary": [ { "id": "mus.biceps", "name": "Biceps", "categoryId": "cat.arms" } ]
+  },
+  "equipment": {
+    "required": [ { "id": "eq.latPulldown", "name": "Lat Pulldown Machine" } ]
+  },
+  "relations": [
+    { "type": "alternate", "targetId": "urn:slug:pull-up" }
+  ],
+  "metrics": {
+    "primary": { "type": "reps", "unit": "count" },
+    "secondary": [ { "type": "weight", "unit": "kg" } ]
+  },
+  "metadata": {
+    "createdAt": "2025-09-03T00:00:00Z",
+    "updatedAt": "2025-09-03T00:00:00Z",
+    "status": "active",
+    "source": "vitness.core",
+    "version": "1.0.0"
+  }
+}
+

@@ -1,0 +1,52 @@
+{
+  "schemaVersion": "1.0.0",
+  "exerciseId": "00000000-0000-4000-8000-000000000001",
+  "canonical": {
+    "name": "Treadmill Run",
+    "slug": "treadmill-run",
+    "aliases": ["TM Run"],
+    "localized": [
+      { "lang": "en", "name": "Treadmill Run" },
+      { "lang": "es", "name": "Cinta de correr" }
+    ]
+  },
+  "classification": {
+    "exerciseType": "cardio",
+    "movement": "locomotion",
+    "mechanics": "compound",
+    "force": "mixed",
+    "level": "beginner",
+    "unilateral": false,
+    "kineticChain": "mixed",
+    "tags": ["cardio", "aerobic"]
+  },
+  "targets": {
+    "primary": [
+      { "id": "mus.quadriceps", "name": "Quadriceps", "categoryId": "cat.legs" }
+    ],
+    "secondary": [
+      { "id": "mus.hamstrings", "name": "Hamstrings", "categoryId": "cat.legs" },
+      { "id": "mus.glutes", "name": "Glutes", "categoryId": "cat.legs" }
+    ]
+  },
+  "equipment": {
+    "required": [ { "id": "eq.treadmill", "name": "Treadmill" } ]
+  },
+  "metrics": {
+    "primary": { "type": "duration", "unit": "min" },
+    "secondary": [
+      { "type": "distance", "unit": "km" },
+      { "type": "pace", "unit": "min_per_km" },
+      { "type": "heartRate", "unit": "bpm" },
+      { "type": "calories", "unit": "kcal" }
+    ]
+  },
+  "metadata": {
+    "createdAt": "2025-09-03T00:00:00Z",
+    "updatedAt": "2025-09-03T00:00:00Z",
+    "status": "active",
+    "source": "vitness.core",
+    "version": "1.0.0"
+  }
+}
+

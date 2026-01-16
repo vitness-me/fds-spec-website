@@ -1,0 +1,93 @@
+{
+  "schemaVersion": "1.0.0",
+  "exerciseId": "550e8400-e29b-41d4-a716-446655440000",
+  "canonical": {
+    "name": "Back Squat",
+    "slug": "back-squat",
+    "description": "A compound lower body exercise that primarily targets the quadriceps, hamstrings, and glutes while engaging core stability",
+    "aliases": ["Barbell Back Squat", "BB Back Squat"],
+    "localized": [
+      { 
+        "lang": "sr", 
+        "name": "Сквот са шипком", 
+        "description": "Комплексна вежба за јачање ногу која активира квадрицепс, хамстринг и седални мишић" 
+      },
+      { 
+        "lang": "es", 
+        "name": "Sentadilla trasera", 
+        "description": "Ejercicio compuesto para el fortalecimiento de piernas que trabaja cuádriceps, isquiotibiales y glúteos",
+        "aliases": ["Sentadilla con barra atrás"] 
+      }
+    ]
+  },
+  "classification": {
+    "exerciseType": "strength",
+    "movement": "squat",
+    "mechanics": "compound",
+    "force": "push",
+    "level": "intermediate",
+    "unilateral": false,
+    "kineticChain": "closed",
+    "tags": ["bilateral","hipDominant"]
+  },
+  "targets": {
+    "primary": [
+      { "id": "mus.quadriceps", "name": "Quadriceps", "categoryId": "cat.legs" }
+    ],
+    "secondary": [
+      { "id": "mus.hamstrings", "name": "Hamstrings", "categoryId": "cat.legs" },
+      { "id": "mus.erectorSpinae", "name": "Erector Spinae", "categoryId": "cat.back" }
+    ]
+  },
+  "equipment": {
+    "required": [
+      { "id": "eq.barbell", "name": "Barbell" },
+      { "id": "eq.rack", "name": "Power Rack" }
+    ],
+    "optional": [
+      { "id": "eq.belt", "name": "Lifting Belt" }
+    ]
+  },
+  "constraints": {
+    "contraindications": ["Acute knee injury without professional clearance"],
+    "prerequisites": ["Bodyweight squat competency"],
+    "progressions": ["High-bar back squat", "Paused back squat"],
+    "regressions": ["Goblet squat", "Box squat"]
+  },
+  "relations": [
+    { "type": "alternate", "targetId": "urn:slug:front-squat" },
+    { "type": "regression", "targetId": "urn:slug:goblet-squat" }
+  ],
+  "metrics": {
+    "primary": { "type": "reps", "unit": "count" },
+    "secondary": [
+      { "type": "weight", "unit": "lb" },
+      { "type": "tempo", "unit": "count" },
+      { "type": "rpe", "unit": "count" }
+    ]
+  },
+  "media": [
+    {
+      "type": "video",
+      "uri": "https://cdn.example.com/exercises/back-squat.mp4",
+      "caption": "Side view, full-depth demo",
+      "license": "CC BY 4.0",
+      "attribution": "Vitness"
+    }
+  ],
+  "attributes": {
+    "x:vitness.barPathHint": "midfoot → midfoot",
+    "x:vitness.stanceWidth": "shoulder-width"
+  },
+  "extensions": {
+    "x:vitness.tempo": { "eccentric": 3, "isometric": 1, "concentric": 1 },
+    "x:vitness.rangeOfMotion": { "standard": "hip-crease below knee" }
+  },
+  "metadata": {
+    "createdAt": "2025-09-02T15:00:00Z",
+    "updatedAt": "2025-09-02T15:00:00Z",
+    "status": "active",
+    "source": "vitness.core",
+    "version": "1.0.0"
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "cat.legs",
+  "canonical": { 
+    "name": "Legs", 
+    "slug": "legs",
+    "description": "Lower body muscle category encompassing all leg muscles including quadriceps, hamstrings, glutes, and calves",
+    "localized": [
+      { 
+        "lang": "sr", 
+        "name": "Noge", 
+        "description": "Категорија мишића доњих екстремитета која обухвата све мишиће ногу укључујући квадрицепс, хамстринг, седалне и листове"
+      }
+    ]
+  },
+  "classification": {
+    "tags": ["major-group", "compound-movements"]
+  },
+  "media": [],
+  "attributes": {
+    "complexity": "high",
+    "trainingPriority": "essential"
+  },
+  "extensions": {
+    "x:programming": {
+      "weeklyVolume": "high",
+      "recoveryTime": "48-72hrs"
+    }
+  },
+  "metadata": {
+    "createdAt": "2025-01-01T00:00:00Z",
+    "updatedAt": "2025-09-03T00:00:00Z",
+    "source": "vitness.registry",
+    "status": "active"
+  }
+}

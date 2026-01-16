@@ -1,0 +1,45 @@
+{
+  "schemaVersion": "1.0.0",
+  "exerciseId": "00000000-0000-4000-8000-000000000004",
+  "canonical": {
+    "name": "Bulgarian Split Squat",
+    "slug": "bulgarian-split-squat",
+    "aliases": ["Rear-Foot-Elevated Split Squat"],
+    "localized": [ { "lang": "en", "name": "Bulgarian Split Squat" } ]
+  },
+  "classification": {
+    "exerciseType": "strength",
+    "movement": "lunge",
+    "mechanics": "compound",
+    "force": "push",
+    "level": "intermediate",
+    "unilateral": true,
+    "kineticChain": "closed",
+    "tags": ["lower-body", "unilateral"]
+  },
+  "targets": {
+    "primary": [ { "id": "mus.quadriceps", "name": "Quadriceps", "categoryId": "cat.legs" } ],
+    "secondary": [
+      { "id": "mus.glutes", "name": "Glutes", "categoryId": "cat.legs" },
+      { "id": "mus.hamstrings", "name": "Hamstrings", "categoryId": "cat.legs" }
+    ]
+  },
+  "equipment": {
+    "optional": [ { "id": "eq.dumbbell", "name": "Dumbbell" } ]
+  },
+  "relations": [
+    { "type": "unilateralPair", "targetId": "urn:slug:split-squat" }
+  ],
+  "metrics": {
+    "primary": { "type": "reps", "unit": "count" },
+    "secondary": [ { "type": "weight", "unit": "kg" } ]
+  },
+  "metadata": {
+    "createdAt": "2025-09-03T00:00:00Z",
+    "updatedAt": "2025-09-03T00:00:00Z",
+    "status": "active",
+    "source": "vitness.core",
+    "version": "1.0.0"
+  }
+}
+

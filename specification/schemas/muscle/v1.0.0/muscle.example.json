@@ -1,0 +1,48 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "mus.quadriceps",
+  "canonical": { 
+    "name": "Quadriceps", 
+    "slug": "quadriceps",
+    "description": "A large muscle group consisting of four muscles responsible for knee extension and hip flexion",
+    "aliases": ["Quads"],
+    "localized": [
+      { 
+        "lang": "sr", 
+        "name": "Kvadriceps",
+        "description": "Велика мишићна група која се састоји од четири мишића одговорних за испружање колена"
+      }
+    ]
+  },
+  "classification": { 
+    "categoryId": "cat.legs", 
+    "region": "lower-front", 
+    "laterality": "bilateral"
+  },
+  "heatmap": {
+    "atlasId": "atlas.body.v1",
+    "regions": [
+      { "areaId": "thigh.left.anterior", "weight": 1.0 },
+      { "areaId": "thigh.right.anterior", "weight": 1.0 }
+    ]
+  },
+  "media": [],
+  "attributes": {
+    "fiberType": "mixed",
+    "size": "large",
+    "function": "knee-extension"
+  },
+  "extensions": {
+    "x:anatomy": {
+      "origin": "Anterior superior iliac spine, femur",
+      "insertion": "Patella, tibial tuberosity",
+      "innervation": "Femoral nerve"
+    }
+  },
+  "metadata": {
+    "createdAt": "2025-01-01T00:00:00Z",
+    "updatedAt": "2025-09-03T00:00:00Z",
+    "source": "vitness.registry",
+    "status": "active"
+  }
+}

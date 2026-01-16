@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "mus.lats",
+  "canonical": {
+    "name": "Latissimus Dorsi",
+    "slug": "latissimus-dorsi",
+    "aliases": ["Lats"],
+    "localized": [ { "lang": "sr", "name": "Latissimus dorsi", "aliases": ["Latis"] } ]
+  },
+  "classification": {
+    "categoryId": "cat.back",
+    "region": "upper-back",
+    "laterality": "bilateral"
+  },
+  "heatmap": {
+    "atlasId": "atlas.body.v1",
+    "regions": [
+      { "areaId": "back.mid.posterior", "weight": 0.6 },
+      { "areaId": "back.lower.posterior", "weight": 0.8 }
+    ]
+  },
+  "media": [],
+  "metadata": {
+    "createdAt": "2025-09-03T12:00:00Z",
+    "updatedAt": "2025-09-03T12:00:00Z",
+    "source": "vitness.registry",
+    "status": "active"
+  }
+}
+
