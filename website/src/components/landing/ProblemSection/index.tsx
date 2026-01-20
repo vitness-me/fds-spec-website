@@ -1,25 +1,26 @@
 import React, { useState } from 'react';
+import { Lock, Wrench, Puzzle, Smartphone, ChevronDown, ChevronUp, X } from 'lucide-react';
 import styles from './styles.module.css';
 
 interface PainPoint {
-  icon: string;
+  icon: React.ReactNode;
   title: string;
   description: string;
 }
 
 const painPoints: PainPoint[] = [
   {
-    icon: '🔒',
+    icon: <Lock size={20} />,
     title: 'User Lock-in',
-    description: 'Users lose their workout history when switching apps. Years of progress data trapped in proprietary formats.',
+    description: 'Switch apps, lose everything. Years of PRs, workout history, and progress vanish. Data hostage in proprietary formats.',
   },
   {
-    icon: '🔧',
+    icon: <Wrench size={20} />,
     title: 'Developer Overhead',
-    description: 'Building integrations requires reverse-engineering each platform. No shared vocabulary for exercises.',
+    description: "Building from scratch or adding integrations? Either way, you're defining exercise models alone. No shared vocabulary to build on.",
   },
   {
-    icon: '🧩',
+    icon: <Puzzle size={20} />,
     title: 'Ecosystem Fragmentation',
     description: 'Apps cannot interoperate. The same exercise has different IDs, names, and structures everywhere.',
   },
@@ -42,17 +43,17 @@ export default function ProblemSection(): JSX.Element {
             <span className={styles.appName}>App A</span>
             <span className={styles.appFormat}>exercise_id: "squat_01"</span>
           </div>
-          <span className={styles.incompatible}>✗</span>
+          <span className={styles.incompatible}><X size={16} /></span>
           <div className={styles.appBox}>
             <span className={styles.appName}>App B</span>
             <span className={styles.appFormat}>exerciseId: 42</span>
           </div>
-          <span className={styles.incompatible}>✗</span>
+          <span className={styles.incompatible}><X size={16} /></span>
           <div className={styles.appBox}>
             <span className={styles.appName}>App C</span>
             <span className={styles.appFormat}>eid: "BS"</span>
           </div>
-          <span className={styles.incompatible}>✗</span>
+          <span className={styles.incompatible}><X size={16} /></span>
           <div className={styles.appBox}>
             <span className={styles.appName}>App D</span>
             <span className={styles.appFormat}>Exercise_Ref: "001"</span>
@@ -67,13 +68,13 @@ export default function ProblemSection(): JSX.Element {
               onClick={() => setIsExpanded(true)}
             >
               <div className={styles.summaryContent}>
-                <span className={styles.summaryIcon}>📱</span>
+                <span className={styles.summaryIcon}><Smartphone size={18} /></span>
                 <div className={styles.summaryText}>
                   <span className={styles.summaryTitle}>4 apps, 4 different formats</span>
                   <span className={styles.summarySubtitle}>Same exercise, incompatible data</span>
                 </div>
               </div>
-              <span className={styles.expandIcon}>↓</span>
+              <span className={styles.expandIcon}><ChevronDown size={18} /></span>
             </button>
           ) : (
             <div className={styles.expandedMobile}>
@@ -96,14 +97,14 @@ export default function ProblemSection(): JSX.Element {
                 </div>
               </div>
               <div className={styles.incompatibleBanner}>
-                <span className={styles.incompatible}>✗</span>
+                <span className={styles.incompatible}><X size={16} /></span>
                 <span>None of these formats are compatible</span>
               </div>
               <button
                 className={styles.collapseButton}
                 onClick={() => setIsExpanded(false)}
               >
-                Collapse ↑
+                Collapse <ChevronUp size={14} />
               </button>
             </div>
           )}

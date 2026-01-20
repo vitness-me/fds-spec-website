@@ -6,7 +6,9 @@ import Heading from '@theme/Heading';
 
 import ProblemSection from '@site/src/components/landing/ProblemSection';
 import ComparisonDemo from '@site/src/components/landing/ComparisonDemo';
+import UseCases from '@site/src/components/landing/UseCases';
 import SolutionSection from '@site/src/components/landing/SolutionSection';
+import QuickStart from '@site/src/components/landing/QuickStart';
 import TrustSection from '@site/src/components/landing/TrustSection';
 
 import styles from './index.module.css';
@@ -22,8 +24,13 @@ function HomepageHeader() {
           </Heading>
           <p className={styles.heroSubtitle}>
             Enable seamless data portability across fitness applications.
-            Stop rebuilding integrations. Start speaking the same language.
+            Stop reverse-engineering every platform's data format.
           </p>
+          <div className={styles.audienceBadges}>
+            <span className={styles.audienceBadge}>For App Developers</span>
+            <span className={styles.audienceBadge}>Platform Builders</span>
+            <span className={styles.audienceBadge}>Data Engineers</span>
+          </div>
           <div className={styles.heroButtons}>
             <Link
               className={styles.primaryButton}
@@ -56,7 +63,7 @@ function CTASection() {
           <Link className={styles.primaryButton} to="/docs/getting-started/overview">
             View Documentation
           </Link>
-          <Link className={styles.secondaryButton} to="https://github.com/anthropics/fds-spec-website">
+          <Link className={styles.secondaryButton} to="https://github.com/vitness-me/fds-spec-website">
             GitHub Repository
           </Link>
         </div>
@@ -64,6 +71,14 @@ function CTASection() {
           Start with exercise data today. Workout templates, progress tracking, and more planned in{' '}
           <Link to="/docs/governance/roadmap">future RFCs</Link>.
         </p>
+        <div className={styles.earlyAdopters}>
+          <p className={styles.earlyAdoptersText}>
+            We're seeking early adopters to shape the standard. Implement FDS, share feedback, and help build the foundation for fitness data interoperability.
+          </p>
+          <Link className={styles.earlyAdoptersLink} to="/docs/governance/contributing">
+            Become an Early Adopter →
+          </Link>
+        </div>
       </div>
     </section>
   );
@@ -79,7 +94,9 @@ export default function Home(): ReactNode {
       <main>
         <ProblemSection />
         <ComparisonDemo />
+        <UseCases />
         <SolutionSection />
+        <QuickStart />
         <TrustSection />
         <CTASection />
       </main>

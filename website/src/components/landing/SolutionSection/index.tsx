@@ -1,4 +1,5 @@
 import React from 'react';
+import { Check, ArrowRight, Tag, Shield, RefreshCw } from 'lucide-react';
 import styles from './styles.module.css';
 
 const platforms = ['FitApp Pro', 'GymTracker', 'WorkoutDB', 'IronLog'];
@@ -38,7 +39,7 @@ export default function SolutionSection(): JSX.Element {
                 <span className={styles.comparisonFormula}>N × (N-1) integrations</span>
                 <span className={styles.comparisonExample}>4 apps = 12 integrations</span>
               </div>
-              <div className={styles.comparisonDivider}>→</div>
+              <div className={styles.comparisonDivider}><ArrowRight size={20} /></div>
               <div className={styles.comparisonItem}>
                 <span className={styles.comparisonGood}>With FDS</span>
                 <span className={styles.comparisonFormula}>N integrations</span>
@@ -55,15 +56,15 @@ export default function SolutionSection(): JSX.Element {
         {/* Core Benefits */}
         <div className={styles.highlights}>
           <div className={styles.highlight}>
-            <span className={styles.highlightIcon}>✓</span>
+            <span className={styles.highlightIcon}><Check size={16} /></span>
             <span className={styles.highlightText}>No forced architecture changes</span>
           </div>
           <div className={styles.highlight}>
-            <span className={styles.highlightIcon}>✓</span>
+            <span className={styles.highlightIcon}><Check size={16} /></span>
             <span className={styles.highlightText}>Validated data exchange</span>
           </div>
           <div className={styles.highlight}>
-            <span className={styles.highlightIcon}>✓</span>
+            <span className={styles.highlightIcon}><Check size={16} /></span>
             <span className={styles.highlightText}>Works with any tech stack</span>
           </div>
         </div>
@@ -87,21 +88,21 @@ export default function SolutionSection(): JSX.Element {
 
           <div className={styles.extensibilityGrid}>
             <div className={styles.extensibilityCard}>
-              <span className={styles.extensibilityIcon}>🏷️</span>
+              <span className={styles.extensibilityIcon}><Tag size={24} /></span>
               <h4 className={styles.extensibilityCardTitle}>Vendor Namespaces</h4>
               <p className={styles.extensibilityCardText}>
                 Prefix custom fields with <code>x:yourapp.</code> to add platform-specific data that travels with the standard.
               </p>
             </div>
             <div className={styles.extensibilityCard}>
-              <span className={styles.extensibilityIcon}>🔒</span>
+              <span className={styles.extensibilityIcon}><Shield size={24} /></span>
               <h4 className={styles.extensibilityCardTitle}>Safe Extensions</h4>
               <p className={styles.extensibilityCardText}>
                 Other platforms ignore unknown namespaces. Your custom data never breaks their imports.
               </p>
             </div>
             <div className={styles.extensibilityCard}>
-              <span className={styles.extensibilityIcon}>🔄</span>
+              <span className={styles.extensibilityIcon}><RefreshCw size={24} /></span>
               <h4 className={styles.extensibilityCardTitle}>Round-trip Preservation</h4>
               <p className={styles.extensibilityCardText}>
                 Extensions survive export → import cycles. Data you add comes back intact.
