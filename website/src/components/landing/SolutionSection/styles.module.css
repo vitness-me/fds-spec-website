@@ -39,130 +39,209 @@
   color: rgba(255, 255, 255, 0.6);
 }
 
-.flowDiagram {
-  display: flex;
+/* Hub Section */
+.hubSection {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
   align-items: center;
-  justify-content: center;
-  gap: 1.5rem;
-  margin-bottom: 3rem;
-  flex-wrap: wrap;
+  margin-bottom: 2.5rem;
 }
 
-.flowBox {
+/* Hub Diagram */
+.hubDiagram {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.platformsGrid {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.platformItem {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 1.25rem 1.5rem;
-  background: #fff;
-  border: 2px solid #e5e7eb;
-  border-radius: 8px;
-  min-width: 120px;
+  flex: 1;
 }
 
-[data-theme='dark'] .flowBox {
+.platformNode {
+  padding: 0.5rem 0.75rem;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  width: 100%;
+  text-align: center;
+}
+
+[data-theme='dark'] .platformNode {
   background: #111;
   border-color: #333;
 }
 
-.flowLabel {
-  font-size: 0.9375rem;
-  font-weight: 600;
+.platformLabel {
+  font-size: 0.6875rem;
+  font-weight: 500;
   color: #000;
+  white-space: nowrap;
 }
 
-[data-theme='dark'] .flowLabel {
+[data-theme='dark'] .platformLabel {
   color: #fff;
 }
 
-.flowSublabel {
-  font-size: 0.75rem;
-  color: #666;
-  margin-top: 0.25rem;
+.connectorLine {
+  width: 2px;
+  height: 20px;
+  background: linear-gradient(to bottom, #ccc, #000);
 }
 
-[data-theme='dark'] .flowSublabel {
-  color: rgba(255, 255, 255, 0.5);
+[data-theme='dark'] .connectorLine {
+  background: linear-gradient(to bottom, #444, #fff);
 }
 
-.flowSteps {
+.hubCenter {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 1rem;
-  padding: 1.5rem;
+  justify-content: center;
+  padding: 1rem 2rem;
+  background: #000;
+  border-radius: 8px;
+  width: 100%;
+}
+
+[data-theme='dark'] .hubCenter {
+  background: #fff;
+}
+
+.hubLabel {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+[data-theme='dark'] .hubLabel {
+  color: #000;
+}
+
+.hubSublabel {
+  font-size: 0.5625rem;
+  color: rgba(255, 255, 255, 0.7);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+[data-theme='dark'] .hubSublabel {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+/* Hub Explanation */
+.hubExplanation {
+  padding: 2rem;
   background: #fff;
   border: 1px solid #e5e7eb;
   border-radius: 12px;
 }
 
-[data-theme='dark'] .flowSteps {
+[data-theme='dark'] .hubExplanation {
   background: #111;
   border-color: #222;
 }
 
-.flowArrow {
+.comparison {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.comparisonItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.comparisonBad {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #dc2626;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.25rem;
+}
+
+[data-theme='dark'] .comparisonBad {
+  color: #f87171;
+}
+
+.comparisonGood {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #16a34a;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.25rem;
+}
+
+[data-theme='dark'] .comparisonGood {
+  color: #4ade80;
+}
+
+.comparisonFormula {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #000;
+}
+
+[data-theme='dark'] .comparisonFormula {
+  color: #fff;
+}
+
+.comparisonExample {
+  font-size: 0.8125rem;
+  color: #666;
+  margin-top: 0.25rem;
+}
+
+[data-theme='dark'] .comparisonExample {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.comparisonDivider {
   font-size: 1.25rem;
   color: #666;
   font-weight: 500;
 }
 
-[data-theme='dark'] .flowArrow {
+[data-theme='dark'] .comparisonDivider {
   color: rgba(255, 255, 255, 0.4);
 }
 
-.step {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  padding: 0 0.75rem;
-}
-
-.stepNumber {
-  width: 28px;
-  height: 28px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #000;
-  color: #fff;
-  font-size: 0.8125rem;
-  font-weight: 600;
-  border-radius: 50%;
-  margin-bottom: 0.5rem;
-}
-
-[data-theme='dark'] .stepNumber {
-  background: #fff;
-  color: #000;
-}
-
-.stepTitle {
+.hubDescription {
   font-size: 0.9375rem;
-  font-weight: 600;
-  color: #000;
-  margin-bottom: 0.25rem;
-}
-
-[data-theme='dark'] .stepTitle {
-  color: #fff;
-}
-
-.stepDescription {
-  font-size: 0.75rem;
   color: #666;
-  max-width: 140px;
-  line-height: 1.4;
+  line-height: 1.6;
+  text-align: center;
+  margin: 0;
 }
 
-[data-theme='dark'] .stepDescription {
-  color: rgba(255, 255, 255, 0.5);
+[data-theme='dark'] .hubDescription {
+  color: rgba(255, 255, 255, 0.6);
 }
 
+/* Highlights */
 .highlights {
   display: flex;
   justify-content: center;
   gap: 2rem;
   flex-wrap: wrap;
+  margin-bottom: 2.5rem;
 }
 
 .highlight {
@@ -191,18 +270,157 @@
   color: rgba(255, 255, 255, 0.7);
 }
 
+/* AI Tool Callout */
+.toolCallout {
+  padding: 2rem;
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  border: 1px solid #bae6fd;
+  border-radius: 12px;
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+[data-theme='dark'] .toolCallout {
+  background: linear-gradient(135deg, #0c1929 0%, #0a1628 100%);
+  border-color: #1e3a5f;
+}
+
+.toolBadge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  background: #0ea5e9;
+  color: #fff;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-radius: 9999px;
+  margin-bottom: 1rem;
+}
+
+.toolTitle {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #000;
+  margin: 0 0 0.5rem 0;
+}
+
+[data-theme='dark'] .toolTitle {
+  color: #fff;
+}
+
+.toolDescription {
+  font-size: 0.9375rem;
+  color: #4b5563;
+  line-height: 1.6;
+  margin: 0;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+[data-theme='dark'] .toolDescription {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Extensibility Section */
+.extensibilitySection {
+  padding-top: 2.5rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+[data-theme='dark'] .extensibilitySection {
+  border-top-color: rgba(255, 255, 255, 0.1);
+}
+
+.extensibilityTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-align: center;
+  color: #000;
+  margin-bottom: 0.5rem;
+}
+
+[data-theme='dark'] .extensibilityTitle {
+  color: #fff;
+}
+
+.extensibilitySubtitle {
+  font-size: 1rem;
+  color: #666;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+[data-theme='dark'] .extensibilitySubtitle {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.extensibilityGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.extensibilityCard {
+  padding: 1.5rem;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  text-align: center;
+}
+
+[data-theme='dark'] .extensibilityCard {
+  background: #111;
+  border-color: #222;
+}
+
+.extensibilityIcon {
+  font-size: 1.5rem;
+  display: block;
+  margin-bottom: 0.75rem;
+}
+
+.extensibilityCardTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #000;
+  margin: 0 0 0.5rem 0;
+}
+
+[data-theme='dark'] .extensibilityCardTitle {
+  color: #fff;
+}
+
+.extensibilityCardText {
+  font-size: 0.875rem;
+  color: #666;
+  line-height: 1.5;
+  margin: 0;
+}
+
+[data-theme='dark'] .extensibilityCardText {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.extensibilityCardText code {
+  font-size: 0.8125rem;
+  padding: 0.125rem 0.375rem;
+  background: #f5f5f5;
+  border-radius: 4px;
+  color: #000;
+}
+
+[data-theme='dark'] .extensibilityCardText code {
+  background: #1a1a1a;
+  color: #fff;
+}
+
+/* Responsive */
 @media (max-width: 900px) {
-  .flowDiagram {
-    flex-direction: column;
-  }
-
-  .flowSteps {
-    flex-direction: column;
-    gap: 1.5rem;
-  }
-
-  .flowArrow {
-    transform: rotate(90deg);
+  .hubSection {
+    grid-template-columns: 1fr;
+    gap: 2rem;
   }
 }
 
@@ -211,9 +429,126 @@
     padding: 3.5rem 0;
   }
 
+  .hubDiagram {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    gap: 0;
+  }
+
+  .platformsGrid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex: 1;
+  }
+
+  .platformItem {
+    flex-direction: row;
+    align-items: center;
+    gap: 0;
+  }
+
+  .platformNode {
+    flex: 1;
+    padding: 0.625rem 0.5rem;
+  }
+
+  .platformLabel {
+    font-size: 0.625rem;
+  }
+
+  .connectorLine {
+    width: 20px;
+    height: 2px;
+    background: #999;
+    flex-shrink: 0;
+  }
+
+  [data-theme='dark'] .connectorLine {
+    background: #555;
+  }
+
+  .hubCenter {
+    width: auto;
+    min-width: 60px;
+    padding: 0.75rem 0.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    position: relative;
+  }
+
+  /* Vertical connector bar on the left edge of FDS box */
+  .hubCenter::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, #999, #000, #000, #999);
+  }
+
+  [data-theme='dark'] .hubCenter::before {
+    background: linear-gradient(to bottom, #555, #fff, #fff, #555);
+  }
+
+  .hubLabel {
+    font-size: 0.875rem;
+  }
+
+  .hubSublabel {
+    font-size: 0.5rem;
+    text-align: center;
+  }
+
+  .comparison {
+    gap: 1rem;
+  }
+
   .highlights {
     flex-direction: column;
     align-items: center;
     gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .toolCallout {
+    padding: 1.5rem;
+  }
+
+  .extensibilityGrid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .extensibilityCard {
+    padding: 1rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    text-align: left;
+    gap: 0.75rem;
+  }
+
+  .extensibilityIcon {
+    font-size: 1.25rem;
+    margin-bottom: 0;
+    flex-shrink: 0;
+  }
+
+  .extensibilityCardTitle {
+    font-size: 0.875rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .extensibilityCardText {
+    font-size: 0.8125rem;
+    line-height: 1.4;
   }
 }

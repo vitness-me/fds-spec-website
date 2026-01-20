@@ -223,6 +223,35 @@
   flex-wrap: wrap;
 }
 
+.ctaRoadmap {
+  font-size: 0.875rem;
+  color: #888;
+  margin-top: 1.5rem;
+  margin-bottom: 0;
+}
+
+.ctaRoadmap a {
+  color: #666;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.ctaRoadmap a:hover {
+  color: #000;
+}
+
+[data-theme='dark'] .ctaRoadmap {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+[data-theme='dark'] .ctaRoadmap a {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+[data-theme='dark'] .ctaRoadmap a:hover {
+  color: #fff;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .heroBanner {

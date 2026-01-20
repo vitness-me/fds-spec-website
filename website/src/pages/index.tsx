@@ -60,6 +60,10 @@ function CTASection() {
             GitHub Repository
           </Link>
         </div>
+        <p className={styles.ctaRoadmap}>
+          Start with exercise data today. Workout templates, progress tracking, and more planned in{' '}
+          <Link to="/docs/governance/roadmap">future RFCs</Link>.
+        </p>
       </div>
     </section>
   );
