@@ -1,0 +1,374 @@
+.problemSection {
+  padding: 5rem 0;
+  background: #fafafa;
+  border-top: 1px solid #e5e7eb;
+}
+
+[data-theme='dark'] .problemSection {
+  background: #0a0a0a;
+  border-top-color: rgba(255, 255, 255, 0.1);
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.sectionTitle {
+  font-size: clamp(1.75rem, 4vw, 2.25rem);
+  font-weight: 700;
+  text-align: center;
+  color: #000;
+  margin-bottom: 0.75rem;
+  letter-spacing: -0.02em;
+}
+
+[data-theme='dark'] .sectionTitle {
+  color: #fff;
+}
+
+.sectionSubtitle {
+  font-size: 1.125rem;
+  color: #666;
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+[data-theme='dark'] .sectionSubtitle {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* Desktop fragmentation visual */
+.fragmentationDesktop {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 3.5rem;
+  padding: 2rem;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+}
+
+[data-theme='dark'] .fragmentationDesktop {
+  background: #111;
+  border-color: #222;
+}
+
+/* Mobile fragmentation visual - hidden on desktop */
+.fragmentationMobile {
+  display: none;
+  margin-bottom: 1.5rem;
+}
+
+.appBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem 1.25rem;
+  background: #f5f5f5;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  min-width: 140px;
+}
+
+[data-theme='dark'] .appBox {
+  background: #1a1a1a;
+  border-color: #333;
+}
+
+.appName {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #000;
+  margin-bottom: 0.5rem;
+}
+
+[data-theme='dark'] .appName {
+  color: #fff;
+}
+
+.appFormat {
+  font-size: 0.75rem;
+  font-family: var(--ifm-font-family-monospace);
+  color: #666;
+}
+
+[data-theme='dark'] .appFormat {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.incompatible {
+  font-size: 1.25rem;
+  color: #dc2626;
+  font-weight: 600;
+}
+
+[data-theme='dark'] .incompatible {
+  color: #f87171;
+}
+
+/* Mobile collapsed summary */
+.collapsedSummary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 1.25rem;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.collapsedSummary:hover {
+  border-color: #ccc;
+}
+
+[data-theme='dark'] .collapsedSummary {
+  background: #111;
+  border-color: #222;
+}
+
+[data-theme='dark'] .collapsedSummary:hover {
+  border-color: #333;
+}
+
+.summaryContent {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.summaryIcon {
+  font-size: 1.5rem;
+}
+
+.summaryText {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+}
+
+.summaryTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #000;
+}
+
+[data-theme='dark'] .summaryTitle {
+  color: #fff;
+}
+
+.summarySubtitle {
+  font-size: 0.8125rem;
+  color: #666;
+}
+
+[data-theme='dark'] .summarySubtitle {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.expandIcon {
+  font-size: 1rem;
+  color: #666;
+  transition: transform 0.2s ease;
+}
+
+[data-theme='dark'] .expandIcon {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* Mobile expanded view */
+.expandedMobile {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 1.25rem;
+}
+
+[data-theme='dark'] .expandedMobile {
+  background: #111;
+  border-color: #222;
+}
+
+.mobileAppGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.mobileAppGrid .appBox {
+  min-width: unset;
+}
+
+.incompatibleBanner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  background: #fef2f2;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  color: #991b1b;
+  margin-bottom: 1rem;
+}
+
+[data-theme='dark'] .incompatibleBanner {
+  background: rgba(239, 68, 68, 0.1);
+  color: #fca5a5;
+}
+
+.collapseButton {
+  display: block;
+  width: 100%;
+  padding: 0.625rem;
+  background: transparent;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.collapseButton:hover {
+  border-color: #ccc;
+  color: #000;
+}
+
+[data-theme='dark'] .collapseButton {
+  border-color: #333;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+[data-theme='dark'] .collapseButton:hover {
+  border-color: #444;
+  color: #fff;
+}
+
+/* Pain points - Desktop grid */
+.painPointsDesktop {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+/* Pain points - Mobile chips (hidden on desktop) */
+.painPointsMobile {
+  display: none;
+}
+
+.painPoint {
+  padding: 1.5rem;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  text-align: center;
+}
+
+[data-theme='dark'] .painPoint {
+  background: #111;
+  border-color: #222;
+}
+
+.painIcon {
+  font-size: 2rem;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.painTitle {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #000;
+  margin-bottom: 0.5rem;
+}
+
+[data-theme='dark'] .painTitle {
+  color: #fff;
+}
+
+.painDescription {
+  font-size: 0.9375rem;
+  color: #666;
+  line-height: 1.6;
+  margin: 0;
+}
+
+[data-theme='dark'] .painDescription {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* Compact chips for mobile */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.5rem 0.875rem;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 9999px;
+  font-size: 0.8125rem;
+  white-space: nowrap;
+}
+
+[data-theme='dark'] .chip {
+  background: #111;
+  border-color: #333;
+}
+
+.chipIcon {
+  font-size: 0.875rem;
+}
+
+.chipTitle {
+  font-weight: 500;
+  color: #000;
+}
+
+[data-theme='dark'] .chipTitle {
+  color: #fff;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .problemSection {
+    padding: 3.5rem 0;
+  }
+
+  /* Hide desktop, show mobile */
+  .fragmentationDesktop {
+    display: none;
+  }
+
+  .fragmentationMobile {
+    display: block;
+  }
+
+  .painPointsDesktop {
+    display: none;
+  }
+
+  .painPointsMobile {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+}
+
+/* Tablet: 2 column grid instead of 3 */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .painPointsDesktop {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

@@ -1,0 +1,219 @@
+.solutionSection {
+  padding: 5rem 0;
+  background: #fafafa;
+  border-top: 1px solid #e5e7eb;
+}
+
+[data-theme='dark'] .solutionSection {
+  background: #0a0a0a;
+  border-top-color: rgba(255, 255, 255, 0.1);
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.sectionTitle {
+  font-size: clamp(1.75rem, 4vw, 2.25rem);
+  font-weight: 700;
+  text-align: center;
+  color: #000;
+  margin-bottom: 0.75rem;
+  letter-spacing: -0.02em;
+}
+
+[data-theme='dark'] .sectionTitle {
+  color: #fff;
+}
+
+.sectionSubtitle {
+  font-size: 1.125rem;
+  color: #666;
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+[data-theme='dark'] .sectionSubtitle {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.flowDiagram {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+  flex-wrap: wrap;
+}
+
+.flowBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.25rem 1.5rem;
+  background: #fff;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  min-width: 120px;
+}
+
+[data-theme='dark'] .flowBox {
+  background: #111;
+  border-color: #333;
+}
+
+.flowLabel {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: #000;
+}
+
+[data-theme='dark'] .flowLabel {
+  color: #fff;
+}
+
+.flowSublabel {
+  font-size: 0.75rem;
+  color: #666;
+  margin-top: 0.25rem;
+}
+
+[data-theme='dark'] .flowSublabel {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.flowSteps {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+}
+
+[data-theme='dark'] .flowSteps {
+  background: #111;
+  border-color: #222;
+}
+
+.flowArrow {
+  font-size: 1.25rem;
+  color: #666;
+  font-weight: 500;
+}
+
+[data-theme='dark'] .flowArrow {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 0 0.75rem;
+}
+
+.stepNumber {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+  color: #fff;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  border-radius: 50%;
+  margin-bottom: 0.5rem;
+}
+
+[data-theme='dark'] .stepNumber {
+  background: #fff;
+  color: #000;
+}
+
+.stepTitle {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: #000;
+  margin-bottom: 0.25rem;
+}
+
+[data-theme='dark'] .stepTitle {
+  color: #fff;
+}
+
+.stepDescription {
+  font-size: 0.75rem;
+  color: #666;
+  max-width: 140px;
+  line-height: 1.4;
+}
+
+[data-theme='dark'] .stepDescription {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.highlights {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.highlight {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.highlightIcon {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #16a34a;
+}
+
+[data-theme='dark'] .highlightIcon {
+  color: #4ade80;
+}
+
+.highlightText {
+  font-size: 0.9375rem;
+  color: #666;
+  font-weight: 500;
+}
+
+[data-theme='dark'] .highlightText {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+@media (max-width: 900px) {
+  .flowDiagram {
+    flex-direction: column;
+  }
+
+  .flowSteps {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .flowArrow {
+    transform: rotate(90deg);
+  }
+}
+
+@media (max-width: 768px) {
+  .solutionSection {
+    padding: 3.5rem 0;
+  }
+
+  .highlights {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+}

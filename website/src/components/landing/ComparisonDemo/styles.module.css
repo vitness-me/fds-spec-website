@@ -1,0 +1,264 @@
+.comparisonSection {
+  padding: 5rem 0;
+  background: #fff;
+  border-top: 1px solid #e5e7eb;
+}
+
+[data-theme='dark'] .comparisonSection {
+  background: #000;
+  border-top-color: rgba(255, 255, 255, 0.1);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.sectionTitle {
+  font-size: clamp(1.75rem, 4vw, 2.25rem);
+  font-weight: 700;
+  text-align: center;
+  color: #000;
+  margin-bottom: 0.75rem;
+  letter-spacing: -0.02em;
+}
+
+[data-theme='dark'] .sectionTitle {
+  color: #fff;
+}
+
+.sectionSubtitle {
+  font-size: 1.125rem;
+  color: #666;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+[data-theme='dark'] .sectionSubtitle {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.tabs {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.tab {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #666;
+  background: transparent;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.tab:hover {
+  border-color: #000;
+  color: #000;
+}
+
+[data-theme='dark'] .tab {
+  color: rgba(255, 255, 255, 0.6);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+[data-theme='dark'] .tab:hover {
+  border-color: rgba(255, 255, 255, 0.4);
+  color: #fff;
+}
+
+.tabActive {
+  background: #000;
+  border-color: #000;
+  color: #fff;
+}
+
+.tabActive:hover {
+  background: #1a1a1a;
+  border-color: #1a1a1a;
+  color: #fff;
+}
+
+[data-theme='dark'] .tabActive {
+  background: #fff;
+  border-color: #fff;
+  color: #000;
+}
+
+[data-theme='dark'] .tabActive:hover {
+  background: #e5e5e5;
+  border-color: #e5e5e5;
+  color: #000;
+}
+
+.comparisonContainer {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 1.5rem;
+  align-items: stretch;
+}
+
+.codePanel {
+  background: #fafafa;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+[data-theme='dark'] .codePanel {
+  background: #0a0a0a;
+  border-color: #222;
+}
+
+.codePanelHeader {
+  padding: 1rem;
+  border-bottom: 1px solid #e5e7eb;
+  background: #fff;
+}
+
+[data-theme='dark'] .codePanelHeader {
+  background: #111;
+  border-bottom-color: #222;
+}
+
+.panelTitle {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: #000;
+  display: block;
+}
+
+[data-theme='dark'] .panelTitle {
+  color: #fff;
+}
+
+.panelSubtitle {
+  font-size: 0.8125rem;
+  color: #666;
+}
+
+[data-theme='dark'] .panelSubtitle {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.codeBlock {
+  padding: 1rem;
+  overflow-x: auto;
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  flex: 1;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.codeBlock pre {
+  margin: 0;
+  padding: 0;
+}
+
+.arrow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.arrowIcon {
+  font-size: 1.5rem;
+  color: #000;
+  font-weight: 600;
+}
+
+[data-theme='dark'] .arrowIcon {
+  color: #fff;
+}
+
+.arrowLabel {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+[data-theme='dark'] .arrowLabel {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.toggleContainer {
+  display: flex;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+
+.toggleButton {
+  padding: 0.625rem 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #666;
+  background: transparent;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.toggleButton:hover {
+  border-color: #000;
+  color: #000;
+}
+
+[data-theme='dark'] .toggleButton {
+  color: rgba(255, 255, 255, 0.6);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+[data-theme='dark'] .toggleButton:hover {
+  border-color: rgba(255, 255, 255, 0.4);
+  color: #fff;
+}
+
+@media (max-width: 900px) {
+  .comparisonContainer {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .arrow {
+    flex-direction: row;
+    padding: 0.5rem 0;
+  }
+
+  .arrowIcon {
+    transform: rotate(90deg);
+  }
+
+  .codeBlock {
+    max-height: 300px;
+  }
+}
+
+@media (max-width: 768px) {
+  .comparisonSection {
+    padding: 3.5rem 0;
+  }
+
+  .tabs {
+    gap: 0.375rem;
+  }
+
+  .tab {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8125rem;
+  }
+}

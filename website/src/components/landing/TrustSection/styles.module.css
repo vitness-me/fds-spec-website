@@ -1,0 +1,144 @@
+.trustSection {
+  padding: 5rem 0;
+  background: #fff;
+  border-top: 1px solid #e5e7eb;
+}
+
+[data-theme='dark'] .trustSection {
+  background: #000;
+  border-top-color: rgba(255, 255, 255, 0.1);
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.sectionTitle {
+  font-size: clamp(1.75rem, 4vw, 2.25rem);
+  font-weight: 700;
+  text-align: center;
+  color: #000;
+  margin-bottom: 0.75rem;
+  letter-spacing: -0.02em;
+}
+
+[data-theme='dark'] .sectionTitle {
+  color: #fff;
+}
+
+.sectionSubtitle {
+  font-size: 1.125rem;
+  color: #666;
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+[data-theme='dark'] .sectionSubtitle {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.featureGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.featureCard {
+  padding: 2rem;
+  background: #fafafa;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.featureCard:hover {
+  border-color: #ccc;
+  transform: translateY(-2px);
+}
+
+[data-theme='dark'] .featureCard {
+  background: #0a0a0a;
+  border-color: #222;
+}
+
+[data-theme='dark'] .featureCard:hover {
+  border-color: #333;
+}
+
+.cardIcon {
+  font-size: 2rem;
+  display: block;
+  margin-bottom: 1.25rem;
+}
+
+.cardTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #000;
+  margin-bottom: 0.75rem;
+}
+
+[data-theme='dark'] .cardTitle {
+  color: #fff;
+}
+
+.cardDescription {
+  font-size: 0.9375rem;
+  color: #666;
+  line-height: 1.6;
+  margin: 0 0 1.25rem 0;
+  flex: 1;
+}
+
+[data-theme='dark'] .cardDescription {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.cardLink {
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: #000;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.cardLink:hover {
+  color: #666;
+  text-decoration: none;
+}
+
+[data-theme='dark'] .cardLink {
+  color: #fff;
+}
+
+[data-theme='dark'] .cardLink:hover {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+@media (max-width: 768px) {
+  .trustSection {
+    padding: 3.5rem 0;
+  }
+
+  .featureGrid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .featureCard {
+    padding: 1.5rem;
+  }
+
+  .cardIcon {
+    font-size: 1.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .cardTitle {
+    font-size: 1.125rem;
+  }
+}

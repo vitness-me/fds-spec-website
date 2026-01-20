@@ -1,12 +1,12 @@
 /**
  * Vercel-inspired design for FDS landing page
- * Ultra-tight spacing, smooth animations, perfect light/dark mode support
+ * Hero and CTA section styles
  */
 
 /* Hero Section - Default (Light Mode) */
 .heroBanner {
   position: relative;
-  padding: 2.5rem 0 4rem;
+  padding: 4rem 0 5rem;
   text-align: center;
   background: #fff;
   overflow: hidden;
@@ -44,14 +44,16 @@
 }
 
 .heroContent {
-  max-width: 750px;
+  max-width: 900px;
   margin: 0 auto;
+  padding: 0 1rem;
+  animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .badge {
   display: inline-block;
   padding: 0.375rem 0.875rem;
-  margin-bottom: 1.25rem;
+  margin-bottom: 1.5rem;
   font-size: 0.8125rem;
   font-weight: 500;
   color: #666;
@@ -70,10 +72,10 @@
 }
 
 .heroTitle {
-  font-size: clamp(2.25rem, 7vw, 3.75rem);
+  font-size: clamp(2.5rem, 8vw, 4rem);
   font-weight: 700;
   line-height: 1.1;
-  margin-bottom: 1.25rem;
+  margin-bottom: 1.5rem;
   color: #000;
   letter-spacing: -0.03em;
 }
@@ -83,11 +85,11 @@
 }
 
 .heroSubtitle {
-  font-size: clamp(1rem, 2.5vw, 1.25rem);
-  line-height: 1.55;
+  font-size: clamp(1.0625rem, 2.5vw, 1.25rem);
+  line-height: 1.6;
   color: #666;
-  margin-bottom: 2rem;
-  max-width: 650px;
+  margin-bottom: 2.5rem;
+  max-width: 640px;
   margin-left: auto;
   margin-right: auto;
 }
@@ -101,14 +103,13 @@
   gap: 0.75rem;
   justify-content: center;
   flex-wrap: wrap;
-  margin-bottom: 2.5rem;
 }
 
 .primaryButton {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.625rem 1.5rem;
+  padding: 0.75rem 1.75rem;
   font-size: 0.9375rem;
   font-weight: 500;
   color: #fff;
@@ -143,7 +144,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.625rem 1.5rem;
+  padding: 0.75rem 1.75rem;
   font-size: 0.9375rem;
   font-weight: 500;
   color: #666;
@@ -173,153 +174,16 @@
   color: #fff;
 }
 
-.heroFeatures {
-  display: flex;
-  gap: 1.5rem;
-  justify-content: center;
-  flex-wrap: wrap;
-  margin-top: 2.5rem;
-  padding-top: 2.5rem;
-  border-top: 1px solid #e5e7eb;
-}
-
-[data-theme='dark'] .heroFeatures {
-  border-top-color: rgba(255, 255, 255, 0.1);
-}
-
-.heroFeature {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.8125rem;
-  color: #666;
-  font-weight: 500;
-}
-
-[data-theme='dark'] .heroFeature {
-  color: rgba(255, 255, 255, 0.5);
-}
-
-.heroFeature .featureIcon {
-  color: #000;
-  font-weight: 600;
-  font-size: 0.75rem;
-}
-
-[data-theme='dark'] .heroFeature .featureIcon {
-  color: #fff;
-}
-
-/* Features Section */
-.features {
-  padding: 4rem 0;
-  background: #fafafa;
-}
-
-[data-theme='dark'] .features {
-  background: #000;
-}
-
-.featuresContainer {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 0 1.5rem;
-}
-
-.featuresGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 1rem;
-}
-
-.featureCard {
-  padding: 1.5rem;
-  background: #fff;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  text-decoration: none;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  display: flex;
-  flex-direction: column;
-}
-
-.featureCard:hover {
-  border-color: #000;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
-  transform: translateY(-2px);
-  text-decoration: none;
-}
-
-[data-theme='dark'] .featureCard {
-  background: #0a0a0a;
-  border-color: #1a1a1a;
-}
-
-[data-theme='dark'] .featureCard:hover {
-  border-color: #333;
-  box-shadow: 0 4px 16px rgba(255, 255, 255, 0.02);
-}
-
-.featureIcon {
-  font-size: 2rem;
-  margin-bottom: 0.875rem;
-  display: block;
-  line-height: 1;
-}
-
-.featureTitle {
-  font-size: 1.125rem;
-  font-weight: 600;
-  color: #000;
-  margin-bottom: 0.625rem;
-  line-height: 1.4;
-  letter-spacing: -0.01em;
-}
-
-[data-theme='dark'] .featureTitle {
-  color: #fff;
-}
-
-.featureDescription {
-  font-size: 0.875rem;
-  line-height: 1.6;
-  color: #666;
-  margin-bottom: 0.875rem;
-  flex-grow: 1;
-}
-
-[data-theme='dark'] .featureDescription {
-  color: rgba(255, 255, 255, 0.55);
-}
-
-.featureLink {
-  font-size: 0.8125rem;
-  font-weight: 500;
-  color: #000;
-  transition: gap 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-  display: inline-flex;
-  align-items: center;
-  gap: 0.25rem;
-}
-
-[data-theme='dark'] .featureLink {
-  color: #fff;
-}
-
-.featureCard:hover .featureLink {
-  gap: 0.5rem;
-}
-
 /* CTA Section */
 .ctaSection {
-  padding: 4rem 0;
-  background: #fff;
+  padding: 5rem 0;
+  background: #fafafa;
   border-top: 1px solid #e5e7eb;
   text-align: center;
 }
 
 [data-theme='dark'] .ctaSection {
-  background: #000;
+  background: #0a0a0a;
   border-top-color: rgba(255, 255, 255, 0.1);
 }
 
@@ -333,7 +197,7 @@
   font-size: clamp(1.75rem, 4vw, 2.5rem);
   font-weight: 700;
   color: #000;
-  margin-bottom: 0.875rem;
+  margin-bottom: 1rem;
   letter-spacing: -0.02em;
 }
 
@@ -342,7 +206,7 @@
 }
 
 .ctaDescription {
-  font-size: 1rem;
+  font-size: 1.0625rem;
   line-height: 1.6;
   color: #666;
   margin-bottom: 2rem;
@@ -362,13 +226,18 @@
 /* Responsive */
 @media (max-width: 768px) {
   .heroBanner {
-    padding: 2rem 0 3rem;
+    padding: 3rem 0 4rem;
+  }
+
+  .heroTitle {
+    font-size: clamp(2rem, 7vw, 2.5rem);
   }
 
   .heroButtons,
   .ctaButtons {
     flex-direction: column;
     width: 100%;
+    padding: 0 1rem;
   }
 
   .primaryButton,
@@ -377,19 +246,8 @@
     justify-content: center;
   }
 
-  .heroFeatures {
-    flex-direction: column;
-    gap: 0.875rem;
-    align-items: center;
-  }
-
-  .featuresGrid {
-    grid-template-columns: 1fr;
-  }
-
-  .features,
   .ctaSection {
-    padding: 3rem 0;
+    padding: 3.5rem 0;
   }
 }
 
@@ -404,19 +262,3 @@
     transform: translateY(0);
   }
 }
-
-.heroContent {
-  animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.featureCard {
-  animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-  animation-fill-mode: both;
-}
-
-.featureCard:nth-child(1) { animation-delay: 0.05s; }
-.featureCard:nth-child(2) { animation-delay: 0.1s; }
-.featureCard:nth-child(3) { animation-delay: 0.15s; }
-.featureCard:nth-child(4) { animation-delay: 0.2s; }
-.featureCard:nth-child(5) { animation-delay: 0.25s; }
-.featureCard:nth-child(6) { animation-delay: 0.3s; }
