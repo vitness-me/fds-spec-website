@@ -41,7 +41,22 @@ Conformance implications:
 
 URNs and external references:
 - Relation examples MAY show URNs (e.g., `urn:slug:front-squat`) to illustrate non‑ID relationships. Producers SHOULD prefer UUID references where available; URNs MAY be used for cross‑system loose references when a UUID is unknown.
-- `externalRefs` SHOULD include a `system` string and an external `id` string; systems SHOULD be stable and documented by the producer.
+
+External reference mapping (`externalRefs`):
+- All FDS entities support an optional `externalRefs` array within `metadata` to map identifiers across different systems.
+- Each entry MUST include a `system` string (identifying the external platform) and an `id` string (the identifier in that system).
+- Systems SHOULD be stable, well‑documented identifiers (e.g., `platform-a`, `legacy-system`, reverse‑DNS like `com.example.app`).
+- Use cases include: data migration, multi‑platform synchronization, legacy system mapping, and third‑party integrations.
+
+Example:
+```json
+"metadata": {
+  "externalRefs": [
+    { "system": "platform-a", "id": "ex-back-squat-001" },
+    { "system": "legacy-system", "id": "squat_barbell_back" }
+  ]
+}
+```
 
 ## Extensions
 Two structured extension points enable platform‑specific data without breaking interoperability:

@@ -15,6 +15,7 @@ const sidebars: SidebarsConfig = {
       items: [
         'getting-started/overview',
         'getting-started/quick-validation',
+        'getting-started/identifiers',
       ],
     },
     {
