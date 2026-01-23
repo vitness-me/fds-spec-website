@@ -55,6 +55,10 @@
     "createdAt": "2025-09-03T12:00:00Z",
     "updatedAt": "2025-09-03T12:00:00Z",
     "source": "vitness.atlas",
-    "status": "active"
+    "status": "active",
+    "externalRefs": [
+      { "system": "platform-a", "id": "atlas-body-001" },
+      { "system": "legacy-system", "id": "body_atlas_standard_v1" }
+    ]
   }
 }

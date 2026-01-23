@@ -43,6 +43,10 @@
     "createdAt": "2025-01-01T00:00:00Z",
     "updatedAt": "2025-09-03T00:00:00Z",
     "source": "vitness.registry",
-    "status": "active"
+    "status": "active",
+    "externalRefs": [
+      { "system": "platform-a", "id": "mus-quads-001" },
+      { "system": "legacy-system", "id": "muscle_quadriceps_femoris" }
+    ]
   }
 }
