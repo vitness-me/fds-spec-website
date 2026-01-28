@@ -71,12 +71,14 @@ export default function SolutionSection(): JSX.Element {
 
         {/* Tool Callout */}
         <div className={styles.toolCallout}>
-          <div className={styles.toolBadge}>Coming Soon</div>
           <h3 className={styles.toolTitle}>Schema Transformer & Validation</h3>
           <p className={styles.toolDescription}>
             Automated mapping from your existing schema to FDS format.
             Optional AI assistance fills gaps when source data fields are missing.
           </p>
+          <a href="#quick-start" className={styles.toolLink}>
+            Get Started Below
+          </a>
         </div>
 
         {/* Extensibility Section */}

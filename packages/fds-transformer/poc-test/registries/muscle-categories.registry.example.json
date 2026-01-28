@@ -1,0 +1,24 @@
+[
+  {
+    "schemaVersion": "1.0.0",
+    "id": "cat.legs",
+    "canonical": { "name": "Legs", "slug": "legs" },
+    "classification": { "tags": ["major-group"] },
+    "metadata": { "createdAt": "2025-01-01T00:00:00Z", "updatedAt": "2025-09-03T00:00:00Z", "status": "active" }
+  },
+  {
+    "schemaVersion": "1.0.0",
+    "id": "cat.back",
+    "canonical": { "name": "Back", "slug": "back" },
+    "classification": { "tags": ["major-group"] },
+    "metadata": { "createdAt": "2025-01-01T00:00:00Z", "updatedAt": "2025-09-03T00:00:00Z", "status": "active" }
+  },
+  {
+    "schemaVersion": "1.0.0",
+    "id": "cat.core",
+    "canonical": { "name": "Core", "slug": "core" },
+    "classification": { "tags": ["major-group"] },
+    "metadata": { "createdAt": "2025-01-01T00:00:00Z", "updatedAt": "2025-09-03T00:00:00Z", "status": "active" }
+  }
+]
+

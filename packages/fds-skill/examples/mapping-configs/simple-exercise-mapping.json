@@ -1,0 +1,167 @@
+{
+  "$schema": "https://spec.vitness.me/schemas/transformer/v1.0.0/mapping.schema.json",
+  "version": "1.0.0",
+  "targetSchema": {
+    "version": "1.0.0",
+    "entity": "exercise"
+  },
+  "registries": {
+    "muscles": {
+      "source": "local",
+      "local": "../../fds-transformer/registries/muscles.registry.json"
+    },
+    "equipment": {
+      "source": "local",
+      "local": "../../fds-transformer/registries/equipment.registry.json"
+    },
+    "muscleCategories": {
+      "source": "local",
+      "local": "../../fds-transformer/registries/muscle-categories.registry.json"
+    }
+  },
+  "mappings": {
+    "schemaVersion": {
+      "default": "1.0.0"
+    },
+    "exerciseId": {
+      "from": null,
+      "transform": "uuid"
+    },
+    "canonical.name": {
+      "from": "name",
+      "transform": "titleCase"
+    },
+    "canonical.slug": {
+      "from": "name",
+      "transform": "slugify"
+    },
+    "canonical.description": {
+      "from": null,
+      "enrichment": {
+        "enabled": true,
+        "prompt": "exercise_description",
+        "context": ["name", "bodyPart", "target", "equipment"],
+        "when": "missing"
+      }
+    },
+    "canonical.aliases": {
+      "from": null,
+      "enrichment": {
+        "enabled": true,
+        "prompt": "exercise_description",
+        "context": ["name"],
+        "fields": ["aliases"],
+        "when": "missing"
+      }
+    },
+    "classification": {
+      "from": null,
+      "enrichment": {
+        "enabled": true,
+        "prompt": "exercise_classification",
+        "context": ["name", "bodyPart", "target", "equipment"],
+        "fields": ["exerciseType", "movement", "mechanics", "force", "level"]
+      }
+    },
+    "targets.primary": {
+      "from": "target",
+      "transform": "registryLookup",
+      "options": {
+        "registry": "muscles",
+        "matchField": "name",
+        "fuzzyMatch": true,
+        "toArray": true
+      }
+    },
+    "equipment.required": {
+      "from": "equipment",
+      "transform": "registryLookup",
+      "options": {
+        "registry": "equipment",
+        "matchField": "name",
+        "fuzzyMatch": true,
+        "toArray": true
+      }
+    },
+    "metrics": {
+      "from": null,
+      "enrichment": {
+        "enabled": true,
+        "prompt": "exercise_metrics",
+        "context": ["name", "classification.exerciseType", "classification.movement"]
+      }
+    },
+    "media": {
+      "from": "gifUrl",
+      "transform": "toMediaArray",
+      "options": {
+        "type": "image",
+        "urlTransform": {
+          "pattern": "http://d205bpvrqc9yn1.cloudfront.net/(\\d+)\\.gif",
+          "replace": "file:///path/to/animations/$1.gif"
+        }
+      }
+    },
+    "metadata.createdAt": {
+      "transform": "timestamp",
+      "options": {
+        "format": "iso8601"
+      }
+    },
+    "metadata.updatedAt": {
+      "transform": "timestamp",
+      "options": {
+        "format": "iso8601"
+      }
+    },
+    "metadata.status": {
+      "default": "draft"
+    },
+    "metadata.source": {
+      "default": "exercises-db-import"
+    },
+    "metadata.externalRefs": {
+      "from": "id",
+      "transform": "template",
+      "options": {
+        "template": [
+          {
+            "system": "legacy-exercises-db",
+            "id": "{{value}}"
+          }
+        ]
+      }
+    }
+  },
+  "enrichment": {
+    "enabled": true,
+    "provider": "openrouter",
+    "model": "anthropic/claude-3.5-sonnet",
+    "options": {
+      "temperature": 0.3,
+      "maxRetries": 3,
+      "rateLimit": {
+        "requestsPerMinute": 60
+      }
+    },
+    "batch": {
+      "enabled": true,
+      "concurrency": 5,
+      "chunkSize": 10
+    },
+    "defaultFields": "all"
+  },
+  "validation": {
+    "enabled": true,
+    "strict": true,
+    "failOnError": false,
+    "outputErrors": "./errors.json"
+  },
+  "output": {
+    "format": "json",
+    "pretty": true,
+    "directory": "./output/exercises/",
+    "naming": "{{slug}}.json",
+    "singleFile": false
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "name": "@vitness/fds-transformer",
+  "version": "0.1.0",
+  "description": "Transform any source schema to FDS (Fitness Data Standard) format with optional AI enrichment",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "fds-transformer": "./dist/bin/fds-transformer.js"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "schemas",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "lint": "eslint src --ext .ts",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "fds",
+    "fitness",
+    "data",
+    "standard",
+    "schema",
+    "transformer",
+    "exercise",
+    "cli"
+  ],
+  "author": "VITNESS",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vitness/fds-spec-website.git",
+    "directory": "packages/fds-transformer"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  },
+  "dependencies": {
+    "@clack/prompts": "^0.8.2",
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1",
+    "commander": "^13.0.0",
+    "fast-levenshtein": "^3.0.0",
+    "picocolors": "^1.1.1",
+    "uuid": "^11.0.4",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/fast-levenshtein": "^0.0.4",
+    "@types/node": "^22.10.6",
+    "@types/uuid": "^10.0.0",
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.3",
+    "vitest": "^2.1.8"
+  }
+}

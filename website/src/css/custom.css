@@ -356,3 +356,552 @@ html {
 .navbar-sidebar--show {
   height: 100vh;
 }
+
+/* ============================================
+   Modern Code Block Styling
+   ============================================ */
+
+/* Code block container */
+div[class*='codeBlockContainer'] {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  margin: 1.5rem 0;
+  border: 1px solid var(--ifm-color-gray-300);
+}
+
+[data-theme='dark'] div[class*='codeBlockContainer'] {
+  border-color: #2a2a2a;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -2px rgba(0, 0, 0, 0.2);
+}
+
+/* Code block title bar (with language label) */
+div[class*='codeBlockTitle'] {
+  background: linear-gradient(to bottom, #f8f9fa, #f1f3f5);
+  border-bottom: 1px solid var(--ifm-color-gray-300);
+  padding: 0.6rem 1rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--ifm-color-gray-700);
+  letter-spacing: 0.02em;
+}
+
+[data-theme='dark'] div[class*='codeBlockTitle'] {
+  background: linear-gradient(to bottom, #1a1a1a, #141414);
+  border-bottom-color: #2a2a2a;
+  color: #a1a1aa;
+}
+
+/* The pre element containing code */
+pre[class*='prism'] {
+  background: #fafbfc !important;
+  padding: 1.25rem !important;
+  margin: 0 !important;
+  font-size: 0.875rem !important;
+  line-height: 1.7 !important;
+  border-radius: 0 !important;
+}
+
+[data-theme='dark'] pre[class*='prism'] {
+  background: #0d0d0d !important;
+}
+
+/* Code inside pre */
+pre[class*='prism'] code {
+  font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace !important;
+  font-size: 0.875rem !important;
+  line-height: 1.7 !important;
+  background: transparent !important;
+  padding: 0 !important;
+}
+
+/* Line numbers styling */
+.prism-code .token-line {
+  padding: 0 1rem;
+}
+
+span[class*='codeLineNumber'] {
+  display: inline-block;
+  min-width: 2rem;
+  margin-right: 1rem;
+  padding-right: 1rem;
+  text-align: right;
+  color: #9ca3af;
+  user-select: none;
+  font-size: 0.8rem;
+  border-right: 1px solid #e5e7eb;
+}
+
+[data-theme='dark'] span[class*='codeLineNumber'] {
+  color: #6b7280;
+  border-right-color: #3f3f46;
+}
+
+/* Line content */
+span[class*='codeLineContent'] {
+  padding-left: 1rem;
+}
+
+/* Copy button styling */
+button[class*='copyButton'] {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid var(--ifm-color-gray-300);
+  border-radius: 6px;
+  padding: 0.4rem 0.6rem;
+  font-size: 0.75rem;
+  color: var(--ifm-color-gray-700);
+  transition: all 0.15s ease;
+  backdrop-filter: blur(4px);
+}
+
+button[class*='copyButton']:hover {
+  background: #fff;
+  border-color: var(--ifm-color-gray-500);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme='dark'] button[class*='copyButton'] {
+  background: rgba(30, 30, 30, 0.9);
+  border-color: #3a3a3a;
+  color: #a1a1aa;
+}
+
+[data-theme='dark'] button[class*='copyButton']:hover {
+  background: #252525;
+  border-color: #525252;
+}
+
+/* Highlighted line */
+.theme-code-block-highlighted-line {
+  background-color: rgba(0, 0, 0, 0.05);
+  display: block;
+  margin: 0 calc(-1 * var(--ifm-pre-padding));
+  padding: 0 var(--ifm-pre-padding);
+  border-left: 3px solid var(--ifm-color-primary);
+}
+
+[data-theme='dark'] .theme-code-block-highlighted-line {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Error line highlighting */
+.code-block-error-line {
+  background-color: rgba(220, 38, 38, 0.1);
+  display: block;
+  margin: 0 calc(-1 * var(--ifm-pre-padding));
+  padding: 0 var(--ifm-pre-padding);
+  border-left: 3px solid #dc2626;
+}
+
+[data-theme='dark'] .code-block-error-line {
+  background-color: rgba(248, 113, 113, 0.12);
+}
+
+/* Success line highlighting */
+.code-block-success-line {
+  background-color: rgba(22, 163, 74, 0.1);
+  display: block;
+  margin: 0 calc(-1 * var(--ifm-pre-padding));
+  padding: 0 var(--ifm-pre-padding);
+  border-left: 3px solid #16a34a;
+}
+
+[data-theme='dark'] .code-block-success-line {
+  background-color: rgba(74, 222, 128, 0.12);
+}
+
+/* Language badge in top-right */
+div[class*='codeBlockContainer']::before {
+  content: none;
+}
+
+/* Enhanced syntax highlighting colors - Light mode */
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+  color: #6a737d;
+  font-style: italic;
+}
+
+.token.property,
+.token.tag,
+.token.constant,
+.token.symbol,
+.token.deleted {
+  color: #d73a49;
+}
+
+.token.boolean,
+.token.number {
+  color: #005cc5;
+}
+
+.token.string,
+.token.char,
+.token.attr-value,
+.token.inserted {
+  color: #22863a;
+}
+
+.token.operator,
+.token.entity,
+.token.url {
+  color: #d73a49;
+}
+
+.token.atrule,
+.token.keyword {
+  color: #d73a49;
+}
+
+.token.function,
+.token.class-name {
+  color: #6f42c1;
+}
+
+.token.selector,
+.token.attr-name {
+  color: #6f42c1;
+}
+
+/* Inline code styling */
+:not(pre) > code {
+  background: rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
+  padding: 0.15em 0.4em;
+  font-size: 0.875em;
+  font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', 'Monaco', monospace;
+  color: #1a1a1a;
+}
+
+[data-theme='dark'] :not(pre) > code {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: #e5e5e5;
+}
+
+/* Code block scrollbar styling */
+pre[class*='prism']::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+
+pre[class*='prism']::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+pre[class*='prism']::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 4px;
+}
+
+pre[class*='prism']::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+[data-theme='dark'] pre[class*='prism']::-webkit-scrollbar-thumb {
+  background: #3a3a3a;
+}
+
+[data-theme='dark'] pre[class*='prism']::-webkit-scrollbar-thumb:hover {
+  background: #525252;
+}
+
+/* ============================================
+   Search Plugin Styling (docusaurus-search-local)
+   ============================================ */
+
+/* Search modal backdrop */
+.DocSearch-Container {
+  background: rgba(0, 0, 0, 0.6) !important;
+  backdrop-filter: blur(4px);
+}
+
+/* Search modal */
+.DocSearch-Modal {
+  border-radius: 12px !important;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
+}
+
+/* Search input */
+.search-bar input {
+  background: var(--ifm-background-color) !important;
+  border: 1px solid var(--ifm-color-gray-300) !important;
+  border-radius: 8px !important;
+  color: var(--ifm-font-color-base) !important;
+}
+
+[data-theme='dark'] .search-bar input {
+  background: #1a1a1a !important;
+  border-color: #3a3a3a !important;
+  color: #e5e5e5 !important;
+}
+
+/* Search results dropdown */
+.search-result-match {
+  background: var(--ifm-background-color) !important;
+  border: 1px solid var(--ifm-color-gray-300) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15) !important;
+}
+
+[data-theme='dark'] .search-result-match {
+  background: #1a1a1a !important;
+  border-color: #2a2a2a !important;
+}
+
+/* Individual search result item */
+.searchResultItem,
+.aa-Item,
+[class*='searchResultItem'] {
+  background: transparent !important;
+  color: var(--ifm-font-color-base) !important;
+  border-radius: 6px !important;
+  margin: 2px 4px !important;
+}
+
+/* Selected/focused search result - LIGHT MODE */
+.searchResultItem[aria-selected='true'],
+.aa-Item[aria-selected='true'],
+[class*='searchResultItem']:focus,
+[class*='searchResultItem']:hover,
+.aa-Item:hover,
+.menu__link--active,
+[class*='suggestion'][class*='cursor'] {
+  background: rgba(0, 0, 0, 0.05) !important;
+  color: var(--ifm-font-color-base) !important;
+}
+
+/* Selected/focused search result - DARK MODE */
+[data-theme='dark'] .searchResultItem[aria-selected='true'],
+[data-theme='dark'] .aa-Item[aria-selected='true'],
+[data-theme='dark'] [class*='searchResultItem']:focus,
+[data-theme='dark'] [class*='searchResultItem']:hover,
+[data-theme='dark'] .aa-Item:hover,
+[data-theme='dark'] [class*='suggestion'][class*='cursor'] {
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: #ffffff !important;
+}
+
+/* Search result text content */
+.searchResultItemHeading,
+[class*='searchResultItemHeading'] {
+  color: var(--ifm-font-color-base) !important;
+}
+
+[data-theme='dark'] .searchResultItemHeading,
+[data-theme='dark'] [class*='searchResultItemHeading'] {
+  color: #ffffff !important;
+}
+
+.searchResultItemPath,
+[class*='searchResultItemPath'] {
+  color: var(--ifm-color-gray-600) !important;
+}
+
+[data-theme='dark'] .searchResultItemPath,
+[data-theme='dark'] [class*='searchResultItemPath'] {
+  color: #a1a1aa !important;
+}
+
+/* Search highlight marks */
+mark,
+.search-result-match mark,
+[class*='searchResultItem'] mark {
+  background: rgba(255, 213, 0, 0.4) !important;
+  color: inherit !important;
+  padding: 0 2px;
+  border-radius: 2px;
+}
+
+[data-theme='dark'] mark,
+[data-theme='dark'] .search-result-match mark,
+[data-theme='dark'] [class*='searchResultItem'] mark {
+  background: rgba(255, 213, 0, 0.3) !important;
+  color: #ffffff !important;
+}
+
+/* Easyops search-local specific styles */
+.navbar__search-input,
+input[class*='searchQueryInput'] {
+  background: var(--ifm-background-color) !important;
+  color: var(--ifm-font-color-base) !important;
+  border: 1px solid var(--ifm-color-gray-300) !important;
+}
+
+[data-theme='dark'] .navbar__search-input,
+[data-theme='dark'] input[class*='searchQueryInput'] {
+  background: #1a1a1a !important;
+  color: #e5e5e5 !important;
+  border-color: #3a3a3a !important;
+}
+
+/* Search results container for easyops-cn/docusaurus-search-local */
+ul[class*='searchResults'],
+div[class*='searchResults'] {
+  background: var(--ifm-background-color) !important;
+  border: 1px solid var(--ifm-color-gray-300) !important;
+  border-radius: 8px !important;
+}
+
+[data-theme='dark'] ul[class*='searchResults'],
+[data-theme='dark'] div[class*='searchResults'] {
+  background: #141414 !important;
+  border-color: #2a2a2a !important;
+}
+
+/* Search result link items */
+a[class*='searchResult'] {
+  color: var(--ifm-font-color-base) !important;
+  text-decoration: none !important;
+  display: block;
+  padding: 0.75rem 1rem !important;
+  border-radius: 6px !important;
+  margin: 2px 0 !important;
+}
+
+a[class*='searchResult']:hover,
+a[class*='searchResult']:focus,
+a[class*='searchResult'][class*='cursor'] {
+  background: rgba(0, 0, 0, 0.05) !important;
+  color: var(--ifm-font-color-base) !important;
+}
+
+[data-theme='dark'] a[class*='searchResult'] {
+  color: #e5e5e5 !important;
+}
+
+[data-theme='dark'] a[class*='searchResult']:hover,
+[data-theme='dark'] a[class*='searchResult']:focus,
+[data-theme='dark'] a[class*='searchResult'][class*='cursor'] {
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: #ffffff !important;
+}
+
+/* ============================================
+   Dark Mode Code Block Syntax Highlighting
+   ============================================ */
+
+/* Improve dark mode code block background */
+[data-theme='dark'] pre[class*='prism'] {
+  background: #161618 !important;
+}
+
+/* Dark mode syntax colors - inspired by Dracula/One Dark */
+[data-theme='dark'] .token.comment,
+[data-theme='dark'] .token.prolog,
+[data-theme='dark'] .token.doctype,
+[data-theme='dark'] .token.cdata {
+  color: #6272a4;
+  font-style: italic;
+}
+
+[data-theme='dark'] .token.punctuation {
+  color: #a1a1aa;
+}
+
+[data-theme='dark'] .token.property,
+[data-theme='dark'] .token.tag,
+[data-theme='dark'] .token.constant,
+[data-theme='dark'] .token.symbol,
+[data-theme='dark'] .token.deleted {
+  color: #ff79c6;
+}
+
+[data-theme='dark'] .token.boolean,
+[data-theme='dark'] .token.number {
+  color: #bd93f9;
+}
+
+[data-theme='dark'] .token.string,
+[data-theme='dark'] .token.char,
+[data-theme='dark'] .token.attr-value,
+[data-theme='dark'] .token.builtin,
+[data-theme='dark'] .token.inserted {
+  color: #50fa7b;
+}
+
+[data-theme='dark'] .token.operator,
+[data-theme='dark'] .token.entity,
+[data-theme='dark'] .token.url,
+[data-theme='dark'] .token.variable {
+  color: #f8f8f2;
+}
+
+[data-theme='dark'] .token.atrule,
+[data-theme='dark'] .token.keyword {
+  color: #ff79c6;
+}
+
+[data-theme='dark'] .token.function,
+[data-theme='dark'] .token.class-name {
+  color: #8be9fd;
+}
+
+[data-theme='dark'] .token.selector,
+[data-theme='dark'] .token.attr-name {
+  color: #50fa7b;
+}
+
+[data-theme='dark'] .token.regex,
+[data-theme='dark'] .token.important {
+  color: #ffb86c;
+}
+
+/* JSON specific tokens for dark mode */
+[data-theme='dark'] .language-json .token.property {
+  color: #8be9fd;
+}
+
+[data-theme='dark'] .language-json .token.string {
+  color: #f1fa8c;
+}
+
+[data-theme='dark'] .language-json .token.number {
+  color: #bd93f9;
+}
+
+[data-theme='dark'] .language-json .token.boolean,
+[data-theme='dark'] .language-json .token.null {
+  color: #ff79c6;
+}
+
+/* TypeScript/JavaScript specific for dark mode */
+[data-theme='dark'] .language-typescript .token.keyword,
+[data-theme='dark'] .language-javascript .token.keyword,
+[data-theme='dark'] .language-ts .token.keyword,
+[data-theme='dark'] .language-js .token.keyword {
+  color: #ff79c6;
+}
+
+[data-theme='dark'] .language-typescript .token.function,
+[data-theme='dark'] .language-javascript .token.function,
+[data-theme='dark'] .language-ts .token.function,
+[data-theme='dark'] .language-js .token.function {
+  color: #8be9fd;
+}
+
+/* Bash/Shell for dark mode */
+[data-theme='dark'] .language-bash .token.function,
+[data-theme='dark'] .language-shell .token.function {
+  color: #8be9fd;
+}
+
+[data-theme='dark'] .language-bash .token.string,
+[data-theme='dark'] .language-shell .token.string {
+  color: #f1fa8c;
+}
+
+/* YAML for dark mode */
+[data-theme='dark'] .language-yaml .token.key,
+[data-theme='dark'] .language-yml .token.key {
+  color: #8be9fd;
+}
+
+[data-theme='dark'] .language-yaml .token.string,
+[data-theme='dark'] .language-yml .token.string {
+  color: #f1fa8c;
+}

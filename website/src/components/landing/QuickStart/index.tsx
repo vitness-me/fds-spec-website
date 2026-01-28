@@ -1,8 +1,38 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from '@docusaurus/Link';
 import { Highlight, themes } from 'prism-react-renderer';
-import { useColorMode } from '@docusaurus/theme-common';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 import styles from './styles.module.css';
+
+/**
+ * Custom hook to safely detect dark mode during SSR
+ * Falls back to light mode during server-side rendering
+ */
+function useSafeColorMode(): 'light' | 'dark' {
+  const [colorMode, setColorMode] = useState<'light' | 'dark'>('light');
+
+  useEffect(() => {
+    // Initial detection
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    setColorMode(isDark ? 'dark' : 'light');
+
+    // Watch for changes
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.attributeName === 'data-theme') {
+          const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+          setColorMode(isDark ? 'dark' : 'light');
+        }
+      });
+    });
+
+    observer.observe(document.documentElement, { attributes: true });
+    return () => observer.disconnect();
+  }, []);
+
+  return colorMode;
+}
 
 const minimalExample = `{
   "schemaVersion": "1.0.0",
@@ -35,7 +65,7 @@ const minimalExample = `{
 
 export default function QuickStart(): JSX.Element {
   const [copied, setCopied] = useState(false);
-  const { colorMode } = useColorMode();
+  const colorMode = useSafeColorMode();
   const theme = colorMode === 'dark' ? themes.vsDark : themes.vsLight;
 
   const handleCopy = () => {
@@ -45,7 +75,7 @@ export default function QuickStart(): JSX.Element {
   };
 
   return (
-    <section className={styles.quickStartSection}>
+    <section id="quick-start" className={styles.quickStartSection}>
       <div className={styles.container}>
         <h2 className={styles.sectionTitle}>Quick Start</h2>
         <p className={styles.sectionSubtitle}>
@@ -92,6 +122,35 @@ export default function QuickStart(): JSX.Element {
                   to="/docs/getting-started/quick-validation"
                 >
                   Validation Guide →
+                </Link>
+              </div>
+            </div>
+
+            <div className={styles.step}>
+              <span className={styles.stepNumber}>4</span>
+              <div className={styles.stepContent}>
+                <h3 className={styles.stepTitle}>Transform Your Data</h3>
+                <p className={styles.stepDescription}>
+                  Use the FDS Transformer CLI to convert your existing data to FDS format with optional AI enrichment.
+                </p>
+                <div className={styles.installTabs}>
+                  <Tabs groupId="package-manager" queryString>
+                    <TabItem value="pnpm" label="pnpm" default>
+                      <code className={styles.codeSnippet}>pnpm add -g @vitness/fds-transformer</code>
+                    </TabItem>
+                    <TabItem value="npm" label="npm">
+                      <code className={styles.codeSnippet}>npm install -g @vitness/fds-transformer</code>
+                    </TabItem>
+                    <TabItem value="yarn" label="yarn">
+                      <code className={styles.codeSnippet}>yarn global add @vitness/fds-transformer</code>
+                    </TabItem>
+                  </Tabs>
+                </div>
+                <Link
+                  className={styles.stepLink}
+                  to="/docs/tools/transformer"
+                >
+                  Transformer Docs →
                 </Link>
               </div>
             </div>

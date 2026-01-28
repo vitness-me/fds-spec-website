@@ -1,0 +1,42 @@
+[
+    {
+        "bodyPart": "waist",
+        "equipment": "body weight",
+        "gifUrl": "http://d205bpvrqc9yn1.cloudfront.net/0001.gif",
+        "id": "0001",
+        "name": "3/4 sit-up",
+        "target": "abs"
+    },
+    {
+        "bodyPart": "back",
+        "equipment": "body weight",
+        "gifUrl": "http://d205bpvrqc9yn1.cloudfront.net/3293.gif",
+        "id": "3293",
+        "name": "archer pull up",
+        "target": "lats"
+    },
+    {
+        "bodyPart": "chest",
+        "equipment": "barbell",
+        "gifUrl": "http://d205bpvrqc9yn1.cloudfront.net/0025.gif",
+        "id": "0025",
+        "name": "barbell bench press",
+        "target": "pectorals"
+    },
+    {
+        "bodyPart": "upper legs",
+        "equipment": "barbell",
+        "gifUrl": "http://d205bpvrqc9yn1.cloudfront.net/0043.gif",
+        "id": "0043",
+        "name": "barbell full squat",
+        "target": "quads"
+    },
+    {
+        "bodyPart": "cardio",
+        "equipment": "body weight",
+        "gifUrl": "http://d205bpvrqc9yn1.cloudfront.net/3220.gif",
+        "id": "3220",
+        "name": "astride jumps (male)",
+        "target": "cardiovascular system"
+    }
+]
