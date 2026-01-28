@@ -10,11 +10,6 @@ import type { RegistriesConfig, MuscleRegistryEntry, EquipmentRegistryEntry } fr
 const mockFetch = vi.fn();
 global.fetch = mockFetch;
 
-// Helper to create mocked fs module
-const createMockFs = (mockReadFile: ReturnType<typeof vi.fn>) => ({
-  readFile: mockReadFile
-});
-
 // Sample registry data
 const sampleMuscles: MuscleRegistryEntry[] = [
   {
