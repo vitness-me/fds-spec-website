@@ -8,11 +8,11 @@ var __export = (target, all) => {
     __defProp(target, name, { get: all[name], enumerable: true });
 };
 
-// node_modules/.pnpm/tsup@8.5.1_postcss@8.5.6_typescript@5.9.3/node_modules/tsup/assets/esm_shims.js
+// node_modules/tsup/assets/esm_shims.js
 import path from "path";
 import { fileURLToPath } from "url";
 var init_esm_shims = __esm({
-  "node_modules/.pnpm/tsup@8.5.1_postcss@8.5.6_typescript@5.9.3/node_modules/tsup/assets/esm_shims.js"() {
+  "node_modules/tsup/assets/esm_shims.js"() {
     "use strict";
   }
 });
@@ -1428,55 +1428,91 @@ function getNestedValue(obj, path2) {
 
 // src/transforms/builtin/registry-lookup.ts
 init_esm_shims();
+function getRegistryLookupOptions(options) {
+  const registry = options.registry;
+  const matchField = options.matchField;
+  const fuzzyMatch = options.fuzzyMatch;
+  const toArray2 = options.toArray;
+  const returnFields = options.returnFields;
+  return {
+    registry: registry === "muscles" || registry === "equipment" || registry === "muscleCategories" ? registry : "muscles",
+    matchField: matchField === "name" || matchField === "slug" || matchField === "id" ? matchField : void 0,
+    fuzzyMatch: typeof fuzzyMatch === "boolean" ? fuzzyMatch : void 0,
+    toArray: typeof toArray2 === "boolean" ? toArray2 : void 0,
+    returnFields: Array.isArray(returnFields) ? returnFields.filter((field) => typeof field === "string") : void 0
+  };
+}
 var registryLookup = (value, options = {}, context) => {
+  const lookupOptions = getRegistryLookupOptions(options);
   if (value === null || value === void 0 || value === "") {
-    return options.toArray ? [] : null;
+    return lookupOptions.toArray ? [] : null;
   }
-  const lookupOptions = options;
-  const registryName = lookupOptions.registry || "muscles";
+  const registryName = lookupOptions.registry;
   const registry = context.registries[registryName];
   if (!registry || registry.length === 0) {
     console.warn(`Registry "${registryName}" is empty or not loaded`);
-    return options.toArray ? [] : null;
+    return lookupOptions.toArray ? [] : null;
   }
   const queries = Array.isArray(value) ? value : [value];
   const results = [];
   for (const query of queries) {
     const normalizedQuery = String(query).toLowerCase().trim();
-    let match = registry.find(
-      (entry) => entry.canonical.name.toLowerCase() === normalizedQuery || entry.canonical.slug === normalizedQuery
-    );
-    if (!match) {
+    let match;
+    if (lookupOptions.matchField === "id") {
+      match = registry.find((entry) => String(entry.id).toLowerCase() === normalizedQuery);
+    } else if (lookupOptions.matchField === "slug") {
+      match = registry.find((entry) => entry.canonical.slug.toLowerCase() === normalizedQuery);
+    } else if (lookupOptions.matchField === "name") {
       match = registry.find(
-        (entry) => entry.canonical.aliases?.some(
-          (alias) => alias.toLowerCase() === normalizedQuery
-        )
+        (entry) => entry.canonical.name.toLowerCase() === normalizedQuery || entry.canonical.aliases?.some((alias) => alias.toLowerCase() === normalizedQuery)
       );
+    } else {
+      match = registry.find(
+        (entry) => entry.canonical.name.toLowerCase() === normalizedQuery || entry.canonical.slug.toLowerCase() === normalizedQuery
+      );
+      if (!match) {
+        match = registry.find(
+          (entry) => entry.canonical.aliases?.some((alias) => alias.toLowerCase() === normalizedQuery)
+        );
+      }
     }
-    if (!match && lookupOptions.fuzzyMatch) {
+    if (!match && lookupOptions.fuzzyMatch && lookupOptions.matchField !== "id") {
       match = findFuzzyMatch(registry, normalizedQuery);
     }
     if (match) {
+      let result;
       if (registryName === "muscles") {
         const muscleEntry = match;
-        results.push({
+        result = {
           id: match.id,
           name: match.canonical.name,
           slug: match.canonical.slug,
           categoryId: muscleEntry.classification?.categoryId || ""
-        });
+        };
       } else if (registryName === "equipment") {
-        results.push({
+        result = {
           id: match.id,
           name: match.canonical.name,
           slug: match.canonical.slug
-        });
+        };
       } else {
-        results.push({
+        result = {
           id: match.id,
           name: match.canonical.name,
           slug: match.canonical.slug
-        });
+        };
+      }
+      if (lookupOptions.returnFields?.length) {
+        const filtered = {};
+        const resultRecord = { ...result };
+        for (const field of lookupOptions.returnFields) {
+          if (field in resultRecord) {
+            filtered[field] = resultRecord[field];
+          }
+        }
+        results.push(filtered);
+      } else {
+        results.push(result);
       }
     }
   }
@@ -1793,7 +1829,11 @@ var MappingEngine = class {
    */
   async applyMapping(source, mapping, context) {
     if (mapping.condition) {
-      const conditionMet = this.evaluateCondition(mapping.condition, source);
+      const conditionMet = this.evaluateCondition(
+        mapping.condition,
+        source,
+        context.config?.allowUnsafeEval === true
+      );
       if (!conditionMet) {
         return void 0;
       }
@@ -1861,21 +1901,55 @@ var MappingEngine = class {
   setNestedValue(obj, path2, value) {
     const parts = path2.split(".");
     let current = obj;
-    for (let i = 0; i < parts.length - 1; i++) {
+    for (let i = 0; i < parts.length; i++) {
       const part = parts[i];
-      if (!(part in current)) {
-        const nextPart = parts[i + 1];
-        current[part] = /^\d+$/.test(nextPart) ? [] : {};
+      const isLast = i === parts.length - 1;
+      const arrayMatch = part.match(/^(\w+)\[(\d+)\]$/);
+      if (arrayMatch) {
+        const [, fieldName, index] = arrayMatch;
+        const targetIndex = parseInt(index, 10);
+        if (current === null || current === void 0 || typeof current !== "object") {
+          return;
+        }
+        const currentRecord2 = current;
+        if (!Array.isArray(currentRecord2[fieldName])) {
+          currentRecord2[fieldName] = [];
+        }
+        const arrayRef = currentRecord2[fieldName];
+        if (isLast) {
+          arrayRef[targetIndex] = value;
+          return;
+        }
+        if (arrayRef[targetIndex] === void 0) {
+          const nextPart = parts[i + 1];
+          arrayRef[targetIndex] = /^\w+\[\d+\]$/.test(nextPart) ? [] : {};
+        }
+        current = arrayRef[targetIndex];
+        continue;
       }
-      current = current[part];
+      if (current === null || current === void 0 || typeof current !== "object") {
+        return;
+      }
+      const currentRecord = current;
+      if (isLast) {
+        currentRecord[part] = value;
+        return;
+      }
+      if (!(part in currentRecord)) {
+        const nextPart = parts[i + 1];
+        currentRecord[part] = /^\w+\[\d+\]$/.test(nextPart) ? [] : {};
+      }
+      current = currentRecord[part];
     }
-    const lastPart = parts[parts.length - 1];
-    current[lastPart] = value;
   }
   /**
    * Evaluate a condition expression
    */
-  evaluateCondition(condition, source) {
+  evaluateCondition(condition, source, allowUnsafeEval) {
+    if (!allowUnsafeEval) {
+      console.warn("Conditional expressions are disabled. Set allowUnsafeEval to true to enable them.");
+      return false;
+    }
     try {
       const fn = new Function("source", `return ${condition}`);
       return Boolean(fn(source));
@@ -2876,7 +2950,7 @@ var RateLimiter = class {
 // src/ai/checkpoint-manager.ts
 init_esm_shims();
 import { createHash } from "crypto";
-import { existsSync, mkdirSync, readFileSync, unlinkSync, writeFileSync } from "fs";
+import { existsSync, mkdirSync, readFileSync, renameSync, unlinkSync, writeFileSync } from "fs";
 import { dirname, join } from "path";
 var CHECKPOINT_FILENAME = ".fds-checkpoint.json";
 var ENRICHMENT_LOG_FILENAME = "enrichment.log";
@@ -2887,14 +2961,12 @@ var DEFAULT_CHECKPOINT_CONFIG = {
 };
 var CheckpointManager = class {
   config;
-  outputDirectory;
   checkpointPath;
   logFilePath;
   data = null;
   updatesSinceLastSave = 0;
   constructor(outputDirectory, config = {}) {
     this.config = { ...DEFAULT_CHECKPOINT_CONFIG, ...config };
-    this.outputDirectory = outputDirectory;
     this.checkpointPath = join(outputDirectory, CHECKPOINT_FILENAME);
     this.logFilePath = join(outputDirectory, ENRICHMENT_LOG_FILENAME);
   }
@@ -3040,7 +3112,9 @@ var CheckpointManager = class {
     this.ensureDirectory();
     this.data.lastUpdatedAt = (/* @__PURE__ */ new Date()).toISOString();
     const content = JSON.stringify(this.data, null, 2);
-    writeFileSync(this.checkpointPath, content, "utf-8");
+    const tempPath = `${this.checkpointPath}.tmp.${process.pid}.${Date.now()}`;
+    writeFileSync(tempPath, content, "utf-8");
+    renameSync(tempPath, this.checkpointPath);
     this.updatesSinceLastSave = 0;
   }
   /**
@@ -3129,8 +3203,58 @@ var CheckpointManager = class {
    * Hash configuration for change detection
    */
   hashConfig(config) {
-    const json = JSON.stringify(config, Object.keys(config).sort());
+    const json = this.stableStringify(config);
     return createHash("sha256").update(json).digest("hex").substring(0, 16);
+  }
+  stableStringify(value) {
+    const seen = /* @__PURE__ */ new WeakSet();
+    const stringify = (input) => {
+      if (input === null) {
+        return "null";
+      }
+      const inputType = typeof input;
+      if (inputType === "number") {
+        return Number.isFinite(input) ? String(input) : "null";
+      }
+      if (inputType === "string") {
+        return JSON.stringify(input);
+      }
+      if (inputType === "boolean") {
+        return input ? "true" : "false";
+      }
+      if (inputType === "bigint") {
+        return JSON.stringify(String(input));
+      }
+      if (inputType === "undefined" || inputType === "function" || inputType === "symbol") {
+        return void 0;
+      }
+      if (inputType !== "object") {
+        return JSON.stringify(input);
+      }
+      const objectValue = input;
+      if (typeof objectValue.toJSON === "function") {
+        return stringify(objectValue.toJSON());
+      }
+      if (Array.isArray(objectValue)) {
+        const items = objectValue.map((item) => stringify(item) ?? "null");
+        return `[${items.join(",")} ]`.replace(", ]", "]");
+      }
+      if (seen.has(objectValue)) {
+        throw new TypeError("Cannot stringify circular structure");
+      }
+      seen.add(objectValue);
+      const keys = Object.keys(objectValue).sort();
+      const entries = [];
+      for (const key of keys) {
+        const valueString = stringify(objectValue[key]);
+        if (valueString !== void 0) {
+          entries.push(`${JSON.stringify(key)}:${valueString}`);
+        }
+      }
+      seen.delete(objectValue);
+      return `{${entries.join(",")}}`;
+    };
+    return stringify(value) ?? "null";
   }
   /**
    * Ensure output directory exists
@@ -4909,6 +5033,9 @@ var ConfigLoader = class {
       }
       if (config.mappings) {
         merged.mappings = { ...merged.mappings, ...config.mappings };
+      }
+      if (config.allowUnsafeEval !== void 0) {
+        merged.allowUnsafeEval = config.allowUnsafeEval;
       }
       if (config.enrichment) {
         merged.enrichment = { ...merged.enrichment, ...config.enrichment };
