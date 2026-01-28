@@ -18,6 +18,27 @@ export interface RegistryLookupOptions {
   returnFields?: string[];
 }
 
+function getRegistryLookupOptions(options: Record<string, unknown>): RegistryLookupOptions {
+  const registry = options.registry;
+  const matchField = options.matchField;
+  const fuzzyMatch = options.fuzzyMatch;
+  const toArray = options.toArray;
+  const returnFields = options.returnFields;
+
+  return {
+    registry:
+      registry === 'muscles' || registry === 'equipment' || registry === 'muscleCategories'
+        ? registry
+        : 'muscles',
+    matchField: matchField === 'name' || matchField === 'slug' || matchField === 'id' ? matchField : undefined,
+    fuzzyMatch: typeof fuzzyMatch === 'boolean' ? fuzzyMatch : undefined,
+    toArray: typeof toArray === 'boolean' ? toArray : undefined,
+    returnFields: Array.isArray(returnFields)
+      ? returnFields.filter((field): field is string => typeof field === 'string')
+      : undefined,
+  };
+}
+
 /**
  * Look up a value in a registry
  */
@@ -26,21 +47,22 @@ export const registryLookup: TransformFunction = (
   options: Record<string, unknown> = {},
   context: TransformContext
 ): unknown => {
+  const lookupOptions = getRegistryLookupOptions(options);
+
   if (value === null || value === undefined || value === '') {
-    return (options as RegistryLookupOptions).toArray ? [] : null;
+    return lookupOptions.toArray ? [] : null;
   }
 
-  const lookupOptions = options as unknown as RegistryLookupOptions;
-  const registryName = lookupOptions.registry || 'muscles';
+  const registryName = lookupOptions.registry;
   const registry = context.registries[registryName];
 
   if (!registry || registry.length === 0) {
     console.warn(`Registry "${registryName}" is empty or not loaded`);
-    return options.toArray ? [] : null;
+    return lookupOptions.toArray ? [] : null;
   }
 
   const queries = Array.isArray(value) ? value : [value];
-  const results: Array<MuscleRef | EquipmentRef | MuscleCategoryRef> = [];
+  const results: Array<MuscleRef | EquipmentRef | MuscleCategoryRef | Record<string, unknown>> = [];
 
   for (const query of queries) {
     const normalizedQuery = String(query).toLowerCase().trim();
@@ -104,12 +126,13 @@ export const registryLookup: TransformFunction = (
 
       if (lookupOptions.returnFields?.length) {
         const filtered: Record<string, unknown> = {};
+        const resultRecord: Record<string, unknown> = { ...result };
         for (const field of lookupOptions.returnFields) {
-          if (field in result) {
-            filtered[field] = (result as Record<string, unknown>)[field];
+          if (field in resultRecord) {
+            filtered[field] = resultRecord[field];
           }
         }
-        results.push(filtered as typeof result);
+        results.push(filtered);
       } else {
         results.push(result);
       }

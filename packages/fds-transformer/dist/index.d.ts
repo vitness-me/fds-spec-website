@@ -7,6 +7,7 @@ interface MappingConfig {
     targetSchema: TargetSchemaConfig;
     registries?: RegistriesConfig;
     mappings: Record<string, FieldMapping>;
+    allowUnsafeEval?: boolean;
     enrichment?: EnrichmentConfig;
     validation?: ValidationConfig;
     output?: OutputConfig;
