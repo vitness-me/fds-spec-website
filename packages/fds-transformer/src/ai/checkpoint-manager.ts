@@ -83,7 +83,6 @@ export interface CheckpointValidationResult {
  */
 export class CheckpointManager {
   private config: CheckpointConfig;
-  private outputDirectory: string;
   private checkpointPath: string;
   private logFilePath: string;
   private data: CheckpointData | null = null;
@@ -91,7 +90,6 @@ export class CheckpointManager {
 
   constructor(outputDirectory: string, config: Partial<CheckpointConfig> = {}) {
     this.config = { ...DEFAULT_CHECKPOINT_CONFIG, ...config };
-    this.outputDirectory = outputDirectory;
     this.checkpointPath = join(outputDirectory, CHECKPOINT_FILENAME);
     this.logFilePath = join(outputDirectory, ENRICHMENT_LOG_FILENAME);
   }
