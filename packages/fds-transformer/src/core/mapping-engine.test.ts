@@ -2,7 +2,7 @@
  * Tests for MappingEngine
  */
 
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { MappingEngine } from './mapping-engine.js';
 import type { TransformContext, FieldMapping, MappingConfig } from './types.js';
 
@@ -21,7 +21,7 @@ describe('MappingEngine', () => {
         equipment: [],
         muscleCategories: []
       },
-      config: {} as MappingConfig
+      config: { allowUnsafeEval: true } as MappingConfig
     };
   });
 
@@ -362,6 +362,29 @@ describe('MappingEngine', () => {
       expect(result).toEqual({
         bonus: 10
       });
+    });
+
+    it('should skip condition evaluation when unsafe eval is disabled', async () => {
+      const source = { name: 'Test', hasMedia: true, mediaUrl: 'http://example.com/img.jpg' };
+      const mappings: Record<string, FieldMapping> = {
+        name: 'name',
+        media: {
+          from: 'mediaUrl',
+          condition: 'source.hasMedia === true'
+        }
+      };
+      const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+
+      const result = await engine.apply(source, mappings, {
+        ...defaultContext,
+        config: { allowUnsafeEval: false } as MappingConfig
+      });
+
+      expect(result).toEqual({
+        name: 'Test'
+      });
+      expect(warnSpy).toHaveBeenCalled();
+      warnSpy.mockRestore();
     });
   });
 

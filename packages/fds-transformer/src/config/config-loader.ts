@@ -108,6 +108,9 @@ export class ConfigLoader {
       if (config.mappings) {
         merged.mappings = { ...merged.mappings, ...config.mappings };
       }
+      if (config.allowUnsafeEval !== undefined) {
+        merged.allowUnsafeEval = config.allowUnsafeEval;
+      }
       if (config.enrichment) {
         merged.enrichment = { ...merged.enrichment, ...config.enrichment };
       }

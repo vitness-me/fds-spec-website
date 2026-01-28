@@ -62,7 +62,11 @@ export class MappingEngine {
   ): Promise<unknown> {
     // Check condition if present
     if (mapping.condition) {
-      const conditionMet = this.evaluateCondition(mapping.condition, source);
+      const conditionMet = this.evaluateCondition(
+        mapping.condition,
+        source,
+        context.config?.allowUnsafeEval === true
+      );
       if (!conditionMet) {
         return undefined;
       }
@@ -213,8 +217,13 @@ export class MappingEngine {
    */
   private evaluateCondition(
     condition: string,
-    source: Record<string, unknown>
+    source: Record<string, unknown>,
+    allowUnsafeEval: boolean
   ): boolean {
+    if (!allowUnsafeEval) {
+      console.warn('Conditional expressions are disabled. Set allowUnsafeEval to true to enable them.');
+      return false;
+    }
     try {
       // Create a safe evaluation context
       const fn = new Function('source', `return ${condition}`);
