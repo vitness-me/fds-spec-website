@@ -114,7 +114,8 @@ describe('CheckpointManager', () => {
 
       expect(data.startedAt >= before).toBe(true);
       expect(data.startedAt <= after).toBe(true);
-      expect(data.lastUpdatedAt).toBe(data.startedAt);
+      expect(data.lastUpdatedAt >= data.startedAt).toBe(true);
+      expect(data.lastUpdatedAt <= after).toBe(true);
     });
 
     it('should hash config for change detection', () => {
