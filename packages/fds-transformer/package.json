@@ -44,7 +44,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/vitness/fds-spec-website.git",
+    "url": "https://github.com/vitness-me/fds-spec-website.git",
     "directory": "packages/fds-transformer"
   },
   "engines": {
