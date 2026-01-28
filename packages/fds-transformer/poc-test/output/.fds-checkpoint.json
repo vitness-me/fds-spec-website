@@ -1,0 +1,368 @@
+{
+  "version": "1.0.0",
+  "configHash": "2f71f9b3169b5acf",
+  "startedAt": "2026-01-27T12:59:52.401Z",
+  "lastUpdatedAt": "2026-01-27T13:02:14.284Z",
+  "inputFile": "batch-enrichment",
+  "totalExercises": 5,
+  "completedExercises": 5,
+  "completedIds": [
+    "ec2a9c51-4435-4f0c-a05a-56617878473b",
+    "252afb44-8531-4e58-aeeb-ba157fda446d",
+    "941b6629-50e5-4da6-b8c5-bfa5d990999b",
+    "f8f87844-39b1-415a-b559-f651a9334989",
+    "3808ea3f-7cc1-4c61-a2a8-7edc6ecd598b"
+  ],
+  "failedIds": [],
+  "currentTier": "complex",
+  "results": {
+    "ec2a9c51-4435-4f0c-a05a-56617878473b": {
+      "medium": {
+        "constraints": {
+          "contraindications": [
+            "Acute or chronic lower back pain",
+            "Recent abdominal surgery",
+            "Pregnancy (especially 2nd and 3rd trimester)",
+            "Hiatal hernia",
+            "Severe osteoporosis"
+          ],
+          "prerequisites": [
+            "dead-bug",
+            "basic-crunch",
+            "Ability to maintain neutral spine",
+            "Core activation control"
+          ],
+          "progressions": [
+            "full-sit-up",
+            "weighted-sit-up",
+            "decline-sit-up",
+            "v-up"
+          ],
+          "regressions": [
+            "crunch",
+            "modified-crunch",
+            "dead-bug",
+            "Partial range of motion sit-up"
+          ]
+        },
+        "relations": [
+          {
+            "type": "variation",
+            "targetId": "full-sit-up",
+            "confidence": 0.95,
+            "notes": "Full range of motion variant"
+          },
+          {
+            "type": "regression",
+            "targetId": "crunch",
+            "confidence": 0.9,
+            "notes": "Shorter range of motion, easier variation"
+          },
+          {
+            "type": "similarPattern",
+            "targetId": "v-up",
+            "confidence": 0.8,
+            "notes": "Similar trunk flexion pattern"
+          },
+          {
+            "type": "accessory",
+            "targetId": "plank",
+            "confidence": 0.85,
+            "notes": "Builds core stability needed for sit-ups"
+          }
+        ]
+      }
+    },
+    "252afb44-8531-4e58-aeeb-ba157fda446d": {
+      "medium": {
+        "constraints": {
+          "contraindications": [
+            "Shoulder impingement",
+            "Rotator cuff injuries",
+            "Bicep tendonitis",
+            "Severe shoulder instability",
+            "Recent upper body surgery"
+          ],
+          "prerequisites": [
+            "standard-pull-up",
+            "wide-grip-pull-up",
+            "Ability to perform 8-10 strict pull-ups",
+            "Scapular control"
+          ],
+          "progressions": [
+            "one-arm-pull-up",
+            "weighted-archer-pull-up",
+            "typewriter-pull-up",
+            "around-the-world-pull-up"
+          ],
+          "regressions": [
+            "wide-grip-pull-up",
+            "standard-pull-up",
+            "negative-pull-up",
+            "band-assisted-pull-up"
+          ]
+        },
+        "relations": [
+          {
+            "type": "regression",
+            "targetId": "pull-up",
+            "confidence": 0.95,
+            "notes": "Standard pull-up is prerequisite"
+          },
+          {
+            "type": "similarPattern",
+            "targetId": "one-arm-pull-up",
+            "confidence": 0.9,
+            "notes": "Similar unilateral pulling pattern"
+          },
+          {
+            "type": "progression",
+            "targetId": "one-arm-pull-up",
+            "confidence": 0.85,
+            "notes": "Archer pull-up helps build toward one-arm pull-up"
+          },
+          {
+            "type": "mobilityPrep",
+            "targetId": "active-hang",
+            "confidence": 0.8,
+            "notes": "Builds shoulder mobility and stability"
+          }
+        ]
+      }
+    },
+    "941b6629-50e5-4da6-b8c5-bfa5d990999b": {
+      "medium": {
+        "constraints": {
+          "contraindications": [
+            "Acute shoulder injury",
+            "Unstable shoulder joint",
+            "Severe rotator cuff problems",
+            "Acute wrist injuries",
+            "Sternum or rib injuries"
+          ],
+          "prerequisites": [
+            "push-up",
+            "dumbbell-bench-press",
+            "Proper scapular retraction",
+            "Core stability",
+            "Shoulder mobility"
+          ],
+          "progressions": [
+            "incline-barbell-bench-press",
+            "close-grip-bench-press",
+            "pause-bench-press",
+            "spoto-press"
+          ],
+          "regressions": [
+            "dumbbell-bench-press",
+            "push-up",
+            "incline-push-up",
+            "machine-chest-press"
+          ]
+        },
+        "relations": [
+          {
+            "type": "equipmentVariant",
+            "targetId": "dumbbell-bench-press",
+            "confidence": 0.95,
+            "notes": "Same movement pattern with dumbbells"
+          },
+          {
+            "type": "regression",
+            "targetId": "push-up",
+            "confidence": 0.9,
+            "notes": "Bodyweight alternative with similar pattern"
+          },
+          {
+            "type": "variation",
+            "targetId": "incline-bench-press",
+            "confidence": 0.95,
+            "notes": "Variant with different angle emphasis"
+          },
+          {
+            "type": "accessory",
+            "targetId": "tricep-extension",
+            "confidence": 0.85,
+            "notes": "Assists with lockout strength"
+          },
+          {
+            "type": "mobilityPrep",
+            "targetId": "shoulder-dislocates",
+            "confidence": 0.8,
+            "notes": "Improves shoulder mobility needed for bench"
+          }
+        ]
+      },
+      "complex": {
+        "classification": {
+          "movement": "push-horizontal",
+          "mechanics": "compound",
+          "force": "push",
+          "kineticChain": "closed",
+          "tags": [
+            "upper-body",
+            "strength",
+            "power",
+            "chest",
+            "horizontal-push"
+          ]
+        },
+        "targets": {
+          "secondary": [
+            {
+              "id": "anterior-deltoid",
+              "name": "Anterior Deltoid"
+            },
+            {
+              "id": "triceps-brachii",
+              "name": "Triceps Brachii"
+            },
+            {
+              "id": "serratus-anterior",
+              "name": "Serratus Anterior"
+            },
+            {
+              "id": "coracobrachialis",
+              "name": "Coracobrachialis"
+            },
+            {
+              "id": "rotator-cuff",
+              "name": "Rotator Cuff Complex"
+            },
+            {
+              "id": "core-stabilizers",
+              "name": "Core Stabilizers"
+            }
+          ]
+        }
+      }
+    },
+    "f8f87844-39b1-415a-b559-f651a9334989": {
+      "medium": {
+        "constraints": {
+          "contraindications": [
+            "Acute lower back injury",
+            "Acute knee injury or severe osteoarthritis",
+            "Uncontrolled high blood pressure",
+            "Spinal disc herniation",
+            "Severe balance disorders"
+          ],
+          "prerequisites": [
+            "bodyweight-squat",
+            "adequate-ankle-mobility",
+            "core-stability",
+            "proper-hip-hinge-pattern",
+            "shoulder-mobility-for-bar-position"
+          ],
+          "progressions": [
+            "front-squat",
+            "overhead-squat",
+            "pause-squat",
+            "tempo-squat",
+            "box-squat"
+          ],
+          "regressions": [
+            "bodyweight-squat",
+            "goblet-squat",
+            "wall-squat",
+            "box-squat-higher-box",
+            "dumbbell-squat"
+          ]
+        },
+        "relations": [
+          {
+            "type": "variation",
+            "targetId": "front-squat",
+            "confidence": 0.95,
+            "notes": "Same movement pattern with different bar position"
+          },
+          {
+            "type": "equipmentVariant",
+            "targetId": "dumbbell-squat",
+            "confidence": 0.9,
+            "notes": "Same movement using dumbbells instead of barbell"
+          },
+          {
+            "type": "regression",
+            "targetId": "bodyweight-squat",
+            "confidence": 0.95,
+            "notes": "Fundamental regression without external load"
+          },
+          {
+            "type": "progression",
+            "targetId": "pause-squat",
+            "confidence": 0.85,
+            "notes": "Adds difficulty with paused bottom position"
+          },
+          {
+            "type": "mobilityPrep",
+            "targetId": "ankle-mobility-drill",
+            "confidence": 0.9,
+            "notes": "Prepares ankle dorsiflexion required for squat"
+          }
+        ]
+      }
+    },
+    "3808ea3f-7cc1-4c61-a2a8-7edc6ecd598b": {
+      "medium": {
+        "constraints": {
+          "contraindications": [
+            "Acute lower extremity injury",
+            "Severe joint pain",
+            "Recent surgery",
+            "Uncontrolled cardiovascular conditions",
+            "Severe obesity",
+            "Balance disorders"
+          ],
+          "prerequisites": [
+            "bodyweight-squat",
+            "jumping-jack",
+            "adequate-cardiovascular-fitness",
+            "basic-coordination",
+            "ankle-stability"
+          ],
+          "progressions": [
+            "weighted-astride-jumps",
+            "single-leg-bounds",
+            "depth-jumps",
+            "box-jumps",
+            "plyometric-jumps"
+          ],
+          "regressions": [
+            "jumping-jack",
+            "step-out-squat",
+            "alternating-side-steps",
+            "low-impact-astride-steps",
+            "static-lunge"
+          ]
+        },
+        "relations": [
+          {
+            "type": "similarPattern",
+            "targetId": "jumping-jacks",
+            "confidence": 0.9,
+            "notes": "Similar lateral jumping movement pattern"
+          },
+          {
+            "type": "regression",
+            "targetId": "lateral-steps",
+            "confidence": 0.85,
+            "notes": "Non-jumping version of lateral movement"
+          },
+          {
+            "type": "progression",
+            "targetId": "weighted-astride-jumps",
+            "confidence": 0.8,
+            "notes": "Added resistance version"
+          },
+          {
+            "type": "alternate",
+            "targetId": "skater-hops",
+            "confidence": 0.75,
+            "notes": "Alternative lateral plyometric movement"
+          }
+        ]
+      }
+    }
+  }
+}

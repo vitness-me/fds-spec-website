@@ -1,13 +1,41 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Highlight, themes } from 'prism-react-renderer';
-import { useColorMode } from '@docusaurus/theme-common';
 import { platformData, fdsFormat, fdsFullSchema } from './comparisonData';
 import styles from './styles.module.css';
+
+/**
+ * Custom hook to safely detect dark mode during SSR
+ * Falls back to light mode during server-side rendering
+ */
+function useSafeColorMode(): 'light' | 'dark' {
+  const [colorMode, setColorMode] = useState<'light' | 'dark'>('light');
+
+  useEffect(() => {
+    // Initial detection
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    setColorMode(isDark ? 'dark' : 'light');
+
+    // Watch for changes
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.attributeName === 'data-theme') {
+          const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+          setColorMode(isDark ? 'dark' : 'light');
+        }
+      });
+    });
+
+    observer.observe(document.documentElement, { attributes: true });
+    return () => observer.disconnect();
+  }, []);
+
+  return colorMode;
+}
 
 export default function ComparisonDemo(): JSX.Element {
   const [activeTab, setActiveTab] = useState(0);
   const [showFullSchema, setShowFullSchema] = useState(false);
-  const { colorMode } = useColorMode();
+  const colorMode = useSafeColorMode();
 
   const activePlatform = platformData[activeTab];
   const platformJson = showFullSchema && activePlatform.fullSchema

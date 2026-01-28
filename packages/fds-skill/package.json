@@ -1,0 +1,32 @@
+{
+  "name": "@vitness/fds-skill",
+  "version": "1.0.0",
+  "description": "FDS (Fitness Data Standard) AI skill and knowledge base for schema transformation and enrichment",
+  "type": "module",
+  "main": "./SKILL.md",
+  "files": [
+    "SKILL.md",
+    "CLAUDE.md",
+    "knowledge",
+    "prompts",
+    "examples"
+  ],
+  "keywords": [
+    "fds",
+    "fitness",
+    "data",
+    "standard",
+    "ai",
+    "skill",
+    "knowledge-base",
+    "llm",
+    "prompt"
+  ],
+  "author": "VITNESS",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vitness/fds-spec-website.git",
+    "directory": "packages/fds-skill"
+  }
+}

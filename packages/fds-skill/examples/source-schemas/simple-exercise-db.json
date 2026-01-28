@@ -1,0 +1,65 @@
+{
+  "$comment": "Example source schema: Simple exercise database format",
+  "schema": {
+    "type": "array",
+    "items": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier (typically numeric string)"
+        },
+        "name": {
+          "type": "string",
+          "description": "Exercise name"
+        },
+        "bodyPart": {
+          "type": "string",
+          "description": "General body region",
+          "enum": ["waist", "upper legs", "back", "chest", "upper arms", "shoulders", "lower legs", "lower arms", "neck", "cardio"]
+        },
+        "equipment": {
+          "type": "string",
+          "description": "Equipment needed",
+          "enum": ["body weight", "barbell", "dumbbell", "cable", "machine", "kettlebell", "band", "medicine ball", "stability ball", "other"]
+        },
+        "target": {
+          "type": "string",
+          "description": "Primary target muscle",
+          "enum": ["abs", "quads", "lats", "pectorals", "biceps", "delts", "triceps", "hamstrings", "glutes", "calves", "forearms", "traps", "cardiovascular system"]
+        },
+        "gifUrl": {
+          "type": "string",
+          "description": "URL to exercise animation GIF"
+        }
+      },
+      "required": ["id", "name", "bodyPart", "equipment", "target", "gifUrl"]
+    }
+  },
+  "examples": [
+    {
+      "id": "0001",
+      "name": "3/4 sit-up",
+      "bodyPart": "waist",
+      "equipment": "body weight",
+      "target": "abs",
+      "gifUrl": "http://d205bpvrqc9yn1.cloudfront.net/0001.gif"
+    },
+    {
+      "id": "0025",
+      "name": "barbell bench press",
+      "bodyPart": "chest",
+      "equipment": "barbell",
+      "target": "pectorals",
+      "gifUrl": "http://d205bpvrqc9yn1.cloudfront.net/0025.gif"
+    },
+    {
+      "id": "0007",
+      "name": "alternate lateral pulldown",
+      "bodyPart": "back",
+      "equipment": "cable",
+      "target": "lats",
+      "gifUrl": "http://d205bpvrqc9yn1.cloudfront.net/0007.gif"
+    }
+  ]
+}

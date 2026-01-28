@@ -1,0 +1,9 @@
+<<<<<<< ours
+packages/fds-transformer/node_modules/
+packages/fds-transformer/poc-test/output/
+.DS_Store
+|||||||
+=======
+packages/fds-transformer/node_modules/
+.DS_Store
+>>>>>>> theirs

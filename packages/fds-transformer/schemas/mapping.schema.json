@@ -1,0 +1,467 @@
+{
+  "$id": "https://spec.vitness.me/schemas/transformer/v1.0.0/mapping.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "FDS Transformer Mapping Configuration",
+  "description": "Configuration schema for transforming source data to FDS format",
+  "type": "object",
+  "required": ["version", "targetSchema", "mappings"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "JSON Schema reference for IDE support"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+      "description": "Mapping configuration version"
+    },
+    "targetSchema": {
+      "type": "object",
+      "required": ["version"],
+      "additionalProperties": false,
+      "description": "Target FDS schema configuration",
+      "properties": {
+        "version": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+          "description": "FDS schema version to target"
+        },
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "description": "URL to the FDS schema (optional, will use bundled if not specified)"
+        },
+        "entity": {
+          "type": "string",
+          "enum": ["exercise", "equipment", "muscle", "muscle-category", "body-atlas"],
+          "default": "exercise",
+          "description": "FDS entity type to transform to"
+        }
+      }
+    },
+    "registries": {
+      "type": "object",
+      "description": "Registry configuration for lookups",
+      "additionalProperties": false,
+      "properties": {
+        "muscles": {
+          "$ref": "#/$defs/registryConfig"
+        },
+        "equipment": {
+          "$ref": "#/$defs/registryConfig"
+        },
+        "muscleCategories": {
+          "$ref": "#/$defs/registryConfig"
+        }
+      }
+    },
+    "mappings": {
+      "type": "object",
+      "description": "Field mapping definitions",
+      "additionalProperties": {
+        "$ref": "#/$defs/fieldMapping"
+      }
+    },
+    "allowUnsafeEval": {
+      "type": "boolean",
+      "default": false,
+      "description": "Allow unsafe JavaScript evaluation in mapping conditions"
+    },
+    "enrichment": {
+      "type": "object",
+      "description": "AI enrichment configuration",
+      "additionalProperties": false,
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable/disable AI enrichment globally"
+        },
+        "provider": {
+          "type": "string",
+          "enum": ["openrouter", "openai", "anthropic", "ollama"],
+          "default": "openrouter",
+          "description": "AI provider to use"
+        },
+        "model": {
+          "type": "string",
+          "description": "Model identifier (e.g., 'anthropic/claude-3.5-sonnet')"
+        },
+        "apiKey": {
+          "type": "string",
+          "description": "API key (prefer env var OPENROUTER_API_KEY)"
+        },
+        "baseUrl": {
+          "type": "string",
+          "format": "uri",
+          "description": "Custom API base URL"
+        },
+        "options": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "temperature": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 2,
+              "default": 0.3
+            },
+            "maxTokens": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1024
+            },
+            "maxRetries": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 3
+            },
+            "retryDelay": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 1000,
+              "description": "Retry delay in milliseconds"
+            },
+            "rateLimit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "requestsPerMinute": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "default": 60
+                },
+                "tokensPerMinute": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              }
+            }
+          }
+        },
+        "batch": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true
+            },
+            "concurrency": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 20,
+              "default": 5
+            },
+            "chunkSize": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 10,
+              "description": "Number of items to process per batch"
+            }
+          }
+        },
+        "defaultFields": {
+          "oneOf": [
+            {
+              "type": "string",
+              "enum": ["all", "none"]
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          ],
+          "default": "all",
+          "description": "Fields to enrich by default when source is missing"
+        },
+        "skipFields": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Fields to skip even if empty"
+        }
+      }
+    },
+    "validation": {
+      "type": "object",
+      "description": "Output validation configuration",
+      "additionalProperties": false,
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "strict": {
+          "type": "boolean",
+          "default": true,
+          "description": "Fail on any validation error"
+        },
+        "failOnError": {
+          "type": "boolean",
+          "default": false,
+          "description": "Stop processing on first error"
+        },
+        "outputErrors": {
+          "type": "string",
+          "description": "Path to write validation errors"
+        }
+      }
+    },
+    "output": {
+      "type": "object",
+      "description": "Output configuration",
+      "additionalProperties": false,
+      "properties": {
+        "format": {
+          "type": "string",
+          "enum": ["json", "jsonl", "ndjson"],
+          "default": "json"
+        },
+        "pretty": {
+          "type": "boolean",
+          "default": true,
+          "description": "Pretty-print JSON output"
+        },
+        "directory": {
+          "type": "string",
+          "description": "Output directory path"
+        },
+        "naming": {
+          "type": "string",
+          "default": "{{slug}}.json",
+          "description": "Output file naming template (supports {{id}}, {{slug}}, {{index}})"
+        },
+        "singleFile": {
+          "type": "boolean",
+          "default": false,
+          "description": "Output all items to a single file"
+        },
+        "singleFileName": {
+          "type": "string",
+          "default": "output.json",
+          "description": "Single file name when singleFile is true"
+        }
+      }
+    },
+    "plugins": {
+      "type": "array",
+      "description": "Custom transform plugins to load",
+      "items": {
+        "oneOf": [
+          {
+            "type": "string",
+            "description": "Plugin package name or path"
+          },
+          {
+            "type": "object",
+            "required": ["name"],
+            "additionalProperties": false,
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Plugin package name or path"
+              },
+              "options": {
+                "type": "object",
+                "description": "Plugin-specific options"
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "$defs": {
+    "registryConfig": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "source": {
+          "oneOf": [
+            {
+              "type": "string",
+              "enum": ["remote", "local", "inline"]
+            },
+            {
+              "type": "string",
+              "format": "uri"
+            }
+          ],
+          "description": "Registry source: 'remote' (fetch from spec.vitness.me), 'local' (use local file), 'inline' (use inline data), or a URL"
+        },
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "description": "Custom URL to fetch registry from"
+        },
+        "local": {
+          "type": "string",
+          "description": "Path to local registry file"
+        },
+        "inline": {
+          "type": "array",
+          "description": "Inline registry data",
+          "items": {
+            "type": "object"
+          }
+        },
+        "fallback": {
+          "type": "string",
+          "enum": ["remote", "local", "inline"],
+          "description": "Fallback source if primary fails"
+        },
+        "cache": {
+          "type": "boolean",
+          "default": true,
+          "description": "Cache remote registries locally"
+        }
+      }
+    },
+    "fieldMapping": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "from": {
+              "oneOf": [
+                {
+                  "type": "string",
+                  "description": "Source field path (dot notation for nested)"
+                },
+                {
+                  "type": "null",
+                  "description": "No source field (for generated/enriched fields)"
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Multiple source fields (for merging)"
+                }
+              ]
+            },
+            "transform": {
+              "oneOf": [
+                {
+                  "type": "string",
+                  "description": "Transform function name"
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Chain of transform functions"
+                }
+              ]
+            },
+            "options": {
+              "type": "object",
+              "description": "Transform-specific options"
+            },
+            "enrichment": {
+              "$ref": "#/$defs/fieldEnrichment"
+            },
+            "default": {
+              "description": "Default value if source is missing/empty"
+            },
+            "required": {
+              "type": "boolean",
+              "default": false,
+              "description": "Fail if field cannot be populated"
+            },
+            "condition": {
+              "type": "string",
+              "description": "JavaScript expression to conditionally apply mapping"
+            }
+          }
+        },
+        {
+          "type": "string",
+          "description": "Simple mapping: source field path"
+        }
+      ]
+    },
+    "fieldEnrichment": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "prompt": {
+          "type": "string",
+          "description": "Prompt template name or custom prompt"
+        },
+        "context": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Source fields to include as context for AI"
+        },
+        "fields": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Specific sub-fields to enrich"
+        },
+        "when": {
+          "type": "string",
+          "enum": ["always", "missing", "empty", "notFound"],
+          "default": "missing",
+          "description": "When to trigger enrichment"
+        },
+        "validate": {
+          "type": "boolean",
+          "default": true,
+          "description": "Validate AI output against schema"
+        },
+        "fallback": {
+          "description": "Fallback value if enrichment fails"
+        }
+      }
+    },
+    "builtinTransforms": {
+      "description": "Documentation of built-in transforms",
+      "enum": [
+        "slugify",
+        "titleCase",
+        "lowerCase",
+        "upperCase",
+        "camelCase",
+        "kebabCase",
+        "snakeCase",
+        "trim",
+        "uuid",
+        "prefixUUID",
+        "timestamp",
+        "toArray",
+        "toMediaArray",
+        "registryLookup",
+        "autoGenerate",
+        "urlTransform",
+        "jsonParse",
+        "jsonStringify",
+        "split",
+        "join",
+        "replace",
+        "template",
+        "coalesce",
+        "pick",
+        "omit",
+        "map",
+        "filter"
+      ]
+    }
+  }
+}

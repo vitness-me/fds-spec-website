@@ -56,6 +56,28 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: 'category',
+      label: 'Tools',
+      collapsed: false,
+      items: [
+        {
+          type: 'category',
+          label: 'FDS Transformer',
+          collapsed: false,
+          items: [
+            'tools/transformer/index',
+            'tools/transformer/installation',
+            'tools/transformer/cli-reference',
+            'tools/transformer/configuration',
+            'tools/transformer/ai-enrichment',
+            'tools/transformer/transforms',
+            'tools/transformer/plugins',
+            'tools/transformer/examples',
+          ],
+        },
+      ],
+    },
+    {
+      type: 'category',
       label: 'Governance',
       collapsed: false,
       items: [

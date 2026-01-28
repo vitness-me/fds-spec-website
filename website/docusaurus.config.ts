@@ -28,7 +28,13 @@ const config: Config = {
   trailingSlash: false,
 
   onBrokenLinks: 'throw',
-  onBrokenMarkdownLinks: 'warn',
+  onBrokenAnchors: 'warn',
+  
+  markdown: {
+    hooks: {
+      onBrokenMarkdownLinks: 'warn',
+    },
+  },
 
   // Even if you don't use internationalization, you can use this field to set
   // useful metadata like html lang. For example, if your site is Chinese, you
@@ -62,6 +68,30 @@ const config: Config = {
           customCss: './src/css/custom.css',
         },
       } satisfies Preset.Options,
+    ],
+  ],
+
+  themes: [
+    [
+      '@easyops-cn/docusaurus-search-local',
+      {
+        // `hashed` is recommended for long-term caching
+        hashed: true,
+        // For multilingual sites, set this to the default language
+        language: ['en'],
+        // Index blog posts (disabled since blog is disabled)
+        indexBlog: false,
+        // Index pages (landing page, etc.)
+        indexPages: true,
+        // Highlight search terms on target pages
+        highlightSearchTermsOnTargetPage: true,
+        // Search result limits
+        searchResultLimits: 8,
+        // Search result context max length
+        searchResultContextMaxLength: 50,
+        // Paths to exclude from indexing
+        docsRouteBasePath: '/docs',
+      },
     ],
   ],
 
@@ -213,6 +243,21 @@ const config: Config = {
       theme: prismThemes.github,
       darkTheme: prismThemes.dracula,
       additionalLanguages: ['json', 'typescript', 'bash'],
+      magicComments: [
+        {
+          className: 'theme-code-block-highlighted-line',
+          line: 'highlight-next-line',
+          block: {start: 'highlight-start', end: 'highlight-end'},
+        },
+        {
+          className: 'code-block-error-line',
+          line: 'error-line',
+        },
+        {
+          className: 'code-block-success-line',
+          line: 'success-line',
+        },
+      ],
     },
   } satisfies Preset.ThemeConfig,
 };

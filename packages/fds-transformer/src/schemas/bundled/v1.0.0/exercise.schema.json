@@ -1,0 +1,594 @@
+{
+  "$id": "https://spec.vitness.me/schemas/exercises/v1.0.0/exercise.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "FDS Exercise (v1.0.0)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "exerciseId",
+    "canonical",
+    "classification",
+    "targets",
+    "metrics",
+    "metadata"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "exerciseId": {
+      "type": "string"
+    },
+    "canonical": {
+      "type": "object",
+      "required": [
+        "name",
+        "slug"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "slug": {
+          "type": "string",
+          "pattern": "^[a-z0-9-]{2,}$"
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "aliases": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "localized": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "lang",
+              "name"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "lang": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "description": {
+                "type": "string",
+                "minLength": 1
+              },
+              "aliases": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "uniqueItems": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "classification": {
+      "type": "object",
+      "required": [
+        "exerciseType",
+        "movement",
+        "mechanics",
+        "force",
+        "level"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "exerciseType" : {
+          "type": "string"
+        },
+        "movement": {
+          "$ref": "#/$defs/movement"
+        },
+        "mechanics": {
+          "$ref": "#/$defs/mechanics"
+        },
+        "force": {
+          "$ref": "#/$defs/force"
+        },
+        "level": {
+          "$ref": "#/$defs/level"
+        },
+        "unilateral": {
+          "type": "boolean",
+          "default": false
+        },
+        "kineticChain": {
+          "$ref": "#/$defs/kineticChain"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "taxonomyRefs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "registry",
+              "id"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "registry": {
+                "type": "string",
+                "format": "uri-reference"
+              },
+              "id": {
+                "type": "string"
+              },
+              "label": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "targets": {
+      "type": "object",
+      "required": [
+        "primary"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "primary": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/muscleRef"
+          }
+        },
+        "secondary": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/muscleRef"
+          }
+        }
+      }
+    },
+    "equipment": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "required": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/equipmentRef"
+          }
+        },
+        "optional": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/equipmentRef"
+          }
+        }
+      }
+    },
+    "constraints": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "contraindications": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "prerequisites": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "progressions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "regressions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "environment": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "relations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "type",
+          "targetId"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "type": {
+            "$ref": "#/$defs/relationTypes"
+          },
+          "targetId": {
+            "type": "string"
+          },
+          "confidence": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "notes": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "metrics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "primary"
+      ],
+      "properties": {
+        "primary": {
+          "$ref": "#/$defs/metricRef"
+        },
+        "secondary": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/metricRef"
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "media": {
+      "$ref": "#/$defs/media"
+    },
+    "attributes": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "extensions": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "metadata": {
+      "type": "object",
+      "required": [
+        "createdAt",
+        "updatedAt",
+        "status"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "source": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "status" : {
+          "$ref": "#/$defs/status"
+        },
+        "deprecated": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "since": {
+              "type": "string",
+              "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+            },
+            "replacedBy": {
+              "type": "string"
+            }
+          }
+        },
+        "externalRefs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "system",
+              "id"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "system": { 
+                "type": "string"
+              },
+              "id": { 
+                "type": "string"
+              }
+            }
+          }
+        },
+        "history": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "at": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "actor": {
+                "type": "string"
+              },
+              "change": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "muscleRef": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "categoryId"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "slug": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "categoryId": {
+          "type": "string"
+        },
+        "aliases": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "equipmentRef": {
+      "type": "object",
+      "required": [
+        "id",
+        "name"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "slug": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "abbreviation": {
+          "type": "string"
+        },
+        "categories": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "aliases": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "metricRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "unit"
+      ],
+      "properties": {
+        "type": {
+          "$ref": "#/$defs/metricType"
+        },
+        "unit": {
+          "$ref": "#/$defs/metricUnit"
+        }
+      }
+    },
+    "metricType": {
+      "type": "string",
+      "enum": [
+        "reps",
+        "weight",
+        "duration",
+        "distance",
+        "speed",
+        "pace",
+        "power",
+        "heartRate",
+        "steps",
+        "calories",
+        "height",
+        "tempo",
+        "rpe"
+      ]
+    },
+    "metricUnit": {
+      "type": "string",
+      "enum": [
+        "count",
+        "kg",
+        "lb",
+        "s",
+        "min",
+        "m",
+        "km",
+        "mi",
+        "m_s",
+        "km_h",
+        "min_per_km",
+        "min_per_mi",
+        "W",
+        "bpm",
+        "kcal",
+        "cm",
+        "in"
+      ]
+    },
+    "movement": {
+      "type": "string",
+      "enum": [
+        "squat",
+        "hinge",
+        "lunge",
+        "push-horizontal",
+        "push-vertical",
+        "pull-horizontal",
+        "pull-vertical",
+        "carry",
+        "core-anti-extension",
+        "core-anti-rotation",
+        "rotation",
+        "locomotion",
+        "isolation",
+        "other"
+      ]
+    },
+    "mechanics": {
+      "type": "string",
+      "enum": [
+        "compound",
+        "isolation"
+      ]
+    },
+    "force": {
+      "type": "string",
+      "enum": [
+        "push",
+        "pull",
+        "static",
+        "mixed"
+      ]
+    },
+    "level": {
+      "type": "string",
+      "enum": [
+        "beginner",
+        "intermediate",
+        "advanced"
+      ]
+    },
+    "kineticChain": {
+      "type": "string",
+      "enum": [
+        "open",
+        "closed",
+        "mixed"
+      ],
+      "default": "mixed"
+    },
+    "relationTypes": {
+      "type": "string",
+      "enum": [
+        "alternate",
+        "variation",
+        "substitute",
+        "progression",
+        "regression",
+        "equipmentVariant",
+        "accessory",
+        "mobilityPrep",
+        "similarPattern",
+        "unilateralPair",
+        "contralateralPair"
+      ]
+    },
+    "media": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["type","uri"],
+        "additionalProperties": false,
+        "properties": {
+          "type": { 
+            "type": "string", 
+            "enum": [
+              "image",
+              "video",
+              "doc",
+              "3d"]
+          },
+          "uri": { 
+            "type": "string", 
+            "format": "uri"
+          },
+          "caption": { 
+            "type": "string"
+          },
+          "license": { 
+            "type": "string"
+          },
+          "attribution": { 
+            "type": "string"
+          }
+        }
+      }
+    },
+    "status" : {
+      "type": "string",
+      "enum": [
+        "draft",
+        "review",
+        "active",
+        "inactive",
+        "deprecated"
+      ],
+      "default": "active"
+    }
+  }
+}

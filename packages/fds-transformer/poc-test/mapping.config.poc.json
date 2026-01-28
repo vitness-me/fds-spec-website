@@ -1,0 +1,213 @@
+{
+  "$schema": "../schemas/mapping.schema.json",
+  "version": "1.0.0",
+  "description": "POC configuration with tiered AI enrichment for 5 test exercises",
+  
+  "targetSchema": {
+    "version": "1.0.0",
+    "entity": "exercise"
+  },
+  
+  "registries": {
+    "muscles": {
+      "source": "local",
+      "local": "./registries/muscles.registry.example.json"
+    },
+    "equipment": {
+      "source": "local",
+      "local": "./registries/equipment.registry.example.json"
+    },
+    "muscleCategories": {
+      "source": "local",
+      "local": "./registries/muscle-categories.registry.example.json"
+    }
+  },
+  
+  "mappings": {
+    "exerciseId": { "from": null, "transform": "uuid" },
+    "schemaVersion": { "from": null, "default": "1.0.0" },
+    
+    "canonical.name": { "from": "name", "transform": "titleCase" },
+    "canonical.slug": { "from": "name", "transform": "slugify" },
+    
+    "targets.primary": {
+      "from": "target",
+      "transform": "registryLookup",
+      "options": { "registry": "muscles", "toArray": true, "fuzzyMatch": true }
+    },
+    
+    "equipment.required": {
+      "from": "equipment",
+      "transform": "registryLookup",
+      "options": { "registry": "equipment", "toArray": true, "fuzzyMatch": true }
+    },
+    
+    "media": {
+      "from": "gifUrl",
+      "transform": "toMediaArray",
+      "options": { "type": "gif" }
+    },
+    
+    "metadata.status": { "from": null, "default": "draft" },
+    "metadata.createdAt": { "from": null, "transform": "timestamp" },
+    "metadata.updatedAt": { "from": null, "transform": "timestamp" },
+    "metadata.source": { "from": null, "default": "exercisedb" },
+    "metadata.externalRefs": {
+      "from": "id",
+      "transform": "template",
+      "options": {
+        "template": [{ "system": "exercisedb", "id": "{{value}}" }]
+      }
+    }
+  },
+  
+  "validation": {
+    "enabled": true,
+    "strict": false
+  },
+  
+  "output": {
+    "singleFile": true,
+    "singleFileName": "enriched-exercises.json",
+    "pretty": true
+  },
+  
+  "enrichment": {
+    "enabled": true,
+    "provider": "openrouter",
+    
+    "tiers": {
+      "simple": {
+        "model": "anthropic/claude-3-5-haiku-20241022",
+        "temperature": 0.1,
+        "maxTokens": 800,
+        "batchSize": 5,
+        "priority": "speed"
+      },
+      "medium": {
+        "model": "anthropic/claude-3-5-sonnet-20241022",
+        "temperature": 0.1,
+        "maxTokens": 1500,
+        "batchSize": 3,
+        "priority": "balanced"
+      },
+      "complex": {
+        "model": "anthropic/claude-3-5-sonnet-20241022",
+        "temperature": 0.1,
+        "maxTokens": 2000,
+        "batchSize": 1,
+        "priority": "accuracy"
+      }
+    },
+    
+    "fields": {
+      "canonical.description": {
+        "tier": "simple",
+        "prompt": "description"
+      },
+      "canonical.aliases": {
+        "tier": "simple",
+        "prompt": "aliases"
+      },
+      "classification.exerciseType": {
+        "tier": "simple",
+        "prompt": "classification-simple",
+        "enum": ["strength", "cardio", "flexibility", "balance", "plyometric"]
+      },
+      "classification.level": {
+        "tier": "simple",
+        "prompt": "classification-simple",
+        "enum": ["beginner", "intermediate", "advanced"]
+      },
+      "classification.unilateral": {
+        "tier": "simple",
+        "prompt": "classification-simple"
+      },
+      "metrics.primary": {
+        "tier": "simple",
+        "prompt": "metrics"
+      },
+      "metrics.secondary": {
+        "tier": "simple",
+        "prompt": "metrics"
+      },
+      "equipment.optional": {
+        "tier": "simple",
+        "prompt": "equipment"
+      },
+      
+      "constraints.contraindications": {
+        "tier": "medium",
+        "prompt": "constraints"
+      },
+      "constraints.prerequisites": {
+        "tier": "medium",
+        "prompt": "constraints"
+      },
+      "constraints.progressions": {
+        "tier": "medium",
+        "prompt": "constraints"
+      },
+      "constraints.regressions": {
+        "tier": "medium",
+        "prompt": "constraints"
+      },
+      "relations": {
+        "tier": "medium",
+        "prompt": "relations"
+      },
+      
+      "classification.movement": {
+        "tier": "complex",
+        "prompt": "biomechanics",
+        "enum": ["squat", "hinge", "lunge", "push-horizontal", "push-vertical", "pull-horizontal", "pull-vertical", "carry", "core-anti-extension", "core-anti-rotation", "rotation", "locomotion", "isolation", "other"]
+      },
+      "classification.mechanics": {
+        "tier": "complex",
+        "prompt": "biomechanics",
+        "enum": ["compound", "isolation"]
+      },
+      "classification.force": {
+        "tier": "complex",
+        "prompt": "biomechanics",
+        "enum": ["push", "pull", "static", "mixed"]
+      },
+      "classification.kineticChain": {
+        "tier": "complex",
+        "prompt": "biomechanics",
+        "enum": ["open", "closed", "mixed"]
+      },
+      "classification.tags": {
+        "tier": "complex",
+        "prompt": "biomechanics"
+      },
+      "targets.secondary": {
+        "tier": "complex",
+        "prompt": "biomechanics"
+      }
+    },
+    
+    "fallback": {
+      "retries": 1,
+      "degradeModel": true,
+      "useDefaults": true,
+      "degradeChain": {
+        "complex": "medium",
+        "medium": "simple",
+        "simple": null
+      }
+    },
+    
+    "rateLimit": {
+      "requestsPerMinute": 50,
+      "backoffStrategy": "exponential",
+      "initialBackoffMs": 1000,
+      "maxBackoffMs": 60000
+    },
+    
+    "checkpoint": {
+      "enabled": true,
+      "saveInterval": 1
+    }
+  }
+}

@@ -1,0 +1,24 @@
+[
+  {
+    "schemaVersion": "1.0.0",
+    "id": "mus.quadriceps",
+    "canonical": { "name": "Quadriceps", "slug": "quadriceps", "aliases": ["Quads"] },
+    "classification": { "categoryId": "cat.legs", "region": "lower-front", "laterality": "bilateral" },
+    "metadata": { "createdAt": "2025-01-01T00:00:00Z", "updatedAt": "2025-09-03T00:00:00Z", "status": "active" }
+  },
+  {
+    "schemaVersion": "1.0.0",
+    "id": "mus.lats",
+    "canonical": { "name": "Latissimus Dorsi", "slug": "latissimus-dorsi", "aliases": ["Lats"] },
+    "classification": { "categoryId": "cat.back", "region": "upper-back", "laterality": "bilateral" },
+    "metadata": { "createdAt": "2025-01-01T00:00:00Z", "updatedAt": "2025-09-03T00:00:00Z", "status": "active" }
+  },
+  {
+    "schemaVersion": "1.0.0",
+    "id": "mus.rectusAbdominis",
+    "canonical": { "name": "Rectus Abdominis", "slug": "rectus-abdominis" },
+    "classification": { "categoryId": "cat.core", "region": "core", "laterality": "bilateral" },
+    "metadata": { "createdAt": "2025-01-01T00:00:00Z", "updatedAt": "2025-09-03T00:00:00Z", "status": "active" }
+  }
+]
+

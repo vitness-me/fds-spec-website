@@ -1,0 +1,118 @@
+name: Publish FDS Transformer
+
+on:
+  push:
+    tags:
+      - 'fds-transformer@*'  # e.g., fds-transformer@0.1.0
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry run (skip npm publish)'
+        required: false
+        default: 'false'
+        type: boolean
+
+permissions:
+  contents: read
+  id-token: write  # Required for npm provenance
+
+jobs:
+  build-and-test:
+    name: Build & Test
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/fds-transformer
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: packages/fds-transformer/package-lock.json
+
+      - name: Install dependencies (including dev for build)
+        run: npm ci
+
+      - name: Type check
+        run: npm run typecheck
+
+      - name: Run tests
+        run: npm run test:run
+
+      - name: Build
+        run: npm run build
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: packages/fds-transformer/dist/
+          retention-days: 1
+
+  publish:
+    name: Publish to npm
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/fds-transformer
+    environment:
+      name: npm
+      url: https://www.npmjs.com/package/@vitness/fds-transformer
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: packages/fds-transformer/dist/
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Verify package
+        run: npm pack --dry-run
+
+      - name: Extract version from tag
+        if: github.event_name == 'push'
+        id: version
+        run: |
+          TAG="${GITHUB_REF#refs/tags/fds-transformer@}"
+          echo "version=$TAG" >> $GITHUB_OUTPUT
+          echo "Publishing version: $TAG"
+
+      - name: Verify version matches package.json
+        if: github.event_name == 'push'
+        run: |
+          PKG_VERSION=$(node -p "require('./package.json').version")
+          TAG_VERSION="${{ steps.version.outputs.version }}"
+          if [ "$PKG_VERSION" != "$TAG_VERSION" ]; then
+            echo "Error: Tag version ($TAG_VERSION) doesn't match package.json version ($PKG_VERSION)"
+            exit 1
+          fi
+
+      - name: Publish to npm
+        if: ${{ github.event.inputs.dry_run != 'true' }}
+        run: npm publish --access public --provenance
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Dry run - skip publish
+        if: ${{ github.event.inputs.dry_run == 'true' }}
+        run: |
+          echo "Dry run mode - skipping npm publish"
+          npm pack
+          echo "Package contents:"
+          tar -tzf *.tgz

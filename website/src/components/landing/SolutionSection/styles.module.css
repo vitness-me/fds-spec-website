@@ -298,6 +298,36 @@
   margin-bottom: 1rem;
 }
 
+.toolBadgeAvailable {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  background: #16a34a;
+  color: #fff;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-radius: 9999px;
+  margin-bottom: 1rem;
+}
+
+.toolLink {
+  display: inline-block;
+  margin-top: 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #0369a1;
+  text-decoration: none;
+}
+
+.toolLink:hover {
+  text-decoration: underline;
+}
+
+[data-theme='dark'] .toolLink {
+  color: #38bdf8;
+}
+
 .toolTitle {
   font-size: 1.25rem;
   font-weight: 700;
