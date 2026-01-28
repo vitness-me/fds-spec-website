@@ -153,20 +153,59 @@ export class MappingEngine {
     value: unknown
   ): void {
     const parts = path.split('.');
-    let current = obj;
+    let current: unknown = obj;
 
-    for (let i = 0; i < parts.length - 1; i++) {
+    for (let i = 0; i < parts.length; i++) {
       const part = parts[i];
-      if (!(part in current)) {
-        // Determine if next part is array index
-        const nextPart = parts[i + 1];
-        current[part] = /^\d+$/.test(nextPart) ? [] : {};
-      }
-      current = current[part] as Record<string, unknown>;
-    }
+      const isLast = i === parts.length - 1;
+      const arrayMatch = part.match(/^(\w+)\[(\d+)\]$/);
 
-    const lastPart = parts[parts.length - 1];
-    current[lastPart] = value;
+      if (arrayMatch) {
+        const [, fieldName, index] = arrayMatch;
+        const targetIndex = parseInt(index, 10);
+
+        if (current === null || current === undefined || typeof current !== 'object') {
+          return;
+        }
+
+        const currentRecord = current as Record<string, unknown>;
+        if (!Array.isArray(currentRecord[fieldName])) {
+          currentRecord[fieldName] = [];
+        }
+
+        const arrayRef = currentRecord[fieldName] as unknown[];
+
+        if (isLast) {
+          arrayRef[targetIndex] = value;
+          return;
+        }
+
+        if (arrayRef[targetIndex] === undefined) {
+          const nextPart = parts[i + 1];
+          arrayRef[targetIndex] = /^\w+\[\d+\]$/.test(nextPart) ? [] : {};
+        }
+
+        current = arrayRef[targetIndex];
+        continue;
+      }
+
+      if (current === null || current === undefined || typeof current !== 'object') {
+        return;
+      }
+
+      const currentRecord = current as Record<string, unknown>;
+      if (isLast) {
+        currentRecord[part] = value;
+        return;
+      }
+
+      if (!(part in currentRecord)) {
+        const nextPart = parts[i + 1];
+        currentRecord[part] = /^\w+\[\d+\]$/.test(nextPart) ? [] : {};
+      }
+
+      current = currentRecord[part];
+    }
   }
 
   /**
