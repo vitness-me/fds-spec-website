@@ -9,7 +9,7 @@
  */
 
 import { createHash } from 'crypto';
-import { existsSync, mkdirSync, readFileSync, unlinkSync, writeFileSync } from 'fs';
+import { existsSync, mkdirSync, readFileSync, renameSync, unlinkSync, writeFileSync } from 'fs';
 import { dirname, join } from 'path';
 import type { CheckpointConfig, CheckpointData, TierName } from '../core/types.js';
 
@@ -277,7 +277,9 @@ export class CheckpointManager {
 
     // Write atomically (write to temp, then rename)
     const content = JSON.stringify(this.data, null, 2);
-    writeFileSync(this.checkpointPath, content, 'utf-8');
+    const tempPath = `${this.checkpointPath}.tmp.${process.pid}.${Date.now()}`;
+    writeFileSync(tempPath, content, 'utf-8');
+    renameSync(tempPath, this.checkpointPath);
 
     this.updatesSinceLastSave = 0;
   }
@@ -380,8 +382,77 @@ export class CheckpointManager {
    * Hash configuration for change detection
    */
   private hashConfig(config: unknown): string {
-    const json = JSON.stringify(config, Object.keys(config as object).sort());
+    const json = this.stableStringify(config);
     return createHash('sha256').update(json).digest('hex').substring(0, 16);
+  }
+
+  private stableStringify(value: unknown): string {
+    const seen = new WeakSet<object>();
+
+    const stringify = (input: unknown): string | undefined => {
+      if (input === null) {
+        return 'null';
+      }
+
+      const inputType = typeof input;
+
+      if (inputType === 'number') {
+        return Number.isFinite(input) ? String(input) : 'null';
+      }
+
+      if (inputType === 'string') {
+        return JSON.stringify(input);
+      }
+
+      if (inputType === 'boolean') {
+        return input ? 'true' : 'false';
+      }
+
+      if (inputType === 'bigint') {
+        return JSON.stringify(String(input));
+      }
+
+      if (inputType === 'undefined' || inputType === 'function' || inputType === 'symbol') {
+        return undefined;
+      }
+
+      if (inputType !== 'object') {
+        return JSON.stringify(input);
+      }
+
+      const objectValue = input as Record<string, unknown>;
+
+      if (typeof objectValue.toJSON === 'function') {
+        return stringify(objectValue.toJSON());
+      }
+
+      if (Array.isArray(objectValue)) {
+        const items = objectValue.map((item) => stringify(item) ?? 'null');
+        return `[${items.join(',')} ]`.replace(', ]', ']');
+      }
+
+      if (seen.has(objectValue)) {
+        throw new TypeError('Cannot stringify circular structure');
+      }
+
+      seen.add(objectValue);
+
+      const keys = Object.keys(objectValue).sort();
+      const entries: string[] = [];
+
+      for (const key of keys) {
+        const valueString = stringify(objectValue[key]);
+        if (valueString !== undefined) {
+          entries.push(`${JSON.stringify(key)}:${valueString}`);
+        }
+      }
+
+      seen.delete(objectValue);
+
+      return `{${entries.join(',')}}`;
+    };
+
+    return stringify(value) ?? 'null';
   }
 
   /**
