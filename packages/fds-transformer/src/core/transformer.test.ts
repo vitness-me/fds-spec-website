@@ -266,13 +266,16 @@ describe('Transformer', () => {
 
   describe('conditional mapping', () => {
     it('should include field when condition is true', async () => {
-      const config = createTestConfig({
-        'canonical.name': 'name',
-        'constraints.environment': {
-          from: 'environment',
-          condition: 'source.hasEnvironment === true'
-        }
-      });
+      const config = {
+        ...createTestConfig({
+          'canonical.name': 'name',
+          'constraints.environment': {
+            from: 'environment',
+            condition: 'source.hasEnvironment === true'
+          }
+        }),
+        allowUnsafeEval: true
+      };
 
       const transformer = new Transformer({ config });
       const result = await transformer.transform({
@@ -286,13 +289,16 @@ describe('Transformer', () => {
     });
 
     it('should exclude field when condition is false', async () => {
-      const config = createTestConfig({
-        'canonical.name': 'name',
-        'constraints.environment': {
-          from: 'environment',
-          condition: 'source.hasEnvironment === true'
-        }
-      });
+      const config = {
+        ...createTestConfig({
+          'canonical.name': 'name',
+          'constraints.environment': {
+            from: 'environment',
+            condition: 'source.hasEnvironment === true'
+          }
+        }),
+        allowUnsafeEval: true
+      };
 
       const transformer = new Transformer({ config });
       const result = await transformer.transform({

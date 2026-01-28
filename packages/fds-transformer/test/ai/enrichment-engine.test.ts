@@ -618,7 +618,7 @@ describe('EnrichmentEngine - Legacy API', () => {
     });
 
     const result = await engine.enrich(
-      { 'canonical.description': 'Already has value' },
+      { canonical: { description: 'Already has value' } },
       {
         'canonical.description': {
           from: 'description',
