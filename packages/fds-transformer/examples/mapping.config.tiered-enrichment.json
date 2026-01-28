@@ -1,5 +1,5 @@
 {
-  "$schema": "../schemas/mapping-config.schema.json",
+  "$schema": "../schemas/mapping.schema.json",
   "version": "1.0.0",
   "description": "Example configuration with tiered AI enrichment for ExerciseDB to FDS transformation",
   
@@ -10,13 +10,16 @@
   
   "registries": {
     "muscles": {
-      "path": "./registries/muscles.json"
+      "source": "local",
+      "local": "./registries/muscles.json"
     },
     "equipment": {
-      "path": "./registries/equipment.json"
+      "source": "local",
+      "local": "./registries/equipment.json"
     },
     "muscleCategories": {
-      "path": "./registries/muscle-categories.json"
+      "source": "local",
+      "local": "./registries/muscle-categories.json"
     }
   },
   
