@@ -89,6 +89,17 @@ const mockEquipmentRegistry = [
   }
 ];
 
+const mockMuscleCategoriesRegistry = [
+  {
+    id: 'cat-0001-4000-8000-000000000001',
+    canonical: {
+      name: 'Chest',
+      slug: 'chest',
+      aliases: ['pecs']
+    }
+  }
+];
+
 describe('registryLookup', () => {
   let context: TransformContext;
 
@@ -100,7 +111,7 @@ describe('registryLookup', () => {
       registries: {
         muscles: mockMusclesRegistry as any,
         equipment: mockEquipmentRegistry as any,
-        muscleCategories: []
+        muscleCategories: mockMuscleCategoriesRegistry as any
       }
     };
   });
@@ -337,6 +348,52 @@ describe('registryLookup', () => {
         name: 'Rectus Abdominis',
         slug: 'rectus-abdominis',
         categoryId: 'cat-core-001'
+      });
+    });
+  });
+
+  describe('matchField option', () => {
+    it('should match by id when matchField is id', () => {
+      const result = registryLookup(
+        'a1b2c3d4-1111-4000-8000-000000000003',
+        { registry: 'muscles', matchField: 'id' },
+        context
+      );
+      expect(result).toEqual({
+        id: 'a1b2c3d4-1111-4000-8000-000000000003',
+        name: 'Latissimus Dorsi',
+        slug: 'latissimus-dorsi',
+        categoryId: 'cat-back-001'
+      });
+    });
+
+    it('should not match aliases when matchField is slug', () => {
+      const result = registryLookup('abs', { registry: 'muscles', matchField: 'slug' }, context);
+      expect(result).toBe(null);
+    });
+  });
+
+  describe('returnFields option', () => {
+    it('should return only requested fields', () => {
+      const result = registryLookup(
+        'abs',
+        { registry: 'muscles', returnFields: ['id', 'slug'] },
+        context
+      );
+      expect(result).toEqual({
+        id: 'a1b2c3d4-1111-4000-8000-000000000001',
+        slug: 'rectus-abdominis'
+      });
+    });
+  });
+
+  describe('muscle categories registry', () => {
+    it('should return a category ref for muscle categories', () => {
+      const result = registryLookup('chest', { registry: 'muscleCategories' }, context);
+      expect(result).toEqual({
+        id: 'cat-0001-4000-8000-000000000001',
+        name: 'Chest',
+        slug: 'chest'
       });
     });
   });

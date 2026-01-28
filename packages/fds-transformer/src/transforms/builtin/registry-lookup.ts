@@ -2,7 +2,13 @@
  * Registry Lookup transform - find entries in FDS registries
  */
 
-import type { TransformFunction, TransformContext, MuscleRef, EquipmentRef } from '../../core/types.js';
+import type {
+  TransformFunction,
+  TransformContext,
+  MuscleRef,
+  EquipmentRef,
+  MuscleCategoryRef,
+} from '../../core/types.js';
 
 export interface RegistryLookupOptions {
   registry: 'muscles' | 'equipment' | 'muscleCategories';
@@ -21,7 +27,7 @@ export const registryLookup: TransformFunction = (
   context: TransformContext
 ): unknown => {
   if (value === null || value === undefined || value === '') {
-    return options.toArray ? [] : null;
+    return (options as RegistryLookupOptions).toArray ? [] : null;
   }
 
   const lookupOptions = options as unknown as RegistryLookupOptions;
@@ -34,54 +40,78 @@ export const registryLookup: TransformFunction = (
   }
 
   const queries = Array.isArray(value) ? value : [value];
-  const results: Array<MuscleRef | EquipmentRef> = [];
+  const results: Array<MuscleRef | EquipmentRef | MuscleCategoryRef> = [];
 
   for (const query of queries) {
     const normalizedQuery = String(query).toLowerCase().trim();
 
-    // Try exact match first
-    let match = registry.find(
-      (entry) =>
-        entry.canonical.name.toLowerCase() === normalizedQuery ||
-        entry.canonical.slug === normalizedQuery
-    );
+    let match: typeof registry[0] | undefined;
 
-    // Try aliases
-    if (!match) {
-      match = registry.find((entry) =>
-        entry.canonical.aliases?.some(
-          (alias) => alias.toLowerCase() === normalizedQuery
-        )
+    if (lookupOptions.matchField === 'id') {
+      match = registry.find((entry) => String(entry.id).toLowerCase() === normalizedQuery);
+    } else if (lookupOptions.matchField === 'slug') {
+      match = registry.find((entry) => entry.canonical.slug.toLowerCase() === normalizedQuery);
+    } else if (lookupOptions.matchField === 'name') {
+      match = registry.find(
+        (entry) =>
+          entry.canonical.name.toLowerCase() === normalizedQuery ||
+          entry.canonical.aliases?.some((alias) => alias.toLowerCase() === normalizedQuery)
       );
+    } else {
+      match = registry.find(
+        (entry) =>
+          entry.canonical.name.toLowerCase() === normalizedQuery ||
+          entry.canonical.slug.toLowerCase() === normalizedQuery
+      );
+
+      if (!match) {
+        match = registry.find((entry) =>
+          entry.canonical.aliases?.some((alias) => alias.toLowerCase() === normalizedQuery)
+        );
+      }
     }
 
     // Try fuzzy match
-    if (!match && lookupOptions.fuzzyMatch) {
+    if (!match && lookupOptions.fuzzyMatch && lookupOptions.matchField !== 'id') {
       match = findFuzzyMatch(registry, normalizedQuery) as typeof registry[0] | undefined;
     }
 
     if (match) {
       // Format the result based on registry type
+      let result: MuscleRef | EquipmentRef | MuscleCategoryRef;
+
       if (registryName === 'muscles') {
         const muscleEntry = match as any;
-        results.push({
+        result = {
           id: match.id,
           name: match.canonical.name,
           slug: match.canonical.slug,
           categoryId: muscleEntry.classification?.categoryId || '',
-        } as MuscleRef);
+        } as MuscleRef;
       } else if (registryName === 'equipment') {
-        results.push({
+        result = {
           id: match.id,
           name: match.canonical.name,
           slug: match.canonical.slug,
-        } as EquipmentRef);
+        } as EquipmentRef;
       } else {
-        results.push({
+        result = {
           id: match.id,
           name: match.canonical.name,
           slug: match.canonical.slug,
-        } as EquipmentRef);
+        } as MuscleCategoryRef;
+      }
+
+      if (lookupOptions.returnFields?.length) {
+        const filtered: Record<string, unknown> = {};
+        for (const field of lookupOptions.returnFields) {
+          if (field in result) {
+            filtered[field] = (result as Record<string, unknown>)[field];
+          }
+        }
+        results.push(filtered as typeof result);
+      } else {
+        results.push(result);
       }
     }
   }

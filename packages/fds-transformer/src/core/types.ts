@@ -589,6 +589,13 @@ export interface EquipmentRef {
   aliases?: string[];
 }
 
+export interface MuscleCategoryRef {
+  id: string;
+  slug?: string;
+  name: string;
+  aliases?: string[];
+}
+
 export interface MetricRef {
   type: MetricType;
   unit: MetricUnit;
