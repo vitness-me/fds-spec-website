@@ -1,5 +1,5 @@
 {
-  "$schema": "../schemas/mapping-config.schema.json",
+  "$schema": "../schemas/mapping.schema.json",
   "version": "1.0.0",
   "description": "POC configuration with tiered AI enrichment for 5 test exercises",
   
@@ -10,13 +10,16 @@
   
   "registries": {
     "muscles": {
-      "path": "./registries/muscles.registry.example.json"
+      "source": "local",
+      "local": "./registries/muscles.registry.example.json"
     },
     "equipment": {
-      "path": "./registries/equipment.registry.example.json"
+      "source": "local",
+      "local": "./registries/equipment.registry.example.json"
     },
     "muscleCategories": {
-      "path": "./registries/muscle-categories.registry.example.json"
+      "source": "local",
+      "local": "./registries/muscle-categories.registry.example.json"
     }
   },
   
