@@ -5,11 +5,11 @@
  * and ensure consistent validation behavior.
  */
 
-import exerciseSchema from './exercise.schema.json' with { type: 'json' };
-import equipmentSchema from './equipment.schema.json' with { type: 'json' };
-import muscleSchema from './muscle.schema.json' with { type: 'json' };
-import muscleCategorySchema from './muscle-category.schema.json' with { type: 'json' };
-import bodyAtlasSchema from './body-atlas.schema.json' with { type: 'json' };
+import exerciseSchema from './exercise.schema.json' assert { type: 'json' };
+import equipmentSchema from './equipment.schema.json' assert { type: 'json' };
+import muscleSchema from './muscle.schema.json' assert { type: 'json' };
+import muscleCategorySchema from './muscle-category.schema.json' assert { type: 'json' };
+import bodyAtlasSchema from './body-atlas.schema.json' assert { type: 'json' };
 
 export default {
   exercise: exerciseSchema,
