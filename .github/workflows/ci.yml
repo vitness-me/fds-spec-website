@@ -1,0 +1,123 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# A newer push to the same branch supersedes an in-flight run.
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  transformer:
+    name: Transformer — typecheck, test, build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/fds-transformer
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: packages/fds-transformer/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Type check
+        run: npm run typecheck
+
+      - name: Run tests
+        run: npm run test:run
+
+      - name: Build
+        run: npm run build
+
+  schemas:
+    name: Schemas — validate examples
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Ajv CLI
+        run: npm install --no-save ajv-cli@5 ajv-formats@3
+
+      # Every published example must validate against its schema, standalone.
+      #
+      # No `-r` reference schemas: each entity schema is self-contained, which is
+      # what lets an implementer validate one entity without fetching the others.
+      # If a cross-schema `$ref` is ever reintroduced, this job fails — which is
+      # the point. It is also what will prove the fds-common dereference output
+      # stayed non-breaking.
+      - name: Validate all schema examples
+        run: |
+          set -euo pipefail
+          SCHEMAS=specification/schemas
+          failed=0 total=0
+
+          validate() {
+            local schema="$1" dir="$2" example
+            for example in "$dir"/*.example*.json; do
+              [ -e "$example" ] || continue
+              total=$((total + 1))
+              printf '→ %-40s ' "$(basename "$example")"
+              if npx ajv validate --spec=draft2020 -c ajv-formats \
+                   -s "$schema" -d "$example" >/dev/null 2>&1; then
+                echo PASS
+              else
+                echo FAIL
+                failed=$((failed + 1))
+                npx ajv validate --spec=draft2020 -c ajv-formats \
+                  -s "$schema" -d "$example" || true
+              fi
+            done
+          }
+
+          validate "$SCHEMAS/exercises/v1.0.0/exercise.schema.json"                     "$SCHEMAS/exercises/v1.0.0"
+          validate "$SCHEMAS/equipment/v1.0.0/equipment.schema.json"                    "$SCHEMAS/equipment/v1.0.0"
+          validate "$SCHEMAS/muscle/v1.0.0/muscle.schema.json"                          "$SCHEMAS/muscle/v1.0.0"
+          validate "$SCHEMAS/muscle/muscle-category/v1.0.0/muscle-category.schema.json" "$SCHEMAS/muscle/muscle-category/v1.0.0"
+          validate "$SCHEMAS/atlas/v1.0.0/body-atlas.schema.json"                       "$SCHEMAS/atlas/v1.0.0"
+
+          echo "---- $total examples, $failed failed ----"
+          [ "$failed" -eq 0 ]
+
+  website:
+    name: Website — build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: website
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: website/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
