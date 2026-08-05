@@ -1,9 +1,12 @@
-<<<<<<< ours
-packages/fds-transformer/node_modules/
+# Dependencies
+node_modules/
+
+# Build output — produced by CI and by `prepublishOnly`.
+# npm packs `files: ["dist"]` from the built output, so it never needs committing.
+dist/
+
+# Local scratch
 packages/fds-transformer/poc-test/output/
+
+# OS
 .DS_Store
-|||||||
-=======
-packages/fds-transformer/node_modules/
-.DS_Store
->>>>>>> theirs
