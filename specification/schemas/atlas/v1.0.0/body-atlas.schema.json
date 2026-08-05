@@ -13,8 +13,13 @@
     "metadata"
   ],
   "properties": {
-    "schemaVersion": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
-    "id": { "type": "string" },
+    "schemaVersion": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "id": {
+      "type": "string"
+    },
     "canonical": {
       "type": "object",
       "required": [
@@ -82,10 +87,16 @@
       "minItems": 1,
       "items": {
         "type": "object",
-        "required": ["id", "kind", "asset"],
+        "required": [
+          "id",
+          "kind",
+          "asset"
+        ],
         "additionalProperties": false,
         "properties": {
-          "id": { "type": "string" },
+          "id": {
+            "type": "string"
+          },
           "kind": {
             "type": "string",
             "enum": [
@@ -99,11 +110,24 @@
           },
           "asset": {
             "type": "object",
-            "required": ["type", "uri"],
+            "required": [
+              "type",
+              "uri"
+            ],
             "additionalProperties": false,
             "properties": {
-              "type": { "type": "string", "enum": ["svg", "image", "3d"] },
-              "uri": { "type": "string", "format": "uri" }
+              "type": {
+                "type": "string",
+                "enum": [
+                  "svg",
+                  "image",
+                  "3d"
+                ]
+              },
+              "uri": {
+                "type": "string",
+                "format": "uri"
+              }
             }
           }
         }
@@ -114,17 +138,31 @@
       "minItems": 1,
       "items": {
         "type": "object",
-        "required": ["id", "canonical", "bindings"],
+        "required": [
+          "id",
+          "canonical",
+          "bindings"
+        ],
         "additionalProperties": false,
         "properties": {
-          "id": { "type": "string" },
+          "id": {
+            "type": "string"
+          },
           "canonical": {
             "type": "object",
-            "required": ["name", "slug"],
+            "required": [
+              "name",
+              "slug"
+            ],
             "additionalProperties": false,
             "properties": {
-              "name": { "type": "string" },
-              "slug": { "type": "string", "pattern": "^[a-z0-9-.]+$" }
+              "name": {
+                "type": "string"
+              },
+              "slug": {
+                "type": "string",
+                "pattern": "^[a-z0-9-.]+$"
+              }
             }
           },
           "bindings": {
@@ -132,22 +170,126 @@
             "minItems": 1,
             "items": {
               "type": "object",
-              "required": ["viewId", "selector"],
+              "required": [
+                "viewId",
+                "selector"
+              ],
               "additionalProperties": false,
               "properties": {
-                "viewId": { "type": "string" },
-                "selector": { "type": "string" }
+                "viewId": {
+                  "type": "string"
+                },
+                "selector": {
+                  "type": "string"
+                }
               }
             }
           }
         }
       }
     },
-    "attributes": { "type": "object", "additionalProperties": true },
-    "extensions": { "type": "object", "additionalProperties": true },
+    "attributes": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "extensions": {
+      "type": "object",
+      "additionalProperties": true
+    },
     "metadata": {
-      "$ref": "https://spec.vitness.me/schemas/exercises/v1.0.0/exercise.schema.json#/properties/metadata"
+      "$ref": "#/$defs/metadata"
+    }
+  },
+  "$defs": {
+    "metadata": {
+      "type": "object",
+      "required": [
+        "createdAt",
+        "updatedAt",
+        "status"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "source": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/$defs/status"
+        },
+        "deprecated": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "since": {
+              "type": "string",
+              "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+            },
+            "replacedBy": {
+              "type": "string"
+            }
+          }
+        },
+        "externalRefs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "system",
+              "id"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "system": {
+                "type": "string"
+              },
+              "id": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "history": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "at": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "actor": {
+                "type": "string"
+              },
+              "change": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "review",
+        "active",
+        "inactive",
+        "deprecated"
+      ],
+      "default": "active"
     }
   }
 }
-

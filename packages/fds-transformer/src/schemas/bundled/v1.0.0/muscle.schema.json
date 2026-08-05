@@ -12,12 +12,12 @@
     "metadata"
   ],
   "properties": {
-    "schemaVersion": { 
-      "type": "string", 
+    "schemaVersion": {
+      "type": "string",
       "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
     },
-    "id": { 
-      "type": "string" 
+    "id": {
+      "type": "string"
     },
     "canonical": {
       "type": "object",
@@ -27,12 +27,12 @@
       ],
       "additionalProperties": false,
       "properties": {
-        "name": { 
+        "name": {
           "type": "string",
           "minLength": 1
         },
-        "slug": { 
-          "type": "string", 
+        "slug": {
+          "type": "string",
           "pattern": "^[a-z0-9-]{2,}$"
         },
         "description": {
@@ -89,8 +89,8 @@
       ],
       "additionalProperties": false,
       "properties": {
-        "categoryId": { 
-          "type": "string" 
+        "categoryId": {
+          "type": "string"
         },
         "region": {
           "$ref": "#/$defs/regionGroup"
@@ -106,40 +106,54 @@
         }
       }
     },
-    "media": { 
-      "$ref": "https://spec.vitness.me/schemas/exercises/v1.0.0/exercise.schema.json#/$defs/media"
+    "media": {
+      "$ref": "#/$defs/media"
     },
-    "attributes": { 
-      "type": "object", 
+    "attributes": {
+      "type": "object",
       "additionalProperties": true
     },
-    "extensions": { 
-      "type": "object", 
+    "extensions": {
+      "type": "object",
       "additionalProperties": true
     },
     "heatmap": {
       "type": "object",
-      "required": ["atlasId", "regions"],
+      "required": [
+        "atlasId",
+        "regions"
+      ],
       "additionalProperties": false,
       "properties": {
-        "atlasId": { "type": "string" },
+        "atlasId": {
+          "type": "string"
+        },
         "regions": {
           "type": "array",
           "minItems": 1,
           "items": {
             "type": "object",
-            "required": ["areaId"],
+            "required": [
+              "areaId"
+            ],
             "additionalProperties": false,
             "properties": {
-              "areaId": { "type": "string" },
-              "weight": { "type": "number", "minimum": 0, "maximum": 1, "default": 1 }
+              "areaId": {
+                "type": "string"
+              },
+              "weight": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1,
+                "default": 1
+              }
             }
           }
         }
       }
     },
     "metadata": {
-      "$ref": "https://spec.vitness.me/schemas/exercises/v1.0.0/exercise.schema.json#/properties/metadata"
+      "$ref": "#/$defs/metadata"
     }
   },
   "$defs": {
@@ -164,6 +178,131 @@
         "unilateral",
         "n/a"
       ]
+    },
+    "media": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "type",
+          "uri"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "image",
+              "video",
+              "doc",
+              "3d"
+            ]
+          },
+          "uri": {
+            "type": "string",
+            "format": "uri"
+          },
+          "caption": {
+            "type": "string"
+          },
+          "license": {
+            "type": "string"
+          },
+          "attribution": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "required": [
+        "createdAt",
+        "updatedAt",
+        "status"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "source": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/$defs/status"
+        },
+        "deprecated": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "since": {
+              "type": "string",
+              "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+            },
+            "replacedBy": {
+              "type": "string"
+            }
+          }
+        },
+        "externalRefs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "system",
+              "id"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "system": {
+                "type": "string"
+              },
+              "id": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "history": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "at": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "actor": {
+                "type": "string"
+              },
+              "change": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "review",
+        "active",
+        "inactive",
+        "deprecated"
+      ],
+      "default": "active"
     }
   }
 }
