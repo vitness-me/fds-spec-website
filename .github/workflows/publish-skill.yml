@@ -19,7 +19,7 @@ permissions:
 jobs:
   build-and-test:
     name: Validate Package
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     defaults:
       run:
         working-directory: packages/fds-skill
@@ -43,7 +43,7 @@ jobs:
   publish:
     name: Publish to npm
     needs: build-and-test
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     defaults:
       run:
         working-directory: packages/fds-skill
