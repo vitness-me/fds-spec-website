@@ -12,6 +12,22 @@
 import type { ValidationResult } from '../core/types.js';
 import { Validator } from './validator.js';
 
+/**
+ * Bundled schema loaders, keyed by schema version.
+ *
+ * Static import specifiers are required so the bundler can resolve them at build
+ * time — a computed `import(\`./bundled/v${version}/index.js\`)` would not be
+ * bundled and would fail at runtime in the published package.
+ *
+ * To add a version: create `./bundled/v<version>/` and add one entry here.
+ */
+const BUNDLED_SCHEMA_LOADERS: Record<string, () => Promise<Record<string, object>>> = {
+  '1.0.0': async () => {
+    const mod = await import('./bundled/v1.0.0/index.js');
+    return (mod.default ?? mod) as unknown as Record<string, object>;
+  },
+};
+
 export interface SchemaVersion {
   version: string;
   url: string;
@@ -82,18 +98,16 @@ export class SchemaManager {
     if (!remoteSuccess) {
       entitySchemas.clear();
       source = 'bundled';
-      
+
       try {
         const bundled = await this.loadBundled(version);
         for (const [entity, schema] of Object.entries(bundled)) {
           entitySchemas.set(entity, schema);
         }
       } catch (bundledError) {
-        errors.push(`Bundled fallback failed: ${bundledError instanceof Error ? bundledError.message : 'Unknown error'}`);
-        // Log errors but don't throw - validator will handle missing schemas gracefully
-        for (const err of errors) {
-          console.warn(err);
-        }
+        errors.push(
+          `Bundled fallback failed: ${bundledError instanceof Error ? bundledError.message : 'Unknown error'}`
+        );
       }
     }
 
@@ -102,6 +116,15 @@ export class SchemaManager {
       entities: Array.from(entitySchemas.keys()),
       errors,
     };
+
+    // Both paths exhausted. Caching an empty schema set here would leave every
+    // subsequent validate() call with nothing to check against — fail loudly instead.
+    if (entitySchemas.size === 0) {
+      throw new Error(
+        `Unable to load FDS schemas for version ${version}. ` +
+          `Remote fetch and bundled fallback both failed:\n  - ${errors.join('\n  - ')}`
+      );
+    }
 
     this.schemas.set(version, entitySchemas);
     this.validator.addSchemas(entitySchemas);
@@ -115,19 +138,42 @@ export class SchemaManager {
   }
 
   /**
-   * Load bundled schemas (fallback for offline/network errors)
+   * Versions with bundled schemas available for offline fallback.
+   */
+  static getBundledVersions(): string[] {
+    return Object.keys(BUNDLED_SCHEMA_LOADERS).sort();
+  }
+
+  /**
+   * Whether a version can be served from bundled schemas.
+   */
+  static hasBundledVersion(version: string): boolean {
+    return version in BUNDLED_SCHEMA_LOADERS;
+  }
+
+  /**
+   * Load bundled schemas (fallback for offline/network errors).
+   *
+   * Throws when the version has no bundled copy — the caller must surface that
+   * rather than proceeding with an empty schema set.
    */
   private async loadBundled(version: string): Promise<Record<string, object>> {
-    // Use statically imported bundled schemas for v1.0.0
-    if (version === '1.0.0') {
-      try {
-        const bundled = await import('./bundled/v1.0.0/index.js');
-        return bundled.default || bundled;
-      } catch {
-        throw new Error(`Failed to load bundled schemas for version ${version}`);
-      }
+    const loader = BUNDLED_SCHEMA_LOADERS[version];
+    if (!loader) {
+      const available = SchemaManager.getBundledVersions().join(', ') || 'none';
+      throw new Error(
+        `No bundled schemas for version ${version} (available: ${available})`
+      );
     }
-    throw new Error(`No bundled schemas for version ${version}`);
+
+    try {
+      return await loader();
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Unknown error';
+      throw new Error(
+        `Failed to load bundled schemas for version ${version}: ${message}`
+      );
+    }
   }
 
   /**

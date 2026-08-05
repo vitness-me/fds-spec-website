@@ -32,23 +32,24 @@ export class Validator {
   }
 
   /**
-   * Load external schema by URI (for $ref resolution)
-   * This is called by Ajv when it encounters an external $ref
+   * Load external schema by URI (for $ref resolution).
+   *
+   * Only consulted by Ajv's async `compileAsync()` — the synchronous `compile()`
+   * used in `addSchemas` throws `MissingRefError` on an unresolved external `$ref`
+   * without ever calling this.
+   *
+   * An unresolvable `$ref` MUST propagate. Substituting a permissive
+   * `{ additionalProperties: true }` schema would make every constrained field
+   * under that `$ref` validate against nothing — silently passing invalid data.
    */
   private async loadExternalSchema(uri: string): Promise<object> {
-    try {
-      const response = await fetch(uri);
-      if (!response.ok) {
-        throw new Error(`Failed to fetch schema: ${response.statusText}`);
-      }
-      return await response.json() as object;
-    } catch (error) {
-      // Return a permissive schema if we can't load the external reference
-      if (!this.silent) {
-        console.warn(`Could not load external schema ${uri}:`, error);
-      }
-      return { type: 'object', additionalProperties: true };
+    const response = await fetch(uri);
+    if (!response.ok) {
+      throw new Error(
+        `Failed to fetch external schema ${uri}: ${response.status} ${response.statusText}`
+      );
     }
+    return await response.json() as object;
   }
 
   /**
@@ -112,33 +113,32 @@ export class Validator {
     let validateFn: ReturnType<InstanceType<typeof Ajv2020>['compile']>;
 
     if (typeof schema === 'string') {
-      // Check if there was a compilation error for this schema
+      // A schema that failed to compile cannot validate anything. Reporting
+      // `valid: true` here would silently pass every record — treat it as invalid.
       const schemaError = this.schemaErrors.get(schema);
       if (schemaError) {
-        // Return a warning but consider valid (schema couldn't be compiled)
         return {
-          valid: true,
-          errors: [],
-          warnings: [
+          valid: false,
+          errors: [
             {
               field: '_schema',
-              message: `Schema "${schema}" could not be compiled: ${schemaError}. Validation skipped.`,
+              message: `Schema "${schema}" could not be compiled: ${schemaError}. Data cannot be validated.`,
+              constraint: 'schemaUnavailable',
             },
           ],
         };
       }
 
-      // Use pre-compiled schema by name
+      // Likewise, an absent schema means validation never ran. Never report success.
       const compiled = this.compiledSchemas.get(schema);
       if (!compiled) {
-        // Schema not found - consider valid but warn
         return {
-          valid: true,
-          errors: [],
-          warnings: [
+          valid: false,
+          errors: [
             {
               field: '_schema',
-              message: `Schema "${schema}" not found. Validation skipped.`,
+              message: `Schema "${schema}" not found. Data cannot be validated.`,
+              constraint: 'schemaNotFound',
             },
           ],
         };
