@@ -177,6 +177,32 @@ For complex platform-unique data structures:
 }
 ```
 
+
+### 4.4. Loading Characteristics
+
+The optional `loading` object describes how an implement carries load. It is the authoritative source for plate math and load rounding.
+
+```json
+{
+  "loading": {
+    "increment": { "value": 2.5, "unit": "kg" },
+    "stackBased": false
+  }
+}
+```
+
+| Field | Type | Default | Meaning |
+|---|---|---|---|
+| `increment.value` | number, > 0 | — | Smallest usable load step |
+| `increment.unit` | metric unit | — | Unit that step is expressed in |
+| `stackBased` | boolean | `false` | Load is selected from discrete stack positions rather than assembled from free weight |
+
+`increment` is what makes a computed load realisable. A program prescribing 82.5% of a 100 kg one-rep max asks for 82.5 kg; whether that is achievable depends on the implement. A barbell loaded with 1.25 kg plate pairs reaches it; a dumbbell rack in 2.5 kg jumps does not. Consumers SHOULD round a computed load to the nearest achievable multiple of `increment.value` rather than presenting a number that cannot be loaded.
+
+`stackBased: true` signals that positions are discrete and not comparable across facilities. Two gyms' "pin 7" are not the same load even on nominally identical stacks, so a stack position SHOULD NOT be treated as portable; the `resistanceLevel` metric (unit `level`) exists to record it as an opaque setting. Where a stack publishes real increments, `increment` remains the portable answer.
+
+This is the counterpart to `exercise.loading` (RFC-001 §4.6): the exercise states *whether* a movement takes load, the equipment states *in what steps*.
+
 ## 5. Versioning and Compatibility
 
 ### 5.1. Schema Versioning
