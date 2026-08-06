@@ -1,7 +1,7 @@
 {
-  "$id": "https://spec.vitness.me/schemas/exercises/v1.0.0/exercise.schema.json",
+  "$id": "https://spec.vitness.me/schemas/exercises/v1.1.0/exercise.schema.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "FDS Exercise (v1.0.0)",
+  "title": "FDS Exercise (v1.1.0)",
   "type": "object",
   "additionalProperties": false,
   "required": [

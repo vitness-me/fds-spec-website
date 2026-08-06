@@ -1,0 +1,54 @@
+{
+  "schemaVersion": "1.1.0",
+  "exerciseId": "00000000-0000-4000-8000-000000000007",
+  "canonical": {
+    "name": "Barbell Back Squat",
+    "slug": "barbell-back-squat",
+    "description": "Bilateral squat loaded across the upper back, prescribed here for velocity-based training.",
+    "aliases": ["Back Squat"],
+    "localized": [{ "lang": "en", "name": "Barbell Back Squat" }]
+  },
+  "classification": {
+    "exerciseType": "strength",
+    "movement": "squat",
+    "mechanics": "compound",
+    "force": "push",
+    "level": "advanced",
+    "unilateral": false,
+    "kineticChain": "closed",
+    "tags": ["barbell", "lower-body", "velocity-based"]
+  },
+  "targets": {
+    "primary": [{ "id": "mus.quadriceps", "name": "Quadriceps", "categoryId": "cat.legs" }],
+    "secondary": [{ "id": "mus.gluteusMaximus", "name": "Gluteus Maximus", "categoryId": "cat.glutes" }]
+  },
+  "equipment": {
+    "required": [
+      { "id": "eq.barbell", "name": "Barbell" },
+      { "id": "eq.squatRack", "name": "Squat Rack" }
+    ]
+  },
+  "loading": {
+    "externalLoad": "required",
+    "assisted": false,
+    "asymmetric": false
+  },
+  "metrics": {
+    "primary": { "type": "reps", "unit": "count" },
+    "secondary": [
+      { "type": "weight", "unit": "kg" },
+      { "type": "percent1RM", "unit": "percent" },
+      { "type": "oneRepMax", "unit": "kg" },
+      { "type": "velocity", "unit": "m_s" },
+      { "type": "sets", "unit": "count" },
+      { "type": "tempo", "unit": "ms" }
+    ]
+  },
+  "metadata": {
+    "createdAt": "2026-08-06T00:00:00Z",
+    "updatedAt": "2026-08-06T00:00:00Z",
+    "status": "active",
+    "source": "vitness.core",
+    "version": "1.1.0"
+  }
+}

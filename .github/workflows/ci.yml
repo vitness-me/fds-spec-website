@@ -100,8 +100,8 @@ jobs:
             done
           }
 
-          validate "$SCHEMAS/exercises/v1.0.0/exercise.schema.json"                     "$SCHEMAS/exercises/v1.0.0"
-          validate "$SCHEMAS/equipment/v1.0.0/equipment.schema.json"                    "$SCHEMAS/equipment/v1.0.0"
+          validate "$SCHEMAS/exercises/v1.1.0/exercise.schema.json"                     "$SCHEMAS/exercises/v1.1.0"
+          validate "$SCHEMAS/equipment/v1.1.0/equipment.schema.json"                    "$SCHEMAS/equipment/v1.1.0"
           validate "$SCHEMAS/muscle/v1.0.0/muscle.schema.json"                          "$SCHEMAS/muscle/v1.0.0"
           validate "$SCHEMAS/muscle/muscle-category/v1.0.0/muscle-category.schema.json" "$SCHEMAS/muscle/muscle-category/v1.0.0"
           validate "$SCHEMAS/atlas/v1.0.0/body-atlas.schema.json"                       "$SCHEMAS/atlas/v1.0.0"

@@ -1,7 +1,7 @@
 {
-  "$id": "https://spec.vitness.me/schemas/equipment/v1.0.0/equipment.schema.json",
+  "$id": "https://spec.vitness.me/schemas/equipment/v1.1.0/equipment.schema.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "FDS Equipment (v1.0.0)",
+  "title": "FDS Equipment (v1.1.0)",
   "type": "object",
   "additionalProperties": false,
   "required": [

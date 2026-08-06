@@ -1,0 +1,51 @@
+{
+  "schemaVersion": "1.1.0",
+  "exerciseId": "00000000-0000-4000-8000-000000000006",
+  "canonical": {
+    "name": "Air Bike Interval",
+    "slug": "air-bike-interval",
+    "description": "Fan-resistance cycling performed in repeated hard efforts, prescribed by rounds rather than reps.",
+    "aliases": ["Assault Bike Interval", "Fan Bike Interval"],
+    "localized": [{ "lang": "en", "name": "Air Bike Interval" }]
+  },
+  "classification": {
+    "exerciseType": "conditioning",
+    "movement": "locomotion",
+    "mechanics": "compound",
+    "force": "mixed",
+    "level": "intermediate",
+    "unilateral": false,
+    "kineticChain": "closed",
+    "tags": ["machine", "conditioning", "interval"]
+  },
+  "targets": {
+    "primary": [{ "id": "mus.quadriceps", "name": "Quadriceps", "categoryId": "cat.legs" }],
+    "secondary": [{ "id": "mus.deltoids", "name": "Deltoids", "categoryId": "cat.shoulders" }]
+  },
+  "equipment": {
+    "required": [{ "id": "eq.airBike", "name": "Air Bike" }]
+  },
+  "loading": {
+    "externalLoad": "none",
+    "assisted": false,
+    "asymmetric": false
+  },
+  "metrics": {
+    "primary": { "type": "duration", "unit": "s" },
+    "secondary": [
+      { "type": "rounds", "unit": "count" },
+      { "type": "rest", "unit": "s" },
+      { "type": "cadence", "unit": "rpm" },
+      { "type": "resistanceLevel", "unit": "level" },
+      { "type": "incline", "unit": "percent" },
+      { "type": "calories", "unit": "kcal" }
+    ]
+  },
+  "metadata": {
+    "createdAt": "2026-08-06T00:00:00Z",
+    "updatedAt": "2026-08-06T00:00:00Z",
+    "status": "active",
+    "source": "vitness.core",
+    "version": "1.1.0"
+  }
+}

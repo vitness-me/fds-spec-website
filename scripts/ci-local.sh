@@ -64,8 +64,8 @@ if run_job schemas; then
       else bad "validate $(basename "$example")"; failed=$((failed + 1)); fi
     done
   }
-  validate "$S/exercises/v1.0.0/exercise.schema.json"                     "$S/exercises/v1.0.0"
-  validate "$S/equipment/v1.0.0/equipment.schema.json"                    "$S/equipment/v1.0.0"
+  validate "$S/exercises/v1.1.0/exercise.schema.json"                     "$S/exercises/v1.1.0"
+  validate "$S/equipment/v1.1.0/equipment.schema.json"                    "$S/equipment/v1.1.0"
   validate "$S/muscle/v1.0.0/muscle.schema.json"                          "$S/muscle/v1.0.0"
   validate "$S/muscle/muscle-category/v1.0.0/muscle-category.schema.json" "$S/muscle/muscle-category/v1.0.0"
   validate "$S/atlas/v1.0.0/body-atlas.schema.json"                       "$S/atlas/v1.0.0"

@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "1.1.0",
+  "id": "eq.cableStack",
+  "canonical": {
+    "name": "Cable Stack",
+    "slug": "cable-stack",
+    "description": "Pin-loaded weight stack driving a cable and pulley, where load is selected in fixed steps rather than by adding plates.",
+    "aliases": ["Cable Machine", "Pulley Stack"],
+    "abbreviation": "CBL",
+    "localized": [{ "lang": "en", "name": "Cable Stack" }]
+  },
+  "classification": {
+    "tags": ["machine", "cable"]
+  },
+  "loading": {
+    "increment": { "value": 5, "unit": "kg" },
+    "stackBased": true
+  },
+  "metadata": {
+    "createdAt": "2026-08-06T00:00:00Z",
+    "updatedAt": "2026-08-06T00:00:00Z",
+    "status": "active",
+    "source": "vitness.registry"
+  }
+}
