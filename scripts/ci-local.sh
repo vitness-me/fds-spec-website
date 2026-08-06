@@ -44,6 +44,7 @@ fi
 if run_job schemas; then
   hdr "schemas — drift check + standalone validation"
   try "published schemas match sources" npm run check:schemas
+  try "metrics guide covers the vocabulary" npm run check:metrics
 
   # Ajv CLI is installed on demand, mirroring the workflow.
   if [[ ! -d node_modules/ajv-cli ]]; then
