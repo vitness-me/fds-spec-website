@@ -1,0 +1,78 @@
+{
+  "$id": "https://spec.vitness.me/schemas/equipment/v1.0.0/equipment.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "FDS Equipment (v1.0.0)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "id",
+    "canonical",
+    "metadata"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "id": {
+      "type": "string"
+    },
+    "canonical": {
+      "type": "object",
+      "required": [
+        "name",
+        "slug"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "slug": {
+          "$ref": "https://spec.vitness.me/schemas/common/v1.0.0/common.schema.json#/$defs/slug"
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "abbreviation": {
+          "type": "string"
+        },
+        "aliases": {
+          "$ref": "https://spec.vitness.me/schemas/common/v1.0.0/common.schema.json#/$defs/aliases"
+        },
+        "localized": {
+          "$ref": "https://spec.vitness.me/schemas/common/v1.0.0/common.schema.json#/$defs/localizedNames"
+        }
+      }
+    },
+    "classification": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "media": {
+      "$ref": "https://spec.vitness.me/schemas/common/v1.0.0/common.schema.json#/$defs/media"
+    },
+    "attributes": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "extensions": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "metadata": {
+      "$ref": "https://spec.vitness.me/schemas/common/v1.0.0/common.schema.json#/$defs/metadata"
+    }
+  }
+}

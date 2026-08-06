@@ -1,0 +1,51 @@
+{
+  "$id": "https://spec.vitness.me/schemas/muscle/muscle-category/v1.0.0/muscle-category.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "FDS Muscle Category (v1.0.0)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "id",
+    "canonical",
+    "metadata"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "id": {
+      "type": "string"
+    },
+    "canonical": {
+      "$ref": "https://spec.vitness.me/schemas/common/v1.0.0/common.schema.json#/$defs/canonical"
+    },
+    "classification": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "media": {
+      "$ref": "https://spec.vitness.me/schemas/common/v1.0.0/common.schema.json#/$defs/media"
+    },
+    "attributes": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "extensions": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "metadata": {
+      "$ref": "https://spec.vitness.me/schemas/common/v1.0.0/common.schema.json#/$defs/metadata"
+    }
+  }
+}
