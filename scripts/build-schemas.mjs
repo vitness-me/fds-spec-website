@@ -33,8 +33,8 @@ const OUT = join(ROOT, 'specification/schemas');
 
 /** Entity schemas to publish. `common` is authoring-only and deliberately absent. */
 const ENTITIES = [
-  'exercises/v1.0.0/exercise.schema.json',
-  'equipment/v1.0.0/equipment.schema.json',
+  'exercises/v1.1.0/exercise.schema.json',
+  'equipment/v1.1.0/equipment.schema.json',
   'muscle/v1.0.0/muscle.schema.json',
   'muscle/muscle-category/v1.0.0/muscle-category.schema.json',
   'atlas/v1.0.0/body-atlas.schema.json',
@@ -97,8 +97,22 @@ function assertSelfContained(schema, label) {
   }
 }
 
+/**
+ * A published schema's `$id` must be the URL its path resolves to, or an
+ * implementer who fetches the URL gets a document claiming to be something else.
+ */
+function assertIdMatchesPath(schema, entityPath) {
+  const expected = `https://spec.vitness.me/schemas/${entityPath}`;
+  if (schema.$id !== expected) {
+    throw new Error(
+      `${entityPath}: $id is "${schema.$id}" but its published URL is "${expected}"`
+    );
+  }
+}
+
 async function build(entity, commonDefs) {
   const schema = await readJson(join(SRC, entity));
+  assertIdMatchesPath(schema, entity);
   const required = collectRequiredDefs(schema, commonDefs);
 
   const defs = { ...(schema.$defs ?? {}) };
