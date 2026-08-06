@@ -22,66 +22,7 @@
       "type": "string"
     },
     "canonical": {
-      "type": "object",
-      "required": [
-        "name",
-        "slug"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "name": {
-          "type": "string",
-          "minLength": 1
-        },
-        "slug": {
-          "type": "string",
-          "pattern": "^[a-z0-9-]{2,}$"
-        },
-        "description": {
-          "type": "string",
-          "minLength": 1
-        },
-        "aliases": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "minLength": 1
-          },
-          "uniqueItems": true
-        },
-        "localized": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "required": [
-              "lang",
-              "name"
-            ],
-            "additionalProperties": false,
-            "properties": {
-              "lang": {
-                "type": "string"
-              },
-              "name": {
-                "type": "string",
-                "minLength": 1
-              },
-              "description": {
-                "type": "string",
-                "minLength": 1
-              },
-              "aliases": {
-                "type": "array",
-                "items": {
-                  "type": "string",
-                  "minLength": 1
-                },
-                "uniqueItems": true
-              }
-            }
-          }
-        }
-      }
+      "$ref": "#/$defs/canonical"
     },
     "classification": {
       "type": "object",
@@ -94,7 +35,7 @@
       ],
       "additionalProperties": false,
       "properties": {
-        "exerciseType" : {
+        "exerciseType": {
           "type": "string"
         },
         "movement": {
@@ -281,111 +222,68 @@
       "additionalProperties": true
     },
     "metadata": {
-      "type": "object",
-      "required": [
-        "createdAt",
-        "updatedAt",
-        "status"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "createdAt": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "updatedAt": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "source": {
-          "type": "string"
-        },
-        "version": {
-          "type": "string"
-        },
-        "status" : {
-          "$ref": "#/$defs/status"
-        },
-        "deprecated": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "since": {
-              "type": "string",
-              "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
-            },
-            "replacedBy": {
-              "type": "string"
-            }
-          }
-        },
-        "externalRefs": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "required": [
-              "system",
-              "id"
-            ],
-            "additionalProperties": false,
-            "properties": {
-              "system": { 
-                "type": "string"
-              },
-              "id": { 
-                "type": "string"
-              }
-            }
-          }
-        },
-        "history": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-              "at": {
-                "type": "string",
-                "format": "date-time"
-              },
-              "actor": {
-                "type": "string"
-              },
-              "change": {
-                "type": "string"
-              }
-            }
-          }
-        }
-      }
+      "$ref": "#/$defs/metadata"
     }
   },
   "$defs": {
-    "muscleRef": {
+    "canonical": {
       "type": "object",
       "required": [
-        "id",
         "name",
-        "categoryId"
+        "slug"
       ],
       "additionalProperties": false,
       "properties": {
-        "id": {
-          "type": "string"
+        "name": {
+          "type": "string",
+          "minLength": 1
         },
         "slug": {
-          "type": "string"
+          "type": "string",
+          "pattern": "^[a-z0-9-]{2,}$"
         },
-        "name": {
-          "type": "string"
-        },
-        "categoryId": {
-          "type": "string"
+        "description": {
+          "type": "string",
+          "minLength": 1
         },
         "aliases": {
           "type": "array",
           "items": {
-            "type": "string"
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "localized": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "lang",
+              "name"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "lang": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "description": {
+                "type": "string",
+                "minLength": 1
+              },
+              "aliases": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "uniqueItems": true
+              }
+            }
           }
         }
       }
@@ -420,6 +318,153 @@
           "type": "array",
           "items": {
             "type": "string"
+          }
+        }
+      }
+    },
+    "force": {
+      "type": "string",
+      "enum": [
+        "push",
+        "pull",
+        "static",
+        "mixed"
+      ]
+    },
+    "kineticChain": {
+      "type": "string",
+      "enum": [
+        "open",
+        "closed",
+        "mixed"
+      ],
+      "default": "mixed"
+    },
+    "level": {
+      "type": "string",
+      "enum": [
+        "beginner",
+        "intermediate",
+        "advanced"
+      ]
+    },
+    "mechanics": {
+      "type": "string",
+      "enum": [
+        "compound",
+        "isolation"
+      ]
+    },
+    "media": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "type",
+          "uri"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "image",
+              "video",
+              "doc",
+              "3d"
+            ]
+          },
+          "uri": {
+            "type": "string",
+            "format": "uri"
+          },
+          "caption": {
+            "type": "string"
+          },
+          "license": {
+            "type": "string"
+          },
+          "attribution": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "required": [
+        "createdAt",
+        "updatedAt",
+        "status"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "source": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/$defs/status"
+        },
+        "deprecated": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "since": {
+              "type": "string",
+              "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+            },
+            "replacedBy": {
+              "type": "string"
+            }
+          }
+        },
+        "externalRefs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "system",
+              "id"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "system": {
+                "type": "string"
+              },
+              "id": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "history": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "at": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "actor": {
+                "type": "string"
+              },
+              "change": {
+                "type": "string"
+              }
+            }
           }
         }
       }
@@ -499,38 +544,34 @@
         "other"
       ]
     },
-    "mechanics": {
-      "type": "string",
-      "enum": [
-        "compound",
-        "isolation"
-      ]
-    },
-    "force": {
-      "type": "string",
-      "enum": [
-        "push",
-        "pull",
-        "static",
-        "mixed"
-      ]
-    },
-    "level": {
-      "type": "string",
-      "enum": [
-        "beginner",
-        "intermediate",
-        "advanced"
-      ]
-    },
-    "kineticChain": {
-      "type": "string",
-      "enum": [
-        "open",
-        "closed",
-        "mixed"
+    "muscleRef": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "categoryId"
       ],
-      "default": "mixed"
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "slug": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "categoryId": {
+          "type": "string"
+        },
+        "aliases": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
     },
     "relationTypes": {
       "type": "string",
@@ -548,38 +589,7 @@
         "contralateralPair"
       ]
     },
-    "media": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "required": ["type","uri"],
-        "additionalProperties": false,
-        "properties": {
-          "type": { 
-            "type": "string", 
-            "enum": [
-              "image",
-              "video",
-              "doc",
-              "3d"]
-          },
-          "uri": { 
-            "type": "string", 
-            "format": "uri"
-          },
-          "caption": { 
-            "type": "string"
-          },
-          "license": { 
-            "type": "string"
-          },
-          "attribution": { 
-            "type": "string"
-          }
-        }
-      }
-    },
-    "status" : {
+    "status": {
       "type": "string",
       "enum": [
         "draft",

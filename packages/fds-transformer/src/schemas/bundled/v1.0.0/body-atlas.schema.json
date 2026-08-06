@@ -21,66 +21,7 @@
       "type": "string"
     },
     "canonical": {
-      "type": "object",
-      "required": [
-        "name",
-        "slug"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "name": {
-          "type": "string",
-          "minLength": 1
-        },
-        "slug": {
-          "type": "string",
-          "pattern": "^[a-z0-9-]{2,}$"
-        },
-        "description": {
-          "type": "string",
-          "minLength": 1
-        },
-        "aliases": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "minLength": 1
-          },
-          "uniqueItems": true
-        },
-        "localized": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "required": [
-              "lang",
-              "name"
-            ],
-            "additionalProperties": false,
-            "properties": {
-              "lang": {
-                "type": "string"
-              },
-              "name": {
-                "type": "string",
-                "minLength": 1
-              },
-              "description": {
-                "type": "string",
-                "minLength": 1
-              },
-              "aliases": {
-                "type": "array",
-                "items": {
-                  "type": "string",
-                  "minLength": 1
-                },
-                "uniqueItems": true
-              }
-            }
-          }
-        }
-      }
+      "$ref": "#/$defs/canonical"
     },
     "views": {
       "type": "array",
@@ -233,6 +174,68 @@
     }
   },
   "$defs": {
+    "canonical": {
+      "type": "object",
+      "required": [
+        "name",
+        "slug"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "slug": {
+          "type": "string",
+          "pattern": "^[a-z0-9-]{2,}$"
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "aliases": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "localized": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "lang",
+              "name"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "lang": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "description": {
+                "type": "string",
+                "minLength": 1
+              },
+              "aliases": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "uniqueItems": true
+              }
+            }
+          }
+        }
+      }
+    },
     "metadata": {
       "type": "object",
       "required": [

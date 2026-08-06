@@ -19,6 +19,37 @@
       "type": "string"
     },
     "canonical": {
+      "$ref": "#/$defs/canonical"
+    },
+    "classification": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "media": {
+      "$ref": "#/$defs/media"
+    },
+    "attributes": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "extensions": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "metadata": {
+      "$ref": "#/$defs/metadata"
+    }
+  },
+  "$defs": {
+    "canonical": {
       "type": "object",
       "required": [
         "name",
@@ -80,34 +111,6 @@
         }
       }
     },
-    "classification": {
-      "type": "object",
-      "additionalProperties": true,
-      "properties": {
-        "tags": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        }
-      }
-    },
-    "media": {
-      "$ref": "#/$defs/media"
-    },
-    "attributes": {
-      "type": "object",
-      "additionalProperties": true
-    },
-    "extensions": {
-      "type": "object",
-      "additionalProperties": true
-    },
-    "metadata": {
-      "$ref": "#/$defs/metadata"
-    }
-  },
-  "$defs": {
     "media": {
       "type": "array",
       "items": {
