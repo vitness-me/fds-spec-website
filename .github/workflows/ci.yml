@@ -5,6 +5,9 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+  # Manual trigger. When Actions is degraded no run is created at all, so there
+  # is nothing to re-run — without this the only way to retry is an empty commit.
+  workflow_dispatch:
 
 # A newer push to the same branch supersedes an in-flight run.
 concurrency:
@@ -17,7 +20,7 @@ permissions:
 jobs:
   transformer:
     name: Transformer — typecheck, test, build
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     defaults:
       run:
         working-directory: packages/fds-transformer
@@ -46,7 +49,7 @@ jobs:
 
   schemas:
     name: Schemas — validate examples
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -108,7 +111,7 @@ jobs:
 
   website:
     name: Website — build
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     defaults:
       run:
         working-directory: website
