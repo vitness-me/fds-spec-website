@@ -18,33 +18,70 @@
  * and nothing is ever rewritten to point into `properties` — a pointer into an
  * entity's instance shape is not a stable contract.
  *
+ * Two artifacts come out of one run, so they cannot disagree:
+ *   1. specification/schemas/                  the published schemas
+ *   2. specification/schemas/.integrity.json   hash + freeze state per schema
+ *
  * Usage:
- *   node scripts/build-schemas.mjs           write specification/schemas/
- *   node scripts/build-schemas.mjs --check   verify output matches sources (CI)
+ *   node scripts/build-schemas.mjs           write both
+ *   node scripts/build-schemas.mjs --check   verify they match sources (CI)
  */
 
-import { readFile, writeFile, mkdir } from 'node:fs/promises';
+import { readFile, writeFile, mkdir, readdir } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
 import { dirname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const SRC = join(ROOT, 'specification/schema-sources');
 const OUT = join(ROOT, 'specification/schemas');
+const INTEGRITY = join(OUT, '.integrity.json');
 
-/** Entity schemas to publish. `common` is authoring-only and deliberately absent. */
+/**
+ * Entity schemas to publish. `common` is authoring-only and deliberately absent.
+ *
+ * Entities version independently: a change to the exercise model must not force
+ * a new muscle URL, and once RFC-006..008 land, a new workout entity must not
+ * drag exercise to a version it did not change in.
+ */
 const ENTITIES = [
-  'exercises/v1.1.0/exercise.schema.json',
-  'equipment/v1.1.0/equipment.schema.json',
-  'muscle/v1.0.0/muscle.schema.json',
-  'muscle/muscle-category/v1.0.0/muscle-category.schema.json',
-  'atlas/v1.0.0/body-atlas.schema.json',
+  { name: 'exercise', path: 'exercises/v1.1.0/exercise.schema.json' },
+  { name: 'equipment', path: 'equipment/v1.1.0/equipment.schema.json' },
+  { name: 'muscle', path: 'muscle/v1.0.0/muscle.schema.json' },
+  { name: 'muscle-category', path: 'muscle/muscle-category/v1.0.0/muscle-category.schema.json' },
+  { name: 'body-atlas', path: 'atlas/v1.0.0/body-atlas.schema.json' },
 ];
+
+/**
+ * Published schemas that are served but not generated from an authoring source.
+ *
+ * `transformer/v1.0.0/mapping.schema.json` describes the transformer's mapping
+ * configuration, not an FDS entity: it has no `schema-sources` counterpart and
+ * shares no `common` definitions, so there is nothing to flatten. It is still
+ * served from spec.vitness.me, so it is still hashed and freezable — it is only
+ * exempt from being *rendered*, not from being *tracked*.
+ *
+ * Adding a file here is a deliberate, reviewable act. That is the point: the
+ * integrity manifest is derived from what is actually published, so nothing can
+ * reach the published tree without appearing in one of these two lists.
+ */
+const UNGENERATED = ['transformer/v1.0.0/mapping.schema.json'];
+
+/** Every `*.schema.json` under the published tree, relative to it. */
+async function publishedSchemaFiles() {
+  const entries = await readdir(OUT, { recursive: true, withFileTypes: true });
+  return entries
+    .filter((entry) => entry.isFile() && entry.name.endsWith('.schema.json'))
+    .map((entry) => relative(OUT, join(entry.parentPath ?? entry.path, entry.name)))
+    .sort();
+}
 
 const COMMON_REL = 'common/v1.0.0/common.schema.json';
 const COMMON_ID = `https://spec.vitness.me/schemas/${COMMON_REL}`;
 const COMMON_REF = `${COMMON_ID}#/$defs/`;
 
 const readJson = async (p) => JSON.parse(await readFile(p, 'utf8'));
+const sha256 = (text) => createHash('sha256').update(text, 'utf8').digest('hex');
 
 const walk = (node, visit) => {
   if (Array.isArray(node)) return node.forEach((v) => walk(v, visit));
@@ -111,14 +148,14 @@ function assertIdMatchesPath(schema, entityPath) {
 }
 
 async function build(entity, commonDefs) {
-  const schema = await readJson(join(SRC, entity));
-  assertIdMatchesPath(schema, entity);
+  const schema = await readJson(join(SRC, entity.path));
+  assertIdMatchesPath(schema, entity.path);
   const required = collectRequiredDefs(schema, commonDefs);
 
   const defs = { ...(schema.$defs ?? {}) };
   for (const name of required) {
     if (name in defs) {
-      throw new Error(`${entity}: local $defs/${name} collides with common`);
+      throw new Error(`${entity.path}: local $defs/${name} collides with common`);
     }
     defs[name] = structuredClone(commonDefs[name]);
   }
@@ -135,41 +172,196 @@ async function build(entity, commonDefs) {
     delete schema.$defs;
   }
 
-  assertSelfContained(schema, `specification/schemas/${entity}`);
+  assertSelfContained(schema, `specification/schemas/${entity.path}`);
   return `${JSON.stringify(schema, null, 2)}\n`;
 }
 
-const check = process.argv.includes('--check');
-const commonDefs = (await readJson(join(SRC, COMMON_REL))).$defs;
-let drifted = 0;
+// ── integrity ────────────────────────────────────────────────────────────────
+//
+// A published URL is a contract. Once an entity version is released, its bytes
+// must never change — a consumer that fetched it yesterday and again today must
+// get the same document. `frozen: true` makes the build refuse to alter it; the
+// only legitimate way to change a frozen schema is to publish a new version.
+//
+// New entries are recorded unfrozen so a schema can be iterated on before it
+// ships. Flipping the flag is a one-line, reviewable diff.
 
-for (const entity of ENTITIES) {
-  const rendered = await build(entity, commonDefs);
-  const outPath = join(OUT, entity);
-  const label = relative(ROOT, outPath);
+const INTEGRITY_COMMENT =
+  'Generated by scripts/build-schemas.mjs. A frozen entry may never change ' +
+  'content — publish a new version instead. Unfreezing is a deliberate, ' +
+  'reviewable edit to this file.';
 
-  if (check) {
-    const current = await readFile(outPath, 'utf8').catch(() => null);
-    if (current === rendered) {
-      console.log(`ok     ${label}`);
-    } else {
-      drifted += 1;
-      console.error(`DRIFT  ${label}`);
-    }
-  } else {
-    await mkdir(dirname(outPath), { recursive: true });
-    await writeFile(outPath, rendered);
-    console.log(`built  ${label}`);
+async function readIntegrity() {
+  try {
+    return await readJson(INTEGRITY);
+  } catch {
+    return { $comment: INTEGRITY_COMMENT, schemas: {} };
   }
 }
 
-if (check && drifted > 0) {
-  console.error(
-    `\n${drifted} published schema(s) do not match their authoring source.\n` +
-      'Run `npm run build:schemas` and commit the result.\n' +
-      'Never edit specification/schemas/ by hand — edit specification/schema-sources/.'
-  );
+const renderIntegrity = (schemas) =>
+  `${JSON.stringify(
+    {
+      $comment: INTEGRITY_COMMENT,
+      schemas: Object.fromEntries(Object.keys(schemas).sort().map((k) => [k, schemas[k]])),
+    },
+    null,
+    2
+  )}\n`;
+
+
+// ── run ──────────────────────────────────────────────────────────────────────
+
+const check = process.argv.includes('--check');
+const commonDefs = (await readJson(join(SRC, COMMON_REL))).$defs;
+const integrity = await readIntegrity();
+const recorded = integrity.schemas ?? {};
+const problems = [];
+
+const rendered = new Map();
+for (const entity of ENTITIES) {
+  rendered.set(entity.name, await build(entity, commonDefs));
+}
+
+/**
+ * Every file this run owns.
+ *
+ * `key` marks a *published* schema — the ones the integrity manifest tracks.
+ * `content: null` means the file is tracked but not rendered (see UNGENERATED):
+ * it is hashed and freezable, never rewritten.
+ */
+const artifacts = [
+  ...ENTITIES.map((e) => ({
+    key: e.path,
+    path: join(OUT, e.path),
+    content: rendered.get(e.name),
+    note: 'published file does not match its authoring source',
+  })),
+  ...UNGENERATED.map((rel) => ({
+    key: rel,
+    path: join(OUT, rel),
+    content: null,
+  })),
+];
+
+/**
+ * Derive the tracked set from what is actually on disk, not from ENTITIES.
+ *
+ * A manifest built only from the entity list can only describe what someone
+ * remembered to list — a schema published without being registered would be
+ * unhashed, unfrozen and invisible, which is exactly how mapping.schema.json
+ * went untracked. Every published schema must be generated or declared.
+ */
+{
+  const declared = new Set([...ENTITIES.map((e) => e.path), ...UNGENERATED]);
+  for (const rel of await publishedSchemaFiles()) {
+    if (declared.has(rel)) continue;
+    problems.push(
+      `UNTRACKED  ${rel} — published but neither generated nor declared.\n` +
+        `             Add it to ENTITIES (generated from schema-sources) or to ` +
+        `UNGENERATED (served as-is) in ${relative(ROOT, fileURLToPath(import.meta.url))}.`
+    );
+  }
+}
+
+// Phase 1 — decide. Nothing is written until every artifact passes, so a frozen
+// violation cannot leave the published tree half-updated.
+for (const artifact of artifacts) {
+  const label = relative(ROOT, artifact.path);
+  const current = await readFile(artifact.path, 'utf8').catch(() => null);
+
+  // A generated file legitimately does not exist on a first build. A tracked but
+  // ungenerated one cannot be conjured, so its absence is always a problem.
+  if (current === null) {
+    if (check || artifact.content === null) {
+      problems.push(
+        `MISSING    ${label}` +
+          (artifact.content === null ? ' — declared as ungenerated but not present' : '')
+      );
+      continue;
+    }
+  }
+
+  if (check) {
+    if (artifact.content === null) console.log(`checked  ${label} (tracked, not generated)`);
+    else if (current !== artifact.content) problems.push(`DRIFT      ${label} — ${artifact.note}`);
+    else console.log(`checked  ${label}`);
+  }
+
+  if (!artifact.key) continue;
+  const entry = recorded[artifact.key];
+
+  // What this run considers authoritative: the render for generated schemas,
+  // the file itself for the ones served as-is.
+  const authoritative = artifact.content ?? current;
+
+  if (check) {
+    // Hash the file on disk, not the render: a hand-edit to a published schema
+    // must fail here even when the render happens to agree with it.
+    if (!entry) {
+      problems.push(`UNRECORDED ${artifact.key} — absent from ${relative(ROOT, INTEGRITY)}`);
+    } else if (sha256(current) !== entry.sha256) {
+      problems.push(
+        `INTEGRITY  ${artifact.key} — sha256 ${sha256(current).slice(0, 12)}… does not match ` +
+          `recorded ${entry.sha256.slice(0, 12)}…${entry.frozen ? ' (frozen)' : ''}`
+      );
+    }
+  } else if (entry?.frozen && entry.sha256 !== sha256(authoritative)) {
+    problems.push(
+      `FROZEN     ${artifact.key} — content changed but this version is frozen.\n` +
+        `             Publish a new version directory, or unfreeze deliberately in ` +
+        `${relative(ROOT, INTEGRITY)}.`
+    );
+  }
+}
+
+if (problems.length) {
+  console.error(`\n${problems.length} problem(s):\n`);
+  for (const problem of problems) console.error(`  ${problem}`);
+  if (check) {
+    console.error(
+      '\nRun `npm run build:schemas` and commit the result.\n' +
+        'Never edit specification/schemas/ by hand — edit specification/schema-sources/.'
+    );
+  }
   process.exit(1);
 }
 
-console.log(check ? '\nAll published schemas match their authoring sources.' : '');
+if (check) {
+  console.log('\nPublished schemas and integrity manifest match their sources.');
+  process.exit(0);
+}
+
+// Phase 2 — write.
+for (const artifact of artifacts) {
+  const label = relative(ROOT, artifact.path);
+
+  // Ungenerated schemas are tracked, not produced: hash what is there.
+  if (artifact.content === null) {
+    recorded[artifact.key] = {
+      sha256: sha256(await readFile(artifact.path, 'utf8')),
+      frozen: recorded[artifact.key]?.frozen ?? false,
+    };
+    console.log(`tracked  ${label}`);
+    continue;
+  }
+
+  await mkdir(dirname(artifact.path), { recursive: true });
+  await writeFile(artifact.path, artifact.content);
+  if (artifact.key) {
+    recorded[artifact.key] = {
+      sha256: sha256(artifact.content),
+      frozen: recorded[artifact.key]?.frozen ?? false,
+    };
+  }
+  console.log(`built    ${label}`);
+}
+
+// Drop entries for schemas that are no longer published — a superseded version
+// leaves the tree, so its hash should leave the manifest with it.
+const tracked = new Set([...ENTITIES.map((e) => e.path), ...UNGENERATED]);
+for (const key of Object.keys(recorded)) {
+  if (!tracked.has(key)) delete recorded[key];
+}
+await writeFile(INTEGRITY, renderIntegrity(recorded));
+console.log(`built    ${relative(ROOT, INTEGRITY)}`);
