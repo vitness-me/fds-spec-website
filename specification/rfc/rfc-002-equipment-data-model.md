@@ -57,7 +57,7 @@ All compliant equipment data MUST include these fields:
 
 ```json
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "id": "eq.barbell",
   "canonical": {
     "name": "Barbell",
@@ -255,7 +255,7 @@ Based on reference implementation (`/specification/schemas/equipment/v.1.0.0/equ
 
 ```json
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "id": "eq.barbell",
   "canonical": { 
     "name": "Barbell", 

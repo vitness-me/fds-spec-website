@@ -24,19 +24,73 @@ are separated:
 The duplication in the published tree is **generated, never hand-maintained**, so it
 cannot drift from the source.
 
+One build run writes three things, so they cannot disagree:
+
+1. `specification/schemas/` — the published schemas
+2. `specification/schemas/.integrity.json` — hash and freeze state per schema
+3. `packages/fds-transformer/src/schemas/bundled/v<release>/` — the transformer's
+   offline copies, including a generated `index.ts`
+
+The bundle is generated for the same reason the published tree is: a stale offline
+copy rejects data the live schema accepts, which is worse than having no bundle.
+
 ## Workflow
 
 ```bash
-npm run build:schemas    # regenerate specification/schemas/
-npm run check:schemas    # verify published output matches sources (CI runs this)
+npm run build:schemas    # regenerate all three
+npm run check:schemas    # verify they match sources (CI runs this)
 ```
 
 Change a shared definition once in `common/v1.0.0/common.schema.json`, rebuild, and
 every entity that references it is updated.
 
-CI fails if the published tree does not match what the sources produce — so a
-hand-edit to `specification/schemas/`, or a source change committed without
-rebuilding, is caught in the pull request.
+CI fails if any generated artifact does not match what the sources produce — so a
+hand-edit to `specification/schemas/`, a hand-edit to a bundled copy, or a source
+change committed without rebuilding, is caught in the pull request.
+
+## Versioning
+
+Entities version independently. `exercises/v1.1.0` and `equipment/v1.1.0` sit
+alongside `muscle/v1.0.0`, because the muscle model did not change. A release name
+is therefore a *set* of entity versions, not a path segment shared by all of them —
+the transformer's `RELEASE_ENTITY_VERSIONS` map records that set, and a test checks
+it against the `$id` of each bundled schema.
+
+### Frozen versions
+
+A published URL is a contract: whoever fetched it yesterday must get the same bytes
+today. `.integrity.json` records a sha256 per published schema plus a `frozen` flag.
+
+- `frozen: true` — the build **refuses** to write a change. Publish a new version
+  directory instead.
+- `frozen: false` — still in development; the build updates the hash freely.
+
+`--check` hashes the file on disk, so a hand-edit to a published schema fails even
+if the render happens to agree with it. Unfreezing is possible, but only as a
+deliberate one-line edit to `.integrity.json` that shows up in review.
+
+Nothing is written until every artifact passes, so a frozen violation cannot leave
+the published tree and the bundle half-updated.
+
+### Nothing gets published untracked
+
+The manifest is derived from **what is on disk**, not from the entity list. Every
+`*.schema.json` under `specification/schemas/` must be one of:
+
+- listed in `ENTITIES` — generated from an authoring source, or
+- listed in `UNGENERATED` — served as-is, with no source to render from.
+
+Anything else fails the build with `UNTRACKED`. A manifest built only from the
+entity list could only ever describe what someone remembered to register, which is
+how `transformer/v1.0.0/mapping.schema.json` stayed unhashed and unfreezable while
+looking fine.
+
+`UNGENERATED` schemas are still hashed and still freezable — they are exempt from
+being *rendered*, not from being *tracked*. Adding a file there is a deliberate,
+reviewable act.
+
+**When adding a new entity version** (a workout schema, a new exercise version):
+add it to `ENTITIES` and rebuild. If you forget, the build tells you.
 
 ## `common.schema.json`
 

@@ -1,6 +1,6 @@
 # FDS Schema Reference
 
-## Exercise Schema (v1.0.0)
+## Exercise Schema (v1.1.0)
 
 ### Top-Level Structure
 
@@ -143,7 +143,7 @@ interface MediaItem {
 
 ---
 
-## Equipment Schema (v1.0.0)
+## Equipment Schema (v1.1.0)
 
 ```typescript
 interface FDSEquipment {
