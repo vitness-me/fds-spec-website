@@ -11,6 +11,9 @@
 
 import type { ValidationResult } from '../core/types.js';
 import { Validator } from './validator.js';
+import { DEFAULT_SCHEMA_VERSION, entityVersionFor, RELEASE_ENTITY_VERSIONS } from './versions.js';
+
+export { DEFAULT_SCHEMA_VERSION, entityVersionFor, RELEASE_ENTITY_VERSIONS };
 
 /**
  * Bundled schema loaders, keyed by schema version.
@@ -26,7 +29,12 @@ const BUNDLED_SCHEMA_LOADERS: Record<string, () => Promise<Record<string, object
     const mod = await import('./bundled/v1.0.0/index.js');
     return (mod.default ?? mod) as unknown as Record<string, object>;
   },
+  '1.1.0': async () => {
+    const mod = await import('./bundled/v1.1.0/index.js');
+    return (mod.default ?? mod) as unknown as Record<string, object>;
+  },
 };
+
 
 export interface SchemaVersion {
   version: string;
@@ -181,23 +189,28 @@ export class SchemaManager {
    */
   private async fetchSchema(entity: string, version: string): Promise<object> {
     const baseUrl = 'https://spec.vitness.me/schemas';
+
+    // The release name is not the path segment — see RELEASE_ENTITY_VERSIONS.
+    // Using it directly would request muscle/v1.1.0/, a URL that was never
+    // published, and send every entity down the bundled fallback.
+    const v = entityVersionFor(entity, version);
     let url: string;
 
     switch (entity) {
       case 'exercise':
-        url = `${baseUrl}/exercises/v${version}/exercise.schema.json`;
+        url = `${baseUrl}/exercises/v${v}/exercise.schema.json`;
         break;
       case 'equipment':
-        url = `${baseUrl}/equipment/v${version}/equipment.schema.json`;
+        url = `${baseUrl}/equipment/v${v}/equipment.schema.json`;
         break;
       case 'muscle':
-        url = `${baseUrl}/muscle/v${version}/muscle.schema.json`;
+        url = `${baseUrl}/muscle/v${v}/muscle.schema.json`;
         break;
       case 'muscle-category':
-        url = `${baseUrl}/muscle/muscle-category/v${version}/muscle-category.schema.json`;
+        url = `${baseUrl}/muscle/muscle-category/v${v}/muscle-category.schema.json`;
         break;
       case 'body-atlas':
-        url = `${baseUrl}/atlas/v${version}/body-atlas.schema.json`;
+        url = `${baseUrl}/atlas/v${v}/body-atlas.schema.json`;
         break;
       default:
         throw new Error(`Unknown entity type: ${entity}`);
@@ -242,20 +255,19 @@ export class SchemaManager {
    * List available schema versions
    */
   async listVersions(): Promise<SchemaVersion[]> {
-    // For now, return known versions
-    return [
-      {
-        version: '1.0.0',
-        url: 'https://spec.vitness.me/schemas/exercises/v1.0.0/exercise.schema.json',
-        bundled: true,
-      },
-    ];
+    return Object.keys(RELEASE_ENTITY_VERSIONS)
+      .sort()
+      .map((version) => ({
+        version,
+        url: `https://spec.vitness.me/schemas/exercises/v${entityVersionFor('exercise', version)}/exercise.schema.json`,
+        bundled: SchemaManager.hasBundledVersion(version),
+      }));
   }
 
   /**
    * Get a specific schema
    */
-  getSchema(entity: string, version = '1.0.0'): object | null {
+  getSchema(entity: string, version = DEFAULT_SCHEMA_VERSION): object | null {
     return this.schemas.get(version)?.get(entity) ?? null;
   }
 
@@ -265,7 +277,7 @@ export class SchemaManager {
   async validate(
     data: unknown,
     entity: string,
-    version = '1.0.0'
+    version = DEFAULT_SCHEMA_VERSION
   ): Promise<ValidationResult> {
     // Ensure schema is loaded
     await this.loadVersion(version);
