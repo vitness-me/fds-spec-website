@@ -250,7 +250,18 @@
         "calories",
         "height",
         "tempo",
-        "rpe"
+        "rpe",
+        "rir",
+        "percent1RM",
+        "percentBodyweight",
+        "velocity",
+        "cadence",
+        "rounds",
+        "sets",
+        "rest",
+        "incline",
+        "resistanceLevel",
+        "oneRepMax"
       ]
     },
     "metricUnit": {
@@ -272,7 +283,12 @@
         "bpm",
         "kcal",
         "cm",
-        "in"
+        "in",
+        "percent",
+        "rpm",
+        "spm",
+        "level",
+        "ms"
       ]
     },
     "metricRef": {
@@ -429,6 +445,62 @@
           "items": {
             "type": "string"
           }
+        }
+      }
+    },
+    "exerciseLoading": {
+      "description": "How a movement accepts external load. Increments are a property of the implement and live on equipment, not here.",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "externalLoad": {
+          "description": "Whether the movement can carry external load at all.",
+          "type": "string",
+          "enum": [
+            "none",
+            "optional",
+            "required"
+          ]
+        },
+        "assisted": {
+          "description": "Load may be negative — assistance reduces effective bodyweight (assisted pull-up, band-assisted dip).",
+          "type": "boolean",
+          "default": false
+        },
+        "asymmetric": {
+          "description": "Left and right sides can be loaded independently.",
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    "equipmentLoading": {
+      "description": "Loading characteristics of an implement.",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "increment": {
+          "description": "Smallest usable load step (2.5 kg plate pair, 5 lb dumbbell jump, one pin on a stack). Authoritative for plate math.",
+          "type": "object",
+          "required": [
+            "value",
+            "unit"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "value": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "unit": {
+              "$ref": "#/$defs/metricUnit"
+            }
+          }
+        },
+        "stackBased": {
+          "description": "Load is selected from discrete stack positions rather than free weight.",
+          "type": "boolean",
+          "default": false
         }
       }
     }

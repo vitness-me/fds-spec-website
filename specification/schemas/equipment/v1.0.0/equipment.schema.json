@@ -60,6 +60,9 @@
         }
       }
     },
+    "loading": {
+      "$ref": "#/$defs/equipmentLoading"
+    },
     "media": {
       "$ref": "#/$defs/media"
     },
@@ -83,6 +86,36 @@
         "minLength": 1
       },
       "uniqueItems": true
+    },
+    "equipmentLoading": {
+      "description": "Loading characteristics of an implement.",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "increment": {
+          "description": "Smallest usable load step (2.5 kg plate pair, 5 lb dumbbell jump, one pin on a stack). Authoritative for plate math.",
+          "type": "object",
+          "required": [
+            "value",
+            "unit"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "value": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "unit": {
+              "$ref": "#/$defs/metricUnit"
+            }
+          }
+        },
+        "stackBased": {
+          "description": "Load is selected from discrete stack positions rather than free weight.",
+          "type": "boolean",
+          "default": false
+        }
+      }
     },
     "localizedNames": {
       "type": "array",
@@ -229,6 +262,33 @@
           }
         }
       }
+    },
+    "metricUnit": {
+      "type": "string",
+      "enum": [
+        "count",
+        "kg",
+        "lb",
+        "s",
+        "min",
+        "m",
+        "km",
+        "mi",
+        "m_s",
+        "km_h",
+        "min_per_km",
+        "min_per_mi",
+        "W",
+        "bpm",
+        "kcal",
+        "cm",
+        "in",
+        "percent",
+        "rpm",
+        "spm",
+        "level",
+        "ms"
+      ]
     },
     "slug": {
       "type": "string",
