@@ -128,6 +128,9 @@
         }
       }
     },
+    "loading": {
+      "$ref": "#/$defs/exerciseLoading"
+    },
     "constraints": {
       "type": "object",
       "additionalProperties": false,
@@ -322,6 +325,32 @@
         }
       }
     },
+    "exerciseLoading": {
+      "description": "How a movement accepts external load. Increments are a property of the implement and live on equipment, not here.",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "externalLoad": {
+          "description": "Whether the movement can carry external load at all.",
+          "type": "string",
+          "enum": [
+            "none",
+            "optional",
+            "required"
+          ]
+        },
+        "assisted": {
+          "description": "Load may be negative — assistance reduces effective bodyweight (assisted pull-up, band-assisted dip).",
+          "type": "boolean",
+          "default": false
+        },
+        "asymmetric": {
+          "description": "Left and right sides can be loaded independently.",
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
     "force": {
       "type": "string",
       "enum": [
@@ -500,7 +529,18 @@
         "calories",
         "height",
         "tempo",
-        "rpe"
+        "rpe",
+        "rir",
+        "percent1RM",
+        "percentBodyweight",
+        "velocity",
+        "cadence",
+        "rounds",
+        "sets",
+        "rest",
+        "incline",
+        "resistanceLevel",
+        "oneRepMax"
       ]
     },
     "metricUnit": {
@@ -522,7 +562,12 @@
         "bpm",
         "kcal",
         "cm",
-        "in"
+        "in",
+        "percent",
+        "rpm",
+        "spm",
+        "level",
+        "ms"
       ]
     },
     "movement": {
