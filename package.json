@@ -7,6 +7,7 @@
   "scripts": {
     "build:schemas": "node scripts/build-schemas.mjs",
     "check:schemas": "node scripts/build-schemas.mjs --check",
-    "verify": "bash scripts/ci-local.sh"
+    "verify": "bash scripts/ci-local.sh",
+    "check:metrics": "node scripts/check-metrics-guide.mjs"
   }
 }
