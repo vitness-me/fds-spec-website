@@ -232,6 +232,41 @@ For complex platform-unique data structures:
 }
 ```
 
+
+### 4.6. Loading Characteristics
+
+The optional `loading` object describes **how a movement accepts external load**. It answers what a consumer otherwise has to infer from the exercise name: whether the movement can be loaded at all, whether added load makes it harder or easier, and whether the two sides can be loaded independently.
+
+```json
+{
+  "loading": {
+    "externalLoad": "required",
+    "assisted": false,
+    "asymmetric": false
+  }
+}
+```
+
+| Field | Type | Default | Meaning |
+|---|---|---|---|
+| `externalLoad` | `"none"` \| `"optional"` \| `"required"` | — | Whether the movement can carry external load at all |
+| `assisted` | boolean | `false` | Load may be negative — assistance reduces effective bodyweight |
+| `asymmetric` | boolean | `false` | Left and right sides can be loaded independently |
+
+`externalLoad` values:
+
+- **`none`** — the movement cannot be externally loaded (a standing hamstring stretch). A `weight` metric on such an exercise is a producer error.
+- **`optional`** — the movement works loaded or unloaded (a push-up, with or without a plate on the back).
+- **`required`** — the movement is meaningless without load (a barbell bench press).
+
+`assisted: true` inverts the sign of load. On an assisted pull-up machine, *more* selected weight makes the movement *easier*. Consumers that plot progress MUST NOT treat an increase in load on an assisted movement as an increase in effort.
+
+`asymmetric: true` means a producer MAY report per-side load; it does not require it.
+
+**Increments are deliberately not part of this object.** The smallest usable load step is a property of the implement, not the movement — a 2.5 kg plate pair, a 5 lb dumbbell jump, one pin on a stack. It lives on `equipment.loading.increment` (RFC-002 §4.4). The same movement performed with dumbbells and with a barbell has two different smallest steps, which a single field on the exercise could not express.
+
+Consumers MUST NOT reject an exercise that omits `loading`. Absence means unstated, not `none`.
+
 ## 5. Versioning and Compatibility
 
 ### 5.1. Schema Versioning

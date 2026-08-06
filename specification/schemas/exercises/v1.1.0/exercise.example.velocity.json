@@ -41,7 +41,7 @@
       { "type": "oneRepMax", "unit": "kg" },
       { "type": "velocity", "unit": "m_s" },
       { "type": "sets", "unit": "count" },
-      { "type": "tempo", "unit": "ms" }
+      { "type": "duration", "unit": "ms" }
     ]
   },
   "metadata": {
