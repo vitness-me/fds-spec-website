@@ -56,6 +56,13 @@ jobs:
         with:
           node-version: 20
 
+      # specification/schemas/ is generated from specification/schema-sources/.
+      # Rebuilding and diffing catches both a hand-edit to a published schema and
+      # a source change committed without rebuilding — either would let the two
+      # drift apart silently. No dependencies: the build is plain Node.
+      - name: Verify published schemas match their authoring sources
+        run: npm run check:schemas
+
       - name: Install Ajv CLI
         run: npm install --no-save ajv-cli@5 ajv-formats@3
 
