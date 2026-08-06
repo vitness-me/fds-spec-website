@@ -20,7 +20,7 @@ npm install -g ajv-cli ajv-formats
 
 ```bash
 ajv validate \
-  -s https://spec.vitness.me/schemas/exercises/v1.0.0/exercise.schema.json \
+  -s https://spec.vitness.me/schemas/exercises/v1.1.0/exercise.schema.json \
   -d your-exercise.json \
   --spec=draft2020 \
   -c ajv-formats
@@ -30,7 +30,7 @@ ajv validate \
 
 ```bash
 ajv validate \
-  -s https://spec.vitness.me/schemas/equipment/v1.0.0/equipment.schema.json \
+  -s https://spec.vitness.me/schemas/equipment/v1.1.0/equipment.schema.json \
   -d your-equipment.json \
   --spec=draft2020 \
   -c ajv-formats
@@ -40,8 +40,8 @@ ajv validate \
 
 All schemas are available at: `https://spec.vitness.me/schemas/`
 
-- Exercise: `/schemas/exercises/v1.0.0/exercise.schema.json`
-- Equipment: `/schemas/equipment/v1.0.0/equipment.schema.json`
+- Exercise: `/schemas/exercises/v1.1.0/exercise.schema.json`
+- Equipment: `/schemas/equipment/v1.1.0/equipment.schema.json`
 - Muscle: `/schemas/muscle/v1.0.0/muscle.schema.json`
 - Muscle Category: `/schemas/muscle/muscle-category/v1.0.0/muscle-category.schema.json`
 - Body Atlas: `/schemas/atlas/v1.0.0/body-atlas.schema.json`

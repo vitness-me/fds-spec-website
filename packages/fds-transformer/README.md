@@ -323,7 +323,7 @@ The transformer produces FDS-compliant JSON with all enriched fields:
 ```json
 {
   "exerciseId": "caf217a9-3880-4f12-bc2e-71ce44d42665",
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "canonical": {
     "name": "Barbell Bench Press",
     "slug": "barbell-bench-press",

@@ -34,8 +34,8 @@ Your role is to assist developers and fitness platforms in understanding, implem
 ### Schema URLs (Production)
 
 ```
-https://spec.vitness.me/schemas/exercises/v1.0.0/exercise.schema.json
-https://spec.vitness.me/schemas/equipment/v1.0.0/equipment.schema.json
+https://spec.vitness.me/schemas/exercises/v1.1.0/exercise.schema.json
+https://spec.vitness.me/schemas/equipment/v1.1.0/equipment.schema.json
 https://spec.vitness.me/schemas/muscle/v1.0.0/muscle.schema.json
 https://spec.vitness.me/schemas/muscle/muscle-category/v1.0.0/muscle-category.schema.json
 https://spec.vitness.me/schemas/atlas/v1.0.0/body-atlas.schema.json
@@ -51,7 +51,7 @@ Every FDS Exercise MUST include:
 
 ```json
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "exerciseId": "uuid-v4-here",
   "canonical": {
     "name": "Exercise Name",
@@ -157,7 +157,7 @@ Short IDs like `eq.barbell`, `mus.biceps`, `cat.legs` are ONLY for documentation
 ### Equipment Registry Entry
 ```json
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "id": "b2c3d4e5-2222-4000-8000-000000000003",
   "canonical": {
     "name": "Barbell",
@@ -355,7 +355,7 @@ What type of exercise?
 ### Target: FDS Exercise
 ```json
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "exerciseId": "550e8400-e29b-41d4-a716-446655440001",
   "canonical": {
     "name": "3/4 Sit-Up",

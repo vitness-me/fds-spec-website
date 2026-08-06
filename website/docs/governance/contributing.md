@@ -28,8 +28,8 @@ Thanks for helping improve fitness data interoperability! This document explains
 - Validate examples locally (Ajv Draft 2020‑12):
 
 ```bash
-npx ajv -s specification/schemas/exercises/v1.0.0/exercise.schema.json \
-  -d specification/schemas/exercises/v1.0.0/exercise.example.json
+npx ajv -s specification/schemas/exercises/v1.1.0/exercise.schema.json \
+  -d specification/schemas/exercises/v1.1.0/exercise.example.json
 ```
 
 ## Identifier Policy

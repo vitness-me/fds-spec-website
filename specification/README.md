@@ -113,12 +113,12 @@ Validate examples with Ajv (Draft 2020‑12):
 
 ```bash
 # Exercise
-npx ajv -s specification/schemas/exercises/v1.0.0/exercise.schema.json \
-  -d specification/schemas/exercises/v1.0.0/exercise.example.json
+npx ajv -s specification/schemas/exercises/v1.1.0/exercise.schema.json \
+  -d specification/schemas/exercises/v1.1.0/exercise.example.json
 
 # Equipment
-npx ajv -s specification/schemas/equipment/v1.0.0/equipment.schema.json \
-  -d specification/schemas/equipment/v1.0.0/equipment.example.json
+npx ajv -s specification/schemas/equipment/v1.1.0/equipment.schema.json \
+  -d specification/schemas/equipment/v1.1.0/equipment.example.json
 
 # Muscle
 npx ajv -s specification/schemas/muscle/v1.0.0/muscle.schema.json \
@@ -141,9 +141,9 @@ Notes:
   - RFC‑004 Muscle Category Data Model
   - RFC‑005 Body Atlas Data Model
 - `specification/schemas/`
-  - `exercises/v1.0.0/` exercise schema + example
+  - `exercises/v1.1.0/` exercise schema + example
   - `atlas/v1.0.0/` body atlas schema + example
-  - `equipment/v1.0.0/` equipment schema + example
+  - `equipment/v1.1.0/` equipment schema + example
   - `muscle/v1.0.0/` muscle schema + example
   - `muscle/muscle-category/v1.0.0/` muscle category schema + example
 - `specification/governance/`

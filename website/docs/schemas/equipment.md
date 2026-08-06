@@ -4,20 +4,20 @@ description: JSON Schema for equipment data model
 sidebar_position: 3
 ---
 
-# Equipment Schema (v1.0.0)
+# Equipment Schema (v1.1.0)
 
 The Equipment schema defines fitness equipment entities with classification, metadata, and extensible attributes.
 
 ## Schema Location
 
-**URL:** `https://spec.vitness.me/schemas/equipment/v1.0.0/equipment.schema.json`
+**URL:** `https://spec.vitness.me/schemas/equipment/v1.1.0/equipment.schema.json`
 
-**Download:** [equipment.schema.json](https://spec.vitness.me/schemas/equipment/v1.0.0/equipment.schema.json)
+**Download:** [equipment.schema.json](https://spec.vitness.me/schemas/equipment/v1.1.0/equipment.schema.json)
 
 ## Examples
 
 View the equipment examples:
-- [Basic Equipment](https://spec.vitness.me/schemas/equipment/v1.0.0/equipment.example.json)
+- [Basic Equipment](https://spec.vitness.me/schemas/equipment/v1.1.0/equipment.example.json)
 
 ## Specification
 

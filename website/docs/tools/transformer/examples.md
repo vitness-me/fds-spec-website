@@ -129,7 +129,7 @@ fds-transformer transform \
 ```json title="fds-output/barbell-bench-press.json"
 {
   "exerciseId": "550e8400-e29b-41d4-a716-446655440000",
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "canonical": {
     "name": "Barbell Bench Press",
     "slug": "barbell-bench-press"
@@ -293,7 +293,7 @@ OPENROUTER_API_KEY=your-key fds-transformer transform \
 ```json title="fds-output/barbell-bench-press.json"
 {
   "exerciseId": "caf217a9-3880-4f12-bc2e-71ce44d42665",
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "canonical": {
     "name": "Barbell Bench Press",
     "slug": "barbell-bench-press",

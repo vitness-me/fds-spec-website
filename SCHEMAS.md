@@ -4,19 +4,23 @@ All schemas are available at the following URLs:
 
 ## Production URLs (spec.vitness.me)
 
-### Exercise Schema (v1.0.0)
-- **Schema**: https://spec.vitness.me/schemas/exercises/v1.0.0/exercise.schema.json
+### Exercise Schema (v1.1.0)
+- **Schema**: https://spec.vitness.me/schemas/exercises/v1.1.0/exercise.schema.json
 - **Examples**:
-  - https://spec.vitness.me/schemas/exercises/v1.0.0/exercise.example.json
-  - https://spec.vitness.me/schemas/exercises/v1.0.0/exercise.example.cardio.json
-  - https://spec.vitness.me/schemas/exercises/v1.0.0/exercise.example.mobility.json
-  - https://spec.vitness.me/schemas/exercises/v1.0.0/exercise.example.machine.json
-  - https://spec.vitness.me/schemas/exercises/v1.0.0/exercise.example.unilateral.json
+  - https://spec.vitness.me/schemas/exercises/v1.1.0/exercise.example.json
+  - https://spec.vitness.me/schemas/exercises/v1.1.0/exercise.example.cardio.json
+  - https://spec.vitness.me/schemas/exercises/v1.1.0/exercise.example.mobility.json
+  - https://spec.vitness.me/schemas/exercises/v1.1.0/exercise.example.machine.json
+  - https://spec.vitness.me/schemas/exercises/v1.1.0/exercise.example.unilateral.json
+  - https://spec.vitness.me/schemas/exercises/v1.1.0/exercise.example.assisted.json
+  - https://spec.vitness.me/schemas/exercises/v1.1.0/exercise.example.conditioning.json
+  - https://spec.vitness.me/schemas/exercises/v1.1.0/exercise.example.velocity.json
 
-### Equipment Schema (v1.0.0)
-- **Schema**: https://spec.vitness.me/schemas/equipment/v1.0.0/equipment.schema.json
+### Equipment Schema (v1.1.0)
+- **Schema**: https://spec.vitness.me/schemas/equipment/v1.1.0/equipment.schema.json
 - **Examples**:
-  - https://spec.vitness.me/schemas/equipment/v1.0.0/equipment.example.json
+  - https://spec.vitness.me/schemas/equipment/v1.1.0/equipment.example.json
+  - https://spec.vitness.me/schemas/equipment/v1.1.0/equipment.example.stack.json
 
 ### Muscle Schema (v1.0.0)
 - **Schema**: https://spec.vitness.me/schemas/muscle/v1.0.0/muscle.schema.json
@@ -40,7 +44,7 @@ All schema `$id` fields match their serving URLs:
 
 ```json
 {
-  "$id": "https://spec.vitness.me/schemas/exercises/v1.0.0/exercise.schema.json"
+  "$id": "https://spec.vitness.me/schemas/exercises/v1.1.0/exercise.schema.json"
 }
 ```
 
@@ -50,7 +54,7 @@ Use these URLs directly with JSON Schema validators like Ajv:
 
 ```bash
 ajv validate \
-  -s https://spec.vitness.me/schemas/exercises/v1.0.0/exercise.schema.json \
+  -s https://spec.vitness.me/schemas/exercises/v1.1.0/exercise.schema.json \
   -d your-exercise.json \
   --spec=draft2020 \
   -c ajv-formats

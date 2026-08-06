@@ -7,8 +7,8 @@ This directory contains the FDS (Fitness Data Standard) specification skill for 
 When working in this codebase, you have access to comprehensive FDS knowledge:
 
 ### Schema Knowledge
-- **Exercise Schema** - Full structure at `/specification/schemas/exercises/v1.0.0/exercise.schema.json`
-- **Equipment Schema** - Structure at `/specification/schemas/equipment/v1.0.0/equipment.schema.json`
+- **Exercise Schema** - Full structure at `/specification/schemas/exercises/v1.1.0/exercise.schema.json`
+- **Equipment Schema** - Structure at `/specification/schemas/equipment/v1.1.0/equipment.schema.json`
 - **Muscle Schema** - Structure at `/specification/schemas/muscle/v1.0.0/muscle.schema.json`
 - **Muscle Category Schema** - Structure at `/specification/schemas/muscle/muscle-category/v1.0.0/muscle-category.schema.json`
 - **Body Atlas Schema** - Structure at `/specification/schemas/atlas/v1.0.0/body-atlas.schema.json`

@@ -65,7 +65,7 @@ All compliant exercise data **MUST** include these fields:
 
 ```json
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "exerciseId": "550e8400-e29b-41d4-a716-446655440000",
   "canonical": {
     "name": "Back Squat",
@@ -322,8 +322,8 @@ Potential response structure:
 ## 8. JSON Schema Reference
 
 Complete JSON Schema available at:
-- **Exercise**: `/specification/schemas/exercises/v1.0.0/exercise.schema.json`
-- **Equipment**: `/specification/schemas/equipment/v1.0.0/equipment.schema.json`  
+- **Exercise**: `/specification/schemas/exercises/v1.1.0/exercise.schema.json`
+- **Equipment**: `/specification/schemas/equipment/v1.1.0/equipment.schema.json`  
 - **Muscle**: `/specification/schemas/muscle/v1.0.0/muscle.schema.json`
 
 ## 8.1. Validation
@@ -331,29 +331,29 @@ Complete JSON Schema available at:
 Validate with Ajv (Draft 2020-12):
 
 ```
-npx ajv -s specification/schemas/exercises/v1.0.0/exercise.schema.json \
-  -d specification/schemas/exercises/v1.0.0/exercise.example.json
+npx ajv -s specification/schemas/exercises/v1.1.0/exercise.schema.json \
+  -d specification/schemas/exercises/v1.1.0/exercise.example.json
 
 # Additional examples (optional):
-npx ajv -s specification/schemas/exercises/v1.0.0/exercise.schema.json \
-  -d specification/schemas/exercises/v1.0.0/exercise.example.cardio.json
-npx ajv -s specification/schemas/exercises/v1.0.0/exercise.schema.json \
-  -d specification/schemas/exercises/v1.0.0/exercise.example.mobility.json
-npx ajv -s specification/schemas/exercises/v1.0.0/exercise.schema.json \
-  -d specification/schemas/exercises/v1.0.0/exercise.example.machine.json
-npx ajv -s specification/schemas/exercises/v1.0.0/exercise.schema.json \
-  -d specification/schemas/exercises/v1.0.0/exercise.example.unilateral.json
+npx ajv -s specification/schemas/exercises/v1.1.0/exercise.schema.json \
+  -d specification/schemas/exercises/v1.1.0/exercise.example.cardio.json
+npx ajv -s specification/schemas/exercises/v1.1.0/exercise.schema.json \
+  -d specification/schemas/exercises/v1.1.0/exercise.example.mobility.json
+npx ajv -s specification/schemas/exercises/v1.1.0/exercise.schema.json \
+  -d specification/schemas/exercises/v1.1.0/exercise.example.machine.json
+npx ajv -s specification/schemas/exercises/v1.1.0/exercise.schema.json \
+  -d specification/schemas/exercises/v1.1.0/exercise.example.unilateral.json
 ```
 
 ## 9. Example Implementation
 
 ### 9.1. Complete Back Squat Export
 
-Based on reference implementation (`/specification/schemas/exercises/v1.0.0/exercise.example.json`):
+Based on reference implementation (`/specification/schemas/exercises/v1.1.0/exercise.example.json`):
 
 ```json
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "exerciseId": "550e8400-e29b-41d4-a716-446655440000",
   "canonical": {
     "name": "Back Squat",

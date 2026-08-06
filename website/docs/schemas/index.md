@@ -8,17 +8,17 @@ sidebar_position: 1
 
 All FDS entities are defined using JSON Schema (Draft 2020-12). Each schema includes examples and validation rules.
 
-## Available Schemas (v1.0.0)
+## Available Schemas
 
 ### [Exercise Schema](/docs/schemas/exercise)
 The core exercise data model with classification, targets, equipment, and media.
 
-**Schema:** `/schemas/exercises/v1.0.0/exercise.schema.json`
+**Schema:** `/schemas/exercises/v1.1.0/exercise.schema.json`
 
 ### [Equipment Schema](/docs/schemas/equipment)
 Fitness equipment definitions with classification and metadata.
 
-**Schema:** `/schemas/equipment/v1.0.0/equipment.schema.json`
+**Schema:** `/schemas/equipment/v1.1.0/equipment.schema.json`
 
 ### [Muscle Schema](/docs/schemas/muscle)
 Anatomical muscle definitions with heatmap visualization support.

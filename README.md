@@ -19,7 +19,7 @@ This repository hosts the official FDS specification documentation website, buil
 fds-spec-website/
 ├── specification/          # FDS specification content (RFCs, schemas, governance)
 │   ├── rfc/               # RFC documents (001-005)
-│   ├── schemas/           # JSON Schema definitions (v1.0.0)
+│   ├── schemas/           # JSON Schema definitions
 │   ├── registries/        # Reference data (exercises, equipment, muscles)
 │   └── governance/        # Governance, contributing, changelog
 │

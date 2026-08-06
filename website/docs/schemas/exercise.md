@@ -4,24 +4,24 @@ description: JSON Schema for exercise data model
 sidebar_position: 2
 ---
 
-# Exercise Schema (v1.0.0)
+# Exercise Schema (v1.1.0)
 
 The Exercise schema defines the core data model for fitness exercises. It includes classification, muscle targets, equipment requirements, and media assets.
 
 ## Schema Location
 
-**URL:** `https://spec.vitness.me/schemas/exercises/v1.0.0/exercise.schema.json`
+**URL:** `https://spec.vitness.me/schemas/exercises/v1.1.0/exercise.schema.json`
 
-**Download:** [exercise.schema.json](https://spec.vitness.me/schemas/exercises/v1.0.0/exercise.schema.json)
+**Download:** [exercise.schema.json](https://spec.vitness.me/schemas/exercises/v1.1.0/exercise.schema.json)
 
 ## Examples
 
 View the exercise examples:
-- [Basic Exercise](https://spec.vitness.me/schemas/exercises/v1.0.0/exercise.example.json)
-- [Cardio Exercise](https://spec.vitness.me/schemas/exercises/v1.0.0/exercise.example.cardio.json)
-- [Mobility Exercise](https://spec.vitness.me/schemas/exercises/v1.0.0/exercise.example.mobility.json)
-- [Machine Exercise](https://spec.vitness.me/schemas/exercises/v1.0.0/exercise.example.machine.json)
-- [Unilateral Exercise](https://spec.vitness.me/schemas/exercises/v1.0.0/exercise.example.unilateral.json)
+- [Basic Exercise](https://spec.vitness.me/schemas/exercises/v1.1.0/exercise.example.json)
+- [Cardio Exercise](https://spec.vitness.me/schemas/exercises/v1.1.0/exercise.example.cardio.json)
+- [Mobility Exercise](https://spec.vitness.me/schemas/exercises/v1.1.0/exercise.example.mobility.json)
+- [Machine Exercise](https://spec.vitness.me/schemas/exercises/v1.1.0/exercise.example.machine.json)
+- [Unilateral Exercise](https://spec.vitness.me/schemas/exercises/v1.1.0/exercise.example.unilateral.json)
 
 ## Specification
 
