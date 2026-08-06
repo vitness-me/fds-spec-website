@@ -1,0 +1,298 @@
+{
+  "$id": "https://spec.vitness.me/schemas/exercises/v1.0.0/exercise.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "FDS Exercise (v1.0.0)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "exerciseId",
+    "canonical",
+    "classification",
+    "targets",
+    "metrics",
+    "metadata"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "exerciseId": {
+      "type": "string"
+    },
+    "canonical": {
+      "$ref": "https://spec.vitness.me/schemas/common/v1.0.0/common.schema.json#/$defs/canonical"
+    },
+    "classification": {
+      "type": "object",
+      "required": [
+        "exerciseType",
+        "movement",
+        "mechanics",
+        "force",
+        "level"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "exerciseType": {
+          "type": "string"
+        },
+        "movement": {
+          "$ref": "#/$defs/movement"
+        },
+        "mechanics": {
+          "$ref": "#/$defs/mechanics"
+        },
+        "force": {
+          "$ref": "#/$defs/force"
+        },
+        "level": {
+          "$ref": "#/$defs/level"
+        },
+        "unilateral": {
+          "type": "boolean",
+          "default": false
+        },
+        "kineticChain": {
+          "$ref": "#/$defs/kineticChain"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "taxonomyRefs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "registry",
+              "id"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "registry": {
+                "type": "string",
+                "format": "uri-reference"
+              },
+              "id": {
+                "type": "string"
+              },
+              "label": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "targets": {
+      "type": "object",
+      "required": [
+        "primary"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "primary": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "https://spec.vitness.me/schemas/common/v1.0.0/common.schema.json#/$defs/muscleRef"
+          }
+        },
+        "secondary": {
+          "type": "array",
+          "items": {
+            "$ref": "https://spec.vitness.me/schemas/common/v1.0.0/common.schema.json#/$defs/muscleRef"
+          }
+        }
+      }
+    },
+    "equipment": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "required": {
+          "type": "array",
+          "items": {
+            "$ref": "https://spec.vitness.me/schemas/common/v1.0.0/common.schema.json#/$defs/equipmentRef"
+          }
+        },
+        "optional": {
+          "type": "array",
+          "items": {
+            "$ref": "https://spec.vitness.me/schemas/common/v1.0.0/common.schema.json#/$defs/equipmentRef"
+          }
+        }
+      }
+    },
+    "constraints": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "contraindications": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "prerequisites": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "progressions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "regressions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "environment": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "relations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "type",
+          "targetId"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "type": {
+            "$ref": "#/$defs/relationTypes"
+          },
+          "targetId": {
+            "type": "string"
+          },
+          "confidence": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "notes": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "metrics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "primary"
+      ],
+      "properties": {
+        "primary": {
+          "$ref": "https://spec.vitness.me/schemas/common/v1.0.0/common.schema.json#/$defs/metricRef"
+        },
+        "secondary": {
+          "type": "array",
+          "items": {
+            "$ref": "https://spec.vitness.me/schemas/common/v1.0.0/common.schema.json#/$defs/metricRef"
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "media": {
+      "$ref": "https://spec.vitness.me/schemas/common/v1.0.0/common.schema.json#/$defs/media"
+    },
+    "attributes": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "extensions": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "metadata": {
+      "$ref": "https://spec.vitness.me/schemas/common/v1.0.0/common.schema.json#/$defs/metadata"
+    }
+  },
+  "$defs": {
+    "movement": {
+      "type": "string",
+      "enum": [
+        "squat",
+        "hinge",
+        "lunge",
+        "push-horizontal",
+        "push-vertical",
+        "pull-horizontal",
+        "pull-vertical",
+        "carry",
+        "core-anti-extension",
+        "core-anti-rotation",
+        "rotation",
+        "locomotion",
+        "isolation",
+        "other"
+      ]
+    },
+    "mechanics": {
+      "type": "string",
+      "enum": [
+        "compound",
+        "isolation"
+      ]
+    },
+    "force": {
+      "type": "string",
+      "enum": [
+        "push",
+        "pull",
+        "static",
+        "mixed"
+      ]
+    },
+    "level": {
+      "type": "string",
+      "enum": [
+        "beginner",
+        "intermediate",
+        "advanced"
+      ]
+    },
+    "kineticChain": {
+      "type": "string",
+      "enum": [
+        "open",
+        "closed",
+        "mixed"
+      ],
+      "default": "mixed"
+    },
+    "relationTypes": {
+      "type": "string",
+      "enum": [
+        "alternate",
+        "variation",
+        "substitute",
+        "progression",
+        "regression",
+        "equipmentVariant",
+        "accessory",
+        "mobilityPrep",
+        "similarPattern",
+        "unilateralPair",
+        "contralateralPair"
+      ]
+    }
+  }
+}
