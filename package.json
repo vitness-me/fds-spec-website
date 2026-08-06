@@ -2,10 +2,11 @@
   "name": "fds-spec",
   "version": "0.0.0",
   "private": true,
-  "description": "Fitness Data Standard — specification tooling",
+  "description": "Fitness Data Standard \u2014 specification tooling",
   "type": "module",
   "scripts": {
     "build:schemas": "node scripts/build-schemas.mjs",
-    "check:schemas": "node scripts/build-schemas.mjs --check"
+    "check:schemas": "node scripts/build-schemas.mjs --check",
+    "verify": "bash scripts/ci-local.sh"
   }
 }
