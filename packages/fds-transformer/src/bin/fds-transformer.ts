@@ -15,6 +15,7 @@ import { Transformer, type BatchTransformOptions } from '../core/transformer.js'
 import { BatchProcessor } from '../core/batch-processor.js';
 import { ConfigLoader } from '../config/config-loader.js';
 import { SchemaManager } from '../schemas/schema-manager.js';
+import { DEFAULT_SCHEMA_VERSION } from '../schemas/versions.js';
 import { CheckpointManager, CHECKPOINT_FILENAME } from '../ai/checkpoint-manager.js';
 import type { CostEstimate, EnrichmentProgress, TierName } from '../core/types.js';
 
@@ -247,7 +248,7 @@ program
   .option('--no-ai', 'Disable AI enrichment (legacy)')
   .option('--api-key <key>', 'API key for enrichment provider')
   .option('--model <model>', 'AI model to use (legacy single-model mode)')
-  .option('--version <version>', 'Target FDS schema version', '1.0.0')
+  .option('--version <version>', 'Target FDS schema version', DEFAULT_SCHEMA_VERSION)
   .option('--dry-run', 'Preview transformation without writing files')
   // New tiered enrichment options
   .option('--estimate-cost', 'Show cost estimate without running enrichment')
@@ -548,7 +549,7 @@ program
     'Entity type (exercise, equipment, muscle)',
     'exercise'
   )
-  .option('--version <version>', 'FDS schema version', '1.0.0')
+  .option('--version <version>', 'FDS schema version', DEFAULT_SCHEMA_VERSION)
   .action(async (options) => {
     p.intro(pc.bgCyan(pc.black(' FDS Validator ')));
 

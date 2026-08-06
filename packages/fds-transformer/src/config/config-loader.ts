@@ -4,6 +4,7 @@
 
 import type { MappingConfig, RegistriesConfig } from '../core/types.js';
 import { dirname, resolve, isAbsolute } from 'path';
+import { DEFAULT_SCHEMA_VERSION } from '../schemas/versions.js';
 
 export class ConfigLoader {
   /**
@@ -93,7 +94,7 @@ export class ConfigLoader {
   static merge(...configs: Partial<MappingConfig>[]): MappingConfig {
     const merged: MappingConfig = {
       version: '1.0.0',
-      targetSchema: { version: '1.0.0' },
+      targetSchema: { version: DEFAULT_SCHEMA_VERSION },
       mappings: {},
     };
 

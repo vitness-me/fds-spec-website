@@ -17,6 +17,7 @@ import type {
 import { MappingEngine } from './mapping-engine.js';
 import { RegistryManager } from '../registries/registry-manager.js';
 import { SchemaManager } from '../schemas/schema-manager.js';
+import { DEFAULT_SCHEMA_VERSION } from '../schemas/versions.js';
 import { EnrichmentEngine, type ExerciseInput, type BatchEnrichmentOptions, type BatchEnrichmentResult } from '../ai/enrichment-engine.js';
 import { ConfigLoader } from '../config/config-loader.js';
 
@@ -331,7 +332,7 @@ export class Transformer {
       // Get schema $defs for validation context
       const schema = this.schemaManager.getSchema(
         this.config.targetSchema?.entity || 'exercise',
-        this.config.targetSchema?.version || '1.0.0'
+        this.config.targetSchema?.version || DEFAULT_SCHEMA_VERSION
       );
       const schemaDefs = (schema as Record<string, unknown> | null)?.$defs as
         | Record<string, unknown>

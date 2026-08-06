@@ -20,11 +20,12 @@ afterEach(() => {
 describe('SchemaManager', () => {
   describe('bundled version registry', () => {
     it('reports the versions it can serve offline', () => {
-      expect(SchemaManager.getBundledVersions()).toContain('1.0.0');
+      expect(SchemaManager.getBundledVersions()).toEqual(['1.0.0', '1.1.0']);
     });
 
     it('answers hasBundledVersion for known and unknown versions', () => {
       expect(SchemaManager.hasBundledVersion('1.0.0')).toBe(true);
+      expect(SchemaManager.hasBundledVersion('1.1.0')).toBe(true);
       expect(SchemaManager.hasBundledVersion('9.9.9')).toBe(false);
     });
   });
@@ -43,7 +44,9 @@ describe('SchemaManager', () => {
       vi.stubGlobal('fetch', unreachableRemote());
       const manager = new SchemaManager();
 
-      await expect(manager.loadVersion('9.9.9')).rejects.toThrow(/available: 1\.0\.0/);
+      await expect(manager.loadVersion('9.9.9')).rejects.toThrow(
+        /available: 1\.0\.0, 1\.1\.0/
+      );
     });
 
     it('falls back to bundled schemas when the remote is unreachable', async () => {
@@ -94,20 +97,85 @@ describe('SchemaManager', () => {
   });
 
   describe('bundled schemas are self-contained', () => {
-    it('compiles every bundled entity schema without unresolved $refs', async () => {
+    it.each(['1.0.0', '1.1.0'])(
+      'compiles every bundled entity schema of %s without unresolved $refs',
+      async (version) => {
+        vi.stubGlobal('fetch', unreachableRemote());
+        const manager = new SchemaManager();
+
+        await manager.loadVersion(version);
+
+        // A deliberately broken schema would surface here as a compile error.
+        for (const entity of manager.getLoadResult()?.entities ?? []) {
+          const result = await manager.validate({}, entity, version);
+          const schemaLevelFailure = result.errors.some(
+            (e) => e.constraint === 'schemaUnavailable' || e.constraint === 'schemaNotFound'
+          );
+          expect(schemaLevelFailure).toBe(false);
+        }
+      }
+    );
+  });
+
+  /**
+   * 1.1.0 is only worth publishing if the bundled copy is actually the new
+   * schema. Loading it offline and feeding it a document that only 1.1.0
+   * accepts proves the bundle is not a stale duplicate of 1.0.0.
+   */
+  describe('the 1.1.0 bundle is the 1.1.0 schema', () => {
+    const exerciseWithNewFields = {
+      schemaVersion: '1.1.0',
+      exerciseId: '00000000-0000-4000-8000-000000000005',
+      canonical: { name: 'Assisted Pull-Up', slug: 'assisted-pull-up' },
+      classification: {
+        exerciseType: 'strength',
+        movement: 'pull-vertical',
+        mechanics: 'compound',
+        force: 'pull',
+        level: 'beginner',
+      },
+      targets: {
+        primary: [{ id: 'mus.lats', name: 'Latissimus Dorsi', categoryId: 'cat.back' }],
+      },
+      loading: { externalLoad: 'optional', assisted: true },
+      metrics: {
+        primary: { type: 'reps', unit: 'count' },
+        secondary: [
+          { type: 'percentBodyweight', unit: 'percent' },
+          { type: 'rir', unit: 'count' },
+        ],
+      },
+      metadata: {
+        createdAt: '2026-08-06T00:00:00Z',
+        updatedAt: '2026-08-06T00:00:00Z',
+        status: 'active',
+        source: 'vitness.core',
+      },
+    };
+
+    it('accepts loading and the new metric vocabulary offline', async () => {
       vi.stubGlobal('fetch', unreachableRemote());
       const manager = new SchemaManager();
 
-      await manager.loadVersion('1.0.0');
+      await manager.loadVersion('1.1.0');
 
-      // A deliberately broken schema would surface here as a compile error.
-      for (const entity of manager.getLoadResult()?.entities ?? []) {
-        const result = await manager.validate({}, entity, '1.0.0');
-        const schemaLevelFailure = result.errors.some(
-          (e) => e.constraint === 'schemaUnavailable' || e.constraint === 'schemaNotFound'
-        );
-        expect(schemaLevelFailure).toBe(false);
-      }
+      expect(manager.getLoadResult()?.source).toBe('bundled');
+      const result = await manager.validate(exerciseWithNewFields, 'exercise', '1.1.0');
+      expect(result.errors).toEqual([]);
+      expect(result.valid).toBe(true);
+    });
+
+    it('rejects the same document under 1.0.0, so the two bundles differ', async () => {
+      vi.stubGlobal('fetch', unreachableRemote());
+      const manager = new SchemaManager();
+
+      await manager.loadBundledOnly('1.0.0');
+
+      const result = await manager.validate(exerciseWithNewFields, 'exercise', '1.0.0');
+      expect(result.valid).toBe(false);
+      // Specifically because 1.0.0 has no `loading` and is a closed object —
+      // not because the fixture is malformed in some unrelated way.
+      expect(JSON.stringify(result.errors)).toMatch(/loading/);
     });
   });
 });
