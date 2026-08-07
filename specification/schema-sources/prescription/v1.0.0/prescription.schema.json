@@ -1,0 +1,555 @@
+{
+  "$id": "https://spec.vitness.me/schemas/prescription/v1.0.0/prescription.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "FDS Prescription Primitives (v1.0.0)",
+  "description": "A definition library, not an entity. Nothing is ever \"a prescription document\" — RFC-007 Workout and RFC-008 Program compose these definitions. Factoring them out is what stops load-prescription semantics drifting between the two.",
+  "$comment": "The root accepts nothing on purpose: validating a document against this file is a category error. Reference a definition instead, e.g. #/$defs/loadTarget.",
+  "not": {},
+  "$defs": {
+    "loadTarget": {
+      "description": "How much load a set prescribes. Discriminated on `method`. A consumer that does not understand a method MUST ignore the target and SHOULD warn — it MUST NOT substitute a default, because silently guessing a working weight is a safety problem, not a data-quality one.",
+      "type": "object",
+      "required": ["method"],
+      "oneOf": [
+        {
+          "title": "absolute",
+          "description": "A fixed load. The only method that needs no resolution context.",
+          "type": "object",
+          "required": ["method", "value", "unit"],
+          "additionalProperties": false,
+          "properties": {
+            "method": { "const": "absolute" },
+            "value": { "type": "number", "minimum": 0 },
+            "unit": { "enum": ["kg", "lb"] },
+            "range": { "$ref": "#/$defs/loadRange" }
+          }
+        },
+        {
+          "title": "percent1RM",
+          "description": "A percentage of a one-rep max. `referenceExerciseId` expresses \"70% of your back squat 1RM\" on an exercise that is not the back squat; absent, the reference is the prescribed exercise itself.",
+          "type": "object",
+          "required": ["method", "value"],
+          "additionalProperties": false,
+          "properties": {
+            "method": { "const": "percent1RM" },
+            "value": { "type": "number", "exclusiveMinimum": 0 },
+            "referenceExerciseId": { "type": "string" },
+            "range": { "$ref": "#/$defs/loadRange" }
+          }
+        },
+        {
+          "title": "percentBodyweight",
+          "description": "A percentage of the athlete's bodyweight. FDS models no person, so this is unresolvable without a bodyweight supplied by the caller — see the Resolution Context section of RFC-006.",
+          "type": "object",
+          "required": ["method", "value"],
+          "additionalProperties": false,
+          "properties": {
+            "method": { "const": "percentBodyweight" },
+            "value": { "type": "number", "exclusiveMinimum": 0 },
+            "range": { "$ref": "#/$defs/loadRange" }
+          }
+        },
+        {
+          "title": "rpe",
+          "description": "Rate of perceived exertion, 1-10. The athlete selects the load.",
+          "type": "object",
+          "required": ["method", "value"],
+          "additionalProperties": false,
+          "properties": {
+            "method": { "const": "rpe" },
+            "value": { "type": "number", "minimum": 1, "maximum": 10 },
+            "allowHalf": { "type": "boolean", "default": false },
+            "range": { "$ref": "#/$defs/loadRange" }
+          }
+        },
+        {
+          "title": "rir",
+          "description": "Reps in reserve, 0-10. The inverse of RPE; do not mix the two scales in one document without recording which is meant.",
+          "type": "object",
+          "required": ["method", "value"],
+          "additionalProperties": false,
+          "properties": {
+            "method": { "const": "rir" },
+            "value": { "type": "number", "minimum": 0, "maximum": 10 },
+            "range": { "$ref": "#/$defs/loadRange" }
+          }
+        },
+        {
+          "title": "velocity",
+          "description": "Velocity-based training. `lossThreshold` terminates the set once bar speed drops by that percentage from the fastest rep.",
+          "type": "object",
+          "required": ["method", "value", "unit"],
+          "additionalProperties": false,
+          "properties": {
+            "method": { "const": "velocity" },
+            "value": { "type": "number", "exclusiveMinimum": 0 },
+            "unit": { "const": "m_s" },
+            "lossThreshold": { "type": "number", "exclusiveMinimum": 0, "maximum": 100 },
+            "range": { "$ref": "#/$defs/loadRange" }
+          }
+        },
+        {
+          "title": "level",
+          "description": "A machine pin or stack position. Opaque: two facilities' level 7 are unrelated, so this MUST NOT be converted to load or compared across machines.",
+          "type": "object",
+          "required": ["method", "value"],
+          "additionalProperties": false,
+          "properties": {
+            "method": { "const": "level" },
+            "value": { "type": "number" },
+            "scale": { "type": "string" },
+            "range": { "$ref": "#/$defs/loadRange" }
+          }
+        },
+        {
+          "title": "bandResistance",
+          "description": "Elastic resistance. Colour conventions are manufacturer-specific, so `equipment` identifies whose scale is meant; `estimatedLoad` is an approximation and MUST NOT be treated as measured.",
+          "type": "object",
+          "required": ["method"],
+          "additionalProperties": false,
+          "properties": {
+            "method": { "const": "bandResistance" },
+            "equipment": {
+              "$ref": "https://spec.vitness.me/schemas/common/v1.0.0/common.schema.json#/$defs/equipmentRef"
+            },
+            "colour": { "type": "string" },
+            "estimatedLoad": {
+              "type": "object",
+              "required": ["value", "unit"],
+              "additionalProperties": false,
+              "properties": {
+                "value": { "type": "number", "exclusiveMinimum": 0 },
+                "unit": { "enum": ["kg", "lb"] }
+              }
+            },
+            "range": { "$ref": "#/$defs/loadRange" }
+          }
+        },
+        {
+          "title": "assisted",
+          "description": "Negative load: assistance reduces effective bodyweight. `value` is the magnitude of assistance, always positive — more assistance is less effort. Only valid on an exercise whose `loading.assisted` is true (RFC-001 4.6).",
+          "type": "object",
+          "required": ["method", "value", "unit"],
+          "additionalProperties": false,
+          "properties": {
+            "method": { "const": "assisted" },
+            "value": { "type": "number", "minimum": 0 },
+            "unit": { "enum": ["kg", "lb"] },
+            "range": { "$ref": "#/$defs/loadRange" }
+          }
+        },
+        {
+          "title": "relative",
+          "description": "Load derived from a prior result: \"last session plus 2.5 kg\". Unresolvable without training history, which FDS does not carry.",
+          "type": "object",
+          "required": ["method", "basis", "delta", "deltaUnit"],
+          "additionalProperties": false,
+          "properties": {
+            "method": { "const": "relative" },
+            "basis": { "enum": ["lastSession", "e1RM", "trainingMax"] },
+            "delta": { "type": "number" },
+            "deltaUnit": { "enum": ["kg", "lb", "percent"] },
+            "referenceExerciseId": { "type": "string" },
+            "range": { "$ref": "#/$defs/loadRange" }
+          }
+        },
+        {
+          "title": "bodyweight",
+          "description": "Bodyweight only, with no external load and no scaling.",
+          "type": "object",
+          "required": ["method"],
+          "additionalProperties": false,
+          "properties": {
+            "method": { "const": "bodyweight" }
+          }
+        },
+        {
+          "title": "autoregulated",
+          "description": "Load is decided at execution time by a progression rule declared elsewhere in the document.",
+          "type": "object",
+          "required": ["method", "progressionRuleRef"],
+          "additionalProperties": false,
+          "properties": {
+            "method": { "const": "autoregulated" },
+            "progressionRuleRef": { "type": "string" }
+          }
+        },
+        {
+          "title": "none",
+          "description": "Load is deliberately unprescribed. Distinct from omitting `load` entirely, which means unstated.",
+          "type": "object",
+          "required": ["method"],
+          "additionalProperties": false,
+          "properties": {
+            "method": { "const": "none" }
+          }
+        },
+        {
+          "title": "unrecognized",
+          "description": "Forward compatibility. A method this version does not define still validates, so a document using a future method is not rejected wholesale. `not/enum` keeps this branch disjoint from the named ones — without it every known method would match two branches and `oneOf` would fail.",
+          "type": "object",
+          "required": ["method"],
+          "properties": {
+            "method": {
+              "type": "string",
+              "not": {
+                "enum": [
+                  "absolute",
+                  "percent1RM",
+                  "percentBodyweight",
+                  "rpe",
+                  "rir",
+                  "velocity",
+                  "level",
+                  "bandResistance",
+                  "assisted",
+                  "relative",
+                  "bodyweight",
+                  "autoregulated",
+                  "none"
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+
+    "loadRange": {
+      "description": "A prescribed band rather than a point, in the units of the enclosing method: kg for absolute, percent for percent1RM, RPE points for rpe.",
+      "type": "object",
+      "required": ["min", "max"],
+      "additionalProperties": false,
+      "properties": {
+        "min": { "type": "number" },
+        "max": { "type": "number" }
+      }
+    },
+
+    "repTarget": {
+      "description": "What terminates a set. Discriminated on `kind`. Same unrecognized-branch rule as loadTarget.",
+      "type": "object",
+      "required": ["kind"],
+      "oneOf": [
+        {
+          "title": "fixed",
+          "type": "object",
+          "required": ["kind", "value"],
+          "additionalProperties": false,
+          "properties": {
+            "kind": { "const": "fixed" },
+            "value": { "type": "integer", "minimum": 1 }
+          }
+        },
+        {
+          "title": "range",
+          "type": "object",
+          "required": ["kind", "min", "max"],
+          "additionalProperties": false,
+          "properties": {
+            "kind": { "const": "range" },
+            "min": { "type": "integer", "minimum": 1 },
+            "max": { "type": "integer", "minimum": 1 }
+          }
+        },
+        {
+          "title": "amrap",
+          "description": "As many reps as possible. `min` is a floor the set is expected to clear; `cap` stops a set that would otherwise run long.",
+          "type": "object",
+          "required": ["kind"],
+          "additionalProperties": false,
+          "properties": {
+            "kind": { "const": "amrap" },
+            "min": { "type": "integer", "minimum": 1 },
+            "cap": { "type": "integer", "minimum": 1 }
+          }
+        },
+        {
+          "title": "toFailure",
+          "description": "`technical: true` means stop when form degrades, not at absolute failure.",
+          "type": "object",
+          "required": ["kind"],
+          "additionalProperties": false,
+          "properties": {
+            "kind": { "const": "toFailure" },
+            "technical": { "type": "boolean", "default": false }
+          }
+        },
+        {
+          "title": "time",
+          "type": "object",
+          "required": ["kind", "value", "unit"],
+          "additionalProperties": false,
+          "properties": {
+            "kind": { "const": "time" },
+            "value": { "type": "number", "exclusiveMinimum": 0 },
+            "unit": { "enum": ["s", "min", "ms"] }
+          }
+        },
+        {
+          "title": "distance",
+          "type": "object",
+          "required": ["kind", "value", "unit"],
+          "additionalProperties": false,
+          "properties": {
+            "kind": { "const": "distance" },
+            "value": { "type": "number", "exclusiveMinimum": 0 },
+            "unit": { "enum": ["m", "km", "mi"] }
+          }
+        },
+        {
+          "title": "calories",
+          "type": "object",
+          "required": ["kind", "value"],
+          "additionalProperties": false,
+          "properties": {
+            "kind": { "const": "calories" },
+            "value": { "type": "number", "exclusiveMinimum": 0 }
+          }
+        },
+        {
+          "title": "maxHold",
+          "description": "Hold as long as possible, optionally with a floor and a cap.",
+          "type": "object",
+          "required": ["kind"],
+          "additionalProperties": false,
+          "properties": {
+            "kind": { "const": "maxHold" },
+            "min": { "type": "number", "exclusiveMinimum": 0 },
+            "cap": { "type": "number", "exclusiveMinimum": 0 },
+            "unit": { "enum": ["s", "min"] }
+          }
+        },
+        {
+          "title": "unrecognized",
+          "type": "object",
+          "required": ["kind"],
+          "properties": {
+            "kind": {
+              "type": "string",
+              "not": {
+                "enum": [
+                  "fixed",
+                  "range",
+                  "amrap",
+                  "toFailure",
+                  "time",
+                  "distance",
+                  "calories",
+                  "maxHold"
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+
+    "tempo": {
+      "description": "Per-phase timing in seconds, in the conventional order eccentric-pause-concentric-pause. \"X\" means explosive: as fast as possible rather than a specific duration. Promoted here from the x:vitness.tempo extension in RFC-001.",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "eccentric": { "$ref": "#/$defs/tempoPhase" },
+        "bottomPause": { "$ref": "#/$defs/tempoPhase" },
+        "concentric": { "$ref": "#/$defs/tempoPhase" },
+        "topPause": { "$ref": "#/$defs/tempoPhase" }
+      }
+    },
+
+    "tempoPhase": {
+      "description": "Seconds, or \"X\" for explosive.",
+      "oneOf": [
+        { "type": "number", "minimum": 0 },
+        { "const": "X" }
+      ]
+    },
+
+    "restSpec": {
+      "description": "Prescribed rest. `appliesTo` is load-bearing: the same block can rest 30 s between superset members and 3 min between rounds, and a consumer cannot infer which is meant from the value alone.",
+      "type": "object",
+      "required": ["method", "appliesTo"],
+      "oneOf": [
+        {
+          "title": "fixed",
+          "type": "object",
+          "required": ["method", "appliesTo", "value", "unit"],
+          "additionalProperties": false,
+          "properties": {
+            "method": { "const": "fixed" },
+            "appliesTo": { "$ref": "#/$defs/restScope" },
+            "value": { "type": "number", "minimum": 0 },
+            "unit": { "enum": ["s", "min"] }
+          }
+        },
+        {
+          "title": "range",
+          "type": "object",
+          "required": ["method", "appliesTo", "min", "max", "unit"],
+          "additionalProperties": false,
+          "properties": {
+            "method": { "const": "range" },
+            "appliesTo": { "$ref": "#/$defs/restScope" },
+            "min": { "type": "number", "minimum": 0 },
+            "max": { "type": "number", "minimum": 0 },
+            "unit": { "enum": ["s", "min"] }
+          }
+        },
+        {
+          "title": "toHeartRate",
+          "description": "Rest until heart rate recovers to a threshold. Requires live heart-rate data at execution time.",
+          "type": "object",
+          "required": ["method", "appliesTo", "value"],
+          "additionalProperties": false,
+          "properties": {
+            "method": { "const": "toHeartRate" },
+            "appliesTo": { "$ref": "#/$defs/restScope" },
+            "value": { "type": "number", "exclusiveMinimum": 0 },
+            "unit": { "const": "bpm", "default": "bpm" }
+          }
+        },
+        {
+          "title": "asNeeded",
+          "type": "object",
+          "required": ["method", "appliesTo"],
+          "additionalProperties": false,
+          "properties": {
+            "method": { "const": "asNeeded" },
+            "appliesTo": { "$ref": "#/$defs/restScope" }
+          }
+        },
+        {
+          "title": "ratio",
+          "description": "Work-to-rest ratio, e.g. 1:2. Resolved against the duration of the work interval.",
+          "type": "object",
+          "required": ["method", "appliesTo", "work", "rest"],
+          "additionalProperties": false,
+          "properties": {
+            "method": { "const": "ratio" },
+            "appliesTo": { "$ref": "#/$defs/restScope" },
+            "work": { "type": "number", "exclusiveMinimum": 0 },
+            "rest": { "type": "number", "minimum": 0 }
+          }
+        },
+        {
+          "title": "unrecognized",
+          "type": "object",
+          "required": ["method", "appliesTo"],
+          "properties": {
+            "method": {
+              "type": "string",
+              "not": {
+                "enum": ["fixed", "range", "toHeartRate", "asNeeded", "ratio"]
+              }
+            },
+            "appliesTo": { "$ref": "#/$defs/restScope" }
+          }
+        }
+      ]
+    },
+
+    "restScope": {
+      "description": "Which boundary the rest sits at.",
+      "type": "string",
+      "enum": ["set", "group", "round", "block"]
+    },
+
+    "intensityZone": {
+      "description": "A zone in a named system. The zone registry defines the systems; the personal boundary values are caller context, exactly like bodyweight.",
+      "type": "object",
+      "required": ["system", "zone"],
+      "additionalProperties": false,
+      "properties": {
+        "system": { "enum": ["heartRate", "power", "pace", "perceived"] },
+        "zone": { "type": "string" },
+        "boundsRef": {
+          "description": "Identifier of the zone-registry entry the zone label is defined by. Without it, \"Z4\" is only meaningful inside one producer.",
+          "type": "string"
+        }
+      }
+    },
+
+    "setScheme": {
+      "description": "A named set pattern and its parameters, for prescriptions that describe a shape rather than enumerating every set. A producer MAY always expand to explicit sets instead; consumers that do not recognise a pattern MUST NOT attempt to expand it.",
+      "type": "object",
+      "required": ["pattern"],
+      "additionalProperties": false,
+      "properties": {
+        "pattern": {
+          "type": "string",
+          "enum": [
+            "straight",
+            "ramping",
+            "reversePyramid",
+            "drop",
+            "restPause",
+            "cluster",
+            "myoReps",
+            "wave",
+            "ladder",
+            "density",
+            "topSetBackoff"
+          ]
+        },
+        "sets": { "type": "integer", "minimum": 1 },
+        "params": {
+          "description": "Pattern-specific parameters. Left open because each pattern takes a different shape; RFC-006 documents the conventional keys per pattern.",
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    },
+
+    "progressionRule": {
+      "description": "When to change the prescription, and how. Consumed by both RFC-007 and RFC-008 so that progression means the same thing inside a workout and across a program.",
+      "type": "object",
+      "required": ["id", "trigger", "action"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "trigger": {
+          "type": "object",
+          "required": ["kind"],
+          "additionalProperties": true,
+          "properties": {
+            "kind": {
+              "type": "string",
+              "enum": [
+                "allRepsCompleted",
+                "topOfRepRange",
+                "rpeBelow",
+                "rirAbove",
+                "amrapThreshold",
+                "sessionsCompleted",
+                "failedAttempts",
+                "always"
+              ]
+            }
+          }
+        },
+        "action": {
+          "type": "object",
+          "required": ["kind"],
+          "additionalProperties": true,
+          "properties": {
+            "kind": {
+              "type": "string",
+              "enum": [
+                "increaseLoad",
+                "decreaseLoad",
+                "increaseReps",
+                "increaseSets",
+                "deload",
+                "retest",
+                "advanceStage",
+                "hold"
+              ]
+            }
+          }
+        },
+        "notes": { "type": "string" }
+      }
+    }
+  }
+}

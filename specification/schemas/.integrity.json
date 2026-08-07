@@ -21,6 +21,10 @@
       "sha256": "a865d7fdf402794b5daa5ddaa979bb3ac46bdc04f52dd28c501c5fe4ec55930f",
       "frozen": true
     },
+    "prescription/v1.0.0/prescription.schema.json": {
+      "sha256": "a3eec1f02277304451a443bb85f5e97dd1e6fd992305c4924b874bb18cd930ac",
+      "frozen": false
+    },
     "transformer/v1.0.0/mapping.schema.json": {
       "sha256": "e5d4b010841bd92ff33171ac9267498cb61040b69f0a667888f9c2cc4660edca",
       "frozen": true
