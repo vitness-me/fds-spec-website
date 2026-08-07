@@ -33,6 +33,10 @@ const BUNDLED_SCHEMA_LOADERS: Record<string, () => Promise<Record<string, object
     const mod = await import('./bundled/v1.1.0/index.js');
     return (mod.default ?? mod) as unknown as Record<string, object>;
   },
+  '1.2.0': async () => {
+    const mod = await import('./bundled/v1.2.0/index.js');
+    return (mod.default ?? mod) as unknown as Record<string, object>;
+  },
 };
 
 
@@ -70,7 +74,13 @@ export class SchemaManager {
     }
 
     const entitySchemas = new Map<string, object>();
-    const entities = ['exercise', 'equipment', 'muscle', 'muscle-category', 'body-atlas'];
+    // Entities the release publishes. A release that predates an entity must not
+    // try to fetch it — 1.1.0 has no workout URL, and asking for one would 404
+    // and drop the whole release to the bundled fallback.
+    const entities = Object.keys(RELEASE_ENTITY_VERSIONS[version] ?? {});
+    if (entities.length === 0) {
+      entities.push('exercise', 'equipment', 'muscle', 'muscle-category', 'body-atlas');
+    }
     const errors: string[] = [];
     let source: 'remote' | 'bundled' = 'remote';
 
@@ -211,6 +221,9 @@ export class SchemaManager {
         break;
       case 'body-atlas':
         url = `${baseUrl}/atlas/v${v}/body-atlas.schema.json`;
+        break;
+      case 'workout':
+        url = `${baseUrl}/workout/v${v}/workout.schema.json`;
         break;
       default:
         throw new Error(`Unknown entity type: ${entity}`);

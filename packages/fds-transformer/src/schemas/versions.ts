@@ -33,6 +33,17 @@ export const RELEASE_ENTITY_VERSIONS: Record<string, Record<string, string>> = {
     'muscle-category': '1.0.0',
     'body-atlas': '1.0.0',
   },
+  // 1.2.0 adds workout. No existing entity changed — a release is the set of
+  // entity versions it publishes, so gaining an entity is a new set even when
+  // every prior member kept its version.
+  '1.2.0': {
+    exercise: '1.1.0',
+    equipment: '1.1.0',
+    muscle: '1.0.0',
+    'muscle-category': '1.0.0',
+    'body-atlas': '1.0.0',
+    workout: '1.0.0',
+  },
 };
 
 /** The entity version a release publishes, or the release itself if unknown. */
@@ -49,4 +60,4 @@ export function entityVersionFor(entity: string, release: string): string {
  * reject the fields the new release just introduced. Pin explicitly to stay on
  * an older release.
  */
-export const DEFAULT_SCHEMA_VERSION = '1.1.0';
+export const DEFAULT_SCHEMA_VERSION = '1.2.0';

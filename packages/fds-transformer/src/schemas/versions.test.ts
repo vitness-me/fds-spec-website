@@ -7,6 +7,7 @@ import {
 import { SchemaManager } from './schema-manager.js';
 import bundled100 from './bundled/v1.0.0/index.js';
 import bundled110 from './bundled/v1.1.0/index.js';
+import bundled120 from './bundled/v1.2.0/index.js';
 
 /**
  * Entities version independently, so a release name is not a path segment.
@@ -17,7 +18,11 @@ import bundled110 from './bundled/v1.1.0/index.js';
  * tests check the map against the `$id` the generator wrote.
  */
 
-const ENTITIES = ['exercise', 'equipment', 'muscle', 'muscle-category', 'body-atlas'];
+const BUNDLES: Record<string, unknown> = {
+  '1.0.0': bundled100,
+  '1.1.0': bundled110,
+  '1.2.0': bundled120,
+};
 
 const versionFromId = (schema: unknown): string => {
   const id = (schema as { $id?: string }).$id ?? '';
@@ -49,16 +54,18 @@ describe('release versioning', () => {
   });
 
   describe('the map agrees with the bundled schemas it describes', () => {
-    it.each([
-      ['1.0.0', bundled100],
-      ['1.1.0', bundled110],
-    ])('release %s', (release, bundle) => {
-      for (const entity of ENTITIES) {
-        const schema = (bundle as unknown as Record<string, unknown>)[entity];
-        expect(schema, `${release} bundle is missing ${entity}`).toBeDefined();
-        expect(versionFromId(schema), `${release}/${entity} $id`).toBe(
-          RELEASE_ENTITY_VERSIONS[release][entity]
-        );
+    it.each(Object.keys(BUNDLES))('release %s', (release) => {
+      const bundle = BUNDLES[release] as Record<string, unknown>;
+      const declared = RELEASE_ENTITY_VERSIONS[release];
+
+      // Both directions. An entity added to the bundle but not the map would be
+      // fetched from a URL built off the release name; one added to the map but
+      // not the bundle would 404 remotely and have no offline copy to fall back
+      // to. Either way the failure is silent at runtime.
+      expect(Object.keys(bundle).sort()).toEqual(Object.keys(declared).sort());
+
+      for (const [entity, version] of Object.entries(declared)) {
+        expect(versionFromId(bundle[entity]), `${release}/${entity} $id`).toBe(version);
       }
     });
   });
