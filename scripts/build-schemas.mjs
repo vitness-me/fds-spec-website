@@ -52,10 +52,18 @@ const ENTITIES = [
   { name: 'muscle', path: 'muscle/v1.0.0/muscle.schema.json' },
   { name: 'muscle-category', path: 'muscle/muscle-category/v1.0.0/muscle-category.schema.json' },
   { name: 'body-atlas', path: 'atlas/v1.0.0/body-atlas.schema.json' },
+  // A definition library rather than an entity — nothing is ever "a prescription
+  // document", so the transformer has nothing to validate against it. RFC-007 and
+  // RFC-008 reference these definitions, and flattening copies them into those
+  // schemas, so a bundled copy would be dead weight the loader never asks for.
+  { name: 'prescription', path: 'prescription/v1.0.0/prescription.schema.json', bundled: false },
 ];
 
+/** Entities the transformer carries an offline copy of. */
+const BUNDLED_ENTITIES = ENTITIES.filter((entity) => entity.bundled !== false);
+
 /**
- * The FDS release the entity set above constitutes, and the directory the
+ * The FDS release the bundled entity set constitutes, and the directory the
  * transformer bundles it under.
  *
  * `bundled/v1.0.0/` is not generated: its exercise and equipment sources no
@@ -305,14 +313,14 @@ const artifacts = [
     path: join(OUT, rel),
     content: null,
   })),
-  ...ENTITIES.map((e) => ({
+  ...BUNDLED_ENTITIES.map((e) => ({
     path: join(bundleDir, `${e.name}.schema.json`),
     content: rendered.get(e.name),
     note: 'bundled copy does not match the published schema',
   })),
   {
     path: join(bundleDir, 'index.ts'),
-    content: renderBundleIndex(BUNDLE_RELEASE, ENTITIES),
+    content: renderBundleIndex(BUNDLE_RELEASE, BUNDLED_ENTITIES),
     note: 'bundled barrel does not match the entity set',
   },
 ];
