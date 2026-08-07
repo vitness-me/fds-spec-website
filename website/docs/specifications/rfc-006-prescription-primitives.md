@@ -172,7 +172,23 @@ A named pattern and its parameters, for prescriptions that describe a shape rath
 
 Unlike the load and rep unions, `pattern` is a **closed** enum with no catch-all. Expanding a pattern into concrete sets requires knowing its semantics, so a consumer cannot do anything useful with a pattern it has never heard of — accepting one would only defer the failure to the point where it matters. Producers using a pattern not listed here MUST expand it into explicit sets instead.
 
-`params` is deliberately open: each pattern takes a different shape, and constraining them all here would freeze the parameter vocabulary of eleven distinct methodologies in a version 1.0.0.
+`params` is deliberately open: each pattern takes a different shape, and constraining all eleven here would freeze the parameter vocabulary of eleven distinct methodologies in a version 1.0.0. The conventional keys are these:
+
+| Pattern | Conventional `params` | Meaning |
+|---|---|---|
+| `straight` | — | Every set identical; `sets` alone is sufficient |
+| `ramping` | `startPercent`, `endPercent` | Ascending load across the prescribed sets, ending at the top set |
+| `reversePyramid` | `dropPercent` | Heaviest set first; each subsequent set drops by this much |
+| `drop` | `drops`, `dropPercent` | Consecutive drops taken with no rest after the working set |
+| `restPause` | `miniSets`, `intraSetRest`, `restUnit` | One set taken to near-failure, then resumed after brief rests |
+| `cluster` | `repsPerCluster`, `intraSetRest`, `restUnit` | Reps grouped into clusters with programmed rest inside the set |
+| `myoReps` | `activationReps`, `miniSetReps`, `miniSets`, `intraSetRest` | An activation set followed by short mini-sets |
+| `wave` | `waves`, `repPattern` | A repeating rep ladder, e.g. `[3, 2, 1]`, run for several waves |
+| `ladder` | `rungs`, `direction` | Explicit rungs, ascending, descending or up-and-down |
+| `density` | `timeCap`, `timeUnit`, `target` | Maximum work inside a time cap |
+| `topSetBackoff` | `backoffPercent`, `backoffSets` | One top set, then back-off sets at a reduced load |
+
+These keys are conventional, not normative — a producer MAY add its own. A consumer that recognises the pattern but not a key SHOULD ignore the key and warn, and MUST NOT expand the pattern if a key it needs is missing.
 
 ### 4.7. `progressionRule`
 
