@@ -129,12 +129,77 @@ for (const file of files.sort()) {
 
 // Every definition needs at least one worked example. A primitive nobody has
 // exemplified is a primitive nobody has checked.
-const exemplified = new Set(
-  files.filter((f) => f.endsWith('.example.json')).map((f) => basename(f).split('.')[0])
-);
+const exampleFiles = files.filter((f) => f.endsWith('.example.json'));
+const exemplified = new Set(exampleFiles.map((f) => basename(f).split('.')[0]));
 for (const name of owned) {
   if (!exemplified.has(name)) {
     problems.push(`#/$defs/${name} has no worked example (expected ${name}.<variant>.example.json)`);
+  }
+}
+
+/**
+ * Per-variant coverage for the discriminated definitions.
+ *
+ * One example per *definition* is not enough: `loadTarget` has thirteen methods,
+ * and an example of `absolute` says nothing about whether `bandResistance`
+ * works. The epic this schema belongs to promises that no scenario ships without
+ * a worked example — this is what makes that checkable instead of aspirational.
+ *
+ * Only the dimension is named here. The values are read out of the schema, so
+ * adding a method without adding an example fails, rather than needing someone
+ * to remember to extend a list in this file.
+ */
+const COVERAGE = [
+  { def: 'loadTarget', discriminator: 'method' },
+  { def: 'repTarget', discriminator: 'kind' },
+  { def: 'restSpec', discriminator: 'method' },
+  { def: 'setScheme', discriminator: 'pattern' },
+];
+
+/** Discriminator values a definition names: `const` per oneOf branch, or a plain enum. */
+function variantsOf(definition, discriminator) {
+  if (Array.isArray(definition.oneOf)) {
+    return definition.oneOf
+      // The forward-compatibility branch constrains the discriminator with
+      // `not`, not `const`. It is unbounded by design and cannot be exemplified
+      // exhaustively — one example of *some* unrecognized value is enough, and
+      // the per-definition rule above already requires that.
+      .map((branch) => branch.properties?.[discriminator]?.const)
+      .filter((value) => value !== undefined);
+  }
+  return definition.properties?.[discriminator]?.enum ?? [];
+}
+
+for (const { def, discriminator } of COVERAGE) {
+  const definition = library.$defs?.[def];
+  if (!definition) {
+    problems.push(`coverage is configured for #/$defs/${def}, which no longer exists`);
+    continue;
+  }
+
+  const variants = variantsOf(definition, discriminator);
+  if (!variants.length) {
+    problems.push(
+      `#/$defs/${def} has no "${discriminator}" values to cover — the discriminator was probably renamed`
+    );
+    continue;
+  }
+
+  const covered = new Set();
+  for (const file of exampleFiles) {
+    if (basename(file).split('.')[0] !== def) continue;
+    const data = JSON.parse(await readFile(join(DIR, file), 'utf8'));
+    if (data && typeof data === 'object') covered.add(data[discriminator]);
+  }
+
+  const missing = variants.filter((value) => !covered.has(value));
+  if (missing.length) {
+    problems.push(
+      `#/$defs/${def} has no worked example for ${discriminator}: ${missing.join(', ')}\n` +
+        `    Add ${def}.<variant>.example.json for each.`
+    );
+  } else {
+    console.log(`  ok    cover   ${def}.${discriminator} — all ${variants.length} variants`);
   }
 }
 
