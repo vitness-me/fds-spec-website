@@ -203,6 +203,54 @@ for (const { def, discriminator } of COVERAGE) {
   }
 }
 
+/**
+ * Every fixture is explained in the directory README, and every fixture the
+ * README names exists.
+ *
+ * A fragment is far more opaque than a whole-entity example — `{"method":
+ * "relative", "basis": "e1RM", "delta": -10, …}` tells a reader nothing about
+ * why a negative delta is normal there. The explanation cannot go inside the
+ * file, because most branches close `additionalProperties` and a `_comment` key
+ * would make the fixture fail its own validation. So it lives beside them, and
+ * is checked, because an unchecked index rots the moment someone adds a file.
+ */
+{
+  const readmePath = join(DIR, 'README.md');
+  const readme = await readFile(readmePath, 'utf8').catch(() => null);
+
+  if (readme === null) {
+    problems.push('README.md is missing from the fixture directory');
+  } else {
+    const named = new Set(
+      [...readme.matchAll(/`([A-Za-z0-9._-]+\.json)`/g)].map((m) => m[1])
+    );
+
+    const undocumented = files.filter((f) => !named.has(f));
+    if (undocumented.length) {
+      problems.push(
+        `${undocumented.length} fixture(s) missing from README.md:\n` +
+          undocumented.map((f) => `    ${f}`).join('\n') +
+          '\n    Every fixture needs a line saying what it demonstrates.'
+      );
+    }
+
+    const present = new Set(files);
+    const stale = [...named].filter(
+      (f) => !present.has(f) && f !== 'prescription.schema.json'
+    );
+    if (stale.length) {
+      problems.push(
+        `README.md names ${stale.length} fixture(s) that do not exist:\n` +
+          stale.map((f) => `    ${f}`).join('\n')
+      );
+    }
+
+    if (!undocumented.length && !stale.length) {
+      console.log(`  ok    readme  all ${files.length} fixtures documented`);
+    }
+  }
+}
+
 if (problems.length) {
   console.error(`\n${problems.length} problem(s):\n`);
   for (const problem of problems) console.error(`  ${problem}`);
