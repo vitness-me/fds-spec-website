@@ -73,7 +73,13 @@ jobs:
         run: npm run check:metrics
 
       - name: Install Ajv CLI
-        run: npm install --no-save ajv-cli@5 ajv-formats@3
+        run: npm install --no-save ajv@8 ajv-cli@5 ajv-formats@3
+
+      # RFC-006 publishes a $defs library, not an entity: its root accepts nothing,
+      # so the loop below cannot check it. Each fixture names the definition it
+      # exemplifies and is validated against that definition instead.
+      - name: Validate prescription fixtures against their definitions
+        run: npm run check:prescription
 
       # Every published example must validate against its schema, standalone.
       #
