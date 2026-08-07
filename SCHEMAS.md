@@ -22,6 +22,12 @@ All schemas are available at the following URLs:
   - https://spec.vitness.me/schemas/equipment/v1.1.0/equipment.example.json
   - https://spec.vitness.me/schemas/equipment/v1.1.0/equipment.example.stack.json
 
+### Prescription Primitives (v1.0.0)
+- **Library**: https://spec.vitness.me/schemas/prescription/v1.0.0/prescription.schema.json
+- A `$defs` library, not an entity — see RFC-006. Its root accepts nothing by design; reference a definition:
+  `…/prescription.schema.json#/$defs/loadTarget`
+- **Fixtures**: `<definition>.<variant>.example.json` alongside the library, plus `.invalid.json` negative cases
+
 ### Muscle Schema (v1.0.0)
 - **Schema**: https://spec.vitness.me/schemas/muscle/v1.0.0/muscle.schema.json
 - **Examples**:

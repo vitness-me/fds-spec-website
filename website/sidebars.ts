@@ -39,6 +39,7 @@ const sidebars: SidebarsConfig = {
         'specifications/rfc-003-muscle-data-model',
         'specifications/rfc-004-muscle-category-data-model',
         'specifications/rfc-005-body-atlas-data-model',
+        'specifications/rfc-006-prescription-primitives',
       ],
     },
     {
