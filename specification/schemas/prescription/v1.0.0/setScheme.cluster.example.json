@@ -1,0 +1,1 @@
+{ "pattern": "cluster", "sets": 4, "params": { "repsPerCluster": 2, "intraSetRest": 20, "restUnit": "s" } }

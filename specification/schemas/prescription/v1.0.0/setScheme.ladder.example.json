@@ -1,0 +1,1 @@
+{ "pattern": "ladder", "sets": 5, "params": { "rungs": [1, 2, 3, 4, 5], "direction": "ascending" } }

@@ -1,0 +1,1 @@
+{ "method": "toHeartRate", "appliesTo": "round", "value": 120, "unit": "bpm" }
