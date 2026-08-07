@@ -1,0 +1,1 @@
+{ "method": "range", "appliesTo": "set", "min": 90, "max": 120, "unit": "s" }

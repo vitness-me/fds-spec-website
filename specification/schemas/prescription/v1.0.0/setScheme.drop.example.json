@@ -1,0 +1,1 @@
+{ "pattern": "drop", "sets": 1, "params": { "drops": 3, "dropPercent": 20 } }

@@ -1,0 +1,1 @@
+{ "method": "relative", "basis": "trainingMax", "delta": 90, "deltaUnit": "percent" }

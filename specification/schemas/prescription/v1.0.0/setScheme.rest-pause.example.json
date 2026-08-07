@@ -1,0 +1,1 @@
+{ "pattern": "restPause", "sets": 1, "params": { "miniSets": 3, "intraSetRest": 15, "restUnit": "s" } }

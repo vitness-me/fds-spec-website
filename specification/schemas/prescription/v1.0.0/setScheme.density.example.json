@@ -1,0 +1,1 @@
+{ "pattern": "density", "params": { "timeCap": 10, "timeUnit": "min", "target": "sets" } }
