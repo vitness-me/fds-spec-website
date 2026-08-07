@@ -23,7 +23,7 @@
     },
     "prescription/v1.0.0/prescription.schema.json": {
       "sha256": "a3eec1f02277304451a443bb85f5e97dd1e6fd992305c4924b874bb18cd930ac",
-      "frozen": false
+      "frozen": true
     },
     "transformer/v1.0.0/mapping.schema.json": {
       "sha256": "e5d4b010841bd92ff33171ac9267498cb61040b69f0a667888f9c2cc4660edca",
