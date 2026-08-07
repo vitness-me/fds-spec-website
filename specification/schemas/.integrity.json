@@ -28,6 +28,10 @@
     "transformer/v1.0.0/mapping.schema.json": {
       "sha256": "e5d4b010841bd92ff33171ac9267498cb61040b69f0a667888f9c2cc4660edca",
       "frozen": true
+    },
+    "workout/v1.0.0/workout.schema.json": {
+      "sha256": "7505bca7ca32e4d6d118622ecacc9af9c43173797e45e0f54cdfe613e4a97362",
+      "frozen": false
     }
   }
 }

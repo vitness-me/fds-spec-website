@@ -1,0 +1,1709 @@
+{
+  "$id": "https://spec.vitness.me/schemas/workout/v1.0.0/workout.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "FDS Workout (v1.0.0)",
+  "description": "A single prescribed training session. Structure is blocks of items; how a block is executed is `mode`, which is what lets circuits, EMOM, AMRAP and interval work share one schema with straight strength training.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "workoutId",
+    "canonical",
+    "classification",
+    "structure",
+    "metadata"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "workoutId": {
+      "type": "string"
+    },
+    "canonical": {
+      "$ref": "#/$defs/canonical"
+    },
+    "classification": {
+      "type": "object",
+      "required": [
+        "workoutType"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "workoutType": {
+          "description": "Open string per D8 — a plain classifier with no structural consequence. Consumers SHOULD warn on an unrecognised value and MUST NOT reject. Recommended values live in the workout-type registry.",
+          "type": "string"
+        },
+        "level": {
+          "enum": [
+            "beginner",
+            "intermediate",
+            "advanced"
+          ]
+        },
+        "focus": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "estimatedDuration": {
+          "description": "Planned wall-clock length. Carries its own unit: a bare number here would be read as minutes by some implementers and seconds by others.",
+          "type": "object",
+          "required": [
+            "value",
+            "unit"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "value": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "unit": {
+              "enum": [
+                "s",
+                "min"
+              ]
+            }
+          }
+        },
+        "environment": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "structure": {
+      "type": "object",
+      "required": [
+        "blocks"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "blocks": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/block"
+          }
+        }
+      }
+    },
+    "targets": {
+      "description": "Derived rollup of the muscles the session trains. Optional and advisory — a consumer MUST NOT treat it as authoritative over walking the items, because it can be stale or absent.",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "primary": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/muscleRef"
+          }
+        },
+        "secondary": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/muscleRef"
+          }
+        }
+      }
+    },
+    "equipment": {
+      "description": "Derived rollup, same advisory status as `targets`.",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "required": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/equipmentRef"
+          }
+        },
+        "optional": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/equipmentRef"
+          }
+        }
+      }
+    },
+    "metrics": {
+      "description": "Metric shapes this session is expected to produce. Declares shapes, never values — the same seam RFC-001 draws.",
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/metricRef"
+      },
+      "uniqueItems": true
+    },
+    "constraints": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "contraindications": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "prerequisites": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "environment": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "relations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "type",
+          "targetId"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "alternate",
+              "variation",
+              "progression",
+              "regression",
+              "deload",
+              "test"
+            ]
+          },
+          "targetId": {
+            "type": "string"
+          },
+          "notes": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "media": {
+      "$ref": "#/$defs/media"
+    },
+    "attributes": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "extensions": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "metadata": {
+      "$ref": "#/$defs/metadata"
+    }
+  },
+  "$defs": {
+    "block": {
+      "description": "A contiguous section of the session executed under one mode.",
+      "type": "object",
+      "required": [
+        "id",
+        "mode",
+        "items"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "role": {
+          "description": "What the block is for. Open string per D8 — a plain classifier. Recommended values: warmup, primary, accessory, conditioning, cooldown, finisher.",
+          "type": "string"
+        },
+        "mode": {
+          "$ref": "#/$defs/blockMode"
+        },
+        "modeParams": {
+          "$ref": "#/$defs/modeParams"
+        },
+        "rest": {
+          "$ref": "#/$defs/restSpec"
+        },
+        "items": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/blockItem"
+          }
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "blockItem": {
+      "description": "One exercise within a block, with its prescription.",
+      "type": "object",
+      "required": [
+        "id",
+        "exercise"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "groupLabel": {
+          "description": "Groups items that are performed together — \"A1\"/\"A2\" for a superset, \"A1\"/\"A2\"/\"A3\" for a triset. Items sharing a label are alternated; the letter orders the groups within the block.",
+          "type": "string"
+        },
+        "exercise": {
+          "$ref": "#/$defs/exerciseRef"
+        },
+        "alternatives": {
+          "description": "Substitutions the author sanctions in advance — equipment unavailable, movement contraindicated. Distinct from a substitution an athlete makes during a session, which is performed data and belongs to RFC-009.",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/exerciseRef"
+          }
+        },
+        "sets": {
+          "description": "Explicit per-set prescription. Mutually exclusive with `scheme` — see the constraint below.",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/setPrescription"
+          }
+        },
+        "scheme": {
+          "description": "A named set pattern instead of enumerated sets.",
+          "$ref": "#/$defs/setScheme"
+        },
+        "load": {
+          "description": "Load for every set of this item, when it does not vary. A set-level `load` overrides it.",
+          "$ref": "#/$defs/loadTarget"
+        },
+        "reps": {
+          "$ref": "#/$defs/repTarget"
+        },
+        "tempo": {
+          "$ref": "#/$defs/tempo"
+        },
+        "rest": {
+          "$ref": "#/$defs/restSpec"
+        },
+        "zone": {
+          "$ref": "#/$defs/intensityZone"
+        },
+        "notes": {
+          "type": "string"
+        },
+        "media": {
+          "$ref": "#/$defs/media"
+        }
+      },
+      "not": {
+        "description": "An item states its sets one way or the other. Carrying both is two prescriptions for the same work, and nothing says which wins.",
+        "required": [
+          "sets",
+          "scheme"
+        ]
+      }
+    },
+    "blockMode": {
+      "description": "How the block is executed. A structural discriminator, not a label: it decides which modeParams are meaningful and how a consumer must sequence the items. Closed set with a disjoint catch-all, per RFC-006 §3.2.",
+      "oneOf": [
+        {
+          "const": "sequential",
+          "description": "Items performed one after another, all sets of an item before moving on."
+        },
+        {
+          "const": "superset",
+          "description": "Items alternated, grouped by groupLabel."
+        },
+        {
+          "const": "circuit",
+          "description": "One set of each item per round, for a number of rounds."
+        },
+        {
+          "const": "emom",
+          "description": "Every minute on the minute."
+        },
+        {
+          "const": "amrap",
+          "description": "As many rounds as possible inside a time cap."
+        },
+        {
+          "const": "forTime",
+          "description": "Fixed work completed as fast as possible."
+        },
+        {
+          "const": "tabata",
+          "description": "Fixed work/rest intervals, conventionally 20/10."
+        },
+        {
+          "const": "interval",
+          "description": "Explicit work and rest intervals."
+        },
+        {
+          "description": "A mode this version does not define. Kept disjoint from the named values so a known mode never matches two branches.",
+          "type": "string",
+          "not": {
+            "enum": [
+              "sequential",
+              "superset",
+              "circuit",
+              "emom",
+              "amrap",
+              "forTime",
+              "tabata",
+              "interval"
+            ]
+          }
+        }
+      ]
+    },
+    "canonical": {
+      "type": "object",
+      "required": [
+        "name",
+        "slug"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "slug": {
+          "type": "string",
+          "pattern": "^[a-z0-9-]{2,}$"
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "aliases": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "localized": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "lang",
+              "name"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "lang": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "description": {
+                "type": "string",
+                "minLength": 1
+              },
+              "aliases": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "uniqueItems": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "duration": {
+      "type": "object",
+      "required": [
+        "value",
+        "unit"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "unit": {
+          "enum": [
+            "s",
+            "min"
+          ]
+        }
+      }
+    },
+    "equipmentRef": {
+      "type": "object",
+      "required": [
+        "id",
+        "name"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "slug": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "abbreviation": {
+          "type": "string"
+        },
+        "categories": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "aliases": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "exerciseRef": {
+      "description": "Denormalised snapshot of an exercise, mirroring muscleRef/equipmentRef.",
+      "type": "object",
+      "required": [
+        "id",
+        "name"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "slug": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "aliases": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "intensityZone": {
+      "description": "A zone in a named system. The zone registry defines the systems; the personal boundary values are caller context, exactly like bodyweight.",
+      "type": "object",
+      "required": [
+        "system",
+        "zone"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "system": {
+          "enum": [
+            "heartRate",
+            "power",
+            "pace",
+            "perceived"
+          ]
+        },
+        "zone": {
+          "type": "string"
+        },
+        "boundsRef": {
+          "description": "Identifier of the zone-registry entry the zone label is defined by. Without it, \"Z4\" is only meaningful inside one producer.",
+          "type": "string"
+        }
+      }
+    },
+    "loadRange": {
+      "description": "A prescribed band rather than a point, in the units of the enclosing method: kg for absolute, percent for percent1RM, RPE points for rpe.",
+      "type": "object",
+      "required": [
+        "min",
+        "max"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "min": {
+          "type": "number"
+        },
+        "max": {
+          "type": "number"
+        }
+      }
+    },
+    "loadTarget": {
+      "description": "How much load a set prescribes. Discriminated on `method`. A consumer that does not understand a method MUST ignore the target and SHOULD warn — it MUST NOT substitute a default, because silently guessing a working weight is a safety problem, not a data-quality one.",
+      "type": "object",
+      "required": [
+        "method"
+      ],
+      "oneOf": [
+        {
+          "title": "absolute",
+          "description": "A fixed load. The only method that needs no resolution context.",
+          "type": "object",
+          "required": [
+            "method",
+            "value",
+            "unit"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "method": {
+              "const": "absolute"
+            },
+            "value": {
+              "type": "number",
+              "minimum": 0
+            },
+            "unit": {
+              "enum": [
+                "kg",
+                "lb"
+              ]
+            },
+            "range": {
+              "$ref": "#/$defs/loadRange"
+            }
+          }
+        },
+        {
+          "title": "percent1RM",
+          "description": "A percentage of a one-rep max. `referenceExerciseId` expresses \"70% of your back squat 1RM\" on an exercise that is not the back squat; absent, the reference is the prescribed exercise itself.",
+          "type": "object",
+          "required": [
+            "method",
+            "value"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "method": {
+              "const": "percent1RM"
+            },
+            "value": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "referenceExerciseId": {
+              "type": "string"
+            },
+            "range": {
+              "$ref": "#/$defs/loadRange"
+            }
+          }
+        },
+        {
+          "title": "percentBodyweight",
+          "description": "A percentage of the athlete's bodyweight. FDS models no person, so this is unresolvable without a bodyweight supplied by the caller — see the Resolution Context section of RFC-006.",
+          "type": "object",
+          "required": [
+            "method",
+            "value"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "method": {
+              "const": "percentBodyweight"
+            },
+            "value": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "range": {
+              "$ref": "#/$defs/loadRange"
+            }
+          }
+        },
+        {
+          "title": "rpe",
+          "description": "Rate of perceived exertion, 1-10. The athlete selects the load.",
+          "type": "object",
+          "required": [
+            "method",
+            "value"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "method": {
+              "const": "rpe"
+            },
+            "value": {
+              "type": "number",
+              "minimum": 1,
+              "maximum": 10
+            },
+            "allowHalf": {
+              "type": "boolean",
+              "default": false
+            },
+            "range": {
+              "$ref": "#/$defs/loadRange"
+            }
+          }
+        },
+        {
+          "title": "rir",
+          "description": "Reps in reserve, 0-10. The inverse of RPE; do not mix the two scales in one document without recording which is meant.",
+          "type": "object",
+          "required": [
+            "method",
+            "value"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "method": {
+              "const": "rir"
+            },
+            "value": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 10
+            },
+            "range": {
+              "$ref": "#/$defs/loadRange"
+            }
+          }
+        },
+        {
+          "title": "velocity",
+          "description": "Velocity-based training. `lossThreshold` terminates the set once bar speed drops by that percentage from the fastest rep.",
+          "type": "object",
+          "required": [
+            "method",
+            "value",
+            "unit"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "method": {
+              "const": "velocity"
+            },
+            "value": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "unit": {
+              "const": "m_s"
+            },
+            "lossThreshold": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "maximum": 100
+            },
+            "range": {
+              "$ref": "#/$defs/loadRange"
+            }
+          }
+        },
+        {
+          "title": "level",
+          "description": "A machine pin or stack position. Opaque: two facilities' level 7 are unrelated, so this MUST NOT be converted to load or compared across machines.",
+          "type": "object",
+          "required": [
+            "method",
+            "value"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "method": {
+              "const": "level"
+            },
+            "value": {
+              "type": "number"
+            },
+            "scale": {
+              "type": "string"
+            },
+            "range": {
+              "$ref": "#/$defs/loadRange"
+            }
+          }
+        },
+        {
+          "title": "bandResistance",
+          "description": "Elastic resistance. Colour conventions are manufacturer-specific, so `equipment` identifies whose scale is meant; `estimatedLoad` is an approximation and MUST NOT be treated as measured.",
+          "type": "object",
+          "required": [
+            "method"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "method": {
+              "const": "bandResistance"
+            },
+            "equipment": {
+              "$ref": "#/$defs/equipmentRef"
+            },
+            "colour": {
+              "type": "string"
+            },
+            "estimatedLoad": {
+              "type": "object",
+              "required": [
+                "value",
+                "unit"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "value": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "unit": {
+                  "enum": [
+                    "kg",
+                    "lb"
+                  ]
+                }
+              }
+            },
+            "range": {
+              "$ref": "#/$defs/loadRange"
+            }
+          }
+        },
+        {
+          "title": "assisted",
+          "description": "Negative load: assistance reduces effective bodyweight. `value` is the magnitude of assistance, always positive — more assistance is less effort. Only valid on an exercise whose `loading.assisted` is true (RFC-001 4.6).",
+          "type": "object",
+          "required": [
+            "method",
+            "value",
+            "unit"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "method": {
+              "const": "assisted"
+            },
+            "value": {
+              "type": "number",
+              "minimum": 0
+            },
+            "unit": {
+              "enum": [
+                "kg",
+                "lb"
+              ]
+            },
+            "range": {
+              "$ref": "#/$defs/loadRange"
+            }
+          }
+        },
+        {
+          "title": "relative",
+          "description": "Load derived from a prior result: \"last session plus 2.5 kg\". Unresolvable without training history, which FDS does not carry.",
+          "type": "object",
+          "required": [
+            "method",
+            "basis",
+            "delta",
+            "deltaUnit"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "method": {
+              "const": "relative"
+            },
+            "basis": {
+              "enum": [
+                "lastSession",
+                "e1RM",
+                "trainingMax"
+              ]
+            },
+            "delta": {
+              "type": "number"
+            },
+            "deltaUnit": {
+              "enum": [
+                "kg",
+                "lb",
+                "percent"
+              ]
+            },
+            "referenceExerciseId": {
+              "type": "string"
+            },
+            "range": {
+              "$ref": "#/$defs/loadRange"
+            }
+          }
+        },
+        {
+          "title": "bodyweight",
+          "description": "Bodyweight only, with no external load and no scaling.",
+          "type": "object",
+          "required": [
+            "method"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "method": {
+              "const": "bodyweight"
+            }
+          }
+        },
+        {
+          "title": "autoregulated",
+          "description": "Load is decided at execution time by a progression rule declared elsewhere in the document.",
+          "type": "object",
+          "required": [
+            "method",
+            "progressionRuleRef"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "method": {
+              "const": "autoregulated"
+            },
+            "progressionRuleRef": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "title": "none",
+          "description": "Load is deliberately unprescribed. Distinct from omitting `load` entirely, which means unstated.",
+          "type": "object",
+          "required": [
+            "method"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "method": {
+              "const": "none"
+            }
+          }
+        },
+        {
+          "title": "unrecognized",
+          "description": "Forward compatibility. A method this version does not define still validates, so a document using a future method is not rejected wholesale. `not/enum` keeps this branch disjoint from the named ones — without it every known method would match two branches and `oneOf` would fail.",
+          "type": "object",
+          "required": [
+            "method"
+          ],
+          "properties": {
+            "method": {
+              "type": "string",
+              "not": {
+                "enum": [
+                  "absolute",
+                  "percent1RM",
+                  "percentBodyweight",
+                  "rpe",
+                  "rir",
+                  "velocity",
+                  "level",
+                  "bandResistance",
+                  "assisted",
+                  "relative",
+                  "bodyweight",
+                  "autoregulated",
+                  "none"
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    "media": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "type",
+          "uri"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "image",
+              "video",
+              "doc",
+              "3d"
+            ]
+          },
+          "uri": {
+            "type": "string",
+            "format": "uri"
+          },
+          "caption": {
+            "type": "string"
+          },
+          "license": {
+            "type": "string"
+          },
+          "attribution": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "required": [
+        "createdAt",
+        "updatedAt",
+        "status"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "source": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/$defs/status"
+        },
+        "deprecated": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "since": {
+              "type": "string",
+              "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+            },
+            "replacedBy": {
+              "type": "string"
+            }
+          }
+        },
+        "externalRefs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "system",
+              "id"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "system": {
+                "type": "string"
+              },
+              "id": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "history": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "at": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "actor": {
+                "type": "string"
+              },
+              "change": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "metricRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "unit"
+      ],
+      "properties": {
+        "type": {
+          "$ref": "#/$defs/metricType"
+        },
+        "unit": {
+          "$ref": "#/$defs/metricUnit"
+        }
+      }
+    },
+    "metricType": {
+      "type": "string",
+      "enum": [
+        "reps",
+        "weight",
+        "duration",
+        "distance",
+        "speed",
+        "pace",
+        "power",
+        "heartRate",
+        "steps",
+        "calories",
+        "height",
+        "tempo",
+        "rpe",
+        "rir",
+        "percent1RM",
+        "percentBodyweight",
+        "velocity",
+        "cadence",
+        "rounds",
+        "sets",
+        "rest",
+        "incline",
+        "resistanceLevel",
+        "oneRepMax"
+      ]
+    },
+    "metricUnit": {
+      "type": "string",
+      "enum": [
+        "count",
+        "kg",
+        "lb",
+        "s",
+        "min",
+        "m",
+        "km",
+        "mi",
+        "m_s",
+        "km_h",
+        "min_per_km",
+        "min_per_mi",
+        "W",
+        "bpm",
+        "kcal",
+        "cm",
+        "in",
+        "percent",
+        "rpm",
+        "spm",
+        "level",
+        "ms"
+      ]
+    },
+    "modeParams": {
+      "description": "Parameters the mode needs. Which keys apply depends on the mode; RFC-007 documents the pairing. Left open rather than per-mode-typed because a consumer that does not recognise the mode cannot use the params either — the mode is the gate, not the shape.",
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "rounds": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "timeCap": {
+          "$ref": "#/$defs/duration"
+        },
+        "work": {
+          "$ref": "#/$defs/duration"
+        },
+        "rest": {
+          "$ref": "#/$defs/duration"
+        },
+        "interval": {
+          "$ref": "#/$defs/duration"
+        }
+      }
+    },
+    "muscleRef": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "categoryId"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "slug": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "categoryId": {
+          "type": "string"
+        },
+        "aliases": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "repTarget": {
+      "description": "What terminates a set. Discriminated on `kind`. Same unrecognized-branch rule as loadTarget.",
+      "type": "object",
+      "required": [
+        "kind"
+      ],
+      "oneOf": [
+        {
+          "title": "fixed",
+          "type": "object",
+          "required": [
+            "kind",
+            "value"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "fixed"
+            },
+            "value": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        },
+        {
+          "title": "range",
+          "type": "object",
+          "required": [
+            "kind",
+            "min",
+            "max"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "range"
+            },
+            "min": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "max": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        },
+        {
+          "title": "amrap",
+          "description": "As many reps as possible. `min` is a floor the set is expected to clear; `cap` stops a set that would otherwise run long.",
+          "type": "object",
+          "required": [
+            "kind"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "amrap"
+            },
+            "min": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "cap": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        },
+        {
+          "title": "toFailure",
+          "description": "`technical: true` means stop when form degrades, not at absolute failure.",
+          "type": "object",
+          "required": [
+            "kind"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "toFailure"
+            },
+            "technical": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        },
+        {
+          "title": "time",
+          "type": "object",
+          "required": [
+            "kind",
+            "value",
+            "unit"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "time"
+            },
+            "value": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "unit": {
+              "enum": [
+                "s",
+                "min",
+                "ms"
+              ]
+            }
+          }
+        },
+        {
+          "title": "distance",
+          "type": "object",
+          "required": [
+            "kind",
+            "value",
+            "unit"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "distance"
+            },
+            "value": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "unit": {
+              "enum": [
+                "m",
+                "km",
+                "mi"
+              ]
+            }
+          }
+        },
+        {
+          "title": "calories",
+          "type": "object",
+          "required": [
+            "kind",
+            "value"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "calories"
+            },
+            "value": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            }
+          }
+        },
+        {
+          "title": "maxHold",
+          "description": "Hold as long as possible, optionally with a floor and a cap.",
+          "type": "object",
+          "required": [
+            "kind"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "maxHold"
+            },
+            "min": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "cap": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "unit": {
+              "enum": [
+                "s",
+                "min"
+              ]
+            }
+          }
+        },
+        {
+          "title": "unrecognized",
+          "type": "object",
+          "required": [
+            "kind"
+          ],
+          "properties": {
+            "kind": {
+              "type": "string",
+              "not": {
+                "enum": [
+                  "fixed",
+                  "range",
+                  "amrap",
+                  "toFailure",
+                  "time",
+                  "distance",
+                  "calories",
+                  "maxHold"
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    "restScope": {
+      "description": "Which boundary the rest sits at.",
+      "type": "string",
+      "enum": [
+        "set",
+        "group",
+        "round",
+        "block"
+      ]
+    },
+    "restSpec": {
+      "description": "Prescribed rest. `appliesTo` is load-bearing: the same block can rest 30 s between superset members and 3 min between rounds, and a consumer cannot infer which is meant from the value alone.",
+      "type": "object",
+      "required": [
+        "method",
+        "appliesTo"
+      ],
+      "oneOf": [
+        {
+          "title": "fixed",
+          "type": "object",
+          "required": [
+            "method",
+            "appliesTo",
+            "value",
+            "unit"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "method": {
+              "const": "fixed"
+            },
+            "appliesTo": {
+              "$ref": "#/$defs/restScope"
+            },
+            "value": {
+              "type": "number",
+              "minimum": 0
+            },
+            "unit": {
+              "enum": [
+                "s",
+                "min"
+              ]
+            }
+          }
+        },
+        {
+          "title": "range",
+          "type": "object",
+          "required": [
+            "method",
+            "appliesTo",
+            "min",
+            "max",
+            "unit"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "method": {
+              "const": "range"
+            },
+            "appliesTo": {
+              "$ref": "#/$defs/restScope"
+            },
+            "min": {
+              "type": "number",
+              "minimum": 0
+            },
+            "max": {
+              "type": "number",
+              "minimum": 0
+            },
+            "unit": {
+              "enum": [
+                "s",
+                "min"
+              ]
+            }
+          }
+        },
+        {
+          "title": "toHeartRate",
+          "description": "Rest until heart rate recovers to a threshold. Requires live heart-rate data at execution time.",
+          "type": "object",
+          "required": [
+            "method",
+            "appliesTo",
+            "value"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "method": {
+              "const": "toHeartRate"
+            },
+            "appliesTo": {
+              "$ref": "#/$defs/restScope"
+            },
+            "value": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "unit": {
+              "const": "bpm",
+              "default": "bpm"
+            }
+          }
+        },
+        {
+          "title": "asNeeded",
+          "type": "object",
+          "required": [
+            "method",
+            "appliesTo"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "method": {
+              "const": "asNeeded"
+            },
+            "appliesTo": {
+              "$ref": "#/$defs/restScope"
+            }
+          }
+        },
+        {
+          "title": "ratio",
+          "description": "Work-to-rest ratio, e.g. 1:2. Resolved against the duration of the work interval.",
+          "type": "object",
+          "required": [
+            "method",
+            "appliesTo",
+            "work",
+            "rest"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "method": {
+              "const": "ratio"
+            },
+            "appliesTo": {
+              "$ref": "#/$defs/restScope"
+            },
+            "work": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "rest": {
+              "type": "number",
+              "minimum": 0
+            }
+          }
+        },
+        {
+          "title": "unrecognized",
+          "type": "object",
+          "required": [
+            "method",
+            "appliesTo"
+          ],
+          "properties": {
+            "method": {
+              "type": "string",
+              "not": {
+                "enum": [
+                  "fixed",
+                  "range",
+                  "toHeartRate",
+                  "asNeeded",
+                  "ratio"
+                ]
+              }
+            },
+            "appliesTo": {
+              "$ref": "#/$defs/restScope"
+            }
+          }
+        }
+      ]
+    },
+    "setPrescription": {
+      "description": "One prescribed set.",
+      "type": "object",
+      "required": [
+        "index"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "index": {
+          "description": "Position within the item, 1-based. Explicit rather than implied by array order so a consumer can reference a set stably.",
+          "type": "integer",
+          "minimum": 1
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "warmup",
+            "working",
+            "backoff",
+            "drop",
+            "cluster",
+            "amrap"
+          ],
+          "default": "working"
+        },
+        "load": {
+          "$ref": "#/$defs/loadTarget"
+        },
+        "reps": {
+          "$ref": "#/$defs/repTarget"
+        },
+        "tempo": {
+          "$ref": "#/$defs/tempo"
+        },
+        "rest": {
+          "$ref": "#/$defs/restSpec"
+        },
+        "schemeParams": {
+          "description": "Parameters for the scheme this set participates in — drop percentages, cluster rest. Open for the same reason setScheme.params is.",
+          "type": "object",
+          "additionalProperties": true
+        },
+        "side": {
+          "description": "Which side the set loads. Only meaningful on an exercise whose classification.unilateral is true.",
+          "type": "string",
+          "enum": [
+            "both",
+            "left",
+            "right"
+          ],
+          "default": "both"
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "setScheme": {
+      "description": "A named set pattern and its parameters, for prescriptions that describe a shape rather than enumerating every set. A producer MAY always expand to explicit sets instead; consumers that do not recognise a pattern MUST NOT attempt to expand it.",
+      "type": "object",
+      "required": [
+        "pattern"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "pattern": {
+          "type": "string",
+          "enum": [
+            "straight",
+            "ramping",
+            "reversePyramid",
+            "drop",
+            "restPause",
+            "cluster",
+            "myoReps",
+            "wave",
+            "ladder",
+            "density",
+            "topSetBackoff"
+          ]
+        },
+        "sets": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "params": {
+          "description": "Pattern-specific parameters. Left open because each pattern takes a different shape; RFC-006 documents the conventional keys per pattern.",
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "review",
+        "active",
+        "inactive",
+        "deprecated"
+      ],
+      "default": "active"
+    },
+    "tempo": {
+      "description": "Per-phase timing in seconds, in the conventional order eccentric-pause-concentric-pause. \"X\" means explosive: as fast as possible rather than a specific duration. Promoted here from the x:vitness.tempo extension in RFC-001.",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "eccentric": {
+          "$ref": "#/$defs/tempoPhase"
+        },
+        "bottomPause": {
+          "$ref": "#/$defs/tempoPhase"
+        },
+        "concentric": {
+          "$ref": "#/$defs/tempoPhase"
+        },
+        "topPause": {
+          "$ref": "#/$defs/tempoPhase"
+        }
+      }
+    },
+    "tempoPhase": {
+      "description": "Seconds, or \"X\" for explosive.",
+      "oneOf": [
+        {
+          "type": "number",
+          "minimum": 0
+        },
+        {
+          "const": "X"
+        }
+      ]
+    }
+  }
+}

@@ -57,6 +57,9 @@ const ENTITIES = [
   // RFC-008 reference these definitions, and flattening copies them into those
   // schemas, so a bundled copy would be dead weight the loader never asks for.
   { name: 'prescription', path: 'prescription/v1.0.0/prescription.schema.json', bundled: false },
+  // After prescription: workout composes its definitions, and a library must be
+  // built before anything that references it.
+  { name: 'workout', path: 'workout/v1.0.0/workout.schema.json' },
 ];
 
 /** Entities the transformer carries an offline copy of. */
@@ -66,11 +69,15 @@ const BUNDLED_ENTITIES = ENTITIES.filter((entity) => entity.bundled !== false);
  * The FDS release the bundled entity set constitutes, and the directory the
  * transformer bundles it under.
  *
- * `bundled/v1.0.0/` is not generated: its exercise and equipment sources no
- * longer exist (D9 — 1.0.0 was superseded rather than frozen in place), so it is
- * a checked-in historical artifact kept for consumers pinned to 1.0.0.
+ * Adding an entity changes what a release *contains*, so it gets a new release
+ * name rather than being folded into the last one — a consumer pinned to 1.1.0
+ * should not find a workout schema appearing in it.
+ *
+ * Earlier bundle directories are not regenerated. `v1.0.0`'s exercise and
+ * equipment sources no longer exist (D9), and `v1.1.0` predates workout; both
+ * are checked-in historical artifacts kept for consumers pinned to them.
  */
-const BUNDLE_RELEASE = '1.1.0';
+const BUNDLE_RELEASE = '1.2.0';
 
 /**
  * Published schemas that are served but not generated from an authoring source.
@@ -96,9 +103,22 @@ async function publishedSchemaFiles() {
     .sort();
 }
 
+const SCHEMA_BASE = 'https://spec.vitness.me/schemas/';
 const COMMON_REL = 'common/v1.0.0/common.schema.json';
-const COMMON_ID = `https://spec.vitness.me/schemas/${COMMON_REL}`;
-const COMMON_REF = `${COMMON_ID}#/$defs/`;
+
+/**
+ * Definition libraries an entity may reference, keyed by `$id`.
+ *
+ * `common` seeds it. Every entity built adds itself, so a later entity can
+ * compose an earlier one — which is how RFC-007 Workout references the RFC-006
+ * prescription primitives instead of restating them. ENTITIES is therefore
+ * ordered by dependency, and a forward reference fails with a clear message
+ * rather than silently inlining nothing.
+ *
+ * Registered defs are always the *flattened* ones, so anything copied out of a
+ * library refers only to that library's own `$defs` — no chains to chase.
+ */
+const libraries = new Map();
 
 const readJson = async (p) => JSON.parse(await readFile(p, 'utf8'));
 const sha256 = (text) => createHash('sha256').update(text, 'utf8').digest('hex');
@@ -110,33 +130,77 @@ const walk = (node, visit) => {
   Object.values(node).forEach((v) => walk(v, visit));
 };
 
+/** Split `<libraryId>#/$defs/<name>` into its parts, or null for a local ref. */
+function parseExternalRef(ref) {
+  if (typeof ref !== 'string' || !ref.startsWith(SCHEMA_BASE)) return null;
+  const [id, pointer] = ref.split('#');
+  if (!pointer || !pointer.startsWith('/$defs/')) {
+    throw new Error(
+      `refs must point at a $defs entry, not into an instance shape: ${ref}`
+    );
+  }
+  return { id, name: pointer.slice('/$defs/'.length) };
+}
+
 /**
- * Names pulled in from common, including transitive ones — `metadata` reaches
- * `status`, `metricRef` reaches `metricType` and `metricUnit`.
+ * Every definition an entity pulls in, transitively.
+ *
+ * Transitive in two directions: `metadata` reaches `status` inside common, and
+ * `loadTarget` reaches `equipmentRef` across libraries. Provenance is tracked so
+ * a `#/$defs/x` inside a copied definition resolves against the library it came
+ * from, not against the entity doing the copying.
  */
-function collectRequiredDefs(schema, commonDefs) {
-  const required = new Set();
+function collectRequiredDefs(schema, label) {
+  const required = new Map(); // name -> { def, from }
   const queue = [];
 
   walk(schema, (node) => {
-    if (typeof node.$ref === 'string' && node.$ref.startsWith(COMMON_REF)) {
-      queue.push(node.$ref.slice(COMMON_REF.length));
-    }
+    const ref = parseExternalRef(node.$ref);
+    if (ref) queue.push(ref);
   });
 
   while (queue.length) {
-    const name = queue.pop();
-    if (required.has(name)) continue;
-    const def = commonDefs[name];
-    if (!def) throw new Error(`common.schema.json has no $defs/${name}`);
-    required.add(name);
-    // definitions inside common reference their siblings as #/$defs/<name>
+    const { id, name } = queue.pop();
+    const library = libraries.get(id);
+    if (!library) {
+      throw new Error(
+        `${label} references ${id}, which is not a known library.\n` +
+          `  Known: ${[...libraries.keys()].join(', ') || 'none'}\n` +
+          '  If it is another entity, move it earlier in ENTITIES — the list is dependency-ordered.'
+      );
+    }
+
+    const def = library[name];
+    if (!def) throw new Error(`${id} has no $defs/${name} (needed by ${label})`);
+
+    const seen = required.get(name);
+    if (seen) {
+      // The same definition legitimately arrives by two routes: workout takes
+      // `equipmentRef` straight from common, and again inside `loadTarget`,
+      // which already had it flattened in. Identical content is that, and is
+      // fine. Different content under one name is a real collision — the two
+      // would overwrite each other and whichever lost would be silently wrong.
+      if (seen.from !== id && JSON.stringify(seen.def) !== JSON.stringify(def)) {
+        throw new Error(
+          `${label}: "${name}" is defined differently by ${seen.from} and ${id}. ` +
+            'Two libraries cannot contribute different definitions under one name.'
+        );
+      }
+      continue;
+    }
+    required.set(name, { def, from: id });
+
     walk(def, (node) => {
       if (typeof node.$ref === 'string' && node.$ref.startsWith('#/$defs/')) {
-        queue.push(node.$ref.slice('#/$defs/'.length));
+        // A local ref inside a copied definition belongs to its own library.
+        queue.push({ id, name: node.$ref.slice('#/$defs/'.length) });
+      } else {
+        const ref = parseExternalRef(node.$ref);
+        if (ref) queue.push(ref);
       }
     });
   }
+
   return required;
 }
 
@@ -167,23 +231,22 @@ function assertIdMatchesPath(schema, entityPath) {
   }
 }
 
-async function build(entity, commonDefs) {
+async function build(entity) {
   const schema = await readJson(join(SRC, entity.path));
   assertIdMatchesPath(schema, entity.path);
-  const required = collectRequiredDefs(schema, commonDefs);
+  const required = collectRequiredDefs(schema, entity.path);
 
   const defs = { ...(schema.$defs ?? {}) };
-  for (const name of required) {
+  for (const [name, { def, from }] of required) {
     if (name in defs) {
-      throw new Error(`${entity.path}: local $defs/${name} collides with common`);
+      throw new Error(`${entity.path}: local $defs/${name} collides with ${from}`);
     }
-    defs[name] = structuredClone(commonDefs[name]);
+    defs[name] = structuredClone(def);
   }
 
   walk(schema, (node) => {
-    if (typeof node.$ref === 'string' && node.$ref.startsWith(COMMON_REF)) {
-      node.$ref = `#/$defs/${node.$ref.slice(COMMON_REF.length)}`;
-    }
+    const ref = parseExternalRef(node.$ref);
+    if (ref) node.$ref = `#/$defs/${ref.name}`;
   });
 
   if (Object.keys(defs).length) {
@@ -193,6 +256,10 @@ async function build(entity, commonDefs) {
   }
 
   assertSelfContained(schema, `specification/schemas/${entity.path}`);
+
+  // Publish this entity as a library so later entities can compose it.
+  libraries.set(schema.$id, schema.$defs ?? {});
+
   return `${JSON.stringify(schema, null, 2)}\n`;
 }
 
@@ -283,14 +350,14 @@ const renderIntegrity = (schemas) =>
 // ── run ──────────────────────────────────────────────────────────────────────
 
 const check = process.argv.includes('--check');
-const commonDefs = (await readJson(join(SRC, COMMON_REL))).$defs;
+libraries.set(`${SCHEMA_BASE}${COMMON_REL}`, (await readJson(join(SRC, COMMON_REL))).$defs);
 const integrity = await readIntegrity();
 const recorded = integrity.schemas ?? {};
 const problems = [];
 
 const rendered = new Map();
 for (const entity of ENTITIES) {
-  rendered.set(entity.name, await build(entity, commonDefs));
+  rendered.set(entity.name, await build(entity));
 }
 
 /**
