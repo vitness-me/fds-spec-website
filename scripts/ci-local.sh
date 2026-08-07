@@ -49,8 +49,10 @@ if run_job schemas; then
   # Ajv CLI is installed on demand, mirroring the workflow.
   if [[ ! -d node_modules/ajv-cli ]]; then
     step "install ajv-cli"
-    if npm install --no-save --no-fund --no-audit ajv-cli@5 ajv-formats@3 >/dev/null 2>&1; then ok; else bad "install ajv-cli"; fi
+    if npm install --no-save --no-fund --no-audit ajv@8 ajv-cli@5 ajv-formats@3 >/dev/null 2>&1; then ok; else bad "install ajv-cli"; fi
   fi
+
+  try "prescription fixtures match their definitions" npm run check:prescription
 
   S=specification/schemas
   total=0; failed=0

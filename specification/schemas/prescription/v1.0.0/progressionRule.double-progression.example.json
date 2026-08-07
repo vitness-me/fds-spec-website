@@ -1,0 +1,7 @@
+{
+  "id": "prog.doubleProgression",
+  "name": "Double progression",
+  "trigger": { "kind": "topOfRepRange", "consecutiveSessions": 1 },
+  "action": { "kind": "increaseLoad", "value": 2.5, "unit": "kg" },
+  "notes": "Add load once the top of the prescribed rep range is reached on every working set."
+}
