@@ -147,13 +147,31 @@ This is distinct from a substitution an athlete makes during a session, which is
 
 `side` is meaningful only where the referenced exercise's `classification.unilateral` is true. A set MAY carry free-text `notes`.
 
-### 4.5. Derived rollups
+### 4.5. `repStyle`
+
+Two prescriptions in wide use are expressible by nothing else in the model: **partials** (a deliberately reduced range of motion) and **one-and-a-half reps** (a full repetition followed by a half, counted as one). `tempo` governs how fast a repetition is performed, not its range or its composition, and no metric or set scheme reaches them either.
+
+```json
+{ "repStyle": { "rangeOfMotion": "partial", "segment": "top" } }
+```
+
+| Field | Values | Meaning |
+|---|---|---|
+| `rangeOfMotion` | `full` \| `partial` \| `extended` | `extended` is a deliberately increased range, as in a deficit deadlift |
+| `segment` | `top` \| `bottom` \| `mid` | Which part of the movement a partial covers. Meaningful only when `rangeOfMotion` is `partial` |
+| `pattern` | `standard` \| `oneAndAHalf` \| `pulse` | `pulse` is repeated short repetitions at one point in the range |
+
+`repStyle` sits on an item or on a single set, so a prescription can call for full reps followed by partials to failure without splitting the item in two.
+
+It is defined here rather than in the RFC-006 library because a workout is currently its only consumer. A definition becomes shared when a second consumer needs it; if RFC-008 does, it is promoted to a new prescription version at that point. Promoting it now would mean publishing a new version of a frozen URL to serve a user that does not yet exist.
+
+### 4.6. Derived rollups
 
 `targets` and `equipment` summarise what the session trains and needs. Both are **optional and advisory**.
 
 A consumer MUST NOT treat either as authoritative over walking the items. They are derived data that can be absent, stale, or computed under assumptions the consumer does not share — a rollup produced before an item was substituted no longer describes the session. They exist for listing and filtering, where recomputing across a library is expensive and approximate answers are acceptable.
 
-### 4.6. Optional descriptive fields
+### 4.7. Optional descriptive fields
 
 `constraints` records what the session demands of the athlete before they start: `contraindications` (conditions under which it should not be performed), `prerequisites` (competencies it assumes) and `environment` (where it can be done). These are advisory prose, not machine-enforceable gates — FDS models no athlete to check them against.
 
