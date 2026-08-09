@@ -1,0 +1,73 @@
+{
+  "schemaVersion": "1.0.0",
+  "workoutId": "00000000-0000-4000-8000-000000000117",
+  "canonical": {
+    "name": "Finisher",
+    "slug": "finisher"
+  },
+  "classification": {
+    "workoutType": "hypertrophy"
+  },
+  "structure": {
+    "blocks": [
+      {
+        "id": "b1",
+        "mode": "sequential",
+        "items": [
+          {
+            "id": "i1",
+            "exercise": {
+              "id": "ex.benchPress",
+              "name": "Barbell Bench Press"
+            },
+            "scheme": {
+              "pattern": "straight",
+              "sets": 4
+            },
+            "reps": {
+              "kind": "fixed",
+              "value": 6
+            },
+            "rest": {
+              "method": "fixed",
+              "appliesTo": "set",
+              "value": 3,
+              "unit": "min"
+            }
+          }
+        ],
+        "role": "primary"
+      },
+      {
+        "id": "b2",
+        "mode": "amrap",
+        "items": [
+          {
+            "id": "i2",
+            "exercise": {
+              "id": "ex.pushUp",
+              "name": "Push-Up"
+            },
+            "reps": {
+              "kind": "toFailure",
+              "technical": true
+            }
+          }
+        ],
+        "role": "finisher",
+        "modeParams": {
+          "timeCap": {
+            "value": 4,
+            "unit": "min"
+          }
+        }
+      }
+    ]
+  },
+  "metadata": {
+    "createdAt": "2026-08-09T00:00:00Z",
+    "updatedAt": "2026-08-09T00:00:00Z",
+    "status": "active",
+    "source": "vitness.core"
+  }
+}
