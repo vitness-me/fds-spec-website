@@ -37,6 +37,10 @@ const BUNDLED_SCHEMA_LOADERS: Record<string, () => Promise<Record<string, object
     const mod = await import('./bundled/v1.2.0/index.js');
     return (mod.default ?? mod) as unknown as Record<string, object>;
   },
+  '1.3.0': async () => {
+    const mod = await import('./bundled/v1.3.0/index.js');
+    return (mod.default ?? mod) as unknown as Record<string, object>;
+  },
 };
 
 
@@ -224,6 +228,9 @@ export class SchemaManager {
         break;
       case 'workout':
         url = `${baseUrl}/workout/v${v}/workout.schema.json`;
+        break;
+      case 'program':
+        url = `${baseUrl}/program/v${v}/program.schema.json`;
         break;
       default:
         throw new Error(`Unknown entity type: ${entity}`);

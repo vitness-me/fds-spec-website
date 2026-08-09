@@ -8,6 +8,7 @@ import { SchemaManager } from './schema-manager.js';
 import bundled100 from './bundled/v1.0.0/index.js';
 import bundled110 from './bundled/v1.1.0/index.js';
 import bundled120 from './bundled/v1.2.0/index.js';
+import bundled130 from './bundled/v1.3.0/index.js';
 
 /**
  * Entities version independently, so a release name is not a path segment.
@@ -22,6 +23,7 @@ const BUNDLES: Record<string, unknown> = {
   '1.0.0': bundled100,
   '1.1.0': bundled110,
   '1.2.0': bundled120,
+  '1.3.0': bundled130,
 };
 
 const versionFromId = (schema: unknown): string => {
