@@ -33,7 +33,19 @@
       "properties": {
         "workoutType": {
           "description": "Open string per D8 — a plain classifier with no structural consequence. Consumers SHOULD warn on an unrecognised value and MUST NOT reject. Recommended values live in the workout-type registry.",
-          "type": "string"
+          "type": "string",
+          "examples": [
+            "strength",
+            "hypertrophy",
+            "conditioning",
+            "endurance",
+            "mobility",
+            "hybrid",
+            "circuit",
+            "class",
+            "recovery",
+            "test"
+          ]
         },
         "level": {
           "enum": [
@@ -233,7 +245,15 @@
         },
         "role": {
           "description": "What the block is for. Open string per D8 — a plain classifier. Recommended values: warmup, primary, accessory, conditioning, cooldown, finisher.",
-          "type": "string"
+          "type": "string",
+          "examples": [
+            "warmup",
+            "primary",
+            "accessory",
+            "conditioning",
+            "cooldown",
+            "finisher"
+          ]
         },
         "mode": {
           "$ref": "#/$defs/blockMode"
