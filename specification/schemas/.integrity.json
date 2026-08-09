@@ -31,7 +31,7 @@
     },
     "workout/v1.0.0/workout.schema.json": {
       "sha256": "acb29a2ffe402c1c510e1556d9205b9ee605e63b5a6c2d0944bb0e53ab2f5e09",
-      "frozen": false
+      "frozen": true
     }
   }
 }
