@@ -103,7 +103,7 @@ This is stronger than the warn-don't-reject rule that governs classifiers elsewh
 
 ### 4.1. `loadTarget`
 
-Thirteen defined methods plus the forward-compatibility branch. All methods except `bodyweight`, `autoregulated` and `none` accept an optional `range` for prescriptions given as a band rather than a point.
+Thirteen defined methods plus the forward-compatibility branch. All methods except `bodyweight`, `autoregulated` and `none` accept an optional `range` — a `loadRange` of `min` and `max` — for prescriptions given as a band rather than a point. A `loadRange` carries no unit of its own: it takes the units of the method enclosing it, so a band on `absolute` is kilograms and a band on `rpe` is RPE points.
 
 | `method` | Payload | Resolvable from the document alone? |
 |---|---|---|
@@ -141,7 +141,7 @@ What terminates a set: `fixed`, `range`, `amrap`, `toFailure`, `time`, `distance
 
 Per-phase timing in seconds, in the conventional order: `eccentric`, `bottomPause`, `concentric`, `topPause`. A phase MAY be the string `"X"`, meaning explosive — as fast as possible rather than a specific duration.
 
-This was previously expressible only as the `x:vitness.tempo` extension in RFC-001. It is promoted to a core primitive here because tempo is a prescription concern, not a catalog one: the same exercise is prescribed at different tempos in different blocks.
+Each phase is a `tempoPhase`: a non-negative number of seconds, or `"X"`. This was previously expressible only as the `x:vitness.tempo` extension in RFC-001. It is promoted to a core primitive here because tempo is a prescription concern, not a catalog one: the same exercise is prescribed at different tempos in different blocks.
 
 Note the distinction from the `tempo` metric type in RFC-001, which records the count convention (3‑1‑1) as a logged value. Sub-second per-phase timing is `duration` in `ms`.
 
@@ -151,7 +151,11 @@ Note the distinction from the `tempo` metric type in RFC-001, which records the 
 
 `appliesTo` is REQUIRED, and is the field most likely to be omitted by an implementer porting from a simpler format. Rest binds to one of four boundaries — `set`, `group`, `round`, `block` — and the same block routinely carries several: thirty seconds between superset members, three minutes between rounds. A bare duration is ambiguous, and the ambiguity is not recoverable by inspection.
 
-`ratio` expresses work-to-rest as two numbers resolved against the duration of the work interval, so a 1:2 ratio after a 40-second effort means 80 seconds.
+`ratio` expresses work-to-rest as `work` and `rest`, two numbers resolved against the duration of the work interval, so a 1:2 ratio after a 40-second effort means 80 seconds.
+
+`toHeartRate` takes its threshold in `bpm`, the only unit it accepts.
+
+`appliesTo` is a `restScope`, one of `set`, `group`, `round` or `block`.
 
 ### 4.5. `intensityZone`
 
@@ -186,6 +190,8 @@ These keys are conventional, not normative — a producer MAY add its own. A con
 ### 4.7. `progressionRule`
 
 `{ id, trigger, action }`. Triggers cover completion (`allRepsCompleted`, `topOfRepRange`), effort (`rpeBelow`, `rirAbove`, `amrapThreshold`), time (`sessionsCompleted`) and failure (`failedAttempts`). Actions cover load, reps, sets, `deload`, `retest`, `advanceStage` and `hold`.
+
+A rule MAY also carry a human-readable `name` and free-text `notes`; neither affects resolution.
 
 The same rule structure is consumed by RFC-007, where progression applies within a session, and RFC-008, where it applies across a cycle. That is the whole reason it is defined here rather than in either.
 
