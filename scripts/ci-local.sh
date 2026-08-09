@@ -53,6 +53,7 @@ if run_job schemas; then
   fi
 
   try "prescription fixtures match their definitions" npm run check:prescription
+  try "RFCs and schemas agree" npm run check:rfc
 
   S=specification/schemas
   total=0; failed=0
