@@ -20,13 +20,14 @@ afterEach(() => {
 describe('SchemaManager', () => {
   describe('bundled version registry', () => {
     it('reports the versions it can serve offline', () => {
-      expect(SchemaManager.getBundledVersions()).toEqual(['1.0.0', '1.1.0', '1.2.0']);
+      expect(SchemaManager.getBundledVersions()).toEqual(['1.0.0', '1.1.0', '1.2.0', '1.3.0']);
     });
 
     it('answers hasBundledVersion for known and unknown versions', () => {
       expect(SchemaManager.hasBundledVersion('1.0.0')).toBe(true);
       expect(SchemaManager.hasBundledVersion('1.1.0')).toBe(true);
       expect(SchemaManager.hasBundledVersion('1.2.0')).toBe(true);
+      expect(SchemaManager.hasBundledVersion('1.3.0')).toBe(true);
       expect(SchemaManager.hasBundledVersion('9.9.9')).toBe(false);
     });
   });
@@ -46,7 +47,7 @@ describe('SchemaManager', () => {
       const manager = new SchemaManager();
 
       await expect(manager.loadVersion('9.9.9')).rejects.toThrow(
-        /available: 1\.0\.0, 1\.1\.0, 1\.2\.0/
+        /available: 1\.0\.0, 1\.1\.0, 1\.2\.0, 1\.3\.0/
       );
     });
 
@@ -98,7 +99,7 @@ describe('SchemaManager', () => {
   });
 
   describe('bundled schemas are self-contained', () => {
-    it.each(['1.0.0', '1.1.0', '1.2.0'])(
+    it.each(['1.0.0', '1.1.0', '1.2.0', '1.3.0'])(
       'compiles every bundled entity schema of %s without unresolved $refs',
       async (version) => {
         vi.stubGlobal('fetch', unreachableRemote());
