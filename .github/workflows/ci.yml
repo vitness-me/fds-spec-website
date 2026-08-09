@@ -128,6 +128,7 @@ jobs:
           validate "$SCHEMAS/muscle/muscle-category/v1.0.0/muscle-category.schema.json" "$SCHEMAS/muscle/muscle-category/v1.0.0"
           validate "$SCHEMAS/atlas/v1.0.0/body-atlas.schema.json"                       "$SCHEMAS/atlas/v1.0.0"
           validate "$SCHEMAS/workout/v1.0.0/workout.schema.json"                        "$SCHEMAS/workout/v1.0.0"
+          validate "$SCHEMAS/program/v1.0.0/program.schema.json"                        "$SCHEMAS/program/v1.0.0"
 
           echo "---- $total examples, $failed failed ----"
           [ "$failed" -eq 0 ]

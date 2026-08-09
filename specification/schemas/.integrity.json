@@ -25,6 +25,10 @@
       "sha256": "a3eec1f02277304451a443bb85f5e97dd1e6fd992305c4924b874bb18cd930ac",
       "frozen": true
     },
+    "program/v1.0.0/program.schema.json": {
+      "sha256": "5ca6cd5c283a0a4884a072ce27f7b46fd351950560a5706e66d3078952e3c1fb",
+      "frozen": false
+    },
     "transformer/v1.0.0/mapping.schema.json": {
       "sha256": "e5d4b010841bd92ff33171ac9267498cb61040b69f0a667888f9c2cc4660edca",
       "frozen": true

@@ -60,6 +60,9 @@ const ENTITIES = [
   // After prescription: workout composes its definitions, and a library must be
   // built before anything that references it.
   { name: 'workout', path: 'workout/v1.0.0/workout.schema.json' },
+  // After workout: program references it by workoutRef and composes RFC-006
+  // progression rules.
+  { name: 'program', path: 'program/v1.0.0/program.schema.json' },
 ];
 
 /** Entities the transformer carries an offline copy of. */
@@ -74,10 +77,11 @@ const BUNDLED_ENTITIES = ENTITIES.filter((entity) => entity.bundled !== false);
  * should not find a workout schema appearing in it.
  *
  * Earlier bundle directories are not regenerated. `v1.0.0`'s exercise and
- * equipment sources no longer exist (D9), and `v1.1.0` predates workout; both
- * are checked-in historical artifacts kept for consumers pinned to them.
+ * equipment sources no longer exist (D9), `v1.1.0` predates workout and
+ * `v1.2.0` predates program; all are checked-in historical artifacts kept for
+ * consumers pinned to them.
  */
-const BUNDLE_RELEASE = '1.2.0';
+const BUNDLE_RELEASE = '1.3.0';
 
 /**
  * Published schemas that are served but not generated from an authoring source.
