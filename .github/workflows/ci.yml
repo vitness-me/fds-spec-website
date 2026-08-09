@@ -77,6 +77,11 @@ jobs:
       - name: Verify RFCs and their schemas agree
         run: npm run check:rfc
 
+      # "No scenario without an example ships" is a promise about a list of
+      # training structures, and a list is exactly what quietly falls out of date.
+      - name: Verify every matrix scenario has a worked example
+        run: npm run check:scenarios
+
       - name: Install Ajv CLI
         run: npm install --no-save ajv@8 ajv-cli@5 ajv-formats@3
 

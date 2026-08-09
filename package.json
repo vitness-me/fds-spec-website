@@ -10,6 +10,7 @@
     "verify": "bash scripts/ci-local.sh",
     "check:metrics": "node scripts/check-metrics-guide.mjs",
     "check:prescription": "node scripts/check-prescription.mjs",
-    "check:rfc": "node scripts/check-rfc-fields.mjs"
+    "check:rfc": "node scripts/check-rfc-fields.mjs",
+    "check:scenarios": "node scripts/check-scenarios.mjs"
   }
 }
