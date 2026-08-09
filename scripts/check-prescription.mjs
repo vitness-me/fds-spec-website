@@ -26,6 +26,7 @@
 import { readFile, readdir } from 'node:fs/promises';
 import { dirname, join, basename } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { checkReadmeIndex } from './lib/fixture-readme.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const DIR = join(ROOT, 'specification/schemas/prescription/v1.0.0');
@@ -215,39 +216,12 @@ for (const { def, discriminator } of COVERAGE) {
  * is checked, because an unchecked index rots the moment someone adds a file.
  */
 {
-  const readmePath = join(DIR, 'README.md');
-  const readme = await readFile(readmePath, 'utf8').catch(() => null);
-
-  if (readme === null) {
-    problems.push('README.md is missing from the fixture directory');
-  } else {
-    const named = new Set(
-      [...readme.matchAll(/`([A-Za-z0-9._-]+\.json)`/g)].map((m) => m[1])
-    );
-
-    const undocumented = files.filter((f) => !named.has(f));
-    if (undocumented.length) {
-      problems.push(
-        `${undocumented.length} fixture(s) missing from README.md:\n` +
-          undocumented.map((f) => `    ${f}`).join('\n') +
-          '\n    Every fixture needs a line saying what it demonstrates.'
-      );
-    }
-
-    const present = new Set(files);
-    const stale = [...named].filter(
-      (f) => !present.has(f) && f !== 'prescription.schema.json'
-    );
-    if (stale.length) {
-      problems.push(
-        `README.md names ${stale.length} fixture(s) that do not exist:\n` +
-          stale.map((f) => `    ${f}`).join('\n')
-      );
-    }
-
-    if (!undocumented.length && !stale.length) {
-      console.log(`  ok    readme  all ${files.length} fixtures documented`);
-    }
+  const { problems: readmeProblems } = await checkReadmeIndex(DIR, files.sort(), [
+    'prescription.schema.json',
+  ]);
+  problems.push(...readmeProblems);
+  if (!readmeProblems.length) {
+    console.log(`  ok    readme  all ${files.length} fixtures documented`);
   }
 }
 
