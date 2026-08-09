@@ -1,0 +1,75 @@
+{
+  "schemaVersion": "1.0.0",
+  "workoutId": "00000000-0000-4000-8000-000000000116",
+  "canonical": {
+    "name": "Cooldown Block",
+    "slug": "cooldown-block"
+  },
+  "classification": {
+    "workoutType": "recovery"
+  },
+  "structure": {
+    "blocks": [
+      {
+        "id": "b1",
+        "mode": "sequential",
+        "items": [
+          {
+            "id": "i1",
+            "exercise": {
+              "id": "ex.rowErg",
+              "name": "Rowing Ergometer"
+            },
+            "reps": {
+              "kind": "time",
+              "value": 5,
+              "unit": "min"
+            },
+            "zone": {
+              "system": "heartRate",
+              "zone": "Z1",
+              "boundsRef": "zone.fiveZoneHeartRate"
+            }
+          }
+        ],
+        "role": "primary"
+      },
+      {
+        "id": "b2",
+        "mode": "sequential",
+        "items": [
+          {
+            "id": "i2",
+            "exercise": {
+              "id": "ex.hamstringStretch",
+              "name": "Hamstring Stretch"
+            },
+            "reps": {
+              "kind": "maxHold",
+              "min": 45,
+              "unit": "s"
+            }
+          },
+          {
+            "id": "i3",
+            "exercise": {
+              "id": "ex.catCow",
+              "name": "Cat-Cow"
+            },
+            "reps": {
+              "kind": "fixed",
+              "value": 10
+            }
+          }
+        ],
+        "role": "cooldown"
+      }
+    ]
+  },
+  "metadata": {
+    "createdAt": "2026-08-09T00:00:00Z",
+    "updatedAt": "2026-08-09T00:00:00Z",
+    "status": "active",
+    "source": "vitness.core"
+  }
+}

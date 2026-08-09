@@ -1,0 +1,63 @@
+{
+  "schemaVersion": "1.0.0",
+  "workoutId": "00000000-0000-4000-8000-000000000102",
+  "canonical": {
+    "name": "Superset",
+    "slug": "superset"
+  },
+  "classification": {
+    "workoutType": "hypertrophy"
+  },
+  "structure": {
+    "blocks": [
+      {
+        "id": "b1",
+        "mode": "superset",
+        "items": [
+          {
+            "id": "i1",
+            "exercise": {
+              "id": "ex.dumbbellRow",
+              "name": "Dumbbell Row"
+            },
+            "groupLabel": "A1",
+            "reps": {
+              "kind": "range",
+              "min": 8,
+              "max": 12
+            }
+          },
+          {
+            "id": "i2",
+            "exercise": {
+              "id": "ex.benchPress",
+              "name": "Barbell Bench Press"
+            },
+            "groupLabel": "A2",
+            "reps": {
+              "kind": "range",
+              "min": 8,
+              "max": 12
+            }
+          }
+        ],
+        "role": "accessory",
+        "modeParams": {
+          "rounds": 3
+        },
+        "rest": {
+          "method": "fixed",
+          "appliesTo": "group",
+          "value": 90,
+          "unit": "s"
+        }
+      }
+    ]
+  },
+  "metadata": {
+    "createdAt": "2026-08-09T00:00:00Z",
+    "updatedAt": "2026-08-09T00:00:00Z",
+    "status": "active",
+    "source": "vitness.core"
+  }
+}

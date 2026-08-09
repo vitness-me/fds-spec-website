@@ -1,0 +1,58 @@
+{
+  "schemaVersion": "1.0.0",
+  "workoutId": "00000000-0000-4000-8000-000000000011",
+  "canonical": {
+    "name": "Ladders",
+    "slug": "ladders"
+  },
+  "classification": {
+    "workoutType": "strength"
+  },
+  "structure": {
+    "blocks": [
+      {
+        "id": "b1",
+        "mode": "sequential",
+        "items": [
+          {
+            "id": "i1",
+            "exercise": {
+              "id": "ex.pullUp",
+              "name": "Pull-Up"
+            },
+            "scheme": {
+              "pattern": "ladder",
+              "sets": 5,
+              "params": {
+                "rungs": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5
+                ],
+                "direction": "ascending"
+              }
+            },
+            "load": {
+              "method": "bodyweight"
+            },
+            "rest": {
+              "method": "fixed",
+              "appliesTo": "set",
+              "value": 60,
+              "unit": "s"
+            }
+          }
+        ],
+        "role": "primary"
+      }
+    ]
+  },
+  "metadata": {
+    "createdAt": "2026-08-09T00:00:00Z",
+    "updatedAt": "2026-08-09T00:00:00Z",
+    "status": "active",
+    "source": "vitness.core"
+  }
+}

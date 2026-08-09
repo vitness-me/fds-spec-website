@@ -1,0 +1,51 @@
+{
+  "schemaVersion": "1.0.0",
+  "workoutId": "00000000-0000-4000-8000-000000000012",
+  "canonical": {
+    "name": "Density Block",
+    "slug": "density"
+  },
+  "classification": {
+    "workoutType": "conditioning"
+  },
+  "structure": {
+    "blocks": [
+      {
+        "id": "b1",
+        "mode": "sequential",
+        "items": [
+          {
+            "id": "i1",
+            "exercise": {
+              "id": "ex.kettlebellSwing",
+              "name": "Kettlebell Swing"
+            },
+            "scheme": {
+              "pattern": "density",
+              "params": {
+                "timeCap": 10,
+                "timeUnit": "min",
+                "target": "sets"
+              }
+            },
+            "reps": {
+              "kind": "fixed",
+              "value": 10
+            },
+            "rest": {
+              "method": "asNeeded",
+              "appliesTo": "set"
+            }
+          }
+        ],
+        "role": "conditioning"
+      }
+    ]
+  },
+  "metadata": {
+    "createdAt": "2026-08-09T00:00:00Z",
+    "updatedAt": "2026-08-09T00:00:00Z",
+    "status": "active",
+    "source": "vitness.core"
+  }
+}

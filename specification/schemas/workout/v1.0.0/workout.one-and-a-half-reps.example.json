@@ -1,0 +1,56 @@
+{
+  "schemaVersion": "1.0.0",
+  "workoutId": "00000000-0000-4000-8000-000000000017",
+  "canonical": {
+    "name": "One-and-a-Half Reps",
+    "slug": "one-and-a-half-reps"
+  },
+  "classification": {
+    "workoutType": "hypertrophy"
+  },
+  "structure": {
+    "blocks": [
+      {
+        "id": "b1",
+        "mode": "sequential",
+        "items": [
+          {
+            "id": "i1",
+            "exercise": {
+              "id": "ex.backSquat",
+              "name": "Barbell Back Squat"
+            },
+            "scheme": {
+              "pattern": "straight",
+              "sets": 3
+            },
+            "reps": {
+              "kind": "fixed",
+              "value": 8
+            },
+            "repStyle": {
+              "pattern": "oneAndAHalf"
+            },
+            "load": {
+              "method": "percent1RM",
+              "value": 55
+            },
+            "rest": {
+              "method": "fixed",
+              "appliesTo": "set",
+              "value": 2,
+              "unit": "min"
+            }
+          }
+        ],
+        "role": "primary"
+      }
+    ]
+  },
+  "metadata": {
+    "createdAt": "2026-08-09T00:00:00Z",
+    "updatedAt": "2026-08-09T00:00:00Z",
+    "status": "active",
+    "source": "vitness.core"
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "schemaVersion": "1.0.0",
+  "workoutId": "00000000-0000-4000-8000-000000000106",
+  "canonical": {
+    "name": "Antagonist Pairing",
+    "slug": "antagonist-pairing"
+  },
+  "classification": {
+    "workoutType": "hypertrophy"
+  },
+  "structure": {
+    "blocks": [
+      {
+        "id": "b1",
+        "mode": "superset",
+        "items": [
+          {
+            "id": "i1",
+            "exercise": {
+              "id": "ex.bicepCurl",
+              "name": "Biceps Curl"
+            },
+            "groupLabel": "A1",
+            "reps": {
+              "kind": "fixed",
+              "value": 10
+            }
+          },
+          {
+            "id": "i2",
+            "exercise": {
+              "id": "ex.tricepExtension",
+              "name": "Triceps Extension"
+            },
+            "groupLabel": "A2",
+            "reps": {
+              "kind": "fixed",
+              "value": 10
+            }
+          }
+        ],
+        "role": "accessory",
+        "modeParams": {
+          "rounds": 3
+        },
+        "rest": {
+          "method": "fixed",
+          "appliesTo": "group",
+          "value": 90,
+          "unit": "s"
+        },
+        "notes": "Opposing muscle groups. Structurally identical to a compound set; the distinction lives in the referenced exercises."
+      }
+    ]
+  },
+  "metadata": {
+    "createdAt": "2026-08-09T00:00:00Z",
+    "updatedAt": "2026-08-09T00:00:00Z",
+    "status": "active",
+    "source": "vitness.core"
+  }
+}

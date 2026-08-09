@@ -1,0 +1,85 @@
+{
+  "schemaVersion": "1.0.0",
+  "workoutId": "00000000-0000-4000-8000-000000000104",
+  "canonical": {
+    "name": "Giant Set",
+    "slug": "giant-set"
+  },
+  "classification": {
+    "workoutType": "hypertrophy"
+  },
+  "structure": {
+    "blocks": [
+      {
+        "id": "b1",
+        "mode": "superset",
+        "items": [
+          {
+            "id": "i1",
+            "exercise": {
+              "id": "ex.dumbbellFly",
+              "name": "Dumbbell Fly"
+            },
+            "groupLabel": "A1",
+            "reps": {
+              "kind": "fixed",
+              "value": 12
+            }
+          },
+          {
+            "id": "i2",
+            "exercise": {
+              "id": "ex.benchPress",
+              "name": "Barbell Bench Press"
+            },
+            "groupLabel": "A2",
+            "reps": {
+              "kind": "fixed",
+              "value": 10
+            }
+          },
+          {
+            "id": "i3",
+            "exercise": {
+              "id": "ex.dip",
+              "name": "Dip"
+            },
+            "groupLabel": "A3",
+            "reps": {
+              "kind": "fixed",
+              "value": 10
+            }
+          },
+          {
+            "id": "i4",
+            "exercise": {
+              "id": "ex.tricepExtension",
+              "name": "Triceps Extension"
+            },
+            "groupLabel": "A4",
+            "reps": {
+              "kind": "fixed",
+              "value": 15
+            }
+          }
+        ],
+        "role": "accessory",
+        "modeParams": {
+          "rounds": 3
+        },
+        "rest": {
+          "method": "fixed",
+          "appliesTo": "group",
+          "value": 3,
+          "unit": "min"
+        }
+      }
+    ]
+  },
+  "metadata": {
+    "createdAt": "2026-08-09T00:00:00Z",
+    "updatedAt": "2026-08-09T00:00:00Z",
+    "status": "active",
+    "source": "vitness.core"
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "schemaVersion": "1.0.0",
+  "workoutId": "00000000-0000-4000-8000-000000000004",
+  "canonical": {
+    "name": "Drop Sets",
+    "slug": "drop-sets"
+  },
+  "classification": {
+    "workoutType": "hypertrophy"
+  },
+  "structure": {
+    "blocks": [
+      {
+        "id": "b1",
+        "mode": "sequential",
+        "items": [
+          {
+            "id": "i1",
+            "exercise": {
+              "id": "ex.legExtension",
+              "name": "Leg Extension"
+            },
+            "scheme": {
+              "pattern": "drop",
+              "sets": 1,
+              "params": {
+                "drops": 3,
+                "dropPercent": 20
+              }
+            },
+            "reps": {
+              "kind": "toFailure",
+              "technical": true
+            },
+            "rest": {
+              "method": "fixed",
+              "appliesTo": "set",
+              "value": 2,
+              "unit": "min"
+            }
+          }
+        ],
+        "role": "accessory"
+      }
+    ]
+  },
+  "metadata": {
+    "createdAt": "2026-08-09T00:00:00Z",
+    "updatedAt": "2026-08-09T00:00:00Z",
+    "status": "active",
+    "source": "vitness.core"
+  }
+}

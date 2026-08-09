@@ -1,0 +1,58 @@
+{
+  "schemaVersion": "1.0.0",
+  "workoutId": "00000000-0000-4000-8000-000000000013",
+  "canonical": {
+    "name": "Technical Failure",
+    "slug": "technical-failure"
+  },
+  "classification": {
+    "workoutType": "hypertrophy"
+  },
+  "structure": {
+    "blocks": [
+      {
+        "id": "b1",
+        "mode": "sequential",
+        "items": [
+          {
+            "id": "i1",
+            "exercise": {
+              "id": "ex.bicepCurl",
+              "name": "Biceps Curl"
+            },
+            "sets": [
+              {
+                "index": 1,
+                "reps": {
+                  "kind": "toFailure",
+                  "technical": true
+                }
+              },
+              {
+                "index": 2,
+                "reps": {
+                  "kind": "toFailure",
+                  "technical": false
+                },
+                "notes": "Final set taken to absolute failure."
+              }
+            ],
+            "rest": {
+              "method": "fixed",
+              "appliesTo": "set",
+              "value": 90,
+              "unit": "s"
+            }
+          }
+        ],
+        "role": "accessory"
+      }
+    ]
+  },
+  "metadata": {
+    "createdAt": "2026-08-09T00:00:00Z",
+    "updatedAt": "2026-08-09T00:00:00Z",
+    "status": "active",
+    "source": "vitness.core"
+  }
+}

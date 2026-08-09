@@ -1,0 +1,68 @@
+{
+  "schemaVersion": "1.0.0",
+  "workoutId": "00000000-0000-4000-8000-000000000110",
+  "canonical": {
+    "name": "AMRAP Block",
+    "slug": "amrap-block"
+  },
+  "classification": {
+    "workoutType": "conditioning"
+  },
+  "structure": {
+    "blocks": [
+      {
+        "id": "b1",
+        "mode": "amrap",
+        "items": [
+          {
+            "id": "i1",
+            "exercise": {
+              "id": "ex.pullUp",
+              "name": "Pull-Up"
+            },
+            "reps": {
+              "kind": "fixed",
+              "value": 5
+            }
+          },
+          {
+            "id": "i2",
+            "exercise": {
+              "id": "ex.pushUp",
+              "name": "Push-Up"
+            },
+            "reps": {
+              "kind": "fixed",
+              "value": 10
+            }
+          },
+          {
+            "id": "i3",
+            "exercise": {
+              "id": "ex.airSquat",
+              "name": "Air Squat"
+            },
+            "reps": {
+              "kind": "fixed",
+              "value": 15
+            }
+          }
+        ],
+        "role": "conditioning",
+        "modeParams": {
+          "timeCap": {
+            "value": 20,
+            "unit": "min"
+          }
+        },
+        "notes": "As many rounds as possible in 20 minutes."
+      }
+    ]
+  },
+  "metadata": {
+    "createdAt": "2026-08-09T00:00:00Z",
+    "updatedAt": "2026-08-09T00:00:00Z",
+    "status": "active",
+    "source": "vitness.core"
+  }
+}

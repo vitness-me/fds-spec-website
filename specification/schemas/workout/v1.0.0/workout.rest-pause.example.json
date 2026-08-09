@@ -1,0 +1,54 @@
+{
+  "schemaVersion": "1.0.0",
+  "workoutId": "00000000-0000-4000-8000-000000000005",
+  "canonical": {
+    "name": "Rest-Pause",
+    "slug": "rest-pause"
+  },
+  "classification": {
+    "workoutType": "hypertrophy"
+  },
+  "structure": {
+    "blocks": [
+      {
+        "id": "b1",
+        "mode": "sequential",
+        "items": [
+          {
+            "id": "i1",
+            "exercise": {
+              "id": "ex.overheadPress",
+              "name": "Overhead Press"
+            },
+            "scheme": {
+              "pattern": "restPause",
+              "sets": 1,
+              "params": {
+                "miniSets": 3,
+                "intraSetRest": 15,
+                "restUnit": "s"
+              }
+            },
+            "reps": {
+              "kind": "toFailure",
+              "technical": true
+            },
+            "rest": {
+              "method": "fixed",
+              "appliesTo": "set",
+              "value": 3,
+              "unit": "min"
+            }
+          }
+        ],
+        "role": "primary"
+      }
+    ]
+  },
+  "metadata": {
+    "createdAt": "2026-08-09T00:00:00Z",
+    "updatedAt": "2026-08-09T00:00:00Z",
+    "status": "active",
+    "source": "vitness.core"
+  }
+}
