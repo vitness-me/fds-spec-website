@@ -431,6 +431,9 @@
         },
         "media": {
           "$ref": "https://spec.vitness.me/schemas/common/v1.0.0/common.schema.json#/$defs/media"
+        },
+        "repStyle": {
+          "$ref": "#/$defs/repStyle"
         }
       },
       "not": {
@@ -495,6 +498,46 @@
         },
         "notes": {
           "type": "string"
+        },
+        "repStyle": {
+          "$ref": "#/$defs/repStyle"
+        }
+      }
+    },
+    "repStyle": {
+      "description": "How a repetition is performed, where that differs from a full standard rep. Partials and one-and-a-half reps are prescriptions in wide use that no metric, tempo or set scheme can express: tempo governs the speed of a rep, not its range or composition.",
+      "$comment": "Defined here rather than in the RFC-006 library because workout is currently its only consumer. If RFC-008 needs it, it is promoted to a new prescription version at that point — a second consumer is what makes a definition shared, and the RFC-006 URL is frozen.",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "rangeOfMotion": {
+          "description": "`partial` is a deliberately reduced range; `extended` is a deliberately increased one, as in a deficit deadlift.",
+          "type": "string",
+          "enum": [
+            "full",
+            "partial",
+            "extended"
+          ],
+          "default": "full"
+        },
+        "segment": {
+          "description": "Which part of the movement a partial covers. Meaningful only when rangeOfMotion is partial.",
+          "type": "string",
+          "enum": [
+            "top",
+            "bottom",
+            "mid"
+          ]
+        },
+        "pattern": {
+          "description": "`oneAndAHalf` is a full rep followed by a half rep counted as one; `pulse` is repeated short reps at one point in the range.",
+          "type": "string",
+          "enum": [
+            "standard",
+            "oneAndAHalf",
+            "pulse"
+          ],
+          "default": "standard"
         }
       }
     }
