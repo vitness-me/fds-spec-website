@@ -1,0 +1,826 @@
+{
+  "$id": "https://spec.vitness.me/schemas/program/v1.0.0/program.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "FDS Training Program (v1.0.0)",
+  "description": "A schedule of workout references over time. A program does not contain workouts — it points at them, so a session shared by four programs is authored once and fixed once.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "programId",
+    "canonical",
+    "classification",
+    "schedule",
+    "metadata"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "programId": {
+      "type": "string"
+    },
+    "canonical": {
+      "$ref": "#/$defs/canonical"
+    },
+    "classification": {
+      "type": "object",
+      "required": [
+        "periodization"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "periodization": {
+          "description": "Open string per D8 — a plain classifier. It names the shape of the plan; it does not change how the document is read.",
+          "type": "string",
+          "examples": [
+            "linear",
+            "undulating",
+            "block",
+            "conjugate",
+            "wave",
+            "none"
+          ]
+        },
+        "goal": {
+          "type": "string",
+          "examples": [
+            "strength",
+            "hypertrophy",
+            "peaking",
+            "conditioning",
+            "endurance",
+            "general"
+          ]
+        },
+        "level": {
+          "enum": [
+            "beginner",
+            "intermediate",
+            "advanced"
+          ]
+        },
+        "durationWeeks": {
+          "description": "Total planned length. Derived: it MUST equal the sum of the cycles' durations, and a consumer that needs certainty SHOULD compute rather than trust it — the same advisory status as the workout rollups.",
+          "type": "integer",
+          "minimum": 1
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "authorship": {
+      "description": "Who wrote the program and on what terms. The first place FDS records a rights claim: training programs are routinely coach-authored and commercially licensed, and an interchange format that drops attribution makes redistribution indistinguishable from theft.",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "author": {
+          "type": "string"
+        },
+        "organization": {
+          "type": "string"
+        },
+        "license": {
+          "description": "SPDX identifier where one applies, or a free-text term. Absence means unstated, not public domain.",
+          "type": "string"
+        },
+        "attribution": {
+          "type": "string"
+        },
+        "uri": {
+          "type": "string",
+          "format": "uri"
+        }
+      }
+    },
+    "schedule": {
+      "$ref": "#/$defs/schedule"
+    },
+    "progressions": {
+      "description": "Rules that change the prescription over time, referenced by id from a day override or a load target.",
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/progressionRule"
+      }
+    },
+    "references": {
+      "$ref": "#/$defs/references"
+    },
+    "branching": {
+      "description": "Conditional routing between days. A consumer that cannot evaluate a condition MUST follow the unconditional schedule and SHOULD warn — it MUST NOT guess the branch, for the same reason it must not guess a load.",
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/branch"
+      }
+    },
+    "relations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "type",
+          "targetId"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "successor",
+              "predecessor",
+              "variant",
+              "beginnerVariant",
+              "advancedVariant"
+            ]
+          },
+          "targetId": {
+            "type": "string"
+          },
+          "notes": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "media": {
+      "$ref": "#/$defs/media"
+    },
+    "attributes": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "extensions": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "metadata": {
+      "$ref": "#/$defs/metadata"
+    }
+  },
+  "$defs": {
+    "branch": {
+      "description": "If a condition holds, route to a different day. The condition is declarative so a consumer can refuse one it does not understand rather than mis-evaluating it.",
+      "type": "object",
+      "required": [
+        "id",
+        "condition",
+        "thenDayRef"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "condition": {
+          "type": "object",
+          "required": [
+            "kind"
+          ],
+          "additionalProperties": true,
+          "properties": {
+            "kind": {
+              "type": "string",
+              "enum": [
+                "failedPrescribedReps",
+                "metPrescribedReps",
+                "amrapBelowThreshold",
+                "amrapAboveThreshold",
+                "missedSession",
+                "athleteChoice"
+              ]
+            },
+            "onDayRef": {
+              "type": "string"
+            }
+          }
+        },
+        "thenDayRef": {
+          "type": "string"
+        },
+        "elseDayRef": {
+          "type": "string"
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "canonical": {
+      "type": "object",
+      "required": [
+        "name",
+        "slug"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "slug": {
+          "type": "string",
+          "pattern": "^[a-z0-9-]{2,}$"
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "aliases": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "localized": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "lang",
+              "name"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "lang": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "description": {
+                "type": "string",
+                "minLength": 1
+              },
+              "aliases": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "uniqueItems": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "cycle": {
+      "description": "A block of training with one intent. Macro contains meso contains micro, but the nesting is expressed by `type` and `order` rather than by embedding, so a flat list stays readable and a cycle can be referenced directly.",
+      "type": "object",
+      "required": [
+        "id",
+        "type",
+        "order",
+        "weeks"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "enum": [
+            "macro",
+            "meso",
+            "micro"
+          ]
+        },
+        "order": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "durationWeeks": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "intent": {
+          "description": "What the cycle is for. Open string per D8 — it explains the plan, it does not change how the document is read.",
+          "type": "string",
+          "examples": [
+            "accumulation",
+            "intensification",
+            "realization",
+            "deload",
+            "test"
+          ]
+        },
+        "weeks": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/week"
+          }
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "day": {
+      "description": "One scheduled slot. A day either references a workout or is a rest day; the two are mutually exclusive.",
+      "type": "object",
+      "required": [
+        "index"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "index": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "dayOfWeek": {
+          "description": "Authoritative under the `calendar` model, ignored under the others.",
+          "type": "string",
+          "enum": [
+            "monday",
+            "tuesday",
+            "wednesday",
+            "thursday",
+            "friday",
+            "saturday",
+            "sunday"
+          ]
+        },
+        "offsetDays": {
+          "description": "Authoritative under `relative` and `rolling`, ignored under the others. Counted from the program start.",
+          "type": "integer",
+          "minimum": 0
+        },
+        "rest": {
+          "description": "An explicit rest day. Modelled rather than left as a gap in the sequence, because an absent day and a prescribed rest day are different instructions — one is unplanned, the other is part of the programme.",
+          "type": "boolean",
+          "default": false
+        },
+        "optional": {
+          "description": "The day may be skipped without breaking the plan — accessory or conditioning work the author considers discretionary.",
+          "type": "boolean",
+          "default": false
+        },
+        "workout": {
+          "$ref": "#/$defs/workoutRef"
+        },
+        "overrides": {
+          "$ref": "#/$defs/dayOverrides"
+        },
+        "notes": {
+          "type": "string"
+        }
+      },
+      "not": {
+        "description": "A rest day carries no workout. Both together is a contradiction that a consumer would have to break arbitrarily.",
+        "allOf": [
+          {
+            "required": [
+              "workout"
+            ]
+          },
+          {
+            "properties": {
+              "rest": {
+                "const": true
+              }
+            },
+            "required": [
+              "rest"
+            ]
+          }
+        ]
+      },
+      "anyOf": [
+        {
+          "required": [
+            "workout"
+          ],
+          "$comment": "A day is a workout or a rest day. With the `not` below this is exactly-one: a slot that is neither says nothing, and a consumer rendering a calendar would have to invent a meaning for it."
+        },
+        {
+          "properties": {
+            "rest": {
+              "const": true
+            }
+          },
+          "required": [
+            "rest"
+          ]
+        }
+      ]
+    },
+    "dayOverrides": {
+      "description": "Adjustments applied to the referenced workout for this occurrence only. The workout itself is never modified — that is what makes it shareable across programs.",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "loadScaling": {
+          "description": "Multiplier applied to every resolved load in the workout. 0.9 is a ten-percent back-off. Applied after the load target resolves, so it composes with any method rather than replacing it.",
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "volumeScaling": {
+          "description": "Multiplier applied to set counts. Rounding is the consumer's, and it SHOULD round toward the athlete's benefit on a deload.",
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "progressionState": {
+          "description": "Where in a progression rule this occurrence sits — the wave number in a 5/3/1 cycle, the stage of a double progression. Opaque to the schema; meaningful to the rule that reads it.",
+          "type": "object",
+          "additionalProperties": true
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "exerciseRef": {
+      "description": "Denormalised snapshot of an exercise, mirroring muscleRef/equipmentRef.",
+      "type": "object",
+      "required": [
+        "id",
+        "name"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "slug": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "aliases": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "media": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "type",
+          "uri"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "image",
+              "video",
+              "doc",
+              "3d"
+            ]
+          },
+          "uri": {
+            "type": "string",
+            "format": "uri"
+          },
+          "caption": {
+            "type": "string"
+          },
+          "license": {
+            "type": "string"
+          },
+          "attribution": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "required": [
+        "createdAt",
+        "updatedAt",
+        "status"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "source": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/$defs/status"
+        },
+        "deprecated": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "since": {
+              "type": "string",
+              "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+            },
+            "replacedBy": {
+              "type": "string"
+            }
+          }
+        },
+        "externalRefs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "system",
+              "id"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "system": {
+                "type": "string"
+              },
+              "id": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "history": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "at": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "actor": {
+                "type": "string"
+              },
+              "change": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "progressionRule": {
+      "description": "When to change the prescription, and how. Consumed by both RFC-007 and RFC-008 so that progression means the same thing inside a workout and across a program.",
+      "type": "object",
+      "required": [
+        "id",
+        "trigger",
+        "action"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "trigger": {
+          "type": "object",
+          "required": [
+            "kind"
+          ],
+          "additionalProperties": true,
+          "properties": {
+            "kind": {
+              "type": "string",
+              "enum": [
+                "allRepsCompleted",
+                "topOfRepRange",
+                "rpeBelow",
+                "rirAbove",
+                "amrapThreshold",
+                "sessionsCompleted",
+                "failedAttempts",
+                "always"
+              ]
+            }
+          }
+        },
+        "action": {
+          "type": "object",
+          "required": [
+            "kind"
+          ],
+          "additionalProperties": true,
+          "properties": {
+            "kind": {
+              "type": "string",
+              "enum": [
+                "increaseLoad",
+                "decreaseLoad",
+                "increaseReps",
+                "increaseSets",
+                "deload",
+                "retest",
+                "advanceStage",
+                "hold"
+              ]
+            }
+          }
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "references": {
+      "description": "Values the program is computed from, declared as slots.",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "trainingMaxes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/trainingMaxSlot"
+          }
+        }
+      }
+    },
+    "schedule": {
+      "type": "object",
+      "required": [
+        "model",
+        "cycles"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "model": {
+          "$ref": "#/$defs/scheduleModel"
+        },
+        "cycles": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/cycle"
+          }
+        }
+      }
+    },
+    "scheduleModel": {
+      "description": "How a day is placed in time. A structural discriminator, not a label: it decides which of a day's placement fields is authoritative, and reading a document under the wrong model silently reorders the training. Closed set with a disjoint catch-all, per RFC-006 §3.2.",
+      "oneOf": [
+        {
+          "const": "calendar",
+          "description": "Days are placed on named weekdays. `dayOfWeek` is authoritative."
+        },
+        {
+          "const": "relative",
+          "description": "Days are placed at offsets from the program start. `offsetDays` is authoritative."
+        },
+        {
+          "const": "rolling",
+          "description": "Days repeat on a fixed cadence regardless of weekday. `offsetDays` gives the cadence position."
+        },
+        {
+          "const": "sequence",
+          "description": "Days are performed in order at the athlete's pace. Neither placement field applies; `index` is the only ordering."
+        },
+        {
+          "description": "A model this version does not define. Disjoint from the named values so a known model never matches two branches.",
+          "type": "string",
+          "not": {
+            "enum": [
+              "calendar",
+              "relative",
+              "rolling",
+              "sequence"
+            ]
+          }
+        }
+      ]
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "review",
+        "active",
+        "inactive",
+        "deprecated"
+      ],
+      "default": "active"
+    },
+    "trainingMaxSlot": {
+      "description": "Declares that the program references a training max for a lift, and how that number is arrived at — never the number itself. A value here would make any program carrying one personal data, which would drag consent and retention into a reference-data document. See RFC-008 §7.",
+      "type": "object",
+      "required": [
+        "exercise",
+        "method"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "description": "Referenced by `percent1RM.referenceExerciseId` and by relative load targets.",
+          "type": "string"
+        },
+        "exercise": {
+          "$ref": "#/$defs/exerciseRef"
+        },
+        "method": {
+          "description": "How the caller should derive the value.",
+          "type": "string",
+          "enum": [
+            "testedOneRepMax",
+            "estimatedOneRepMax",
+            "percentOfOneRepMax",
+            "recentBest",
+            "callerSupplied"
+          ]
+        },
+        "percent": {
+          "description": "Used with `percentOfOneRepMax` — a training max set at 90% of a true max, the 5/3/1 convention.",
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "week": {
+      "type": "object",
+      "required": [
+        "index",
+        "days"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "index": {
+          "description": "Position within the cycle, 1-based and explicit so a week can be referenced stably.",
+          "type": "integer",
+          "minimum": 1
+        },
+        "name": {
+          "type": "string"
+        },
+        "deload": {
+          "description": "Marks a recovery week. A flag rather than an `intent` value because a deload week can appear inside a cycle whose intent is something else.",
+          "type": "boolean",
+          "default": false
+        },
+        "days": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/day"
+          }
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "workoutRef": {
+      "description": "Denormalised snapshot of a workout.",
+      "type": "object",
+      "required": [
+        "id",
+        "name"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "slug": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "aliases": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
