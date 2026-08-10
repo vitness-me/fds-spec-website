@@ -57,3 +57,18 @@ Together they answer the question RFC-007 exists to answer: can one schema expre
 **AMRAP appears twice on purpose.** `workout.amrap-reps` is a rep target — one set, as many reps as possible. `workout.amrap-block` is a block mode — as many *rounds* as possible in a time cap. They are different prescriptions that share a name, and conflating them is a common source of misimport.
 
 **A scheme and a mode are orthogonal.** `workout.ladder-circuit` shows both at once: `setScheme.ladder` describes how one item's sets progress, `mode: circuit` describes how the block is traversed. Neither implies the other.
+
+## §4.4 — Cardio and endurance
+
+| Example | Demonstrates |
+|---|---|
+| `workout.duration.example.json` | Thirty minutes in a heart-rate zone. The clock terminates the effort, and no rep count is invented to stand in for one. |
+| `workout.distance.example.json` | Five kilometres. Distance terminates the effort, so duration is the outcome rather than the prescription. |
+| `workout.pace.example.json` | Distance says how far, zone says how fast. Note that a *higher* pace zone means a *lower* time per kilometre — the one place zone ordering and the underlying number run in opposite directions. |
+| `workout.hr-zone.example.json` | `boundsRef` names the registry entry that defines Z2. The athlete's beats per minute are caller context and never appear here. |
+| `workout.power-zone.example.json` | Sweet-spot intervals against the Coggan seven-zone model. What percentage of threshold power a zone corresponds to belongs to the registry entry, not to the session. |
+| `workout.structured-intervals.example.json` | The canonical 4×4. Work and rest live in `modeParams` because they are properties of the interval structure, not of the exercise performed inside it. |
+| `workout.fartlek.example.json` | Deliberately unstructured surges. `sequential` rather than `interval` precisely because the surge lengths are the athlete's — it looks like intervals and is not. |
+| `workout.machine-resistance.example.json` | A resistance ladder, prescribed with `loadTarget.method: "level"` and a named `scale` so that "level 8" is not read against another machine's numbering. |
+| `workout.negative-splits.example.json` | Two halves with ascending pace zones. The relationship between them *is* the session, so it is expressed as two items rather than one item with a note. |
+| `workout.progressive.example.json` | Intensity climbing every five minutes and never coming back down. Each step is its own **item** rather than its own set, because `zone` sits on an item and not on a set. |
