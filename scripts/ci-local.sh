@@ -56,6 +56,7 @@ if run_job schemas; then
   try "RFCs and schemas agree" npm run check:rfc
   try "RFC website pages match their sources" npm run check:mirrors
   try "every matrix scenario has an example" npm run check:scenarios
+  try "recommended values are in a registry" npm run check:registries
 
   S=specification/schemas
   total=0; failed=0

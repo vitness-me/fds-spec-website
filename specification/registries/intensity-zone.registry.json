@@ -1,0 +1,65 @@
+{
+  "registry": "intensity-zone",
+  "version": "1.0.0",
+  "description": "Zone systems a prescription can name. An intensityZone carries a system and a label — \"Z4\" — and this registry is what makes that label mean the same thing in two applications. It defines the systems and their zone labels; it never carries the boundary values, which are personal and are caller context (RFC-006 §5.1).",
+  "policy": "open",
+  "governs": [
+    {
+      "source": "specification/schema-sources/prescription/v1.0.0/prescription.schema.json",
+      "pointer": "intensityZone.boundsRef"
+    }
+  ],
+  "entries": [
+    {
+      "value": "zone.fiveZoneHeartRate",
+      "label": "Five-zone heart rate",
+      "system": "heartRate",
+      "zones": ["Z1", "Z2", "Z3", "Z4", "Z5"],
+      "boundsBasis": "percentMaxHeartRate",
+      "description": "The common five-zone model, expressed as percentages of maximum heart rate. The percentages are conventional; the athlete's maximum is not carried here."
+    },
+    {
+      "value": "zone.threeZoneHeartRate",
+      "label": "Three-zone heart rate",
+      "system": "heartRate",
+      "zones": ["Z1", "Z2", "Z3"],
+      "boundsBasis": "percentThresholdHeartRate",
+      "description": "The polarised-training model: below threshold, at threshold, above. Anchored on threshold rather than maximum, which is why it is a different system entry and not a coarser view of the five-zone one."
+    },
+    {
+      "value": "zone.coggan7",
+      "label": "Coggan seven-zone power",
+      "system": "power",
+      "zones": ["Z1", "Z2", "Z3", "Z4", "Z5", "Z6", "Z7"],
+      "boundsBasis": "percentFunctionalThresholdPower",
+      "description": "Seven training levels expressed as percentages of functional threshold power. Widely used in cycling."
+    },
+    {
+      "value": "zone.fiveZonePace",
+      "label": "Five-zone pace",
+      "system": "pace",
+      "zones": ["Z1", "Z2", "Z3", "Z4", "Z5"],
+      "boundsBasis": "percentThresholdPace",
+      "description": "Pace zones anchored on threshold pace. Note that a higher zone means a lower time per unit distance — an implementation comparing zones numerically must not compare the paces themselves the same way."
+    },
+    {
+      "value": "zone.rpe10",
+      "label": "Ten-point perceived exertion",
+      "system": "perceived",
+      "zones": ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
+      "boundsBasis": "selfReported",
+      "description": "A perceived-effort scale. Listed as a zone system because a prescription may name it the same way, but note that RPE as a *load* target is loadTarget.method \"rpe\" — this entry is for zone-style conditioning prescriptions."
+    },
+    {
+      "value": "zone.borg6to20",
+      "label": "Borg 6–20 perceived exertion",
+      "system": "perceived",
+      "zones": [
+        "6", "7", "8", "9", "10", "11", "12", "13",
+        "14", "15", "16", "17", "18", "19", "20"
+      ],
+      "boundsBasis": "selfReported",
+      "description": "The original Borg scale. Present because 6–20 and 1–10 are both called \"RPE\" in the wild, and a document that does not say which one it means is ambiguous by exactly a factor of two."
+    }
+  ]
+}

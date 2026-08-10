@@ -1,0 +1,84 @@
+{
+  "registry": "exercise-type",
+  "version": "1.0.0",
+  "description": "Recommended values for an exercise's classification.exerciseType. Open by policy: an unrecognised value is a classification this registry has not caught up with, not an invalid document.",
+  "policy": "open",
+  "governs": [
+    {
+      "source": "specification/schema-sources/exercises/v1.1.0/exercise.schema.json",
+      "pointer": "classification.exerciseType"
+    }
+  ],
+  "entries": [
+    {
+      "value": "strength",
+      "label": "Strength",
+      "description": "Resistance work whose intent is force production. Loaded, low to moderate repetitions."
+    },
+    {
+      "value": "hypertrophy",
+      "label": "Hypertrophy",
+      "description": "Resistance work whose intent is muscle growth. Moderate load, moderate to high repetitions, accumulated volume."
+    },
+    {
+      "value": "power",
+      "label": "Power",
+      "description": "Explosive work where velocity is the point — Olympic derivatives, jumps, throws."
+    },
+    {
+      "value": "cardio",
+      "label": "Cardio",
+      "description": "Sustained work measured by duration, distance or output rather than repetitions."
+    },
+    {
+      "value": "conditioning",
+      "label": "Conditioning",
+      "description": "Mixed-modal work under time pressure. Distinguished from cardio by the presence of resistance elements."
+    },
+    {
+      "value": "endurance",
+      "label": "Endurance",
+      "description": "Long-duration steady work. A cardio subtype named separately because programs routinely distinguish the two."
+    },
+    {
+      "value": "mobility",
+      "label": "Mobility",
+      "description": "Work whose intent is usable range of motion — active, under control."
+    },
+    {
+      "value": "flexibility",
+      "label": "Flexibility",
+      "description": "Passive lengthening. Distinct from mobility, which is range you can produce rather than range you can be placed in."
+    },
+    {
+      "value": "balance",
+      "label": "Balance",
+      "description": "Work whose intent is postural control and stability under challenge."
+    },
+    {
+      "value": "plyometric",
+      "label": "Plyometric",
+      "description": "Stretch-shortening cycle work. A power subtype where ground contact time is the variable of interest."
+    },
+    {
+      "value": "skill",
+      "label": "Skill",
+      "description": "Practice of a movement pattern where technique, not load or fatigue, is the target."
+    },
+    {
+      "value": "rehabilitation",
+      "label": "Rehabilitation",
+      "description": "Prescribed corrective or return-to-function work. Recorded as intent; FDS carries no clinical claim."
+    },
+    {
+      "value": "warmup",
+      "label": "Warm-up",
+      "description": "Preparatory work performed to raise readiness rather than to accumulate training stress."
+    },
+    {
+      "value": "cooldown",
+      "label": "Cool-down",
+      "description": "Down-regulating work performed after training."
+    }
+  ]
+}

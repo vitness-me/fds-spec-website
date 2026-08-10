@@ -1,0 +1,26 @@
+{
+  "registry": "workout-type",
+  "version": "1.0.0",
+  "description": "Recommended values for a workout's classification.workoutType. Open by policy — the value labels a session, it does not change how the document is read (RFC-007 §3.2).",
+  "policy": "open",
+  "governs": [
+    {
+      "source": "specification/schema-sources/workout/v1.0.0/workout.schema.json",
+      "pointer": "classification.workoutType"
+    }
+  ],
+  "entries": [
+    { "value": "strength", "label": "Strength", "description": "A session built around force production in a small number of lifts." },
+    { "value": "hypertrophy", "label": "Hypertrophy", "description": "A session built around accumulated volume." },
+    { "value": "conditioning", "label": "Conditioning", "description": "Mixed-modal work under time pressure." },
+    { "value": "endurance", "label": "Endurance", "description": "Sustained steady-state work." },
+    { "value": "mobility", "label": "Mobility", "description": "A session whose target is usable range of motion." },
+    { "value": "hybrid", "label": "Hybrid", "description": "Strength and conditioning in one session, neither subordinate to the other." },
+    { "value": "circuit", "label": "Circuit", "description": "A session whose defining feature is circuit traversal. Note this is a label — the structure is carried by blocks[].mode." },
+    { "value": "class", "label": "Class", "description": "A coached group session, where the format rather than the individual prescription is the identity." },
+    { "value": "recovery", "label": "Recovery", "description": "Deliberately low-stress work intended to aid recovery." },
+    { "value": "test", "label": "Test", "description": "A session whose purpose is measurement — a max attempt, a benchmark, a retest." },
+    { "value": "power", "label": "Power", "description": "A session built around velocity and rate of force development." },
+    { "value": "isometric", "label": "Isometric", "description": "A session built around held positions rather than movement through a range." }
+  ]
+}
