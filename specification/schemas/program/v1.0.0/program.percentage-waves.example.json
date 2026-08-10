@@ -1,0 +1,207 @@
+{
+  "schemaVersion": "1.0.0",
+  "programId": "00000000-0000-4000-8000-0000000c0006",
+  "canonical": {
+    "name": "Percentage Waves",
+    "slug": "percentage-waves"
+  },
+  "classification": {
+    "periodization": "wave",
+    "goal": "strength",
+    "level": "intermediate",
+    "durationWeeks": 4,
+    "tags": [
+      "531"
+    ]
+  },
+  "authorship": {
+    "author": "VITNESS Team",
+    "license": "CC-BY-4.0",
+    "attribution": "Percentage wave template, after the 5/3/1 convention."
+  },
+  "references": {
+    "trainingMaxes": [
+      {
+        "id": "tm.backSquat",
+        "exercise": {
+          "id": "ex.backSquat",
+          "name": "Barbell Back Squat"
+        },
+        "method": "percentOfOneRepMax",
+        "percent": 90,
+        "notes": "The number is the caller’s. This says only which lift the plan is computed from, and how."
+      },
+      {
+        "id": "tm.benchPress",
+        "exercise": {
+          "id": "ex.benchPress",
+          "name": "Barbell Bench Press"
+        },
+        "method": "percentOfOneRepMax",
+        "percent": 90
+      }
+    ]
+  },
+  "schedule": {
+    "model": "calendar",
+    "cycles": [
+      {
+        "id": "c1",
+        "name": "Wave",
+        "type": "meso",
+        "order": 1,
+        "durationWeeks": 4,
+        "intent": "intensification",
+        "weeks": [
+          {
+            "index": 1,
+            "name": "5s",
+            "days": [
+              {
+                "id": "d5-1",
+                "index": 1,
+                "dayOfWeek": "monday",
+                "workout": {
+                  "id": "wo.squatWave",
+                  "name": "Squat Wave"
+                },
+                "overrides": {
+                  "progressionState": {
+                    "wave": 1,
+                    "repScheme": "5-5-5"
+                  }
+                }
+              },
+              {
+                "id": "d5-2",
+                "index": 2,
+                "dayOfWeek": "thursday",
+                "workout": {
+                  "id": "wo.benchWave",
+                  "name": "Bench Wave"
+                },
+                "overrides": {
+                  "progressionState": {
+                    "wave": 1,
+                    "repScheme": "5-5-5"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "index": 2,
+            "name": "3s",
+            "days": [
+              {
+                "id": "d5-1",
+                "index": 1,
+                "dayOfWeek": "monday",
+                "workout": {
+                  "id": "wo.squatWave",
+                  "name": "Squat Wave"
+                },
+                "overrides": {
+                  "progressionState": {
+                    "wave": 2,
+                    "repScheme": "3-3-3"
+                  }
+                }
+              },
+              {
+                "id": "d5-2",
+                "index": 2,
+                "dayOfWeek": "thursday",
+                "workout": {
+                  "id": "wo.benchWave",
+                  "name": "Bench Wave"
+                },
+                "overrides": {
+                  "progressionState": {
+                    "wave": 2,
+                    "repScheme": "3-3-3"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "index": 3,
+            "name": "5/3/1",
+            "days": [
+              {
+                "id": "d5-1",
+                "index": 1,
+                "dayOfWeek": "monday",
+                "workout": {
+                  "id": "wo.squatWave",
+                  "name": "Squat Wave"
+                },
+                "overrides": {
+                  "progressionState": {
+                    "wave": 3,
+                    "repScheme": "5-3-1"
+                  }
+                }
+              },
+              {
+                "id": "d5-2",
+                "index": 2,
+                "dayOfWeek": "thursday",
+                "workout": {
+                  "id": "wo.benchWave",
+                  "name": "Bench Wave"
+                },
+                "overrides": {
+                  "progressionState": {
+                    "wave": 3,
+                    "repScheme": "5-3-1"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "index": 4,
+            "name": "Deload",
+            "deload": true,
+            "days": [
+              {
+                "id": "d5-1",
+                "index": 1,
+                "dayOfWeek": "monday",
+                "workout": {
+                  "id": "wo.squatWave",
+                  "name": "Squat Wave"
+                },
+                "overrides": {
+                  "loadScaling": 0.7,
+                  "volumeScaling": 0.6
+                }
+              },
+              {
+                "id": "d5-2",
+                "index": 2,
+                "dayOfWeek": "thursday",
+                "workout": {
+                  "id": "wo.benchWave",
+                  "name": "Bench Wave"
+                },
+                "overrides": {
+                  "loadScaling": 0.7,
+                  "volumeScaling": 0.6
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "metadata": {
+    "createdAt": "2026-08-10T00:00:00Z",
+    "updatedAt": "2026-08-10T00:00:00Z",
+    "status": "active",
+    "source": "vitness.core"
+  }
+}

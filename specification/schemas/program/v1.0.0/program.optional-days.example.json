@@ -1,0 +1,67 @@
+{
+  "schemaVersion": "1.0.0",
+  "programId": "00000000-0000-4000-8000-0000000c0016",
+  "canonical": {
+    "name": "Optional Days",
+    "slug": "optional-days"
+  },
+  "classification": {
+    "periodization": "none",
+    "goal": "general",
+    "durationWeeks": 1
+  },
+  "schedule": {
+    "model": "calendar",
+    "cycles": [
+      {
+        "id": "c1",
+        "type": "micro",
+        "order": 1,
+        "durationWeeks": 1,
+        "notes": "An optional day is still a training day. The flag says the author considers it discretionary; it does not turn the day into a rest day.",
+        "weeks": [
+          {
+            "index": 1,
+            "days": [
+              {
+                "id": "d15-1",
+                "index": 1,
+                "dayOfWeek": "monday",
+                "workout": {
+                  "id": "wo.lowerStrength",
+                  "name": "Lower Strength"
+                }
+              },
+              {
+                "id": "d15-2",
+                "index": 2,
+                "dayOfWeek": "wednesday",
+                "workout": {
+                  "id": "wo.upperStrength",
+                  "name": "Upper Strength"
+                }
+              },
+              {
+                "id": "d15-3",
+                "index": 3,
+                "dayOfWeek": "saturday",
+                "workout": {
+                  "id": "wo.conditioning",
+                  "name": "Conditioning"
+                },
+                "optional": true,
+                "notes": "Skip without breaking the plan."
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "metadata": {
+    "createdAt": "2026-08-10T00:00:00Z",
+    "updatedAt": "2026-08-10T00:00:00Z",
+    "status": "active",
+    "source": "vitness.core"
+  }
+}

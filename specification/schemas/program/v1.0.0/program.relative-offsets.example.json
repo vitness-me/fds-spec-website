@@ -1,0 +1,97 @@
+{
+  "schemaVersion": "1.0.0",
+  "programId": "00000000-0000-4000-8000-0000000c0013",
+  "canonical": {
+    "name": "Relative Offsets",
+    "slug": "relative-offsets"
+  },
+  "classification": {
+    "periodization": "none",
+    "goal": "general",
+    "durationWeeks": 2
+  },
+  "schedule": {
+    "model": "relative",
+    "cycles": [
+      {
+        "id": "c1",
+        "type": "meso",
+        "order": 1,
+        "durationWeeks": 2,
+        "notes": "offsetDays is authoritative and counted from the program start, whatever weekday that lands on.",
+        "weeks": [
+          {
+            "index": 1,
+            "days": [
+              {
+                "id": "r1",
+                "index": 1,
+                "offsetDays": 0,
+                "workout": {
+                  "id": "wo.lowerStrength",
+                  "name": "Lower Strength"
+                }
+              },
+              {
+                "id": "r2",
+                "index": 2,
+                "offsetDays": 2,
+                "workout": {
+                  "id": "wo.upperStrength",
+                  "name": "Upper Strength"
+                }
+              },
+              {
+                "id": "r3",
+                "index": 3,
+                "offsetDays": 4,
+                "workout": {
+                  "id": "wo.fullBody",
+                  "name": "Full Body"
+                }
+              }
+            ]
+          },
+          {
+            "index": 2,
+            "days": [
+              {
+                "id": "r4",
+                "index": 1,
+                "offsetDays": 7,
+                "workout": {
+                  "id": "wo.lowerStrength",
+                  "name": "Lower Strength"
+                }
+              },
+              {
+                "id": "r5",
+                "index": 2,
+                "offsetDays": 9,
+                "workout": {
+                  "id": "wo.upperStrength",
+                  "name": "Upper Strength"
+                }
+              },
+              {
+                "id": "r6",
+                "index": 3,
+                "offsetDays": 11,
+                "workout": {
+                  "id": "wo.fullBody",
+                  "name": "Full Body"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "metadata": {
+    "createdAt": "2026-08-10T00:00:00Z",
+    "updatedAt": "2026-08-10T00:00:00Z",
+    "status": "active",
+    "source": "vitness.core"
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "schemaVersion": "1.0.0",
+  "programId": "00000000-0000-4000-8000-0000000c0002",
+  "canonical": {
+    "name": "Daily Undulating",
+    "slug": "daily-undulating"
+  },
+  "classification": {
+    "periodization": "undulating",
+    "goal": "hypertrophy",
+    "level": "intermediate",
+    "durationWeeks": 1,
+    "tags": [
+      "dup"
+    ]
+  },
+  "schedule": {
+    "model": "calendar",
+    "cycles": [
+      {
+        "id": "c1",
+        "type": "micro",
+        "order": 1,
+        "durationWeeks": 1,
+        "intent": "accumulation",
+        "notes": "Undulation lives in the three referenced sessions, not in this document. The program states which session falls on which day; the rep ranges are the workouts’ business.",
+        "weeks": [
+          {
+            "index": 1,
+            "days": [
+              {
+                "id": "d1-1",
+                "index": 1,
+                "dayOfWeek": "monday",
+                "workout": {
+                  "id": "wo.squatHeavy",
+                  "name": "Squat — Heavy 3–5"
+                }
+              },
+              {
+                "id": "d1-2",
+                "index": 2,
+                "dayOfWeek": "wednesday",
+                "workout": {
+                  "id": "wo.squatModerate",
+                  "name": "Squat — Moderate 6–8"
+                }
+              },
+              {
+                "id": "d1-3",
+                "index": 3,
+                "dayOfWeek": "friday",
+                "workout": {
+                  "id": "wo.squatLight",
+                  "name": "Squat — Light 10–12"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "metadata": {
+    "createdAt": "2026-08-10T00:00:00Z",
+    "updatedAt": "2026-08-10T00:00:00Z",
+    "status": "active",
+    "source": "vitness.core"
+  }
+}

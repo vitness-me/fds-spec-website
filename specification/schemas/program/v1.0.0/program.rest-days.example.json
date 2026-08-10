@@ -1,0 +1,90 @@
+{
+  "schemaVersion": "1.0.0",
+  "programId": "00000000-0000-4000-8000-0000000c0018",
+  "canonical": {
+    "name": "Explicit Rest Days",
+    "slug": "rest-days"
+  },
+  "classification": {
+    "periodization": "none",
+    "goal": "general",
+    "durationWeeks": 1
+  },
+  "schedule": {
+    "model": "calendar",
+    "cycles": [
+      {
+        "id": "c1",
+        "type": "micro",
+        "order": 1,
+        "durationWeeks": 1,
+        "notes": "All seven days are stated. A rest day is prescribed recovery; an absent day is an unplanned gap. Writing both out is what makes the difference readable.",
+        "weeks": [
+          {
+            "index": 1,
+            "days": [
+              {
+                "id": "d17-1",
+                "index": 1,
+                "dayOfWeek": "monday",
+                "workout": {
+                  "id": "wo.lowerStrength",
+                  "name": "Lower Strength"
+                }
+              },
+              {
+                "id": "d17-2",
+                "index": 2,
+                "dayOfWeek": "tuesday",
+                "rest": true,
+                "notes": "Full rest. Walking is fine."
+              },
+              {
+                "id": "d17-3",
+                "index": 3,
+                "dayOfWeek": "wednesday",
+                "workout": {
+                  "id": "wo.upperStrength",
+                  "name": "Upper Strength"
+                }
+              },
+              {
+                "id": "d17-4",
+                "index": 4,
+                "dayOfWeek": "thursday",
+                "rest": true
+              },
+              {
+                "id": "d17-5",
+                "index": 5,
+                "dayOfWeek": "friday",
+                "workout": {
+                  "id": "wo.fullBody",
+                  "name": "Full Body"
+                }
+              },
+              {
+                "id": "d17-6",
+                "index": 6,
+                "dayOfWeek": "saturday",
+                "rest": true
+              },
+              {
+                "id": "d17-7",
+                "index": 7,
+                "dayOfWeek": "sunday",
+                "rest": true
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "metadata": {
+    "createdAt": "2026-08-10T00:00:00Z",
+    "updatedAt": "2026-08-10T00:00:00Z",
+    "status": "active",
+    "source": "vitness.core"
+  }
+}

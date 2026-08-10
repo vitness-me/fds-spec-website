@@ -1,0 +1,123 @@
+{
+  "schemaVersion": "1.0.0",
+  "programId": "00000000-0000-4000-8000-0000000c0003",
+  "canonical": {
+    "name": "Weekly Undulating",
+    "slug": "weekly-undulating"
+  },
+  "classification": {
+    "periodization": "undulating",
+    "goal": "strength",
+    "level": "intermediate",
+    "durationWeeks": 3
+  },
+  "schedule": {
+    "model": "calendar",
+    "cycles": [
+      {
+        "id": "c1",
+        "type": "meso",
+        "order": 1,
+        "durationWeeks": 3,
+        "intent": "accumulation",
+        "notes": "The same two sessions all three weeks. Undulation is expressed entirely by loadScaling, so the workouts stay reusable.",
+        "weeks": [
+          {
+            "index": 1,
+            "name": "Medium",
+            "days": [
+              {
+                "id": "d2-1",
+                "index": 1,
+                "dayOfWeek": "monday",
+                "workout": {
+                  "id": "wo.lowerStrength",
+                  "name": "Lower Strength"
+                }
+              },
+              {
+                "id": "d2-2",
+                "index": 2,
+                "dayOfWeek": "thursday",
+                "workout": {
+                  "id": "wo.upperStrength",
+                  "name": "Upper Strength"
+                }
+              }
+            ]
+          },
+          {
+            "index": 2,
+            "name": "Heavy",
+            "days": [
+              {
+                "id": "d2-1",
+                "index": 1,
+                "dayOfWeek": "monday",
+                "workout": {
+                  "id": "wo.lowerStrength",
+                  "name": "Lower Strength"
+                },
+                "overrides": {
+                  "loadScaling": 1.05,
+                  "volumeScaling": 0.8
+                }
+              },
+              {
+                "id": "d2-2",
+                "index": 2,
+                "dayOfWeek": "thursday",
+                "workout": {
+                  "id": "wo.upperStrength",
+                  "name": "Upper Strength"
+                },
+                "overrides": {
+                  "loadScaling": 1.05,
+                  "volumeScaling": 0.8
+                }
+              }
+            ]
+          },
+          {
+            "index": 3,
+            "name": "Light",
+            "days": [
+              {
+                "id": "d2-1",
+                "index": 1,
+                "dayOfWeek": "monday",
+                "workout": {
+                  "id": "wo.lowerStrength",
+                  "name": "Lower Strength"
+                },
+                "overrides": {
+                  "loadScaling": 0.9,
+                  "volumeScaling": 1.2
+                }
+              },
+              {
+                "id": "d2-2",
+                "index": 2,
+                "dayOfWeek": "thursday",
+                "workout": {
+                  "id": "wo.upperStrength",
+                  "name": "Upper Strength"
+                },
+                "overrides": {
+                  "loadScaling": 0.9,
+                  "volumeScaling": 1.2
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "metadata": {
+    "createdAt": "2026-08-10T00:00:00Z",
+    "updatedAt": "2026-08-10T00:00:00Z",
+    "status": "active",
+    "source": "vitness.core"
+  }
+}

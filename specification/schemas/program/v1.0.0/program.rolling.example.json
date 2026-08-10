@@ -1,0 +1,112 @@
+{
+  "schemaVersion": "1.0.0",
+  "programId": "00000000-0000-4000-8000-0000000c0014",
+  "canonical": {
+    "name": "Rolling Four-Day Cadence",
+    "slug": "rolling"
+  },
+  "classification": {
+    "periodization": "none",
+    "goal": "general",
+    "durationWeeks": 2,
+    "tags": [
+      "three-on-one-off"
+    ]
+  },
+  "schedule": {
+    "model": "rolling",
+    "cycles": [
+      {
+        "id": "c1",
+        "type": "meso",
+        "order": 1,
+        "durationWeeks": 2,
+        "notes": "Three on, one off, repeating. The cadence drifts against the calendar by design — reading this as calendar would collapse the rest pattern the plan is built around.",
+        "weeks": [
+          {
+            "index": 1,
+            "days": [
+              {
+                "id": "g1",
+                "index": 1,
+                "offsetDays": 0,
+                "workout": {
+                  "id": "wo.push",
+                  "name": "Push"
+                }
+              },
+              {
+                "id": "g2",
+                "index": 2,
+                "offsetDays": 1,
+                "workout": {
+                  "id": "wo.pull",
+                  "name": "Pull"
+                }
+              },
+              {
+                "id": "g3",
+                "index": 3,
+                "offsetDays": 2,
+                "workout": {
+                  "id": "wo.legs",
+                  "name": "Legs"
+                }
+              },
+              {
+                "id": "g4",
+                "index": 4,
+                "offsetDays": 3,
+                "rest": true
+              }
+            ]
+          },
+          {
+            "index": 2,
+            "days": [
+              {
+                "id": "g5",
+                "index": 1,
+                "offsetDays": 4,
+                "workout": {
+                  "id": "wo.push",
+                  "name": "Push"
+                }
+              },
+              {
+                "id": "g6",
+                "index": 2,
+                "offsetDays": 5,
+                "workout": {
+                  "id": "wo.pull",
+                  "name": "Pull"
+                }
+              },
+              {
+                "id": "g7",
+                "index": 3,
+                "offsetDays": 6,
+                "workout": {
+                  "id": "wo.legs",
+                  "name": "Legs"
+                }
+              },
+              {
+                "id": "g8",
+                "index": 4,
+                "offsetDays": 7,
+                "rest": true
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "metadata": {
+    "createdAt": "2026-08-10T00:00:00Z",
+    "updatedAt": "2026-08-10T00:00:00Z",
+    "status": "active",
+    "source": "vitness.core"
+  }
+}

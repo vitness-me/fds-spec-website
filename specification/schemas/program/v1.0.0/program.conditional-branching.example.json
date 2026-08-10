@@ -1,0 +1,93 @@
+{
+  "schemaVersion": "1.0.0",
+  "programId": "00000000-0000-4000-8000-0000000c0010",
+  "canonical": {
+    "name": "Conditional Branching",
+    "slug": "conditional-branching"
+  },
+  "classification": {
+    "periodization": "linear",
+    "goal": "strength",
+    "level": "intermediate",
+    "durationWeeks": 2
+  },
+  "schedule": {
+    "model": "calendar",
+    "cycles": [
+      {
+        "id": "c1",
+        "type": "meso",
+        "order": 1,
+        "durationWeeks": 2,
+        "intent": "accumulation",
+        "weeks": [
+          {
+            "index": 1,
+            "days": [
+              {
+                "id": "day.attempt",
+                "index": 1,
+                "dayOfWeek": "monday",
+                "workout": {
+                  "id": "wo.lowerStrength",
+                  "name": "Lower Strength"
+                }
+              },
+              {
+                "id": "day.repeat",
+                "index": 2,
+                "dayOfWeek": "thursday",
+                "workout": {
+                  "id": "wo.lowerStrength",
+                  "name": "Lower Strength"
+                },
+                "overrides": {
+                  "loadScaling": 0.9,
+                  "notes": "Same session, ten percent lighter, on a failed attempt."
+                }
+              },
+              {
+                "id": "day.advance",
+                "index": 3,
+                "dayOfWeek": "friday",
+                "workout": {
+                  "id": "wo.lowerHeavy",
+                  "name": "Lower Strength — Heavy"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "branching": [
+    {
+      "id": "br.failed",
+      "condition": {
+        "kind": "failedPrescribedReps",
+        "onDayRef": "day.attempt",
+        "consecutiveFailures": 1
+      },
+      "thenDayRef": "day.repeat",
+      "elseDayRef": "day.advance",
+      "notes": "A consumer that cannot evaluate this follows the unconditional schedule and warns. It does not pick a side."
+    },
+    {
+      "id": "br.amrap",
+      "condition": {
+        "kind": "amrapAboveThreshold",
+        "onDayRef": "day.attempt",
+        "threshold": 10
+      },
+      "thenDayRef": "day.advance",
+      "notes": "A strong AMRAP set skips straight to the heavier session."
+    }
+  ],
+  "metadata": {
+    "createdAt": "2026-08-10T00:00:00Z",
+    "updatedAt": "2026-08-10T00:00:00Z",
+    "status": "active",
+    "source": "vitness.core"
+  }
+}
