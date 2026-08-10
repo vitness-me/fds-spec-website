@@ -1,0 +1,22 @@
+{
+  "registry": "block-role",
+  "version": "1.0.0",
+  "description": "Recommended values for blocks[].role in a workout. A plain classifier: it says what a block is for, not how it is executed. Execution is blocks[].mode, which is a closed discriminator (RFC-007 §3.2).",
+  "policy": "open",
+  "governs": [
+    {
+      "source": "specification/schema-sources/workout/v1.0.0/workout.schema.json",
+      "pointer": "blocks[].role"
+    }
+  ],
+  "entries": [
+    { "value": "warmup", "label": "Warm-up", "description": "Preparatory work. Sets here are conventionally excluded from training volume." },
+    { "value": "primary", "label": "Primary", "description": "The main work of the session, usually the heaviest or most technical." },
+    { "value": "accessory", "label": "Accessory", "description": "Supporting work chosen to serve the primary movements." },
+    { "value": "conditioning", "label": "Conditioning", "description": "Metabolic work inside a session whose main intent is something else." },
+    { "value": "cooldown", "label": "Cool-down", "description": "Down-regulating work at the end of a session." },
+    { "value": "finisher", "label": "Finisher", "description": "A short high-effort block placed last, by intent rather than by leftover." },
+    { "value": "skill", "label": "Skill", "description": "Technique practice, typically early and deliberately non-fatiguing." },
+    { "value": "activation", "label": "Activation", "description": "Targeted preparatory work for a specific muscle or pattern before the primary block." }
+  ]
+}

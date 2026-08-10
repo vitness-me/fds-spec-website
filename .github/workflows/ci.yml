@@ -88,6 +88,11 @@ jobs:
       - name: Verify every matrix scenario has a worked example
         run: npm run check:scenarios
 
+      # `exerciseType` carries no enum and no examples — the registry is the only
+      # place its vocabulary is written down, which makes it load-bearing.
+      - name: Verify recommended values are in a registry
+        run: npm run check:registries
+
       - name: Install Ajv CLI
         run: npm install --no-save ajv@8 ajv-cli@5 ajv-formats@3
 
