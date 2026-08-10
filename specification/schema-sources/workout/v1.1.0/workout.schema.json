@@ -1,0 +1,643 @@
+{
+  "$id": "https://spec.vitness.me/schemas/workout/v1.1.0/workout.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "FDS Workout (v1.1.0)",
+  "description": "A single prescribed training session. Structure is blocks of items; how a block is executed is `mode`, which is what lets circuits, EMOM, AMRAP and interval work share one schema with straight strength training.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "workoutId",
+    "canonical",
+    "classification",
+    "structure",
+    "metadata"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "workoutId": {
+      "type": "string"
+    },
+    "canonical": {
+      "$ref": "https://spec.vitness.me/schemas/common/v1.0.0/common.schema.json#/$defs/canonical"
+    },
+    "classification": {
+      "type": "object",
+      "required": [
+        "workoutType"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "workoutType": {
+          "description": "Open string per D8 \u2014 a plain classifier with no structural consequence. Consumers SHOULD warn on an unrecognised value and MUST NOT reject. Recommended values live in the workout-type registry.",
+          "type": "string",
+          "examples": [
+            "strength",
+            "hypertrophy",
+            "conditioning",
+            "endurance",
+            "mobility",
+            "hybrid",
+            "circuit",
+            "class",
+            "recovery",
+            "test"
+          ]
+        },
+        "level": {
+          "enum": [
+            "beginner",
+            "intermediate",
+            "advanced"
+          ]
+        },
+        "focus": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "estimatedDuration": {
+          "description": "Planned wall-clock length. Carries its own unit: a bare number here would be read as minutes by some implementers and seconds by others.",
+          "type": "object",
+          "required": [
+            "value",
+            "unit"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "value": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "unit": {
+              "enum": [
+                "s",
+                "min"
+              ]
+            }
+          }
+        },
+        "environment": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "structure": {
+      "type": "object",
+      "required": [
+        "blocks"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "blocks": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/block"
+          }
+        }
+      }
+    },
+    "targets": {
+      "description": "Derived rollup of the muscles the session trains. Optional and advisory \u2014 a consumer MUST NOT treat it as authoritative over walking the items, because it can be stale or absent.",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "primary": {
+          "type": "array",
+          "items": {
+            "$ref": "https://spec.vitness.me/schemas/common/v1.0.0/common.schema.json#/$defs/muscleRef"
+          }
+        },
+        "secondary": {
+          "type": "array",
+          "items": {
+            "$ref": "https://spec.vitness.me/schemas/common/v1.0.0/common.schema.json#/$defs/muscleRef"
+          }
+        }
+      }
+    },
+    "equipment": {
+      "description": "Derived rollup, same advisory status as `targets`.",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "required": {
+          "type": "array",
+          "items": {
+            "$ref": "https://spec.vitness.me/schemas/common/v1.0.0/common.schema.json#/$defs/equipmentRef"
+          }
+        },
+        "optional": {
+          "type": "array",
+          "items": {
+            "$ref": "https://spec.vitness.me/schemas/common/v1.0.0/common.schema.json#/$defs/equipmentRef"
+          }
+        }
+      }
+    },
+    "metrics": {
+      "description": "Metric shapes this session is expected to produce. Declares shapes, never values \u2014 the same seam RFC-001 draws.",
+      "type": "array",
+      "items": {
+        "$ref": "https://spec.vitness.me/schemas/common/v1.0.0/common.schema.json#/$defs/metricRef"
+      },
+      "uniqueItems": true
+    },
+    "constraints": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "contraindications": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "prerequisites": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "environment": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "relations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "type",
+          "targetId"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "alternate",
+              "variation",
+              "progression",
+              "regression",
+              "deload",
+              "test"
+            ]
+          },
+          "targetId": {
+            "type": "string"
+          },
+          "notes": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "media": {
+      "$ref": "https://spec.vitness.me/schemas/common/v1.0.0/common.schema.json#/$defs/media"
+    },
+    "attributes": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "extensions": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "metadata": {
+      "$ref": "https://spec.vitness.me/schemas/common/v1.0.0/common.schema.json#/$defs/metadata"
+    }
+  },
+  "$defs": {
+    "block": {
+      "description": "A contiguous section of the session executed under one mode.",
+      "type": "object",
+      "required": [
+        "id",
+        "mode",
+        "items"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "role": {
+          "description": "What the block is for. Open string per D8 \u2014 a plain classifier. Recommended values: warmup, primary, accessory, conditioning, cooldown, finisher.",
+          "type": "string",
+          "examples": [
+            "warmup",
+            "primary",
+            "accessory",
+            "conditioning",
+            "cooldown",
+            "finisher"
+          ]
+        },
+        "mode": {
+          "$ref": "#/$defs/blockMode"
+        },
+        "modeParams": {
+          "$ref": "#/$defs/modeParams"
+        },
+        "rest": {
+          "$ref": "https://spec.vitness.me/schemas/prescription/v1.0.0/prescription.schema.json#/$defs/restSpec"
+        },
+        "items": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/blockItem"
+          }
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "blockMode": {
+      "description": "How the block is executed. A structural discriminator, not a label: it decides which modeParams are meaningful and how a consumer must sequence the items. Closed set with a disjoint catch-all, per RFC-006 \u00a73.2.",
+      "oneOf": [
+        {
+          "const": "sequential",
+          "description": "Items performed one after another, all sets of an item before moving on."
+        },
+        {
+          "const": "superset",
+          "description": "Items alternated, grouped by groupLabel."
+        },
+        {
+          "const": "circuit",
+          "description": "One set of each item per round, for a number of rounds."
+        },
+        {
+          "const": "emom",
+          "description": "Every minute on the minute."
+        },
+        {
+          "const": "amrap",
+          "description": "As many rounds as possible inside a time cap."
+        },
+        {
+          "const": "forTime",
+          "description": "Fixed work completed as fast as possible."
+        },
+        {
+          "const": "tabata",
+          "description": "Fixed work/rest intervals, conventionally 20/10."
+        },
+        {
+          "const": "interval",
+          "description": "Explicit work and rest intervals."
+        },
+        {
+          "description": "A mode this version does not define. Kept disjoint from the named values so a known mode never matches two branches.",
+          "type": "string",
+          "not": {
+            "enum": [
+              "sequential",
+              "superset",
+              "circuit",
+              "emom",
+              "amrap",
+              "forTime",
+              "tabata",
+              "interval"
+            ]
+          }
+        }
+      ]
+    },
+    "modeParams": {
+      "description": "Parameters the mode needs. Which keys apply depends on the mode; RFC-007 documents the pairing. Left open rather than per-mode-typed because a consumer that does not recognise the mode cannot use the params either \u2014 the mode is the gate, not the shape.",
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "rounds": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "timeCap": {
+          "$ref": "#/$defs/duration"
+        },
+        "work": {
+          "$ref": "#/$defs/duration"
+        },
+        "rest": {
+          "$ref": "#/$defs/duration"
+        },
+        "interval": {
+          "$ref": "#/$defs/duration"
+        }
+      }
+    },
+    "duration": {
+      "type": "object",
+      "required": [
+        "value",
+        "unit"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "unit": {
+          "enum": [
+            "s",
+            "min"
+          ]
+        }
+      }
+    },
+    "blockItem": {
+      "description": "One exercise within a block, with its prescription.",
+      "type": "object",
+      "required": [
+        "id",
+        "exercise"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "groupLabel": {
+          "description": "Groups items that are performed together \u2014 \"A1\"/\"A2\" for a superset, \"A1\"/\"A2\"/\"A3\" for a triset. Items sharing a label are alternated; the letter orders the groups within the block.",
+          "type": "string"
+        },
+        "exercise": {
+          "$ref": "https://spec.vitness.me/schemas/common/v1.0.0/common.schema.json#/$defs/exerciseRef"
+        },
+        "alternatives": {
+          "description": "Substitutions the author sanctions in advance \u2014 equipment unavailable, movement contraindicated. Distinct from a substitution an athlete makes during a session, which is performed data and belongs to RFC-009.",
+          "type": "array",
+          "items": {
+            "$ref": "https://spec.vitness.me/schemas/common/v1.0.0/common.schema.json#/$defs/exerciseRef"
+          }
+        },
+        "sets": {
+          "description": "Explicit per-set prescription. Mutually exclusive with `scheme` \u2014 see the constraint below.",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/setPrescription"
+          }
+        },
+        "scheme": {
+          "description": "A named set pattern instead of enumerated sets.",
+          "$ref": "https://spec.vitness.me/schemas/prescription/v1.0.0/prescription.schema.json#/$defs/setScheme"
+        },
+        "load": {
+          "description": "Load for every set of this item, when it does not vary. A set-level `load` overrides it.",
+          "$ref": "https://spec.vitness.me/schemas/prescription/v1.0.0/prescription.schema.json#/$defs/loadTarget"
+        },
+        "reps": {
+          "$ref": "https://spec.vitness.me/schemas/prescription/v1.0.0/prescription.schema.json#/$defs/repTarget"
+        },
+        "tempo": {
+          "$ref": "https://spec.vitness.me/schemas/prescription/v1.0.0/prescription.schema.json#/$defs/tempo"
+        },
+        "rest": {
+          "$ref": "https://spec.vitness.me/schemas/prescription/v1.0.0/prescription.schema.json#/$defs/restSpec"
+        },
+        "zone": {
+          "$ref": "https://spec.vitness.me/schemas/prescription/v1.0.0/prescription.schema.json#/$defs/intensityZone"
+        },
+        "settings": {
+          "description": "Machine and environment settings the session prescribes. Each entry is a metric shape from RFC-001 with a value attached \u2014 the same seam the standard already draws, applied to the settings a consumer has to dial in before starting.\n\nLoad, repetitions, tempo and rest each have a definition of their own because each carries semantics a consumer must act on. A treadmill incline carries none: it is a number, in a unit, that the athlete sets. Giving it a bespoke definition would have meant one more per setting, and the metric vocabulary already names incline, cadence and resistanceLevel.",
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "object",
+            "required": [
+              "type",
+              "unit",
+              "value"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "type": {
+                "description": "A metric type from the shared vocabulary. Only the settings a consumer dials in belong here \u2014 prescribing reps or weight through this field instead of through `reps` or `load` would create a second way to say the same thing.",
+                "$ref": "https://spec.vitness.me/schemas/common/v1.0.0/common.schema.json#/$defs/metricType"
+              },
+              "unit": {
+                "$ref": "https://spec.vitness.me/schemas/common/v1.0.0/common.schema.json#/$defs/metricUnit"
+              },
+              "value": {
+                "type": "number"
+              },
+              "range": {
+                "description": "A band rather than a point \u2014 \"incline 3 to 5 percent\".",
+                "type": "object",
+                "required": [
+                  "min",
+                  "max"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "min": {
+                    "type": "number"
+                  },
+                  "max": {
+                    "type": "number"
+                  }
+                }
+              },
+              "notes": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "notes": {
+          "type": "string"
+        },
+        "media": {
+          "$ref": "https://spec.vitness.me/schemas/common/v1.0.0/common.schema.json#/$defs/media"
+        },
+        "repStyle": {
+          "$ref": "#/$defs/repStyle"
+        }
+      },
+      "not": {
+        "description": "An item states its sets one way or the other. Carrying both is two prescriptions for the same work, and nothing says which wins.",
+        "required": [
+          "sets",
+          "scheme"
+        ]
+      }
+    },
+    "setPrescription": {
+      "description": "One prescribed set.",
+      "type": "object",
+      "required": [
+        "index"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "index": {
+          "description": "Position within the item, 1-based. Explicit rather than implied by array order so a consumer can reference a set stably.",
+          "type": "integer",
+          "minimum": 1
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "warmup",
+            "working",
+            "backoff",
+            "drop",
+            "cluster",
+            "amrap"
+          ],
+          "default": "working"
+        },
+        "load": {
+          "$ref": "https://spec.vitness.me/schemas/prescription/v1.0.0/prescription.schema.json#/$defs/loadTarget"
+        },
+        "reps": {
+          "$ref": "https://spec.vitness.me/schemas/prescription/v1.0.0/prescription.schema.json#/$defs/repTarget"
+        },
+        "tempo": {
+          "$ref": "https://spec.vitness.me/schemas/prescription/v1.0.0/prescription.schema.json#/$defs/tempo"
+        },
+        "rest": {
+          "$ref": "https://spec.vitness.me/schemas/prescription/v1.0.0/prescription.schema.json#/$defs/restSpec"
+        },
+        "zone": {
+          "description": "The intensity zone for this set only, overriding the item. Present here from 1.1.0: load, reps, tempo and rest were always statable per set and zone was not, so a session whose intensity climbs set by set had to be split into separate items to say so.",
+          "$ref": "https://spec.vitness.me/schemas/prescription/v1.0.0/prescription.schema.json#/$defs/intensityZone"
+        },
+        "settings": {
+          "description": "Machine and environment settings the session prescribes. Each entry is a metric shape from RFC-001 with a value attached \u2014 the same seam the standard already draws, applied to the settings a consumer has to dial in before starting.\n\nLoad, repetitions, tempo and rest each have a definition of their own because each carries semantics a consumer must act on. A treadmill incline carries none: it is a number, in a unit, that the athlete sets. Giving it a bespoke definition would have meant one more per setting, and the metric vocabulary already names incline, cadence and resistanceLevel.",
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "object",
+            "required": [
+              "type",
+              "unit",
+              "value"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "type": {
+                "description": "A metric type from the shared vocabulary. Only the settings a consumer dials in belong here \u2014 prescribing reps or weight through this field instead of through `reps` or `load` would create a second way to say the same thing.",
+                "$ref": "https://spec.vitness.me/schemas/common/v1.0.0/common.schema.json#/$defs/metricType"
+              },
+              "unit": {
+                "$ref": "https://spec.vitness.me/schemas/common/v1.0.0/common.schema.json#/$defs/metricUnit"
+              },
+              "value": {
+                "type": "number"
+              },
+              "range": {
+                "description": "A band rather than a point \u2014 \"incline 3 to 5 percent\".",
+                "type": "object",
+                "required": [
+                  "min",
+                  "max"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "min": {
+                    "type": "number"
+                  },
+                  "max": {
+                    "type": "number"
+                  }
+                }
+              },
+              "notes": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "schemeParams": {
+          "description": "Parameters for the scheme this set participates in \u2014 drop percentages, cluster rest. Open for the same reason setScheme.params is.",
+          "type": "object",
+          "additionalProperties": true
+        },
+        "side": {
+          "description": "Which side the set loads. Only meaningful on an exercise whose classification.unilateral is true.",
+          "type": "string",
+          "enum": [
+            "both",
+            "left",
+            "right"
+          ],
+          "default": "both"
+        },
+        "notes": {
+          "type": "string"
+        },
+        "repStyle": {
+          "$ref": "#/$defs/repStyle"
+        }
+      }
+    },
+    "repStyle": {
+      "description": "How a repetition is performed, where that differs from a full standard rep. Partials and one-and-a-half reps are prescriptions in wide use that no metric, tempo or set scheme can express: tempo governs the speed of a rep, not its range or composition.",
+      "$comment": "Defined here rather than in the RFC-006 library because workout is currently its only consumer. If RFC-008 needs it, it is promoted to a new prescription version at that point \u2014 a second consumer is what makes a definition shared, and the RFC-006 URL is frozen.",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "rangeOfMotion": {
+          "description": "`partial` is a deliberately reduced range; `extended` is a deliberately increased one, as in a deficit deadlift.",
+          "type": "string",
+          "enum": [
+            "full",
+            "partial",
+            "extended"
+          ],
+          "default": "full"
+        },
+        "segment": {
+          "description": "Which part of the movement a partial covers. Meaningful only when rangeOfMotion is partial.",
+          "type": "string",
+          "enum": [
+            "top",
+            "bottom",
+            "mid"
+          ]
+        },
+        "pattern": {
+          "description": "`oneAndAHalf` is a full rep followed by a half rep counted as one; `pulse` is repeated short reps at one point in the range.",
+          "type": "string",
+          "enum": [
+            "standard",
+            "oneAndAHalf",
+            "pulse"
+          ],
+          "default": "standard"
+        }
+      }
+    }
+  }
+}

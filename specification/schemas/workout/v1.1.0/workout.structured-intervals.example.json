@@ -1,0 +1,82 @@
+{
+  "schemaVersion": "1.1.0",
+  "workoutId": "00000000-0000-4000-8000-0000000d0106",
+  "canonical": {
+    "name": "Four by Four",
+    "slug": "structured-intervals"
+  },
+  "classification": {
+    "workoutType": "conditioning",
+    "level": "intermediate"
+  },
+  "structure": {
+    "blocks": [
+      {
+        "id": "b1",
+        "role": "warmup",
+        "mode": "sequential",
+        "items": [
+          {
+            "id": "i1",
+            "exercise": {
+              "id": "ex.run",
+              "name": "Running"
+            },
+            "reps": {
+              "kind": "time",
+              "value": 10,
+              "unit": "min"
+            },
+            "zone": {
+              "system": "heartRate",
+              "zone": "Z1",
+              "boundsRef": "zone.fiveZoneHeartRate"
+            }
+          }
+        ]
+      },
+      {
+        "id": "b2",
+        "role": "primary",
+        "mode": "interval",
+        "modeParams": {
+          "rounds": 4,
+          "work": {
+            "value": 4,
+            "unit": "min"
+          },
+          "rest": {
+            "value": 3,
+            "unit": "min"
+          }
+        },
+        "notes": "The canonical 4\u00d74. The work and rest durations live in modeParams because they are properties of the interval structure, not of the exercise being performed inside it.",
+        "items": [
+          {
+            "id": "i2",
+            "exercise": {
+              "id": "ex.run",
+              "name": "Running"
+            },
+            "reps": {
+              "kind": "time",
+              "value": 4,
+              "unit": "min"
+            },
+            "zone": {
+              "system": "heartRate",
+              "zone": "Z4",
+              "boundsRef": "zone.fiveZoneHeartRate"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "metadata": {
+    "createdAt": "2026-08-10T00:00:00Z",
+    "updatedAt": "2026-08-10T00:00:00Z",
+    "status": "active",
+    "source": "vitness.core"
+  }
+}

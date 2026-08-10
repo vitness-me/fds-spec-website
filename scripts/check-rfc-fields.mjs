@@ -64,7 +64,7 @@ const PAIRS = [
   },
   {
     rfc: 'specification/rfc/rfc-007-workout-data-model.md',
-    source: 'specification/schema-sources/workout/v1.0.0/workout.schema.json',
+    source: 'specification/schema-sources/workout/v1.1.0/workout.schema.json',
   },
   {
     rfc: 'specification/rfc/rfc-008-program-data-model.md',

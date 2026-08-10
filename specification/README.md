@@ -159,7 +159,7 @@ Notes:
   - `exercises/v1.1.0/`, `equipment/v1.1.0/` schema + examples
   - `muscle/v1.0.0/`, `muscle/muscle-category/v1.0.0/`, `atlas/v1.0.0/` schema + examples
   - `prescription/v1.0.0/` definition library + 69 fixtures
-  - `workout/v1.0.0/` schema + 36 worked sessions
+  - `workout/v1.1.0/` schema + 46 worked sessions; `workout/v1.0.0/` schema only, superseded but still served and frozen
   - `program/v1.0.0/` schema + 18 worked programs
   - `.integrity.json` — sha256 and frozen flag per published schema
 - `specification/registries/`

@@ -392,7 +392,7 @@ interface ProgressionRule {
 
 `setScheme.pattern` is the one closed union with **no** catch-all. Expanding a pattern requires knowing its semantics, so accepting an unknown one would defer the failure to the point where it does damage.
 
-## Workout Schema (v1.0.0)
+## Workout Schema (v1.1.0)
 
 ```typescript
 interface FDSWorkout {
@@ -442,8 +442,17 @@ interface BlockItem {
   scheme?: SetScheme;              // XOR with `sets`
   load?: LoadTarget; reps?: RepTarget; tempo?: Tempo; rest?: RestSpec;
   zone?: IntensityZone;
+  settings?: MachineSetting[];     // 1.1.0
   repStyle?: RepStyle;
   media?: Media[];
+  notes?: string;
+}
+
+interface MachineSetting {         // 1.1.0 — incline, cadence, and the like
+  type: MetricType;                // from the shared RFC-001 vocabulary
+  unit: MetricUnit;
+  value: number;
+  range?: { min: number; max: number };
   notes?: string;
 }
 
@@ -451,6 +460,8 @@ interface SetPrescription {
   index: number;                   // 1-based, explicit so it can be referenced
   type?: 'warmup' | 'working' | 'backoff' | 'drop' | 'cluster' | 'amrap';
   load?: LoadTarget; reps?: RepTarget; tempo?: Tempo; rest?: RestSpec;
+  zone?: IntensityZone;            // 1.1.0 — was item-level only
+  settings?: MachineSetting[];     // 1.1.0
   schemeParams?: Record<string, unknown>;
   repStyle?: RepStyle;
   side?: 'both' | 'left' | 'right';

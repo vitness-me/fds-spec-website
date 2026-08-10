@@ -61,7 +61,7 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const SUITES = [
   {
     entity: 'workout',
-    version: 'v1.0.0',
+    version: 'v1.1.0',
     sections: [
       [
         '§4.1 set and rep schemes',
@@ -76,7 +76,7 @@ const SUITES = [
         '§4.4 cardio and endurance',
         [
           'duration', 'distance', 'pace', 'hr-zone', 'power-zone',
-          'structured-intervals', 'fartlek', 'machine-resistance',
+          'structured-intervals', 'fartlek', 'machine-settings',
           'negative-splits', 'progressive',
         ],
       ],

@@ -1,0 +1,90 @@
+{
+  "schemaVersion": "1.1.0",
+  "workoutId": "00000000-0000-4000-8000-000000000112",
+  "canonical": {
+    "name": "Chipper",
+    "slug": "chipper"
+  },
+  "classification": {
+    "workoutType": "conditioning"
+  },
+  "structure": {
+    "blocks": [
+      {
+        "id": "b1",
+        "mode": "forTime",
+        "items": [
+          {
+            "id": "i1",
+            "exercise": {
+              "id": "ex.wallBall",
+              "name": "Wall Ball"
+            },
+            "reps": {
+              "kind": "fixed",
+              "value": 50
+            }
+          },
+          {
+            "id": "i2",
+            "exercise": {
+              "id": "ex.kettlebellSwing",
+              "name": "Kettlebell Swing"
+            },
+            "reps": {
+              "kind": "fixed",
+              "value": 40
+            }
+          },
+          {
+            "id": "i3",
+            "exercise": {
+              "id": "ex.burpee",
+              "name": "Burpee"
+            },
+            "reps": {
+              "kind": "fixed",
+              "value": 30
+            }
+          },
+          {
+            "id": "i4",
+            "exercise": {
+              "id": "ex.pullUp",
+              "name": "Pull-Up"
+            },
+            "reps": {
+              "kind": "fixed",
+              "value": 20
+            }
+          },
+          {
+            "id": "i5",
+            "exercise": {
+              "id": "ex.boxJump",
+              "name": "Box Jump"
+            },
+            "reps": {
+              "kind": "fixed",
+              "value": 10
+            }
+          }
+        ],
+        "role": "conditioning",
+        "modeParams": {
+          "timeCap": {
+            "value": 25,
+            "unit": "min"
+          }
+        },
+        "notes": "Each movement completed in full before the next \u2014 one pass, descending reps."
+      }
+    ]
+  },
+  "metadata": {
+    "createdAt": "2026-08-09T00:00:00Z",
+    "updatedAt": "2026-08-09T00:00:00Z",
+    "status": "active",
+    "source": "vitness.core"
+  }
+}

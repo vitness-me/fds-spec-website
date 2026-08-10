@@ -1,0 +1,57 @@
+{
+  "schemaVersion": "1.1.0",
+  "workoutId": "00000000-0000-4000-8000-000000000111",
+  "canonical": {
+    "name": "For Time",
+    "slug": "for-time"
+  },
+  "classification": {
+    "workoutType": "conditioning"
+  },
+  "structure": {
+    "blocks": [
+      {
+        "id": "b1",
+        "mode": "forTime",
+        "items": [
+          {
+            "id": "i1",
+            "exercise": {
+              "id": "ex.thruster",
+              "name": "Thruster"
+            },
+            "reps": {
+              "kind": "fixed",
+              "value": 21
+            }
+          },
+          {
+            "id": "i2",
+            "exercise": {
+              "id": "ex.pullUp",
+              "name": "Pull-Up"
+            },
+            "reps": {
+              "kind": "fixed",
+              "value": 21
+            }
+          }
+        ],
+        "role": "conditioning",
+        "modeParams": {
+          "rounds": 3,
+          "timeCap": {
+            "value": 15,
+            "unit": "min"
+          }
+        }
+      }
+    ]
+  },
+  "metadata": {
+    "createdAt": "2026-08-09T00:00:00Z",
+    "updatedAt": "2026-08-09T00:00:00Z",
+    "status": "active",
+    "source": "vitness.core"
+  }
+}

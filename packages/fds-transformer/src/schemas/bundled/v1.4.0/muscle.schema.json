@@ -1,0 +1,311 @@
+{
+  "$id": "https://spec.vitness.me/schemas/muscle/v1.0.0/muscle.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "FDS Muscle (v1.0.0)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "id",
+    "canonical",
+    "classification",
+    "metadata"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "id": {
+      "type": "string"
+    },
+    "canonical": {
+      "$ref": "#/$defs/canonical"
+    },
+    "classification": {
+      "type": "object",
+      "required": [
+        "categoryId",
+        "region"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "categoryId": {
+          "type": "string"
+        },
+        "region": {
+          "$ref": "#/$defs/regionGroup"
+        },
+        "laterality": {
+          "$ref": "#/$defs/laterality"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "media": {
+      "$ref": "#/$defs/media"
+    },
+    "attributes": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "extensions": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "heatmap": {
+      "type": "object",
+      "required": [
+        "atlasId",
+        "regions"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "atlasId": {
+          "type": "string"
+        },
+        "regions": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": [
+              "areaId"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "areaId": {
+                "type": "string"
+              },
+              "weight": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1,
+                "default": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "metadata": {
+      "$ref": "#/$defs/metadata"
+    }
+  },
+  "$defs": {
+    "canonical": {
+      "type": "object",
+      "required": [
+        "name",
+        "slug"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "slug": {
+          "type": "string",
+          "pattern": "^[a-z0-9-]{2,}$"
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "aliases": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "localized": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "lang",
+              "name"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "lang": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "description": {
+                "type": "string",
+                "minLength": 1
+              },
+              "aliases": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "uniqueItems": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "laterality": {
+      "type": "string",
+      "enum": [
+        "left",
+        "right",
+        "bilateral",
+        "unilateral",
+        "n/a"
+      ]
+    },
+    "media": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "type",
+          "uri"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "image",
+              "video",
+              "doc",
+              "3d"
+            ]
+          },
+          "uri": {
+            "type": "string",
+            "format": "uri"
+          },
+          "caption": {
+            "type": "string"
+          },
+          "license": {
+            "type": "string"
+          },
+          "attribution": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "required": [
+        "createdAt",
+        "updatedAt",
+        "status"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "source": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/$defs/status"
+        },
+        "deprecated": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "since": {
+              "type": "string",
+              "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+            },
+            "replacedBy": {
+              "type": "string"
+            }
+          }
+        },
+        "externalRefs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "system",
+              "id"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "system": {
+                "type": "string"
+              },
+              "id": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "history": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "at": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "actor": {
+                "type": "string"
+              },
+              "change": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "regionGroup": {
+      "type": "string",
+      "enum": [
+        "upper-front",
+        "upper-back",
+        "lower-front",
+        "lower-back",
+        "core",
+        "full-body",
+        "n/a"
+      ]
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "review",
+        "active",
+        "inactive",
+        "deprecated"
+      ],
+      "default": "active"
+    }
+  }
+}

@@ -77,7 +77,7 @@ if run_job schemas; then
   validate "$S/muscle/v1.0.0/muscle.schema.json"                          "$S/muscle/v1.0.0"
   validate "$S/muscle/muscle-category/v1.0.0/muscle-category.schema.json" "$S/muscle/muscle-category/v1.0.0"
   validate "$S/atlas/v1.0.0/body-atlas.schema.json"                       "$S/atlas/v1.0.0"
-  validate "$S/workout/v1.0.0/workout.schema.json"                        "$S/workout/v1.0.0"
+  validate "$S/workout/v1.1.0/workout.schema.json"                        "$S/workout/v1.1.0"
   validate "$S/program/v1.0.0/program.schema.json"                        "$S/program/v1.0.0"
   printf '  %d examples validated standalone, %d failed\n' "$total" "$failed"
 fi

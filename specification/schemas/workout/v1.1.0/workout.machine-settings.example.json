@@ -1,0 +1,181 @@
+{
+  "schemaVersion": "1.1.0",
+  "workoutId": "00000000-0000-4000-8000-0000000d0110",
+  "canonical": {
+    "name": "Treadmill Hill Progression",
+    "slug": "machine-settings"
+  },
+  "classification": {
+    "workoutType": "conditioning",
+    "estimatedDuration": {
+      "value": 30,
+      "unit": "min"
+    }
+  },
+  "structure": {
+    "blocks": [
+      {
+        "id": "b1",
+        "role": "warmup",
+        "mode": "sequential",
+        "items": [
+          {
+            "id": "i1",
+            "exercise": {
+              "id": "ex.treadmill",
+              "name": "Treadmill"
+            },
+            "reps": {
+              "kind": "time",
+              "value": 5,
+              "unit": "min"
+            },
+            "settings": [
+              {
+                "type": "incline",
+                "unit": "percent",
+                "value": 0
+              }
+            ],
+            "zone": {
+              "system": "heartRate",
+              "zone": "Z1",
+              "boundsRef": "zone.fiveZoneHeartRate"
+            }
+          }
+        ]
+      },
+      {
+        "id": "b2",
+        "role": "primary",
+        "mode": "sequential",
+        "notes": "Incline climbs and never comes back down. Each set states its own incline and its own zone \u2014 both are per-set from workout 1.1.0.",
+        "items": [
+          {
+            "id": "i2",
+            "exercise": {
+              "id": "ex.treadmill",
+              "name": "Treadmill"
+            },
+            "sets": [
+              {
+                "index": 1,
+                "reps": {
+                  "kind": "time",
+                  "value": 5,
+                  "unit": "min"
+                },
+                "settings": [
+                  {
+                    "type": "incline",
+                    "unit": "percent",
+                    "value": 3
+                  }
+                ],
+                "zone": {
+                  "system": "heartRate",
+                  "zone": "Z2",
+                  "boundsRef": "zone.fiveZoneHeartRate"
+                }
+              },
+              {
+                "index": 2,
+                "reps": {
+                  "kind": "time",
+                  "value": 5,
+                  "unit": "min"
+                },
+                "settings": [
+                  {
+                    "type": "incline",
+                    "unit": "percent",
+                    "value": 6
+                  }
+                ],
+                "zone": {
+                  "system": "heartRate",
+                  "zone": "Z3",
+                  "boundsRef": "zone.fiveZoneHeartRate"
+                }
+              },
+              {
+                "index": 3,
+                "reps": {
+                  "kind": "time",
+                  "value": 5,
+                  "unit": "min"
+                },
+                "settings": [
+                  {
+                    "type": "incline",
+                    "unit": "percent",
+                    "value": 9,
+                    "notes": "Hold the handrails only if form breaks."
+                  }
+                ],
+                "zone": {
+                  "system": "heartRate",
+                  "zone": "Z4",
+                  "boundsRef": "zone.fiveZoneHeartRate"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "b3",
+        "role": "conditioning",
+        "mode": "interval",
+        "modeParams": {
+          "rounds": 4,
+          "work": {
+            "value": 90,
+            "unit": "s"
+          },
+          "rest": {
+            "value": 90,
+            "unit": "s"
+          }
+        },
+        "notes": "Cadence and resistance together. Resistance is a load, so it stays a loadTarget; cadence is a setting the athlete dials in, so it is a setting.",
+        "items": [
+          {
+            "id": "i3",
+            "exercise": {
+              "id": "ex.bike",
+              "name": "Stationary Bike"
+            },
+            "reps": {
+              "kind": "time",
+              "value": 90,
+              "unit": "s"
+            },
+            "load": {
+              "method": "level",
+              "value": 8,
+              "scale": "keiser-m3"
+            },
+            "settings": [
+              {
+                "type": "cadence",
+                "unit": "rpm",
+                "value": 90,
+                "range": {
+                  "min": 85,
+                  "max": 95
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "metadata": {
+    "createdAt": "2026-08-10T00:00:00Z",
+    "updatedAt": "2026-08-10T00:00:00Z",
+    "status": "active",
+    "source": "vitness.core"
+  }
+}

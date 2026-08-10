@@ -1,0 +1,66 @@
+{
+  "schemaVersion": "1.1.0",
+  "workoutId": "00000000-0000-4000-8000-0000000d0108",
+  "canonical": {
+    "name": "Negative Split Ten",
+    "slug": "negative-splits"
+  },
+  "classification": {
+    "workoutType": "endurance",
+    "level": "intermediate"
+  },
+  "structure": {
+    "blocks": [
+      {
+        "id": "b1",
+        "role": "primary",
+        "mode": "sequential",
+        "notes": "Each half is faster than the last. Expressed as separate items with ascending zones rather than as one item with a note, so a consumer can render the intent instead of reading it.",
+        "items": [
+          {
+            "id": "i1",
+            "exercise": {
+              "id": "ex.run",
+              "name": "Running"
+            },
+            "reps": {
+              "kind": "distance",
+              "value": 5,
+              "unit": "km"
+            },
+            "zone": {
+              "system": "pace",
+              "zone": "Z2",
+              "boundsRef": "zone.fiveZonePace"
+            },
+            "notes": "First half, held back."
+          },
+          {
+            "id": "i2",
+            "exercise": {
+              "id": "ex.run",
+              "name": "Running"
+            },
+            "reps": {
+              "kind": "distance",
+              "value": 5,
+              "unit": "km"
+            },
+            "zone": {
+              "system": "pace",
+              "zone": "Z4",
+              "boundsRef": "zone.fiveZonePace"
+            },
+            "notes": "Second half, faster than the first. That relationship is the session."
+          }
+        ]
+      }
+    ]
+  },
+  "metadata": {
+    "createdAt": "2026-08-10T00:00:00Z",
+    "updatedAt": "2026-08-10T00:00:00Z",
+    "status": "active",
+    "source": "vitness.core"
+  }
+}

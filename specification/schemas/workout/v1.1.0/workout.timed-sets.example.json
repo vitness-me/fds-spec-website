@@ -1,0 +1,55 @@
+{
+  "schemaVersion": "1.1.0",
+  "workoutId": "00000000-0000-4000-8000-000000000019",
+  "canonical": {
+    "name": "Timed Sets",
+    "slug": "timed-sets"
+  },
+  "classification": {
+    "workoutType": "conditioning"
+  },
+  "structure": {
+    "blocks": [
+      {
+        "id": "b1",
+        "mode": "sequential",
+        "items": [
+          {
+            "id": "i1",
+            "exercise": {
+              "id": "ex.airBike",
+              "name": "Air Bike"
+            },
+            "scheme": {
+              "pattern": "straight",
+              "sets": 4
+            },
+            "reps": {
+              "kind": "time",
+              "value": 45,
+              "unit": "s"
+            },
+            "zone": {
+              "system": "heartRate",
+              "zone": "Z4",
+              "boundsRef": "zone.fiveZoneHeartRate"
+            },
+            "rest": {
+              "method": "fixed",
+              "appliesTo": "set",
+              "value": 75,
+              "unit": "s"
+            }
+          }
+        ],
+        "role": "conditioning"
+      }
+    ]
+  },
+  "metadata": {
+    "createdAt": "2026-08-09T00:00:00Z",
+    "updatedAt": "2026-08-09T00:00:00Z",
+    "status": "active",
+    "source": "vitness.core"
+  }
+}

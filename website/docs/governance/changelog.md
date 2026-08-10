@@ -13,6 +13,34 @@ The format is inspired by Keep a Changelog, and the project adheres to Semantic 
 ## [Unreleased]
 - Extension namespace policy (draft) and conformance sections (planned).
 
+## Schema release — workout 1.1.0 (2026-08-10)
+
+### Added
+- `settings[]` on a workout item and on a single set — machine and environment
+  settings the session prescribes, as a metric shape from RFC-001 with a value
+  attached. A treadmill incline and a bike cadence had no home before this;
+  `incline`, `cadence` and `resistanceLevel` were in the metric vocabulary with
+  nowhere to attach a value.
+- `zone` on a set. Load, repetitions, tempo and rest were always statable per
+  set and intensity was not, so a session whose intensity climbed set by set had
+  to be split into one item per step. That was an asymmetry, not a decision.
+- `workout.machine-settings.example.json`, and ten cardio and endurance sessions
+  completing §4.4 of the coverage matrix.
+
+### Changed
+- The transformer bundles release **1.4.0**, which serves workout at 1.1.0.
+  1.0.0 through 1.3.0 remain bundled.
+- `check:scenarios` now enforces all seven answerable sections of the coverage
+  matrix — **87 rows**, up from 54.
+
+### Compatibility
+- Purely additive. Every 1.0.0 workout document validates against 1.1.0
+  unchanged; a 1.1.0 document using either addition is rejected by the 1.0.0
+  schema, which is what makes this a version rather than an edit.
+- **`workout/v1.0.0/` stays published and frozen.** Transformer releases 1.2.0
+  and 1.3.0 declare workout at 1.0.0, and a frozen URL that disappears is worse
+  than one that changes.
+
 ## Schema release — program 1.0.0 (2026-08-10)
 
 ### Added
