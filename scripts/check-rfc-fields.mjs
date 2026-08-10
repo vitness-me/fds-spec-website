@@ -43,6 +43,10 @@ const PAIRS = [
     rfc: 'specification/rfc/rfc-007-workout-data-model.md',
     source: 'specification/schema-sources/workout/v1.0.0/workout.schema.json',
   },
+  {
+    rfc: 'specification/rfc/rfc-008-program-data-model.md',
+    source: 'specification/schema-sources/program/v1.0.0/program.schema.json',
+  },
 ];
 
 /**
@@ -120,6 +124,7 @@ async function globalVocabulary() {
     'specification/schema-sources/atlas/v1.0.0/body-atlas.schema.json',
     'specification/schema-sources/prescription/v1.0.0/prescription.schema.json',
     'specification/schema-sources/workout/v1.0.0/workout.schema.json',
+    'specification/schema-sources/program/v1.0.0/program.schema.json',
   ];
   const all = new Set();
   for (const rel of sources) {
