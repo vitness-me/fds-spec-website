@@ -4,6 +4,8 @@ description: FDS version history and changes
 sidebar_position: 3
 ---
 
+# Fitness Data Standard — Changelog
+
 All notable changes to the FDS RFCs and schemas are documented here.
 
 The format is inspired by Keep a Changelog, and the project adheres to Semantic Versioning for spec releases.
