@@ -17,7 +17,12 @@ export { RegistryManager } from './registries/registry-manager.js';
 export { FuzzyMatcher } from './registries/fuzzy-matcher.js';
 
 // Schema exports
-export { SchemaManager } from './schemas/schema-manager.js';
+export { SchemaManager, SchemaFetchError } from './schemas/schema-manager.js';
+export type {
+  SchemaLoadResult,
+  SchemaFetchFailure,
+  SchemaFetchFailureReason,
+} from './schemas/schema-manager.js';
 export { Validator } from './schemas/validator.js';
 
 // AI exports

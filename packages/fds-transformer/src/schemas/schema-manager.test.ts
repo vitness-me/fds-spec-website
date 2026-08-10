@@ -180,4 +180,99 @@ describe('SchemaManager', () => {
       expect(JSON.stringify(result.errors)).toMatch(/loading/);
     });
   });
+
+  /**
+   * A 200 is not proof that a schema came back.
+   *
+   * `spec.vitness.me` sat behind Cloudflare Access for weeks answering every
+   * schema URL with 200 and an HTML sign-in page. `response.ok` was true, the
+   * subsequent `.json()` threw a parse error, and the fallback quietly served
+   * bundled schemas — so "remote first, so consumers get the latest" had become
+   * "always bundled", indistinguishable from being offline, and nobody noticed.
+   *
+   * The fallback is still the right behaviour. What was missing is the reason.
+   */
+  describe('a reachable URL that is not serving a schema', () => {
+    const respondWith = (body: string, contentType: string, status = 200) =>
+      vi.fn().mockResolvedValue({
+        ok: status >= 200 && status < 300,
+        status,
+        statusText: status === 200 ? 'OK' : 'Error',
+        headers: { get: (name: string) => (name.toLowerCase() === 'content-type' ? contentType : null) },
+        json: async () => JSON.parse(body),
+      });
+
+    const signInPage = () =>
+      respondWith('<!doctype html><title>Sign in</title>', 'text/html; charset=utf-8');
+
+    it('names the content type and the URL rather than throwing a parse error', async () => {
+      vi.stubGlobal('fetch', signInPage());
+      const manager = new SchemaManager();
+
+      await manager.loadVersion('1.0.0');
+
+      const errors = manager.getLoadResult()?.errors ?? [];
+      expect(errors.join('\n')).toMatch(/content-type "text\/html; charset=utf-8"/);
+      expect(errors.join('\n')).toMatch(/spec\.vitness\.me\/schemas\/exercises\/v1\.0\.0/);
+      // The failure a reader must never see, because it names neither.
+      expect(errors.join('\n')).not.toMatch(/Unexpected token/);
+    });
+
+    it('distinguishes not-serving-a-schema from unreachable', async () => {
+      vi.stubGlobal('fetch', signInPage());
+      const served = new SchemaManager();
+      await served.loadVersion('1.0.0');
+
+      vi.stubGlobal('fetch', unreachableRemote());
+      const offline = new SchemaManager();
+      await offline.loadVersion('1.0.0');
+
+      expect(served.getLoadResult()?.failures.map((f) => f.reason)).toEqual(['notJson']);
+      expect(offline.getLoadResult()?.failures.map((f) => f.reason)).toEqual(['unreachable']);
+    });
+
+    it('rejects JSON that is not a schema document', async () => {
+      vi.stubGlobal('fetch', respondWith('{"error":"forbidden"}', 'application/json'));
+      const manager = new SchemaManager();
+
+      await manager.loadVersion('1.0.0');
+
+      expect(manager.getLoadResult()?.failures[0]?.reason).toBe('notASchema');
+      expect(manager.getLoadResult()?.errors.join('\n')).toMatch(/no string \$id/);
+    });
+
+    it('reports an HTTP error separately again', async () => {
+      vi.stubGlobal('fetch', respondWith('{}', 'application/json', 503));
+      const manager = new SchemaManager();
+
+      await manager.loadVersion('1.0.0');
+
+      expect(manager.getLoadResult()?.failures[0]?.reason).toBe('httpError');
+    });
+
+    it('accepts application/schema+json, which is a legitimate schema media type', async () => {
+      vi.stubGlobal(
+        'fetch',
+        respondWith('{"$id":"https://example.test/x.json"}', 'application/schema+json')
+      );
+      const manager = new SchemaManager();
+
+      await manager.loadVersion('1.0.0');
+
+      // The stub serves the same stub document for every entity, so this does not
+      // assert a working schema set — only that the content type was accepted and
+      // the fetch produced no failure.
+      expect(manager.getLoadResult()?.failures).toEqual([]);
+    });
+
+    it('still falls back, so this changes the message and not the resilience', async () => {
+      vi.stubGlobal('fetch', signInPage());
+      const manager = new SchemaManager();
+
+      await manager.loadVersion('1.0.0');
+
+      expect(manager.getLoadResult()?.source).toBe('bundled');
+      expect(manager.getLoadResult()?.entities).toContain('exercise');
+    });
+  });
 });

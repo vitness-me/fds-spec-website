@@ -50,10 +50,61 @@ export interface SchemaVersion {
   bundled: boolean;
 }
 
+/**
+ * Why a remote schema could not be used.
+ *
+ * The distinction that matters is the last one. `unreachable` and `httpError`
+ * are ordinary — no network, wrong URL — and the bundled fallback is the right
+ * answer. `notJson` and `notASchema` mean the URL *answered*, successfully, with
+ * something that is not a schema: a sign-in page, a captive portal, a CDN error
+ * page, a Pages 404 rendered as HTML. That is a misconfiguration, and it reads
+ * completely differently to whoever has to fix it.
+ */
+export type SchemaFetchFailureReason =
+  | 'unreachable'
+  | 'httpError'
+  | 'notJson'
+  | 'notASchema';
+
+export interface SchemaFetchFailure {
+  entity: string;
+  url: string;
+  reason: SchemaFetchFailureReason;
+  message: string;
+}
+
 export interface SchemaLoadResult {
   source: 'remote' | 'bundled';
   entities: string[];
   errors: string[];
+  /**
+   * The same failures as `errors`, structured. Callers deciding whether to warn
+   * loudly need the reason, not a string to match against.
+   */
+  failures: SchemaFetchFailure[];
+}
+
+/** A remote fetch that did not yield a usable schema, with the reason attached. */
+export class SchemaFetchError extends Error {
+  constructor(
+    readonly reason: SchemaFetchFailureReason,
+    readonly url: string,
+    message: string
+  ) {
+    super(message);
+    this.name = 'SchemaFetchError';
+  }
+}
+
+/**
+ * Whether a content type promises JSON.
+ *
+ * Accepts the `+json` structured-syntax suffix, so `application/schema+json`
+ * counts. Parameters are ignored: `application/json; charset=utf-8` is JSON.
+ */
+function isJsonContentType(contentType: string): boolean {
+  const essence = contentType.split(';')[0]?.trim().toLowerCase() ?? '';
+  return essence === 'application/json' || essence.endsWith('+json');
 }
 
 export class SchemaManager {
@@ -86,6 +137,7 @@ export class SchemaManager {
       entities.push('exercise', 'equipment', 'muscle', 'muscle-category', 'body-atlas');
     }
     const errors: string[] = [];
+    const failures: SchemaFetchFailure[] = [];
     let source: 'remote' | 'bundled' = 'remote';
 
     // Try remote first
@@ -96,7 +148,13 @@ export class SchemaManager {
         entitySchemas.set(entity, schema);
       } catch (error) {
         remoteSuccess = false;
-        errors.push(`Remote fetch failed for ${entity}: ${error instanceof Error ? error.message : 'Unknown error'}`);
+        const message = error instanceof Error ? error.message : 'Unknown error';
+        if (error instanceof SchemaFetchError) {
+          failures.push({ entity, url: error.url, reason: error.reason, message });
+          errors.push(`Remote fetch failed for ${entity} [${error.reason}]: ${message}`);
+        } else {
+          errors.push(`Remote fetch failed for ${entity}: ${message}`);
+        }
         break; // If one fails, switch to bundled for all
       }
     }
@@ -137,6 +195,7 @@ export class SchemaManager {
       source,
       entities: Array.from(entitySchemas.keys()),
       errors,
+      failures,
     };
 
     // Both paths exhausted. Caching an empty schema set here would leave every
@@ -236,12 +295,69 @@ export class SchemaManager {
         throw new Error(`Unknown entity type: ${entity}`);
     }
 
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(`Failed to fetch schema: ${response.statusText}`);
+    let response: Response;
+    try {
+      response = await fetch(url);
+    } catch (cause) {
+      const message = cause instanceof Error ? cause.message : 'Unknown error';
+      throw new SchemaFetchError('unreachable', url, `${url} could not be reached: ${message}`);
     }
 
-    const schema = await response.json() as object;
+    if (!response.ok) {
+      throw new SchemaFetchError(
+        'httpError',
+        url,
+        `${url} answered ${response.status} ${response.statusText}`
+      );
+    }
+
+    // A 200 is not proof that a schema came back. Anything that intercepts the
+    // request — a Cloudflare Access sign-in page, a captive portal, a CDN error
+    // page — answers 200 with HTML, and calling .json() on it produces a parse
+    // error that names neither the URL nor what actually arrived. Checking the
+    // content type first is what turns "unexpected token <" into a sentence
+    // someone can act on.
+    const contentType = response.headers.get('content-type') ?? '';
+    if (!isJsonContentType(contentType)) {
+      throw new SchemaFetchError(
+        'notJson',
+        url,
+        `${url} answered ${response.status} with content-type ` +
+          `"${contentType || 'none'}", not JSON. The URL is reachable but is ` +
+          'not serving a schema — an interstitial, sign-in page or error page ' +
+          'usually answers this way.'
+      );
+    }
+
+    let parsed: unknown;
+    try {
+      parsed = await response.json();
+    } catch (cause) {
+      const message = cause instanceof Error ? cause.message : 'Unknown error';
+      throw new SchemaFetchError(
+        'notJson',
+        url,
+        `${url} declared content-type "${contentType}" but the body is not valid JSON: ${message}`
+      );
+    }
+
+    // A JSON body is still not necessarily a schema. An API gateway answering
+    // {"error":"forbidden"} in JSON would otherwise be cached and compiled as
+    // an empty schema, which validates everything.
+    if (
+      typeof parsed !== 'object' ||
+      parsed === null ||
+      Array.isArray(parsed) ||
+      typeof (parsed as { $id?: unknown }).$id !== 'string'
+    ) {
+      throw new SchemaFetchError(
+        'notASchema',
+        url,
+        `${url} returned JSON with no string $id, so it is not an FDS schema document.`
+      );
+    }
+
+    const schema = parsed as object;
 
     // Cache locally if cacheDir is set
     if (this.cacheDir) {
@@ -344,12 +460,14 @@ export class SchemaManager {
         source: 'bundled',
         entities: Array.from(entitySchemas.keys()),
         errors: [],
+        failures: [],
       };
     } catch (error) {
       this.lastLoadResult = {
         source: 'bundled',
         entities: [],
         errors: [`Failed to load bundled schemas: ${error instanceof Error ? error.message : 'Unknown error'}`],
+        failures: [],
       };
       throw error;
     }
