@@ -11,6 +11,7 @@
     "check:metrics": "node scripts/check-metrics-guide.mjs",
     "check:prescription": "node scripts/check-prescription.mjs",
     "check:rfc": "node scripts/check-rfc-fields.mjs",
+    "check:mirrors": "node scripts/check-rfc-mirrors.mjs",
     "check:scenarios": "node scripts/check-scenarios.mjs"
   }
 }
