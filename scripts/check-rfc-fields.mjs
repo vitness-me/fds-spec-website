@@ -25,6 +25,7 @@
 import { readFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { globalVocabulary, vocabularyOf } from './lib/vocabulary.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -69,70 +70,6 @@ const PROSE = new Set([
   'repsPerCluster', 'restUnit', 'rungs', 'startPercent', 'target', 'timeUnit',
   'waves',
 ]);
-
-const walk = (node, visit) => {
-  if (Array.isArray(node)) return node.forEach((v) => walk(v, visit));
-  if (!node || typeof node !== 'object') return;
-  visit(node);
-  Object.values(node).forEach((v) => walk(v, visit));
-};
-
-/**
- * Names a schema authors: property names, definition names, and `const`
- * discriminator values.
- *
- * `enum` values are excluded from the *forward* requirement. They are mostly
- * shared vocabulary owned elsewhere — units belong to RFC-001's metric guide,
- * not to every RFC that happens to reference a duration — and demanding each
- * one be named turns the check into noise. Discriminators are different: they
- * select structure, so they are written with `const` and are required.
- */
-function vocabularyOf(schema, { includeEnums = false } = {}) {
-  const names = new Set(Object.keys(schema.$defs ?? {}));
-  walk(schema, (node) => {
-    if (node.properties && typeof node.properties === 'object') {
-      for (const key of Object.keys(node.properties)) names.add(key);
-    }
-    if (typeof node.const === 'string') names.add(node.const);
-    if (includeEnums && Array.isArray(node.enum)) {
-      for (const value of node.enum) if (typeof value === 'string') names.add(value);
-    }
-    // Recommended values for an open classifier. Not constraints, but the
-    // schema does name them, so an RFC citing one is not inventing it.
-    if (includeEnums && Array.isArray(node.examples)) {
-      for (const value of node.examples) if (typeof value === 'string') names.add(value);
-    }
-  });
-  return names;
-}
-
-/**
- * Everything any FDS schema defines.
- *
- * An RFC legitimately names fields it does not own — RFC-007 refers to
- * `loadTarget`, `metadata` and `schemaVersion` constantly. The backward check
- * is looking for *invented* fields, so it asks whether a name exists anywhere
- * in the standard, not whether this one schema declares it.
- */
-async function globalVocabulary() {
-  const sources = [
-    'specification/schema-sources/common/v1.0.0/common.schema.json',
-    'specification/schema-sources/exercises/v1.1.0/exercise.schema.json',
-    'specification/schema-sources/equipment/v1.1.0/equipment.schema.json',
-    'specification/schema-sources/muscle/v1.0.0/muscle.schema.json',
-    'specification/schema-sources/muscle/muscle-category/v1.0.0/muscle-category.schema.json',
-    'specification/schema-sources/atlas/v1.0.0/body-atlas.schema.json',
-    'specification/schema-sources/prescription/v1.0.0/prescription.schema.json',
-    'specification/schema-sources/workout/v1.0.0/workout.schema.json',
-    'specification/schema-sources/program/v1.0.0/program.schema.json',
-  ];
-  const all = new Set();
-  for (const rel of sources) {
-    const schema = JSON.parse(await readFile(join(ROOT, rel), 'utf8'));
-    for (const name of vocabularyOf(schema, { includeEnums: true })) all.add(name);
-  }
-  return all;
-}
 
 const GLOBAL = await globalVocabulary();
 const problems = [];
