@@ -1,6 +1,6 @@
 # Fitness Data Standard (FDS) Specification
 
-This repository defines the Fitness Data Standard (FDS) for interoperable exchange of fitness domain data. The current scope covers core registry entities and the exercise model used by applications.
+This repository defines the Fitness Data Standard (FDS) for interoperable exchange of fitness domain data. The current scope covers the exercise catalog and its registries, the prescription primitives, and the workout and programming models built on them.
 
 ## Purpose & Scope
 - Enable data portability and interoperability across fitness applications.
@@ -9,12 +9,23 @@ This repository defines the Fitness Data Standard (FDS) for interoperable exchan
 
 In scope (current):
 - Exercise data model (RFC‑001)
-- Registry entities: Equipment (RFC‑002), Muscles (RFC‑003), Muscle Categories (RFC‑004)
+- Registry entities: Equipment (RFC‑002), Muscles (RFC‑003), Muscle Categories (RFC‑004), Body Atlas (RFC‑005)
+- Prescription primitives (RFC‑006) — a definition library, not an entity
+- Workout data model (RFC‑007) and training program data model (RFC‑008)
 
 Out of scope (current):
-- Workout/programming models, user progress tracking, authN/Z (to be covered by future RFCs)
+- Performed data — what was actually done, and by whom (RFC‑009, deferred pending a consent and privacy model)
+- Athlete identity, bodyweight, and the numeric value of any one‑rep max or training max. This is a decision, not a gap: FDS models no person, which is what lets catalogs, sessions and plans be published, cached and mirrored freely. A program declares *which* lifts it is computed from and *how* the caller derives them, never the numbers.
+- Authentication and authorization
 
 ## Versioning & Compatibility
+
+**Entities version independently, and a release names a set of entity versions.** Release 1.3.0 serves exercise and equipment at 1.1.0 and everything else at 1.0.0. There is no `muscle/v1.3.0/`, and there will not be unless muscle itself changes — a client that expands a release name into a path segment requests URLs that were never published. Build schema URLs from the entity version.
+
+Gaining an entity is a new release even when nothing existing changed, because a release names the *set* it publishes: 1.2.0 added workout, 1.3.0 added program.
+
+**A published URL is frozen.** Once an entity version is released its bytes never change; a consumer that fetched it yesterday and again today gets the same document. The build refuses to alter a frozen schema, and every published schema is currently frozen. Changes ship at a new version URL.
+
 FDS follows Semantic Versioning for data model releases:
 - Major (X.0.0): Breaking changes to required fields or semantics.
 - Minor (0.Y.0): Backward‑compatible additions (optional fields, new enum values where allowed, documentation clarifications).
@@ -140,14 +151,31 @@ Notes:
   - RFC‑003 Muscle Data Model
   - RFC‑004 Muscle Category Data Model
   - RFC‑005 Body Atlas Data Model
-- `specification/schemas/`
-  - `exercises/v1.1.0/` exercise schema + example
-  - `atlas/v1.0.0/` body atlas schema + example
-  - `equipment/v1.1.0/` equipment schema + example
-  - `muscle/v1.0.0/` muscle schema + example
-  - `muscle/muscle-category/v1.0.0/` muscle category schema + example
+  - RFC‑006 Prescription Primitives
+  - RFC‑007 Workout Data Model
+  - RFC‑008 Training Program Data Model
+- `specification/schema-sources/` — **authoring**. Entity schemas `$ref` a shared `common` envelope here; hand‑edit these.
+- `specification/schemas/` — **generated and published**. Each file is flattened to be self‑contained, so validating one entity never requires fetching another. Never hand‑edit a `*.schema.json`; the examples and READMEs beside them are hand‑written.
+  - `exercises/v1.1.0/`, `equipment/v1.1.0/` schema + examples
+  - `muscle/v1.0.0/`, `muscle/muscle-category/v1.0.0/`, `atlas/v1.0.0/` schema + examples
+  - `prescription/v1.0.0/` definition library + 69 fixtures
+  - `workout/v1.0.0/` schema + 36 worked sessions
+  - `program/v1.0.0/` schema + 18 worked programs
+  - `.integrity.json` — sha256 and frozen flag per published schema
+- `specification/registries/`
+  - `*.registry.json` — normative recommended values for the open classifiers
+  - `*.registry.example.json` — illustrative entity catalogs, not normative
 - `specification/governance/`
-  - `GOVERNANCE.md`, `CONTRIBUTING.md`, `CHANGELOG.md` (to be populated)
+  - `GOVERNANCE.md`, `CONTRIBUTING.md`, `CHANGELOG.md`
+
+## Verifying a change
+
+```bash
+npm run verify          # everything CI runs
+npm run verify schemas  # one job: transformer | schemas | website
+```
+
+Nine checks run, each of which was demonstrated failing before being trusted: published schemas match their authoring sources, the metrics guide covers the metric vocabulary, prescription fixtures match the definitions they exemplify, RFCs and their schemas agree in both directions, website pages match their sources and every published schema has one, every coverage‑matrix row has a worked example, and every recommended value appears in a registry.
 
 ## Security & Privacy
 - Schemas define data formats; transport and storage security are implementation responsibilities.

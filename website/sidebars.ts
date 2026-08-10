@@ -90,6 +90,7 @@ const sidebars: SidebarsConfig = {
         'governance/index',
         'governance/contributing',
         'governance/changelog',
+        'governance/roadmap',
       ],
     },
     'license',

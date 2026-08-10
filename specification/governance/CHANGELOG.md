@@ -5,8 +5,48 @@ All notable changes to the FDS RFCs and schemas are documented here.
 The format is inspired by Keep a Changelog, and the project adheres to Semantic Versioning for spec releases.
 
 ## [Unreleased]
-- Governance, contribution guide, and repository README improvements.
 - Extension namespace policy (draft) and conformance sections (planned).
+
+## Schema release — program 1.0.0 (2026-08-10)
+
+### Added
+- `program/v1.0.0` — RFC-008 training program. A schedule of workout references
+  over time: cycles, weeks, day placement, per-occurrence overrides, progression
+  rules and conditional branching. A program does not contain workouts; it
+  points at them, so a session shared by four programs is authored once and
+  fixed once.
+- `references.trainingMaxes[]` — declares which lifts a program is computed from
+  and how the caller derives each number. It never carries the number, and
+  RFC-008 §8.1 states as normative text that an implementation MUST NOT add one.
+- 18 worked program examples, one per row of §4.6 periodization and §4.7
+  scheduling in the coverage matrix.
+- Four registries under `specification/registries/`: exercise type, workout
+  type, block role and intensity zone. `exerciseType` carries no `enum` and no
+  `examples`, so its registry is the only place that vocabulary is written down.
+- Website pages for the workout, program and prescription schemas. All three had
+  been published at frozen URLs the documentation never mentioned.
+
+### Changed
+- The transformer bundles release **1.3.0**, which adds program. 1.0.0 through
+  1.2.0 remain bundled for consumers pinned to them.
+- `discovery.md` covers all seven entities and adds `entity_versions`. A release
+  names a *set* of entity versions, so a client that expands a release into a
+  path segment requests URLs that were never published.
+- A remote schema fetch that answers 200 with something other than a schema now
+  fails with a message naming the content type and the URL. Previously the parse
+  error was swallowed and the transformer fell back to bundled schemas silently,
+  which is indistinguishable from being offline.
+
+### Fixed
+- The published metrics guide page had not been rebuilt after the metric
+  vocabulary was extended, so the website documented types the standard had
+  moved past.
+- A training-max slot is matched by its `exercise`, not by its `id`. The schema
+  had described the wrong key.
+
+### Compatibility
+- Purely additive. No existing schema changed; every published example validates
+  unchanged. Every published schema is now frozen.
 
 ## Schema release — prescription 1.0.0, workout 1.0.0 (2026-08-09)
 
