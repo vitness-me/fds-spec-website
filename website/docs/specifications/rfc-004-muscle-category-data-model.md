@@ -133,6 +133,9 @@ For complex platform-unique data structures:
 ## 4. Reference Types and Structures
 
 ### 4.1. Canonical Information
+
+`canonical` carries the category's identity — display name, slug, and optional aliases and localised names. Category names are the ones that appear in a user interface most often, which makes localisation here more visible than anywhere else in the catalog.
+
 ```json
 {
   "canonical": {
@@ -146,6 +149,9 @@ For complex platform-unique data structures:
 ```
 
 ### 4.2. Classification Structure
+
+`classification` carries `tags` for filtering — `major-group` distinguishing the handful of top-level groupings from finer ones, for example. Tags have no structural consequence: a consumer that does not recognise one ignores it.
+
 ```json
 {
   "classification": {
@@ -155,6 +161,9 @@ For complex platform-unique data structures:
 ```
 
 ### 4.3. Media References
+
+`media` follows the shared definition from RFC-001 — typically an icon or illustration representing the group.
+
 ```json
 {
   "media": [

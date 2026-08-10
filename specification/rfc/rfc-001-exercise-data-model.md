@@ -1,10 +1,10 @@
 # RFC-001: Exercise Data Model Specification
 
-**Status**: Draft  
-**Version**: 0.1.0  
-**Date**: 2025-09-02  
-**Authors**: VITNESS Team  
-**Category**: Standards Track  
+**Status**: Draft
+**Version**: 0.1.0
+**Date**: 2025-09-02
+**Authors**: VITNESS Team
+**Category**: Standards Track
 
 ## Abstract
 
@@ -52,7 +52,13 @@ This specification aims to:
 
 ### 3.1. Required Fields
 
-All compliant exercise data MUST include these fields:
+Six fields are required: `schemaVersion`, `exerciseId`, `canonical` (the name and slug this exercise is known by), `classification` (what kind of movement it is), `targets` (what it trains), `metrics` (how it is measured) and `metadata`.
+
+An exercise missing any of them is not identifiable, not classifiable, or not measurable, and each of those makes it unusable to a consumer rather than merely incomplete.
+
+:::danger MUST
+All compliant exercise data **MUST** include these fields:
+:::
 
 ```json
 {
@@ -87,7 +93,17 @@ All compliant exercise data MUST include these fields:
 
 ### 3.2. Optional Standard Fields
 
-Commonly supported optional fields that enhance interoperability:
+Four optional fields carry most of what an implementation actually renders.
+
+`equipment` splits into what the movement cannot be performed without and what merely helps. `media` carries demonstration assets.
+
+`constraints` records what the exercise demands before it is attempted: `contraindications` (conditions under which it should not be performed), `prerequisites` (competencies it assumes), `progressions` and `regressions` (harder and easier movements on the same pattern), and `environment` (where it can be done). These are advisory prose rather than machine-enforceable gates — FDS models no athlete to check a prerequisite against.
+
+`relations` links this exercise to others. Each entry carries a `type` from `relationTypes` — `alternate`, `variation`, `substitute`, `progression`, `regression`, `equipmentVariant`, `accessory`, `mobilityPrep`, `similarPattern`, `unilateralPair`, `contralateralPair` — a `targetId`, an optional `confidence` between 0 and 1, and optional `notes`.
+
+`confidence` exists because relations are frequently machine-derived. A consumer filtering a large catalog needs to know whether a link was asserted by an editor or inferred by a similarity pass, and without the field it cannot tell the two apart.
+
+Note that `constraints.progressions` and `constraints.regressions` are free-text descriptions, while a `relations` entry of type `progression` is a link to another exercise. Both exist because an author often knows *that* a movement is harder before the harder movement is in the catalog.
 
 ```json
 {
@@ -149,6 +165,9 @@ For complex platform-unique data structures:
 ## 4. Reference Types and Structures
 
 ### 4.1. Canonical Information
+
+`canonical` carries the exercise's identity as a reader sees it: a display `name`, a stable `slug`, optional `aliases`, and `localized` entries giving the name in other languages. The slug is the human-readable identifier and is distinct from `exerciseId`; see §3 of the identifier policy.
+
 ```json
 {
   "canonical": {
@@ -164,6 +183,21 @@ For complex platform-unique data structures:
 ```
 
 ### 4.2. Classification Structure
+
+`classification` answers what kind of movement this is. Five of its fields are required.
+
+| Field | Meaning |
+|---|---|
+| `exerciseType` | The broad category — an **open string** per D8, with recommended values in the exercise-type registry. An unrecognised value is a mislabelled exercise, not an invalid one, so consumers warn rather than reject. |
+| `movement` | The movement pattern: `squat`, `hinge`, `lunge`, the push and pull directions, `carry`, the core patterns, `rotation`, `locomotion`, `isolation`, `other`. |
+| `mechanics` | `compound` or `isolation` — whether more than one joint is involved. |
+| `force` | `push`, `pull`, `static` or `mixed`. |
+| `level` | `beginner`, `intermediate` or `advanced`. |
+| `unilateral` | Whether one side works at a time. Optional, defaulting to false. It is what makes a set's `side` meaningful. |
+| `kineticChain` | `open`, `closed` or `mixed`. Optional. |
+| `tags` | Free-form labels for filtering. Carries no structural consequence. |
+| `taxonomyRefs` | References into an external taxonomy — each an object of `registry`, `id` and an optional human-readable `label`. This is how an implementation keeps its own classification alongside the FDS one without either overwriting the other. |
+
 ```json
 {
   "classification": {
@@ -180,6 +214,11 @@ For complex platform-unique data structures:
 ```
 
 ### 4.3. Target Muscles
+
+`targets.primary` lists the muscles the exercise is chosen for and is required; `targets.secondary` lists those meaningfully involved but not the point of the movement. Each entry is a muscle reference — an `id`, a display `name`, and the `categoryId` of the group it belongs to — denormalised so a consumer can render the exercise without resolving the muscle catalog.
+
+The split matters to anything computing training volume per muscle: counting secondary involvement as primary inflates volume in a way that compounds across a program.
+
 ```json
 {
   "targets": {
@@ -195,6 +234,9 @@ For complex platform-unique data structures:
 ```
 
 ### 4.4. Equipment References
+
+`equipment.required` is what the movement cannot be performed without; `equipment.optional` is what changes the experience but not the exercise. Each entry denormalises an `id` and a `name` for the same reason target muscles do.
+
 ```json
 {
   "equipment": {
@@ -210,6 +252,11 @@ For complex platform-unique data structures:
 ```
 
 ### 4.5. Metrics and Measurements
+
+`metrics.primary` is the measurement the exercise is fundamentally counted in, and is required. `metrics.secondary` lists further measurements that apply.
+
+Each is a `{ type, unit }` pair and carries **no value** — this is a shape declaration, not a measurement. Attaching values to these shapes is what a workout prescription does (RFC-007), and a prescription SHOULD only use metric types the exercise declares here.
+
 ```json
 {
   "metrics": {
@@ -534,21 +581,36 @@ const internalExercise = importExercise(backSquatRFC001);
 
 ## Conformance
 
-Conforming Producers:
-- MUST emit JSON that validates against the Exercise schema for the declared `schemaVersion`.
-- MUST use UUIDv4 for all identifiers in production data (e.g., `exerciseId` and any referenced IDs). Example short IDs shown in this RFC are illustrative only.
-- MUST populate all required fields and respect enumerations and structure.
-- SHOULD include RFC 3339 UTC timestamps in `metadata` and maintain accurate lifecycle fields.
+**Conforming Producers:**
 
-Conforming Consumers:
-- MUST validate incoming exercise data against the appropriate schema version.
-- MUST ignore unknown keys in `attributes` and `extensions`.
-- SHOULD tolerate additional optional fields introduced in newer minor versions.
-- SHOULD reject data with missing required fields or invalid enumerations.
+:::danger MUST
+- **MUST** emit JSON that validates against the Exercise schema for the declared `schemaVersion`.
+- **MUST** use UUIDv4 for all identifiers in production data (e.g., `exerciseId` and any referenced IDs). Example short IDs shown in this RFC are illustrative only.
+- **MUST** populate all required fields and respect enumerations and structure.
+:::
 
-Compatibility:
-- Optional fields added in minor versions MUST NOT break consumers; consumers SHOULD ignore unknown optional fields.
-- New required fields are a MAJOR change and require coordinated upgrades.
+:::tip SHOULD
+- **SHOULD** include RFC 3339 UTC timestamps in `metadata` and maintain accurate lifecycle fields.
+:::
+
+**Conforming Consumers:**
+
+:::danger MUST
+- **MUST** validate incoming exercise data against the appropriate schema version.
+- **MUST** ignore unknown keys in `attributes` and `extensions`.
+:::
+
+:::tip SHOULD
+- **SHOULD** tolerate additional optional fields introduced in newer minor versions.
+- **SHOULD** reject data with missing required fields or invalid enumerations.
+:::
+
+**Compatibility:**
+
+:::danger MUST
+- Optional fields added in minor versions **MUST NOT** break consumers; consumers **SHOULD** ignore unknown optional fields.
+- New required fields are a **MAJOR** change and require coordinated upgrades.
+:::
 
 ---
 

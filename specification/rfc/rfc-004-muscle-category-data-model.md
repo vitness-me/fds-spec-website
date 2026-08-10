@@ -1,10 +1,10 @@
 # RFC-004: Muscle Category Data Model Specification
 
-**Status**: Draft  
-**Version**: 0.1.0  
-**Date**: 2025-09-09  
-**Authors**: VITNESS Team  
-**Category**: Standards Track  
+**Status**: Draft
+**Version**: 0.1.0
+**Date**: 2025-09-09
+**Authors**: VITNESS Team
+**Category**: Standards Track
 
 ## Abstract
 
@@ -52,7 +52,9 @@ This specification aims to:
 
 ### 3.1. Required Fields
 
-All compliant muscle category data MUST include these fields:
+:::danger MUST
+All compliant muscle category data **MUST** include these fields:
+:::
 
 ```json
 {
@@ -124,6 +126,9 @@ For complex platform-unique data structures:
 ## 4. Reference Types and Structures
 
 ### 4.1. Canonical Information
+
+`canonical` carries the category's identity — display name, slug, and optional aliases and localised names. Category names are the ones that appear in a user interface most often, which makes localisation here more visible than anywhere else in the catalog.
+
 ```json
 {
   "canonical": {
@@ -137,6 +142,9 @@ For complex platform-unique data structures:
 ```
 
 ### 4.2. Classification Structure
+
+`classification` carries `tags` for filtering — `major-group` distinguishing the handful of top-level groupings from finer ones, for example. Tags have no structural consequence: a consumer that does not recognise one ignores it.
+
 ```json
 {
   "classification": {
@@ -146,6 +154,9 @@ For complex platform-unique data structures:
 ```
 
 ### 4.3. Media References
+
+`media` follows the shared definition from RFC-001 — typically an icon or illustration representing the group.
+
 ```json
 {
   "media": [
@@ -337,21 +348,36 @@ function importMuscleCategory(rfc004Data: RFC004MuscleCategory) {
 
 ## Conformance
 
-Conforming Producers:
-- MUST emit JSON that validates against the Muscle Category schema for the declared `schemaVersion`.
-- MUST use UUIDv4 for all identifiers in production data (e.g., category `id`). Example short IDs in this RFC are illustrative only.
-- MUST populate all required fields and respect enumerations and structure.
-- SHOULD include RFC 3339 UTC timestamps in `metadata`.
+**Conforming Producers:**
 
-Conforming Consumers:
-- MUST validate incoming category data against the appropriate schema version.
-- MUST ignore unknown keys in `attributes` and `extensions`.
-- SHOULD tolerate additional optional fields introduced in newer minor versions.
-- SHOULD reject data with missing required fields or invalid enumerations.
+:::danger MUST
+- **MUST** emit JSON that validates against the Muscle Category schema for the declared `schemaVersion`.
+- **MUST** use UUIDv4 for all identifiers in production data (e.g., category `id`). Example short IDs in this RFC are illustrative only.
+- **MUST** populate all required fields and respect enumerations and structure.
+:::
 
-Compatibility:
-- Optional fields added in minor versions MUST NOT break consumers; consumers SHOULD ignore unknown optional fields.
-- New required fields are a MAJOR change and require coordinated upgrades.
+:::tip SHOULD
+- **SHOULD** include RFC 3339 UTC timestamps in `metadata`.
+:::
+
+**Conforming Consumers:**
+
+:::danger MUST
+- **MUST** validate incoming category data against the appropriate schema version.
+- **MUST** ignore unknown keys in `attributes` and `extensions`.
+:::
+
+:::tip SHOULD
+- **SHOULD** tolerate additional optional fields introduced in newer minor versions.
+- **SHOULD** reject data with missing required fields or invalid enumerations.
+:::
+
+**Compatibility:**
+
+:::danger MUST
+- Optional fields added in minor versions **MUST NOT** break consumers; consumers **SHOULD** ignore unknown optional fields.
+- New required fields are a **MAJOR** change and require coordinated upgrades.
+:::
 
 ---
 
