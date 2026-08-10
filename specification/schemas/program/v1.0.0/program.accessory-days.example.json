@@ -1,0 +1,76 @@
+{
+  "schemaVersion": "1.0.0",
+  "programId": "00000000-0000-4000-8000-0000000c0017",
+  "canonical": {
+    "name": "Accessory Days",
+    "slug": "accessory-days"
+  },
+  "classification": {
+    "periodization": "none",
+    "goal": "hypertrophy",
+    "durationWeeks": 1
+  },
+  "schedule": {
+    "model": "calendar",
+    "cycles": [
+      {
+        "id": "c1",
+        "type": "micro",
+        "order": 1,
+        "durationWeeks": 1,
+        "notes": "Two required strength days and two optional accessory days. The accessory work is a separate session rather than extra blocks on the main day, so it can be dropped whole.",
+        "weeks": [
+          {
+            "index": 1,
+            "days": [
+              {
+                "id": "d16-1",
+                "index": 1,
+                "dayOfWeek": "monday",
+                "workout": {
+                  "id": "wo.lowerStrength",
+                  "name": "Lower Strength"
+                }
+              },
+              {
+                "id": "d16-2",
+                "index": 2,
+                "dayOfWeek": "tuesday",
+                "workout": {
+                  "id": "wo.armsAccessory",
+                  "name": "Arms — Accessory"
+                },
+                "optional": true
+              },
+              {
+                "id": "d16-3",
+                "index": 3,
+                "dayOfWeek": "thursday",
+                "workout": {
+                  "id": "wo.upperStrength",
+                  "name": "Upper Strength"
+                }
+              },
+              {
+                "id": "d16-4",
+                "index": 4,
+                "dayOfWeek": "friday",
+                "workout": {
+                  "id": "wo.posteriorAccessory",
+                  "name": "Posterior Chain — Accessory"
+                },
+                "optional": true
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "metadata": {
+    "createdAt": "2026-08-10T00:00:00Z",
+    "updatedAt": "2026-08-10T00:00:00Z",
+    "status": "active",
+    "source": "vitness.core"
+  }
+}

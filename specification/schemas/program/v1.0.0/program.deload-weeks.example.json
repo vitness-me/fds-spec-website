@@ -1,0 +1,144 @@
+{
+  "schemaVersion": "1.0.0",
+  "programId": "00000000-0000-4000-8000-0000000c0007",
+  "canonical": {
+    "name": "Deload Weeks",
+    "slug": "deload-weeks"
+  },
+  "classification": {
+    "periodization": "linear",
+    "goal": "strength",
+    "level": "intermediate",
+    "durationWeeks": 4
+  },
+  "schedule": {
+    "model": "calendar",
+    "cycles": [
+      {
+        "id": "c1",
+        "type": "meso",
+        "order": 1,
+        "durationWeeks": 4,
+        "intent": "accumulation",
+        "notes": "The fourth week is the deload, and the cycle intent stays accumulation. That is why deload is a week flag and not an intent value.",
+        "weeks": [
+          {
+            "index": 1,
+            "days": [
+              {
+                "id": "d6-1",
+                "index": 1,
+                "dayOfWeek": "monday",
+                "workout": {
+                  "id": "wo.lowerStrength",
+                  "name": "Lower Strength"
+                }
+              },
+              {
+                "id": "d6-2",
+                "index": 2,
+                "dayOfWeek": "thursday",
+                "workout": {
+                  "id": "wo.upperStrength",
+                  "name": "Upper Strength"
+                }
+              }
+            ]
+          },
+          {
+            "index": 2,
+            "days": [
+              {
+                "id": "d6-1",
+                "index": 1,
+                "dayOfWeek": "monday",
+                "workout": {
+                  "id": "wo.lowerStrength",
+                  "name": "Lower Strength"
+                }
+              },
+              {
+                "id": "d6-2",
+                "index": 2,
+                "dayOfWeek": "thursday",
+                "workout": {
+                  "id": "wo.upperStrength",
+                  "name": "Upper Strength"
+                }
+              }
+            ]
+          },
+          {
+            "index": 3,
+            "days": [
+              {
+                "id": "d6-1",
+                "index": 1,
+                "dayOfWeek": "monday",
+                "workout": {
+                  "id": "wo.lowerStrength",
+                  "name": "Lower Strength"
+                }
+              },
+              {
+                "id": "d6-2",
+                "index": 2,
+                "dayOfWeek": "thursday",
+                "workout": {
+                  "id": "wo.upperStrength",
+                  "name": "Upper Strength"
+                }
+              }
+            ]
+          },
+          {
+            "index": 4,
+            "name": "Deload",
+            "deload": true,
+            "days": [
+              {
+                "id": "d6-1",
+                "index": 1,
+                "dayOfWeek": "monday",
+                "workout": {
+                  "id": "wo.lowerStrength",
+                  "name": "Lower Strength"
+                },
+                "overrides": {
+                  "loadScaling": 0.85,
+                  "volumeScaling": 0.6,
+                  "notes": "Keep the movement, drop the stress."
+                }
+              },
+              {
+                "id": "d6-2",
+                "index": 2,
+                "dayOfWeek": "wednesday",
+                "rest": true
+              },
+              {
+                "id": "d6-3",
+                "index": 3,
+                "dayOfWeek": "thursday",
+                "workout": {
+                  "id": "wo.upperStrength",
+                  "name": "Upper Strength"
+                },
+                "overrides": {
+                  "loadScaling": 0.85,
+                  "volumeScaling": 0.6
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "metadata": {
+    "createdAt": "2026-08-10T00:00:00Z",
+    "updatedAt": "2026-08-10T00:00:00Z",
+    "status": "active",
+    "source": "vitness.core"
+  }
+}

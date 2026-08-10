@@ -1,0 +1,183 @@
+{
+  "schemaVersion": "1.0.0",
+  "programId": "00000000-0000-4000-8000-0000000c0011",
+  "canonical": {
+    "name": "Autoregulated Adaptive",
+    "slug": "adaptive"
+  },
+  "classification": {
+    "periodization": "undulating",
+    "goal": "strength",
+    "level": "intermediate",
+    "durationWeeks": 2,
+    "tags": [
+      "autoregulated",
+      "adaptive"
+    ]
+  },
+  "progressions": [
+    {
+      "id": "prog.adaptive",
+      "name": "Advance when the session felt easy",
+      "trigger": {
+        "kind": "rpeBelow",
+        "value": 7,
+        "sessions": 1
+      },
+      "action": {
+        "kind": "advanceStage",
+        "stages": [
+          "base",
+          "build",
+          "push"
+        ]
+      },
+      "notes": "Referenced from the workouts by loadTarget.progressionRuleRef. The load is chosen at execution time; the plan states the rule, not the number."
+    },
+    {
+      "id": "prog.back-off",
+      "name": "Back off when the session was hard",
+      "trigger": {
+        "kind": "rirAbove",
+        "value": 0,
+        "inverted": true
+      },
+      "action": {
+        "kind": "decreaseLoad",
+        "amount": 5,
+        "unit": "percent"
+      }
+    }
+  ],
+  "schedule": {
+    "model": "calendar",
+    "cycles": [
+      {
+        "id": "c1",
+        "type": "meso",
+        "order": 1,
+        "durationWeeks": 2,
+        "intent": "accumulation",
+        "notes": "The skeleton is fixed — the same three sessions, the same days. What adapts is the load, decided at execution time against the rules above. Exercise selection generated per session is not expressible here; see RFC-008 §4.6.",
+        "weeks": [
+          {
+            "index": 1,
+            "days": [
+              {
+                "id": "d10-1",
+                "index": 1,
+                "dayOfWeek": "monday",
+                "workout": {
+                  "id": "wo.fullBody",
+                  "name": "Full Body"
+                },
+                "overrides": {
+                  "progressionState": {
+                    "ruleRef": "prog.adaptive",
+                    "stage": "base"
+                  }
+                }
+              },
+              {
+                "id": "d10-2",
+                "index": 2,
+                "dayOfWeek": "wednesday",
+                "workout": {
+                  "id": "wo.fullBody",
+                  "name": "Full Body"
+                },
+                "overrides": {
+                  "progressionState": {
+                    "ruleRef": "prog.adaptive",
+                    "stage": "base"
+                  }
+                }
+              },
+              {
+                "id": "d10-3",
+                "index": 3,
+                "dayOfWeek": "friday",
+                "workout": {
+                  "id": "wo.fullBody",
+                  "name": "Full Body"
+                },
+                "overrides": {
+                  "progressionState": {
+                    "ruleRef": "prog.adaptive",
+                    "stage": "base"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "index": 2,
+            "days": [
+              {
+                "id": "d10-1",
+                "index": 1,
+                "dayOfWeek": "monday",
+                "workout": {
+                  "id": "wo.fullBody",
+                  "name": "Full Body"
+                },
+                "overrides": {
+                  "progressionState": {
+                    "ruleRef": "prog.adaptive",
+                    "stage": "build"
+                  }
+                }
+              },
+              {
+                "id": "d10-2",
+                "index": 2,
+                "dayOfWeek": "wednesday",
+                "workout": {
+                  "id": "wo.fullBody",
+                  "name": "Full Body"
+                },
+                "overrides": {
+                  "progressionState": {
+                    "ruleRef": "prog.adaptive",
+                    "stage": "build"
+                  }
+                }
+              },
+              {
+                "id": "d10-3",
+                "index": 3,
+                "dayOfWeek": "friday",
+                "workout": {
+                  "id": "wo.fullBody",
+                  "name": "Full Body"
+                },
+                "overrides": {
+                  "progressionState": {
+                    "ruleRef": "prog.adaptive",
+                    "stage": "build"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "extensions": {
+    "x-vitness-adaptiveEngine": {
+      "model": "recommendation-v2",
+      "inputs": [
+        "sessionRpe",
+        "completionRate"
+      ],
+      "note": "Engine configuration is a vendor extension. The portable part of the plan is the rules above."
+    }
+  },
+  "metadata": {
+    "createdAt": "2026-08-10T00:00:00Z",
+    "updatedAt": "2026-08-10T00:00:00Z",
+    "status": "active",
+    "source": "vitness.core"
+  }
+}

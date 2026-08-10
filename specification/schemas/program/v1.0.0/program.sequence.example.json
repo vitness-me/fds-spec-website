@@ -1,0 +1,63 @@
+{
+  "schemaVersion": "1.0.0",
+  "programId": "00000000-0000-4000-8000-0000000c0015",
+  "canonical": {
+    "name": "Self-Paced Sequence",
+    "slug": "sequence"
+  },
+  "classification": {
+    "periodization": "none",
+    "goal": "general",
+    "level": "beginner",
+    "durationWeeks": 1
+  },
+  "schedule": {
+    "model": "sequence",
+    "cycles": [
+      {
+        "id": "c1",
+        "type": "micro",
+        "order": 1,
+        "durationWeeks": 1,
+        "notes": "Neither placement field is present, and that is the point: the athlete performs these in order at their own pace. index is the only ordering.",
+        "weeks": [
+          {
+            "index": 1,
+            "days": [
+              {
+                "id": "s1",
+                "index": 1,
+                "workout": {
+                  "id": "wo.session1",
+                  "name": "Session 1 — Technique"
+                }
+              },
+              {
+                "id": "s2",
+                "index": 2,
+                "workout": {
+                  "id": "wo.session2",
+                  "name": "Session 2 — Volume"
+                }
+              },
+              {
+                "id": "s3",
+                "index": 3,
+                "workout": {
+                  "id": "wo.session3",
+                  "name": "Session 3 — Intensity"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "metadata": {
+    "createdAt": "2026-08-10T00:00:00Z",
+    "updatedAt": "2026-08-10T00:00:00Z",
+    "status": "active",
+    "source": "vitness.core"
+  }
+}

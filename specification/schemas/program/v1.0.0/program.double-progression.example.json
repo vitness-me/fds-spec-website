@@ -1,0 +1,129 @@
+{
+  "schemaVersion": "1.0.0",
+  "programId": "00000000-0000-4000-8000-0000000c0008",
+  "canonical": {
+    "name": "Double Progression",
+    "slug": "double-progression"
+  },
+  "classification": {
+    "periodization": "linear",
+    "goal": "hypertrophy",
+    "level": "beginner",
+    "durationWeeks": 2
+  },
+  "progressions": [
+    {
+      "id": "prog.double",
+      "name": "Reps first, then load",
+      "trigger": {
+        "kind": "topOfRepRange",
+        "repRange": {
+          "min": 8,
+          "max": 12
+        },
+        "acrossAllSets": true
+      },
+      "action": {
+        "kind": "increaseLoad",
+        "amount": 2.5,
+        "unit": "kg",
+        "thenResetRepsTo": 8
+      },
+      "notes": "Two variables, one at a time: climb the rep range at a fixed load, then add load and start again."
+    }
+  ],
+  "schedule": {
+    "model": "calendar",
+    "cycles": [
+      {
+        "id": "c1",
+        "type": "meso",
+        "order": 1,
+        "durationWeeks": 2,
+        "intent": "accumulation",
+        "weeks": [
+          {
+            "index": 1,
+            "days": [
+              {
+                "id": "d7-1",
+                "index": 1,
+                "dayOfWeek": "monday",
+                "workout": {
+                  "id": "wo.upperStrength",
+                  "name": "Upper Strength"
+                },
+                "overrides": {
+                  "progressionState": {
+                    "ruleRef": "prog.double",
+                    "stage": "reps",
+                    "currentReps": 8
+                  }
+                }
+              },
+              {
+                "id": "d7-2",
+                "index": 2,
+                "dayOfWeek": "thursday",
+                "workout": {
+                  "id": "wo.lowerStrength",
+                  "name": "Lower Strength"
+                },
+                "overrides": {
+                  "progressionState": {
+                    "ruleRef": "prog.double",
+                    "stage": "reps",
+                    "currentReps": 8
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "index": 2,
+            "days": [
+              {
+                "id": "d7-1",
+                "index": 1,
+                "dayOfWeek": "monday",
+                "workout": {
+                  "id": "wo.upperStrength",
+                  "name": "Upper Strength"
+                },
+                "overrides": {
+                  "progressionState": {
+                    "ruleRef": "prog.double",
+                    "stage": "reps",
+                    "currentReps": 10
+                  }
+                }
+              },
+              {
+                "id": "d7-2",
+                "index": 2,
+                "dayOfWeek": "thursday",
+                "workout": {
+                  "id": "wo.lowerStrength",
+                  "name": "Lower Strength"
+                },
+                "overrides": {
+                  "progressionState": {
+                    "ruleRef": "prog.double",
+                    "stage": "reps",
+                    "currentReps": 10
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "metadata": {
+    "createdAt": "2026-08-10T00:00:00Z",
+    "updatedAt": "2026-08-10T00:00:00Z",
+    "status": "active",
+    "source": "vitness.core"
+  }
+}

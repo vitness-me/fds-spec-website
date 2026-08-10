@@ -1,0 +1,65 @@
+{
+  "schemaVersion": "1.0.0",
+  "programId": "00000000-0000-4000-8000-0000000c0012",
+  "canonical": {
+    "name": "Fixed Weekday",
+    "slug": "fixed-weekday"
+  },
+  "classification": {
+    "periodization": "none",
+    "goal": "general",
+    "durationWeeks": 1
+  },
+  "schedule": {
+    "model": "calendar",
+    "cycles": [
+      {
+        "id": "c1",
+        "type": "micro",
+        "order": 1,
+        "durationWeeks": 1,
+        "weeks": [
+          {
+            "index": 1,
+            "notes": "dayOfWeek is authoritative. Week two’s Monday is a Monday.",
+            "days": [
+              {
+                "id": "d11-1",
+                "index": 1,
+                "dayOfWeek": "monday",
+                "workout": {
+                  "id": "wo.lowerStrength",
+                  "name": "Lower Strength"
+                }
+              },
+              {
+                "id": "d11-2",
+                "index": 2,
+                "dayOfWeek": "wednesday",
+                "workout": {
+                  "id": "wo.upperStrength",
+                  "name": "Upper Strength"
+                }
+              },
+              {
+                "id": "d11-3",
+                "index": 3,
+                "dayOfWeek": "friday",
+                "workout": {
+                  "id": "wo.fullBody",
+                  "name": "Full Body"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "metadata": {
+    "createdAt": "2026-08-10T00:00:00Z",
+    "updatedAt": "2026-08-10T00:00:00Z",
+    "status": "active",
+    "source": "vitness.core"
+  }
+}

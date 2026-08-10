@@ -1,0 +1,154 @@
+{
+  "schemaVersion": "1.0.0",
+  "programId": "00000000-0000-4000-8000-0000000c0009",
+  "canonical": {
+    "name": "Test and Max Weeks",
+    "slug": "test-weeks"
+  },
+  "classification": {
+    "periodization": "block",
+    "goal": "peaking",
+    "level": "advanced",
+    "durationWeeks": 3
+  },
+  "progressions": [
+    {
+      "id": "prog.retest",
+      "name": "Retest after twelve sessions",
+      "trigger": {
+        "kind": "sessionsCompleted",
+        "count": 12
+      },
+      "action": {
+        "kind": "retest",
+        "updates": "tm.backSquat"
+      },
+      "notes": "The retest updates the training-max slot, not a value in this document."
+    }
+  ],
+  "references": {
+    "trainingMaxes": [
+      {
+        "id": "tm.backSquat",
+        "exercise": {
+          "id": "ex.backSquat",
+          "name": "Barbell Back Squat"
+        },
+        "method": "testedOneRepMax"
+      }
+    ]
+  },
+  "schedule": {
+    "model": "calendar",
+    "cycles": [
+      {
+        "id": "c.build",
+        "name": "Build",
+        "type": "meso",
+        "order": 1,
+        "durationWeeks": 2,
+        "intent": "accumulation",
+        "weeks": [
+          {
+            "index": 1,
+            "days": [
+              {
+                "id": "d8-1",
+                "index": 1,
+                "dayOfWeek": "monday",
+                "workout": {
+                  "id": "wo.lowerStrength",
+                  "name": "Lower Strength"
+                }
+              },
+              {
+                "id": "d8-2",
+                "index": 2,
+                "dayOfWeek": "thursday",
+                "workout": {
+                  "id": "wo.upperStrength",
+                  "name": "Upper Strength"
+                }
+              }
+            ]
+          },
+          {
+            "index": 2,
+            "days": [
+              {
+                "id": "d8-1",
+                "index": 1,
+                "dayOfWeek": "monday",
+                "workout": {
+                  "id": "wo.lowerStrength",
+                  "name": "Lower Strength"
+                }
+              },
+              {
+                "id": "d8-2",
+                "index": 2,
+                "dayOfWeek": "thursday",
+                "workout": {
+                  "id": "wo.upperStrength",
+                  "name": "Upper Strength"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "c.test",
+        "name": "Test",
+        "type": "meso",
+        "order": 2,
+        "durationWeeks": 1,
+        "intent": "test",
+        "notes": "A test week is an ordinary cycle whose intent is test. It needs no special structure.",
+        "weeks": [
+          {
+            "index": 1,
+            "days": [
+              {
+                "id": "d8-1",
+                "index": 1,
+                "dayOfWeek": "monday",
+                "rest": true
+              },
+              {
+                "id": "d8-2",
+                "index": 2,
+                "dayOfWeek": "tuesday",
+                "workout": {
+                  "id": "wo.squatMaxTest",
+                  "name": "Squat — Max Test"
+                }
+              },
+              {
+                "id": "d8-3",
+                "index": 3,
+                "dayOfWeek": "thursday",
+                "rest": true
+              },
+              {
+                "id": "d8-4",
+                "index": 4,
+                "dayOfWeek": "friday",
+                "workout": {
+                  "id": "wo.benchMaxTest",
+                  "name": "Bench — Max Test"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "metadata": {
+    "createdAt": "2026-08-10T00:00:00Z",
+    "updatedAt": "2026-08-10T00:00:00Z",
+    "status": "active",
+    "source": "vitness.core"
+  }
+}

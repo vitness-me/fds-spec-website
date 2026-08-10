@@ -1,0 +1,131 @@
+{
+  "schemaVersion": "1.0.0",
+  "programId": "00000000-0000-4000-8000-0000000c0005",
+  "canonical": {
+    "name": "Conjugate Rotation",
+    "slug": "conjugate"
+  },
+  "classification": {
+    "periodization": "conjugate",
+    "goal": "strength",
+    "level": "advanced",
+    "durationWeeks": 3
+  },
+  "schedule": {
+    "model": "calendar",
+    "cycles": [
+      {
+        "id": "c1",
+        "type": "meso",
+        "order": 1,
+        "durationWeeks": 3,
+        "intent": "intensification",
+        "notes": "The dynamic-effort days never change; the max-effort days rotate the lift every week. Rotation is expressed by referencing a different workout, which is why no field for it exists.",
+        "weeks": [
+          {
+            "index": 1,
+            "days": [
+              {
+                "id": "d4-1",
+                "index": 1,
+                "dayOfWeek": "monday",
+                "workout": {
+                  "id": "wo.meBoxSquat",
+                  "name": "Max Effort — Box Squat"
+                }
+              },
+              {
+                "id": "d4-2",
+                "index": 2,
+                "dayOfWeek": "wednesday",
+                "workout": {
+                  "id": "wo.deBench",
+                  "name": "Dynamic Effort — Bench"
+                }
+              },
+              {
+                "id": "d4-3",
+                "index": 3,
+                "dayOfWeek": "friday",
+                "workout": {
+                  "id": "wo.meFloorPress",
+                  "name": "Max Effort — Floor Press"
+                }
+              }
+            ]
+          },
+          {
+            "index": 2,
+            "days": [
+              {
+                "id": "d4-1",
+                "index": 1,
+                "dayOfWeek": "monday",
+                "workout": {
+                  "id": "wo.meGoodMorning",
+                  "name": "Max Effort — Good Morning"
+                }
+              },
+              {
+                "id": "d4-2",
+                "index": 2,
+                "dayOfWeek": "wednesday",
+                "workout": {
+                  "id": "wo.deBench",
+                  "name": "Dynamic Effort — Bench"
+                }
+              },
+              {
+                "id": "d4-3",
+                "index": 3,
+                "dayOfWeek": "friday",
+                "workout": {
+                  "id": "wo.meBoardPress",
+                  "name": "Max Effort — Board Press"
+                }
+              }
+            ]
+          },
+          {
+            "index": 3,
+            "days": [
+              {
+                "id": "d4-1",
+                "index": 1,
+                "dayOfWeek": "monday",
+                "workout": {
+                  "id": "wo.meDeficitDeadlift",
+                  "name": "Max Effort — Deficit Deadlift"
+                }
+              },
+              {
+                "id": "d4-2",
+                "index": 2,
+                "dayOfWeek": "wednesday",
+                "workout": {
+                  "id": "wo.deBench",
+                  "name": "Dynamic Effort — Bench"
+                }
+              },
+              {
+                "id": "d4-3",
+                "index": 3,
+                "dayOfWeek": "friday",
+                "workout": {
+                  "id": "wo.mePinPress",
+                  "name": "Max Effort — Pin Press"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "metadata": {
+    "createdAt": "2026-08-10T00:00:00Z",
+    "updatedAt": "2026-08-10T00:00:00Z",
+    "status": "active",
+    "source": "vitness.core"
+  }
+}

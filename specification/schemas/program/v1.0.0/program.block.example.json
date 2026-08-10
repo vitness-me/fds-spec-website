@@ -1,0 +1,177 @@
+{
+  "schemaVersion": "1.0.0",
+  "programId": "00000000-0000-4000-8000-0000000c0004",
+  "canonical": {
+    "name": "Three-Block Peak",
+    "slug": "block"
+  },
+  "classification": {
+    "periodization": "block",
+    "goal": "peaking",
+    "level": "advanced",
+    "durationWeeks": 5
+  },
+  "schedule": {
+    "model": "calendar",
+    "cycles": [
+      {
+        "id": "c.accumulation",
+        "name": "Accumulation",
+        "type": "meso",
+        "order": 1,
+        "durationWeeks": 2,
+        "intent": "accumulation",
+        "weeks": [
+          {
+            "index": 1,
+            "days": [
+              {
+                "id": "d3-1",
+                "index": 1,
+                "dayOfWeek": "monday",
+                "workout": {
+                  "id": "wo.volumeLower",
+                  "name": "Volume Lower"
+                }
+              },
+              {
+                "id": "d3-2",
+                "index": 2,
+                "dayOfWeek": "thursday",
+                "workout": {
+                  "id": "wo.volumeUpper",
+                  "name": "Volume Upper"
+                }
+              }
+            ]
+          },
+          {
+            "index": 2,
+            "days": [
+              {
+                "id": "d3-1",
+                "index": 1,
+                "dayOfWeek": "monday",
+                "workout": {
+                  "id": "wo.volumeLower",
+                  "name": "Volume Lower"
+                }
+              },
+              {
+                "id": "d3-2",
+                "index": 2,
+                "dayOfWeek": "thursday",
+                "workout": {
+                  "id": "wo.volumeUpper",
+                  "name": "Volume Upper"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "c.intensification",
+        "name": "Intensification",
+        "type": "meso",
+        "order": 2,
+        "durationWeeks": 2,
+        "intent": "intensification",
+        "weeks": [
+          {
+            "index": 1,
+            "days": [
+              {
+                "id": "d3-1",
+                "index": 1,
+                "dayOfWeek": "monday",
+                "workout": {
+                  "id": "wo.heavyLower",
+                  "name": "Heavy Lower"
+                }
+              },
+              {
+                "id": "d3-2",
+                "index": 2,
+                "dayOfWeek": "thursday",
+                "workout": {
+                  "id": "wo.heavyUpper",
+                  "name": "Heavy Upper"
+                }
+              }
+            ]
+          },
+          {
+            "index": 2,
+            "days": [
+              {
+                "id": "d3-1",
+                "index": 1,
+                "dayOfWeek": "monday",
+                "workout": {
+                  "id": "wo.heavyLower",
+                  "name": "Heavy Lower"
+                }
+              },
+              {
+                "id": "d3-2",
+                "index": 2,
+                "dayOfWeek": "thursday",
+                "workout": {
+                  "id": "wo.heavyUpper",
+                  "name": "Heavy Upper"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "c.realization",
+        "name": "Realization",
+        "type": "meso",
+        "order": 3,
+        "durationWeeks": 1,
+        "intent": "realization",
+        "notes": "One week, two openers and a test. Volume collapses so the work already done can express itself.",
+        "weeks": [
+          {
+            "index": 1,
+            "days": [
+              {
+                "id": "d3-1",
+                "index": 1,
+                "dayOfWeek": "monday",
+                "workout": {
+                  "id": "wo.opener",
+                  "name": "Openers"
+                }
+              },
+              {
+                "id": "d3-2",
+                "index": 2,
+                "dayOfWeek": "wednesday",
+                "rest": true
+              },
+              {
+                "id": "d3-3",
+                "index": 3,
+                "dayOfWeek": "saturday",
+                "workout": {
+                  "id": "wo.maxTest",
+                  "name": "Max Test"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "metadata": {
+    "createdAt": "2026-08-10T00:00:00Z",
+    "updatedAt": "2026-08-10T00:00:00Z",
+    "status": "active",
+    "source": "vitness.core"
+  }
+}

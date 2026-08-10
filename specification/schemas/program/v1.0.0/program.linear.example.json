@@ -1,0 +1,115 @@
+{
+  "schemaVersion": "1.0.0",
+  "programId": "00000000-0000-4000-8000-0000000c0001",
+  "canonical": {
+    "name": "Linear Progression",
+    "slug": "linear"
+  },
+  "classification": {
+    "periodization": "linear",
+    "goal": "strength",
+    "level": "beginner",
+    "durationWeeks": 2
+  },
+  "progressions": [
+    {
+      "id": "prog.addLoad",
+      "name": "Add 2.5 kg whenever every rep is completed",
+      "trigger": {
+        "kind": "allRepsCompleted"
+      },
+      "action": {
+        "kind": "increaseLoad",
+        "amount": 2.5,
+        "unit": "kg"
+      },
+      "notes": "The whole methodology, in one rule. Nothing else about the plan changes week to week."
+    }
+  ],
+  "schedule": {
+    "model": "calendar",
+    "cycles": [
+      {
+        "id": "c1",
+        "name": "Progression",
+        "type": "meso",
+        "order": 1,
+        "durationWeeks": 2,
+        "intent": "accumulation",
+        "notes": "Every week is identical by design. The load moves; the plan does not.",
+        "weeks": [
+          {
+            "index": 1,
+            "days": [
+              {
+                "id": "d0-1",
+                "index": 1,
+                "dayOfWeek": "monday",
+                "workout": {
+                  "id": "wo.fullBody",
+                  "name": "Full Body"
+                }
+              },
+              {
+                "id": "d0-2",
+                "index": 2,
+                "dayOfWeek": "wednesday",
+                "workout": {
+                  "id": "wo.fullBody",
+                  "name": "Full Body"
+                }
+              },
+              {
+                "id": "d0-3",
+                "index": 3,
+                "dayOfWeek": "friday",
+                "workout": {
+                  "id": "wo.fullBody",
+                  "name": "Full Body"
+                }
+              }
+            ]
+          },
+          {
+            "index": 2,
+            "days": [
+              {
+                "id": "d0-1",
+                "index": 1,
+                "dayOfWeek": "monday",
+                "workout": {
+                  "id": "wo.fullBody",
+                  "name": "Full Body"
+                }
+              },
+              {
+                "id": "d0-2",
+                "index": 2,
+                "dayOfWeek": "wednesday",
+                "workout": {
+                  "id": "wo.fullBody",
+                  "name": "Full Body"
+                }
+              },
+              {
+                "id": "d0-3",
+                "index": 3,
+                "dayOfWeek": "friday",
+                "workout": {
+                  "id": "wo.fullBody",
+                  "name": "Full Body"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "metadata": {
+    "createdAt": "2026-08-10T00:00:00Z",
+    "updatedAt": "2026-08-10T00:00:00Z",
+    "status": "active",
+    "source": "vitness.core"
+  }
+}
