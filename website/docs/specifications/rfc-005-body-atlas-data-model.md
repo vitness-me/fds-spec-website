@@ -100,6 +100,11 @@ All compliant atlas records **MUST** include:
 ## 4. Reference Structures
 
 ### 4.1. Canonical
+
+`canonical` carries the atlas's identity: a display `name`, a stable `slug`, an optional `description`, optional `aliases`, and `localized` entries. Each localised entry is a `lang` tag with the `name` in that language, and optionally its own `description` and `aliases`.
+
+`metadata` follows the shared definition from RFC-001 — timestamps, status and source. An atlas is versioned reference data like any other entity, and a consumer that has cached one needs to know when it changed.
+
 ```json
 {
   "canonical": {
@@ -112,6 +117,11 @@ All compliant atlas records **MUST** include:
 ```
 
 ### 4.2. Views
+
+Each view carries an `id`, a `kind` naming which aspect of the body it shows, and an `asset` — an object of `type` and `uri` pointing at the image. The type is stated rather than inferred from the URI extension, because a consumer that cannot render the format needs to know before fetching it.
+
+Views are the reason the atlas exists as a separate entity: the same muscle appears in several of them, at different coordinates, and binding a muscle to one image would make the atlas unusable for any other.
+
 ```json
 {
   "views": [
@@ -122,6 +132,11 @@ All compliant atlas records **MUST** include:
 ```
 
 ### 4.3. Areas
+
+An area is a clickable region. It carries an `id`, its own `canonical` block — areas are named and localised exactly as entities are, because they are what a user sees and taps — and `bindings` that place it in one or more views.
+
+Each binding pairs a `viewId` with a `selector` into that view's asset. An area may bind to several views, which is what lets a single highlight follow a muscle from the front illustration to the back one.
+
 ```json
 {
   "areas": [

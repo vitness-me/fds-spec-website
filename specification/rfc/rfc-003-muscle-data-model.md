@@ -1,10 +1,10 @@
 # RFC-003: Muscle Data Model Specification
 
-**Status**: Draft  
-**Version**: 0.1.0  
-**Date**: 2025-09-09  
-**Authors**: VITNESS Team  
-**Category**: Standards Track  
+**Status**: Draft
+**Version**: 0.1.0
+**Date**: 2025-09-09
+**Authors**: VITNESS Team
+**Category**: Standards Track
 
 ## Abstract
 
@@ -55,7 +55,9 @@ This specification aims to:
 
 ### 3.1. Required Fields
 
-All compliant muscle data MUST include these fields:
+:::danger MUST
+All compliant muscle data **MUST** include these fields:
+:::
 
 ```json
 {
@@ -143,6 +145,9 @@ For complex platform-unique data structures:
 ## 4. Reference Types and Structures
 
 ### 4.1. Canonical Information
+
+`canonical` carries the muscle's identity — display name, slug, aliases and localised names. Anatomical naming is where aliases earn their place: the same muscle is a "latissimus dorsi" to a clinician and a "lat" to everyone in the gym, and a catalog that recognises only one of those fails half its lookups.
+
 ```json
 {
   "canonical": {
@@ -157,6 +162,9 @@ For complex platform-unique data structures:
 ```
 
 ### 4.2. Classification Structure
+
+`classification` places the muscle in the catalog. `categoryId` is the muscle-category group it belongs to (RFC-004) and is what makes per-group volume aggregation possible without a lookup table. `tags` are free-form labels carrying no structural consequence.
+
 ```json
 {
   "classification": {
@@ -169,6 +177,9 @@ For complex platform-unique data structures:
 ```
 
 ### 4.3. Regional Classification
+
+`regions` names the anatomical subdivisions of the muscle — the parts a program can target separately, such as the upper and lower fibres of the trapezius — and `regionGroup` names the broader area the muscle sits in. A consumer that does not model regions can ignore both without losing the muscle.
+
 
 The `region` field follows standardized anatomical regions:
 - **upper-front**: Chest, front deltoids, biceps
@@ -189,6 +200,9 @@ The `laterality` field describes symmetry characteristics:
 - **n/a**: Not applicable or midline muscles
 
 ### 4.5. Media References
+
+`media` follows the shared definition from RFC-001 — typically an anatomical illustration.
+
 ```json
 {
   "media": [
@@ -413,21 +427,36 @@ function importMuscle(rfc003Data: RFC003Muscle) {
 
 ## Conformance
 
-Conforming Producers:
-- MUST emit JSON that validates against the Muscle schema for the declared `schemaVersion`.
-- MUST use UUIDv4 for all identifiers in production data (e.g., muscle `id`). Example short IDs in this RFC are illustrative only.
-- MUST populate all required fields and respect enumerations and structure.
-- SHOULD include RFC 3339 UTC timestamps in `metadata`.
+**Conforming Producers:**
 
-Conforming Consumers:
-- MUST validate incoming muscle data against the appropriate schema version.
-- MUST ignore unknown keys in `attributes` and `extensions`.
-- SHOULD tolerate additional optional fields introduced in newer minor versions.
-- SHOULD reject data with missing required fields or invalid enumerations.
+:::danger MUST
+- **MUST** emit JSON that validates against the Muscle schema for the declared `schemaVersion`.
+- **MUST** use UUIDv4 for all identifiers in production data (e.g., muscle `id`). Example short IDs in this RFC are illustrative only.
+- **MUST** populate all required fields and respect enumerations and structure.
+:::
 
-Compatibility:
-- Optional fields added in minor versions MUST NOT break consumers; consumers SHOULD ignore unknown optional fields.
-- New required fields are a MAJOR change and require coordinated upgrades.
+:::tip SHOULD
+- **SHOULD** include RFC 3339 UTC timestamps in `metadata`.
+:::
+
+**Conforming Consumers:**
+
+:::danger MUST
+- **MUST** validate incoming muscle data against the appropriate schema version.
+- **MUST** ignore unknown keys in `attributes` and `extensions`.
+:::
+
+:::tip SHOULD
+- **SHOULD** tolerate additional optional fields introduced in newer minor versions.
+- **SHOULD** reject data with missing required fields or invalid enumerations.
+:::
+
+**Compatibility:**
+
+:::danger MUST
+- Optional fields added in minor versions **MUST NOT** break consumers; consumers **SHOULD** ignore unknown optional fields.
+- New required fields are a **MAJOR** change and require coordinated upgrades.
+:::
 
 ---
 

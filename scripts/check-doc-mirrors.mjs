@@ -28,11 +28,10 @@
  * second convention for the guides bought nothing except a second thing to get
  * wrong.
  *
- * RFC-001..005 are exempt from the drift rule only. Their pages were written
- * with Docusaurus admonitions (`:::danger MUST`) and hard line breaks that the
- * plain-text sources do not carry. Reconciling them belongs with the work that
- * enrols those same five RFCs in `check:rfc`; until then the exemption is named
- * here so it is visible rather than implied by the check passing.
+ * There are no exemptions. RFC-001..005 once had one: their pages carried
+ * Docusaurus admonitions the plain-text sources did not, so the two could not be
+ * compared byte for byte. The admonitions were moved into the sources, which
+ * kept the published styling and left one document to edit instead of two.
  *
  *   node scripts/check-doc-mirrors.mjs
  */
@@ -72,14 +71,14 @@ const DOC_PAIRS = [
  */
 const NO_PAGE_NEEDED = new Set(['mapping']);
 
-/** Pages that may differ from their source, with the reason recorded above. */
-const DRIFT_EXEMPT = new Set([
-  'specification/rfc/rfc-001-exercise-data-model.md',
-  'specification/rfc/rfc-002-equipment-data-model.md',
-  'specification/rfc/rfc-003-muscle-data-model.md',
-  'specification/rfc/rfc-004-muscle-category-data-model.md',
-  'specification/rfc/rfc-005-body-atlas-data-model.md',
-]);
+/**
+ * Pages that may differ from their source.
+ *
+ * Deliberately empty. Every page is now its source verbatim; an entry here is a
+ * document that has stopped being checked, so adding one needs a reason written
+ * beside it.
+ */
+const DRIFT_EXEMPT = new Set();
 
 const isRfc = (name) => name.startsWith('rfc-') && name.endsWith('.md');
 
@@ -187,6 +186,7 @@ if (problems.length) {
 
 console.log(
   `  ok    ${PAIRS.length} documents published and linked, ` +
-    `${compared} matching their source (${exempt} exempt); ` +
+    `${compared} matching their source` +
+    `${exempt ? ` (${exempt} exempt)` : ''}; ` +
     `${schemaPages} published schemas documented.`
 );

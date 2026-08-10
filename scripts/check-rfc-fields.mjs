@@ -30,12 +30,34 @@ import { globalVocabulary, vocabularyOf } from './lib/vocabulary.mjs';
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 
 /**
- * RFCs that specify a schema of their own.
+ * RFCs that specify a schema of their own. All of them.
  *
- * RFC-001..005 predate this check and are not yet clean against it; retrofitting
- * them is tracked separately rather than bundled into an unrelated change.
+ * RFC-001..005 predated this check and carried 60 measured gaps between them —
+ * every one a field the schema defined that the RFC only ever showed inside a
+ * JSON block. Showing a field is not documenting it: a reader learns the name
+ * exists and nothing about what it means.
  */
 const PAIRS = [
+  {
+    rfc: 'specification/rfc/rfc-001-exercise-data-model.md',
+    source: 'specification/schema-sources/exercises/v1.1.0/exercise.schema.json',
+  },
+  {
+    rfc: 'specification/rfc/rfc-002-equipment-data-model.md',
+    source: 'specification/schema-sources/equipment/v1.1.0/equipment.schema.json',
+  },
+  {
+    rfc: 'specification/rfc/rfc-003-muscle-data-model.md',
+    source: 'specification/schema-sources/muscle/v1.0.0/muscle.schema.json',
+  },
+  {
+    rfc: 'specification/rfc/rfc-004-muscle-category-data-model.md',
+    source: 'specification/schema-sources/muscle/muscle-category/v1.0.0/muscle-category.schema.json',
+  },
+  {
+    rfc: 'specification/rfc/rfc-005-body-atlas-data-model.md',
+    source: 'specification/schema-sources/atlas/v1.0.0/body-atlas.schema.json',
+  },
   {
     rfc: 'specification/rfc/rfc-006-prescription-primitives.md',
     source: 'specification/schema-sources/prescription/v1.0.0/prescription.schema.json',

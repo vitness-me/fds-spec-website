@@ -138,6 +138,9 @@ For complex platform-unique data structures:
 ## 4. Reference Types and Structures
 
 ### 4.1. Canonical Information
+
+`canonical` carries the equipment's identity: a display `name`, a stable `slug`, an optional `description`, optional `aliases`, and `localized` entries giving the name in other languages. Equipment names vary more by region than exercise names do — the same rack is a "power rack", a "squat cage" and a "Kraftkäfig" — so aliases and localisation matter more here than they might appear to.
+
 ```json
 {
   "canonical": {
@@ -153,6 +156,9 @@ For complex platform-unique data structures:
 ```
 
 ### 4.2. Classification Structure
+
+`classification` describes what kind of implement this is and how it behaves. `abbreviation` carries the short form used in compact interfaces — "DB" for a dumbbell, "KB" for a kettlebell — which implementations otherwise derive by guessing. `tags` are free-form labels for filtering and carry no structural consequence.
+
 ```json
 {
   "classification": {
@@ -162,6 +168,9 @@ For complex platform-unique data structures:
 ```
 
 ### 4.3. Media References
+
+`media` follows the shared definition from RFC-001: a list of assets, each with a type and a URI, illustrating the implement.
+
 ```json
 {
   "media": [

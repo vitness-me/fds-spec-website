@@ -152,6 +152,9 @@ For complex platform-unique data structures:
 ## 4. Reference Types and Structures
 
 ### 4.1. Canonical Information
+
+`canonical` carries the muscle's identity — display name, slug, aliases and localised names. Anatomical naming is where aliases earn their place: the same muscle is a "latissimus dorsi" to a clinician and a "lat" to everyone in the gym, and a catalog that recognises only one of those fails half its lookups.
+
 ```json
 {
   "canonical": {
@@ -166,6 +169,9 @@ For complex platform-unique data structures:
 ```
 
 ### 4.2. Classification Structure
+
+`classification` places the muscle in the catalog. `categoryId` is the muscle-category group it belongs to (RFC-004) and is what makes per-group volume aggregation possible without a lookup table. `tags` are free-form labels carrying no structural consequence.
+
 ```json
 {
   "classification": {
@@ -178,6 +184,9 @@ For complex platform-unique data structures:
 ```
 
 ### 4.3. Regional Classification
+
+`regions` names the anatomical subdivisions of the muscle — the parts a program can target separately, such as the upper and lower fibres of the trapezius — and `regionGroup` names the broader area the muscle sits in. A consumer that does not model regions can ignore both without losing the muscle.
+
 
 The `region` field follows standardized anatomical regions:
 - **upper-front**: Chest, front deltoids, biceps
@@ -198,6 +207,9 @@ The `laterality` field describes symmetry characteristics:
 - **n/a**: Not applicable or midline muscles
 
 ### 4.5. Media References
+
+`media` follows the shared definition from RFC-001 — typically an anatomical illustration.
+
 ```json
 {
   "media": [
