@@ -35,6 +35,29 @@ Body visualization structure with views and areas.
 
 **Schema:** `/schemas/atlas/v1.0.0/body-atlas.schema.json`
 
+### [Workout Schema](/docs/schemas/workout)
+One prescribed session: blocks of items, an execution mode per block, and a prescription per set.
+
+**Schema:** `/schemas/workout/v1.0.0/workout.schema.json`
+
+### [Program Schema](/docs/schemas/program)
+A schedule of workout references over time: cycles, weeks, day placement, progression and branching.
+
+**Schema:** `/schemas/program/v1.0.0/program.schema.json`
+
+## Definition libraries
+
+### [Prescription Primitives](/docs/schemas/prescription)
+Load, repetitions, tempo, rest, intensity zones, set schemes and progression rules — the definitions workouts and programs compose.
+
+**Schema:** `/schemas/prescription/v1.0.0/prescription.schema.json`
+
+This one is **not an entity**. Its root validates nothing by construction: there is no prescription document to hold, only definitions that other schemas use. You validate against a definition inside it, never against the root.
+
+## Entity versions are not uniform
+
+A release names a *set* of entity versions rather than one version they all share. Release 1.3.0 serves exercise and equipment at 1.1.0 and everything else at 1.0.0 — there is no `muscle/v1.3.0/`, and there will not be unless muscle itself changes. Build schema URLs from the entity version, not the release.
+
 ## Validation
 
 See the [Quick Validation Guide](/docs/getting-started/quick-validation) for instructions on validating your data against these schemas.
