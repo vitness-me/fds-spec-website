@@ -2,6 +2,7 @@
 title: Internationalization
 sidebar_position: 1
 ---
+
 # Internationalization (i18n) and Slug Conventions
 
 This guide specifies language and slug rules used across FDS entities (exercises, equipment, muscles, muscle categories).

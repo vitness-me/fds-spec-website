@@ -80,7 +80,7 @@ jobs:
       # The specification lives twice — the source under specification/rfc/ and
       # the page readers actually get. Editing a normative rule in one and not
       # the other leaves the published copy stating the old rule, silently.
-      - name: Verify RFC website pages match their sources
+      - name: Verify website pages match their sources
         run: npm run check:mirrors
 
       # "No scenario without an example ships" is a promise about a list of

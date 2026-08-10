@@ -2,6 +2,7 @@
 title: Extensions
 sidebar_position: 1
 ---
+
 # Extension Policy and Registry Guide
 
 This guide defines how vendors extend the Fitness Data Standard (FDS) without breaking interoperability and how common extensions can be promoted toward standardization.

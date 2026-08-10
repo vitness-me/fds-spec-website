@@ -4,6 +4,8 @@ description: How to contribute to the Fitness Data Standard (FDS)
 sidebar_position: 2
 ---
 
+# Contributing to the Fitness Data Standard (FDS)
+
 Thanks for helping improve fitness data interoperability! This document explains how to propose changes, add RFCs, and update schemas/examples.
 
 ## Ways to Contribute

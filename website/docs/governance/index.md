@@ -17,6 +17,8 @@ This document describes how the Fitness Data Standard (FDS) is evolved, reviewed
 - Default: Lazy consensus (silence is consent) after a minimum 5 business day review window on substantive changes.
 - Escalation: If consensus is unclear, Editors call for a lightweight vote among Editors; a simple majority decides.
 - Input weighting: Real‑world implementer feedback is emphasized for changes affecting compatibility or semantics.
+
+## RFC Lifecycle
 1. Draft: Proposal authored and submitted as a PR under `specification/rfc/` using the RFC template.
 2. Review: Open discussion; Editors request changes; examples and schemas must validate.
 3. Accepted: Approved and merged; assigned a spec version target (e.g., 1.0.0) and tracked in CHANGELOG.
