@@ -3,8 +3,10 @@ name: CI
 on:
   push:
     branches: [main]
+  # Any pull request, not only those targeting main. A stacked PR onto another
+  # feature branch is still a change that needs checking, and restricting the
+  # trigger meant the ones most likely to conflict were the ones with no run.
   pull_request:
-    branches: [main]
   # Manual trigger. When Actions is degraded no run is created at all, so there
   # is nothing to re-run — without this the only way to retry is an empty commit.
   workflow_dispatch:
