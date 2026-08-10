@@ -8,8 +8,8 @@ keywords: [workout, session, superset, circuit, emom, amrap, tabata, data model,
 # RFC-007: Workout Data Model Specification
 
 **Status**: Draft
-**Version**: 0.1.0
-**Date**: 2026-08-09
+**Version**: 0.2.0
+**Date**: 2026-08-10
 **Authors**: VITNESS Team
 **Category**: Standards Track
 
@@ -154,6 +154,8 @@ This is distinct from a substitution an athlete makes during a session, which is
 
 `side` is meaningful only where the referenced exercise's `classification.unilateral` is true. A set MAY carry free-text `notes`.
 
+From schema version 1.1.0 a set also carries `zone`. Load, repetitions, tempo and rest were always statable per set and intensity was not, so a session whose intensity climbs set by set had to be split into one item per step to say so. That was an asymmetry rather than a decision, and it is corrected.
+
 ### 4.5. `repStyle`
 
 Two prescriptions in wide use are expressible by nothing else in the model: **partials** (a deliberately reduced range of motion) and **one-and-a-half reps** (a full repetition followed by a half, counted as one). `tempo` governs how fast a repetition is performed, not its range or its composition, and no metric or set scheme reaches them either.
@@ -172,13 +174,39 @@ Two prescriptions in wide use are expressible by nothing else in the model: **pa
 
 It is defined here rather than in the RFC-006 library because a workout is currently its only consumer. A definition becomes shared when a second consumer needs it; if RFC-008 does, it is promoted to a new prescription version at that point. Promoting it now would mean publishing a new version of a frozen URL to serve a user that does not yet exist.
 
-### 4.6. Derived rollups
+### 4.6. `settings`
+
+Some prescriptions are neither load, repetitions, tempo nor rest. A treadmill at five percent incline, a bike held at ninety revolutions per minute — the athlete has to dial these in before starting, and nothing else in the model reaches them.
+
+Added at schema version 1.1.0, `settings` is an array of metric shapes with a value attached:
+
+```json
+{ "settings": [ { "type": "incline", "unit": "percent", "value": 5 } ] }
+```
+
+| Field | Meaning |
+|---|---|
+| `type` | A metric type from the shared RFC-001 vocabulary — `incline`, `cadence`, `resistanceLevel` and so on |
+| `unit` | Its unit, from the same vocabulary |
+| `value` | The number to set |
+| `range` | A band rather than a point, as `min` and `max` — "cadence 85 to 95" |
+| `notes` | Free text for this setting |
+
+It sits on an item or on a single set, so an incline that climbs every five minutes is three sets rather than three items.
+
+This is deliberately **not** a new definition per setting. Load, repetitions, tempo and rest each earned one because each carries semantics a consumer must act on — a load has a resolution method, a rest has a scope. An incline carries none: it is a number in a unit that the athlete sets, and the metric vocabulary already names it. Giving each setting its own definition would have meant a new one every time a machine gained a dial.
+
+**Resistance is a load, not a setting.** A machine's resistance level changes how hard the work is and is prescribed with `loadTarget.method: "level"`, which carries a `scale` so that "level 8" is not read against a different machine's numbering. Incline and cadence change what the movement *is* rather than how heavy it is. Producers SHOULD keep that division; consumers reading a `resistanceLevel` setting SHOULD accept it and warn.
+
+A consumer that cannot apply a setting — no incline control on the equipment at hand — SHOULD surface it to the athlete rather than discard it silently. Unlike an unrecognised load method, there is no safety argument for refusing: the number is stated in a named unit and means the same thing to a person as to a machine.
+
+### 4.7. Derived rollups
 
 `targets` and `equipment` summarise what the session trains and needs. Both are **optional and advisory**.
 
 A consumer MUST NOT treat either as authoritative over walking the items. They are derived data that can be absent, stale, or computed under assumptions the consumer does not share — a rollup produced before an item was substituted no longer describes the session. They exist for listing and filtering, where recomputing across a library is expensive and approximate answers are acceptable.
 
-### 4.7. Optional descriptive fields
+### 4.8. Optional descriptive fields
 
 `constraints` records what the session demands of the athlete before they start: `contraindications` (conditions under which it should not be performed), `prerequisites` (competencies it assumes) and `environment` (where it can be done). These are advisory prose, not machine-enforceable gates — FDS models no athlete to check them against.
 
@@ -216,6 +244,8 @@ A workout inherits every resolution requirement of the load targets it contains.
 This entity follows the versioning rules in RFC-001 §5. Its published URL is a frozen contract; additions ship at a new version URL.
 
 Adding a `mode` is a MINOR change: documents valid under the old version remain valid, because the new mode previously validated through the catch-all branch.
+
+**1.1.0** added `settings` on items and sets, and `zone` on a set. Both are optional additions to closed objects, so every 1.0.0 document remains valid unchanged — but a 1.1.0 document using either is rejected by the 1.0.0 schema, which is what makes this a version rather than an edit. `workout/v1.0.0/workout.schema.json` stays published and frozen; transformer releases 1.2.0 and 1.3.0 declare workout at 1.0.0 and continue to resolve.
 
 Entities version independently. A new workout version does not oblige exercise, equipment or the prescription library to move, and none of their versions oblige this one.
 

@@ -59,7 +59,7 @@ const ENTITIES = [
   { name: 'prescription', path: 'prescription/v1.0.0/prescription.schema.json', bundled: false },
   // After prescription: workout composes its definitions, and a library must be
   // built before anything that references it.
-  { name: 'workout', path: 'workout/v1.0.0/workout.schema.json' },
+  { name: 'workout', path: 'workout/v1.1.0/workout.schema.json' },
   // After workout: program references it by workoutRef and composes RFC-006
   // progression rules.
   { name: 'program', path: 'program/v1.0.0/program.schema.json' },
@@ -81,7 +81,7 @@ const BUNDLED_ENTITIES = ENTITIES.filter((entity) => entity.bundled !== false);
  * `v1.2.0` predates program; all are checked-in historical artifacts kept for
  * consumers pinned to them.
  */
-const BUNDLE_RELEASE = '1.3.0';
+const BUNDLE_RELEASE = '1.4.0';
 
 /**
  * Published schemas that are served but not generated from an authoring source.
@@ -92,11 +92,21 @@ const BUNDLE_RELEASE = '1.3.0';
  * served from spec.vitness.me, so it is still hashed and freezable — it is only
  * exempt from being *rendered*, not from being *tracked*.
  *
+ * `workout/v1.0.0/workout.schema.json` is a *superseded* version. Its authoring
+ * source is gone — 1.1.0 replaced it — but the published bytes stay, because a
+ * frozen URL that disappears is worse than one that changes: transformer
+ * releases 1.2.0 and 1.3.0 both declare workout at 1.0.0, and deleting it would
+ * leave two shipped releases pointing at nothing. It is served, hashed and
+ * frozen; it is simply never rendered again.
+ *
  * Adding a file here is a deliberate, reviewable act. That is the point: the
  * integrity manifest is derived from what is actually published, so nothing can
  * reach the published tree without appearing in one of these two lists.
  */
-const UNGENERATED = ['transformer/v1.0.0/mapping.schema.json'];
+const UNGENERATED = [
+  'transformer/v1.0.0/mapping.schema.json',
+  'workout/v1.0.0/workout.schema.json',
+];
 
 /** Every `*.schema.json` under the published tree, relative to it. */
 async function publishedSchemaFiles() {

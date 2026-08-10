@@ -4,15 +4,17 @@ description: JSON Schema for a single prescribed training session — blocks, ex
 sidebar_position: 8
 ---
 
-# Workout Schema (v1.0.0)
+# Workout Schema (v1.1.0)
 
 A workout is **one prescribed session**: what is done, in what order, grouped how, and how each item is prescribed.
 
 ## Schema Location
 
-**URL:** `https://spec.vitness.me/schemas/workout/v1.0.0/workout.schema.json`
+**URL:** `https://spec.vitness.me/schemas/workout/v1.1.0/workout.schema.json`
 
-**Download:** [workout.schema.json](https://spec.vitness.me/schemas/workout/v1.0.0/workout.schema.json)
+**Download:** [workout.schema.json](https://spec.vitness.me/schemas/workout/v1.1.0/workout.schema.json)
+
+`v1.0.0` remains published and frozen at its own URL. 1.1.0 is purely additive, so every 1.0.0 document validates against it unchanged.
 
 ## Blocks of items, and a mode
 
@@ -53,13 +55,25 @@ These are mutually exclusive and the schema enforces it. An item carrying both s
 
 Item-level `load`, `reps`, `tempo` and `rest` apply to every set. A set-level value overrides it for that set only.
 
+## Machine settings
+
+Some prescriptions are none of load, repetitions, tempo or rest. A treadmill at five percent incline, a bike held at ninety revolutions per minute — the athlete dials these in before starting, and nothing else in the model reaches them.
+
+`settings` is an array of metric shapes with a value attached: a `type` and `unit` from the shared RFC-001 vocabulary, a `value`, optionally a `range` and `notes`. It sits on an item or on a single set, so an incline that climbs every five minutes is three sets rather than three items.
+
+It is deliberately not a new definition per setting. Load and rest earned their own because each carries semantics a consumer must act on — a resolution method, a scope. An incline carries none: it is a number in a unit that the athlete sets.
+
+**Resistance is a load, not a setting.** It changes how hard the work is, so it stays a `loadTarget` with `method: "level"` and a named `scale`. Incline and cadence change what the movement is rather than how heavy it is.
+
+From 1.1.0 a set also carries `zone`. Load, reps, tempo and rest were always statable per set and intensity was not, so a session whose intensity climbed set by set had to be split into one item per step. That was an asymmetry, not a decision.
+
 ## Rollups are advisory
 
 `targets` and `equipment` summarise what the session trains and needs. Both are optional and **must not** be treated as authoritative over walking the items — they can be absent, stale, or computed under assumptions you do not share. A rollup produced before an item was substituted no longer describes the session. Recompute when correctness matters.
 
 ## Worked examples
 
-Thirty-six sessions are published alongside the schema — one for every set and rep scheme in the coverage matrix, and one for every grouping structure, from a single exercise to a chipper. Each is indexed in [the fixture README](https://spec.vitness.me/schemas/workout/v1.0.0/README.md).
+Forty-six sessions are published alongside the schema — one for every set and rep scheme in the coverage matrix, one for every grouping structure from a single exercise to a chipper, and one for every cardio and endurance scenario. Each is indexed in [the fixture README](https://spec.vitness.me/schemas/workout/v1.0.0/README.md).
 
 The grouping set is the real test of the claim above: if any structure had needed a field the schema lacked, the abstraction would be cut in the wrong place.
 

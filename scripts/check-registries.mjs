@@ -47,24 +47,24 @@ const REGISTRIES = [
     file: 'workout-type.registry.json',
     field: 'workoutType',
     schemaField: {
-      source: 'workout/v1.0.0/workout.schema.json',
+      source: 'workout/v1.1.0/workout.schema.json',
       property: 'workoutType',
     },
-    usedIn: ['workout/v1.0.0'],
+    usedIn: ['workout/v1.1.0'],
   },
   {
     file: 'block-role.registry.json',
     field: 'role',
     schemaField: {
-      source: 'workout/v1.0.0/workout.schema.json',
+      source: 'workout/v1.1.0/workout.schema.json',
       property: 'role',
     },
-    usedIn: ['workout/v1.0.0'],
+    usedIn: ['workout/v1.1.0'],
   },
   {
     file: 'intensity-zone.registry.json',
     field: 'boundsRef',
-    usedIn: ['workout/v1.0.0', 'prescription/v1.0.0', 'program/v1.0.0'],
+    usedIn: ['workout/v1.1.0', 'prescription/v1.0.0', 'program/v1.0.0'],
   },
 ];
 

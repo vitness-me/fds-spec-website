@@ -1,0 +1,54 @@
+{
+  "schemaVersion": "1.1.0",
+  "workoutId": "00000000-0000-4000-8000-000000000006",
+  "canonical": {
+    "name": "Cluster Sets",
+    "slug": "cluster"
+  },
+  "classification": {
+    "workoutType": "power"
+  },
+  "structure": {
+    "blocks": [
+      {
+        "id": "b1",
+        "mode": "sequential",
+        "items": [
+          {
+            "id": "i1",
+            "exercise": {
+              "id": "ex.deadlift",
+              "name": "Deadlift"
+            },
+            "scheme": {
+              "pattern": "cluster",
+              "sets": 4,
+              "params": {
+                "repsPerCluster": 2,
+                "intraSetRest": 20,
+                "restUnit": "s"
+              }
+            },
+            "load": {
+              "method": "percent1RM",
+              "value": 85
+            },
+            "rest": {
+              "method": "fixed",
+              "appliesTo": "set",
+              "value": 3,
+              "unit": "min"
+            }
+          }
+        ],
+        "role": "primary"
+      }
+    ]
+  },
+  "metadata": {
+    "createdAt": "2026-08-09T00:00:00Z",
+    "updatedAt": "2026-08-09T00:00:00Z",
+    "status": "active",
+    "source": "vitness.core"
+  }
+}

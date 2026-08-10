@@ -22,7 +22,7 @@ export const SCHEMA_SOURCES = [
   'specification/schema-sources/muscle/muscle-category/v1.0.0/muscle-category.schema.json',
   'specification/schema-sources/atlas/v1.0.0/body-atlas.schema.json',
   'specification/schema-sources/prescription/v1.0.0/prescription.schema.json',
-  'specification/schema-sources/workout/v1.0.0/workout.schema.json',
+  'specification/schema-sources/workout/v1.1.0/workout.schema.json',
   'specification/schema-sources/program/v1.0.0/program.schema.json',
 ];
 

@@ -54,6 +54,19 @@ export const RELEASE_ENTITY_VERSIONS: Record<string, Record<string, string>> = {
     workout: '1.0.0',
     program: '1.0.0',
   },
+  // 1.4.0 moves workout to 1.1.0 — per-set intensity zones and machine settings.
+  // The first release where an entity this batch introduced has itself moved, so
+  // it is also the first proof that the version map is doing real work: a client
+  // pinned to 1.3.0 keeps fetching workout/v1.0.0/, which is still published.
+  '1.4.0': {
+    exercise: '1.1.0',
+    equipment: '1.1.0',
+    muscle: '1.0.0',
+    'muscle-category': '1.0.0',
+    'body-atlas': '1.0.0',
+    workout: '1.1.0',
+    program: '1.0.0',
+  },
 };
 
 /** The entity version a release publishes, or the release itself if unknown. */
@@ -70,4 +83,4 @@ export function entityVersionFor(entity: string, release: string): string {
  * reject the fields the new release just introduced. Pin explicitly to stay on
  * an older release.
  */
-export const DEFAULT_SCHEMA_VERSION = '1.3.0';
+export const DEFAULT_SCHEMA_VERSION = '1.4.0';

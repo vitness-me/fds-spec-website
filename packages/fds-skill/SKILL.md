@@ -1,7 +1,7 @@
 # FDS Specification Expert Skill
 
 > **Version:** 2.0.0  
-> **Specification Version:** FDS release 1.3.0  
+> **Specification Version:** FDS release 1.4.0  
 > **Last Updated:** August 2026
 
 ## Identity
@@ -48,7 +48,7 @@ https://spec.vitness.me/schemas/muscle/v1.0.0/muscle.schema.json
 https://spec.vitness.me/schemas/muscle/muscle-category/v1.0.0/muscle-category.schema.json
 https://spec.vitness.me/schemas/atlas/v1.0.0/body-atlas.schema.json
 https://spec.vitness.me/schemas/prescription/v1.0.0/prescription.schema.json
-https://spec.vitness.me/schemas/workout/v1.0.0/workout.schema.json
+https://spec.vitness.me/schemas/workout/v1.1.0/workout.schema.json
 https://spec.vitness.me/schemas/program/v1.0.0/program.schema.json
 ```
 
@@ -64,6 +64,9 @@ Release 1.3.0 serves exercise and equipment at 1.1.0 and everything else at 1.0.
 | 1.1.0 | exercise 1.1.0, equipment 1.1.0, rest at 1.0.0 |
 | 1.2.0 | as 1.1.0, plus workout 1.0.0 |
 | 1.3.0 | as 1.2.0, plus program 1.0.0 |
+| 1.4.0 | as 1.3.0, but workout moves to 1.1.0 |
+
+A superseded entity version stays published. `workout/v1.0.0/` is still served and still frozen, because releases 1.2.0 and 1.3.0 declare workout at 1.0.0.
 
 **Every published URL is frozen.** Its bytes never change; a change ships at a new version URL.
 
@@ -477,7 +480,13 @@ Not both, not neither. Rest is modelled explicitly rather than left as a gap, be
 
 A workout's `targets` and `equipment`, and a program's `durationWeeks`, are derived. Recompute rather than trust them when correctness matters.
 
-**7. Overrides apply after the workout's own progression rule resolves.**
+**7. Machine settings are not loads.**
+
+`settings[]` (workout 1.1.0) carries incline, cadence and the like as a metric shape with a value — `{ type, unit, value }`, optionally a `range`. Resistance is *not* one of these: it changes how hard the work is, so it stays a `loadTarget` with `method: "level"` and a named `scale`.
+
+A consumer that cannot apply a setting SHOULD surface it rather than discard it. Unlike an unrecognised load method there is no safety argument for refusing — the number is stated in a named unit.
+
+**8. Overrides apply after the workout's own progression rule resolves.**
 
 `loadScaling` multiplies a *resolved* load, which is what lets it compose with any method — and multiplies nothing on an RPE target, because an RPE has no load until the athlete supplies one.
 
@@ -584,3 +593,5 @@ When responding:
 - Substitute a release name into a schema URL path
 - Give an item both `sets[]` and `scheme`
 - Trust `targets`, `equipment` or `durationWeeks` when correctness matters
+- Put reps, weight or any prescribed *work* into `settings[]` — that is what `load` and `reps` are for
+- Assume a superseded entity version has been withdrawn; `workout/v1.0.0/` is still served

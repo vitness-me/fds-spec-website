@@ -1,0 +1,50 @@
+{
+  "schemaVersion": "1.1.0",
+  "workoutId": "00000000-0000-4000-8000-0000000d0101",
+  "canonical": {
+    "name": "Easy Thirty",
+    "slug": "duration"
+  },
+  "classification": {
+    "workoutType": "endurance",
+    "estimatedDuration": {
+      "value": 30,
+      "unit": "min"
+    }
+  },
+  "structure": {
+    "blocks": [
+      {
+        "id": "b1",
+        "role": "primary",
+        "mode": "sequential",
+        "notes": "The clock terminates the effort. No rep count applies, and none is invented.",
+        "items": [
+          {
+            "id": "i1",
+            "exercise": {
+              "id": "ex.run",
+              "name": "Running"
+            },
+            "reps": {
+              "kind": "time",
+              "value": 30,
+              "unit": "min"
+            },
+            "zone": {
+              "system": "heartRate",
+              "zone": "Z2",
+              "boundsRef": "zone.fiveZoneHeartRate"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "metadata": {
+    "createdAt": "2026-08-10T00:00:00Z",
+    "updatedAt": "2026-08-10T00:00:00Z",
+    "status": "active",
+    "source": "vitness.core"
+  }
+}

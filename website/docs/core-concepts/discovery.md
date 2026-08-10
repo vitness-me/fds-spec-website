@@ -16,7 +16,7 @@ This document defines an optional HTTP discovery endpoint that allows clients to
 ## Response Schema (informal)
 ```json
 {
-  "spec_version": "1.3.0",
+  "spec_version": "1.4.0",
   "provider": "Acme Fitness Platform",
   "supported_entities": [
     "exercise",
@@ -33,7 +33,7 @@ This document defines an optional HTTP discovery endpoint that allows clients to
     "muscle": "1.0.0",
     "muscle-category": "1.0.0",
     "body-atlas": "1.0.0",
-    "workout": "1.0.0",
+    "workout": "1.1.0",
     "program": "1.0.0"
   },
   "supported_extensions": ["x:vitness", "x:gym-management"],
@@ -59,7 +59,9 @@ This document defines an optional HTTP discovery endpoint that allows clients to
 
 `spec_version` names a release. It is **not** a version that every entity shares, and a client that assumes it is will request URLs that were never published.
 
-Entities version independently. Release 1.3.0 publishes exercise and equipment at 1.1.0 while muscle, muscle-category, body-atlas, workout and program remain at 1.0.0. There is no `muscle/v1.3.0/` and there never will be unless muscle itself changes.
+Entities version independently. Release 1.4.0 publishes exercise, equipment and workout at 1.1.0 while muscle, muscle-category, body-atlas and program remain at 1.0.0. There is no `muscle/v1.4.0/` and there never will be unless muscle itself changes.
+
+A superseded entity version stays served. `workout/v1.0.0/` is still published and still frozen, because releases 1.2.0 and 1.3.0 declare workout at 1.0.0 and a client pinned to either must keep resolving.
 
 Providers SHOULD therefore emit `entity_versions`, mapping each supported entity to the entity version they serve. A client that has it can construct schema URLs directly. A client that does not has to resolve the release to its entity versions some other way, and guessing is the failure this field exists to prevent.
 
@@ -69,6 +71,7 @@ Providers SHOULD therefore emit `entity_versions`, mapping each supported entity
 | 1.1.0 | exercise and equipment move to 1.1.0 — extended metric vocabulary and loading characteristics |
 | 1.2.0 | workout |
 | 1.3.0 | program |
+| 1.4.0 | workout moves to 1.1.0 — per-set intensity zones and machine settings |
 
 Gaining an entity is a new release even when nothing existing changed, because a release names the *set* it publishes.
 

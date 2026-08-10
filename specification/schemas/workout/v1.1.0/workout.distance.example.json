@@ -1,0 +1,41 @@
+{
+  "schemaVersion": "1.1.0",
+  "workoutId": "00000000-0000-4000-8000-0000000d0102",
+  "canonical": {
+    "name": "Five Kilometres",
+    "slug": "distance"
+  },
+  "classification": {
+    "workoutType": "endurance"
+  },
+  "structure": {
+    "blocks": [
+      {
+        "id": "b1",
+        "role": "primary",
+        "mode": "sequential",
+        "notes": "Distance terminates the effort. Duration is the outcome, so it is not prescribed.",
+        "items": [
+          {
+            "id": "i1",
+            "exercise": {
+              "id": "ex.run",
+              "name": "Running"
+            },
+            "reps": {
+              "kind": "distance",
+              "value": 5,
+              "unit": "km"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "metadata": {
+    "createdAt": "2026-08-10T00:00:00Z",
+    "updatedAt": "2026-08-10T00:00:00Z",
+    "status": "active",
+    "source": "vitness.core"
+  }
+}

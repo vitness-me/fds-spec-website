@@ -20,7 +20,7 @@ afterEach(() => {
 describe('SchemaManager', () => {
   describe('bundled version registry', () => {
     it('reports the versions it can serve offline', () => {
-      expect(SchemaManager.getBundledVersions()).toEqual(['1.0.0', '1.1.0', '1.2.0', '1.3.0']);
+      expect(SchemaManager.getBundledVersions()).toEqual(['1.0.0', '1.1.0', '1.2.0', '1.3.0', '1.4.0']);
     });
 
     it('answers hasBundledVersion for known and unknown versions', () => {
@@ -28,6 +28,7 @@ describe('SchemaManager', () => {
       expect(SchemaManager.hasBundledVersion('1.1.0')).toBe(true);
       expect(SchemaManager.hasBundledVersion('1.2.0')).toBe(true);
       expect(SchemaManager.hasBundledVersion('1.3.0')).toBe(true);
+      expect(SchemaManager.hasBundledVersion('1.4.0')).toBe(true);
       expect(SchemaManager.hasBundledVersion('9.9.9')).toBe(false);
     });
   });
@@ -47,7 +48,7 @@ describe('SchemaManager', () => {
       const manager = new SchemaManager();
 
       await expect(manager.loadVersion('9.9.9')).rejects.toThrow(
-        /available: 1\.0\.0, 1\.1\.0, 1\.2\.0, 1\.3\.0/
+        /available: 1\.0\.0, 1\.1\.0, 1\.2\.0, 1\.3\.0, 1\.4\.0/
       );
     });
 
@@ -99,7 +100,7 @@ describe('SchemaManager', () => {
   });
 
   describe('bundled schemas are self-contained', () => {
-    it.each(['1.0.0', '1.1.0', '1.2.0', '1.3.0'])(
+    it.each(['1.0.0', '1.1.0', '1.2.0', '1.3.0', '1.4.0'])(
       'compiles every bundled entity schema of %s without unresolved $refs',
       async (version) => {
         vi.stubGlobal('fetch', unreachableRemote());
@@ -178,6 +179,80 @@ describe('SchemaManager', () => {
       // Specifically because 1.0.0 has no `loading` and is a closed object —
       // not because the fixture is malformed in some unrelated way.
       expect(JSON.stringify(result.errors)).toMatch(/loading/);
+    });
+  });
+
+  /**
+   * Workout 1.1.0 is the first time an entity introduced by this batch has moved.
+   * The claim being tested is the one a MINOR bump makes: old documents keep
+   * validating, and new ones do not validate against the old schema. Without the
+   * second half the bump would be an edit, not a version.
+   */
+  describe('workout 1.1.0 is additive over 1.0.0', () => {
+    const withSettings = {
+      schemaVersion: '1.1.0',
+      workoutId: '00000000-0000-4000-8000-00000000c001',
+      canonical: { name: 'Hill Walk', slug: 'hill-walk' },
+      classification: { workoutType: 'conditioning' },
+      structure: {
+        blocks: [
+          {
+            id: 'b1',
+            mode: 'sequential',
+            items: [
+              {
+                id: 'i1',
+                exercise: { id: 'ex.treadmill', name: 'Treadmill' },
+                reps: { kind: 'time', value: 20, unit: 'min' },
+                settings: [{ type: 'incline', unit: 'percent', value: 5 }],
+              },
+            ],
+          },
+        ],
+      },
+      metadata: {
+        createdAt: '2026-08-10T00:00:00Z',
+        updatedAt: '2026-08-10T00:00:00Z',
+        status: 'active',
+      },
+    };
+
+    // Same session with the 1.1.0-only field removed.
+    const withoutSettings = JSON.parse(JSON.stringify(withSettings));
+    withoutSettings.schemaVersion = '1.0.0';
+    delete withoutSettings.structure.blocks[0].items[0].settings;
+
+    it('accepts a 1.0.0-shaped workout under 1.1.0', async () => {
+      vi.stubGlobal('fetch', unreachableRemote());
+      const manager = new SchemaManager();
+
+      await manager.loadVersion('1.4.0');
+
+      const result = await manager.validate(withoutSettings, 'workout', '1.4.0');
+      expect(result.errors).toEqual([]);
+      expect(result.valid).toBe(true);
+    });
+
+    it('accepts settings under 1.1.0', async () => {
+      vi.stubGlobal('fetch', unreachableRemote());
+      const manager = new SchemaManager();
+
+      await manager.loadVersion('1.4.0');
+
+      const result = await manager.validate(withSettings, 'workout', '1.4.0');
+      expect(result.errors).toEqual([]);
+      expect(result.valid).toBe(true);
+    });
+
+    it('rejects settings under 1.3.0, so the two bundles differ', async () => {
+      vi.stubGlobal('fetch', unreachableRemote());
+      const manager = new SchemaManager();
+
+      await manager.loadBundledOnly('1.3.0');
+
+      const result = await manager.validate(withSettings, 'workout', '1.3.0');
+      expect(result.valid).toBe(false);
+      expect(JSON.stringify(result.errors)).toMatch(/settings/);
     });
   });
 

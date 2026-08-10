@@ -1,0 +1,55 @@
+{
+  "schemaVersion": "1.1.0",
+  "workoutId": "00000000-0000-4000-8000-000000000007",
+  "canonical": {
+    "name": "Myo-Reps",
+    "slug": "myo-reps"
+  },
+  "classification": {
+    "workoutType": "hypertrophy"
+  },
+  "structure": {
+    "blocks": [
+      {
+        "id": "b1",
+        "mode": "sequential",
+        "items": [
+          {
+            "id": "i1",
+            "exercise": {
+              "id": "ex.lateralRaise",
+              "name": "Lateral Raise"
+            },
+            "scheme": {
+              "pattern": "myoReps",
+              "sets": 1,
+              "params": {
+                "activationReps": 15,
+                "miniSetReps": 5,
+                "miniSets": 4,
+                "intraSetRest": 15
+              }
+            },
+            "load": {
+              "method": "rir",
+              "value": 1
+            },
+            "rest": {
+              "method": "fixed",
+              "appliesTo": "set",
+              "value": 2,
+              "unit": "min"
+            }
+          }
+        ],
+        "role": "accessory"
+      }
+    ]
+  },
+  "metadata": {
+    "createdAt": "2026-08-09T00:00:00Z",
+    "updatedAt": "2026-08-09T00:00:00Z",
+    "status": "active",
+    "source": "vitness.core"
+  }
+}
