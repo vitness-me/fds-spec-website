@@ -93,13 +93,17 @@ Prescribed rest, and the boundary it binds to. RFC-006 §4.4.
 
 | Fixture | Demonstrates |
 |---|---|
+| `restSpec.fixed.example.json` | Three minutes between sets. The baseline the other four depart from. |
+| `restSpec.between-group-members.example.json` | Fifteen seconds between the members of a superset — the transition, not the recovery. |
 | `restSpec.between-rounds.example.json` | Three minutes, explicitly between *rounds*. |
 | `restSpec.range.example.json` | 90–120 seconds between sets. |
 | `restSpec.to-heart-rate.example.json` | Rest until heart rate falls to 120 bpm — needs live data at execution time. |
 | `restSpec.as-needed.example.json` | Athlete's discretion, stated rather than omitted. |
 | `restSpec.work-to-rest-ratio.example.json` | 1:2, resolved against the work interval's duration. |
 | `restSpec.forward-compatible.example.json` | An unrecognized rest method, still validating. |
-| `restScope.round.example.json` | The scope value on its own. |
+| `restScope.set.example.json` | The scope value on its own — between sets of one exercise. |
+| `restScope.group.example.json` | Between the members of a group, where the rest is a transition rather than a recovery. |
+| `restScope.round.example.json` | Between rounds of a circuit. |
 | `restSpec.missing-scope.invalid.json` | A duration with no `appliesTo`. The field most likely to be dropped when porting from a simpler format, and the ambiguity is not recoverable afterwards — 30 seconds between superset members and 3 minutes between rounds are both "rest". |
 | `restScope.invalid.json` | A scope outside the four the schema defines. |
 
