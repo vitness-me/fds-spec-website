@@ -13,6 +13,7 @@
     "check:rfc": "node scripts/check-rfc-fields.mjs",
     "check:mirrors": "node scripts/check-doc-mirrors.mjs",
     "check:scenarios": "node scripts/check-scenarios.mjs",
-    "check:registries": "node scripts/check-registries.mjs"
+    "check:registries": "node scripts/check-registries.mjs",
+    "check:skill": "node scripts/check-skill.mjs"
   }
 }

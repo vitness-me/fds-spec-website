@@ -57,6 +57,7 @@ if run_job schemas; then
   try "website pages match their sources" npm run check:mirrors
   try "every matrix scenario has an example" npm run check:scenarios
   try "recommended values are in a registry" npm run check:registries
+  try "skill knowledge names real fields" npm run check:skill
 
   S=specification/schemas
   total=0; failed=0

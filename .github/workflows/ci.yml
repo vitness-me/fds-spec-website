@@ -93,6 +93,11 @@ jobs:
       - name: Verify recommended values are in a registry
         run: npm run check:registries
 
+      # The skill is a knowledge base an assistant answers from, so a wrong field
+      # name there produces confident, specific, invalid output.
+      - name: Verify the skill names fields that exist
+        run: npm run check:skill
+
       - name: Install Ajv CLI
         run: npm install --no-save ajv@8 ajv-cli@5 ajv-formats@3
 
