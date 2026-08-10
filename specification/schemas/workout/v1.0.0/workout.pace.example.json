@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "1.0.0",
+  "workoutId": "00000000-0000-4000-8000-0000000d0103",
+  "canonical": {
+    "name": "Threshold Pace",
+    "slug": "pace"
+  },
+  "classification": {
+    "workoutType": "endurance",
+    "level": "intermediate"
+  },
+  "structure": {
+    "blocks": [
+      {
+        "id": "b1",
+        "role": "primary",
+        "mode": "sequential",
+        "notes": "Pace is an intensity, not a target: the distance says how far and the zone says how fast. A higher pace zone means a lower time per kilometre, which is the one place zone ordering and the underlying number run in opposite directions.",
+        "items": [
+          {
+            "id": "i1",
+            "exercise": {
+              "id": "ex.run",
+              "name": "Running"
+            },
+            "reps": {
+              "kind": "distance",
+              "value": 8,
+              "unit": "km"
+            },
+            "zone": {
+              "system": "pace",
+              "zone": "Z4",
+              "boundsRef": "zone.fiveZonePace"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "metadata": {
+    "createdAt": "2026-08-10T00:00:00Z",
+    "updatedAt": "2026-08-10T00:00:00Z",
+    "status": "active",
+    "source": "vitness.core"
+  }
+}

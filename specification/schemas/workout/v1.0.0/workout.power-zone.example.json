@@ -1,0 +1,82 @@
+{
+  "schemaVersion": "1.0.0",
+  "workoutId": "00000000-0000-4000-8000-0000000d0105",
+  "canonical": {
+    "name": "Sweet Spot",
+    "slug": "power-zone"
+  },
+  "classification": {
+    "workoutType": "endurance",
+    "level": "advanced"
+  },
+  "structure": {
+    "blocks": [
+      {
+        "id": "b1",
+        "role": "warmup",
+        "mode": "sequential",
+        "items": [
+          {
+            "id": "i1",
+            "exercise": {
+              "id": "ex.bike",
+              "name": "Stationary Bike"
+            },
+            "reps": {
+              "kind": "time",
+              "value": 15,
+              "unit": "min"
+            },
+            "zone": {
+              "system": "power",
+              "zone": "Z2",
+              "boundsRef": "zone.coggan7"
+            }
+          }
+        ]
+      },
+      {
+        "id": "b2",
+        "role": "primary",
+        "mode": "interval",
+        "modeParams": {
+          "rounds": 3,
+          "work": {
+            "value": 12,
+            "unit": "min"
+          },
+          "rest": {
+            "value": 5,
+            "unit": "min"
+          }
+        },
+        "notes": "Sweet spot sits between the third and fourth Coggan levels. The percentage of functional threshold power it corresponds to belongs to the registry entry, not to this document.",
+        "items": [
+          {
+            "id": "i2",
+            "exercise": {
+              "id": "ex.bike",
+              "name": "Stationary Bike"
+            },
+            "reps": {
+              "kind": "time",
+              "value": 12,
+              "unit": "min"
+            },
+            "zone": {
+              "system": "power",
+              "zone": "Z4",
+              "boundsRef": "zone.coggan7"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "metadata": {
+    "createdAt": "2026-08-10T00:00:00Z",
+    "updatedAt": "2026-08-10T00:00:00Z",
+    "status": "active",
+    "source": "vitness.core"
+  }
+}

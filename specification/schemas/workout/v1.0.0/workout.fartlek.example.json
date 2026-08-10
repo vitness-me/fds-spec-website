@@ -1,0 +1,86 @@
+{
+  "schemaVersion": "1.0.0",
+  "workoutId": "00000000-0000-4000-8000-0000000d0107",
+  "canonical": {
+    "name": "Fartlek Forty",
+    "slug": "fartlek"
+  },
+  "classification": {
+    "workoutType": "conditioning",
+    "tags": [
+      "unstructured"
+    ]
+  },
+  "structure": {
+    "blocks": [
+      {
+        "id": "b1",
+        "role": "primary",
+        "mode": "sequential",
+        "notes": "Speed play: the surges are deliberately not on a clock. Each item is one segment with its own zone, and the athlete decides when to move between them — which is why this is sequential rather than interval, even though it looks like intervals.",
+        "items": [
+          {
+            "id": "i1",
+            "exercise": {
+              "id": "ex.run",
+              "name": "Running"
+            },
+            "reps": {
+              "kind": "time",
+              "value": 10,
+              "unit": "min"
+            },
+            "zone": {
+              "system": "perceived",
+              "zone": "4",
+              "boundsRef": "zone.rpe10"
+            },
+            "notes": "Settle in."
+          },
+          {
+            "id": "i2",
+            "exercise": {
+              "id": "ex.run",
+              "name": "Running"
+            },
+            "reps": {
+              "kind": "time",
+              "value": 20,
+              "unit": "min"
+            },
+            "zone": {
+              "system": "perceived",
+              "zone": "7",
+              "boundsRef": "zone.rpe10"
+            },
+            "notes": "Surge to a landmark, ease off to the next, repeat. Duration of each surge is the athlete’s."
+          },
+          {
+            "id": "i3",
+            "exercise": {
+              "id": "ex.run",
+              "name": "Running"
+            },
+            "reps": {
+              "kind": "time",
+              "value": 10,
+              "unit": "min"
+            },
+            "zone": {
+              "system": "perceived",
+              "zone": "3",
+              "boundsRef": "zone.rpe10"
+            },
+            "notes": "Wind down."
+          }
+        ]
+      }
+    ]
+  },
+  "metadata": {
+    "createdAt": "2026-08-10T00:00:00Z",
+    "updatedAt": "2026-08-10T00:00:00Z",
+    "status": "active",
+    "source": "vitness.core"
+  }
+}

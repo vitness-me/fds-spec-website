@@ -1,0 +1,77 @@
+{
+  "schemaVersion": "1.0.0",
+  "workoutId": "00000000-0000-4000-8000-0000000d0110",
+  "canonical": {
+    "name": "Bike Resistance Ladder",
+    "slug": "machine-resistance"
+  },
+  "classification": {
+    "workoutType": "conditioning"
+  },
+  "structure": {
+    "blocks": [
+      {
+        "id": "b1",
+        "role": "primary",
+        "mode": "sequential",
+        "notes": "Resistance is a load, prescribed with the `level` method and a named scale so that \"level 8\" is not read against a different machine’s numbering.",
+        "items": [
+          {
+            "id": "i1",
+            "exercise": {
+              "id": "ex.treadmill",
+              "name": "Treadmill"
+            },
+            "sets": [
+              {
+                "index": 1,
+                "reps": {
+                  "kind": "time",
+                  "value": 4,
+                  "unit": "min"
+                },
+                "load": {
+                  "method": "level",
+                  "value": 6,
+                  "scale": "concept2-damper"
+                }
+              },
+              {
+                "index": 2,
+                "reps": {
+                  "kind": "time",
+                  "value": 4,
+                  "unit": "min"
+                },
+                "load": {
+                  "method": "level",
+                  "value": 8,
+                  "scale": "concept2-damper"
+                }
+              },
+              {
+                "index": 3,
+                "reps": {
+                  "kind": "time",
+                  "value": 4,
+                  "unit": "min"
+                },
+                "load": {
+                  "method": "level",
+                  "value": 10,
+                  "scale": "concept2-damper"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "metadata": {
+    "createdAt": "2026-08-10T00:00:00Z",
+    "updatedAt": "2026-08-10T00:00:00Z",
+    "status": "active",
+    "source": "vitness.core"
+  }
+}
