@@ -1,0 +1,31 @@
+name: Published URLs
+
+# Deployment, not the change in hand. A CDN hiccup or an access-proxy change is
+# real and worth knowing about, but it must not block a documentation edit — so
+# this runs on a schedule and on demand rather than on every pull request.
+on:
+  schedule:
+    - cron: '17 6 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  published:
+    name: Published URLs — resolve, JSON, frozen bytes
+    runs-on: blacksmith-4vcpu-ubuntu-2404
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # A $id is a promise the document can be fetched from that address. It was
+      # false for weeks while the site sat behind an access proxy, and nothing
+      # noticed because the only consumer fell back to bundled copies silently.
+      - name: Verify the published URLs
+        run: npm run check:published

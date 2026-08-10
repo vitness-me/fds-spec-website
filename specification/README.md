@@ -171,11 +171,14 @@ Notes:
 ## Verifying a change
 
 ```bash
-npm run verify          # everything CI runs
-npm run verify schemas  # one job: transformer | schemas | website
+npm run verify           # everything CI runs
+npm run verify schemas   # one job: transformer | schemas | website
+npm run check:published  # the deployed URLs, separately — needs the network
 ```
 
 Nine checks run, each of which was demonstrated failing before being trusted: published schemas match their authoring sources, the metrics guide covers the metric vocabulary, prescription fixtures match the definitions they exemplify, RFCs and their schemas agree in both directions, website pages match their sources and every published schema has one, every coverage‑matrix row has a worked example, and every recommended value appears in a registry.
+
+`check:published` is deliberately outside that set. It verifies *deployment* rather than the change in hand — that each `$id` resolves, serves JSON, carries an `$id` matching the URL it came from, and hashes to what was frozen. It needs the network, so it runs weekly and on demand rather than blocking a pull request.
 
 ## Security & Privacy
 - Schemas define data formats; transport and storage security are implementation responsibilities.
