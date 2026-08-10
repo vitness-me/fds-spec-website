@@ -435,7 +435,7 @@
       }
     },
     "trainingMaxSlot": {
-      "description": "Declares that the program references a training max for a lift, and how that number is arrived at — never the number itself. A value here would make any program carrying one personal data, which would drag consent and retention into a reference-data document. See RFC-008 §7.",
+      "description": "Declares that the program references a training max for a lift, and how that number is arrived at — never the number itself. A value here would make any program carrying one personal data, which would drag consent and retention into a reference-data document. See RFC-008 §8.",
       "type": "object",
       "required": [
         "exercise",
@@ -444,7 +444,7 @@
       "additionalProperties": false,
       "properties": {
         "id": {
-          "description": "Referenced by `percent1RM.referenceExerciseId` and by relative load targets.",
+          "description": "A local handle, so a progression rule or a day override can cite this slot. Load targets do not use it — a `percent1RM` names the lift through `referenceExerciseId`, and the slot that matches is the one whose `exercise` it names.",
           "type": "string"
         },
         "exercise": {
