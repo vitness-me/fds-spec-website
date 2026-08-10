@@ -27,7 +27,7 @@
     },
     "program/v1.0.0/program.schema.json": {
       "sha256": "2d25db0ee62ae033dac3aa8f0f4b22cf6495cba0e6c72a22240ee88c0429b2aa",
-      "frozen": false
+      "frozen": true
     },
     "transformer/v1.0.0/mapping.schema.json": {
       "sha256": "e5d4b010841bd92ff33171ac9267498cb61040b69f0a667888f9c2cc4660edca",
