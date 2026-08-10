@@ -55,6 +55,9 @@ const sidebars: SidebarsConfig = {
         'schemas/muscle',
         'schemas/muscle-category',
         'schemas/body-atlas',
+        'schemas/workout',
+        'schemas/program',
+        'schemas/prescription',
       ],
     },
     {

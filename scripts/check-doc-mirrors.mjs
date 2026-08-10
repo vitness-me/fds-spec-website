@@ -13,12 +13,15 @@
  * and its page did not, so the site documented metric types the standard had
  * moved past.
  *
- * Four ways it breaks, all checked here:
+ * Five ways it breaks, all checked here:
  *
  *   - The page drifts from its source.
  *   - The page exists but nothing links to it, so it ships unreachable.
  *   - A page outlives the source it came from.
  *   - A source has no page at all.
+ *   - A *schema* is published with no page describing it. Workout, program and
+ *     prescription all shipped before they had one, which is how a reader could
+ *     reach a frozen URL the documentation never mentioned.
  *
  * One convention: a page is its frontmatter followed by the source, verbatim.
  * Documents keep their own `# Heading` — every RFC page already did, and a
@@ -40,6 +43,7 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const RFC_DIR = join(ROOT, 'specification/rfc');
+const INTEGRITY = join(ROOT, 'specification/schemas/.integrity.json');
 const RFC_PAGES = join(ROOT, 'website/docs/specifications');
 const SIDEBARS = join(ROOT, 'website/sidebars.ts');
 
@@ -59,6 +63,14 @@ const DOC_PAIRS = [
   ['specification/governance/CONTRIBUTING.md', 'governance/contributing'],
   ['specification/governance/GOVERNANCE.md', 'governance/index'],
 ];
+
+/**
+ * Published schemas with no reader-facing page, and why.
+ *
+ * The transformer mapping schema configures a tool rather than describing an
+ * entity; it belongs in the transformer documentation, which it has.
+ */
+const NO_PAGE_NEEDED = new Set(['mapping']);
 
 /** Pages that may differ from their source, with the reason recorded above. */
 const DRIFT_EXEMPT = new Set([
@@ -92,6 +104,7 @@ const sidebars = await readFile(SIDEBARS, 'utf8');
 const problems = [];
 let compared = 0;
 let exempt = 0;
+let schemaPages = 0;
 
 for (const { source, page, docId } of PAIRS) {
   const raw = await readFile(join(ROOT, page), 'utf8').catch(() => null);
@@ -133,6 +146,27 @@ for (const { source, page, docId } of PAIRS) {
   compared += 1;
 }
 
+// Every published schema needs a page. The integrity manifest is the list of
+// what is published, so this cannot miss a schema the way a hand-kept list can.
+const published = JSON.parse(await readFile(INTEGRITY, 'utf8')).schemas ?? {};
+for (const path of Object.keys(published)) {
+  const entity = path.split('/').pop().replace(/\.schema\.json$/, '');
+  if (NO_PAGE_NEEDED.has(entity)) continue;
+
+  const page = `website/docs/schemas/${entity}.md`;
+  if (!(await readFile(join(ROOT, page), 'utf8').catch(() => null))) {
+    problems.push(
+      `${path} is published with no page at ${page}.\n` +
+        '    A frozen URL the documentation never mentions is not discoverable.'
+    );
+    continue;
+  }
+  if (!sidebars.includes(`'schemas/${entity}'`)) {
+    problems.push(`${page}: no entry in website/sidebars.ts.`);
+  }
+  schemaPages += 1;
+}
+
 // A page that outlives its source leaves readers a document the standard no
 // longer contains.
 const knownRfcPages = new Set(rfcSources);
@@ -152,6 +186,7 @@ if (problems.length) {
 }
 
 console.log(
-  `  ok    ${PAIRS.length} documents published and linked; ` +
-    `${compared} match their source, ${exempt} exempt from the drift rule.`
+  `  ok    ${PAIRS.length} documents published and linked, ` +
+    `${compared} matching their source (${exempt} exempt); ` +
+    `${schemaPages} published schemas documented.`
 );
