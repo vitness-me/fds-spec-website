@@ -54,6 +54,7 @@ if run_job schemas; then
 
   try "prescription fixtures match their definitions" npm run check:prescription
   try "RFCs and schemas agree" npm run check:rfc
+  try "RFC website pages match their sources" npm run check:mirrors
   try "every matrix scenario has an example" npm run check:scenarios
 
   S=specification/schemas
