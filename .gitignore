@@ -10,3 +10,7 @@ packages/fds-transformer/poc-test/output/
 
 # OS
 .DS_Store
+
+# Agent worktrees. Created under .claude/worktrees/ when work is split across
+# parallel sessions; they are checkouts of this repository, not content of it.
+.claude/
