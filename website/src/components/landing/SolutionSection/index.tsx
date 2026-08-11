@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from '@docusaurus/Link';
 import { Check, ArrowRight, Tag, Shield, RefreshCw } from 'lucide-react';
 import styles from './styles.module.css';
 
@@ -107,12 +108,16 @@ export default function SolutionSection(): JSX.Element {
             </div>
             <div className={styles.extensibilityCard}>
               <span className={styles.extensibilityIcon}><RefreshCw size={24} /></span>
-              <h4 className={styles.extensibilityCardTitle}>Round-trip Preservation</h4>
+              <h4 className={styles.extensibilityCardTitle}>Promotion Path</h4>
               <p className={styles.extensibilityCardText}>
-                Extensions survive export → import cycles. Data you add comes back intact.
+                An extension several implementers adopt can be proposed into the core schema through the RFC process.
               </p>
             </div>
           </div>
+
+          <Link to="/docs/core-concepts/extensions" className={styles.extensibilityLink}>
+            Read the extension policy →
+          </Link>
         </div>
       </div>
     </section>

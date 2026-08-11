@@ -13,10 +13,10 @@ interface UseCase {
 const useCases: UseCase[] = [
   {
     icon: <RefreshCw size={24} />,
-    title: 'User Data Portability',
+    title: 'Content Portability',
     scenario: 'User wants to switch fitness apps',
-    without: 'Years of workout history lost. Manual re-entry or data trapped forever.',
-    withFds: 'Export once, import anywhere. Complete history travels with the user.',
+    without: 'Every exercise, workout and program re-entered by hand, or left behind.',
+    withFds: 'Their exercise library, workouts and programs export once and import anywhere.',
   },
   {
     icon: <Zap size={24} />,
@@ -29,8 +29,8 @@ const useCases: UseCase[] = [
     icon: <TrendingUp size={24} />,
     title: 'Platform Growth',
     scenario: 'Acquiring users from competing platforms',
-    without: 'High switching friction. Users reluctant to lose their data.',
-    withFds: 'Seamless migration path. Lower barrier to user adoption.',
+    without: 'High switching friction. Users reluctant to rebuild everything by hand.',
+    withFds: 'A documented import path for the catalogs and plans they already have.',
   },
   {
     icon: <Link2 size={24} />,

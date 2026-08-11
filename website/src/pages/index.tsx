@@ -22,13 +22,15 @@ function HomepageHeader() {
             One Standard for Fitness Data
           </Heading>
           <p className={styles.heroSubtitle}>
-            Enable seamless data portability across fitness applications.
+            Exercises, the registries they reference, prescribed workouts and
+            the programs that schedule them — one open, versioned format.
             Stop reverse-engineering every platform's data format.
           </p>
-          <div className={styles.audienceBadges}>
-            <span className={styles.audienceBadge}>For App Developers</span>
-            <span className={styles.audienceBadge}>Platform Builders</span>
-            <span className={styles.audienceBadge}>Data Engineers</span>
+          <div className={styles.coverageBadges}>
+            <span className={styles.coverageBadge}>Exercises</span>
+            <span className={styles.coverageBadge}>Equipment, Muscles &amp; Body Atlas</span>
+            <span className={styles.coverageBadge}>Workouts</span>
+            <span className={styles.coverageBadge}>Programs</span>
           </div>
           <div className={styles.heroButtons}>
             <Link
@@ -67,8 +69,10 @@ function CTASection() {
           </Link>
         </div>
         <p className={styles.ctaRoadmap}>
-          Start with exercise data today. Workout templates, progress tracking, and more planned in{' '}
-          <Link to="/docs/governance/roadmap">future RFCs</Link>.
+          Eight RFCs are published: the exercise catalog and its registries, prescription
+          primitives, workouts and programs. What comes next — and what is deliberately
+          left out — is on the{' '}
+          <Link to="/docs/governance/roadmap">roadmap</Link>.
         </p>
         <div className={styles.earlyAdopters}>
           <p className={styles.earlyAdoptersText}>
