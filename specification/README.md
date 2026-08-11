@@ -185,7 +185,7 @@ npm run verify schemas   # one job: transformer | schemas | website
 npm run check:published  # the deployed URLs, separately — needs the network
 ```
 
-Nine checks run, each of which was demonstrated failing before being trusted: published schemas match their authoring sources, the metrics guide covers the metric vocabulary, prescription fixtures match the definitions they exemplify, RFCs and their schemas agree in both directions, website pages match their sources and every published schema has one, every coverage‑matrix row has a worked example, and every recommended value appears in a registry.
+Every check `npm run verify` runs was demonstrated failing before it was trusted — broken on purpose, its output read, then restored. What each one guards, the defect that motivated it, and what it deliberately cannot see are written at the top of its script under `scripts/`. That comment is the explanation; this file keeps no second copy of the list, because a hand‑kept summary of the checks is the same drift the checks exist to catch.
 
 `check:published` is deliberately outside that set. It verifies *deployment* rather than the change in hand — that each `$id` resolves, serves JSON, carries an `$id` matching the URL it came from, and hashes to what was frozen. It needs the network, so it runs weekly and on demand rather than blocking a pull request.
 
