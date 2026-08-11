@@ -22,6 +22,13 @@
  * for a reason given where it is done: it is generated rather than frozen, so
  * what matters is that a deployment has one, not that its bytes never move.
  *
+ * Every published registry is checked on weaker terms again — reachable, JSON,
+ * and the shape its filename promises — because a registry is meant to gain
+ * entries between deployments. That set is read off disk rather than listed
+ * here. This is where a consumer's URL is proved to exist: a unit test with a
+ * mocked fetch proves a URL is *built*, and this project has now shipped three
+ * defects that a mock called well-formed and reality called absent.
+ *
  * This is NOT part of `npm run verify` and does not gate a pull request. It
  * needs the network and it checks *deployment* rather than the change in hand,
  * so a CDN hiccup must not block a documentation edit. It runs on a schedule and
@@ -30,7 +37,7 @@
  *   npm run check:published
  */
 
-import { readFile } from 'node:fs/promises';
+import { readFile, readdir } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -170,29 +177,97 @@ for (const [path, { sha256 }] of Object.entries(schemas)) {
 // ── registries ───────────────────────────────────────────────────────────────
 //
 // Not hashed — a registry is allowed to gain entries between deployments, and
-// freezing one would defeat the point of an open classifier. Reachability and
-// identity are still promises.
-const registryFiles = ['exercise-type', 'workout-type', 'block-role', 'intensity-zone'];
-for (const name of registryFiles) {
-  const url = `${BASE}/registries/${name}.registry.json`;
+// freezing one would defeat the point of an open classifier. Reachability,
+// identity and shape are still promises.
+//
+// The list is read off disk rather than written out here, for the reason the
+// schema loop gives: a hand-kept list cannot fail to be wrong eventually, and
+// this one was. It named the four normative vocabularies and nothing else, so
+// the three illustrative catalogs beside them — muscles, equipment,
+// muscle-categories — were published and never checked. `@vitness/fds-transformer`
+// meanwhile built `<name>.registry.json` for those three, a name that has never
+// existed, and shipped it in every release: its unit test asserted the URL
+// against a mocked fetch, which proves construction and cannot prove existence.
+//
+// `specification/registries/` is symlinked to `website/static/registries/`, so
+// every file here is served at `/registries/<name>` and this loop is exactly the
+// published set.
+//
+// This is one half of a chain, and it is worth naming which half. `check:versions`
+// rule 8 proves offline, on every pull request, that a URL the *code* builds
+// resolves to a file in this directory; this proves on a schedule that every
+// file in this directory is actually served, and served as the kind of document
+// its name promises. Neither half needs the network on the PR path, and together
+// they say the thing a mock never could.
+const REGISTRY_DIR = 'specification/registries';
+const registryFiles = (await readdir(join(ROOT, REGISTRY_DIR)))
+  .filter((name) => name.endsWith('.json'))
+  .sort();
+
+// A loop over an empty list exits zero and reports success — the exact shape of
+// failure this whole file exists to refuse.
+if (!registryFiles.length) {
+  problems.push(
+    `${REGISTRY_DIR}: no registries found to check.\n` +
+      '      Either the directory moved or this check has quietly stopped checking anything.'
+  );
+}
+
+for (const file of registryFiles) {
+  const url = `${BASE}/registries/${file}`;
+  // The filename is the contract. `<name>.registry.json` is a normative
+  // vocabulary: an object that names itself, so a consumer can tell which
+  // classifier it governs. `<name>.registry.example.json` is an illustrative
+  // catalog: an array of entity documents, which is what a registry loader
+  // deserialises. Checking both against the same rule would check neither —
+  // and the array shape is the one a consumer's code indexes into.
+  const isCatalog = file.endsWith('.registry.example.json');
+  const name = file.replace(/\.registry(\.example)?\.json$/, '');
+
   try {
     const { response, body } = await get(url);
     if (!response.ok) {
-      problems.push(`registries/${name}: answered ${response.status} ${response.statusText}`);
+      problems.push(`registries/${file}: answered ${response.status} ${response.statusText}`);
       continue;
     }
     if (!isJson(response.headers.get('content-type') ?? '')) {
-      problems.push(`registries/${name}: answered 200 with a non-JSON content type.`);
+      problems.push(`registries/${file}: answered 200 with a non-JSON content type.`);
       continue;
     }
-    const doc = JSON.parse(body.toString('utf8'));
-    if (doc.registry !== name) {
-      problems.push(`registries/${name}: the document calls itself "${doc.registry}".`);
+
+    let doc;
+    try {
+      doc = JSON.parse(body.toString('utf8'));
+    } catch {
+      problems.push(`registries/${file}: declared JSON but the body does not parse.`);
+      continue;
     }
+
+    if (isCatalog) {
+      if (!Array.isArray(doc)) {
+        problems.push(
+          `registries/${file}: an entity catalog is an array of entity documents; this ` +
+            `served ${doc === null ? 'null' : typeof doc}.\n` +
+            '      A loader indexes into it. Serving an object here fails at the first lookup, ' +
+            'far from the URL.'
+        );
+      } else if (!doc.length) {
+        problems.push(`registries/${file}: served an empty catalog — it demonstrates nothing.`);
+      } else if (doc.some((entry) => !entry?.id || !entry?.canonical?.name)) {
+        problems.push(
+          `registries/${file}: an entry is missing \`id\` or \`canonical.name\`.\n` +
+            '      Those two are what a registry lookup reads; without them the catalog ' +
+            'demonstrates the wrong shape.'
+        );
+      }
+    } else if (doc.registry !== name) {
+      problems.push(`registries/${file}: the document calls itself "${doc.registry}".`);
+    }
+
     checked += 1;
   } catch (cause) {
     problems.push(
-      `registries/${name}: unreachable — ${cause instanceof Error ? cause.message : cause}`
+      `registries/${file}: unreachable — ${cause instanceof Error ? cause.message : cause}`
     );
   }
 }
