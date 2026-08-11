@@ -46,12 +46,15 @@ if run_job schemas; then
   try "published schemas match sources" npm run check:schemas
   try "metrics guide covers the vocabulary" npm run check:metrics
 
-  # Ajv CLI is installed on demand, mirroring the workflow.
+  # Ajv CLI is installed on demand, mirroring the workflow. It sits above the
+  # first check that needs Ajv rather than beside the one that needs the CLI,
+  # because the doc-example check runs earlier and uses the library directly.
   if [[ ! -d node_modules/ajv-cli ]]; then
     step "install ajv-cli"
     if npm install --no-save --no-fund --no-audit ajv@8 ajv-cli@5 ajv-formats@3 >/dev/null 2>&1; then ok; else bad "install ajv-cli"; fi
   fi
 
+  try "documented examples validate" npm run check:doc-examples
   try "prescription fixtures match their definitions" npm run check:prescription
   try "RFCs and schemas agree" npm run check:rfc
   try "website pages match their sources" npm run check:mirrors
