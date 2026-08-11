@@ -1,0 +1,44 @@
+[
+  {
+    "id": "SRC-1",
+    "name": "back squat",
+    "primaryMuscle": "Quadriceps",
+    "gear": "Barbell",
+    "type": "strength",
+    "movement": "squat",
+    "mechanics": "compound",
+    "force": "push",
+    "level": "intermediate",
+    "metricType": "weight",
+    "metricUnit": "kg",
+    "demo": "https://example.com/media/back-squat.gif"
+  },
+  {
+    "id": "SRC-2",
+    "name": "lat pulldown",
+    "primaryMuscle": "Latissimus Dorsi",
+    "gear": "Lat Pulldown Machine",
+    "type": "strength",
+    "movement": "pull-vertical",
+    "mechanics": "compound",
+    "force": "pull",
+    "level": "beginner",
+    "metricType": "weight",
+    "metricUnit": "kg",
+    "demo": "https://example.com/media/lat-pulldown.gif"
+  },
+  {
+    "id": "SRC-3",
+    "name": "dumbbell crunch",
+    "primaryMuscle": "Rectus Abdominis",
+    "gear": "Dumbbell",
+    "type": "strength",
+    "movement": "core-anti-extension",
+    "mechanics": "isolation",
+    "force": "pull",
+    "level": "beginner",
+    "metricType": "reps",
+    "metricUnit": "count",
+    "demo": "https://example.com/media/dumbbell-crunch.gif"
+  }
+]
