@@ -178,10 +178,7 @@ For complex platform-unique data structures:
 
 ### 4.3. Regional Classification
 
-`regions` names the anatomical subdivisions of the muscle — the parts a program can target separately, such as the upper and lower fibres of the trapezius — and `regionGroup` names the broader area the muscle sits in. A consumer that does not model regions can ignore both without losing the muscle.
-
-
-The `region` field follows standardized anatomical regions:
+The `region` field — typed `regionGroup` in the schema — follows standardized anatomical regions:
 - **upper-front**: Chest, front deltoids, biceps
 - **upper-back**: Lats, rear deltoids, rhomboids, traps
 - **lower-front**: Quadriceps, hip flexors
@@ -232,6 +229,7 @@ Structure:
 ```
 
 Notes:
+- `regions` lists the atlas areas this muscle covers; each entry pairs an `areaId` with a `weight`.
 - `atlasId` references an Atlas item (see Body Atlas schema) and SHOULD be a UUID in production datasets.
 - `areaId` MUST correspond to an `areas[*].id` within the referenced Atlas.
 - `weight` is `0..1` and represents relative intensity/coverage; default `1.0`.

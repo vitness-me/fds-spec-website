@@ -132,7 +132,7 @@ For complex platform-unique data structures:
 
 ### 4.1. Canonical Information
 
-`canonical` carries the equipment's identity: a display `name`, a stable `slug`, an optional `description`, optional `aliases`, and `localized` entries giving the name in other languages. Equipment names vary more by region than exercise names do — the same rack is a "power rack", a "squat cage" and a "Kraftkäfig" — so aliases and localisation matter more here than they might appear to.
+`canonical` carries the equipment's identity: a display `name`, a stable `slug`, an optional `description`, an optional `abbreviation`, optional `aliases`, and `localized` entries giving the name in other languages. Equipment names vary more by region than exercise names do — the same rack is a "power rack", a "squat cage" and a "Kraftkäfig" — so aliases and localisation matter more here than they might appear to. `abbreviation` carries the short form used in compact interfaces — "DB" for a dumbbell, "KB" for a kettlebell — which implementations otherwise derive by guessing.
 
 ```json fds:fragment entity=equipment
 {
@@ -150,7 +150,7 @@ For complex platform-unique data structures:
 
 ### 4.2. Classification Structure
 
-`classification` describes what kind of implement this is and how it behaves. `abbreviation` carries the short form used in compact interfaces — "DB" for a dumbbell, "KB" for a kettlebell — which implementations otherwise derive by guessing. `tags` are free-form labels for filtering and carry no structural consequence.
+`classification` describes what kind of implement this is and how it behaves. `tags` are free-form labels for filtering and carry no structural consequence.
 
 ```json fds:fragment entity=equipment
 {
