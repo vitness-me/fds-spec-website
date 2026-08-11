@@ -2,7 +2,9 @@ import React from 'react';
 import { Check, ArrowRight, Tag, Shield, RefreshCw } from 'lucide-react';
 import styles from './styles.module.css';
 
-const platforms = ['FitApp Pro', 'GymTracker', 'WorkoutDB', 'IronLog'];
+// Neutral placeholders, matching the fragmentation diagram above. FDS has no
+// named implementers to point at, and inventing some would be a false claim.
+const platforms = ['App A', 'App B', 'App C', 'App D'];
 
 export default function SolutionSection(): JSX.Element {
   return (
