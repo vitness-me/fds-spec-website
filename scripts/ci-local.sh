@@ -90,6 +90,12 @@ if run_job schemas; then
   try "the transformer produces valid FDS" npm run check:transform
   try "prescription fixtures match their definitions" npm run check:prescription
   try "RFCs and schemas agree" npm run check:rfc
+
+  # Runs the published validation commands rather than reading them, from a
+  # scratch directory with no node_modules. Slower than everything around it and
+  # the only check here that needs the npm registry — see the doc comment in
+  # scripts/check-doc-commands.mjs for why that trade was taken.
+  try "the documented commands run" npm run check:commands
   try "website pages match their sources" npm run check:mirrors
   try "every matrix scenario has an example" npm run check:scenarios
   try "recommended values are in a registry" npm run check:registries

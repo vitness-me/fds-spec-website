@@ -132,6 +132,15 @@ jobs:
       - name: Verify RFCs and their schemas agree
         run: npm run check:rfc
 
+      # The paths inside the published validation commands were already checked.
+      # The command around them was not, so four documents shipped `npx ajv -s …`
+      # — real paths, valid example, and a command that fails on its first line.
+      # This runs each one from a scratch directory with no node_modules, which
+      # is the reader's situation and the only way the resolution failures show
+      # up at all. It needs the npm registry; so do two steps above it.
+      - name: Verify the documented validation commands run
+        run: npm run check:commands
+
       # The specification lives twice — the source under specification/rfc/ and
       # the page readers actually get. Editing a normative rule in one and not
       # the other leaves the published copy stating the old rule, silently.
