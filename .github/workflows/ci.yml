@@ -147,6 +147,15 @@ jobs:
       - name: Verify website pages match their sources
         run: npm run check:mirrors
 
+      # The use-case layer is a sales pitch, and a sales pitch invents its
+      # evidence. These pages sat outside every gate — the same gap that let the
+      # landing page ship a fabricated exercise and four invented companies while
+      # CI stayed green. This forbids a literal JSON fence outright, so every
+      # example is loaded from a published file, and checks each page is reachable,
+      # on the gallery, and that every entity the manifest publishes has one.
+      - name: Verify the use-case pages stay honest
+        run: npm run check:usecases
+
       # "No scenario without an example ships" is a promise about a list of
       # training structures, and a list is exactly what quietly falls out of date.
       - name: Verify every matrix scenario has a worked example
