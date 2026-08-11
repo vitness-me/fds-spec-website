@@ -273,22 +273,22 @@ graph LR
 ## 8. JSON Schema Reference
 
 Complete JSON Schema available at:
-- **Equipment**: `/specification/schemas/equipment/v.1.0.0/equipment.schema.json`
+- **Equipment**: `/specification/schemas/equipment/v1.1.0/equipment.schema.json`
 
 ## 8.1. Validation
 
 Validate with Ajv (Draft 2020-12):
 
 ```
-npx ajv -s specification/schemas/equipment/v.1.0.0/equipment.schema.json \
-  -d specification/schemas/equipment/v.1.0.0/equipment.example.json
+npx ajv -s specification/schemas/equipment/v1.1.0/equipment.schema.json \
+  -d specification/schemas/equipment/v1.1.0/equipment.example.json
 ```
 
 ## 9. Example Implementation
 
 ### 9.1. Complete Barbell Equipment Record
 
-Based on reference implementation (`/specification/schemas/equipment/v.1.0.0/equipment.example.json`):
+Based on reference implementation (`/specification/schemas/equipment/v1.1.0/equipment.example.json`):
 
 ```json fds:document entity=equipment
 {

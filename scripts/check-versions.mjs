@@ -169,17 +169,6 @@ const TEMPORARY_ALLOWANCES = [
       'registries/muscle-categories.registry.json',
     ],
   },
-  {
-    label: 'malformed `v.1.0.0` schema paths in RFC-002, RFC-003 and RFC-004',
-    removedBy: 'the change that enrols the early RFCs',
-    why:
-      'Their §8 and §9 spell the version segment `v.1.0.0` rather than `v1.0.0`, so ' +
-      'every link is broken. RFC-002 compounds it: the version it points at is ' +
-      'equipment 1.0.0, which is withdrawn, so the repair is editorial rather than ' +
-      'mechanical — it has to choose what the RFC now documents.',
-    files: /(?:specification\/rfc|website\/docs\/specifications)\/rfc-00[234]-[\w-]+\.md$/,
-    references: [/^schemas\/.*\/v\.\d+\.\d+\.\d+\//],
-  },
 ];
 
 /** Whether a known defect covers this reference, marking the allowance used. */

@@ -304,7 +304,7 @@ graph LR
 ## 8. JSON Schema Reference
 
 Complete JSON Schema available at:
-- **Muscle**: `/specification/schemas/muscle/v.1.0.0/muscle.schema.json`
+- **Muscle**: `/specification/schemas/muscle/v1.0.0/muscle.schema.json`
 - **Body Atlas**: `/specification/schemas/atlas/v1.0.0/body-atlas.schema.json`
 
 ## 8.1. Validation
@@ -312,15 +312,15 @@ Complete JSON Schema available at:
 Validate with Ajv (Draft 2020-12):
 
 ```
-npx ajv -s specification/schemas/muscle/v.1.0.0/muscle.schema.json \
-  -d specification/schemas/muscle/v.1.0.0/muscle.example.json
+npx ajv -s specification/schemas/muscle/v1.0.0/muscle.schema.json \
+  -d specification/schemas/muscle/v1.0.0/muscle.example.json
 ```
 
 ## 9. Example Implementation
 
 ### 9.1. Complete Quadriceps Muscle Record
 
-Based on reference implementation (`/specification/schemas/muscle/v.1.0.0/muscle.example.json`):
+Based on reference implementation (`/specification/schemas/muscle/v1.0.0/muscle.example.json`):
 
 ```json
 {

@@ -243,7 +243,7 @@ graph LR
 ## 8. JSON Schema Reference
 
 Complete JSON Schema available at:
-- **Muscle Category**: `/specification/schemas/muscle/muscle-category/v.1.0.0/muscle-category.schema.json`
+- **Muscle Category**: `/specification/schemas/muscle/muscle-category/v1.0.0/muscle-category.schema.json`
 
 ## Heatmap Aggregation (Informative)
 
@@ -258,15 +258,15 @@ Producers SHOULD avoid publishing separate category heatmaps in core; if needed,
 Validate with Ajv (Draft 2020-12):
 
 ```
-npx ajv -s specification/schemas/muscle/muscle-category/v.1.0.0/muscle-category.schema.json \
-  -d specification/schemas/muscle/muscle-category/v.1.0.0/muscle-category.example.json
+npx ajv -s specification/schemas/muscle/muscle-category/v1.0.0/muscle-category.schema.json \
+  -d specification/schemas/muscle/muscle-category/v1.0.0/muscle-category.example.json
 ```
 
 ## 9. Example Implementation
 
 ### 9.1. Complete Legs Muscle Category Record
 
-Based on reference implementation (`/specification/schemas/muscle/muscle-category/v.1.0.0/muscle-category.example.json`):
+Based on reference implementation (`/specification/schemas/muscle/muscle-category/v1.0.0/muscle-category.example.json`):
 
 ```json fds:document entity=muscle-category
 {
