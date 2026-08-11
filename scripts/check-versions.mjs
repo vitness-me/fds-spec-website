@@ -23,7 +23,7 @@
  * Every one of them is a claim checkable against the manifest and the
  * filesystem, offline. That is what this does.
  *
- * Nine rules:
+ * Ten rules:
  *
  *   1. The manifest is present and structurally sound. `check:schemas` proves
  *      the stronger thing — that the file matches what the build would write —
@@ -48,10 +48,16 @@
  *      well-formed and reality proves absent.
  *   9. Markers are used. A pin whose reference is gone, or a count metric
  *      nothing derives, is stale scaffolding claiming to be a check.
+ *  10. A document that says it lists everything, lists everything. Rules 2..8
+ *      all check *stated* claims, and a claim that was never made states
+ *      nothing: `SCHEMAS.md` shipped with no mention of `program` at all and
+ *      every gate stayed green, because there was no sentence to be wrong.
+ *      Omission is the one defect a checker of assertions cannot see, so the
+ *      set has to be checked rather than the sentences.
  *
  * ── Markers ──────────────────────────────────────────────────────────────────
  *
- * Two annotations, both plain text inside whatever comment syntax the host file
+ * Three annotations, all plain text inside whatever comment syntax the host file
  * uses, so they survive the byte-for-byte page mirroring `check:mirrors`
  * enforces:
  *
@@ -60,12 +66,16 @@
  *
  *   <!-- fds:count schemas=10 entities=7 -->
  *
+ *   <!-- fds:covers schemas -->
+ *
  * A pin is scoped to the file it appears in and names the reference exactly as
  * it resolves — `<dir>/v<version>/<file>`, or a registry filename. A count
  * marker asserts derived facts; the value must also appear in the neighbouring
  * text, as a numeral or an English word, so the marker cannot quietly stop
- * describing the sentence it annotates. Both are documented for authors in
- * `specification/governance/CONTRIBUTING.md`.
+ * describing the sentence it annotates. A covers marker is the one that catches
+ * silence: it says this document enumerates a whole set, and the set is taken
+ * from the manifest rather than from the document. All three are documented for
+ * authors in `specification/governance/CONTRIBUTING.md`.
  *
  * ── Offline ──────────────────────────────────────────────────────────────────
  *
@@ -252,6 +262,152 @@ async function deriveCounts({ manifest, byPath, currentOf }) {
 
 const PIN = /fds:pin\s+(\S+)/g;
 const COUNT = /fds:count\s+((?:[\w:-]+=\d+\s*)+)/g;
+const COVERS = /fds:covers\s+([\w-]+)/g;
+
+// ── coverage ─────────────────────────────────────────────────────────────────
+
+/**
+ * How far below a `fds:covers` marker its table may start.
+ *
+ * The marker annotates the table under it, so the two are adjacent in practice —
+ * a blank line, or a blank line and a heading. Bounding the search is what stops
+ * a marker whose table was deleted from silently adopting the next unrelated
+ * table further down the page and passing against it.
+ */
+const TABLE_GAP = 4;
+
+/**
+ * The markdown table below a marker, as rows of trimmed cells.
+ *
+ * Header and separator rows come back like any other row. Callers drop them by
+ * requiring a cell to look like a version, which is more robust than counting
+ * rows: it survives a table gaining a column or losing its separator style.
+ */
+function tableBelow(lines, index) {
+  const rows = [];
+  let started = false;
+  for (let i = index + 1; i < lines.length; i += 1) {
+    const line = lines[i].trim();
+    const isRow = line.startsWith('|') && line.endsWith('|') && line.length > 1;
+    if (!isRow) {
+      if (started) break;
+      if (i - index > TABLE_GAP) break;
+      continue;
+    }
+    started = true;
+    rows.push(line.slice(1, -1).split('|').map((cell) => cell.trim()));
+  }
+  return rows;
+}
+
+const SEMVER = /^\d+\.\d+\.\d+$/;
+
+/** Set difference, both ways, as the two lists a reader needs to act on. */
+function reconcile(expected, actual) {
+  const has = new Set(actual);
+  const wanted = new Set(expected);
+  return {
+    missing: expected.filter((item) => !has.has(item)),
+    unexpected: actual.filter((item) => !wanted.has(item)),
+  };
+}
+
+/**
+ * What each `fds:covers` metric means, and how completeness is proved.
+ *
+ * The strategy differs because the shape of the claim differs, and pretending
+ * otherwise would make one of them weaker than it can be:
+ *
+ *   schemas   file-scoped. "Every published schema is listed here" is a claim
+ *             about the whole document — `SCHEMAS.md` reaches them across a
+ *             dozen sections and a pinned appendix, and requiring one table
+ *             would mean rewriting a document that reads well.
+ *   entities  the table below. `| exercise | 1.1.0 |` is pure data, and nothing
+ *             checked those numbers: a row left at a superseded version passed
+ *             every gate, because a table cell is not a URL and not a marked
+ *             count.
+ *   releases  the table below, keyed on its first column. The "Adds" prose is
+ *             editorial and stays hand-written; which releases exist is not.
+ *
+ * Order is deliberately not checked. A table sorted for the reader is good
+ * documentation, and completeness is the thing that was missing.
+ */
+function coverage({ manifest, byPath }, file, lines, index) {
+  const at = `${file}:${index + 1}`;
+
+  const fromTable = (pick) => {
+    const rows = tableBelow(lines, index);
+    if (!rows.length) return null;
+    return rows.map(pick).filter((value) => value !== null);
+  };
+
+  return {
+    schemas() {
+      const published = [...byPath.keys()].sort();
+      const referenced = new Set(
+        schemaReferences(lines.join('\n'))
+          .filter((ref) => ref.kind === 'schemas')
+          .map((ref) => ref.path)
+      );
+      const missing = published.filter((path) => !referenced.has(path));
+      if (!missing.length) return [];
+      return [
+        `${at}: fds:covers schemas — ${missing.length} published schema(s) absent from this ` +
+          'document:\n' +
+          missing.map((path) => `        ${PUBLISHED_DIRS.schemas}/${path}`).join('\n') +
+          '\n    This file says it lists every published schema. Every other rule here checks ' +
+          'a claim that was\n    made; an omission makes none, which is exactly how `program` ' +
+          'shipped unlisted.',
+      ];
+    },
+
+    entities() {
+      const named = manifest.releases[manifest.currentRelease]?.entities ?? {};
+      const expected = Object.entries(named).map(([name, version]) => `${name} ${version}`);
+      const actual = fromTable((row) =>
+        row.length >= 2 && SEMVER.test(row[1]) && row[0] ? `${row[0]} ${row[1]}` : null
+      );
+      if (actual === null) {
+        return [
+          `${at}: fds:covers entities — no table below it.\n` +
+            '    The marker annotates a table of entity and version. Put it directly above one, ' +
+            'or delete it.',
+        ];
+      }
+      const { missing, unexpected } = reconcile(expected, actual);
+      if (!missing.length && !unexpected.length) return [];
+      return [
+        `${at}: fds:covers entities — the table below does not name what release ` +
+          `${manifest.currentRelease} publishes.\n` +
+          (missing.length ? `        missing:    ${missing.join(', ')}\n` : '') +
+          (unexpected.length ? `        not in it:  ${unexpected.join(', ')}\n` : '') +
+          '    A release names a set of entity versions. This table is that set, written out ' +
+          'for a reader.',
+      ];
+    },
+
+    releases() {
+      const expected = Object.keys(manifest.releases);
+      const actual = fromTable((row) => (SEMVER.test(row[0]) ? row[0] : null));
+      if (actual === null) {
+        return [
+          `${at}: fds:covers releases — no table below it.\n` +
+            '    The marker annotates a table keyed on release. Put it directly above one, or ' +
+            'delete it.',
+        ];
+      }
+      const { missing, unexpected } = reconcile(expected, actual);
+      if (!missing.length && !unexpected.length) return [];
+      return [
+        `${at}: fds:covers releases — the table below does not name every release.\n` +
+          (missing.length ? `        missing:    ${missing.join(', ')}\n` : '') +
+          (unexpected.length ? `        not a release: ${unexpected.join(', ')}\n` : '') +
+          '    Publishing a release adds a row here. A table that stops at the release before ' +
+          'last\n    describes a standard nobody is running.',
+      ];
+    },
+  };
+}
 
 /**
  * Character ranges covered by fenced code blocks.
@@ -489,6 +645,7 @@ const files = await scannedFiles();
 let referencesChecked = 0;
 let pinsDeclared = 0;
 let countsAsserted = 0;
+let coversAsserted = 0;
 let releaseStrings = 0;
 let constructedChecked = 0;
 
@@ -643,6 +800,24 @@ for (const file of files) {
     }
   }
 
+  // ── rule 10 — a document that enumerates a set, enumerates all of it ───────
+  for (const match of text.matchAll(COVERS)) {
+    if (isShown(match.index)) continue;
+    const index = text.slice(0, match.index).split('\n').length - 1;
+    const metric = match[1];
+    coversAsserted += 1;
+
+    const strategies = coverage(loaded, file, lines, index);
+    if (!Object.hasOwn(strategies, metric)) {
+      note(
+        `${file}:${index + 1}: fds:covers names "${metric}", which nothing enumerates.\n` +
+          `    Known: ${Object.keys(strategies).sort().join(', ')}`
+      );
+      continue;
+    }
+    for (const problem of strategies[metric]()) note(problem);
+  }
+
   // ── rule 6 — this project's own GitHub URLs ────────────────────────────────
   if (remote) {
     for (const match of text.matchAll(/github\.com\/([\w.-]+)(?:\/([\w.-]+))?/g)) {
@@ -795,6 +970,7 @@ console.log(
   `  ok    ${files.length} files agree with ${MANIFEST_PATH}: ` +
     `${referencesChecked} references (${pinsDeclared} pinned), ` +
     `${releaseStrings} release strings, ${countsAsserted} counts, ` +
+    `${coversAsserted} enumerations, ` +
     `${constructedChecked} constructed URLs, ${floorsChecked} package default(s), ` +
     `release ${manifest.currentRelease}.`
 );

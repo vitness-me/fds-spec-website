@@ -2,12 +2,15 @@
 
 Every schema published by the Fitness Data Standard, at the version it is published under.
 
+<!-- fds:covers schemas -->
 <!-- fds:count schemas=10 entities=7 libraries=1 tooling=1 superseded=1 -->
 The list here is `specification/schemas/.integrity.json`, which is what the build writes and what `npm run check:published` fetches. Ten schemas are published: seven entities, one definition library, one tooling schema, and one superseded entity version that is still served.
 
 ## A release is a set of entity versions
 
 `spec_version` names a release; it is **not** a version every entity shares. The current release is **1.4.0**, and it publishes:
+
+<!-- fds:covers entities -->
 
 | Entity | Version |
 |---|---|
@@ -18,6 +21,8 @@ The list here is `specification/schemas/.integrity.json`, which is what the buil
 | body-atlas | 1.0.0 |
 | workout | 1.1.0 |
 | program | 1.0.0 |
+
+<!-- fds:covers releases -->
 
 | Release | Adds |
 |---|---|

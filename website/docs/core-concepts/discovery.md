@@ -65,6 +65,8 @@ A superseded entity version stays served. `workout/v1.0.0/` is still published a
 
 Providers SHOULD therefore emit `entity_versions`, mapping each supported entity to the entity version they serve. A client that has it can construct schema URLs directly. A client that does not has to resolve the release to its entity versions some other way, and guessing is the failure this field exists to prevent.
 
+<!-- fds:covers releases -->
+
 | Release | Adds |
 |---|---|
 | 1.0.0 | exercise, equipment, muscle, muscle-category, body-atlas |
