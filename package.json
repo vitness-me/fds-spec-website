@@ -15,6 +15,7 @@
     "check:scenarios": "node scripts/check-scenarios.mjs",
     "check:registries": "node scripts/check-registries.mjs",
     "check:skill": "node scripts/check-skill.mjs",
+    "check:versions": "node scripts/check-versions.mjs",
     "check:published": "node scripts/check-published.mjs"
   }
 }

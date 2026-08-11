@@ -43,5 +43,33 @@ npx ajv -s specification/schemas/exercises/v1.1.0/exercise.schema.json \
 - Editorial fixes are Patch.
 - Update `specification/governance/CHANGELOG.md` with a summary of changes.
 
+### Version claims are checked
+
+`npm run check:versions` reads `specification/releases.json` — which is generated from the published schemas — and holds every version claim in the repository against it. A schema URL must resolve to something published; a release number must name a real release; a claim about "the current release" must name the current one. Run it before opening a PR.
+
+Two annotations let you say something the check would otherwise read as drift. Both are plain text inside whatever comment syntax the file already uses, so they survive the byte-for-byte page mirroring.
+
+<!-- fds:pin workout/v1.0.0/workout.schema.json — named by the worked example below, which shows how to pin the superseded workout version. A marker inside a fenced block is shown rather than made, so this page needs a real one. -->
+
+**Pinning an older version.** A URL at a version that is published but no longer current is either a deliberate reference or a stale one, and the two look identical. Say which:
+
+```markdown
+<!-- fds:pin workout/v1.0.0/workout.schema.json — releases 1.2.0 and 1.3.0 declare
+     workout at 1.0.0, so a client pinned to either must keep resolving this URL. -->
+```
+
+The reference is written exactly as it resolves — `<directory>/v<version>/<file>`, or a registry filename. A pin covers the file it appears in, needs a real reason, and is an error once nothing in that file references it. A *withdrawn* version cannot be pinned: `exercise/v1.0.0` and `equipment/v1.0.0` are not served at all, so there is nothing to point at.
+
+**Asserting a count.** A number in a sentence is not automatically a claim about this repository — "eight reps at one hundred kilograms" is not a count of anything. Mark the ones that are:
+
+```markdown
+<!-- fds:count schemas=10 entities=7 -->
+Ten schemas are published. Seven are entities, …
+```
+
+The value is checked against the repository on disk, and it must also appear in the surrounding sentence, spelled or in digits, so the marker cannot quietly stop describing the text it annotates. Run `npm run check:versions` with an unknown metric name to see the full list.
+
+Do not mark counts in `CHANGELOG.md`. A changelog entry describes a past release, and pinning it to today's tree would make an accurate historical record fail.
+
 ## License
 - By contributing, you agree your contributions are licensed under the VITNESS Open Standards License Agreement.

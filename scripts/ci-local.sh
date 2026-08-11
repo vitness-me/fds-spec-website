@@ -58,6 +58,7 @@ if run_job schemas; then
   try "every matrix scenario has an example" npm run check:scenarios
   try "recommended values are in a registry" npm run check:registries
   try "skill knowledge names real fields" npm run check:skill
+  try "every version claim matches the manifest" npm run check:versions
 
   S=specification/schemas
   total=0; failed=0
