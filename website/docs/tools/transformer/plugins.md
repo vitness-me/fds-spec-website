@@ -339,16 +339,16 @@ const plugin: TransformPlugin = {
 export default plugin;
 ```
 
-Use in configuration:
+**No configuration key selects one.** `enrichers` is part of the `TransformPlugin` type, but the transformer registers only a plugin's `transforms` — under `<plugin>:<name>` — and nothing reads `enrichers`. There is no `mapping.json` key that names a plugin enricher, and the mapping schema does not have one, because a schema that accepts a key the tool ignores is worse than no schema at all: it tells you the configuration is correct while the enricher never runs.
 
-```json fds:ignore ALLOWANCE mapping 1.0.0 does not allow the enrichment options the transformer implements (tiers, fields, fallback, rateLimit, checkpoint, enricher); remove when a mapping version publishes them
+Until enrichers are reachable from configuration, do the work in a transform. A transform receives the same `TransformContext` — the source record, the partially built target, and the loaded registries — so anything an enricher could compute, a transform can:
+
+```json fds:fragment entity=mapping
 {
   "mappings": {
-    "extensions.custom": {
-      "enrichment": {
-        "enabled": true,
-        "enricher": "custom-enricher:customEnricher"
-      }
+    "classification.tags": {
+      "from": null,
+      "transform": "fitness-transforms:generateTags"
     }
   }
 }

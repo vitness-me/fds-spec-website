@@ -14,7 +14,7 @@ Create a `mapping.json` file in your project:
 
 ```json
 {
-  "$schema": "https://spec.vitness.me/schemas/transformer/v1.0.0/mapping.schema.json",
+  "$schema": "https://spec.vitness.me/schemas/transformer/v1.1.0/mapping.schema.json",
   "version": "1.0.0",
   "targetSchema": {
     "version": "1.0.0",
@@ -35,14 +35,18 @@ Create a `mapping.json` file in your project:
 | Property | Type | Required | Description |
 |----------|------|----------|-------------|
 | `$schema` | string | No | JSON Schema URL for IDE validation |
+| `description` | string | No | A note to whoever reads the file; never read by the transformer |
 | `version` | string | Yes | Config version (e.g., "1.0.0") |
 | `targetSchema` | object | Yes | Target FDS schema configuration |
 | `registries` | object | No | Registry sources for lookups |
 | `mappings` | object | Yes | Field mapping definitions |
+| `allowUnsafeEval` | boolean | No | Evaluate mapping `condition` expressions (default `false`) |
 | `enrichment` | object | No | AI enrichment configuration |
 | `validation` | object | No | Validation settings |
 | `output` | object | No | Output format settings |
 | `plugins` | array | No | Custom transform plugins |
+
+The mapping schema closes `additionalProperties` at every level. A key that is not in it is a key the transformer does not read, so an editor pointed at `$schema` will flag a misspelling rather than let it pass silently into a run that ignores it.
 
 ---
 
@@ -95,12 +99,14 @@ Configure registry sources for lookups. Registries provide muscle, equipment, an
 |----------|------|-------------|
 | `source` | string | Source type: `local`, `remote`, `inline` |
 | `local` | string | Path to local registry file |
-| `url` | string | URL for remote registry |
+| `url` | string | URL for remote registry; required by `remote` |
 | `inline` | array | Inline registry entries |
 | `cache` | boolean | Cache remote registries locally |
 | `fallback` | string | Fallback source if primary fails |
 
 > **Note:** You must provide your own registry files. The transformer does not ship with pre-built registries.
+
+> **`remote` needs a `url`.** FDS publishes muscles, equipment and muscle categories only as *illustrative catalogs* — they show the shape a provider serves, and nothing in FDS requires their entries. Their ids belong to no provider, and a registry lookup writes an id straight into your output, so there is no default remote source to fall back on. `source: "remote"` without a `url` fails at load rather than fetching. Name the catalog you mean.
 
 ---
 
@@ -166,7 +172,7 @@ Define how source fields map to FDS fields:
 | `options` | object | Options passed to transform function |
 | `default` | any | Default value if source is missing |
 | `required` | boolean | Whether field is required |
-| `condition` | string | Condition expression for conditional mapping |
+| `condition` | string | Condition expression for conditional mapping; evaluated only when the root `allowUnsafeEval` is `true`, and otherwise skipped with a warning |
 | `enrichment` | object | Field-level AI enrichment config |
 
 #### Nested Field Paths
@@ -218,7 +224,7 @@ Apply multiple transforms in sequence:
 
 Configure AI enrichment. See [AI Enrichment Guide](/docs/tools/transformer/ai-enrichment) for details.
 
-```json fds:ignore ALLOWANCE mapping 1.0.0 does not allow the enrichment options the transformer implements (tiers, fields, fallback, rateLimit, checkpoint, enricher); remove when a mapping version publishes them
+```json fds:fragment entity=mapping
 {
   "enrichment": {
     "enabled": true,
@@ -256,7 +262,12 @@ Configure AI enrichment. See [AI Enrichment Guide](/docs/tools/transformer/ai-en
     "fallback": {
       "retries": 2,
       "degradeModel": true,
-      "useDefaults": true
+      "useDefaults": true,
+      "degradeChain": {
+        "complex": "medium",
+        "medium": "simple",
+        "simple": null
+      }
     },
     
     "rateLimit": {
@@ -350,9 +361,9 @@ See [Plugin Development](/docs/tools/transformer/plugins) for details.
 
 ## Complete Example
 
-```json fds:ignore ALLOWANCE mapping 1.0.0 does not allow the enrichment options the transformer implements (tiers, fields, fallback, rateLimit, checkpoint, enricher); remove when a mapping version publishes them
+```json
 {
-  "$schema": "https://spec.vitness.me/schemas/transformer/v1.0.0/mapping.schema.json",
+  "$schema": "https://spec.vitness.me/schemas/transformer/v1.1.0/mapping.schema.json",
   "version": "1.0.0",
   "targetSchema": {
     "version": "1.0.0",

@@ -8,8 +8,8 @@ sidebar_position: 1
 
 FDS is defined in JSON Schema (Draft 2020-12). Every schema below is published at a frozen URL: the bytes at a version URL never change, and a change ships at a new one.
 
-<!-- fds:count schemas=10 entities=7 libraries=1 tooling=1 superseded=1 -->
-Ten schemas are published. Seven are entities, one is a definition library, one configures a tool, and one is a superseded entity version that is still served.
+<!-- fds:count schemas=11 entities=7 libraries=1 tooling=1 superseded=2 -->
+Eleven schemas are published. Seven are entities, one is a definition library, one configures a tool, and two are superseded versions that are still served.
 
 ## Entity versions are not uniform
 
@@ -75,14 +75,21 @@ This one is **not an entity**, and a provider does not export it. Its root valid
 
 ## Tooling schemas
 
-### Transformer Mapping — v1.0.0
-Configuration for the FDS Transformer: how source fields map onto an FDS entity. It describes a tool's input rather than an entity, so it is documented with the tool.
+### Transformer Mapping — v1.1.0
+Configuration for the FDS Transformer: how source fields map onto an FDS entity. It describes a tool's input rather than an entity, so it is documented with the tool. It belongs to no release — a release names entities and the libraries they compose, and this configures a tool.
 
-**Schema:** `/schemas/transformer/v1.0.0/mapping.schema.json` — see [Transformer configuration](/docs/tools/transformer/configuration).
+**Schema:** `/schemas/transformer/v1.1.0/mapping.schema.json` — see [Transformer configuration](/docs/tools/transformer/configuration).
 
 ## Superseded, still served
 
 <!-- fds:pin workout/v1.0.0/workout.schema.json — listed on purpose: releases 1.2.0 and 1.3.0 declare workout at 1.0.0, so a client pinned to either must keep resolving this URL. The section says plainly not to build against it. -->
+<!-- fds:pin transformer/v1.0.0/mapping.schema.json — listed on purpose: it is the `$schema` URL every configuration written before 1.1.0 names, and an editor resolving it must keep getting a document. -->
+
+### Transformer Mapping — v1.0.0
+
+**Schema:** `/schemas/transformer/v1.0.0/mapping.schema.json`
+
+Superseded by mapping 1.1.0, which added the enrichment and evaluation keys the transformer had grown past it. Every 1.0.0 configuration is still valid under 1.1.0 — the additions are optional. It stays served because it is what a configuration written against it names in its own `$schema`, and no FDS release governs a tooling schema, so nothing else would ever say when it may go.
 
 ### Workout — v1.0.0
 

@@ -37,7 +37,7 @@ Transform a simple exercise dataset without AI enrichment.
 
 ```json title="mapping.json"
 {
-  "$schema": "https://spec.vitness.me/schemas/transformer/v1.0.0/mapping.schema.json",
+  "$schema": "https://spec.vitness.me/schemas/transformer/v1.1.0/mapping.schema.json",
   "version": "1.0.0",
   "targetSchema": {
     "version": "1.0.0",
@@ -181,9 +181,9 @@ Transform with tiered AI enrichment for complete exercise data.
 
 ### Mapping Configuration
 
-```json title="mapping-enriched.json" fds:ignore ALLOWANCE mapping 1.0.0 does not allow the enrichment options the transformer implements (tiers, fields, fallback, rateLimit, checkpoint, enricher); remove when a mapping version publishes them
+```json title="mapping-enriched.json"
 {
-  "$schema": "https://spec.vitness.me/schemas/transformer/v1.0.0/mapping.schema.json",
+  "$schema": "https://spec.vitness.me/schemas/transformer/v1.1.0/mapping.schema.json",
   "version": "1.0.0",
   "targetSchema": {
     "version": "1.0.0",
@@ -260,7 +260,12 @@ Transform with tiered AI enrichment for complete exercise data.
     "fallback": {
       "retries": 2,
       "degradeModel": true,
-      "useDefaults": true
+      "useDefaults": true,
+      "degradeChain": {
+        "complex": "medium",
+        "medium": "simple",
+        "simple": null
+      }
     },
     "checkpoint": {
       "enabled": true,
