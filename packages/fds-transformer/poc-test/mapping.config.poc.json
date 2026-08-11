@@ -1,10 +1,10 @@
 {
   "$schema": "../schemas/mapping.schema.json",
   "version": "1.0.0",
-  "description": "POC configuration with tiered AI enrichment for 5 test exercises",
-  
+  "description": "POC configuration with tiered AI enrichment for 5 test exercises. targetSchema.version names an FDS *release*; schemaVersion below is the exercise entity version that release publishes, and the two are not the same number. Release 1.0.0 named exercise 1.0.0, which has since been withdrawn — a document stamped 1.0.0 resolves to nothing.",
+
   "targetSchema": {
-    "version": "1.0.0",
+    "version": "1.4.0",
     "entity": "exercise"
   },
   
@@ -25,7 +25,7 @@
   
   "mappings": {
     "exerciseId": { "from": null, "transform": "uuid" },
-    "schemaVersion": { "from": null, "default": "1.0.0" },
+    "schemaVersion": { "from": null, "default": "1.1.0" },
     
     "canonical.name": { "from": "name", "transform": "titleCase" },
     "canonical.slug": { "from": "name", "transform": "slugify" },
@@ -45,7 +45,7 @@
     "media": {
       "from": "gifUrl",
       "transform": "toMediaArray",
-      "options": { "type": "gif" }
+      "options": { "type": "image" }
     },
     
     "metadata.status": { "from": null, "default": "draft" },
