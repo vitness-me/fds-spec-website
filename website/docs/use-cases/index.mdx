@@ -1,0 +1,67 @@
+---
+title: What can you do with FDS?
+sidebar_label: What can you do with FDS?
+description: The capability layer of the Fitness Data Standard — what the standard is actually for, grouped from foundational to composed.
+---
+
+import {Gallery, Card} from './_shared/UseCase';
+
+# What can you do with FDS?
+
+The Fitness Data Standard is a shared vocabulary for fitness data — from a single
+exercise up to a twelve-week plan. This section answers one question: **what can you
+actually do with it?**
+
+The capabilities build on each other. The **shared library** is the vocabulary
+everything else is written in. **Prescription** primitives express intent — how much
+load, how many reps, how much rest — as reusable pieces. **Composition** puts those
+together into sessions and plans. Read them in that order, or jump to the one that
+matches the problem in front of you.
+
+Every example on every page below is loaded straight from a published file in the
+standard. Nothing here is illustrative-only, and nothing is hand-typed — if a file is
+renamed or a version bumped, the build fails before the page can go stale.
+
+## Foundations — the shared library
+
+<Gallery>
+  <Card to="/docs/use-cases/exercise-catalog" title="Exercise catalog">
+    Describe an exercise once, in a shape another system reads without asking what you meant.
+  </Card>
+  <Card to="/docs/use-cases/equipment" title="Equipment">
+    Say what a machine does in numbers another gym can act on, and say plainly when you cannot.
+  </Card>
+  <Card to="/docs/use-cases/muscles-and-atlas" title="Muscles & body atlas">
+    Name a region once; every renderer draws it, and none has to agree on the drawing.
+  </Card>
+</Gallery>
+
+## Prescription — the intent primitives
+
+<Gallery>
+  <Card to="/docs/use-cases/prescription" title="Prescription primitives">
+    Prescribe load, reps and rest as primitives that reference a person's numbers, never carry them.
+  </Card>
+</Gallery>
+
+## Composition — sessions and plans
+
+<Gallery>
+  <Card to="/docs/use-cases/authoring-workouts" title="Authoring workouts">
+    One schema and one field express every way people structure a session.
+  </Card>
+  <Card to="/docs/use-cases/programming" title="Programming">
+    A program points at sessions; fix one session and every plan using it is fixed.
+  </Card>
+</Gallery>
+
+## What FDS deliberately does not do
+
+FDS models no person. There is no athlete identity, no bodyweight, no one-rep max, and
+no performed or logged result anywhere in the standard. That is a design decision, not
+a gap: a document that describes nobody can be published, cached, mirrored and diffed
+freely, with no consent, retention or erasure obligation attached. Every prescription
+above references the personal numbers it needs rather than carrying them — see
+[Prescription primitives](/docs/use-cases/prescription) for how, and the
+[roadmap](/docs/governance/roadmap) for where performed data is deliberately out of
+scope.

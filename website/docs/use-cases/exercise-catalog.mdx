@@ -1,0 +1,67 @@
+---
+title: Publish an exercise catalog another system can read
+sidebar_label: Exercise catalog
+description: Describe an exercise once, in a shape another system can consume without asking you what you meant.
+usecase_promise: Describe an exercise once, in a shape another system reads without asking what you meant.
+usecase_family: foundations
+usecase_audiences: [app-developer, researcher]
+usecase_sources:
+  - specification/schemas/exercises/v1.1.0/exercise.example.json
+---
+
+import {SpecExample, BeforeAfter, Panel, Audience, NextSteps, Next} from './_shared/UseCase';
+import backSquat from '../../../specification/schemas/exercises/v1.1.0/exercise.example.json';
+
+# Publish an exercise catalog another system can read
+
+> Describe an exercise once, in a shape another system reads without asking what you meant.
+
+<Audience ids={['app-developer', 'researcher']} />
+
+<BeforeAfter>
+  <Panel kind="before">
+    Every app invents its own key for an exercise — `exercise_id`, `exerciseId`,
+    `eid`, `Exercise_Ref` — and its own muscle taxonomy to go with it. Integrating
+    two catalogs is a bespoke mapping project every single time, and the mapping
+    rots the moment either side adds a field.
+  </Panel>
+  <Panel kind="after">
+    An exercise is a required core — identity, classification, targets, metrics,
+    metadata — with muscles bound through `targets`, equipment through `equipment`,
+    and a metric vocabulary whose valid type and unit pairings are written down.
+    Two catalogs that both speak it line up without a translation layer.
+  </Panel>
+</BeforeAfter>
+
+## A complete exercise
+
+Everything a consumer needs to place a squat in a library: canonical name and
+slug, localized names, movement and mechanics classification, the muscles it
+targets with their category ids, the equipment it needs, and the metrics it is
+measured in. Vendor-specific extras live under the `x:` namespace, out of the
+way of the core.
+
+<SpecExample source="specification/schemas/exercises/v1.1.0/exercise.example.json" data={backSquat}>
+  A back squat, fully described. Note `targets.primary[].id` — a muscle id another
+  document resolves — and the `x:vitness.*` extension keys, which a consumer that
+  does not know them ignores.
+</SpecExample>
+
+## How it works
+
+The identity is a stable id plus a canonical name and slug; every human-facing
+string can be localized without touching the id. `classification` carries the
+movement facts a consumer filters and groups on. `targets` names muscles by id
+rather than by free text, so an exercise catalog and a muscle library resolve
+against each other — the chain from an exercise to a body region is real, not
+described.
+
+Fields FDS did not anticipate do not force a fork: they go under the `x:vendor`
+extension namespace, and a consumer that has never heard of them still validates
+the document. That is what lets one catalog serve many readers without any of
+them agreeing in advance on everything it might carry.
+
+<NextSteps>
+  <Next to="/docs/use-cases/muscles-and-atlas">Follow a target to a body region</Next>
+  <Next to="/docs/schemas/exercise">Read the exercise schema</Next>
+</NextSteps>

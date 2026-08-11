@@ -1,0 +1,70 @@
+---
+title: Model equipment so a prescription stays reproducible
+sidebar_label: Equipment
+description: Say what a machine does in numbers another gym can act on — and say plainly when you cannot.
+usecase_promise: Say what a machine does in numbers another gym can act on, and say plainly when you cannot.
+usecase_family: foundations
+usecase_audiences: [oem-engineer, platform-lead]
+usecase_sources:
+  - specification/schemas/equipment/v1.1.0/equipment.example.json
+  - specification/schemas/equipment/v1.1.0/equipment.example.stack.json
+---
+
+import {SpecExample, BeforeAfter, Panel, Audience, NextSteps, Next} from './_shared/UseCase';
+import barbell from '../../../specification/schemas/equipment/v1.1.0/equipment.example.json';
+import cableStack from '../../../specification/schemas/equipment/v1.1.0/equipment.example.stack.json';
+
+# Model equipment so a prescription stays reproducible
+
+> Say what a machine does in numbers another gym can act on, and say plainly when you cannot.
+
+<Audience ids={['oem-engineer', 'platform-lead']} />
+
+<BeforeAfter>
+  <Panel kind="before">
+    Plate math is re-derived in every app. A machine's "level 7" travels between
+    systems as though it means the same thing everywhere, and inclines and cadences
+    get stuffed into a free-text note that no consumer can act on.
+  </Panel>
+  <Panel kind="after">
+    Equipment carries what loads it and in what steps. `loading.increment` is
+    authoritative for plate and stack math, and `stackBased` says whether those
+    steps are fixed. What the standard cannot make portable — a manufacturer's own
+    numbering — it keeps as exactly that, rather than pretending it converts.
+  </Panel>
+</BeforeAfter>
+
+## A free-weight bar, and a pin-loaded stack
+
+A barbell is identity, classification, and the localized and vendor-specific detail
+a gym wants — but no loading rule, because a bar takes any plates.
+
+<SpecExample source="specification/schemas/equipment/v1.1.0/equipment.example.json" data={barbell}>
+  A barbell. The `x:gym-management` extension carries inventory and maintenance a
+  consumer can ignore; the core stays about the equipment itself.
+</SpecExample>
+
+A pin-loaded cable stack is different: its load changes in fixed steps, and that is
+a fact a prescription downstream needs to round to.
+
+<SpecExample source="specification/schemas/equipment/v1.1.0/equipment.example.stack.json" data={cableStack}>
+  `loading.increment` is 5 kg and `stackBased` is true — the increments are fixed,
+  so a consumer knows a prescription must snap to them.
+</SpecExample>
+
+## How it works
+
+`loading` is where reproducibility lives: the increment and whether it is stack-based
+are enough to do plate or pin math the same way in every consumer. Resistance that
+changes *how hard* rather than *what* — a machine dial, a resistance level — stays a
+load prescription with a named scale, not an equipment fact, because two
+manufacturers' "level 7" are unrelated and the standard refuses to imply otherwise.
+
+The rule of thumb the model enforces: record what is portable as numbers, and keep
+what is not portable clearly marked as machine-specific, so a session is reproducible
+on the same machine and never silently mis-converted onto a different one.
+
+<NextSteps>
+  <Next to="/docs/use-cases/prescription">See how a prescription references load</Next>
+  <Next to="/docs/schemas/equipment">Read the equipment schema</Next>
+</NextSteps>

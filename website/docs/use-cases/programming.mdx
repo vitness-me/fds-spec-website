@@ -1,0 +1,73 @@
+---
+title: Plan twelve weeks without copying a session thirty-six times
+sidebar_label: Programming
+description: A program points at sessions; fix one session and every plan that uses it is fixed.
+usecase_promise: A program points at sessions; fix one session and every plan using it is fixed.
+usecase_family: composition
+usecase_audiences: [coach, researcher]
+usecase_sources:
+  - specification/schemas/program/v1.0.0/program.linear.example.json
+  - specification/schemas/program/v1.0.0/program.percentage-waves.example.json
+---
+
+import {SpecExample, BeforeAfter, Panel, Audience, NextSteps, Next} from './_shared/UseCase';
+import linear from '../../../specification/schemas/program/v1.0.0/program.linear.example.json';
+import waves from '../../../specification/schemas/program/v1.0.0/program.percentage-waves.example.json';
+
+# Plan twelve weeks without copying a session thirty-six times
+
+> A program points at sessions; fix one session and every plan using it is fixed.
+
+<Audience ids={['coach', 'researcher']} />
+
+<BeforeAfter>
+  <Panel kind="before">
+    A twelve-week plan inlines thirty-six near-identical copies of a session. Repair
+    it in eight of them and the plan now disagrees with itself. The plan and the
+    session are tangled together, so nothing about either can be reused.
+  </Panel>
+  <Panel kind="after">
+    A program is a schedule of **references** to sessions, each carrying a
+    denormalised name so the plan stays readable without resolving anything. The
+    prescription lives in the sessions; the program says only which falls when. Fix
+    a session once and every plan pointing at it is fixed.
+  </Panel>
+</BeforeAfter>
+
+## A plan is a schedule, not a pile of sessions
+
+Linear progression is the whole methodology in one rule: add load whenever every
+rep is completed. Both weeks are identical — the load moves, the plan does not — and
+the days point at a workout by reference.
+
+<SpecExample source="specification/schemas/program/v1.0.0/program.linear.example.json" data={linear}>
+  Every day is a `workout` reference with a denormalised `name`. Not one set, rep or
+  load appears in the program — they live in the session it points at.
+</SpecExample>
+
+The same structure scales to a 5/3/1-style wave — and still carries no athlete's
+numbers.
+
+<SpecExample source="specification/schemas/program/v1.0.0/program.percentage-waves.example.json" data={waves}>
+  Training-max slots declare which lifts the plan is computed from; `overrides`
+  carry the wave. No training-max *value* appears anywhere in the document.
+</SpecExample>
+
+## How it works
+
+A day resolves to a workout **or** it is a rest day — never both, never neither — and
+the schedule model (`calendar`, `relative`, `rolling`, `sequence`) decides which
+placement field is authoritative. Reuse comes from `overrides`: a week can be scaled
+or flagged as a deload without editing the session it points at, so the session stays
+shared.
+
+The cost is honest and stated: a program is not executable without resolving its
+references, and a fully personalised plan does not round-trip as one self-contained
+document — it is the plan plus a separate resolution context. That trade is what buys
+every other property: a plan that carries no performed data and no person is one that
+can be published and diffed like any other document.
+
+<NextSteps>
+  <Next to="/docs/use-cases/prescription">See where the numbers actually live</Next>
+  <Next to="/docs/schemas/program">Read the program schema</Next>
+</NextSteps>

@@ -1,0 +1,85 @@
+---
+title: Author any session, from straight sets to Tabata
+sidebar_label: Authoring workouts
+description: Model every training structure — supersets, EMOM, AMRAP, Tabata, intervals — with one workout schema and one field.
+usecase_promise: One schema and one field express every way people structure a session.
+usecase_family: composition
+usecase_audiences: [app-developer, oem-engineer]
+usecase_sources:
+  - specification/schemas/workout/v1.1.0/workout.straight.example.json
+  - specification/schemas/workout/v1.1.0/workout.emom.example.json
+  - specification/schemas/workout/v1.1.0/workout.tabata.example.json
+---
+
+import {SpecExample, BeforeAfter, Panel, Audience, NextSteps, Next} from './_shared/UseCase';
+import straight from '../../../specification/schemas/workout/v1.1.0/workout.straight.example.json';
+import emom from '../../../specification/schemas/workout/v1.1.0/workout.emom.example.json';
+import tabata from '../../../specification/schemas/workout/v1.1.0/workout.tabata.example.json';
+
+# Author any session, from straight sets to Tabata
+
+> One schema and one field express every way people structure a session.
+
+<Audience ids={['app-developer', 'oem-engineer']} />
+
+<BeforeAfter>
+  <Panel kind="before">
+    Your workout table grows a column every time a coach asks for something new —
+    `is_circuit`, `emom_interval`, `tabata_rounds`, `superset_group` — most of them
+    null on any given row. Every consumer has to know which columns matter for which
+    kind of session, and a session type nobody planned for has nowhere to live.
+  </Panel>
+  <Panel kind="after">
+    A workout is blocks of items, and how a block is executed is a single field:
+    `blocks[].mode`. Straight sets, supersets, circuits, EMOM, AMRAP, Tabata and
+    interval work are all the same document, differing only in `mode` and its
+    `modeParams`. There is no per-style schema and no per-style field to leave null.
+  </Panel>
+</BeforeAfter>
+
+## The same schema, three ways
+
+Here is a straight-set session — the baseline everything else departs from. Three
+identical sets of one exercise, prescribed by percentage of a one-rep max.
+
+<SpecExample source="specification/schemas/workout/v1.1.0/workout.straight.example.json" data={straight}>
+  Three identical sets. `mode: "sequential"`, and no `modeParams` are needed.
+</SpecExample>
+
+Change nothing but the mode, and the same shape becomes an every-minute-on-the-minute
+conditioning piece. The clock now terminates each interval, which is why `modeParams`
+carries `rounds` and an `interval`.
+
+<SpecExample source="specification/schemas/workout/v1.1.0/workout.emom.example.json" data={emom}>
+  Every minute on the minute for twelve intervals. `mode: "emom"`.
+</SpecExample>
+
+And the same shape again, as a Tabata block — the mode simply changes what the
+consumer must do to traverse and terminate the block.
+
+<SpecExample source="specification/schemas/workout/v1.1.0/workout.tabata.example.json" data={tabata}>
+  Eight rounds of 20 seconds work, 10 seconds rest. `mode: "tabata"`.
+</SpecExample>
+
+## How it works
+
+`mode` decides three things a consumer cannot infer otherwise: how the block is
+**traversed** (all sets of item one before item two, or one set of each per pass),
+when it **terminates** (the work is done, or a clock expires), and which
+`modeParams` are meaningful. Everything else about the document is identical across
+the three examples above.
+
+Grouping is a **label**, not a nesting: two items alternated in a superset carry
+`groupLabel` `A1` and `A2`, and rest falls at the group boundary. An item's sets are
+given by a `sets` count **or** by a `scheme`, never both — the schema enforces it —
+so there is exactly one place to read how a set progresses.
+
+The pay-off is that a consumer written once reads every session. Adding a new way to
+train does not add a schema, a table column, or a branch; it is a new value of one
+field, and a consumer that does not recognise it is told, by the standard, exactly
+what it must not assume.
+
+<NextSteps>
+  <Next to="/docs/use-cases/programming">Put these sessions into a plan</Next>
+  <Next to="/docs/schemas/workout">Read the workout schema</Next>
+</NextSteps>

@@ -1,0 +1,81 @@
+---
+title: Bind muscles to a body without owning the artwork
+sidebar_label: Muscles & body atlas
+description: Name an anatomical region once; every renderer draws it, and none of them has to agree on the drawing.
+usecase_promise: Name a region once; every renderer draws it, and none has to agree on the drawing.
+usecase_family: foundations
+usecase_audiences: [app-developer, researcher]
+usecase_sources:
+  - specification/schemas/muscle/v1.0.0/muscle.example.json
+  - specification/schemas/muscle/muscle-category/v1.0.0/muscle-category.example.json
+  - specification/schemas/atlas/v1.0.0/body-atlas.example.json
+---
+
+import {SpecExample, BeforeAfter, Panel, Audience, NextSteps, Next} from './_shared/UseCase';
+import quadriceps from '../../../specification/schemas/muscle/v1.0.0/muscle.example.json';
+import legs from '../../../specification/schemas/muscle/muscle-category/v1.0.0/muscle-category.example.json';
+import atlas from '../../../specification/schemas/atlas/v1.0.0/body-atlas.example.json';
+
+# Bind muscles to a body without owning the artwork
+
+> Name a region once; every renderer draws it, and none has to agree on the drawing.
+
+<Audience ids={['app-developer', 'researcher']} />
+
+<BeforeAfter>
+  <Panel kind="before">
+    Each app hard-codes a mapping from a muscle to a path in one particular SVG.
+    Commission a new illustration and the anatomy has to be redone; share a
+    highlight between two apps and it does not line up, because neither agrees on
+    the drawing underneath.
+  </Panel>
+  <Panel kind="after">
+    A muscle names the regions it occupies as ids and a weight. An atlas maps each
+    region to a selector inside a view. Swap the artwork, keep the semantics — the
+    binding is an indirection layer, and the geometry stays out of the data.
+  </Panel>
+</BeforeAfter>
+
+## Three records that compose
+
+A muscle carries a `heatmap` naming atlas regions by id, each with a weight —
+never a path, never a colour.
+
+<SpecExample source="specification/schemas/muscle/v1.0.0/muscle.example.json" data={quadriceps}>
+  The quadriceps, bound to two atlas areas at full weight. `classification.categoryId`
+  points at the category below.
+</SpecExample>
+
+A muscle category groups muscles for the reader, and is itself just an id, a name,
+and classification.
+
+<SpecExample source="specification/schemas/muscle/muscle-category/v1.0.0/muscle-category.example.json" data={legs}>
+  The "Legs" category the quadriceps belongs to, referenced by `cat.legs`.
+</SpecExample>
+
+The atlas resolves those region ids to selectors inside named views — and it ships
+no geometry itself. The drawing lives behind the `asset.uri`; the atlas is the map
+from a region id to a selector in it.
+
+<SpecExample source="specification/schemas/atlas/v1.0.0/body-atlas.example.json" data={atlas}>
+  Four areas, each binding a `viewId` and a `selector` such as `#area-thigh-left`.
+  The selector points into *your* SVG — the standard commits to none.
+</SpecExample>
+
+## How it works
+
+The indirection is the feature. A muscle says *which regions and how strongly*; an
+atlas says *where those regions are in a given view*; the artwork is yours and
+interchangeable. Because no coordinate or path lives in the entity records, a muscle
+library is cacheable and diffable, and a new illustration is a new atlas binding
+rather than an edit to the anatomy.
+
+Note what the standard deliberately does **not** ship: this example atlas carries four
+areas and no drawing — `asset.uri` points at an asset the atlas does not define, and
+aggregation across weights is advisory, not mandated. The map is normative; the picture
+is an implementation choice.
+
+<NextSteps>
+  <Next to="/docs/use-cases/exercise-catalog">See a muscle referenced from an exercise</Next>
+  <Next to="/docs/schemas/body-atlas">Read the body-atlas schema</Next>
+</NextSteps>

@@ -6,6 +6,39 @@ import type {SidebarsConfig} from '@docusaurus/plugin-content-docs';
  * Organizes documentation into logical sections for easy navigation.
  */
 const sidebars: SidebarsConfig = {
+  // The capability layer — "what can you do with FDS?" — served under its own
+  // navbar entry. Ordered foundational first, mirroring the FAMILIES registry in
+  // docs/use-cases/_shared/registry.ts. Every page here is checked for a sidebar
+  // entry by scripts/check-usecases.mjs: a page that builds but is unreachable is
+  // the failure that let the landing page rot.
+  useCasesSidebar: [
+    'use-cases/index',
+    {
+      type: 'category',
+      label: 'Foundations — the shared library',
+      collapsed: false,
+      items: [
+        'use-cases/exercise-catalog',
+        'use-cases/equipment',
+        'use-cases/muscles-and-atlas',
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Prescription — the intent primitives',
+      collapsed: false,
+      items: ['use-cases/prescription'],
+    },
+    {
+      type: 'category',
+      label: 'Composition — sessions and plans',
+      collapsed: false,
+      items: [
+        'use-cases/authoring-workouts',
+        'use-cases/programming',
+      ],
+    },
+  ],
   mainSidebar: [
     'intro',
     {

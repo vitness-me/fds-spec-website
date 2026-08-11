@@ -1,0 +1,142 @@
+/* Shared styling for the use-case page pattern. Theme variables only, so the
+   pages track the site's light and dark palettes without a second definition. */
+
+.example {
+  margin: 1.5rem 0;
+}
+
+.caption {
+  margin: 0.5rem 0 0;
+  color: var(--ifm-color-emphasis-700);
+  font-style: italic;
+}
+
+.source {
+  margin: 0.25rem 0 0;
+  font-size: 0.85rem;
+  color: var(--ifm-color-emphasis-600);
+}
+
+.beforeAfter {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+@media (max-width: 768px) {
+  .beforeAfter {
+    grid-template-columns: 1fr;
+  }
+}
+
+.panelBefore,
+.panelAfter {
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: var(--ifm-card-border-radius, 8px);
+  padding: 1rem 1.25rem;
+}
+
+.panelAfter {
+  border-color: var(--ifm-color-primary);
+  background: var(--ifm-color-primary-contrast-background, var(--ifm-color-emphasis-100));
+}
+
+.panelLabel {
+  margin: 0 0 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ifm-color-emphasis-600);
+}
+
+.panelAfter .panelLabel {
+  color: var(--ifm-color-primary);
+}
+
+.audience {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 1rem 0 1.5rem;
+}
+
+.audienceLead {
+  font-weight: 600;
+  color: var(--ifm-color-emphasis-700);
+}
+
+.chip {
+  display: inline-block;
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+  background: var(--ifm-color-emphasis-200);
+  color: var(--ifm-color-emphasis-900);
+  font-size: 0.85rem;
+}
+
+.next {
+  margin: 2rem 0 1rem;
+  border-top: 1px solid var(--ifm-color-emphasis-300);
+  padding-top: 1rem;
+}
+
+.nextLead {
+  margin: 0 0 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ifm-color-emphasis-600);
+}
+
+.nextLinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.nextLink {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--ifm-color-primary);
+  border-radius: var(--ifm-button-border-radius, 6px);
+  font-weight: 600;
+}
+
+/* Gallery (index) cards */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1rem;
+  margin: 1rem 0 2rem;
+}
+
+.card {
+  display: block;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: var(--ifm-card-border-radius, 8px);
+  padding: 1rem 1.25rem;
+  color: inherit;
+  text-decoration: none;
+  transition: border-color 0.15s ease;
+}
+
+.card:hover {
+  border-color: var(--ifm-color-primary);
+  text-decoration: none;
+  color: inherit;
+}
+
+.cardTitle {
+  margin: 0 0 0.35rem;
+  font-weight: 700;
+}
+
+.cardPromise {
+  margin: 0;
+  color: var(--ifm-color-emphasis-700);
+  font-size: 0.9rem;
+}
