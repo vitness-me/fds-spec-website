@@ -25,7 +25,9 @@
  *   2. specification/schemas/.integrity.json   hash + freeze state per schema
  *   3. specification/releases.json             the release manifest — every
  *                                              version fact, in one document
- *   4. packages/fds-transformer/.../bundled/   the transformer's offline copies
+ *   4. packages/fds-transformer/.../bundled/   the transformer's offline copies,
+ *                                              for every release, not only the
+ *                                              current one
  *   5. packages/fds-transformer/.../releases.generated.ts
  *                                              the release map that package ships
  *
@@ -67,10 +69,11 @@ const ENTITIES = [
   // RFC-008 reference these definitions, and flattening copies them into those
   // schemas, so a bundled copy would be dead weight the loader never asks for.
   //
-  // `kind` states that once. The bundle list, the release manifest and the
-  // transformer's entity map all read it, so "is not an entity" and "is not
-  // bundled" cannot come apart — which they could while the only marker here
-  // was a `bundled: false` flag that said nothing about what the schema is.
+  // `kind` states that once. The release manifest reads it, and the bundles and
+  // the transformer's entity map are both derived from the manifest, so "is not
+  // an entity" and "is not bundled" cannot come apart — which they could while
+  // the only marker here was a `bundled: false` flag that said nothing about
+  // what the schema is.
   { name: 'prescription', kind: 'library', path: 'prescription/v1.0.0/prescription.schema.json' },
   // After prescription: workout composes its definitions, and a library must be
   // built before anything that references it.
@@ -84,25 +87,11 @@ const ENTITIES = [
 const kindOf = (declaration) => declaration.kind ?? 'entity';
 
 /**
- * Entities the transformer carries an offline copy of.
- *
- * A library is never one: nothing validates against its root, so the loader
- * would never ask for it.
- */
-const BUNDLED_ENTITIES = ENTITIES.filter((entity) => kindOf(entity) === 'entity');
-
-/**
- * The current FDS release — the newest one published, the one the transformer
- * bundles, and the directory it bundles it under.
+ * The current FDS release — the newest one published.
  *
  * Adding an entity changes what a release *contains*, so it gets a new release
  * name rather than being folded into the last one — a consumer pinned to 1.1.0
  * should not find a workout schema appearing in it.
- *
- * Earlier bundle directories are not regenerated. `v1.0.0`'s exercise and
- * equipment sources no longer exist (D9), `v1.1.0` predates workout and
- * `v1.2.0` predates program; all are checked-in historical artifacts kept for
- * consumers pinned to them.
  */
 const CURRENT_RELEASE = '1.4.0';
 
@@ -450,19 +439,24 @@ async function build(entity) {
  * writes the published schemas, so the transformer's offline copies cannot
  * silently fall behind the URLs they stand in for — a stale bundle rejects data
  * the live schema accepts, which is worse than no bundle at all.
+ *
+ * `members` are the entities that release names, with the version each names —
+ * taken from the release manifest, not from ENTITIES. ENTITIES describes what is
+ * current, and a historical release is by definition not that: release 1.2.0
+ * names workout 1.0.0 and must keep saying so long after 1.1.0 replaced it.
  */
-function renderBundleIndex(release, entities) {
+function renderBundleIndex(release, members) {
   const ident = (name) =>
     name.replace(/-(.)/g, (_, c) => c.toUpperCase()) + 'Schema';
 
-  const imports = entities
+  const imports = members
     .map((e) => `import ${ident(e.name)} from './${e.name}.schema.json' assert { type: 'json' };`)
     .join('\n');
-  const map = entities
+  const map = members
     .map((e) => `  ${key(e.name)}: ${ident(e.name)},`)
     .join('\n');
-  const versions = entities
-    .map((e) => `  ${key(e.name)}: '${versionFromPath(e.path)}',`)
+  const versions = members
+    .map((e) => `  ${key(e.name)}: '${e.version}',`)
     .join('\n');
 
   return `/**
@@ -490,9 +484,18 @@ ${map}
 };
 
 export {
-${entities.map((e) => `  ${ident(e.name)},`).join('\n')}
+${members.map((e) => `  ${ident(e.name)},`).join('\n')}
 };
 `;
+}
+
+/** Every file under the bundled tree, relative to it. */
+async function bundledFiles() {
+  const entries = await readdir(BUNDLED, { recursive: true, withFileTypes: true });
+  return entries
+    .filter((entry) => entry.isFile())
+    .map((entry) => relative(BUNDLED, join(entry.parentPath ?? entry.path, entry.name)))
+    .sort();
 }
 
 // ── integrity ────────────────────────────────────────────────────────────────
@@ -504,25 +507,49 @@ ${entities.map((e) => `  ${ident(e.name)},`).join('\n')}
 //
 // New entries are recorded unfrozen so a schema can be iterated on before it
 // ships. Flipping the flag is a one-line, reviewable diff.
+//
+// `bundles` is the same contract for the one case the published tree cannot
+// carry. Every bundled copy is checked byte for byte against the schema it
+// claims to copy — except a copy of a *withdrawn* version, whose bytes were
+// removed rather than frozen and so no longer exist to compare against. Release
+// 1.0.0 names exercise and equipment 1.0.0; the transformer still ships those
+// bundled copies, because a consumer pinned to 1.0.0 still resolves them
+// offline. A hash is the only thing left that can say they have not changed, so
+// a hash is what is recorded.
+//
+// Only the underivable copies are recorded here. A bundled copy of a version
+// that is still published is gated by being diffed against those bytes, which is
+// strictly stronger — recording its hash as well would be a second copy of a
+// fact, which is the defect this file exists to prevent.
+//
+// Unlike a published schema, a bundled copy is born frozen. There is no period
+// during which it is being iterated on: the release that names it shipped before
+// the copy existed, and the version it copies is already gone.
 
 const INTEGRITY_COMMENT =
   'Generated by scripts/build-schemas.mjs. A frozen entry may never change ' +
   'content — publish a new version instead. Unfreezing is a deliberate, ' +
-  'reviewable edit to this file.';
+  'reviewable edit to this file. "schemas" is keyed by path under ' +
+  'specification/schemas/. "bundles" is keyed by path under ' +
+  'packages/fds-transformer/src/schemas/bundled/ and holds only the copies that ' +
+  'cannot be diffed against a published schema, because the version they copy ' +
+  'was withdrawn and its bytes no longer exist; every other bundled copy is ' +
+  'checked against the published bytes directly and so is not recorded here.';
 
 async function readIntegrity() {
   try {
     return await readJson(INTEGRITY);
   } catch {
-    return { $comment: INTEGRITY_COMMENT, schemas: {} };
+    return { $comment: INTEGRITY_COMMENT, schemas: {}, bundles: {} };
   }
 }
 
-const renderIntegrity = (schemas) =>
+const renderIntegrity = (schemas, bundles) =>
   `${JSON.stringify(
     {
       $comment: INTEGRITY_COMMENT,
       schemas: ordered(schemas),
+      bundles: ordered(bundles),
     },
     null,
     2
@@ -762,6 +789,7 @@ const check = process.argv.includes('--check');
 libraries.set(`${SCHEMA_BASE}${COMMON_REL}`, (await readJson(join(SRC, COMMON_REL))).$defs);
 const integrity = await readIntegrity();
 const recorded = integrity.schemas ?? {};
+const recordedBundles = integrity.bundles ?? {};
 const problems = [];
 
 function report() {
@@ -771,7 +799,9 @@ function report() {
     console.error(
       '\nRun `npm run build:schemas` and commit the result.\n' +
         'Never edit specification/schemas/, specification/releases.json or ' +
-        'src/schemas/bundled/ by hand — edit specification/schema-sources/.'
+        'src/schemas/bundled/ by hand — edit specification/schema-sources/.\n' +
+        'A bundled copy of a withdrawn version is the exception: it cannot be ' +
+        'regenerated, so restore it from history rather than rebuilding.'
     );
   }
   process.exit(1);
@@ -822,6 +852,10 @@ for (const schema of published) {
   }
 
   schema.version = versionFromPath(schema.path);
+  // The bytes this run stands behind for this schema. Bundled copies are taken
+  // from here rather than re-read from disk, so a run that publishes a new
+  // version bundles what it is about to write, not what is still there.
+  schema.bytes = authoritative;
   schema.$id = JSON.parse(authoritative).$id;
   schema.sha256 = sha256(authoritative);
   schema.frozen = recorded[schema.path]?.frozen ?? false;
@@ -863,6 +897,9 @@ if (problems.length) report();
 const { manifest, problems: manifestProblems } = buildManifest(published);
 problems.push(...manifestProblems);
 
+// Nothing after this point can describe releases the manifest failed to build.
+if (problems.length) report();
+
 /**
  * The published mapping schema the package ships, taken from the manifest.
  *
@@ -879,24 +916,128 @@ if (!currentMapping) {
   );
 }
 
+/**
+ * The transformer's offline copies, for *every* release — not only the current
+ * one.
+ *
+ * A bundled copy is what a consumer pinned to that release actually validates
+ * against. Only the current release's copies were ever compared with anything,
+ * so a hand-edit to `bundled/v1.2.0/exercise.schema.json` changed what release
+ * 1.2.0 means and no check disagreed. `check:packages` proves each release
+ * *resolves*, which is a different claim: a corrupted copy resolves perfectly.
+ *
+ * Which entities a release bundles, and at which versions, comes from the
+ * release manifest. Libraries are absent from `releases[].entities` by
+ * construction, which is the whole reason `kind` exists — so nothing here has to
+ * restate that prescription is not bundled.
+ *
+ * The bytes come from the published record for that entity *version*, so the
+ * bundled copy is the same document the URL serves, not a re-render of today's
+ * source. Release 1.2.0 bundles workout 1.0.0; regenerating it from the current
+ * workout source would hand a 1.2.0 consumer a 1.1.0 schema under a 1.0.0 `$id`.
+ *
+ * A withdrawn version has no published bytes left to copy, so its bundled file
+ * is tracked rather than rendered — hashed and frozen in the integrity manifest,
+ * the same arrangement UNGENERATED already has for published schemas that
+ * nothing regenerates.
+ */
+const bundleArtifacts = [];
+/** Bundled copies with nothing to be diffed against: path under BUNDLED. */
+const trackedBundles = [];
+
+for (const [release, { entities }] of Object.entries(manifest.releases)) {
+  const dir = join(BUNDLED, `v${release}`);
+  const members = [];
+
+  for (const [name, version] of Object.entries(entities)) {
+    const withdrawn = manifest.schemas[name]?.versions?.[version]?.status === 'withdrawn';
+    const source = published.find(
+      (schema) => schema.name === name && schema.version === version
+    );
+
+    if (!withdrawn && !source) {
+      // buildManifest already rejects a release naming something unpublished, so
+      // reaching here means the manifest and the traversal disagree.
+      problems.push(
+        `BUNDLE     release ${release} names ${name} ${version}, which is neither published ` +
+          'nor withdrawn — there is nothing for its bundled copy to be a copy of.'
+      );
+      continue;
+    }
+
+    members.push({ name, version });
+    const path = join(dir, `${name}.schema.json`);
+
+    if (source) {
+      bundleArtifacts.push({
+        path,
+        content: source.bytes,
+        note: `bundled copy is not the published ${name} ${version}`,
+      });
+    } else {
+      bundleArtifacts.push({ path, content: null });
+      trackedBundles.push({ path, rel: relative(BUNDLED, path), release, name, version });
+    }
+  }
+
+  bundleArtifacts.push({
+    path: join(dir, 'index.ts'),
+    content: renderBundleIndex(release, members),
+    note: `bundled barrel does not match what release ${release} names`,
+  });
+}
+
+/**
+ * Hash and freeze the copies nothing can be diffed against.
+ *
+ * Read before anything is written, like the published tree's hashes are: these
+ * files are never rewritten, so what is on disk now is what gets recorded.
+ */
+for (const bundle of trackedBundles) {
+  const onDisk = await readFile(bundle.path, 'utf8').catch(() => null);
+  if (onDisk === null) {
+    problems.push(
+      `MISSING    ${relative(ROOT, bundle.path)} — a release bundles ${bundle.name} ` +
+        `${bundle.version}, which is withdrawn, so this copy is the only remaining ` +
+        'record of those bytes and cannot be regenerated.'
+    );
+    continue;
+  }
+  bundle.sha256 = sha256(onDisk);
+  // Born frozen: the release that names it shipped long ago and the version it
+  // copies is already gone, so there is no state in which changing it is right.
+  bundle.frozen = recordedBundles[bundle.rel]?.frozen ?? true;
+}
+
+/**
+ * Nothing may sit in the bundled tree that no release accounts for.
+ *
+ * The same argument as UNTRACKED above, one directory over: a file the loader
+ * can import but that no release names is a schema with no gate on it at all,
+ * and the barrel is not that gate — a stray `exercise.schema.json` under a
+ * release nobody publishes is imported by nothing and checked by nothing.
+ */
+{
+  const owned = new Set(bundleArtifacts.map((artifact) => relative(BUNDLED, artifact.path)));
+  for (const rel of await bundledFiles()) {
+    if (owned.has(rel)) continue;
+    problems.push(
+      `UNBUNDLED  ${relative(ROOT, join(BUNDLED, rel))} — present in the bundled tree but no ` +
+        'release names it.\n' +
+        '             Bundles are derived from specification/releases.json; delete the file, or ' +
+        'add the release that needs it.'
+    );
+  }
+}
+
 /** Every file this run owns. */
-const bundleDir = join(BUNDLED, `v${CURRENT_RELEASE}`);
 const artifacts = [
   ...published.map((schema) => ({
     path: join(OUT, schema.path),
     content: schema.content,
     note: schema.note,
   })),
-  ...BUNDLED_ENTITIES.map((e) => ({
-    path: join(bundleDir, `${e.name}.schema.json`),
-    content: rendered.get(e.name),
-    note: 'bundled copy does not match the published schema',
-  })),
-  {
-    path: join(bundleDir, 'index.ts'),
-    content: renderBundleIndex(CURRENT_RELEASE, BUNDLED_ENTITIES),
-    note: 'bundled barrel does not match the entity set',
-  },
+  ...bundleArtifacts,
   ...(currentMapping
     ? [
         {
@@ -915,6 +1056,11 @@ const artifacts = [
     content: renderIntegrity(
       Object.fromEntries(
         published.map((schema) => [schema.path, { sha256: schema.sha256, frozen: schema.frozen }])
+      ),
+      Object.fromEntries(
+        trackedBundles
+          .filter((bundle) => bundle.sha256)
+          .map((bundle) => [bundle.rel, { sha256: bundle.sha256, frozen: bundle.frozen }])
       )
     ),
     note: 'the integrity manifest does not match the published tree',
@@ -981,12 +1127,44 @@ for (const schema of published) {
   }
 }
 
+// The same two checks for the bundled copies that have no published bytes to be
+// diffed against. Their recorded hash is the only thing standing between a
+// consumer pinned to release 1.0.0 and a schema somebody quietly rewrote.
+for (const bundle of trackedBundles) {
+  const entry = recordedBundles[bundle.rel];
+
+  // Nothing on disk to hash — already reported where it was read.
+  if (!bundle.sha256) continue;
+
+  if (check) {
+    if (!entry) {
+      problems.push(
+        `UNRECORDED ${relative(ROOT, bundle.path)} — absent from the "bundles" section of ` +
+          `${relative(ROOT, INTEGRITY)}. It copies ${bundle.name} ${bundle.version}, which is ` +
+          'withdrawn, so a recorded hash is the only integrity it can have.'
+      );
+    } else if (bundle.sha256 !== entry.sha256) {
+      problems.push(
+        `INTEGRITY  ${relative(ROOT, bundle.path)} — sha256 ${bundle.sha256.slice(0, 12)}… does ` +
+          `not match recorded ${entry.sha256.slice(0, 12)}…${entry.frozen ? ' (frozen)' : ''}`
+      );
+    }
+  } else if (entry?.frozen && entry.sha256 !== bundle.sha256) {
+    problems.push(
+      `FROZEN     ${relative(ROOT, bundle.path)} — content changed but this copy is frozen.\n` +
+        `             It is the offline copy release ${bundle.release} hands consumers for ` +
+        `${bundle.name} ${bundle.version}; a withdrawn version has no newer bytes to move to.\n` +
+        `             Restore it, or unfreeze deliberately in ${relative(ROOT, INTEGRITY)}.`
+    );
+  }
+}
+
 if (problems.length) report();
 
 if (check) {
   console.log(
-    '\nPublished schemas, integrity manifest, release manifest and transformer ' +
-      'bundle all match their sources.'
+    '\nPublished schemas, integrity manifest, release manifest and every ' +
+      "release's transformer bundle all match their sources."
   );
   process.exit(0);
 }
