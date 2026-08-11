@@ -114,6 +114,20 @@ jobs:
           cache: npm
           cache-dependency-path: packages/fds-skill/package-lock.json
 
+      # This job authenticates by trusted publishing — no token, an OIDC
+      # exchange the npm CLI performs automatically at `npm publish`. That
+      # exchange landed in npm 11.5.1 (2025-07-24); every earlier npm just skips
+      # it. Node 20 ships npm 10.8.2 and Node 22 ships npm 10.9.x, both older, so
+      # `node-version: 20` alone leaves the CLI unable to obtain a publish
+      # credential: it sends an unauthenticated PUT and the registry answers
+      # E404 — 404 not 403, by design, so an anonymous caller cannot tell a
+      # package exists. `--provenance` still succeeds because Sigstore signs from
+      # the id-token directly and never touches the registry exchange, which is
+      # why the log shows the signature landing and the write failing right
+      # after it. Install an npm new enough to do the exchange before publishing.
+      - name: Use an npm new enough for trusted publishing
+        run: npm install -g npm@latest
+
       - name: Install dependencies
         run: npm ci
 
