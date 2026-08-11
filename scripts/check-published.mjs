@@ -18,6 +18,10 @@
  *     serves different bytes than the repository froze fails here — the whole
  *     point of freezing.
  *
+ * The release manifest at `/releases.json` is checked too, on weaker terms and
+ * for a reason given where it is done: it is generated rather than frozen, so
+ * what matters is that a deployment has one, not that its bytes never move.
+ *
  * This is NOT part of `npm run verify` and does not gate a pull request. It
  * needs the network and it checks *deployment* rather than the change in hand,
  * so a CDN hiccup must not block a documentation edit. It runs on a schedule and
@@ -48,6 +52,62 @@ async function get(url) {
 
 const problems = [];
 let checked = 0;
+
+// ── the release manifest ─────────────────────────────────────────────────────
+//
+// `/releases.json` is what turns a release name into the entity versions it
+// names. `specification/discovery.md` warns that `spec_version` is not a path
+// segment and that guessing produces URLs nobody published — and until this was
+// served there was nothing a client could read instead, so the only way to
+// follow that advice was to hard-code the answer.
+//
+// Deliberately not hashed and deliberately absent from `.integrity.json`. The
+// manifest is generated and changes every release by design; freezing it would
+// mean a release could not be published without breaking its own freeze. What
+// is checked is that a deployment carries it at all, and that what answers is a
+// manifest rather than a 404 page — nothing on the site links to it, so its
+// absence is silent in a way a schema's would not be.
+//
+// It is also not compared against the repository's copy. This runs on a
+// schedule against production, so between a merge and a deploy the two
+// legitimately differ, and a check that cries stale during every deploy window
+// teaches its reader to ignore it.
+{
+  const url = `${BASE}/releases.json`;
+  try {
+    const { response, body } = await get(url);
+    if (!response.ok) {
+      problems.push(
+        `releases.json: answered ${response.status} ${response.statusText}.\n` +
+          '      A consumer resolving a release name to entity versions has nothing to read.'
+      );
+    } else if (!isJson(response.headers.get('content-type') ?? '')) {
+      problems.push(
+        `releases.json: answered 200 with content-type ` +
+          `"${response.headers.get('content-type') || 'none'}", not JSON.`
+      );
+    } else {
+      const manifest = JSON.parse(body.toString('utf8'));
+      const current = manifest.currentRelease;
+      // Self-consistency only. Whether it agrees with this checkout is a
+      // question about deploy timing, not about the deployment being sound.
+      if (typeof current !== 'string') {
+        problems.push('releases.json: no currentRelease — that is not a release manifest.');
+      } else if (!manifest.releases?.[current]) {
+        problems.push(
+          `releases.json: currentRelease is ${current}, which it does not itself describe.`
+        );
+      } else if (!Object.keys(manifest.schemas ?? {}).length) {
+        problems.push('releases.json: describes no schemas.');
+      }
+      checked += 1;
+    }
+  } catch (cause) {
+    problems.push(
+      `releases.json: unreachable — ${cause instanceof Error ? cause.message : cause}`
+    );
+  }
+}
 
 // ── published schemas ────────────────────────────────────────────────────────
 //
@@ -144,5 +204,6 @@ if (problems.length) {
 }
 
 console.log(
-  `  ok    ${checked} published URLs resolve, serve JSON, and match what was frozen.`
+  `  ok    ${checked} published URLs resolve and serve JSON; every frozen schema serves the ` +
+    'bytes it froze, and the release manifest is deployed.'
 );

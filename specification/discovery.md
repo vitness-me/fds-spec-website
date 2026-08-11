@@ -60,6 +60,10 @@ A superseded entity version stays served. `workout/v1.0.0/` is still published a
 
 Providers SHOULD therefore emit `entity_versions`, mapping each supported entity to the entity version they serve. A client that has it can construct schema URLs directly. A client that does not has to resolve the release to its entity versions some other way, and guessing is the failure this field exists to prevent.
 
+That other way is published: **https://spec.vitness.me/releases.json** is the release manifest, and it maps every release to the entity and library versions that release names, alongside the status of every published schema version — `current`, `superseded` or `withdrawn`. It is generated from the published schemas, so it is the same document this specification is checked against. A client given a `spec_version` and nothing else can resolve it there instead of assuming.
+
+Unlike a schema, the manifest is not frozen. It gains a release every time FDS publishes one, which is the whole reason to fetch it rather than to copy it.
+
 <!-- fds:covers releases -->
 
 | Release | Adds |

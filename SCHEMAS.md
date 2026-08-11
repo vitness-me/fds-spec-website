@@ -34,6 +34,8 @@ The list here is `specification/schemas/.integrity.json`, which is what the buil
 
 There is no `muscle/v1.4.0/`, and there will not be unless muscle itself changes. Build URLs from the entity version, not the release. See `specification/discovery.md`.
 
+Both tables above are published, machine-readable, at **https://spec.vitness.me/releases.json** — the release manifest, generated from the schemas themselves. Read it rather than transcribing this page. It is not frozen: it gains a release every time one is published, which is exactly why it is worth fetching.
+
 ## Production URLs (spec.vitness.me)
 
 ### Exercise Schema (v1.1.0)
