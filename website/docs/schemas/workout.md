@@ -73,7 +73,7 @@ From 1.1.0 a set also carries `zone`. Load, reps, tempo and rest were always sta
 
 ## Worked examples
 
-Forty-six sessions are published alongside the schema — one for every set and rep scheme in the coverage matrix, one for every grouping structure from a single exercise to a chipper, and one for every cardio and endurance scenario. Each is indexed in [the fixture README](https://spec.vitness.me/schemas/workout/v1.0.0/README.md).
+Forty-six sessions are published alongside the schema — one for every set and rep scheme in the coverage matrix, one for every grouping structure from a single exercise to a chipper, and one for every cardio and endurance scenario. Each is indexed in [the fixture README](https://spec.vitness.me/schemas/workout/v1.1.0/README.md).
 
 The grouping set is the real test of the claim above: if any structure had needed a field the schema lacked, the abstraction would be cut in the wrong place.
 

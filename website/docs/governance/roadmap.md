@@ -58,6 +58,6 @@ Areas that fit the standard's remit but have no committed design:
 
 Ideas for future RFCs are welcome:
 
-1. **Open a discussion** on [GitHub](https://github.com/FDS-Spec/fds-spec) to propose an area.
+1. **Open an issue** on [GitHub](https://github.com/vitness-me/fds-spec-website/issues) to propose an area.
 2. **Submit an RFC draft** following the [contributing guidelines](/docs/governance/contributing).
 3. **Share implementer feedback** — the most useful contribution is a case the current schemas cannot express. Every one of those found so far has changed the standard.
