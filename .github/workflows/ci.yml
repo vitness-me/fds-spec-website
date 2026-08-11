@@ -101,6 +101,14 @@ jobs:
           npm install --no-save ajv@8 ajv-formats@3
           npm run check:doc-examples
 
+      # The mapping schema closes `additionalProperties`, which is a promise that
+      # it lists every key the transformer reads. It stopped being true: the tool
+      # grew six keys, documented all six, and none of them validated. Nothing
+      # read the schema and the implementation together. This does. Ajv comes
+      # from the step above, which runs in the same job.
+      - name: Verify the mapping schema names what the transformer reads
+        run: npm run check:mapping
+
       # An RFC that promises a field the schema rejects, or a schema that carries
       # one no RFC explains, has shipped here twice. Nothing read both until now.
       - name: Verify RFCs and their schemas agree
