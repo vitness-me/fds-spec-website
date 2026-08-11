@@ -126,19 +126,23 @@ Validate examples with Ajv (Draft 2020‑12):
 
 ```bash
 # Exercise
-npx ajv -s specification/schemas/exercises/v1.1.0/exercise.schema.json \
+npx --package=ajv-cli --package=ajv-formats ajv validate --spec=draft2020 -c ajv-formats \
+  -s specification/schemas/exercises/v1.1.0/exercise.schema.json \
   -d specification/schemas/exercises/v1.1.0/exercise.example.json
 
 # Equipment
-npx ajv -s specification/schemas/equipment/v1.1.0/equipment.schema.json \
+npx --package=ajv-cli --package=ajv-formats ajv validate --spec=draft2020 -c ajv-formats \
+  -s specification/schemas/equipment/v1.1.0/equipment.schema.json \
   -d specification/schemas/equipment/v1.1.0/equipment.example.json
 
 # Muscle
-npx ajv -s specification/schemas/muscle/v1.0.0/muscle.schema.json \
+npx --package=ajv-cli --package=ajv-formats ajv validate --spec=draft2020 -c ajv-formats \
+  -s specification/schemas/muscle/v1.0.0/muscle.schema.json \
   -d specification/schemas/muscle/v1.0.0/muscle.example.json
 
 # Muscle Category
-npx ajv -s specification/schemas/muscle/muscle-category/v1.0.0/muscle-category.schema.json \
+npx --package=ajv-cli --package=ajv-formats ajv validate --spec=draft2020 -c ajv-formats \
+  -s specification/schemas/muscle/muscle-category/v1.0.0/muscle-category.schema.json \
   -d specification/schemas/muscle/muscle-category/v1.0.0/muscle-category.example.json
 ```
 

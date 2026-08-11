@@ -197,7 +197,8 @@ Consumers MAY combine multiple heatmaps by `areaId` within the same `atlasId` us
 
 Validate with Ajv (Draft 2020‑12):
 ```
-npx ajv -s specification/schemas/atlas/v1.0.0/body-atlas.schema.json \
+npx --package=ajv-cli --package=ajv-formats ajv validate --spec=draft2020 -c ajv-formats \
+  -s specification/schemas/atlas/v1.0.0/body-atlas.schema.json \
   -d specification/schemas/atlas/v1.0.0/body-atlas.example.json
 ```
 
