@@ -75,9 +75,14 @@ jobs:
     defaults:
       run:
         working-directory: packages/fds-skill
-    environment:
-      name: npm
-      url: https://www.npmjs.com/package/@vitness/fds-skill
+    # No `environment:`. npm trusted publishing keys the OIDC identity on the
+    # repository and the workflow filename, and this package's trusted publisher
+    # is configured with no environment. Declaring `environment: npm` here put an
+    # `environment` claim in the OIDC token that the registry validated against a
+    # config that expects none, so the signature succeeded and the registry write
+    # was refused with a 404. Publishing to a GitHub environment is only worth
+    # reinstating alongside an environment on the npm side — and a protection rule
+    # to justify it, which the `npm` environment did not have.
     steps:
       - name: Checkout
         uses: actions/checkout@v4
