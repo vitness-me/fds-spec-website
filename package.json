@@ -10,6 +10,7 @@
     "verify": "bash scripts/ci-local.sh",
     "check:metrics": "node scripts/check-metrics-guide.mjs",
     "check:doc-examples": "node scripts/check-doc-examples.mjs --self-test && node scripts/check-doc-examples.mjs",
+    "check:commands": "node scripts/check-doc-commands.mjs --self-test && node scripts/check-doc-commands.mjs",
     "check:mapping": "node scripts/check-mapping-schema.mjs --self-test",
     "check:transform": "node scripts/check-transform.mjs --self-test",
     "check:prescription": "node scripts/check-prescription.mjs",

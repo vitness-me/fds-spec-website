@@ -404,17 +404,22 @@ Complete JSON Schema available at:
 Validate with Ajv (Draft 2020-12):
 
 ```
-npx ajv -s specification/schemas/exercises/v1.1.0/exercise.schema.json \
+npx --package=ajv-cli --package=ajv-formats ajv validate --spec=draft2020 -c ajv-formats \
+  -s specification/schemas/exercises/v1.1.0/exercise.schema.json \
   -d specification/schemas/exercises/v1.1.0/exercise.example.json
 
 # Additional examples (optional):
-npx ajv -s specification/schemas/exercises/v1.1.0/exercise.schema.json \
+npx --package=ajv-cli --package=ajv-formats ajv validate --spec=draft2020 -c ajv-formats \
+  -s specification/schemas/exercises/v1.1.0/exercise.schema.json \
   -d specification/schemas/exercises/v1.1.0/exercise.example.cardio.json
-npx ajv -s specification/schemas/exercises/v1.1.0/exercise.schema.json \
+npx --package=ajv-cli --package=ajv-formats ajv validate --spec=draft2020 -c ajv-formats \
+  -s specification/schemas/exercises/v1.1.0/exercise.schema.json \
   -d specification/schemas/exercises/v1.1.0/exercise.example.mobility.json
-npx ajv -s specification/schemas/exercises/v1.1.0/exercise.schema.json \
+npx --package=ajv-cli --package=ajv-formats ajv validate --spec=draft2020 -c ajv-formats \
+  -s specification/schemas/exercises/v1.1.0/exercise.schema.json \
   -d specification/schemas/exercises/v1.1.0/exercise.example.machine.json
-npx ajv -s specification/schemas/exercises/v1.1.0/exercise.schema.json \
+npx --package=ajv-cli --package=ajv-formats ajv validate --spec=draft2020 -c ajv-formats \
+  -s specification/schemas/exercises/v1.1.0/exercise.schema.json \
   -d specification/schemas/exercises/v1.1.0/exercise.example.unilateral.json
 ```
 

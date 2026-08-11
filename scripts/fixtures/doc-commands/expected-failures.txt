@@ -1,0 +1,17 @@
+# Every way scripts/fixtures/doc-commands/ must fail, one first-line per entry.
+#
+# Recorded rather than counted: a count tells you something broke, a list tells
+# you which rule stopped working. A line disappearing from this set is the
+# failure mode that matters — a rule going quiet looks, from outside, exactly
+# like a rule that works.
+#
+# The two "does not run" entries are the ones that cost the most to keep: they
+# are real executions, and they are also the only entries that prove this check
+# runs commands at all rather than reading them.
+
+scripts/fixtures/doc-commands/bare-npx.md:8: `npx ajv` names no package.
+scripts/fixtures/doc-commands/draft-07.md:9: the documented command does not run.
+scripts/fixtures/doc-commands/global-install.md:7: `ajv` is run directly.
+scripts/fixtures/doc-commands/outside-fence.md:5: an ajv command outside a fenced block.
+scripts/fixtures/doc-commands/undeclared-module.md:8: `-c ajv-formats` names a module npx was not asked to install.
+scripts/fixtures/doc-commands/unknown-format.md:8: the documented command does not run.

@@ -19,12 +19,15 @@ Thanks for helping improve fitness data interoperability! This document explains
 4. Open a PR and request review from Editors.
 
 ## Schema & Example Changes
-- Update the relevant schema under `specification/schemas/...` and keep `$id`/`title`/version consistent.
+- Author the change in `specification/schema-sources/`, then run `npm run build:schemas`. `specification/schemas/` is generated from those sources; never hand‑edit a `*.schema.json` there. `npm run check:schemas` rebuilds and diffs, so a hand‑edit and a source change committed without rebuilding both fail.
+- A published schema is frozen — its bytes never change once released, because a consumer that fetched it yesterday must get the same document today. A change to one ships as a new version directory beside it, and the build refuses to alter a frozen file.
+- The `*.example.json` fixtures and `README.md` beside a generated schema are hand‑written; those you do edit in place.
 - Provide at least one complete example per schema demonstrating real‑world usage.
 - Validate examples locally (Ajv Draft 2020‑12):
 
 ```bash
-npx ajv -s specification/schemas/exercises/v1.1.0/exercise.schema.json \
+npx --package=ajv-cli --package=ajv-formats ajv validate --spec=draft2020 -c ajv-formats \
+  -s specification/schemas/exercises/v1.1.0/exercise.schema.json \
   -d specification/schemas/exercises/v1.1.0/exercise.example.json
 ```
 
