@@ -5,7 +5,6 @@ import Layout from '@theme/Layout';
 import Heading from '@theme/Heading';
 
 import ProblemSection from '@site/src/components/landing/ProblemSection';
-import ComparisonDemo from '@site/src/components/landing/ComparisonDemo';
 import UseCases from '@site/src/components/landing/UseCases';
 import SolutionSection from '@site/src/components/landing/SolutionSection';
 import QuickStart from '@site/src/components/landing/QuickStart';
@@ -93,7 +92,6 @@ export default function Home(): ReactNode {
       <HomepageHeader />
       <main>
         <ProblemSection />
-        <ComparisonDemo />
         <UseCases />
         <SolutionSection />
         <QuickStart />
