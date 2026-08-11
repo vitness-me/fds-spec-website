@@ -104,17 +104,18 @@ npm run serve
 - **`website/static/schemas/`** - Symlink to `../../specification/schemas/`
 - **`website/static/registries/`** - Symlink to `../../specification/registries/`
 
-## Deployment
+## Releasing and deployment
 
-The site automatically deploys to GitHub Pages via GitHub Actions on every push to `main`.
+**[`RELEASE.md`](./RELEASE.md) is the runbook** — merging a specification change,
+cutting a spec release, and publishing either npm package, end to end, with what
+is automatic, what needs a human, and what cannot be undone.
 
-**GitHub Actions Workflow:** `.github/workflows/deploy.yml`
-
-The workflow:
-1. Checks out the repository
-2. Installs Node.js dependencies
-3. Builds the Docusaurus site
-4. Deploys to GitHub Pages
+The short version: a push to `main` does **not** deploy. `.github/workflows/ci.yml`
+runs first, and `.github/workflows/deploy.yml` starts when that run *completes* —
+then builds and publishes the newest commit on `main` that has a successful CI
+run, which is not necessarily the commit that triggered it. A red `main` stops
+deploying. `.github/workflows/published.yml` then verifies that every frozen
+schema URL is serving the bytes it froze.
 
 ## Contributing
 
@@ -122,6 +123,7 @@ We welcome contributions to improve the FDS documentation! Please see:
 
 - [Contributing Guide](./specification/governance/CONTRIBUTING.md) - How to propose changes
 - [Governance](./specification/governance/GOVERNANCE.md) - RFC process and decision-making
+- [Release Runbook](./RELEASE.md) - How a change gets from a branch to a published, frozen URL
 
 To contribute to the website:
 
