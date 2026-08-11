@@ -22,7 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **There is no default remote source for these three registries.** Asking for
   one now fails immediately, naming the illustrative catalog and explaining the
   choice, instead of fetching a URL that 404s. This is deliberate rather than a
-  rename: `specification/registries/README.md` distinguishes a normative
+  rename: the [registries README][registries-readme] distinguishes a normative
   vocabulary (`*.registry.json`) from an illustrative catalog
   (`*.registry.example.json`), and only the second exists for these entities.
   A registry lookup yields an id that lands in your output and then in your
@@ -76,3 +76,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 [Unreleased]: https://github.com/vitness-me/fds-spec-website/compare/fds-transformer@0.1.0...HEAD
 [0.1.0]: https://github.com/vitness-me/fds-spec-website/releases/tag/fds-transformer@0.1.0
+[registries-readme]: https://github.com/vitness-me/fds-spec-website/blob/main/specification/registries/README.md
