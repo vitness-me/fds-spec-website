@@ -262,7 +262,12 @@ async function deriveCounts({ manifest, byPath, currentOf }) {
 
 const PIN = /fds:pin\s+(\S+)/g;
 const COUNT = /fds:count\s+((?:[\w:-]+=\d+\s*)+)/g;
-const COVERS = /fds:covers\s+([\w-]+)/g;
+// The metric is captured even when absent, so `fds:covers` on its own is
+// reported rather than read as a marker that happens to match nothing. A
+// no-op that looks like a check is the failure this rule exists for.
+// A metric must start with a letter, so the closing `-->` of an empty marker is
+// not mistaken for one.
+const COVERS = /fds:covers(?![\w-])[ \t]*([A-Za-z][\w-]*)?/g;
 
 // ── coverage ─────────────────────────────────────────────────────────────────
 
@@ -804,13 +809,14 @@ for (const file of files) {
   for (const match of text.matchAll(COVERS)) {
     if (isShown(match.index)) continue;
     const index = text.slice(0, match.index).split('\n').length - 1;
-    const metric = match[1];
+    const metric = match[1] ?? '';
     coversAsserted += 1;
 
     const strategies = coverage(loaded, file, lines, index);
     if (!Object.hasOwn(strategies, metric)) {
       note(
-        `${file}:${index + 1}: fds:covers names "${metric}", which nothing enumerates.\n` +
+        `${file}:${index + 1}: fds:covers ${metric ? `names "${metric}", which nothing ` +
+          'enumerates' : 'names nothing'}.\n` +
           `    Known: ${Object.keys(strategies).sort().join(', ')}`
       );
       continue;
