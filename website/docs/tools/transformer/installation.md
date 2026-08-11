@@ -26,7 +26,7 @@ node --version
 
 Install globally to use `fds-transformer` from anywhere:
 
-<PackageManagerTabs packages="@vitness/fds-transformer" global />
+<PackageManagerTabs packages="@vitness-me/fds-transformer" global />
 
 Verify installation:
 
@@ -39,7 +39,7 @@ fds-transformer --version
 
 Install as a project dependency:
 
-<PackageManagerTabs packages="@vitness/fds-transformer" />
+<PackageManagerTabs packages="@vitness-me/fds-transformer" />
 
 Run via package manager scripts:
 
@@ -68,9 +68,9 @@ Run directly without installing:
 
 <PackageManagerTabs
   command={{
-    pnpm: "pnpm dlx @vitness/fds-transformer --version",
-    npm: "npx @vitness/fds-transformer --version",
-    yarn: "yarn dlx @vitness/fds-transformer --version",
+    pnpm: "pnpm dlx @vitness-me/fds-transformer --version",
+    npm: "npx @vitness-me/fds-transformer --version",
+    yarn: "yarn dlx @vitness-me/fds-transformer --version",
   }}
 />
 

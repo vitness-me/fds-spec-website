@@ -1,5 +1,5 @@
 {
-  "name": "@vitness/fds-transformer",
+  "name": "@vitness-me/fds-transformer",
   "version": "0.2.0",
   "description": "Transform any source schema to FDS (Fitness Data Standard) format with optional AI enrichment",
   "type": "module",

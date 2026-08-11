@@ -136,13 +136,13 @@ export default function QuickStart(): JSX.Element {
                 <div className={styles.installTabs}>
                   <Tabs groupId="package-manager" queryString>
                     <TabItem value="pnpm" label="pnpm" default>
-                      <code className={styles.codeSnippet}>pnpm add -g @vitness/fds-transformer</code>
+                      <code className={styles.codeSnippet}>pnpm add -g @vitness-me/fds-transformer</code>
                     </TabItem>
                     <TabItem value="npm" label="npm">
-                      <code className={styles.codeSnippet}>npm install -g @vitness/fds-transformer</code>
+                      <code className={styles.codeSnippet}>npm install -g @vitness-me/fds-transformer</code>
                     </TabItem>
                     <TabItem value="yarn" label="yarn">
-                      <code className={styles.codeSnippet}>yarn global add @vitness/fds-transformer</code>
+                      <code className={styles.codeSnippet}>yarn global add @vitness-me/fds-transformer</code>
                     </TabItem>
                   </Tabs>
                 </div>

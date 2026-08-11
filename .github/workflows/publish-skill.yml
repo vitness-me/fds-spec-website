@@ -77,7 +77,7 @@ jobs:
         working-directory: packages/fds-skill
     environment:
       name: npm
-      url: https://www.npmjs.com/package/@vitness/fds-skill
+      url: https://www.npmjs.com/package/@vitness-me/fds-skill
     steps:
       - name: Checkout
         uses: actions/checkout@v4

@@ -8,7 +8,7 @@ sidebar_position: 1
 
 Transform any source schema to FDS (Fitness Data Standard) format with optional AI enrichment.
 
-**Package:** `@vitness/fds-transformer`  
+**Package:** `@vitness-me/fds-transformer`  
 **Version:** 0.1.0  
 **License:** MIT
 
@@ -59,10 +59,10 @@ The FDS Transformer is a CLI tool and library that converts your existing fitnes
 
 ```bash
 # Global install (recommended for frequent use)
-npm install -g @vitness/fds-transformer
+npm install -g @vitness-me/fds-transformer
 
 # Or use npx without installing
-npx @vitness/fds-transformer --help
+npx @vitness-me/fds-transformer --help
 ```
 
 ### Basic Usage
@@ -81,12 +81,12 @@ fds-transformer transform \
 fds-transformer validate --input ./exercise.json
 ```
 
-> **Note:** If you didn't install globally, prefix commands with `npx @vitness/fds-transformer` instead of `fds-transformer`.
+> **Note:** If you didn't install globally, prefix commands with `npx @vitness-me/fds-transformer` instead of `fds-transformer`.
 
 ### Programmatic Usage
 
 ```typescript
-import { Transformer } from '@vitness/fds-transformer';
+import { Transformer } from '@vitness-me/fds-transformer';
 
 const transformer = new Transformer({
   config: './mapping.json',

@@ -1,4 +1,4 @@
-# @vitness/fds-transformer
+# @vitness-me/fds-transformer
 
 Transform any source schema to FDS (Fitness Data Standard) format with optional AI enrichment.
 
@@ -15,9 +15,9 @@ Transform any source schema to FDS (Fitness Data Standard) format with optional 
 ## Installation
 
 ```bash
-npm install @vitness/fds-transformer
+npm install @vitness-me/fds-transformer
 # or
-pnpm add @vitness/fds-transformer
+pnpm add @vitness-me/fds-transformer
 ```
 
 ## Quick Start
@@ -41,7 +41,7 @@ npx fds-transformer init --sample ./sample.json
 ### Programmatic Usage
 
 ```typescript
-import { Transformer } from '@vitness/fds-transformer';
+import { Transformer } from '@vitness-me/fds-transformer';
 
 const transformer = new Transformer({
   config: './mapping.json',
@@ -257,7 +257,7 @@ For simpler use cases, you can still use field-level enrichment:
 Create custom transforms:
 
 ```typescript
-import type { TransformPlugin } from '@vitness/fds-transformer';
+import type { TransformPlugin } from '@vitness-me/fds-transformer';
 
 const myPlugin: TransformPlugin = {
   name: 'my-plugin',
@@ -382,7 +382,7 @@ pnpm dev
 
 ## Related Packages
 
-- `@vitness/fds-skill` - AI skill and knowledge base for FDS
+- `@vitness-me/fds-skill` - AI skill and knowledge base for FDS
 
 ## License
 

@@ -13,7 +13,7 @@ Extend the FDS Transformer with custom transforms using the plugin system. This 
 A plugin is a JavaScript/TypeScript module that exports a `TransformPlugin` object:
 
 ```typescript
-import type { TransformPlugin } from '@vitness/fds-transformer';
+import type { TransformPlugin } from '@vitness-me/fds-transformer';
 
 const myPlugin: TransformPlugin = {
   name: 'my-plugin',
@@ -54,7 +54,7 @@ interface TransformPlugin {
 A transform function receives a value, options, and context:
 
 ```typescript
-import type { TransformFunction } from '@vitness/fds-transformer';
+import type { TransformFunction } from '@vitness-me/fds-transformer';
 
 const customSlug: TransformFunction = (value, options, context) => {
   const str = String(value);
@@ -114,7 +114,7 @@ interface TransformContext {
 
 ```typescript
 // plugins/string-transforms.ts
-import type { TransformPlugin, TransformFunction } from '@vitness/fds-transformer';
+import type { TransformPlugin, TransformFunction } from '@vitness-me/fds-transformer';
 
 const capitalize: TransformFunction = (value) => {
   const str = String(value);
@@ -151,7 +151,7 @@ export default plugin;
 
 ```typescript
 // plugins/fitness-transforms.ts
-import type { TransformPlugin, TransformFunction } from '@vitness/fds-transformer';
+import type { TransformPlugin, TransformFunction } from '@vitness-me/fds-transformer';
 
 /**
  * Infer difficulty level from other fields
@@ -216,7 +216,7 @@ export default plugin;
 
 ```typescript
 // plugins/external-lookup.ts
-import type { TransformPlugin, TransformFunction } from '@vitness/fds-transformer';
+import type { TransformPlugin, TransformFunction } from '@vitness-me/fds-transformer';
 
 /**
  * Look up exercise data from external API
@@ -313,7 +313,7 @@ Reference plugin transforms with the `plugin:transform` syntax:
 Plugins can also provide custom enrichment functions:
 
 ```typescript
-import type { TransformPlugin, EnrichmentFunction } from '@vitness/fds-transformer';
+import type { TransformPlugin, EnrichmentFunction } from '@vitness-me/fds-transformer';
 
 const customEnricher: EnrichmentFunction = async (context, options) => {
   const { source, target } = context;
@@ -366,7 +366,7 @@ import type {
   EnrichmentFunction,
   RegistryEntry,
   MappingConfig,
-} from '@vitness/fds-transformer';
+} from '@vitness-me/fds-transformer';
 ```
 
 Build with:

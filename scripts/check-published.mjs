@@ -184,7 +184,7 @@ for (const [path, { sha256 }] of Object.entries(schemas)) {
 // schema loop gives: a hand-kept list cannot fail to be wrong eventually, and
 // this one was. It named the four normative vocabularies and nothing else, so
 // the three illustrative catalogs beside them — muscles, equipment,
-// muscle-categories — were published and never checked. `@vitness/fds-transformer`
+// muscle-categories — were published and never checked. `@vitness-me/fds-transformer`
 // meanwhile built `<name>.registry.json` for those three, a name that has never
 // existed, and shipped it in every release: its unit test asserted the URL
 // against a mocked fetch, which proves construction and cannot prove existence.

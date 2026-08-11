@@ -4,8 +4,8 @@ Four things get shipped from this repository, and they ship differently:
 
 1. a schema or specification change merged to `main`;
 2. a new FDS **spec release**;
-3. the npm package `@vitness/fds-transformer`;
-4. the npm package `@vitness/fds-skill`.
+3. the npm package `@vitness-me/fds-transformer`;
+4. the npm package `@vitness-me/fds-skill`.
 
 Each flow below says what is automatic, what needs a human, what proves the step
 worked, and what cannot be undone.
@@ -475,7 +475,7 @@ post-deploy run waits before checking and retries twice before failing.
 
 ---
 
-## Flow 3 — publishing `@vitness/fds-transformer`
+## Flow 3 — publishing `@vitness-me/fds-transformer`
 
 ### Order matters
 
@@ -555,8 +555,8 @@ something else and you do not.
 **Proof:**
 
 ```bash
-npm view @vitness/fds-transformer version
-npm view @vitness/fds-transformer dist.attestations
+npm view @vitness-me/fds-transformer version
+npm view @vitness-me/fds-transformer dist.attestations
 ```
 
 The second should show a `provenance` predicate. A published version with no
@@ -566,7 +566,7 @@ attestation did not come from this workflow.
 
 ---
 
-## Flow 4 — publishing `@vitness/fds-skill`
+## Flow 4 — publishing `@vitness-me/fds-skill`
 
 Same shape, different gates, and the difference is the point: the skill is a
 knowledge base an assistant answers from, so a wrong field name in it does not
@@ -630,8 +630,8 @@ against `package.json`, and publishes with provenance.
 **Proof:**
 
 ```bash
-npm view @vitness/fds-skill version
-npm view @vitness/fds-skill dist.attestations
+npm view @vitness-me/fds-skill version
+npm view @vitness-me/fds-skill dist.attestations
 ```
 
 **Irreversible:** immediately.

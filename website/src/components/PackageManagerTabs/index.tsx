@@ -50,15 +50,15 @@ function generateCommands(
  * 
  * @example
  * // With auto-generated install commands
- * <PackageManagerTabs packages="@vitness/fds-transformer" global />
+ * <PackageManagerTabs packages="@vitness-me/fds-transformer" global />
  * 
  * @example
  * // With custom commands
  * <PackageManagerTabs
  *   command={{
- *     npm: 'npx @vitness/fds-transformer --version',
- *     pnpm: 'pnpm dlx @vitness/fds-transformer --version',
- *     yarn: 'yarn dlx @vitness/fds-transformer --version',
+ *     npm: 'npx @vitness-me/fds-transformer --version',
+ *     pnpm: 'pnpm dlx @vitness-me/fds-transformer --version',
+ *     yarn: 'yarn dlx @vitness-me/fds-transformer --version',
  *   }}
  * />
  */

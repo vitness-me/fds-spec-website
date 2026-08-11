@@ -6,7 +6,7 @@
  * because every gate read the repository. A package is not its repository: it
  * is one tarball, containing the subset of files `files` and npm's own rules
  * let through, resolved by a consumer whose working directory is
- * `node_modules/@vitness/<name>/` and not this checkout. Those two views agree
+ * `node_modules/@vitness-me/<name>/` and not this checkout. Those two views agree
  * right up until they don't, and where they disagree is exactly where the
  * defects were.
  *
@@ -170,7 +170,7 @@ function licenceProblems({ name, json, entries }) {
  * `subpath` is what a consumer writes after the package name, and `condition`
  * the last resolution condition on the way to the file. Both matter, because
  * only one combination has to be loadable JavaScript: the root subpath under a
- * runtime condition. `@vitness/fds-skill/knowledge/schemas.md` is markdown on
+ * runtime condition. `@vitness-me/fds-skill/knowledge/schemas.md` is markdown on
  * purpose — a knowledge pack's subpaths are assets, and a rule that demanded
  * `.js` everywhere would be demanding the package not exist. Likewise `types`
  * resolves for the type checker and is never loaded.

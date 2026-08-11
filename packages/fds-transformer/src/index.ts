@@ -1,5 +1,5 @@
 /**
- * @vitness/fds-transformer
+ * @vitness-me/fds-transformer
  *
  * Transform any source schema to FDS (Fitness Data Standard) format
  * with optional AI enrichment capabilities.

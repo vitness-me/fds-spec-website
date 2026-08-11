@@ -404,7 +404,7 @@ jobs:
           node-version: '20'
           
       - name: Install FDS Transformer
-        run: npm install -g @vitness/fds-transformer
+        run: npm install -g @vitness-me/fds-transformer
         
       - name: Transform exercises
         run: |
@@ -436,7 +436,7 @@ Use the transformer as a library in your Node.js application.
 ### TypeScript Example
 
 ```typescript title="transform-exercises.ts"
-import { Transformer } from '@vitness/fds-transformer';
+import { Transformer } from '@vitness-me/fds-transformer';
 import { readFile, writeFile, mkdir } from 'fs/promises';
 
 async function main() {
@@ -483,7 +483,7 @@ main().catch(console.error);
 ### With AI Enrichment
 
 ```typescript title="transform-with-ai.ts"
-import { Transformer } from '@vitness/fds-transformer';
+import { Transformer } from '@vitness-me/fds-transformer';
 
 async function transformWithAI() {
   const transformer = new Transformer({

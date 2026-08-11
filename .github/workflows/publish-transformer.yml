@@ -78,7 +78,7 @@ jobs:
         working-directory: packages/fds-transformer
     environment:
       name: npm
-      url: https://www.npmjs.com/package/@vitness/fds-transformer
+      url: https://www.npmjs.com/package/@vitness-me/fds-transformer
     steps:
       - name: Checkout
         uses: actions/checkout@v4

@@ -1,4 +1,4 @@
-# @vitness/fds-skill
+# @vitness-me/fds-skill
 
 The Fitness Data Standard as a knowledge pack: the documents an assistant reads
 in order to map a source catalogue onto FDS and to judge whether the result is
@@ -33,13 +33,13 @@ addressed by subpath:
 
 ```js
 // Node resolves the subpath; you read the file yourself.
-const url = import.meta.resolve('@vitness/fds-skill/knowledge/schemas.md');
+const url = import.meta.resolve('@vitness-me/fds-skill/knowledge/schemas.md');
 const text = await readFile(new URL(url), 'utf8');
 ```
 
-The subpaths are `@vitness/fds-skill/SKILL.md`, `@vitness/fds-skill/AGENT.md`,
-and everything under `@vitness/fds-skill/knowledge/`,
-`@vitness/fds-skill/prompts/` and `@vitness/fds-skill/examples/`.
+The subpaths are `@vitness-me/fds-skill/SKILL.md`, `@vitness-me/fds-skill/AGENT.md`,
+and everything under `@vitness-me/fds-skill/knowledge/`,
+`@vitness-me/fds-skill/prompts/` and `@vitness-me/fds-skill/examples/`.
 
 Importing the package itself fails, deliberately and immediately, with
 `ERR_PACKAGE_PATH_NOT_EXPORTED`. It used to name a markdown file as its module
@@ -48,7 +48,7 @@ unknown file extension, from inside whatever was doing the importing.
 
 ## What it is not
 
-Not a validator and not a transformer — those are `@vitness/fds-transformer`,
+Not a validator and not a transformer — those are `@vitness-me/fds-transformer`,
 which ships the schemas bundled for offline use. Not the specification either:
 the normative documents are the RFCs and the published schemas at
 <https://spec.vitness.me>, and this package is a reading of them.

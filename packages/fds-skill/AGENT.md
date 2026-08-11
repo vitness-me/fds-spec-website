@@ -91,7 +91,7 @@ answer itself rather than in a caveat at the end.
 
 Strongest available check first:
 
-1. `npx @vitness/fds-transformer validate --input <file> --entity <entity>`,
+1. `npx @vitness-me/fds-transformer validate --input <file> --entity <entity>`,
    which validates a document against the schema the current release names for
    that entity, works with no network, and exits non-zero when it fails.
 2. Any JSON Schema 2020-12 validator, pointed at the schema URL you resolved
