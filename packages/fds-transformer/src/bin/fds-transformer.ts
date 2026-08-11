@@ -58,6 +58,39 @@ function log(level: LogLevel, message: string): void {
 }
 
 /**
+ * Say why records failed, not just how many.
+ *
+ * Both transform paths reported a count and discarded every error, so a run
+ * that dropped every record printed "Failed: 3" and then "Done!" — and exited
+ * zero. The information needed to fix it was already on each result and simply
+ * never read. A caller who cannot see the reason cannot act on it, and a script
+ * that reads the exit code was being told the run succeeded.
+ *
+ * Returns how many failed, so the caller can set the exit status.
+ */
+function reportFailures(
+  results: Array<{ success: boolean; errors?: Array<{ field?: string; message?: string }> }>,
+  limit = 10
+): number {
+  const failures = results.filter((r) => !r.success);
+  if (failures.length === 0) return 0;
+
+  for (const [index, failure] of failures.slice(0, limit).entries()) {
+    const errors = failure.errors ?? [];
+    const detail = errors.length
+      ? errors.map((e) => `${e.field ?? '/'}: ${e.message ?? 'invalid'}`).join('; ')
+      : 'no error was recorded, which is itself a defect worth reporting';
+    log('error', `  record ${index + 1}: ${detail}`);
+  }
+
+  if (failures.length > limit) {
+    log('error', `  ...and ${failures.length - limit} more.`);
+  }
+
+  return failures.length;
+}
+
+/**
  * Format number with thousand separators
  */
 function formatNumber(n: number): string {
@@ -273,6 +306,10 @@ program
 
     p.intro(pc.bgCyan(pc.black(' FDS Transformer ')));
 
+    // A run that produced no output is not a success, whatever the spinner
+    // said. Set by whichever processing path ran.
+    let producedNothing = false;
+
     try {
       // Load input
       if (!options.input) {
@@ -419,6 +456,8 @@ program
         log('info', `  API Calls: ${formatNumber(result.stats.apiCalls)}`);
         if (result.stats.failed > 0) {
           log('warn', `  Failed: ${formatNumber(result.stats.failed)}`);
+          reportFailures(result.results);
+          producedNothing = result.stats.success === 0;
         }
 
         // Output
@@ -452,12 +491,19 @@ program
         log('info', `  Successful: ${formatNumber(result.summary.successful)}`);
         if (result.summary.failed > 0) {
           log('warn', `  Failed: ${formatNumber(result.summary.failed)}`);
+          reportFailures(result.results);
+          producedNothing = result.summary.successful === 0;
         }
 
         // Output
         if (!options.dryRun) {
           await writeOutput(fs, result.results, config, outputDir, options);
         }
+      }
+
+      if (producedNothing) {
+        p.outro(pc.red('Nothing was produced.'));
+        process.exit(1);
       }
 
       p.outro(pc.green('Done!'));
@@ -566,23 +612,44 @@ program
       const schemaManager = new SchemaManager();
       await schemaManager.loadVersion(options.version);
 
-      const result = await schemaManager.validate(
-        data,
-        options.entity,
-        options.version
-      );
+      // `transform` writes an array when it is given an array, which is the
+      // normal case, so validating its own output reported `_root: must be
+      // object` — a message about the file's shape that reads as a message
+      // about the data. Validate each document instead, and say which one.
+      const documents = Array.isArray(data) ? data : [data];
+      let failed = 0;
 
-      if (result.valid) {
-        p.log.success('Validation passed!');
-      } else {
-        p.log.error('Validation failed:');
+      for (const [index, document] of documents.entries()) {
+        const result = await schemaManager.validate(
+          document,
+          options.entity,
+          options.version
+        );
+        if (result.valid) continue;
+
+        failed += 1;
+        const where = Array.isArray(data) ? `[${index}]` : '';
+        p.log.error(`Validation failed${where}:`);
         for (const error of result.errors) {
           p.log.warn(`  ${error.field}: ${error.message}`);
         }
       }
 
-      p.outro(result.valid ? pc.green('Valid!') : pc.red('Invalid'));
-      process.exit(result.valid ? 0 : 1);
+      const valid = failed === 0;
+      if (valid) {
+        p.log.success(
+          documents.length === 1
+            ? 'Validation passed!'
+            : `Validation passed — ${documents.length} documents.`
+        );
+      }
+
+      p.outro(
+        valid
+          ? pc.green('Valid!')
+          : pc.red(`Invalid — ${failed} of ${documents.length}`)
+      );
+      process.exit(valid ? 0 : 1);
     } catch (error) {
       p.cancel(
         `Error: ${error instanceof Error ? error.message : 'Unknown error'}`

@@ -1,0 +1,74 @@
+{
+  "$schema": "../../schemas/mapping.schema.json",
+  "version": "1.0.0",
+  "description": "Round-trip fixture. Every required field is mapped from source, so a valid document falls out of the mapping alone — no enrichment, no network, no model. That is what makes it runnable as a gate.",
+
+  "targetSchema": {
+    "version": "1.1.0",
+    "entity": "exercise"
+  },
+
+  "registries": {
+    "muscles": {
+      "source": "local",
+      "local": "./registries/muscles.registry.example.json"
+    },
+    "equipment": {
+      "source": "local",
+      "local": "./registries/equipment.registry.example.json"
+    }
+  },
+
+  "mappings": {
+    "exerciseId": { "from": null, "transform": "uuid" },
+    "schemaVersion": { "from": null, "default": "1.1.0" },
+
+    "canonical.name": { "from": "name", "transform": "titleCase" },
+    "canonical.slug": { "from": "name", "transform": "slugify" },
+
+    "classification.exerciseType": { "from": "type" },
+    "classification.movement": { "from": "movement" },
+    "classification.mechanics": { "from": "mechanics" },
+    "classification.force": { "from": "force" },
+    "classification.level": { "from": "level" },
+
+    "targets.primary": {
+      "from": "primaryMuscle",
+      "transform": "registryLookup",
+      "options": { "registry": "muscles", "toArray": true }
+    },
+
+    "equipment.required": {
+      "from": "gear",
+      "transform": "registryLookup",
+      "options": { "registry": "equipment", "toArray": true }
+    },
+
+    "metrics.primary.type": { "from": "metricType" },
+    "metrics.primary.unit": { "from": "metricUnit" },
+
+    "media": {
+      "from": "demo",
+      "transform": "toMediaArray",
+      "options": { "type": "image" }
+    },
+
+    "metadata.status": { "from": null, "default": "active" },
+    "metadata.createdAt": { "from": null, "transform": "timestamp" },
+    "metadata.updatedAt": { "from": null, "transform": "timestamp" },
+    "metadata.source": { "from": null, "default": "roundtrip.fixture" },
+    "metadata.externalRefs": {
+      "from": "id",
+      "transform": "template",
+      "options": { "template": [{ "system": "roundtrip", "id": "{{value}}" }] }
+    }
+  },
+
+  "validation": { "enabled": true, "strict": true },
+
+  "output": {
+    "singleFile": true,
+    "singleFileName": "exercises.json",
+    "pretty": true
+  }
+}
