@@ -62,10 +62,30 @@ distinction matters.
 ## Skill Reference
 
 For detailed FDS knowledge, classification decision trees, and transformation guidance, see:
-- `./SKILL.md` - Comprehensive FDS expert skill definition
+- `./SKILL.md` - Every entity's shape, the closed vocabularies, worked transformations
 - `./knowledge/schemas.md` - Every entity's shape, field by field
 - `./knowledge/mappings.md` - Source-to-FDS mapping strategies
 - `./knowledge/enrichment.md` - When and how to fill gaps with AI
+
+For how to *work* rather than what is true, see `./AGENT.md`: resolve a release
+to its entity versions before building a URL, take values from a registry rather
+than inventing them, validate before claiming, and say which claim you could not
+check. It names no version, count or entity, so a release cannot invalidate it —
+`npm run check:skill` enforces that, and excludes it from the coverage rule so
+the knowledge cannot be counted as documented because the method happened to say
+a word.
+
+### Why it is not also on the website
+
+Decided when it was written, and reversible: the website mirrors sources under
+`specification/`, byte for byte, and this document lives in a package. Publishing
+it would mean either a second hand-written copy — the drift this whole package is
+organised against — or moving the source into `specification/` and adding a pair
+to `scripts/check-doc-mirrors.mjs`, which is a bigger change than the readership
+justifies today. Someone who is not installing the package is not running an
+assistant against FDS yet.
+
+If it is ever surfaced, it goes as a mirrored source and never as a second copy.
 
 ## Key Reminders
 

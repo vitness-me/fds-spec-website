@@ -4,6 +4,28 @@ The Fitness Data Standard as a knowledge pack: the documents an assistant reads
 in order to map a source catalogue onto FDS and to judge whether the result is
 valid.
 
+## Two documents, two lifetimes
+
+`SKILL.md` and `knowledge/` are **what is true**: entity shapes, closed
+vocabularies, worked transformations. They are rewritten every release, and a
+gate proves each time that every name in them exists in a published schema and
+that nothing the current release names has been left out.
+
+`AGENT.md` is **how to work**: resolve a release to its entity versions before
+constructing a URL, take values from a registry rather than inventing them,
+validate before claiming and paste what the validator said, say plainly which
+claim you could not check. It quotes no version, no count and no entity name, so
+a release cannot invalidate it — which is why it can be short, and why it almost
+never changes.
+
+The split is the point. A persona restating release facts is a second copy of
+them that nobody rechecks, and this project has spent most of its effort
+deleting exactly that.
+
+`AGENT.md` is plain markdown rather than any one harness's agent format. Paste it
+into a system prompt, a rules file, or whatever agent definition your tooling
+reads; adapt the wrapper and leave the facts where they are.
+
 ## This package has no JavaScript
 
 There is nothing to import. It ships markdown and JSON, and every file is
@@ -15,9 +37,9 @@ const url = import.meta.resolve('@vitness/fds-skill/knowledge/schemas.md');
 const text = await readFile(new URL(url), 'utf8');
 ```
 
-The subpaths are `@vitness/fds-skill/SKILL.md`, everything under
-`@vitness/fds-skill/knowledge/`, `@vitness/fds-skill/prompts/` and
-`@vitness/fds-skill/examples/`.
+The subpaths are `@vitness/fds-skill/SKILL.md`, `@vitness/fds-skill/AGENT.md`,
+and everything under `@vitness/fds-skill/knowledge/`,
+`@vitness/fds-skill/prompts/` and `@vitness/fds-skill/examples/`.
 
 Importing the package itself fails, deliberately and immediately, with
 `ERR_PACKAGE_PATH_NOT_EXPORTED`. It used to name a markdown file as its module
