@@ -55,6 +55,16 @@
  *      taken from the manifest rather than listed here, so a package that gains
  *      an entry point gains coverage without this file being edited.
  *
+ *      The executing half was a claim this sentence made and nothing performed:
+ *      a `bin` was read for its `#!` line and never started. So the version it
+ *      reports was free to be a string literal in the source, and it was — the
+ *      CLI answered `--version` with a hard-coded `0.1.0` that a bump in
+ *      `package.json` would leave behind. A consumer who installs 0.2.0, runs
+ *      the binary and is told 0.1.0 has no way to tell which number is wrong,
+ *      and every bug report from then on names the wrong release. It now runs
+ *      each `bin` with `--version` and requires the answer to be the version
+ *      the tarball's own manifest declares.
+ *
  *   4. SHIPPED PATHS.  A path in a shipped document resolves for the person the
  *      package was shipped to. A candidate that resolves from the repository
  *      root and not from the package root is the defect: the document is
@@ -90,7 +100,15 @@
  */
 
 import { execFileSync } from 'node:child_process';
-import { existsSync, mkdirSync, mkdtempSync, readdirSync, rmSync, symlinkSync } from 'node:fs';
+import {
+  existsSync,
+  mkdirSync,
+  mkdtempSync,
+  readdirSync,
+  rmSync,
+  symlinkSync,
+  writeFileSync,
+} from 'node:fs';
 import { readFile, readdir } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join, posix } from 'node:path';
@@ -282,6 +300,72 @@ function entryPointProblems({ name, json, entries, read }) {
   return problems;
 }
 
+/** Every executable the manifest declares, as `{ name, path }` inside the tarball. */
+function binTargets(json) {
+  const declared =
+    typeof json.bin === 'string' ? { [json.name ?? 'bin']: json.bin } : (json.bin ?? {});
+  return Object.entries(declared).map(([name, target]) => ({
+    name,
+    path: posix.normalize(target.replace(/^\.\//, '')),
+  }));
+}
+
+/**
+ * Rule 3, the half that cannot be decided by reading.
+ *
+ * A shipped executable is asked what version it is, and has to answer with the
+ * version the manifest beside it declares. Two things are settled at once, and
+ * the second is the reason this runs the binary rather than grepping the source:
+ * that the number is derived from the manifest rather than restated, and that
+ * whatever it derives it *from* survived the build — the transformer reads
+ * `../../package.json`, which is the package root from `dist/bin/` and from
+ * `src/bin/` alike, and a change to the output layout would break that silently
+ * in the tarball while every test in the package still passed.
+ *
+ * `--version` is assumed rather than discovered. A command-line tool that cannot
+ * say which version it is has a defect of its own, and the alternative — parsing
+ * the source for a `.version()` call — is the reading this rule exists to stop
+ * doing.
+ */
+function runBinaryProblems({ name, json, root }) {
+  const problems = [];
+
+  for (const bin of binTargets(json)) {
+    let stdout;
+    try {
+      stdout = execFileSync(process.execPath, [join(root, bin.path), '--version'], {
+        cwd: root,
+        encoding: 'utf8',
+        stdio: ['ignore', 'pipe', 'pipe'],
+        timeout: 60_000,
+      });
+    } catch (error) {
+      const detail = `${error.stderr ?? ''}${error.stdout ?? error.message ?? ''}`.trim();
+      problems.push(
+        `${name}: \`${bin.name} --version\` did not run.\n` +
+          `    ${detail.split('\n').slice(0, 4).join('\n    ')}\n` +
+          '    npm links this onto PATH, so this is the first thing a consumer does with the ' +
+          'package.'
+      );
+      continue;
+    }
+
+    const reported = stdout.trim();
+    if (reported !== json.version) {
+      problems.push(
+        `${name}: \`${bin.name} --version\` reports ${JSON.stringify(reported)} and the tarball ` +
+          `declares ${JSON.stringify(json.version)}.\n` +
+          '    The executable is stating a version of its own instead of deriving the one it ' +
+          `was published as. Read it from the manifest — \`package.json\` is two levels above ` +
+          `${bin.path}, in the checkout and in the tarball alike — rather than writing it out ` +
+          'in the source, where a release bump leaves it behind.'
+      );
+    }
+  }
+
+  return problems;
+}
+
 /**
  * Rule 4.
  *
@@ -369,6 +453,56 @@ async function lockfileProblems(name) {
 // on purpose. Each case is a defect that was really on `main`; a run that passes
 // has therefore also failed, four times, in the ways it claims to catch.
 
+/**
+ * The one rule that cannot be handed a fixture, because it runs one.
+ *
+ * A three-line package is written to a temporary directory and executed. Its
+ * `bin` has no dependencies, so nothing is linked and nothing is installed —
+ * which is also what makes this a fair test of the rule rather than of the
+ * transformer.
+ */
+function selfTestBinaries(silent) {
+  const cases = [
+    [
+      'an executable reporting a version its manifest does not declare',
+      '0.2.0',
+      "console.log('0.1.0');",
+      true,
+    ],
+    [
+      'an executable that cannot answer --version at all',
+      '0.2.0',
+      "process.exit(1);",
+      true,
+    ],
+    ['an executable reporting the version it was published as', '0.2.0', "console.log('0.2.0');", false],
+  ];
+
+  const work = mkdtempSync(join(tmpdir(), 'fds-packages-selftest-'));
+  try {
+    for (const [label, version, body, shouldFail] of cases) {
+      const root = join(work, label.replace(/\W+/g, '-'));
+      mkdirSync(join(root, 'bin'), { recursive: true });
+      const json = { name: 'fixture', version, bin: { tool: './bin/tool.js' } };
+      writeFileSync(join(root, 'package.json'), JSON.stringify(json));
+      writeFileSync(join(root, 'bin/tool.js'), `#!/usr/bin/env node\n${body}\n`);
+
+      const found = runBinaryProblems({ name: 'fixture', json, root }).length > 0;
+      if (found !== shouldFail) {
+        silent.push(
+          shouldFail
+            ? `the rules stayed silent on: ${label}.`
+            : `a clean fixture was flagged: ${label}.`
+        );
+      }
+    }
+  } finally {
+    rmSync(work, { recursive: true, force: true });
+  }
+
+  return cases.filter(([, , , shouldFail]) => shouldFail).length;
+}
+
 function selfTest() {
   const repoFiles = new Set(['specification/releases.json', 'specification/rfc/rfc-001.md']);
   const clean = {
@@ -405,8 +539,13 @@ function selfTest() {
   ];
   for (const problem of noise) silent.push(`a clean fixture was flagged: ${problem.split('\n')[0]}`);
 
+  const executed = selfTestBinaries(silent);
+
   if (silent.length) fail(silent);
-  ok(`self-test — the rules fail in all ${cases.length} recorded ways, and pass a clean package`);
+  ok(
+    `self-test — the rules fail in all ${cases.length + executed} recorded ways, and pass a ` +
+      'clean package'
+  );
 }
 
 // ── packing ──────────────────────────────────────────────────────────────────
@@ -476,21 +615,17 @@ async function repositoryFiles() {
   return new Set(listed.split('\n').filter(Boolean));
 }
 
-// ── Rule 5: ask the tarball to do the thing ──────────────────────────────────
+// ── ask the tarball to do the thing ──────────────────────────────────────────
 
 /**
- * Load every release the manifest names, from the extracted tarball, offline.
- *
- * Run in a child process because proving "no network" means replacing `fetch`
- * before the package is imported, and because a package that hangs or exits
- * should not take the gate with it.
+ * Make the extracted tarball runnable.
  *
  * `node_modules` is symlinked from the package directory rather than installed:
  * the point is to run the *shipped* files against the *locked* dependency tree,
  * which is what a consumer gets and what CI tested. Installing from the registry
  * would prove the same thing while needing the network to do it.
  */
-function offlineReleaseProblems({ name, root, manifest, entry }) {
+function linkDependencies(name, root) {
   const modules = join(ROOT, 'packages', name, 'node_modules');
   if (!existsSync(modules)) {
     return [
@@ -503,7 +638,18 @@ function offlineReleaseProblems({ name, root, manifest, entry }) {
   } catch (error) {
     if (error.code !== 'EEXIST') throw error;
   }
+  return [];
+}
 
+/**
+ * Rule 5. Load every release the manifest names, from the extracted tarball,
+ * offline.
+ *
+ * Run in a child process because proving "no network" means replacing `fetch`
+ * before the package is imported, and because a package that hangs or exits
+ * should not take the gate with it.
+ */
+function offlineReleaseProblems({ name, root, manifest, entry }) {
   const expected = {};
   for (const [release, named] of Object.entries(manifest.releases ?? {})) {
     expected[release] = Object.keys(named.entities ?? {}).sort();
@@ -600,6 +746,7 @@ const repoFiles = await repositoryFiles();
 const work = mkdtempSync(join(tmpdir(), 'fds-packages-'));
 const problems = [];
 const summaries = [];
+let binariesRun = 0;
 
 try {
   for (const name of selected) {
@@ -618,9 +765,24 @@ try {
     // held to the same rule without this file being touched.
     const bundles = existsSync(join(ROOT, 'packages', name, 'src/schemas/bundled'));
     const entry = importEntry(described.json);
-    if (bundles && entry) {
+
+    // Both of the rules that run the tarball need its dependencies beside it.
+    // Linked once, on demand: a package that ships neither an executable nor a
+    // bundle never runs, so it is never asked for a `node_modules` it has no
+    // reason to have — the skill declares no dependencies at all.
+    const executables = binTargets(described.json);
+    const runnable = executables.length || (bundles && entry);
+    const linkage = runnable ? linkDependencies(name, root) : [];
+    problems.push(...linkage);
+
+    if (executables.length && !linkage.length) {
+      problems.push(...runBinaryProblems({ ...described, root }));
+      binariesRun += executables.length;
+    }
+
+    if (bundles && entry && !linkage.length) {
       problems.push(...offlineReleaseProblems({ name, root, manifest, entry }));
-    } else if (bundles) {
+    } else if (bundles && !entry) {
       problems.push(
         `${name}: bundles schemas under src/schemas/bundled/ but declares no importable entry ` +
           'point, so the offline claim cannot be tested.\n' +
@@ -642,5 +804,6 @@ if (problems.length) fail(problems);
 const releases = Object.keys(manifest.releases ?? {}).length;
 ok(
   `packaged tarballs — ${summaries.join('; ')}; ` +
-    `all ${releases} releases resolve offline from the published build`
+    `all ${releases} releases resolve offline from the published build; ` +
+    `${binariesRun} executable(s) report the version their tarball declares`
 );

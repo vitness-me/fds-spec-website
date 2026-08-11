@@ -8,6 +8,7 @@
  * and progress tracking.
  */
 
+import { createRequire } from 'node:module';
 import { Command } from 'commander';
 import * as p from '@clack/prompts';
 import pc from 'picocolors';
@@ -20,6 +21,26 @@ import { CheckpointManager, CHECKPOINT_FILENAME } from '../ai/checkpoint-manager
 import type { CostEstimate, EnrichmentProgress, TierName } from '../core/types.js';
 
 const program = new Command();
+
+/**
+ * The version this package was published as, read from the manifest npm ships.
+ *
+ * It used to be a string literal here. A literal is a second copy of a number
+ * that is authoritative somewhere else, which is the defect this repository
+ * spends most of its effort deleting — and this copy had already gone stale in
+ * the only way that matters to a consumer: bump `package.json` and
+ * `fds-transformer --version` keeps reporting the version before it, in an
+ * installed package, where nobody can see the literal that is lying to them.
+ *
+ * `../../package.json` is the package root from both `src/bin/` and `dist/bin/`,
+ * so the same expression resolves in the checkout and in the tarball. npm always
+ * publishes the manifest, so it is there to be read. That the built executable
+ * finds it is not taken on trust: `scripts/check-packages.mjs` runs the packed
+ * binary and compares what it prints with what the manifest declares.
+ */
+const { version: PACKAGE_VERSION } = createRequire(import.meta.url)('../../package.json') as {
+  version: string;
+};
 
 /**
  * Log levels for controlling output verbosity
@@ -271,13 +292,14 @@ program
   .description('Transform source data to FDS (Fitness Data Standard) format')
   // `transform` and `validate` both take `--version <version>`, meaning the FDS
   // release to work against. `.version()` below also registers `--version` on
-  // the program, as a flag that prints the package version and exits.
+  // the program, as a flag that prints this package's own version and exits.
   //
   // By default commander parses the program's own options across the whole
   // argument list, before it hands anything to a subcommand. So
-  // `validate --version 1.1.0` matched the program's flag, printed `0.1.0` and
-  // exited 0 — the documented option never reached the subcommand, and the exit
-  // status said the validation had passed. (`--version=1.1.0` happened to work,
+  // `validate --version 1.1.0` matched the program's flag, printed the package
+  // version and exited 0 — the documented option never reached the subcommand,
+  // and the exit status said the validation had passed. (`--version=1.1.0`
+  // happened to work,
   // because the program's flag takes no value and so the `--flag=value` branch
   // declined it. Two spellings of the same option, one of which silently did
   // nothing, is worse than either behaviour on its own.)
@@ -287,7 +309,7 @@ program
   // `validate`. `fds-transformer --version` still prints the package version,
   // because there is no subcommand in front of it.
   .enablePositionalOptions()
-  .version('0.1.0');
+  .version(PACKAGE_VERSION);
 
 // Transform command
 program
