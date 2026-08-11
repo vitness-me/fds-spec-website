@@ -6,12 +6,14 @@
   "exports": {
     "./package.json": "./package.json",
     "./SKILL.md": "./SKILL.md",
+    "./AGENT.md": "./AGENT.md",
     "./knowledge/*": "./knowledge/*",
     "./prompts/*": "./prompts/*",
     "./examples/*": "./examples/*"
   },
   "files": [
     "SKILL.md",
+    "AGENT.md",
     "knowledge",
     "prompts",
     "examples",

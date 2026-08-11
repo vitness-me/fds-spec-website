@@ -11,6 +11,9 @@ scripts/fixtures/skill/broken.md: 1 name(s) no schema defines:
 scripts/fixtures/skill/broken.md:18: quotes exercises/v1.0.0/exercise.schema.json, which is not published.
 scripts/fixtures/skill/broken.md: points a reader at /specification/rfc/rfc-009-performed-data-model.md, which does not exist.
 scripts/fixtures/skill/broken-example.json: does not validate against exercises/v1.1.0/exercise.schema.json.
+scripts/fixtures/skill/AGENT.md: states 1 version number(s): <version>.
+scripts/fixtures/skill/AGENT.md: names 1 thing(s) the standard defines: loadTarget.
+scripts/fixtures/skill/AGENT.md: quotes 1 published path(s): workout/v1.1.0/workout.schema.json.
 scripts/fixtures/skill: exercise <version> is not documented.
 scripts/fixtures/skill: equipment <version> is not documented.
 scripts/fixtures/skill: muscle <version> is not documented.

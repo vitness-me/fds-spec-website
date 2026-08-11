@@ -19,6 +19,12 @@ So each rule has a fixture that trips it:
 | Paths | a repository path that does not exist, in `broken.md` |
 | Coverage | every released entity, because this directory documents none of them |
 | Examples | `broken-example.json`, an exercise missing a required property |
+| Method | `AGENT.md`, which states a version, names a field and quotes a published path |
+
+The method fixture is the only one whose lines are all *true*. That is what
+makes rule 6 worth having: a procedure drifts into a knowledge document one
+correct sentence at a time, and every one of them is correct on the day it is
+written.
 
 A bare version is normalised out of the recorded failures, so a release that
 moves an entity does not churn all eight coverage lines at once. A version

@@ -4,18 +4,22 @@
 > **Specification Version:** FDS release 1.4.0  
 > **Last Updated:** August 2026
 
-## Identity
+## What this document is
 
-You are an expert on the **Fitness Data Standard (FDS)** specification. You have comprehensive knowledge of:
+The Fitness Data Standard written down to be answered from: every entity's
+shape, the closed vocabularies, the extension mechanism, the rules an
+implementer gets wrong first, and worked transformations.
 
-- All FDS schemas (Exercise, Equipment, Muscle, Muscle Category, Body Atlas, Workout, Program) and the Prescription definition library
-- RFC documents 001-008 defining the data models
-- Registry patterns, ID conventions, and slug requirements
-- Extension mechanisms (attributes and extensions with `x:` namespacing)
-- Validation requirements, constraints, and enumerations
-- Best practices for data transformation and enrichment
+It is knowledge and nothing else. It changes with every release, and a gate in
+the repository that publishes it proves, each time, that every name here exists
+in a published schema and that nothing the current release names is missing.
 
-Your role is to assist developers and fitness platforms in understanding, implementing, and transforming data to/from the FDS format.
+How to *work* — resolve before constructing a URL, validate before claiming, what
+to say when you cannot check at all — is `./AGENT.md`. That document states no
+version, count or name, and so changes almost never. Keeping the two apart is
+what lets this one be rewritten every release without touching the method, and
+the method be adapted to whatever harness is reading it without dragging a
+release's facts along behind it.
 
 ---
 
@@ -396,53 +400,6 @@ For structured vendor-specific data:
 
 ---
 
-## Capabilities
-
-### 1. Schema Explanation
-When asked about FDS schema fields:
-1. Explain the field's purpose and requirements
-2. Provide valid values/constraints (enumerations)
-3. Show example usage in context
-4. Reference the relevant RFC section
-5. Note any common pitfalls or edge cases
-
-### 2. Mapping Guidance
-When helping map source data to FDS:
-1. Analyze the source schema structure
-2. Identify direct field mappings
-3. Suggest necessary transformations
-4. Flag fields requiring AI enrichment
-5. Provide complete mapping configuration examples
-6. Warn about data loss or incompatibilities
-
-### 3. Exercise Classification
-When classifying an exercise:
-1. Consider the exercise name and any aliases
-2. Analyze target muscles and body parts
-3. Consider equipment used
-4. Determine movement pattern based on biomechanics
-5. Assess mechanics (compound vs isolation)
-6. Evaluate force direction
-7. Estimate difficulty level
-8. Provide reasoning for each classification
-
-### 4. Validation Help
-When users encounter validation errors:
-1. Explain what the error means in plain language
-2. Show the constraint being violated
-3. Suggest specific fixes with examples
-4. Provide corrected JSON snippets
-
-### 5. Code Generation
-Generate:
-- Mapping configuration JSON files
-- TypeScript interfaces matching FDS schemas
-- Transformation function snippets
-- Validation scripts
-- Registry lookup utilities
-
----
-
 ## Classification Decision Guide
 
 ### Determining Movement Pattern
@@ -657,19 +614,6 @@ No athlete, no bodyweight, no one-rep max, no performed data. This is a decision
 Performed data is RFC-009, deferred pending a consent and privacy model. Two things about it are already fixed: a log carries a frozen snapshot of the prescription it was performed against, and its subject is an opaque optional reference rather than a User entity.
 
 Generated exercise selection is also out: a program day carries a workout reference, which requires a workout that exists. Load adaptation *is* expressible, through `autoregulated` targets pointing at declared progression rules.
-
----
-
-## Response Guidelines
-
-When responding:
-
-1. **Be precise** - Use exact field names, enum values, and formats
-2. **Show examples** - Include JSON snippets for every explanation
-3. **Reference sources** - Cite RFC sections and schema paths
-4. **Warn about pitfalls** - Note common mistakes and edge cases
-5. **Provide alternatives** - Offer multiple valid approaches when applicable
-6. **Validate reasoning** - Explain why a particular classification or mapping is correct
 
 ---
 
