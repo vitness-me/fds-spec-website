@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
- * The skill's knowledge base describes a standard that exists, and describes all
- * of it.
+ * The skill's knowledge base describes a standard that exists, describes all of
+ * it, and does not hide behind the method document shipped beside it.
  *
  * `packages/fds-skill/` is a knowledge base an assistant answers from. Wrong
  * knowledge there is worse than none: it produces confident, specific, invalid
@@ -29,7 +29,7 @@
  * for *silence* as well as for error, because a knowledge base fails far more
  * often by omitting a thing than by misspelling it.
  *
- * ── Five rules ───────────────────────────────────────────────────────────────
+ * ── Six rules ────────────────────────────────────────────────────────────────
  *
  *   1. NAMES.  Every FDS name the skill states exists in the standard. Names
  *      are taken from prose backticks, from TypeScript property declarations
@@ -54,6 +54,42 @@
  *      published schema or declared, in the file, not to be FDS. The
  *      transformed-exercise example claimed `schemaVersion: "1.0.0"`, a version
  *      that was withdrawn and 404s.
+ *
+ *   6. METHOD.  `AGENT.md` states no fact the knowledge owns. See below.
+ *
+ * ── The method document, and why it is checked backwards ─────────────────────
+ *
+ * The package ships two things with different lifetimes. `SKILL.md` and
+ * `knowledge/` are what is true, rewritten every release and held to rules 1..5.
+ * `AGENT.md` is how to work — resolve before constructing a URL, validate before
+ * claiming, say which claim you could not check — and it changes almost never,
+ * because a procedure has no release.
+ *
+ * That only stays true if the procedure never restates a fact. A persona saying
+ * "FDS has seven entities, currently at release X" is a second copy of the
+ * manifest inside a document nobody thinks to update, which is the bug this
+ * whole repository is organised against. So rule 6 asks the *opposite* question
+ * to rule 1: not "is every name here real" but "is any name here real at all".
+ * Together the two mean the method document backticks no bare identifier, which
+ * is exactly the shape of a document that carries no facts.
+ *
+ * Three things are refused: a version number anywhere in it, a backticked name
+ * any FDS schema defines, and a reference to a published schema or registry
+ * path. All three are derived — from the schemas and from the manifest — so
+ * there is no list here to keep in step with anything.
+ *
+ * What rule 6 cannot see is a count written in words. "Seven entities" names
+ * nothing and versions nothing, and a regular expression that caught it would
+ * catch every other numeral too. It is left uncaught rather than approximated,
+ * on the grounds that a count with no name attached is not knowledge anyone can
+ * act on.
+ *
+ * The other half of this is subtraction, and it matters more than the rule. The
+ * method document is excluded from the vocabulary rule 4 reads, so a name spoken
+ * only there does not count as documented. Without that, adding any second
+ * document to this package silently weakens the coverage gate on the first: the
+ * knowledge could drop `metricType` entirely and stay green because a procedure
+ * happened to use the word.
  *
  * ── What DOCUMENTED means, and why ───────────────────────────────────────────
  *
@@ -118,11 +154,21 @@ import { loadManifest, schemaReferences, filesUnder, ROOT } from './lib/releases
  * A gate that has only ever passed has not been tested, and this one had only
  * ever passed. The fixtures are the failures it exists for: a planted wrong
  * field name, a deleted entity, a withdrawn schema URL, a path that does not
- * exist, and an example that does not validate.
+ * exist, an example that does not validate, and a method document that has
+ * started restating the manifest.
  */
 const SELF_TEST = process.argv.includes('--self-test');
 const SKILL = SELF_TEST ? 'scripts/fixtures/skill' : 'packages/fds-skill';
 const EXPECTED_FAILURES = 'scripts/fixtures/skill/expected-failures.txt';
+
+/**
+ * The method document: how an assistant works, rather than what is true.
+ *
+ * One filename, checked by rule 6 and subtracted from rule 4's vocabulary.
+ * Vendor-neutral on purpose — a harness-specific agent file inside an npm
+ * package bets the package on one vendor's format outliving the standard.
+ */
+const METHOD = 'AGENT.md';
 
 /**
  * How much of the skill is allowed to say "this name is not FDS", exactly.
@@ -223,9 +269,17 @@ for (const file of files) {
   documents.push({ file, path: `${SKILL}/${file}`, text });
 }
 
-/** Every token in the skill, for the coverage question "is this name said". */
+/**
+ * Every token in the *knowledge*, for the coverage question "is this name said".
+ *
+ * The method document is subtracted. It is held to rule 1 like everything else —
+ * a name it states must be real — but a name only it states is not documentation
+ * of anything, and letting it count would mean a procedure's word choice could
+ * satisfy the gate that guards the knowledge.
+ */
 const spoken = new Set();
-for (const { text } of documents) {
+for (const { file, text } of documents) {
+  if (file === METHOD) continue;
   for (const token of text.match(/[A-Za-z0-9_$-]+/g) ?? []) spoken.add(token);
   // A second pass including `/`, so that `n/a` — a real enum member in two
   // schemas — can be found at all. It only ever adds tokens.
@@ -660,6 +714,59 @@ for (const doc of jsonFiles) {
   }
 }
 
+// ── Rule 6: the method document states no fact the knowledge owns ────────────
+
+const method = documents.find((doc) => doc.file === METHOD);
+
+if (!method) {
+  fail(
+    `${SKILL}: has no ${METHOD}.\n` +
+      '    The package ships knowledge and a method, and the method is what an assistant\n' +
+      '    follows when the knowledge does not answer the question. Restore it, or take\n' +
+      `    ${METHOD} out of "files" and "exports" and out of this check in the same diff.`
+  );
+} else {
+  // The whole text rather than prose only. A fenced command in a procedure is
+  // still the procedure talking, and it should be naming a tool rather than a
+  // field.
+  const versions = [...new Set(method.text.match(/\b\d+\.\d+\.\d+\b/g) ?? [])];
+  if (versions.length) {
+    fail(
+      `${SKILL}/${METHOD}: states ${versions.length} version number(s): ${versions.join(', ')}.\n` +
+        '    A procedure has no version. Whatever this number answers, the manifest at\n' +
+        '    https://spec.vitness.me/releases.json answers it correctly and for ever; say\n' +
+        '    to read it there instead.'
+    );
+  }
+
+  const owned = new Set();
+  for (const [, span] of method.text.matchAll(/`([^`\n]+)`/g)) {
+    for (const name of namesIn(span) ?? []) {
+      if (fdsNames.has(name) || schemaNames.has(name)) owned.add(name);
+    }
+  }
+  if (owned.size) {
+    fail(
+      `${SKILL}/${METHOD}: names ${owned.size} thing(s) the standard defines: ` +
+        `${[...owned].sort().join(', ')}.\n` +
+        '    Rule 1 asks whether a name is real; this asks whether it belongs here, and a\n' +
+        '    name the schemas define belongs in the knowledge, once. Say what to do with a\n' +
+        '    field of that kind rather than which field it is.'
+    );
+  }
+
+  const references = schemaReferences(method.text);
+  if (references.length) {
+    fail(
+      `${SKILL}/${METHOD}: quotes ${references.length} published path(s): ` +
+        `${[...new Set(references.map((r) => r.path))].sort().join(', ')}.\n` +
+        '    Every one of them names a version, and the method outlives every version.\n' +
+        '    Say to resolve the entity against the manifest and build the URL from what it\n' +
+        '    returns.'
+    );
+  }
+}
+
 // ── Result ────────────────────────────────────────────────────────────────────
 
 if (SELF_TEST) {
@@ -704,6 +811,7 @@ const vocabularySize = [...schemaOf.values()].reduce(
   0
 );
 console.log(
-  `  ok    skill knowledge — ${files.length} files: every name real, ` +
-    `${schemaOf.size} released schemas documented across ${vocabularySize} names`
+  `  ok    skill knowledge — ${files.length - 1} files: every name real, ` +
+    `${schemaOf.size} released schemas documented across ${vocabularySize} names; ` +
+    `${METHOD} states none of them`
 );
