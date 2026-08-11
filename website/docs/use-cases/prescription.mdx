@@ -1,0 +1,81 @@
+---
+title: Prescribe intensity without ever storing a person
+sidebar_label: Prescription primitives
+description: Express how much load, how many reps, how much rest — as reusable primitives that reference a person's numbers rather than carrying them.
+usecase_promise: Prescribe load, reps and rest as primitives that reference a person's numbers, never carry them.
+usecase_family: prescription
+usecase_audiences: [coach, app-developer]
+usecase_sources:
+  - specification/schemas/prescription/v1.0.0/loadTarget.percent1RM.example.json
+  - specification/schemas/prescription/v1.0.0/loadTarget.rpe.example.json
+  - specification/schemas/prescription/v1.0.0/loadTarget.percent-bodyweight.example.json
+---
+
+import {SpecExample, BeforeAfter, Panel, Audience, NextSteps, Next} from './_shared/UseCase';
+import percent1RM from '../../../specification/schemas/prescription/v1.0.0/loadTarget.percent1RM.example.json';
+import rpe from '../../../specification/schemas/prescription/v1.0.0/loadTarget.rpe.example.json';
+import percentBodyweight from '../../../specification/schemas/prescription/v1.0.0/loadTarget.percent-bodyweight.example.json';
+
+# Prescribe intensity without ever storing a person
+
+> Prescribe load, reps and rest as primitives that reference a person's numbers, never carry them.
+
+<Audience ids={['coach', 'app-developer']} />
+
+<BeforeAfter>
+  <Panel kind="before">
+    Intensity gets flattened into a single number — a weight — that only means
+    something for one athlete on one day. Anything richer (a percentage, an RPE, a
+    velocity target) is re-invented per app, and storing it as an absolute load
+    drags a data subject and their bodyweight or one-rep max into every record.
+  </Panel>
+  <Panel kind="after">
+    A load target is a small, discriminated primitive: a method and the values that
+    method needs. A percentage-of-max references a lift; it does not embed the max.
+    The prescription is complete and shareable, and the personal number it resolves
+    against stays with the person, outside the document.
+  </Panel>
+</BeforeAfter>
+
+## The same slot, three intents
+
+A percentage of the prescribed lift's own one-rep max. Two keys — and no number
+for the max anywhere, because the max belongs to an athlete this document never names.
+
+<SpecExample source="specification/schemas/prescription/v1.0.0/loadTarget.percent1RM.example.json" data={percent1RM}>
+  82.5% of the prescribed exercise's own one-rep max — the percentage-driven case.
+</SpecExample>
+
+An RPE target hands the load decision to the athlete at the bar, so nothing needs
+to be resolved in advance at all.
+
+<SpecExample source="specification/schemas/prescription/v1.0.0/loadTarget.rpe.example.json" data={rpe}>
+  RPE 8, half-points allowed. The athlete picks the load; the prescription states the effort.
+</SpecExample>
+
+And a percentage of bodyweight — deliberately **unresolvable inside FDS**, because
+there is no athlete in the document to read a bodyweight from.
+
+<SpecExample source="specification/schemas/prescription/v1.0.0/loadTarget.percent-bodyweight.example.json" data={percentBodyweight}>
+  60% of bodyweight. The document says what to compute; the person supplies the number,
+  elsewhere.
+</SpecExample>
+
+## How it works
+
+Each primitive is a discriminated shape — a `method` and exactly the fields that
+method requires — so a consumer reads the method and knows what to expect. The
+methods that *would* need personal data reference it instead of carrying it: a
+percentage names a lift, a training-max basis names a slot, a zone names a system.
+The boundary is deliberate and it is the point — a prescription library carries no
+data subject, which is what lets it be published, cached and diffed freely.
+
+Because prescription is a definition library rather than an entity, these fragments
+are validated against the definition they name, not against a document root. A
+provider never advertises "prescription" as something it exports; the primitives
+live inside the workouts and programs that use them.
+
+<NextSteps>
+  <Next to="/docs/use-cases/authoring-workouts">See prescriptions inside a session</Next>
+  <Next to="/docs/schemas/prescription">Read the prescription library</Next>
+</NextSteps>

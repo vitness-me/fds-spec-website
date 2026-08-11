@@ -166,6 +166,12 @@ const config: Config = {
       },
       items: [
         {
+          type: 'docSidebar',
+          sidebarId: 'useCasesSidebar',
+          position: 'left',
+          label: 'Use cases',
+        },
+        {
           type: 'doc',
           docId: 'intro',
           position: 'left',
@@ -220,6 +226,23 @@ const config: Config = {
     footer: {
       style: 'light',
       links: [
+        {
+          title: 'Use cases',
+          items: [
+            {
+              label: 'What can you do with FDS?',
+              to: 'docs/use-cases',
+            },
+            {
+              label: 'Authoring workouts',
+              to: 'docs/use-cases/authoring-workouts',
+            },
+            {
+              label: 'Programming',
+              to: 'docs/use-cases/programming',
+            },
+          ],
+        },
         {
           title: 'Documentation',
           items: [
