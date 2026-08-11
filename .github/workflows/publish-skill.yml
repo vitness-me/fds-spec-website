@@ -51,6 +51,14 @@ jobs:
       # — as a property, a definition, a `const`, an enum member or a
       # recommended value — and every schema URL it quotes must resolve to a
       # published file.
+      # check:skill validates the skill's shipped examples against their
+      # schemas, so it needs Ajv. The schemas job in ci.yml installs it a step
+      # earlier for a different check; this workflow has no such step, so the
+      # dependency was satisfied there by accident and absent here. Install it
+      # where it is used.
+      - name: Install Ajv
+        run: npm install --no-save ajv@8 ajv-formats@3
+
       - name: Verify the skill names fields that exist
         run: npm run check:skill
 
@@ -125,7 +133,16 @@ jobs:
       - name: The tarball contains the skill it claims to
         run: |
           set -euo pipefail
-          tarball="$RUNNER_TEMP/$(npm pack --silent --pack-destination "$RUNNER_TEMP")"
+          # Pack into an empty directory and find the tarball there, rather than
+          # reading npm's stdout. `prepack` runs the build, and the builder
+          # writes to stdout too, so the "filename" came back with a build log
+          # attached to it. `--silent` quiets npm and has no say over what a
+          # lifecycle script prints.
+          dest="$RUNNER_TEMP/pack"
+          rm -rf "$dest" && mkdir -p "$dest"
+          npm pack --pack-destination "$dest" >/dev/null
+          tarball="$(find "$dest" -maxdepth 1 -name '*.tgz')"
+          [ -f "$tarball" ] || { echo "::error::npm pack produced no tarball in $dest"; exit 1; }
           tar -tzf "$tarball" | sort > "$RUNNER_TEMP/contents"
           sed 's/^/  /' "$RUNNER_TEMP/contents"
 
