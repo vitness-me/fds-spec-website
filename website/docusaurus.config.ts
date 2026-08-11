@@ -54,11 +54,18 @@ const config: Config = {
           editUrl:
             'https://github.com/vitness-me/fds-spec-website/tree/main/website/',
 
-          // Versioning configuration
+          // Versioning configuration.
+          //
+          // The label names the current FDS *release*, which is a set of entity
+          // versions rather than a version every entity shares — release 1.4.0
+          // serves exercise, equipment and workout at 1.1.0 and the rest at
+          // 1.0.0. Keep it in step with DEFAULT_SCHEMA_VERSION in
+          // packages/fds-transformer/src/schemas/versions.ts; the two naming
+          // different releases is the site telling readers the wrong thing.
           lastVersion: 'current',
           versions: {
             current: {
-              label: '1.0.0',
+              label: '1.4.0',
               badge: false,  // Don't show version badge on every page
             },
           },

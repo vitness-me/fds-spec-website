@@ -238,7 +238,7 @@ This entity follows the versioning rules in RFC-001 §5. Its published URL is a 
 
 Adding a `mode` is a MINOR change: documents valid under the old version remain valid, because the new mode previously validated through the catch-all branch.
 
-**1.1.0** added `settings` on items and sets, and `zone` on a set. Both are optional additions to closed objects, so every 1.0.0 document remains valid unchanged — but a 1.1.0 document using either is rejected by the 1.0.0 schema, which is what makes this a version rather than an edit. `workout/v1.0.0/workout.schema.json` stays published and frozen; transformer releases 1.2.0 and 1.3.0 declare workout at 1.0.0 and continue to resolve.
+**1.1.0** added `settings` on items and sets, and `zone` on a set. Both are optional additions to closed objects, so every 1.0.0 document remains valid unchanged — but a 1.1.0 document using either is rejected by the 1.0.0 schema, which is what makes this a version rather than an edit. `workout/v1.0.0/workout.schema.json` stays published and frozen; releases 1.2.0 and 1.3.0 declare workout at 1.0.0 and continue to resolve. Release 1.4.0 is the first to declare it at 1.1.0.
 
 Entities version independently. A new workout version does not oblige exercise, equipment or the prescription library to move, and none of their versions oblige this one.
 
@@ -264,7 +264,13 @@ An implementation that resolves a workout against a specific athlete and stores 
 
 ## 9. JSON Schema Reference
 
+`https://spec.vitness.me/schemas/workout/v1.1.0/workout.schema.json`
+
+The superseded version stays served, and a client pinned to a release that declares workout at 1.0.0 keeps fetching it:
+
 `https://spec.vitness.me/schemas/workout/v1.0.0/workout.schema.json`
+
+Neither path segment is the release number. Releases 1.2.0 and 1.3.0 declare workout at 1.0.0 and release 1.4.0 declares it at 1.1.0, so the version to fetch is the entity version the release names — see §6 and `specification/discovery.md`.
 
 ### 9.1. Validation
 
@@ -278,7 +284,7 @@ An upper-body session: a warmup block, a primary block with a top set and back-o
 
 ```json
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "workoutId": "00000000-0000-4000-8000-00000000a001",
   "canonical": { "name": "Upper A", "slug": "upper-a" },
   "classification": {
