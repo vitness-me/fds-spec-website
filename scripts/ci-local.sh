@@ -52,6 +52,11 @@ if run_job transformer; then
   try "tests"         npm run test:run
   try "build"         npm run build
   popd >/dev/null
+
+  # Runs here rather than in the schemas job because it packs the transformer,
+  # and packing runs `prepack`, which needs the dependencies the job above just
+  # installed. It covers both packages: the skill needs neither.
+  try "packages contain what they claim" npm run check:packages
 fi
 
 # ── schemas ────────────────────────────────────────────────────────────────────

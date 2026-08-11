@@ -100,6 +100,20 @@ jobs:
       - name: Verify package
         run: npm pack --dry-run
 
+      # The tarball is opened, and then it is *run*. The list below is a list,
+      # with the failure mode a list has: it named four paths and stayed green
+      # while `dist/schemas/bundled/` held one release out of five, described in
+      # the build as the offline fallback and read by nothing. This step derives
+      # what to expect from specification/releases.json and from the package's
+      # own manifest, so it cannot fall behind the thing it describes, and it
+      # settles the offline claim by disabling `fetch` and asking the packed
+      # build to resolve every release.
+      - name: Verify the package contains what it claims
+        working-directory: .
+        run: |
+          node scripts/check-packages.mjs --self-test
+          node scripts/check-packages.mjs fds-transformer
+
       # `files` lists dist/, but npm packs happily when a listed path is absent
       # — it mentions it in a notice and exits zero. A package published without
       # its entry point installs without complaint and fails at import, in
