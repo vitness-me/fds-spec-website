@@ -107,6 +107,18 @@ jobs:
       - name: Verify package
         run: npm pack --dry-run
 
+      # The packaging rules the list below cannot state: that the tarball
+      # carries the MIT text it declares, that every entry point resolves and
+      # names something Node can load — `main` was `./SKILL.md`, so importing
+      # this package threw inside the consumer's loader — and that no shipped
+      # document points at a path only this checkout has. `CLAUDE.md` shipped
+      # with nineteen of those.
+      - name: Verify the package contains what it claims
+        working-directory: .
+        run: |
+          node scripts/check-packages.mjs --self-test
+          node scripts/check-packages.mjs fds-skill
+
       # `files` lists directories, and npm packs a listed path that does not
       # exist without failing. This package *is* its files — a tarball missing
       # knowledge/ or prompts/ installs cleanly and teaches nothing.

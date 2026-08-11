@@ -49,6 +49,21 @@ jobs:
       - name: Build
         run: npm run build
 
+      # Every packaging defect this repository shipped was invisible to the ten
+      # checks in the job below, because all of them read the repository and a
+      # package is not its repository. This one packs both tarballs and opens
+      # them: the licence text is present, every declared entry point resolves
+      # and loads, no shipped document points at a path only this checkout has,
+      # and — the behavioural one — the packed transformer resolves every
+      # release the manifest names with `fetch` disabled.
+      #
+      # Here rather than in the schemas job because packing runs `prepack`,
+      # which needs the dependencies and the build this job already has. It
+      # covers the skill too; that half needs neither.
+      - name: Verify the packages contain what they claim
+        working-directory: .
+        run: npm run check:packages
+
   schemas:
     name: Schemas — validate examples
     runs-on: blacksmith-4vcpu-ubuntu-2404
