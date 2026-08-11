@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import Link from '@docusaurus/Link';
 import { Lock, Wrench, Puzzle, Smartphone, ChevronDown, ChevronUp, X } from 'lucide-react';
 import styles from './styles.module.css';
 
@@ -12,8 +11,8 @@ interface PainPoint {
 const painPoints: PainPoint[] = [
   {
     icon: <Lock size={20} />,
-    title: 'User Lock-in',
-    description: 'Switch apps, lose everything. Years of PRs, workout history, and progress vanish. Data hostage in proprietary formats.',
+    title: 'Content Lock-in',
+    description: 'Your exercise library, workouts and programs live in one app’s private format. Switch, and you re-enter them by hand or leave them behind.',
   },
   {
     icon: <Wrench size={20} />,
@@ -133,9 +132,9 @@ export default function ProblemSection(): JSX.Element {
         </div>
 
         <p className={styles.outro}>
-          <Link to="/docs/getting-started/overview">
-            See what FDS defines instead →
-          </Link>
+          <a href="#capabilities">
+            So what does FDS actually define? →
+          </a>
         </p>
       </div>
     </section>

@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from '@docusaurus/Link';
-import { Dumbbell, BarChart3, ClipboardList, FileJson, Globe, Users } from 'lucide-react';
+import { Snowflake, ShieldCheck, GitPullRequestArrow } from 'lucide-react';
 import styles from './styles.module.css';
 
 interface FeatureCard {
@@ -8,44 +8,33 @@ interface FeatureCard {
   title: string;
   description: string;
   link: string;
+  linkLabel: string;
 }
 
 const featureCards: FeatureCard[] = [
   {
-    icon: <Dumbbell size={28} />,
-    title: 'Exercise Data Model',
-    description: 'Comprehensive exercise definitions with classification, muscle targets, equipment, and media assets. RFC-001 defines the core structure.',
-    link: '/docs/specifications/rfc-001-exercise-data-model',
+    icon: <Snowflake size={28} />,
+    title: 'Frozen at permanent URLs',
+    description:
+      'Every published schema is pinned by sha256 and never changes. A new version ships in a new directory beside the old one, which stays served — so a client pinned to an older release keeps resolving.',
+    link: '/docs/core-concepts/discovery',
+    linkLabel: 'How versioning works →',
   },
   {
-    icon: <BarChart3 size={28} />,
-    title: 'Registry Entities',
-    description: 'Standardized equipment, muscle, and body atlas models. Shared taxonomies for consistent data exchange across platforms.',
-    link: '/docs/schemas',
+    icon: <ShieldCheck size={28} />,
+    title: 'Versioned per entity',
+    description:
+      'A release names a set of entity versions, not one number they all share. Entities move independently, and the release manifest is generated from the published tree — so what the site says is published is what is published.',
+    link: '/docs/getting-started/overview',
+    linkLabel: 'Read the overview →',
   },
   {
-    icon: <ClipboardList size={28} />,
-    title: 'Workouts and Programs',
-    description: 'Prescription primitives (RFC-006), one prescribed session (RFC-007), and a schedule of sessions over time (RFC-008). Straight sets, supersets, circuits, EMOM, AMRAP and intervals share one schema.',
-    link: '/docs/specifications/rfc-007-workout-data-model',
-  },
-  {
-    icon: <FileJson size={28} />,
-    title: 'JSON Schema',
-    description: 'Draft 2020-12 schemas with validation rules and examples. Programmatic validation for all entity types.',
-    link: '/docs/schemas',
-  },
-  {
-    icon: <Globe size={28} />,
-    title: 'Internationalization',
-    description: 'Multilingual support with BCP 47 language tags. Localized names, descriptions, and aliases for global accessibility.',
-    link: '/docs/core-concepts/internationalization',
-  },
-  {
-    icon: <Users size={28} />,
-    title: 'Open Governance',
-    description: 'Community-driven RFC process with transparent decision-making. Contribute improvements and propose new features.',
+    icon: <GitPullRequestArrow size={28} />,
+    title: 'Open, additive governance',
+    description:
+      'Every entity arrived through a public RFC, and changes are additive by rule. The standard is developed in the open so no single vendor can quietly redefine the format under you.',
     link: '/docs/governance',
+    linkLabel: 'See how it is governed →',
   },
 ];
 
@@ -53,10 +42,34 @@ export default function TrustSection(): JSX.Element {
   return (
     <section className={styles.trustSection}>
       <div className={styles.container}>
-        <h2 className={styles.sectionTitle}>What's in the Standard</h2>
+        <h2 className={styles.sectionTitle}>Built to be depended on</h2>
         <p className={styles.sectionSubtitle}>
-          Everything you need to build interoperable fitness applications
+          A format you integrate once should not move under you.
         </p>
+
+        <div className={styles.statStrip}>
+          <div className={styles.stat}>
+            {/* fds:count entities=7 */}
+            <span className={styles.statNum}>7</span>
+            <span className={styles.statLabel}>entity schemas, each frozen at a permanent URL</span>
+          </div>
+          <div className={styles.stat}>
+            {/* fds:count scenarios=87 */}
+            <span className={styles.statNum}>87</span>
+            <span className={styles.statLabel}>training scenarios, every one with a worked example</span>
+          </div>
+          <div className={styles.stat}>
+            {/* fds:count examples=136 */}
+            <span className={styles.statNum}>136</span>
+            <span className={styles.statLabel}>worked examples shipped beside the schemas</span>
+          </div>
+          <div className={styles.stat}>
+            {/* fds:count rfcs=8 */}
+            <span className={styles.statNum}>8</span>
+            <span className={styles.statLabel}>public RFCs behind the design</span>
+          </div>
+        </div>
+
         <div className={styles.featureGrid}>
           {featureCards.map((card, idx) => (
             <div key={idx} className={styles.featureCard}>
@@ -64,7 +77,7 @@ export default function TrustSection(): JSX.Element {
               <h3 className={styles.cardTitle}>{card.title}</h3>
               <p className={styles.cardDescription}>{card.description}</p>
               <Link to={card.link} className={styles.cardLink}>
-                Learn more →
+                {card.linkLabel}
               </Link>
             </div>
           ))}
