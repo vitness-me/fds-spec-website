@@ -74,3 +74,58 @@ export async function globalVocabulary() {
   }
   return all;
 }
+
+/**
+ * The vocabulary a *reader* of one schema is expected to know: every property
+ * name, every `enum` member, every `const` discriminator.
+ *
+ * This is `vocabularyOf` asked in the other direction. That function answers
+ * "may a document name this?", so it is generous — it includes `$defs` keys and
+ * `examples` entries, because naming either of those is legitimate. This answers
+ * "must documentation teach this?", so it excludes both:
+ *
+ *   - `$defs` keys are internal identifiers. `blockItem` and `setPrescription`
+ *     are how the schema refers to itself; nobody writes them in a document, and
+ *     requiring a knowledge base to recite them teaches nothing.
+ *   - `examples` are *recommended* values, not the vocabulary. Which values are
+ *     recommended is `check:registries`' question, and answering it twice means
+ *     two places to update when a registry gains an entry.
+ *
+ * What is left is exactly the set a document author can get wrong: the names
+ * they type and the closed vocabularies they must choose from.
+ */
+export function documentableVocabulary(schema) {
+  const names = new Set();
+  walk(schema, (node) => {
+    if (node.properties && typeof node.properties === 'object') {
+      for (const key of Object.keys(node.properties)) names.add(key);
+    }
+    if (typeof node.const === 'string') names.add(node.const);
+    if (Array.isArray(node.enum)) {
+      for (const value of node.enum) if (typeof value === 'string') names.add(value);
+    }
+  });
+  return names;
+}
+
+/**
+ * The transformer mapping schema's vocabulary.
+ *
+ * Deliberately not in `SCHEMA_SOURCES`. That list is the *standard*, and the
+ * mapping schema configures a tool — `build-schemas.mjs` marks it `kind:
+ * "tooling"` and no release names it. Folding it into `globalVocabulary` would
+ * quietly let an RFC invent `fuzzyMatch` and pass.
+ *
+ * A knowledge base that teaches transformation does need it, though: a worked
+ * mapping config names `from`, `transform` and `registries`, and none of those
+ * is an FDS field. So it is loaded separately, by the one check that wants it.
+ *
+ * Read from the published copy rather than an authoring source because there is
+ * no source — `build-schemas.mjs` publishes this schema as written.
+ */
+export async function mappingVocabulary() {
+  const schema = JSON.parse(
+    await readFile(join(ROOT, 'specification/schemas/transformer/v1.0.0/mapping.schema.json'), 'utf8')
+  );
+  return vocabularyOf(schema, { includeEnums: true });
+}
