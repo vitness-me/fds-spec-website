@@ -73,7 +73,7 @@ Create a `mapping.json` file to define how source fields map to FDS:
 
 ```json
 {
-  "$schema": "https://spec.vitness.me/schemas/transformer/v1.0.0/mapping.schema.json",
+  "$schema": "https://spec.vitness.me/schemas/transformer/v1.1.0/mapping.schema.json",
   "version": "1.0.0",
   "targetSchema": {
     "version": "1.0.0",

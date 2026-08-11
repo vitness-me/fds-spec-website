@@ -38,7 +38,7 @@ export OPENROUTER_API_KEY=your-api-key-here
 
 Add the `enrichment` section to your `mapping.json`:
 
-```json fds:ignore ALLOWANCE mapping 1.0.0 does not allow the enrichment options the transformer implements (tiers, fields, fallback, rateLimit, checkpoint, enricher); remove when a mapping version publishes them
+```json fds:fragment entity=mapping
 {
   "enrichment": {
     "enabled": true,
@@ -233,7 +233,7 @@ Output:
 
 Configure graceful degradation:
 
-```json fds:ignore ALLOWANCE mapping 1.0.0 does not allow the enrichment options the transformer implements (tiers, fields, fallback, rateLimit, checkpoint, enricher); remove when a mapping version publishes them
+```json fds:fragment entity=mapping
 {
   "enrichment": {
     "fallback": {
@@ -257,11 +257,13 @@ Configure graceful degradation:
 | `useDefaults` | boolean | Use defaults on complete failure |
 | `degradeChain` | object | Model fallback chain |
 
+All four are required together. The transformer uses this object *in place of* its defaults rather than merging with them, so a `fallback` missing `degradeChain` leaves the degradation path undefined at the moment it is needed — on the error path, where it is hardest to notice.
+
 ## Rate Limiting
 
 Control API request rate:
 
-```json fds:ignore ALLOWANCE mapping 1.0.0 does not allow the enrichment options the transformer implements (tiers, fields, fallback, rateLimit, checkpoint, enricher); remove when a mapping version publishes them
+```json fds:fragment entity=mapping
 {
   "enrichment": {
     "rateLimit": {
@@ -285,7 +287,7 @@ Control API request rate:
 
 Enable checkpoint saving for long runs:
 
-```json fds:ignore ALLOWANCE mapping 1.0.0 does not allow the enrichment options the transformer implements (tiers, fields, fallback, rateLimit, checkpoint, enricher); remove when a mapping version publishes them
+```json fds:fragment entity=mapping
 {
   "enrichment": {
     "checkpoint": {

@@ -109,11 +109,14 @@ const CURRENT_RELEASE = '1.4.0';
 /**
  * Published schemas that are served but not generated from an authoring source.
  *
- * `transformer/v1.0.0/mapping.schema.json` describes the transformer's mapping
- * configuration, not an FDS entity: it has no `schema-sources` counterpart and
- * shares no `common` definitions, so there is nothing to flatten. It is still
- * served from spec.vitness.me, so it is still hashed and freezable — it is only
- * exempt from being *rendered*, not from being *tracked*.
+ * The `transformer/vX/mapping.schema.json` versions describe the transformer's
+ * mapping configuration, not an FDS entity: they have no `schema-sources`
+ * counterpart and share no `common` definitions, so there is nothing to flatten.
+ * They are still served from spec.vitness.me, so they are still hashed and
+ * freezable — only exempt from being *rendered*, not from being *tracked*.
+ * v1.0.0 is superseded by v1.1.0 and stays served: it is the `$schema` URL every
+ * configuration written against it names, and no FDS release governs when a
+ * tooling schema may disappear, so nothing else would ever license removing it.
  *
  * `workout/v1.0.0/workout.schema.json` is a *superseded* version. Its authoring
  * source is gone — 1.1.0 replaced it — but the published bytes stay, because a
@@ -133,8 +136,27 @@ const CURRENT_RELEASE = '1.4.0';
  */
 const UNGENERATED = [
   { name: 'mapping', kind: 'tooling', path: 'transformer/v1.0.0/mapping.schema.json' },
+  { name: 'mapping', kind: 'tooling', path: 'transformer/v1.1.0/mapping.schema.json' },
   { name: 'workout', kind: 'entity', path: 'workout/v1.0.0/workout.schema.json' },
 ];
+
+/**
+ * The transformer's shipped copy of the mapping schema.
+ *
+ * `packages/fds-transformer/schemas/mapping.schema.json` is in the package's
+ * `files`, so it is what an editor resolves for anyone who points `$schema` at
+ * their `node_modules`. It was a hand-made copy, and it did what hand-made
+ * copies do: it grew an `allowUnsafeEval` property the published document did
+ * not have, and nothing compared the two, so the package and the standard
+ * disagreed about what a valid configuration is for as long as anyone cared to
+ * look.
+ *
+ * So it is generated from the published bytes, at whichever version the manifest
+ * calls current — the same arrangement `src/schemas/bundled/` already has for
+ * entity schemas, and for the same reason: a copy that can drift eventually
+ * does.
+ */
+const PACKAGED_MAPPING = join(ROOT, 'packages/fds-transformer/schemas/mapping.schema.json');
 
 /**
  * What each FDS release names.
@@ -841,6 +863,22 @@ if (problems.length) report();
 const { manifest, problems: manifestProblems } = buildManifest(published);
 problems.push(...manifestProblems);
 
+/**
+ * The published mapping schema the package ships, taken from the manifest.
+ *
+ * Derived rather than named, so publishing a new mapping version moves the
+ * package's copy with it and there is no second place to remember.
+ */
+const currentMapping = published.find(
+  (schema) => schema.name === 'mapping' && schema.version === manifest.schemas.mapping?.current
+);
+if (!currentMapping) {
+  problems.push(
+    'MAPPING    no published mapping schema at the version the manifest calls current — ' +
+      `${relative(ROOT, PACKAGED_MAPPING)} has nothing to be a copy of.`
+  );
+}
+
 /** Every file this run owns. */
 const bundleDir = join(BUNDLED, `v${CURRENT_RELEASE}`);
 const artifacts = [
@@ -859,6 +897,15 @@ const artifacts = [
     content: renderBundleIndex(CURRENT_RELEASE, BUNDLED_ENTITIES),
     note: 'bundled barrel does not match the entity set',
   },
+  ...(currentMapping
+    ? [
+        {
+          path: PACKAGED_MAPPING,
+          content: currentMapping.onDisk,
+          note: 'the packaged mapping schema is not the published one',
+        },
+      ]
+    : []),
   {
     // Diff-checked like everything else, not merely consulted. Its hashes are an
     // output of this run, so a hand-edit to one is a claim about the tree that

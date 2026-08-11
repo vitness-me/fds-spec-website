@@ -112,14 +112,21 @@
     },
     "mapping": {
       "kind": "tooling",
-      "current": "1.0.0",
+      "current": "1.1.0",
       "versions": {
         "1.0.0": {
-          "status": "current",
+          "status": "superseded",
           "path": "transformer/v1.0.0/mapping.schema.json",
           "$id": "https://spec.vitness.me/schemas/transformer/v1.0.0/mapping.schema.json",
           "frozen": true,
           "sha256": "e5d4b010841bd92ff33171ac9267498cb61040b69f0a667888f9c2cc4660edca"
+        },
+        "1.1.0": {
+          "status": "current",
+          "path": "transformer/v1.1.0/mapping.schema.json",
+          "$id": "https://spec.vitness.me/schemas/transformer/v1.1.0/mapping.schema.json",
+          "frozen": false,
+          "sha256": "0cb92b2beb0404aa6eebab7b3e1d198a5b306606b8a04bea070aa19b18a1cc2c"
         }
       }
     },

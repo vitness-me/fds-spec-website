@@ -74,6 +74,7 @@ if run_job schemas; then
   fi
 
   try "documented examples validate" npm run check:doc-examples
+  try "the mapping schema names what the tool reads" npm run check:mapping
   try "prescription fixtures match their definitions" npm run check:prescription
   try "RFCs and schemas agree" npm run check:rfc
   try "website pages match their sources" npm run check:mirrors
