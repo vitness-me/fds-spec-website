@@ -1,62 +1,95 @@
 ---
 title: JSON Schemas
-description: Interactive JSON Schema viewers for all FDS entities
+description: Every published FDS schema, at the version it is published under
 sidebar_position: 1
 ---
 
 # FDS JSON Schemas
 
-All FDS entities are defined using JSON Schema (Draft 2020-12). Each schema includes examples and validation rules.
+FDS is defined in JSON Schema (Draft 2020-12). Every schema below is published at a frozen URL: the bytes at a version URL never change, and a change ships at a new one.
 
-## Available Schemas
+Ten schemas are published. Seven are entities, one is a definition library, one configures a tool, and one is a superseded entity version that is still served.
 
-### [Exercise Schema](/docs/schemas/exercise)
-The core exercise data model with classification, targets, equipment, and media.
+## Entity versions are not uniform
+
+A release names a *set* of entity versions rather than one version they all share. The current release is **1.4.0**, and it publishes:
+
+| Entity | Version | Schema URL |
+|---|---|---|
+| [Exercise](/docs/schemas/exercise) | 1.1.0 | `/schemas/exercises/v1.1.0/exercise.schema.json` |
+| [Equipment](/docs/schemas/equipment) | 1.1.0 | `/schemas/equipment/v1.1.0/equipment.schema.json` |
+| [Muscle](/docs/schemas/muscle) | 1.0.0 | `/schemas/muscle/v1.0.0/muscle.schema.json` |
+| [Muscle Category](/docs/schemas/muscle-category) | 1.0.0 | `/schemas/muscle/muscle-category/v1.0.0/muscle-category.schema.json` |
+| [Body Atlas](/docs/schemas/body-atlas) | 1.0.0 | `/schemas/atlas/v1.0.0/body-atlas.schema.json` |
+| [Workout](/docs/schemas/workout) | 1.1.0 | `/schemas/workout/v1.1.0/workout.schema.json` |
+| [Program](/docs/schemas/program) | 1.0.0 | `/schemas/program/v1.0.0/program.schema.json` |
+
+There is no `muscle/v1.4.0/`, and there will not be unless muscle itself changes. Build schema URLs from the entity version, never from the release — see the [discovery endpoint](/docs/core-concepts/discovery) for how a provider advertises which entity version it serves.
+
+## The entities
+
+### [Exercise Schema](/docs/schemas/exercise) — v1.1.0
+The core exercise data model with classification, targets, equipment, metrics and media.
 
 **Schema:** `/schemas/exercises/v1.1.0/exercise.schema.json`
 
-### [Equipment Schema](/docs/schemas/equipment)
-Fitness equipment definitions with classification and metadata.
+### [Equipment Schema](/docs/schemas/equipment) — v1.1.0
+Fitness equipment definitions with classification, loading characteristics and metadata.
 
 **Schema:** `/schemas/equipment/v1.1.0/equipment.schema.json`
 
-### [Muscle Schema](/docs/schemas/muscle)
+### [Muscle Schema](/docs/schemas/muscle) — v1.0.0
 Anatomical muscle definitions with heatmap visualization support.
 
 **Schema:** `/schemas/muscle/v1.0.0/muscle.schema.json`
 
-### [Muscle Category Schema](/docs/schemas/muscle-category)
+### [Muscle Category Schema](/docs/schemas/muscle-category) — v1.0.0
 Muscle grouping and categorization structure.
 
 **Schema:** `/schemas/muscle/muscle-category/v1.0.0/muscle-category.schema.json`
 
-### [Body Atlas Schema](/docs/schemas/body-atlas)
+### [Body Atlas Schema](/docs/schemas/body-atlas) — v1.0.0
 Body visualization structure with views and areas.
 
 **Schema:** `/schemas/atlas/v1.0.0/body-atlas.schema.json`
 
-### [Workout Schema](/docs/schemas/workout)
-One prescribed session: blocks of items, an execution mode per block, and a prescription per set.
+### [Workout Schema](/docs/schemas/workout) — v1.1.0
+One prescribed session: blocks of items, an execution mode per block, and a prescription per set. 1.1.0 added per-set intensity zones and machine settings (RFC-007 §6).
 
-**Schema:** `/schemas/workout/v1.0.0/workout.schema.json`
+**Schema:** `/schemas/workout/v1.1.0/workout.schema.json`
 
-### [Program Schema](/docs/schemas/program)
+### [Program Schema](/docs/schemas/program) — v1.0.0
 A schedule of workout references over time: cycles, weeks, day placement, progression and branching.
 
 **Schema:** `/schemas/program/v1.0.0/program.schema.json`
 
 ## Definition libraries
 
-### [Prescription Primitives](/docs/schemas/prescription)
+### [Prescription Primitives](/docs/schemas/prescription) — v1.0.0
 Load, repetitions, tempo, rest, intensity zones, set schemes and progression rules — the definitions workouts and programs compose.
 
 **Schema:** `/schemas/prescription/v1.0.0/prescription.schema.json`
 
-This one is **not an entity**. Its root validates nothing by construction: there is no prescription document to hold, only definitions that other schemas use. You validate against a definition inside it, never against the root.
+This one is **not an entity**, and a provider does not export it. Its root validates nothing by construction: there is no prescription document to hold, only definitions that other schemas use. You validate against a definition inside it — `…/prescription.schema.json#/$defs/loadTarget` — never against the root. A provider that supports workouts already supports prescription; that is what supporting workouts means.
 
-## Entity versions are not uniform
+## Tooling schemas
 
-A release names a *set* of entity versions rather than one version they all share. Release 1.3.0 serves exercise and equipment at 1.1.0 and everything else at 1.0.0 — there is no `muscle/v1.3.0/`, and there will not be unless muscle itself changes. Build schema URLs from the entity version, not the release.
+### Transformer Mapping — v1.0.0
+Configuration for the FDS Transformer: how source fields map onto an FDS entity. It describes a tool's input rather than an entity, so it is documented with the tool.
+
+**Schema:** `/schemas/transformer/v1.0.0/mapping.schema.json` — see [Transformer configuration](/docs/tools/transformer/configuration).
+
+## Superseded, still served
+
+### Workout — v1.0.0
+
+**Schema:** `/schemas/workout/v1.0.0/workout.schema.json`
+
+Superseded by workout 1.1.0. It stays published and stays frozen, because releases 1.2.0 and 1.3.0 declare workout at 1.0.0 and a client pinned to either must keep resolving. Withdrawing it would break those clients, which is exactly what freezing a URL promises not to do.
+
+Do not build against it. New work should use workout 1.1.0; 1.0.0 documents remain valid under it unchanged, since 1.1.0 only added optional fields.
+
+Worked examples live alongside the current version, at `/schemas/workout/v1.1.0/`.
 
 ## Validation
 
