@@ -44,10 +44,12 @@ sidebar_position: 3
 All FDS entities support an optional `externalRefs` array within the `metadata` object. This enables mapping identifiers across different systems and platforms.
 
 **Schema structure:**
-```json
-"externalRefs": [
-  { "system": "string", "id": "string" }
-]
+```json fds:fragment entity=exercise
+{
+  "externalRefs": [
+    { "system": "string", "id": "string" }
+  ]
+}
 ```
 
 **Field requirements:**
@@ -67,7 +69,7 @@ All FDS entities support an optional `externalRefs` array within the `metadata` 
 - Document your system identifiers for consumers
 
 **Example:**
-```json
+```json fds:fragment entity=exercise
 {
   "metadata": {
     "createdAt": "2025-01-01T00:00:00Z",

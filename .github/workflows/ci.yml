@@ -74,6 +74,18 @@ jobs:
       - name: Verify the metrics guide covers the vocabulary
         run: npm run check:metrics
 
+      # Nine checks were green while the landing page shipped an exercise with
+      # no metrics, no classification.force and no categoryId on any muscle.
+      # They all read schemas, sources or fixtures; none read the JSON on the
+      # page. The script proves itself against that recovered document before it
+      # judges anything, so a run that passes has also failed on purpose. Ajv is
+      # installed here rather than reused from the step below because this runs
+      # before it.
+      - name: Verify every documented example validates against its schema
+        run: |
+          npm install --no-save ajv@8 ajv-formats@3
+          npm run check:doc-examples
+
       # An RFC that promises a field the schema rejects, or a schema that carries
       # one no RFC explains, has shipped here twice. Nothing read both until now.
       - name: Verify RFCs and their schemas agree
@@ -99,6 +111,12 @@ jobs:
       # name there produces confident, specific, invalid output.
       - name: Verify the skill names fields that exist
         run: npm run check:skill
+
+      # Every version fact outside specification/releases.json is a second copy
+      # of a number nobody rechecks: a navbar label, a schema listing, an RFC
+      # pointing at the version it just superseded. All of them have drifted.
+      - name: Verify every version claim matches the release manifest
+        run: npm run check:versions
 
       - name: Install Ajv CLI
         run: npm install --no-save ajv@8 ajv-cli@5 ajv-formats@3

@@ -20,6 +20,7 @@ Enable **data portability** and **interoperability** across fitness applications
 
 ## Current Scope
 
+<!-- fds:count rfcs=8 -->
 **In Scope** — eight published RFCs:
 
 - **Exercise data model** (RFC-001)

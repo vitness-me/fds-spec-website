@@ -56,7 +56,7 @@ This specification aims to:
 All compliant muscle category data **MUST** include these fields:
 :::
 
-```json
+```json fds:document entity=muscle-category
 {
   "schemaVersion": "1.0.0",
   "id": "cat.legs",
@@ -77,7 +77,7 @@ All compliant muscle category data **MUST** include these fields:
 
 Commonly supported optional fields that enhance interoperability:
 
-```json
+```json fds:fragment entity=muscle-category partial
 {
   "canonical": {
     "localized": [
@@ -101,7 +101,7 @@ Two extension points for platform-specific data:
 
 #### 3.3.1. Attributes (Structured Extensions)
 For common extensions that may become standardized:
-```json
+```json fds:fragment entity=muscle-category
 {
   "attributes": {
     "complexity": "high",
@@ -112,7 +112,7 @@ For common extensions that may become standardized:
 
 #### 3.3.2. Extensions (Platform-Specific)
 For complex platform-unique data structures:
-```json
+```json fds:fragment entity=muscle-category
 {
   "extensions": {
     "x:programming": {
@@ -129,7 +129,7 @@ For complex platform-unique data structures:
 
 `canonical` carries the category's identity — display name, slug, and optional aliases and localised names. Category names are the ones that appear in a user interface most often, which makes localisation here more visible than anywhere else in the catalog.
 
-```json
+```json fds:fragment entity=muscle-category
 {
   "canonical": {
     "name": "Legs",
@@ -145,7 +145,7 @@ For complex platform-unique data structures:
 
 `classification` carries `tags` for filtering — `major-group` distinguishing the handful of top-level groupings from finer ones, for example. Tags have no structural consequence: a consumer that does not recognise one ignores it.
 
-```json
+```json fds:fragment entity=muscle-category
 {
   "classification": {
     "tags": ["major-group", "compound-movements"]
@@ -157,7 +157,7 @@ For complex platform-unique data structures:
 
 `media` follows the shared definition from RFC-001 — typically an icon or illustration representing the group.
 
-```json
+```json fds:fragment entity=muscle-category
 {
   "media": [
     {
@@ -187,7 +187,7 @@ Following semantic versioning:
 ### 5.3. Schema Evolution Example
 
 Version 1.0.0 → 1.1.0 (Adding optional hierarchy field):
-```json
+```json fds:ignore a hypothetical next version illustrating how an optional field arrives; no published muscle-category schema has hierarchy
 {
   "schemaVersion": "1.1.0",
   "id": "cat.legs",
@@ -261,7 +261,7 @@ npx ajv -s specification/schemas/muscle/muscle-category/v.1.0.0/muscle-category.
 
 Based on reference implementation (`/specification/schemas/muscle/muscle-category/v.1.0.0/muscle-category.example.json`):
 
-```json
+```json fds:document entity=muscle-category
 {
   "schemaVersion": "1.0.0",
   "id": "cat.legs",

@@ -153,7 +153,7 @@ From schema version 1.1.0 a set also carries `zone`. Load, repetitions, tempo an
 
 Two prescriptions in wide use are expressible by nothing else in the model: **partials** (a deliberately reduced range of motion) and **one-and-a-half reps** (a full repetition followed by a half, counted as one). `tempo` governs how fast a repetition is performed, not its range or its composition, and no metric or set scheme reaches them either.
 
-```json
+```json fds:fragment entity=workout
 { "repStyle": { "rangeOfMotion": "partial", "segment": "top" } }
 ```
 
@@ -173,7 +173,7 @@ Some prescriptions are neither load, repetitions, tempo nor rest. A treadmill at
 
 Added at schema version 1.1.0, `settings` is an array of metric shapes with a value attached:
 
-```json
+```json fds:fragment entity=workout
 { "settings": [ { "type": "incline", "unit": "percent", "value": 5 } ] }
 ```
 
@@ -237,6 +237,8 @@ A workout inherits every resolution requirement of the load targets it contains.
 This entity follows the versioning rules in RFC-001 §5. Its published URL is a frozen contract; additions ship at a new version URL.
 
 Adding a `mode` is a MINOR change: documents valid under the old version remain valid, because the new mode previously validated through the catch-all branch.
+
+<!-- fds:pin workout/v1.0.0/workout.schema.json — this document names the superseded version deliberately, in §6 and again in §9, because releases 1.2.0 and 1.3.0 declare workout at 1.0.0 and a client pinned to either must keep resolving it. New work uses 1.1.0. -->
 
 **1.1.0** added `settings` on items and sets, and `zone` on a set. Both are optional additions to closed objects, so every 1.0.0 document remains valid unchanged — but a 1.1.0 document using either is rejected by the 1.0.0 schema, which is what makes this a version rather than an edit. `workout/v1.0.0/workout.schema.json` stays published and frozen; releases 1.2.0 and 1.3.0 declare workout at 1.0.0 and continue to resolve. Release 1.4.0 is the first to declare it at 1.1.0.
 

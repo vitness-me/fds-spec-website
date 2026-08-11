@@ -53,7 +53,7 @@ Run via package manager scripts:
 
 Or add to `package.json`:
 
-```json
+```json fds:ignore an npm package.json excerpt
 {
   "scripts": {
     "transform": "fds-transformer transform --config ./mapping.json",

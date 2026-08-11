@@ -73,6 +73,7 @@ Adaptive programming splits in two, and only one half is portable. **Load adapta
 
 ## Worked examples
 
+<!-- fds:count examples:program=18 scenarios:program=18 -->
 Eighteen programs are published alongside the schema — one for every periodization model in the coverage matrix and one for every scheduling structure, indexed in [the fixture README](https://spec.vitness.me/schemas/program/v1.0.0/README.md).
 
 Not one of them contains a set, a rep or a load. That is the claim above, demonstrated rather than asserted.

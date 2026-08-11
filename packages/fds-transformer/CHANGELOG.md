@@ -38,5 +38,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - ESM-only package with full type definitions
 - Zero runtime dependencies on external schema fetching (bundled fallback)
 
-[Unreleased]: https://github.com/vitness/fds-spec-website/compare/fds-transformer@0.1.0...HEAD
-[0.1.0]: https://github.com/vitness/fds-spec-website/releases/tag/fds-transformer@0.1.0
+[Unreleased]: https://github.com/vitness-me/fds-spec-website/compare/fds-transformer@0.1.0...HEAD
+[0.1.0]: https://github.com/vitness-me/fds-spec-website/releases/tag/fds-transformer@0.1.0

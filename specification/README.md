@@ -60,12 +60,14 @@ External reference mapping (`externalRefs`):
 - Use cases include: data migration, multi‑platform synchronization, legacy system mapping, and third‑party integrations.
 
 Example:
-```json
-"metadata": {
-  "externalRefs": [
-    { "system": "platform-a", "id": "ex-back-squat-001" },
-    { "system": "legacy-system", "id": "squat_barbell_back" }
-  ]
+```json fds:fragment entity=exercise partial
+{
+  "metadata": {
+    "externalRefs": [
+      { "system": "platform-a", "id": "ex-back-squat-001" },
+      { "system": "legacy-system", "id": "squat_barbell_back" }
+    ]
+  }
 }
 ```
 
@@ -158,8 +160,11 @@ Notes:
 - `specification/schemas/` — **generated and published**. Each file is flattened to be self‑contained, so validating one entity never requires fetching another. Never hand‑edit a `*.schema.json`; the examples and READMEs beside them are hand‑written.
   - `exercises/v1.1.0/`, `equipment/v1.1.0/` schema + examples
   - `muscle/v1.0.0/`, `muscle/muscle-category/v1.0.0/`, `atlas/v1.0.0/` schema + examples
-  - `prescription/v1.0.0/` definition library + 69 fixtures
+  <!-- fds:count fixtures:prescription=73 -->
+  - `prescription/v1.0.0/` definition library + 73 fixtures
+  <!-- fds:count examples:workout=46 -->
   - `workout/v1.1.0/` schema + 46 worked sessions; `workout/v1.0.0/` schema only, superseded but still served and frozen
+  <!-- fds:count examples:program=18 -->
   - `program/v1.0.0/` schema + 18 worked programs
   - `.integrity.json` — sha256 and frozen flag per published schema
 - `specification/registries/`

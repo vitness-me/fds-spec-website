@@ -5,7 +5,7 @@
   "policy": "open",
   "governs": [
     {
-      "source": "specification/schema-sources/workout/v1.0.0/workout.schema.json",
+      "source": "specification/schema-sources/workout/v1.1.0/workout.schema.json",
       "pointer": "classification.workoutType"
     }
   ],

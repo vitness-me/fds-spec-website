@@ -8,6 +8,7 @@ sidebar_position: 1
 
 FDS is defined in JSON Schema (Draft 2020-12). Every schema below is published at a frozen URL: the bytes at a version URL never change, and a change ships at a new one.
 
+<!-- fds:count schemas=10 entities=7 libraries=1 tooling=1 superseded=1 -->
 Ten schemas are published. Seven are entities, one is a definition library, one configures a tool, and one is a superseded entity version that is still served.
 
 ## Entity versions are not uniform
@@ -80,6 +81,8 @@ Configuration for the FDS Transformer: how source fields map onto an FDS entity.
 **Schema:** `/schemas/transformer/v1.0.0/mapping.schema.json` — see [Transformer configuration](/docs/tools/transformer/configuration).
 
 ## Superseded, still served
+
+<!-- fds:pin workout/v1.0.0/workout.schema.json — listed on purpose: releases 1.2.0 and 1.3.0 declare workout at 1.0.0, so a client pinned to either must keep resolving this URL. The section says plainly not to build against it. -->
 
 ### Workout — v1.0.0
 

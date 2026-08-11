@@ -18,7 +18,14 @@ const GOOD_SCHEMA = {
   },
 };
 
-/** Unresolvable external `$ref` — the exact shape a naive fds-common split produces. */
+/**
+ * Unresolvable external `$ref` — the exact shape a naive fds-common split produces.
+ *
+ * fds:pin common/v1.0.0/common.schema.json — never published; `common` is an
+ * authoring-only library that the build flattens into each entity, so this URL
+ * has always 404'd. That is the point: the fixture exists to prove Ajv reports a
+ * compilation error instead of passing every record through.
+ */
 const UNRESOLVABLE_REF_SCHEMA = {
   $id: 'https://spec.vitness.me/test/broken.schema.json',
   $schema: 'https://json-schema.org/draft/2020-12/schema',

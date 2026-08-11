@@ -254,7 +254,7 @@ export default plugin;
 
 Add plugins to your `mapping.json`:
 
-```json
+```json fds:fragment entity=mapping
 {
   "plugins": [
     "./plugins/string-transforms.js",
@@ -277,7 +277,7 @@ Add plugins to your `mapping.json`:
 
 Pass options to plugin initialization:
 
-```json
+```json fds:fragment entity=mapping
 {
   "plugins": [
     {
@@ -294,7 +294,7 @@ Pass options to plugin initialization:
 
 Reference plugin transforms with the `plugin:transform` syntax:
 
-```json
+```json fds:fragment entity=mapping
 {
   "mappings": {
     "canonical.description": {
@@ -341,7 +341,7 @@ export default plugin;
 
 Use in configuration:
 
-```json
+```json fds:ignore ALLOWANCE mapping 1.0.0 does not allow the enrichment options the transformer implements (tiers, fields, fallback, rateLimit, checkpoint, enricher); remove when a mapping version publishes them
 {
   "mappings": {
     "extensions.custom": {
@@ -371,8 +371,7 @@ import type {
 
 Build with:
 
-```json
-// tsconfig.json
+```json title="tsconfig.json" fds:ignore a tsconfig.json excerpt
 {
   "compilerOptions": {
     "target": "ES2022",

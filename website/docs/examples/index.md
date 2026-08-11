@@ -35,8 +35,10 @@ The `.example.` in the filename is the distinction — a file named `*.registry.
 
 ## Example Entities
 
+<!-- fds:count examples=136 -->
 136 example documents are published, each served from the same versioned path as the schema it demonstrates. Every one is validated in CI, so an example that stops matching its schema fails the build.
 
+<!-- fds:count examples:exercise=8 -->
 ### Exercise Examples (8)
 - Basic exercise definition
 - Cardio exercise
@@ -47,26 +49,33 @@ The `.example.` in the filename is the distinction — a file named `*.registry.
 - Assisted exercise
 - Velocity-based exercise
 
+<!-- fds:count examples:equipment=2 -->
 ### Equipment Examples (2)
 - Basic equipment definition (a barbell)
 - Stack-loaded equipment, where load is selected in fixed increments
 
+<!-- fds:count examples:muscle=2 -->
 ### Muscle Examples (2)
 - A muscle with heatmap regions and a localized name
 - A second muscle carrying localized aliases alongside its regions
 
+<!-- fds:count examples:muscle-category=1 -->
 ### Muscle Category Examples (1)
 - A top-level category with localized descriptions and classification tags
 
+<!-- fds:count examples:body-atlas=1 -->
 ### Body Atlas Examples (1)
 - An atlas with anterior and posterior views, and named areas bound to selectors within them
 
+<!-- fds:count examples:prescription=58 invalid:prescription=15 -->
 ### Prescription Examples (58)
 Fragments rather than whole documents — one for every discriminator the RFC-006 definition library defines: load targets, rep targets, tempo, rest, intensity zones, set schemes and progression rules. A further 15 negative fixtures pin down what the schema still refuses. Indexed in [the fixture README](https://spec.vitness.me/schemas/prescription/v1.0.0/README.md).
 
+<!-- fds:count examples:workout=46 -->
 ### Workout Examples (46)
 Complete, validating sessions — one for every set and rep scheme in the coverage matrix, one for every grouping structure from a single exercise to a chipper, and one for every cardio and endurance scenario. Indexed in [the fixture README](https://spec.vitness.me/schemas/workout/v1.1.0/README.md).
 
+<!-- fds:count examples:program=18 -->
 ### Program Examples (18)
 Complete, validating programs covering the periodization and scheduling models in RFC-008 — linear, undulating, block, conjugate, percentage waves, deloads, conditional branching and more. Not one of them contains a set, a rep or a load: a program is a schedule of workout references, and the prescription lives in the sessions it points at. Indexed in [the fixture README](https://spec.vitness.me/schemas/program/v1.0.0/README.md).
 
