@@ -171,6 +171,23 @@ const EXPECTED_FAILURES = 'scripts/fixtures/skill/expected-failures.txt';
 const METHOD = 'AGENT.md';
 
 /**
+ * Documents that may not answer the coverage question for the knowledge.
+ *
+ * Rule 4 unions the tokens of everything it reads, so any document added to this
+ * package quietly weakens the gate on the knowledge: a name the knowledge has
+ * stopped explaining stays "documented" because something else happened to use
+ * the word. The method document was subtracted for that reason; the changelog is
+ * subtracted for a stronger one. It is a record of past states — including
+ * states that were wrong — and it is append-only, so a name that appears in it
+ * once satisfies the gate forever and can never be corrected out.
+ *
+ * Both stay subject to the rules that ask whether what they say is *true*: rule
+ * 1 for the changelog, rules 1 and 6 for the method. Only the "is this taught"
+ * question is withheld from them.
+ */
+const NOT_COVERAGE = new Set([METHOD, 'CHANGELOG.md']);
+
+/**
  * How much of the skill is allowed to say "this name is not FDS", exactly.
  *
  * `names` counts declared names across all files, `blocks` fenced blocks that
@@ -272,14 +289,13 @@ for (const file of files) {
 /**
  * Every token in the *knowledge*, for the coverage question "is this name said".
  *
- * The method document is subtracted. It is held to rule 1 like everything else —
- * a name it states must be real — but a name only it states is not documentation
- * of anything, and letting it count would mean a procedure's word choice could
- * satisfy the gate that guards the knowledge.
+ * The method document and the changelog are subtracted — see NOT_COVERAGE. Both
+ * are held to rule 1 like everything else, because a name they state must be
+ * real; a name *only* they state is not documentation of anything.
  */
 const spoken = new Set();
 for (const { file, text } of documents) {
-  if (file === METHOD) continue;
+  if (NOT_COVERAGE.has(file)) continue;
   for (const token of text.match(/[A-Za-z0-9_$-]+/g) ?? []) spoken.add(token);
   // A second pass including `/`, so that `n/a` — a real enum member in two
   // schemas — can be found at all. It only ever adds tokens.
@@ -810,8 +826,9 @@ const vocabularySize = [...schemaOf.values()].reduce(
   (total, { schema }) => total + documentableVocabulary(schema).size,
   0
 );
+const knowledgeFiles = files.filter((file) => !NOT_COVERAGE.has(file)).length;
 console.log(
-  `  ok    skill knowledge — ${files.length - 1} files: every name real, ` +
+  `  ok    skill knowledge — ${knowledgeFiles} files: every name real, ` +
     `${schemaOf.size} released schemas documented across ${vocabularySize} names; ` +
     `${METHOD} states none of them`
 );

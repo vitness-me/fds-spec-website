@@ -1,12 +1,13 @@
 {
   "name": "@vitness/fds-skill",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "FDS (Fitness Data Standard) AI skill and knowledge base for schema transformation and enrichment",
   "type": "module",
   "exports": {
     "./package.json": "./package.json",
     "./SKILL.md": "./SKILL.md",
     "./AGENT.md": "./AGENT.md",
+    "./CHANGELOG.md": "./CHANGELOG.md",
     "./knowledge/*": "./knowledge/*",
     "./prompts/*": "./prompts/*",
     "./examples/*": "./examples/*"
@@ -14,6 +15,7 @@
   "files": [
     "SKILL.md",
     "AGENT.md",
+    "CHANGELOG.md",
     "knowledge",
     "prompts",
     "examples",
