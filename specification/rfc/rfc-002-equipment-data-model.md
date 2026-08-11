@@ -280,7 +280,8 @@ Complete JSON Schema available at:
 Validate with Ajv (Draft 2020-12):
 
 ```
-npx ajv -s specification/schemas/equipment/v1.1.0/equipment.schema.json \
+npx ajv validate --spec=draft2020 -c ajv-formats \
+  -s specification/schemas/equipment/v1.1.0/equipment.schema.json \
   -d specification/schemas/equipment/v1.1.0/equipment.example.json
 ```
 
