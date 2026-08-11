@@ -1,9 +1,11 @@
 # FDS Mapping Strategies
 
+<!-- fds:not-a-field bodyPart, gifUrl, target, category, subcategory, difficulty — field names belonging to the *source* databases this guide maps from; naming them is the point of a mapping table -->
+
 ## Common Source Formats
 
 ### Format 1: Simple Exercise Database
-```json
+```json fds:not-a-field — a source database record, shown so a reader can see what they are mapping from
 {
   "id": "0001",
   "name": "3/4 sit-up",
@@ -30,7 +32,7 @@
 | - | `metrics.primary` | AI enrichment |
 
 ### Format 2: Detailed Exercise with Categories
-```json
+```json fds:not-a-field — a second source format, likewise not FDS
 {
   "exercise_id": "ex-123",
   "title": "Barbell Back Squat",
@@ -98,7 +100,7 @@ Converts to title case for display names.
 Finds matching registry entry with fuzzy matching.
 
 **Options:**
-```json
+```json fds:not-a-field — options for a transformer transform, whose payload the mapping schema leaves open
 {
   "registry": "muscles",
   "matchField": "name",
@@ -147,7 +149,7 @@ Converts URL(s) to FDS media array format.
 Generates or formats UUIDs with optional prefix.
 
 **Options:**
-```json
+```json fds:not-a-field — likewise transform options rather than FDS fields
 {
   "prefix": "ex-",
   "generate": true
@@ -183,7 +185,7 @@ Auto-generates metadata fields.
   "$schema": "https://spec.vitness.me/schemas/transformer/v1.0.0/mapping.schema.json",
   "version": "1.0.0",
   "targetSchema": {
-    "version": "1.0.0",
+    "version": "1.1.0",
     "entity": "exercise"
   },
   "registries": {
@@ -192,7 +194,7 @@ Auto-generates metadata fields.
     "muscleCategories": { "source": "local", "local": "./registries/muscle-categories.registry.json" }
   },
   "mappings": {
-    "schemaVersion": { "default": "1.0.0" },
+    "schemaVersion": { "default": "1.1.0" },
     "exerciseId": { "from": null, "transform": "uuid" },
     "canonical.name": { "from": "name", "transform": "titleCase" },
     "canonical.slug": { "from": "name", "transform": "slugify" },
