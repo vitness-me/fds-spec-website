@@ -38,7 +38,7 @@ The recommended-value registries are published and gated. Conformance test suite
 
 ## Deliberately out of scope
 
-These are not "not yet". They are decisions.
+These are not "not yet". They are decisions — the [Guiding Principles](/docs/governance#guiding-principles) state them as binding constraints; below is what they exclude, and why.
 
 **Athlete identity, bodyweight, one-rep maxes.** FDS carries no personal values, including the ones a personalised program is computed from. A program declares that it references a back-squat training max and how that number is derived; it never carries the number. The accepted consequence is that a fully personalised program cannot round-trip as one self-contained document — export is the plan plus a separate resolution context.
 
