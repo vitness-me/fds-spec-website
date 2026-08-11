@@ -14,7 +14,7 @@ Transform a simple exercise dataset without AI enrichment.
 
 ### Source Data
 
-```json title="exercises.json"
+```json title="exercises.json" fds:ignore input data in a platform’s own format, before any transformation
 [
   {
     "id": "0001",
@@ -136,6 +136,9 @@ fds-transformer transform \
   },
   "classification": {
     "exerciseType": "strength",
+    "movement": "push-horizontal",
+    "mechanics": "compound",
+    "force": "push",
     "level": "intermediate"
   },
   "targets": {
@@ -178,7 +181,7 @@ Transform with tiered AI enrichment for complete exercise data.
 
 ### Mapping Configuration
 
-```json title="mapping-enriched.json"
+```json title="mapping-enriched.json" fds:ignore ALLOWANCE mapping 1.0.0 does not allow the enrichment options the transformer implements (tiers, fields, fallback, rateLimit, checkpoint, enricher); remove when a mapping version publishes them
 {
   "$schema": "https://spec.vitness.me/schemas/transformer/v1.0.0/mapping.schema.json",
   "version": "1.0.0",
@@ -576,7 +579,7 @@ Combine all exercises into one JSON file.
 
 ### Configuration
 
-```json title="mapping.json"
+```json title="mapping.json" fds:fragment entity=mapping
 {
   "output": {
     "singleFile": true,
@@ -597,7 +600,7 @@ fds-transformer transform \
 
 ### Output
 
-```json title="fds-output/all-exercises.json"
+```json title="fds-output/all-exercises.json" fds:ignore elided output — the ellipses stand for the fields omitted for length
 [
   { "exerciseId": "...", "canonical": { "name": "Barbell Bench Press", ... } },
   { "exerciseId": "...", "canonical": { "name": "Back Squat", ... } },

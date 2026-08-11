@@ -160,7 +160,7 @@ From schema version 1.1.0 a set also carries `zone`. Load, repetitions, tempo an
 
 Two prescriptions in wide use are expressible by nothing else in the model: **partials** (a deliberately reduced range of motion) and **one-and-a-half reps** (a full repetition followed by a half, counted as one). `tempo` governs how fast a repetition is performed, not its range or its composition, and no metric or set scheme reaches them either.
 
-```json
+```json fds:fragment entity=workout
 { "repStyle": { "rangeOfMotion": "partial", "segment": "top" } }
 ```
 
@@ -180,7 +180,7 @@ Some prescriptions are neither load, repetitions, tempo nor rest. A treadmill at
 
 Added at schema version 1.1.0, `settings` is an array of metric shapes with a value attached:
 
-```json
+```json fds:fragment entity=workout
 { "settings": [ { "type": "incline", "unit": "percent", "value": 5 } ] }
 ```
 

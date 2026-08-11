@@ -9,7 +9,7 @@ This document defines an optional HTTP discovery endpoint that allows clients to
 - Caching: `Cache-Control: max-age=3600` recommended
 
 ## Response Schema (informal)
-```json
+```json fds:ignore a discovery document, defined by specification/discovery.md rather than by a published schema
 {
   "spec_version": "1.4.0",
   "provider": "Acme Fitness Platform",

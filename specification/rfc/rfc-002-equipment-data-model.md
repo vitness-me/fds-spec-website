@@ -57,7 +57,7 @@ This specification aims to:
 All compliant equipment data **MUST** include these fields:
 :::
 
-```json
+```json fds:document entity=equipment
 {
   "schemaVersion": "1.1.0",
   "id": "eq.barbell",
@@ -78,7 +78,7 @@ All compliant equipment data **MUST** include these fields:
 
 Commonly supported optional fields that enhance interoperability:
 
-```json
+```json fds:fragment entity=equipment partial
 {
   "canonical": {
     "abbreviation": "BB",
@@ -105,7 +105,7 @@ Two extension points for platform-specific data:
 
 #### 3.3.1. Attributes (Structured Extensions)
 For common extensions that may become standardized:
-```json
+```json fds:fragment entity=equipment
 {
   "attributes": {
     "standardWeight": "20kg",
@@ -117,7 +117,7 @@ For common extensions that may become standardized:
 
 #### 3.3.2. Extensions (Platform-Specific)
 For complex platform-unique data structures:
-```json
+```json fds:fragment entity=equipment
 {
   "extensions": {
     "x:gym-management": {
@@ -134,7 +134,7 @@ For complex platform-unique data structures:
 
 `canonical` carries the equipment's identity: a display `name`, a stable `slug`, an optional `description`, optional `aliases`, and `localized` entries giving the name in other languages. Equipment names vary more by region than exercise names do — the same rack is a "power rack", a "squat cage" and a "Kraftkäfig" — so aliases and localisation matter more here than they might appear to.
 
-```json
+```json fds:fragment entity=equipment
 {
   "canonical": {
     "name": "Barbell",
@@ -152,7 +152,7 @@ For complex platform-unique data structures:
 
 `classification` describes what kind of implement this is and how it behaves. `abbreviation` carries the short form used in compact interfaces — "DB" for a dumbbell, "KB" for a kettlebell — which implementations otherwise derive by guessing. `tags` are free-form labels for filtering and carry no structural consequence.
 
-```json
+```json fds:fragment entity=equipment
 {
   "classification": {
     "tags": ["free-weight"]
@@ -164,7 +164,7 @@ For complex platform-unique data structures:
 
 `media` follows the shared definition from RFC-001: a list of assets, each with a type and a URI, illustrating the implement.
 
-```json
+```json fds:fragment entity=equipment
 {
   "media": [
     {
@@ -184,7 +184,7 @@ For complex platform-unique data structures:
 
 The optional `loading` object describes how an implement carries load. It is the authoritative source for plate math and load rounding.
 
-```json
+```json fds:fragment entity=equipment
 {
   "loading": {
     "increment": { "value": 2.5, "unit": "kg" },
@@ -224,7 +224,7 @@ Following semantic versioning:
 ### 5.3. Schema Evolution Example
 
 Version 1.0.0 → 1.1.0 (Adding optional certification field):
-```json
+```json fds:ignore a hypothetical next version illustrating how an optional field arrives; no published equipment schema has certification
 {
   "schemaVersion": "1.1.0",
   "id": "eq.barbell",
@@ -290,7 +290,7 @@ npx ajv -s specification/schemas/equipment/v.1.0.0/equipment.schema.json \
 
 Based on reference implementation (`/specification/schemas/equipment/v.1.0.0/equipment.example.json`):
 
-```json
+```json fds:document entity=equipment
 {
   "schemaVersion": "1.1.0",
   "id": "eq.barbell",

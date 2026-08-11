@@ -17,7 +17,7 @@ Convert a string to a URL-safe slug.
 **Input:** String  
 **Output:** String
 
-```json
+```json fds:fragment entity=mapping
 {
   "canonical.slug": {
     "from": "name",
@@ -49,7 +49,7 @@ Convert a string to Title Case.
 **Input:** String  
 **Output:** String
 
-```json
+```json fds:fragment entity=mapping
 {
   "canonical.name": {
     "from": "name",
@@ -75,7 +75,7 @@ Generate a UUIDv4 string. FDS requires plain UUIDs for all identifiers.
 **Input:** Any (ignored)  
 **Output:** String
 
-```json
+```json fds:fragment entity=mapping
 {
   "exerciseId": {
     "from": null,
@@ -95,7 +95,7 @@ Ensure a value is wrapped in an array.
 **Input:** Any  
 **Output:** Array
 
-```json
+```json fds:fragment entity=mapping
 {
   "targets.primary": {
     "from": "target",
@@ -128,7 +128,7 @@ Convert URLs to FDS media format.
 | `defaultType` | string | `"image"` | Default media type |
 | `inferType` | boolean | `true` | Infer type from file extension |
 
-```json
+```json fds:fragment entity=mapping
 {
   "media": {
     "from": "images",
@@ -142,12 +142,12 @@ Convert URLs to FDS media format.
 ```
 
 **Input:**
-```json
+```json fds:ignore input data in a platform’s own format, before any transformation
 ["https://example.com/bench-press.jpg", "https://example.com/video.mp4"]
 ```
 
 **Output:**
-```json
+```json fds:ignore input data in a platform’s own format, before any transformation
 [
   { "type": "image", "uri": "https://example.com/bench-press.jpg" },
   { "type": "video", "uri": "https://example.com/video.mp4" }
@@ -183,7 +183,7 @@ Look up a value in a registry with optional fuzzy matching.
 | `returnFormat` | string | `"object"` | Return format: `object`, `array`, `ref` |
 | `includeAliases` | boolean | `true` | Include aliases in matching |
 
-```json
+```json fds:fragment entity=mapping
 {
   "targets.primary": {
     "from": "target",
@@ -201,7 +201,7 @@ Look up a value in a registry with optional fuzzy matching.
 **Input:** `"pectorals"`
 
 **Output:**
-```json
+```json fds:ignore input data in a platform’s own format, before any transformation
 [
   {
     "id": "mus.pectoralis-major",
@@ -227,7 +227,7 @@ Generate an ISO 8601 timestamp.
 **Input:** Any (ignored)  
 **Output:** String
 
-```json
+```json fds:fragment entity=mapping
 {
   "metadata.createdAt": {
     "from": null,
@@ -253,7 +253,7 @@ Auto-generate metadata fields.
 |--------|------|---------|-------------|
 | `fields` | string[] | All fields | Fields to generate |
 
-```json
+```json fds:fragment entity=mapping
 {
   "metadata": {
     "from": null,
@@ -266,7 +266,7 @@ Auto-generate metadata fields.
 ```
 
 **Output:**
-```json
+```json fds:fragment entity=exercise
 {
   "createdAt": "2025-01-27T15:30:00.000Z",
   "updatedAt": "2025-01-27T15:30:00.000Z",
@@ -300,7 +300,7 @@ Apply a template string with variable substitution.
 | `template` | string | Yes | Template string with `{{field}}` placeholders |
 | `defaultValue` | string | No | Default for missing fields |
 
-```json
+```json fds:fragment entity=mapping
 {
   "canonical.description": {
     "from": ["name", "target", "equipment"],
@@ -313,7 +313,7 @@ Apply a template string with variable substitution.
 ```
 
 **Context:**
-```json
+```json fds:ignore input data in a platform’s own format, before any transformation
 {
   "name": "Barbell Bench Press",
   "target": "chest",
@@ -341,7 +341,7 @@ Transform URLs with pattern matching.
 | `prefix` | string | Prefix to add |
 | `suffix` | string | Suffix to add |
 
-```json
+```json fds:fragment entity=mapping
 {
   "media[0].uri": {
     "from": "imageUrl",
@@ -363,7 +363,7 @@ Transform URLs with pattern matching.
 
 Apply multiple transforms in sequence:
 
-```json
+```json fds:fragment entity=mapping
 {
   "canonical.slug": {
     "from": "name",
@@ -386,7 +386,7 @@ Transforms are applied left to right. The output of each transform becomes the i
 
 Common pattern for muscle/equipment mapping:
 
-```json
+```json fds:fragment entity=mapping
 {
   "targets.primary": {
     "from": "target",

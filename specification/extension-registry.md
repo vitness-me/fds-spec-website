@@ -23,7 +23,7 @@ This guide defines how vendors extend the Fitness Data Standard (FDS) without br
 - If breaking, include an explicit version inside your extension namespace (e.g., `extensions: { "x:vitness": { "version": "2" } }`).
 
 ## Example
-```json
+```json fds:fragment entity=exercise
 {
   "attributes": {
     "x:vitness.stanceWidth": "shoulder-width",

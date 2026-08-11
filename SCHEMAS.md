@@ -105,7 +105,7 @@ There is no `muscle/v1.4.0/`, and there will not be unless muscle itself changes
 
 All schema `$id` fields match their serving URLs:
 
-```json
+```json fds:ignore a schema identifier, not a document
 {
   "$id": "https://spec.vitness.me/schemas/exercises/v1.1.0/exercise.schema.json"
 }

@@ -66,7 +66,7 @@ This specification aims to:
 All compliant muscle data **MUST** include these fields:
 :::
 
-```json
+```json fds:document entity=muscle
 {
   "schemaVersion": "1.0.0",
   "id": "mus.quadriceps",
@@ -91,7 +91,7 @@ All compliant muscle data **MUST** include these fields:
 
 Commonly supported optional fields that enhance interoperability:
 
-```json
+```json fds:fragment entity=muscle partial
 {
   "canonical": {
     "aliases": ["Quads"],
@@ -125,7 +125,7 @@ Two extension points for platform-specific data:
 
 #### 3.3.1. Attributes (Structured Extensions)
 For common extensions that may become standardized:
-```json
+```json fds:fragment entity=muscle
 {
   "attributes": {
     "fiberType": "mixed",
@@ -137,7 +137,7 @@ For common extensions that may become standardized:
 
 #### 3.3.2. Extensions (Platform-Specific)
 For complex platform-unique data structures:
-```json
+```json fds:fragment entity=muscle
 {
   "extensions": {
     "x:anatomy": {
@@ -155,7 +155,7 @@ For complex platform-unique data structures:
 
 `canonical` carries the muscle's identity — display name, slug, aliases and localised names. Anatomical naming is where aliases earn their place: the same muscle is a "latissimus dorsi" to a clinician and a "lat" to everyone in the gym, and a catalog that recognises only one of those fails half its lookups.
 
-```json
+```json fds:fragment entity=muscle
 {
   "canonical": {
     "name": "Quadriceps",
@@ -172,7 +172,7 @@ For complex platform-unique data structures:
 
 `classification` places the muscle in the catalog. `categoryId` is the muscle-category group it belongs to (RFC-004) and is what makes per-group volume aggregation possible without a lookup table. `tags` are free-form labels carrying no structural consequence.
 
-```json
+```json fds:fragment entity=muscle
 {
   "classification": {
     "categoryId": "cat.legs",
@@ -210,7 +210,7 @@ The `laterality` field describes symmetry characteristics:
 
 `media` follows the shared definition from RFC-001 — typically an anatomical illustration.
 
-```json
+```json fds:fragment entity=muscle
 {
   "media": [
     {
@@ -226,7 +226,7 @@ The `laterality` field describes symmetry characteristics:
 Muscle records MAY include an optional `heatmap` object referencing a Body Atlas. A Body Atlas defines views (e.g., anterior/posterior) and named areas bound to shapes within an asset (typically SVG). Muscles reference these areas with intensity weights to enable interoperable visualization.
 
 Structure:
-```json
+```json fds:fragment entity=muscle
 {
   "heatmap": {
     "atlasId": "atlas.body.v1",
@@ -263,7 +263,7 @@ Following semantic versioning:
 ### 5.3. Schema Evolution Example
 
 Version 1.0.0 → 1.1.0 (Adding optional biomechanical field):
-```json
+```json fds:ignore a hypothetical next version illustrating how an optional field arrives; no published muscle schema has biomechanics
 {
   "schemaVersion": "1.1.0",
   "id": "mus.quadriceps",

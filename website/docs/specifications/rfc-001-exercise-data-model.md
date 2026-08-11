@@ -112,7 +112,7 @@ Four optional fields carry most of what an implementation actually renders.
 
 Note that `constraints.progressions` and `constraints.regressions` are free-text descriptions, while a `relations` entry of type `progression` is a link to another exercise. Both exist because an author often knows *that* a movement is harder before the harder movement is in the catalog.
 
-```json
+```json fds:fragment entity=exercise
 {
   "equipment": {
     "required": [
@@ -149,7 +149,7 @@ Two extension points for platform-specific data:
 
 #### 3.3.1. Attributes (Structured Extensions)
 For common extensions that may become standardized:
-```json
+```json fds:fragment entity=exercise
 {
   "attributes": {
     "x:vitness.barPathHint": "midfoot → midfoot",
@@ -160,7 +160,7 @@ For common extensions that may become standardized:
 
 #### 3.3.2. Extensions (Platform-Specific)  
 For complex platform-unique data structures:
-```json
+```json fds:fragment entity=exercise
 {
   "extensions": {
     "x:vitness.tempo": { "eccentric": 3, "isometric": 1, "concentric": 1 },
@@ -175,7 +175,7 @@ For complex platform-unique data structures:
 
 `canonical` carries the exercise's identity as a reader sees it: a display `name`, a stable `slug`, optional `aliases`, and `localized` entries giving the name in other languages. The slug is the human-readable identifier and is distinct from `exerciseId`; see §3 of the identifier policy.
 
-```json
+```json fds:fragment entity=exercise
 {
   "canonical": {
     "name": "Back Squat",
@@ -205,7 +205,7 @@ For complex platform-unique data structures:
 | `tags` | Free-form labels for filtering. Carries no structural consequence. |
 | `taxonomyRefs` | References into an external taxonomy — each an object of `registry`, `id` and an optional human-readable `label`. This is how an implementation keeps its own classification alongside the FDS one without either overwriting the other. |
 
-```json
+```json fds:fragment entity=exercise
 {
   "classification": {
     "exerciseType": "strength",
@@ -226,7 +226,7 @@ For complex platform-unique data structures:
 
 The split matters to anything computing training volume per muscle: counting secondary involvement as primary inflates volume in a way that compounds across a program.
 
-```json
+```json fds:fragment entity=exercise
 {
   "targets": {
     "primary": [
@@ -244,7 +244,7 @@ The split matters to anything computing training volume per muscle: counting sec
 
 `equipment.required` is what the movement cannot be performed without; `equipment.optional` is what changes the experience but not the exercise. Each entry denormalises an `id` and a `name` for the same reason target muscles do.
 
-```json
+```json fds:fragment entity=exercise
 {
   "equipment": {
     "required": [
@@ -264,7 +264,7 @@ The split matters to anything computing training volume per muscle: counting sec
 
 Each is a `{ type, unit }` pair and carries **no value** — this is a shape declaration, not a measurement. Attaching values to these shapes is what a workout prescription does (RFC-007), and a prescription SHOULD only use metric types the exercise declares here.
 
-```json
+```json fds:fragment entity=exercise
 {
   "metrics": {
     "primary": { "type": "reps", "unit": "count" },
@@ -282,7 +282,7 @@ Each is a `{ type, unit }` pair and carries **no value** — this is a shape dec
 
 The optional `loading` object describes **how a movement accepts external load**. It answers what a consumer otherwise has to infer from the exercise name: whether the movement can be loaded at all, whether added load makes it harder or easier, and whether the two sides can be loaded independently.
 
-```json
+```json fds:fragment entity=exercise
 {
   "loading": {
     "externalLoad": "required",
@@ -331,7 +331,7 @@ Following semantic versioning:
 ### 5.3. Schema Evolution Example
 
 Version 1.0.0 → 1.1.0 (Adding optional field):
-```json
+```json fds:ignore a hypothetical next version illustrating how an optional field arrives; no published exercise schema has newOptionalField
 {
   "schemaVersion": "1.1.0",
   "exerciseId": "550e8400-e29b-41d4-a716-446655440000",
@@ -383,7 +383,7 @@ GET /.well-known/fitness-data-spec
 ```
 
 Potential response structure:
-```json
+```json fds:ignore a discovery document, defined by specification/discovery.md rather than by a published schema
 {
   "spec_version": "1.0.0",
   "provider": "Platform Name", 
