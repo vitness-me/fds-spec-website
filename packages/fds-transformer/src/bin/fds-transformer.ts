@@ -269,6 +269,24 @@ function createProgressBar(percentage: number, width: number): string {
 program
   .name('fds-transformer')
   .description('Transform source data to FDS (Fitness Data Standard) format')
+  // `transform` and `validate` both take `--version <version>`, meaning the FDS
+  // release to work against. `.version()` below also registers `--version` on
+  // the program, as a flag that prints the package version and exits.
+  //
+  // By default commander parses the program's own options across the whole
+  // argument list, before it hands anything to a subcommand. So
+  // `validate --version 1.1.0` matched the program's flag, printed `0.1.0` and
+  // exited 0 — the documented option never reached the subcommand, and the exit
+  // status said the validation had passed. (`--version=1.1.0` happened to work,
+  // because the program's flag takes no value and so the `--flag=value` branch
+  // declined it. Two spellings of the same option, one of which silently did
+  // nothing, is worse than either behaviour on its own.)
+  //
+  // Positional options stop the program parsing its own options once a
+  // subcommand name appears, so everything after `validate` belongs to
+  // `validate`. `fds-transformer --version` still prints the package version,
+  // because there is no subcommand in front of it.
+  .enablePositionalOptions()
   .version('0.1.0');
 
 // Transform command
