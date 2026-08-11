@@ -16,6 +16,20 @@ ONLY="${1:-all}"
 FAILED=()
 run_job() { [[ "$ONLY" == "all" || "$ONLY" == "$1" ]]; }
 
+# This script's promise is "green here means green there". A different Node
+# major quietly voids it: V8 changes the wording of its own error messages
+# between releases, and a check that compares a recorded message byte for byte
+# then passes locally and fails in CI. That has happened once already.
+#
+# A warning rather than a failure — the divergence is usually harmless, and
+# refusing to run would be worse than saying so.
+CI_NODE=$(grep -m1 'node-version:' .github/workflows/ci.yml | tr -dc '0-9')
+LOCAL_NODE=$(node -v 2>/dev/null | sed 's/^v//; s/\..*//')
+if [[ -n "$CI_NODE" && -n "$LOCAL_NODE" && "$CI_NODE" != "$LOCAL_NODE" ]]; then
+  printf '\033[33m  note  Node %s here, Node %s in CI. Green here is weaker evidence than usual.\033[0m\n' \
+    "$LOCAL_NODE" "$CI_NODE"
+fi
+
 hdr() { printf '\n\033[1m── %s ─────────────────────────────\033[0m\n' "$1"; }
 step() { printf '  %-46s' "$1"; }
 ok()   { printf '\033[32mPASS\033[0m\n'; }

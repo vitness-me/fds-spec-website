@@ -29,7 +29,7 @@
   scripts/fixtures/doc-examples/failing-examples.md:109 — shape fits body-atlas, equipment, muscle, muscle-category; the document does not say which.
     Add `fds:document entity=<name>` to the fence. Guessing here is how a document comes to pass against the wrong schema.
 
-  scripts/fixtures/doc-examples/failing-examples.md:124 — a ```json block that is not JSON: Expected double-quoted property name in JSON at position 28 (line 1 column 29)
+  scripts/fixtures/doc-examples/failing-examples.md:124 — a ```json block that is not JSON: Expected double-quoted property name in JSON at position 28
     A reader copying it gets a parse error. Fence it as text, or mark it `fds:ignore <reason>`.
 
   scripts/fixtures/doc-examples/comparison-data.ts:172 — declares exercise schemaVersion 1.0.0, which is withdrawn and no longer served.

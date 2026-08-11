@@ -524,6 +524,20 @@ function stringFrom(source, start) {
 const lineOf = (source, index) => source.slice(0, index).split('\n').length;
 
 /**
+ * A parse failure, said the same way on every Node version.
+ *
+ * V8 appends `(line N column M)` to `JSON.parse` messages from Node 21 onward
+ * and omits it before that. The recorded self-test transcript compares messages
+ * byte for byte, so an unnormalised message makes this check pass on a
+ * developer's Node and fail on CI's — which is exactly what it did.
+ *
+ * The byte offset is already in the message and is the part that locates the
+ * error; the line and column are a restatement of it.
+ */
+const parseMessage = (error) =>
+  String(error?.message ?? error).replace(/ \(line \d+ column \d+\)$/, '');
+
+/**
  * Documents in a TypeScript source file, plus the regions they came from.
  *
  * Only `const` initializers are read. The exhaustive `schemaVersion` sweep in
@@ -557,7 +571,7 @@ function sourceDocuments(source, rel) {
       parsed = isString ? JSON.parse(parseLiteral(text)) : parseLiteral(text);
     } catch (error) {
       problems.push(
-        `${rel}:${line} — a literal naming schemaVersion could not be read as data: ${error.message}\n` +
+        `${rel}:${line} — a literal naming schemaVersion could not be read as data: ${parseMessage(error)}\n` +
           '    An FDS document in source must be plain data, or nothing can check it.'
       );
       continue;
@@ -901,7 +915,7 @@ for (const file of markdownFiles) {
       doc = JSON.parse(block.text);
     } catch (error) {
       problems.push(
-        `${where} — a \`\`\`json block that is not JSON: ${error.message}\n` +
+        `${where} — a \`\`\`json block that is not JSON: ${parseMessage(error)}\n` +
           '    A reader copying it gets a parse error. Fence it as text, or mark it ' +
           '`fds:ignore <reason>`.'
       );
