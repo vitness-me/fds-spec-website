@@ -63,10 +63,13 @@ if run_job schemas; then
   try "skill knowledge names real fields" npm run check:skill
   try "every version claim matches the manifest" npm run check:versions
 
-  S=specification/schemas
+  # The schemas to validate against come from the release manifest, which is
+  # generated from the published tree — publishing an entity adds it here with
+  # no edit to this file or to ci.yml. See scripts/list-entity-schemas.mjs.
   total=0; failed=0
   validate() {
-    local schema="$1" dir="$2" example
+    local schema="$1" dir example
+    dir="$(dirname "$schema")"
     for example in "$dir"/*.example*.json; do
       [ -e "$example" ] || continue
       total=$((total + 1))
@@ -76,13 +79,19 @@ if run_job schemas; then
       else bad "validate $(basename "$example")"; failed=$((failed + 1)); fi
     done
   }
-  validate "$S/exercises/v1.1.0/exercise.schema.json"                     "$S/exercises/v1.1.0"
-  validate "$S/equipment/v1.1.0/equipment.schema.json"                    "$S/equipment/v1.1.0"
-  validate "$S/muscle/v1.0.0/muscle.schema.json"                          "$S/muscle/v1.0.0"
-  validate "$S/muscle/muscle-category/v1.0.0/muscle-category.schema.json" "$S/muscle/muscle-category/v1.0.0"
-  validate "$S/atlas/v1.0.0/body-atlas.schema.json"                       "$S/atlas/v1.0.0"
-  validate "$S/workout/v1.1.0/workout.schema.json"                        "$S/workout/v1.1.0"
-  validate "$S/program/v1.0.0/program.schema.json"                        "$S/program/v1.0.0"
+
+  step "list published entity schemas"
+  if ENTITY_SCHEMAS=$(node scripts/list-entity-schemas.mjs 2>&1); then ok
+  else bad "list published entity schemas"; printf '%s\n' "$ENTITY_SCHEMAS" | sed 's/^/      /'; ENTITY_SCHEMAS=""; fi
+
+  while IFS= read -r schema; do
+    [ -n "$schema" ] || continue
+    validate "$schema"
+  done <<< "$ENTITY_SCHEMAS"
+
+  # A loop over an empty list exits zero and reports success. That is the shape
+  # of the failure this whole change is about, so it is named rather than passed.
+  if [ "$total" -eq 0 ]; then bad "no examples were validated"; fi
   printf '  %d examples validated standalone, %d failed\n' "$total" "$failed"
 fi
 
