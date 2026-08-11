@@ -2,26 +2,26 @@
   "$schema": "https://spec.vitness.me/schemas/transformer/v1.0.0/mapping.schema.json",
   "version": "1.0.0",
   "targetSchema": {
-    "version": "1.0.0",
+    "version": "1.1.0",
     "entity": "exercise"
   },
   "registries": {
     "muscles": {
       "source": "local",
-      "local": "../../fds-transformer/registries/muscles.registry.json"
+      "local": "./registries/muscles.registry.json"
     },
     "equipment": {
       "source": "local",
-      "local": "../../fds-transformer/registries/equipment.registry.json"
+      "local": "./registries/equipment.registry.json"
     },
     "muscleCategories": {
       "source": "local",
-      "local": "../../fds-transformer/registries/muscle-categories.registry.json"
+      "local": "./registries/muscle-categories.registry.json"
     }
   },
   "mappings": {
     "schemaVersion": {
-      "default": "1.0.0"
+      "default": "1.1.0"
     },
     "exerciseId": {
       "from": null,

@@ -1,0 +1,32 @@
+{
+  "schemaVersion": "1.1.0",
+  "exerciseId": "550e8400-e29b-41d4-a716-446655440099",
+  "canonical": {
+    "name": "Back Squat",
+    "slug": "back-squat"
+  },
+  "classification": {
+    "exerciseType": "strength",
+    "movement": "squat",
+    "mechanics": "compound",
+    "force": "push",
+    "level": "intermediate"
+  },
+  "targets": {
+    "primary": [
+      {
+        "id": "c3d4e5f6-3333-4000-8000-000000000001",
+        "name": "Quadriceps",
+        "categoryId": "a1b2c3d4-1111-4000-8000-000000000006"
+      }
+    ]
+  },
+  "metrics": {
+    "primary": { "type": "reps", "unit": "kilograms" }
+  },
+  "metadata": {
+    "createdAt": "2026-01-25T00:00:00Z",
+    "updatedAt": "2026-01-25T00:00:00Z",
+    "status": "active"
+  }
+}

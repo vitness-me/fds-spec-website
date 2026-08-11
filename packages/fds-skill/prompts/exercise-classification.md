@@ -1,5 +1,7 @@
 # Exercise Classification Prompt
 
+<!-- fds:not-a-field reasoning — a field the prompt asks the model for so its choice can be reviewed; it is deliberately dropped before the document is written -->
+
 ## System Prompt
 
 ```
@@ -18,7 +20,7 @@ Always respond with valid JSON matching the expected schema. Be precise and cons
 ## User Prompt Template
 
 ```
-Classify this exercise according to FDS v1.0.0:
+Classify this exercise according to FDS release 1.4.0 (exercise schema 1.1.0):
 
 Exercise: {{name}}
 {{#if bodyPart}}Body Part: {{bodyPart}}{{/if}}

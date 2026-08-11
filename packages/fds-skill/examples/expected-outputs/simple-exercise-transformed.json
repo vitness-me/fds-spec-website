@@ -1,7 +1,6 @@
 [
   {
-    "$comment": "Transformed from simple exercise database format",
-    "schemaVersion": "1.0.0",
+    "schemaVersion": "1.1.0",
     "exerciseId": "550e8400-e29b-41d4-a716-446655440001",
     "canonical": {
       "name": "3/4 Sit-Up",
@@ -61,7 +60,7 @@
     }
   },
   {
-    "schemaVersion": "1.0.0",
+    "schemaVersion": "1.1.0",
     "exerciseId": "550e8400-e29b-41d4-a716-446655440025",
     "canonical": {
       "name": "Barbell Bench Press",
@@ -148,7 +147,7 @@
     }
   },
   {
-    "schemaVersion": "1.0.0",
+    "schemaVersion": "1.1.0",
     "exerciseId": "550e8400-e29b-41d4-a716-446655440007",
     "canonical": {
       "name": "Alternate Lateral Pulldown",

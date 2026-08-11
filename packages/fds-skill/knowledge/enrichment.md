@@ -1,5 +1,7 @@
 # FDS AI Enrichment Guide
 
+<!-- fds:not-a-field bodyPart, gifUrl, target — field names belonging to the *source* database this guide enriches from -->
+
 ## Overview
 
 AI enrichment fills gaps when source data lacks fields required by FDS. This guide covers when, how, and what to enrich.
@@ -192,7 +194,7 @@ Plyometric?
 **Task:** Map the source muscle name to the closest FDS muscle
 
 **Output format:**
-```json
+```json fds:not-a-field — the shape the enrichment prompt returns, before it is mapped onto a muscleRef; it is a prompt contract, not an FDS document
 {
   "muscleId": "c3d4e5f6-3333-4000-8000-000000000022",
   "muscleName": "Rectus Abdominis",
@@ -224,7 +226,7 @@ Your responses must be:
 ### Classification Prompt
 
 ```
-Classify this exercise according to FDS v1.0.0:
+Classify this exercise according to FDS release 1.4.0 (exercise schema 1.1.0):
 
 Exercise: {{name}}
 Body Part: {{bodyPart}}
@@ -281,19 +283,24 @@ Exercise: {{name}}
 Type: {{exerciseType}}
 Movement: {{movement}}
 
-Valid metric types: reps, weight, duration, distance, speed, pace, power, heartRate, steps, calories, height, tempo, rpe
+Valid metric types (24): reps, weight, duration, distance, speed, pace, power, heartRate,
+steps, calories, height, tempo, rpe, rir, percent1RM, percentBodyweight, oneRepMax,
+velocity, cadence, incline, resistanceLevel, rounds, sets, rest
 
-Valid units:
-- count (reps, tempo, rpe)
-- kg, lb (weight)
-- s, min (duration)
+Valid units (22):
+- count (reps, tempo, rpe, rir, steps, rounds, sets)
+- kg, lb (weight, oneRepMax)
+- s, min, ms (duration, rest)
 - m, km, mi (distance)
-- m_s, km_h (speed)
+- m_s, km_h (speed, velocity)
 - min_per_km, min_per_mi (pace)
 - W (power)
 - bpm (heartRate)
 - kcal (calories)
 - cm, in (height)
+- percent (percent1RM, percentBodyweight, incline)
+- rpm, spm (cadence)
+- level (resistanceLevel)
 
 Respond with JSON only:
 {

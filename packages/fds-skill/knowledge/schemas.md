@@ -6,12 +6,13 @@
 
 ```typescript
 interface FDSExercise {
-  schemaVersion: string;           // Required: "1.0.0"
+  schemaVersion: string;           // Required: "1.1.0"
   exerciseId: string;              // Required: UUIDv4
   canonical: Canonical;            // Required
   classification: Classification;  // Required
   targets: Targets;                // Required
   equipment?: Equipment;           // Optional
+  loading?: ExerciseLoading;       // Optional: 1.1.0
   constraints?: Constraints;       // Optional
   relations?: Relation[];          // Optional
   metrics: Metrics;                // Required
@@ -92,6 +93,47 @@ interface EquipmentRef {
 }
 ```
 
+### Loading (1.1.0)
+
+How the *movement* accepts external load. Increments belong to the implement, so
+they live on equipment rather than here.
+
+```typescript
+interface ExerciseLoading {
+  externalLoad?: 'none' | 'optional' | 'required';
+  assisted?: boolean;      // load may be negative (assisted pull-up, band-assisted dip)
+  asymmetric?: boolean;    // left and right can be loaded independently
+}
+```
+
+### Constraints and relations
+
+```typescript
+interface Constraints {
+  contraindications?: string[]; // conditions under which not to prescribe it
+  prerequisites?: string[];     // what an athlete needs before attempting it
+  progressions?: string[];      // harder variants
+  regressions?: string[];       // easier variants
+  environment?: string[];       // gym, home, outdoor — open strings
+}
+
+interface Relation {
+  type: RelationType;      // Required
+  targetId: string;        // Required: the other exercise's exerciseId
+  confidence?: number;     // 0..1 — how sure the link is, not how strong it is
+  notes?: string;
+}
+
+type RelationType =
+  | 'alternate' | 'variation' | 'substitute' | 'progression' | 'regression'
+  | 'equipmentVariant' | 'accessory' | 'mobilityPrep' | 'similarPattern'
+  | 'unilateralPair' | 'contralateralPair';
+```
+
+`constraints.progressions` and a `relations[]` entry of type `progression` say
+different things: the first is free text an author wrote, the second points at an
+exercise that exists. Prefer the relation when the target is in the catalog.
+
 ### Metrics
 
 ```typescript
@@ -127,7 +169,17 @@ interface ExternalRef {
   system: string;          // Required: external system name
   id: string;              // Required: ID in that system
 }
+
+interface HistoryEntry {   // an editorial trail, not performed data
+  at?: string;             // ISO 8601 datetime
+  actor?: string;          // who or what made the change — free text, not a person record
+  change?: string;
+}
 ```
+
+`metadata.history[].actor` is the only place FDS names anyone at all, and it
+names an *editor* of the catalog rather than an athlete. It is free text; there
+is no User entity behind it, and there is not going to be (D6).
 
 ### Media
 
@@ -160,12 +212,25 @@ interface FDSEquipment {
   classification?: {
     tags?: string[];
   };
+  loading?: EquipmentLoading;  // 1.1.0
   media?: Media[];
   attributes?: Record<string, any>;
   extensions?: Record<string, any>;
   metadata: Metadata;      // Required
 }
+
+interface EquipmentLoading {   // 1.1.0 — loading characteristics of an implement
+  increment?: { value: number; unit: MetricUnit };
+  stackBased?: boolean;        // load comes from discrete stack positions
+}
 ```
+
+`loading.increment` is the smallest usable step — a 2.5 kg plate pair, a 5 lb
+dumbbell jump, one pin on a stack — and it is authoritative for plate math. A
+consumer rounding a computed load MUST round to it rather than to a guess.
+
+`stackBased: true` says the implement has no continuous range, so "add 1 kg" is
+not an instruction it can carry out.
 
 ---
 
@@ -188,15 +253,24 @@ interface FDSMuscle {
     laterality?: Laterality;
   };
   heatmap?: {
-    atlasId: string;
-    areaIds: string[];
+    atlasId: string;                 // Required within heatmap
+    regions: HeatmapRegion[];        // Required within heatmap, >= 1
   };
   media?: Media[];
   attributes?: Record<string, any>;
   extensions?: Record<string, any>;
   metadata: Metadata;      // Required
 }
+
+interface HeatmapRegion {
+  areaId: string;          // Required: an `areas[].id` in the referenced atlas
+  weight?: number;         // 0..1, default 1 — how strongly this muscle shades that area
+}
 ```
+
+A muscle binds to an atlas by naming **areas**, not by carrying geometry. There
+is no `areaIds: string[]`: a region is an object, because the weight has to live
+somewhere and a bare list of ids has nowhere to put it.
 
 ---
 
@@ -225,6 +299,73 @@ interface FDSMuscleCategory {
 
 ---
 
+## Body Atlas Schema (v1.0.0)
+
+An atlas is a set of drawings of a body and a set of named areas on them. It is
+what makes a heatmap renderable: a muscle names `areaId`s, and the atlas is what
+turns each of those into something on screen.
+
+```typescript
+interface FDSBodyAtlas {
+  schemaVersion: string;   // Required
+  id: string;              // Required: UUIDv4
+  canonical: {
+    name: string;          // Required
+    slug: string;          // Required
+    description?: string;
+    localized?: Localized[];
+  };
+  views: AtlasView[];      // REQUIRED, >= 1
+  areas: AtlasArea[];      // REQUIRED, >= 1
+  attributes?: Record<string, any>;
+  extensions?: Record<string, any>;
+  metadata: Metadata;      // Required
+}
+
+interface AtlasView {      // one drawing
+  id: string;              // Required
+  kind: ViewKind;          // Required
+  asset: {                 // Required
+    type: 'svg' | 'image' | '3d';
+    uri: string;           // URI format
+  };
+}
+
+type ViewKind = 'anterior' | 'posterior' | 'left-lateral' | 'right-lateral'
+              | 'superior' | 'inferior';
+
+interface AtlasArea {      // one nameable region, across every view it appears in
+  id: string;              // Required — this is what a muscle's areaId points at
+  canonical: { name: string; slug: string; localized?: Localized[] };  // Required
+  bindings: AreaBinding[]; // Required, >= 1
+}
+
+interface AreaBinding {
+  viewId: string;          // Required — an `views[].id` in this same atlas
+  selector: string;        // Required — how to find the shape inside that asset
+}
+```
+
+Two things are easy to get backwards. `views` and `areas` are both **required**
+and both **non-empty** — an atlas with no drawing or no named area describes
+nothing. And an area is not per-view: one `areas[]` entry carries a `bindings[]`
+entry for *each* view it is visible in, which is why "left quadriceps" is one
+area with an anterior binding rather than one area per drawing.
+
+`selector` is opaque to FDS. For an `svg` asset it is conventionally a CSS
+selector or element id; the standard does not constrain it, because the atlas
+author and the renderer are the two parties that have to agree, and FDS is
+neither.
+
+The atlas's area slugs use a looser pattern than the rest of FDS —
+`^[a-z0-9-.]+$`, dots allowed — so `quad.left` is a legal area slug where it
+would not be a legal exercise slug.
+
+<!-- fds:not-a-field quad — half of an illustrative area slug, not a field -->
+
+
+---
+
 ## Enumerations
 
 ### Movement
@@ -247,6 +388,11 @@ type Movement =
 ```
 
 ### MetricType
+
+24 members. RFC-001 defined the first thirteen; release 1.1.0 added the rest so
+that a prescription and an exercise's tracking metrics draw on one vocabulary
+instead of two.
+
 ```typescript
 type MetricType =
   | "reps"
@@ -261,10 +407,25 @@ type MetricType =
   | "calories"
   | "height"
   | "tempo"
-  | "rpe";
+  | "rpe"
+  // 1.1.0
+  | "rir"
+  | "percent1RM"
+  | "percentBodyweight"
+  | "velocity"
+  | "cadence"
+  | "rounds"
+  | "sets"
+  | "rest"
+  | "incline"
+  | "resistanceLevel"
+  | "oneRepMax";
 ```
 
 ### MetricUnit
+
+22 members.
+
 ```typescript
 type MetricUnit =
   | "count"
@@ -283,8 +444,18 @@ type MetricUnit =
   | "bpm"
   | "kcal"
   | "cm"
-  | "in";
+  | "in"
+  // 1.1.0
+  | "percent"
+  | "rpm"      // revolutions per minute — bike cadence
+  | "spm"      // strokes or steps per minute — rowing, running
+  | "level"    // a machine's own scale, meaningless without the machine
+  | "ms";      // milliseconds, for timings a second cannot express
 ```
+
+A `level` value is not comparable across machines: level 8 on one manufacturer's
+bike is not level 8 on another's. That is why a machine load is a `loadTarget`
+with `method: "level"` and a named `scale` rather than a number on its own.
 
 ### RegionGroup
 ```typescript
@@ -326,9 +497,11 @@ type LoadTarget =
   | { method: 'percentBodyweight'; value: number }
   | { method: 'rpe'; value: number; allowHalf?: boolean; range?: LoadRange }
   | { method: 'rir'; value: number; range?: LoadRange }
-  | { method: 'velocity'; value: number; unit: string }
-  | { method: 'level'; value: number | string }
-  | { method: 'bandResistance'; /* see schema for payload */ }
+  | { method: 'velocity'; value: number; unit: 'm_s';
+      lossThreshold?: number; range?: LoadRange }   // % bar-speed drop that ends the set
+  | { method: 'level'; value: number | string; scale?: string; range?: LoadRange }
+  | { method: 'bandResistance'; equipment?: EquipmentRef; colour?: string;
+      estimatedLoad?: { value: number; unit: 'kg' | 'lb' }; range?: LoadRange }
   | { method: 'assisted'; value: number; unit: 'kg' | 'lb' }
   | { method: 'relative'; basis: 'lastSession' | 'e1RM' | 'trainingMax';
       delta: number; deltaUnit: 'kg' | 'lb' | 'percent'; referenceExerciseId?: string }
@@ -348,10 +521,12 @@ type RepTarget =
   | { kind: 'maxHold'; min?: number; cap?: number; unit?: string }
   | { kind: string };     // unrecognised
 
-interface Tempo {          // seconds per phase; the four phases, nothing else
-  eccentric?: number; bottomPause?: number;
-  concentric?: number; topPause?: number;
+interface Tempo {          // per-phase timing; the four phases, nothing else
+  eccentric?: TempoPhase; bottomPause?: TempoPhase;
+  concentric?: TempoPhase; topPause?: TempoPhase;
 }
+
+type TempoPhase = number | 'X';   // seconds, or "X" for explosive
 
 type RestSpec =            // `appliesTo` is a restScope on every branch
   | { method: 'fixed'; appliesTo: RestScope; value: number; unit: string }
@@ -411,12 +586,19 @@ interface FDSWorkout {
   targets?: Targets;               // ADVISORY rollup — recompute if it matters
   equipment?: { required?: EquipmentRef[]; optional?: EquipmentRef[] };
   metrics?: Metrics;
-  constraints?: Constraints;
-  relations?: Relation[];
+  constraints?: Constraints;       // contraindications, prerequisites, environment
+  relations?: WorkoutRelation[];
   media?: Media[];
   attributes?: Record<string, unknown>;
   extensions?: Record<string, unknown>;
   metadata: Metadata;
+}
+
+interface WorkoutRelation {        // NOT the exercise relation vocabulary
+  type: 'alternate' | 'variation' | 'progression' | 'regression'
+      | 'deload' | 'test';
+  targetId: string;                // another workoutId
+  notes?: string;
 }
 
 interface Block {
@@ -500,7 +682,7 @@ interface FDSProgram {
   progressions?: ProgressionRule[];
   references?: { trainingMaxes?: TrainingMaxSlot[] };
   branching?: Branch[];
-  relations?: Relation[];
+  relations?: ProgramRelation[];
   media?: Media[];
   attributes?: Record<string, unknown>;
   extensions?: Record<string, unknown>;
@@ -508,6 +690,16 @@ interface FDSProgram {
 }
 
 type ScheduleModel = 'calendar' | 'relative' | 'rolling' | 'sequence' | string;
+
+interface ProgramRelation {        // a third, separate relation vocabulary
+  type: 'successor' | 'predecessor' | 'variant'
+      | 'beginnerVariant' | 'advancedVariant';
+  targetId: string;                // another programId
+  notes?: string;
+}
+
+type Weekday = 'monday' | 'tuesday' | 'wednesday' | 'thursday'
+             | 'friday' | 'saturday' | 'sunday';   // lowercase, closed
 
 interface Cycle {
   id: string; name?: string;

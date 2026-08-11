@@ -1,5 +1,5 @@
 {
-  "$comment": "Example source schema: Simple exercise database format",
+  "$comment": "fds:not-a-field — Example source schema: a simple exercise database format. It is the input side of a mapping, so none of its field names are FDS.",
   "schema": {
     "type": "array",
     "items": {

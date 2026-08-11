@@ -144,20 +144,42 @@ Every FDS Exercise MUST include:
 
 ### Metric Types and Units
 
+**24 metric types and 22 units.** RFC-001 defined thirteen types and seventeen
+units; release 1.1.0 added the rest, so that an exercise's tracking metrics and
+a prescription's targets draw on one vocabulary instead of two. A knowledge base
+carrying only the RFC-001 list will confidently tell someone that `cadence` is
+not a metric type.
+
 | Type | Valid Units | Use Case |
 |------|-------------|----------|
 | `reps` | `count` | Strength exercises |
 | `weight` | `kg`, `lb` | Weighted exercises |
-| `duration` | `s`, `min` | Timed exercises, cardio |
+| `duration` | `s`, `min`, `ms` | Timed exercises, cardio |
 | `distance` | `m`, `km`, `mi` | Cardio, carries |
 | `speed` | `m_s`, `km_h` | Sprints, running |
 | `pace` | `min_per_km`, `min_per_mi` | Endurance running |
 | `power` | `W` | Cycling, rowing |
 | `heartRate` | `bpm` | Cardio zones |
+| `steps` | `count` | Step-counted work |
 | `calories` | `kcal` | Energy expenditure |
 | `height` | `cm`, `in` | Box jumps, vertical leap |
 | `tempo` | `count` | Time under tension (e.g., "3-1-2-0") |
 | `rpe` | `count` | Rate of Perceived Exertion (1-10) |
+| `rir` | `count` | Reps in reserve — 1.1.0 |
+| `percent1RM` | `percent` | Intensity as a share of a one-rep max — 1.1.0 |
+| `percentBodyweight` | `percent` | Intensity as a share of bodyweight — 1.1.0 |
+| `oneRepMax` | `kg`, `lb` | A tested or estimated maximum — 1.1.0 |
+| `velocity` | `m_s` | Velocity-based training — 1.1.0 |
+| `cadence` | `rpm`, `spm` | Bike revolutions, rowing strokes, running steps — 1.1.0 |
+| `incline` | `percent` | Treadmill grade and the like — 1.1.0 |
+| `resistanceLevel` | `level` | A machine's own scale — 1.1.0 |
+| `rounds` | `count` | Rounds of a block — 1.1.0 |
+| `sets` | `count` | Sets of an item — 1.1.0 |
+| `rest` | `s`, `min` | Rest as a tracked quantity — 1.1.0 |
+
+`level` is not comparable across machines: level 8 on one manufacturer's bike is
+not level 8 on another's. That is why a machine load is a `loadTarget` with
+`method: "level"` and a named `scale`, never a bare number.
 
 ---
 
@@ -171,6 +193,9 @@ a1b2c3d4-e5f6-4a7b-8c9d-e0f1a2b3c4d5
 
 ### Example/Illustrative IDs
 Short IDs like `eq.barbell`, `mus.biceps`, `cat.legs` are ONLY for documentation and examples. Never use these in production.
+
+<!-- fds:not-a-field eq, mus, cat, barbell, biceps, legs — the halves of an illustrative documentation ID, which is exactly the thing that is not a real identifier -->
+
 
 ### Slug Requirements
 - Pattern: `^[a-z0-9-]{2,}$`
@@ -245,6 +270,99 @@ Short IDs like `eq.barbell`, `mus.biceps`, `cat.legs` are ONLY for documentation
 
 ---
 
+## Body Atlas — what makes a heatmap renderable
+
+A muscle carries no geometry. `heatmap` names an atlas and a list of **areas** in
+it, and the atlas is what turns each of those into something on screen.
+
+```json fds:not-a-field — a fragment showing the two bindings, not a whole document
+{
+  "heatmap": {
+    "atlasId": "d4e5f6a7-4444-4000-8000-000000000001",
+    "regions": [
+      { "areaId": "quad-left", "weight": 1 },
+      { "areaId": "quad-right", "weight": 1 }
+    ]
+  }
+}
+```
+
+There is no `areaIds: []`. A region is an object because the `weight` — 0 to 1,
+default 1 — has to live somewhere, and a bare list of ids has nowhere to put it.
+
+An atlas has two required, non-empty arrays:
+
+| Field | What it holds |
+|---|---|
+| `views` | The drawings. Each has an `id`, a `kind`, and an `asset` of `{ type, uri }` |
+| `areas` | The nameable regions. Each has an `id`, a `canonical` name and slug, and `bindings` |
+
+`views[].kind` is closed: `anterior`, `posterior`, `left-lateral`,
+`right-lateral`, `superior`, `inferior`. `asset.type` is `svg`, `image` or `3d`.
+
+An area is **not** per-view. One `areas[]` entry carries one `bindings[]` entry
+per view it is visible in — `{ viewId, selector }` — so "left quadriceps" is one
+area with an anterior binding, not one area per drawing. `selector` is opaque to
+FDS: the atlas author and the renderer are the two parties that must agree on it,
+and FDS is neither.
+
+Area slugs use a looser pattern than the rest of FDS — `^[a-z0-9-.]+$`, dots
+allowed — so `quad.left` is a legal area slug where it would not be a legal
+exercise slug.
+
+<!-- fds:not-a-field quad, left — halves of an illustrative area slug; `left` is real vocabulary elsewhere but here it is half of an example -->
+
+
+---
+
+## Relations — three vocabularies, not one
+
+Exercises, workouts and programs each declare relations, and the `type` enum is
+different in all three. Using one entity's vocabulary on another is a validation
+error, and it is the easy mistake because the field name is identical.
+
+| On | `relations[].type` |
+|---|---|
+| Exercise | `alternate`, `variation`, `substitute`, `progression`, `regression`, `equipmentVariant`, `accessory`, `mobilityPrep`, `similarPattern`, `unilateralPair`, `contralateralPair` |
+| Workout | `alternate`, `variation`, `progression`, `regression`, `deload`, `test` |
+| Program | `successor`, `predecessor`, `variant`, `beginnerVariant`, `advancedVariant` |
+
+Every entry is `{ type, targetId }` plus optional `notes`. An exercise relation
+may also carry `confidence` (0..1) — how sure the *link* is, not how strong the
+relationship is.
+
+`constraints.progressions` and a relation of type `progression` are different
+claims: the first is free text an author wrote, the second points at an exercise
+that exists. Prefer the relation when the target is in the catalog.
+
+### Exercise loading and constraints (1.1.0)
+
+```json fds:not-a-field — a fragment, showing two optional blocks rather than a document
+{
+  "loading": {
+    "externalLoad": "optional",
+    "assisted": false,
+    "asymmetric": true
+  },
+  "constraints": {
+    "contraindications": ["acute lower-back pain"],
+    "prerequisites": ["bodyweight squat to depth"],
+    "progressions": ["front squat"],
+    "regressions": ["goblet squat"],
+    "environment": ["gym"]
+  }
+}
+```
+
+`loading` describes the **movement**: whether it can carry external load at all
+(`none` / `optional` / `required`), whether load may be negative (`assisted`),
+and whether the sides load independently (`asymmetric`). The smallest usable
+load *step* is a property of the implement, so it lives on equipment as
+`loading.increment`, alongside `loading.stackBased` for a machine whose load
+comes from discrete stack positions.
+
+---
+
 ## Extension Mechanism
 
 ### Simple Extensions (attributes)
@@ -260,7 +378,7 @@ For simple key-value pairs:
 
 ### Complex Extensions (extensions)
 For structured vendor-specific data:
-```json
+```json fds:not-a-field — everything under an x: namespace is the vendor's, and FDS defines none of it
 {
   "extensions": {
     "x:myapp": {
@@ -369,7 +487,7 @@ What type of exercise?
 ## Common Transformations
 
 ### Source: Simple Exercise List
-```json
+```json fds:not-a-field — the source database's own field names, which is the whole point of showing them
 // Source
 {
   "id": "0001",
@@ -443,6 +561,9 @@ What type of exercise?
 **Prescription is defined once.** How much load, how many reps, what tempo, how much rest — RFC-006 defines these and both workouts and programs compose them. A set in a standalone workout and the same set inside a twelve-week program mean exactly the same thing because they are literally the same definitions.
 
 **A workout is blocks of items, and execution is a property of the block.** Straight sets, supersets, circuits, EMOM, AMRAP, Tabata and interval work are one schema differing only in `blocks[].mode`. There are no per-style fields — no `isCircuit`, no `emomInterval`, no `tabataRounds`. If you find yourself wanting one, the mode is what you want.
+
+<!-- fds:not-a-field isCircuit, emomInterval, tabataRounds — named here precisely because no schema defines them; they are the per-style fields a reader is about to invent -->
+
 
 **A program is a schedule of workout references, not a container of workouts.** A session used every Monday for twelve weeks is authored once and pointed at twelve times. This costs self-containment — a program alone is not renderable — and that trade is deliberate.
 

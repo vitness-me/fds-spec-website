@@ -1,0 +1,21 @@
+# Every way scripts/fixtures/skill/ must fail, one first-line per entry.
+#
+# Recorded rather than counted: a count tells you something broke, a list tells
+# you which rule stopped working. A line disappearing from this set is the
+# failure mode that matters — it means a rule went quiet, which is precisely the
+# state the previous version of check:skill was in.
+#
+# A bare version is normalised to <version>; one inside a published path is not.
+
+scripts/fixtures/skill/broken.md: 1 name(s) no schema defines:
+scripts/fixtures/skill/broken.md:18: quotes exercises/v1.0.0/exercise.schema.json, which is not published.
+scripts/fixtures/skill/broken.md: points a reader at /specification/rfc/rfc-009-performed-data-model.md, which does not exist.
+scripts/fixtures/skill/broken-example.json: does not validate against exercises/v1.1.0/exercise.schema.json.
+scripts/fixtures/skill: exercise <version> is not documented.
+scripts/fixtures/skill: equipment <version> is not documented.
+scripts/fixtures/skill: muscle <version> is not documented.
+scripts/fixtures/skill: muscle-category <version> is not documented.
+scripts/fixtures/skill: body-atlas <version> is not documented.
+scripts/fixtures/skill: workout <version> is not documented.
+scripts/fixtures/skill: program <version> is not documented.
+scripts/fixtures/skill: prescription <version> is not documented.

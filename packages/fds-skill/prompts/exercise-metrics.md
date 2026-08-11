@@ -1,5 +1,7 @@
 # Exercise Metrics Prompt
 
+<!-- fds:not-a-field reasoning — a field the prompt asks the model for so its choice can be reviewed; it is deliberately dropped before the document is written -->
+
 ## System Prompt
 
 ```
@@ -38,19 +40,24 @@ Provide metrics as JSON:
   "reasoning": "Brief explanation of metric choices"
 }
 
-Valid metric types: reps, weight, duration, distance, speed, pace, power, heartRate, steps, calories, height, tempo, rpe
+Valid metric types (24): reps, weight, duration, distance, speed, pace, power, heartRate,
+steps, calories, height, tempo, rpe, rir, percent1RM, percentBodyweight, oneRepMax,
+velocity, cadence, incline, resistanceLevel, rounds, sets, rest
 
-Valid metric units:
-- count (for reps, tempo, rpe, steps)
-- kg, lb (for weight)
-- s, min (for duration)
+Valid metric units (22):
+- count (for reps, tempo, rpe, rir, steps, rounds, sets)
+- kg, lb (for weight, oneRepMax)
+- s, min, ms (for duration, rest)
 - m, km, mi (for distance)
-- m_s, km_h (for speed)
+- m_s, km_h (for speed, velocity)
 - min_per_km, min_per_mi (for pace)
 - W (for power)
 - bpm (for heartRate)
 - kcal (for calories)
 - cm, in (for height)
+- percent (for percent1RM, percentBodyweight, incline)
+- rpm, spm (for cadence)
+- level (for resistanceLevel)
 
 Common pairings:
 - Strength: reps/count + weight/kg
