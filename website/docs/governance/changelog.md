@@ -13,6 +13,35 @@ The format is inspired by Keep a Changelog, and the project adheres to Semantic 
 ## [Unreleased]
 - Extension namespace policy (draft) and conformance sections (planned).
 
+## Tooling — the mapping schema is frozen (2026-08-11)
+
+No entity schema changed, no release was added, and the current release is where
+it was. Recorded here because one entry changes what the standard promises about
+a published URL, and that is a governance fact rather than a packaging one.
+
+### Changed
+- **The mapping schema at 1.1.0 is frozen.** It was published deliberately
+  unfrozen, because freezing bytes at a permanent URL is the one act here that
+  cannot be taken back, and it has now been served long enough to be named by
+  `$schema` in configuration files this project does not own. Its bytes will not
+  change again: a change means a new version directory beside it. The 1.0.0
+  mapping schema stays published and stays frozen, as it has since it was
+  superseded.
+
+  A mapping schema is `kind: tooling` in the release manifest — it configures a
+  tool and no release names it — so freezing it is a decision about that URL
+  alone.
+
+- The reference tooling is released as **0.2.0**, both packages. Neither is part
+  of a spec release, but the transformer is how most consumers first meet the
+  standard, so three of its changes are worth knowing about from here: it now
+  resolves every published release offline rather than only the oldest, it
+  defaults to the current release rather than to 1.0.0, and `validate --version`
+  validates instead of matching the program's own flag, printing a package
+  version and exiting successfully without reading the input. The skill package
+  documents every entity and library the current release names, which is gated
+  on each run.
+
 ## Schema release — workout 1.1.0 (2026-08-10)
 
 ### Added
