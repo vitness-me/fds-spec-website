@@ -153,22 +153,10 @@ const GENERATED_EXCEPTIONS = [/^specification\/schemas\/.*\.md$/];
  * until the entry is deleted.
  */
 const TEMPORARY_ALLOWANCES = [
-  {
-    label: 'registry URLs the transformer builds that were never published',
-    removedBy: 'the change that repairs RegistryManager.getDefaultUrl()',
-    why:
-      'getDefaultUrl() builds muscles/equipment/muscle-categories `.registry.json` URLs. ' +
-      'The published files carry `.example.` in the name — they are illustrative ' +
-      'catalogs, not normative vocabularies — so all three 404, and the unit test ' +
-      'asserts one of the broken URLs against a mock, which is how it survived. ' +
-      'Rules 2 and 8 catch it; that is why this gate had to exist before the fix.',
-    files: /^packages\/fds-transformer\/src\/registries\/registry-manager(\.test)?\.ts$/,
-    references: [
-      'registries/muscles.registry.json',
-      'registries/equipment.registry.json',
-      'registries/muscle-categories.registry.json',
-    ],
-  },
+  // Deliberately empty. Both original entries — the registry URLs the transformer
+  // built and the malformed `v.1.0.0` paths in the early RFCs — were removed by the
+  // changes that repaired them, which is what an entry here is for. Adding one means
+  // naming the change that deletes it again.
 ];
 
 /** Whether a known defect covers this reference, marking the allowance used. */

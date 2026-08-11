@@ -12,6 +12,47 @@ import type {
 } from '../core/types.js';
 import { FuzzyMatcher } from './fuzzy-matcher.js';
 
+type RegistryType = 'muscles' | 'equipment' | 'muscleCategories';
+
+const REGISTRY_BASE_URL = 'https://spec.vitness.me/registries';
+
+/**
+ * What FDS publishes for these three entities — and why none of it is a default.
+ *
+ * `specification/registries/README.md` draws a line these filenames encode. A
+ * `*.registry.json` is a **normative vocabulary**: the recommended values for an
+ * open classifier, which FDS undertakes to keep meaning what it meant.
+ * A `*.registry.example.json` is an **illustrative catalog**: it shows the shape
+ * a provider serves, and "nothing in FDS requires these particular entries".
+ *
+ * Muscles, equipment and muscle categories exist only in the second form. This
+ * class nevertheless built the first form's filename, so `source: "remote"` has
+ * fetched a 404 in every published release and the remote path has never run.
+ *
+ * The repair is not to move the default onto the example catalog. What a
+ * registry lookup yields is an id — `mus.quadriceps` — and that id is written
+ * into the transformed document, and from there into the consumer's database.
+ * The example ids are illustrative in exactly the way the entries are: they
+ * belong to no provider, and the spec reserves the right to change them. A
+ * default resolving there would turn a loud failure at load into plausible
+ * output full of ids nothing can resolve, found much later and much further
+ * from the cause. Silence is the more expensive failure.
+ *
+ * So these are the URLs the loader *names* when a caller asks for a remote
+ * source it cannot supply, and nothing more. Naming the illustrative catalog is
+ * a decision a caller should make in their own config, where it is visible.
+ *
+ * Keeping them here as constructed URLs is deliberate: `check:versions` rule 8
+ * resolves them against the published tree offline, so if the spec ever renames
+ * these files this file stops building — rather than the error message quietly
+ * starting to hand out a dead URL.
+ */
+const EXAMPLE_CATALOG_URLS: Record<RegistryType, string> = {
+  muscles: `${REGISTRY_BASE_URL}/muscles.registry.example.json`,
+  equipment: `${REGISTRY_BASE_URL}/equipment.registry.example.json`,
+  muscleCategories: `${REGISTRY_BASE_URL}/muscle-categories.registry.example.json`,
+};
+
 export class RegistryManager {
   private muscles: MuscleRegistryEntry[] = [];
   private equipment: EquipmentRegistryEntry[] = [];
@@ -45,9 +86,17 @@ export class RegistryManager {
    * Load a single registry
    */
   private async loadRegistry(
-    type: 'muscles' | 'equipment' | 'muscleCategories',
+    type: RegistryType,
     config: RegistryConfig
   ): Promise<void> {
+    // Resolved up front, and deliberately outside the try below. "This registry
+    // has no remote source" is a statement about the configuration, not about
+    // the network, and a fallback exists to survive a flaky endpoint rather than
+    // to paper over a source that does not exist. Raising it here means the
+    // caller is told what to change instead of quietly being served the
+    // fallback's data under a config that can never do what it says.
+    const remoteUrl = this.remoteUrl(type, config);
+
     let data: RegistryEntry[] = [];
 
     try {
@@ -55,10 +104,8 @@ export class RegistryManager {
         data = config.inline;
       } else if (config.local) {
         data = await this.loadFromFile(config.local);
-      } else if (config.source === 'remote' || config.url) {
-        data = await this.loadFromUrl(
-          config.url || this.getDefaultUrl(type)
-        );
+      } else if (remoteUrl) {
+        data = await this.loadFromUrl(remoteUrl);
       }
     } catch (error) {
       // Try fallback
@@ -66,8 +113,8 @@ export class RegistryManager {
         console.warn(`Failed to load ${type} from primary source, trying fallback`);
         if (config.fallback === 'local' && config.local) {
           data = await this.loadFromFile(config.local);
-        } else if (config.fallback === 'remote') {
-          data = await this.loadFromUrl(this.getDefaultUrl(type));
+        } else if (config.fallback === 'remote' && remoteUrl) {
+          data = await this.loadFromUrl(remoteUrl);
         }
       } else {
         throw error;
@@ -104,24 +151,45 @@ export class RegistryManager {
     if (!response.ok) {
       throw new Error(`Failed to fetch registry from ${url}: ${response.statusText}`);
     }
-    return response.json() as Promise<RegistryEntry[]>;
+    const body = await response.json();
+    // A catalog is an array of entity documents. The normative vocabulary
+    // registries published in the same directory are objects wrapping an
+    // `entries` array — valid JSON, served with a JSON content type, and not a
+    // catalog. Pointing `url` at one is the easiest mistake to make here, and
+    // without this it surfaces as `registry.find is not a function` at the first
+    // lookup, nowhere near the URL that caused it.
+    if (!Array.isArray(body)) {
+      throw new Error(
+        `Registry at ${url} is not a catalog: expected an array of entity documents, ` +
+          `received ${body === null ? 'null' : typeof body}.`
+      );
+    }
+    return body as RegistryEntry[];
   }
 
   /**
-   * Get default URL for a registry type
+   * The URL this registry is to be fetched from, or null if none is configured.
+   *
+   * An explicit `url` is always honoured — a caller naming a catalog is the
+   * supported way to use the remote path, including naming the illustrative one.
+   * Asking for a remote source *without* naming it is what fails, because for
+   * these three entities there is nothing normative to point at; see
+   * EXAMPLE_CATALOG_URLS above for the reasoning.
    */
-  private getDefaultUrl(type: string): string {
-    const baseUrl = 'https://spec.vitness.me/registries';
-    switch (type) {
-      case 'muscles':
-        return `${baseUrl}/muscles.registry.json`;
-      case 'equipment':
-        return `${baseUrl}/equipment.registry.json`;
-      case 'muscleCategories':
-        return `${baseUrl}/muscle-categories.registry.json`;
-      default:
-        throw new Error(`Unknown registry type: ${type}`);
-    }
+  private remoteUrl(type: RegistryType, config: RegistryConfig): string | null {
+    if (config.url) return config.url;
+    if (config.source !== 'remote' && config.fallback !== 'remote') return null;
+
+    throw new Error(
+      `The ${type} registry has no default remote source.\n` +
+        'FDS publishes muscles, equipment and muscle categories only as illustrative ' +
+        `catalogs. ${EXAMPLE_CATALOG_URLS[type]} shows the shape a provider serves; ` +
+        'nothing in FDS requires its entries, and its ids belong to no provider — so ' +
+        'defaulting to it would write ids nothing can resolve into your output.\n' +
+        'Name the source you mean: "url" for a catalog you or your provider publishes, ' +
+        '"local" for a file, or "inline" for data. Pass the URL above as "url" if the ' +
+        'illustrative catalog is genuinely what you want.'
+    );
   }
 
   // Getters
