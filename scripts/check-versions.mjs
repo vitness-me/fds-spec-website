@@ -869,21 +869,63 @@ for (const file of files) {
 
 // ── rule 4, continued — the site's version label ─────────────────────────────
 
+/**
+ * The site's version label — the one number every page carries.
+ *
+ * It is now an identifier the config binds from `specification/releases.json`
+ * rather than a literal, so it cannot go stale; this is here to prove that it
+ * still is. Two forms pass and nothing else does: a literal equal to the current
+ * release, or an identifier this file demonstrably reads out of the manifest.
+ * Anything else — a literal at the wrong release, an identifier that comes from
+ * somewhere unaudited, a label deleted altogether — is reported, because the
+ * check being satisfied by "the expression is not a string" would be no check.
+ */
 const SITE_CONFIG = 'website/docusaurus.config.ts';
 const siteConfig = await readFile(join(ROOT, SITE_CONFIG), 'utf8');
-const label = /versions:\s*\{\s*current:\s*\{\s*label:\s*'([^']+)'/.exec(siteConfig);
+const versionsBlock = /versions:\s*\{\s*current:\s*\{([\s\S]*?)\}/.exec(siteConfig);
+const label = versionsBlock && /label:\s*([^,\n]+)/.exec(versionsBlock[1]);
+
 if (!label) {
   note(
     `${SITE_CONFIG}: no docs version label found.\n` +
       '    The label names the current release to every reader of the site; it cannot go ' +
       'unchecked.'
   );
-} else if (label[1] !== manifest.currentRelease) {
-  note(
-    `${SITE_CONFIG}: the docs version label is ${label[1]}; the current release is ` +
-      `${manifest.currentRelease}.\n` +
-      '    Every page on the site carries this number.'
-  );
+} else {
+  const expression = label[1].trim();
+  const literal = /^'([^']*)'$/.exec(expression);
+
+  if (literal) {
+    if (literal[1] !== manifest.currentRelease) {
+      note(
+        `${SITE_CONFIG}: the docs version label is ${literal[1]}; the current release is ` +
+          `${manifest.currentRelease}.\n` +
+          '    Every page on the site carries this number. It sat at 1.0.0 for three releases ' +
+          'as a literal —\n    bind it from ' +
+          `${MANIFEST_PATH} instead, the way this config already can.`
+      );
+    }
+  } else if (!/^[A-Za-z_$][\w$]*$/.test(expression)) {
+    note(
+      `${SITE_CONFIG}: the docs version label is \`${expression}\`, which this check cannot ` +
+        'follow.\n' +
+        `    Use a name bound from ${MANIFEST_PATH}, or a string literal.`
+    );
+  } else {
+    // An identifier is only trusted if this file is where it was read from.
+    const bound = new RegExp(
+      `(?:const|let|var)\\s*(?:\\{[^}]*\\b${expression}\\b[^}]*\\}|${expression})\\s*=` +
+        `[\\s\\S]{0,400}?releases\\.json`
+    );
+    if (!bound.test(siteConfig)) {
+      note(
+        `${SITE_CONFIG}: the docs version label is \`${expression}\`, which this file does not ` +
+          `bind from ${MANIFEST_PATH}.\n` +
+          '    A label taken from somewhere else is a second copy of the release number, which ' +
+          'is what\n    reading the manifest was for.'
+      );
+    }
+  }
 }
 
 // ── rule 7 — the D31 floor ───────────────────────────────────────────────────
