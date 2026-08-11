@@ -23,7 +23,9 @@
  * what bytes:
  *   1. specification/schemas/                  the published schemas
  *   2. specification/schemas/.integrity.json   hash + freeze state per schema
- *   3. packages/fds-transformer/.../bundled/   the transformer's offline copies
+ *   3. specification/releases.json             the release manifest — every
+ *                                              version fact, in one document
+ *   4. packages/fds-transformer/.../bundled/   the transformer's offline copies
  *
  * Usage:
  *   node scripts/build-schemas.mjs           write all of them
@@ -132,6 +134,97 @@ const UNGENERATED = [
   { name: 'workout', kind: 'entity', path: 'workout/v1.0.0/workout.schema.json' },
 ];
 
+/**
+ * What each FDS release names.
+ *
+ * A release is a *set* of schema versions, not a version every schema shares —
+ * see `specification/discovery.md`. Release 1.4.0 serves exercise, equipment and
+ * workout at 1.1.0 while muscle, muscle-category, body-atlas, prescription and
+ * program stay at 1.0.0. There is no `muscle/v1.4.0/` and there never will be
+ * unless muscle itself changes.
+ *
+ * This is history, so it is declared rather than derived: nothing on disk
+ * remembers what 1.2.0 contained. The newest release is the exception that keeps
+ * the rest honest — it must name exactly the current version of every schema in
+ * ENTITIES, and the build fails if it does not. That is what stops this list
+ * drifting from the tree it describes when a schema moves.
+ *
+ * The transformer mapping schema is absent on purpose. It configures a tool; it
+ * is versioned on its own and no FDS release names it.
+ */
+const RELEASES = {
+  '1.0.0': {
+    exercise: '1.0.0',
+    equipment: '1.0.0',
+    muscle: '1.0.0',
+    'muscle-category': '1.0.0',
+    'body-atlas': '1.0.0',
+  },
+  // exercise and equipment gain `loading`; the other three did not change and
+  // keep their 1.0.0 URLs.
+  '1.1.0': {
+    exercise: '1.1.0',
+    equipment: '1.1.0',
+    muscle: '1.0.0',
+    'muscle-category': '1.0.0',
+    'body-atlas': '1.0.0',
+  },
+  // Adds the RFC-006 prescription library and the RFC-007 workout entity. No
+  // existing schema moved: gaining one is still a new set.
+  '1.2.0': {
+    exercise: '1.1.0',
+    equipment: '1.1.0',
+    muscle: '1.0.0',
+    'muscle-category': '1.0.0',
+    'body-atlas': '1.0.0',
+    prescription: '1.0.0',
+    workout: '1.0.0',
+  },
+  // Adds the RFC-008 program entity. Again nothing existing moved.
+  '1.3.0': {
+    exercise: '1.1.0',
+    equipment: '1.1.0',
+    muscle: '1.0.0',
+    'muscle-category': '1.0.0',
+    'body-atlas': '1.0.0',
+    prescription: '1.0.0',
+    workout: '1.0.0',
+    program: '1.0.0',
+  },
+  // Moves workout to 1.1.0 — per-set intensity zones and machine settings. The
+  // first release where a schema this batch introduced has itself moved, which
+  // makes it the first proof the set is doing real work: 1.2.0 and 1.3.0 keep
+  // naming workout 1.0.0, and that URL is still served.
+  '1.4.0': {
+    exercise: '1.1.0',
+    equipment: '1.1.0',
+    muscle: '1.0.0',
+    'muscle-category': '1.0.0',
+    'body-atlas': '1.0.0',
+    prescription: '1.0.0',
+    workout: '1.1.0',
+    program: '1.0.0',
+  },
+};
+
+/**
+ * Versions a release names that are no longer served.
+ *
+ * exercise and equipment 1.0.0 were removed rather than frozen in place when
+ * 1.1.0 replaced them — they had no external consumers at the time. Release
+ * 1.0.0 still names them, so the manifest has to say what became of them: named
+ * by a release, not fetchable, no bytes to hash.
+ *
+ * This is the exception. `workout/v1.0.0` is the rule — a superseded version
+ * stays published, because a frozen URL that disappears is worse than one that
+ * changes. Nothing belongs here that has not actually been unpublished, and the
+ * build rejects an entry that is still on disk.
+ */
+const WITHDRAWN = {
+  exercise: ['1.0.0'],
+  equipment: ['1.0.0'],
+};
+
 /** Every `*.schema.json` under the published tree, relative to it. */
 async function publishedSchemaFiles() {
   const entries = await readdir(OUT, { recursive: true, withFileTypes: true });
@@ -155,6 +248,13 @@ function versionFromPath(path) {
   const match = /\/v(\d+\.\d+\.\d+)\//.exec(`/${path}`);
   if (!match) throw new Error(`no /vX.Y.Z/ segment in published path: ${path}`);
   return match[1];
+}
+
+/** Ascending semver order, for the two-part version numbers this project uses. */
+function compareVersions(a, b) {
+  const [aMajor, aMinor, aPatch] = a.split('.').map(Number);
+  const [bMajor, bMinor, bPatch] = b.split('.').map(Number);
+  return aMajor - bMajor || aMinor - bMinor || aPatch - bPatch;
 }
 
 /** An object with its keys in a stated order, so generated output is stable. */
@@ -405,6 +505,181 @@ const renderIntegrity = (schemas) =>
   )}\n`;
 
 
+// ── release manifest ─────────────────────────────────────────────────────────
+//
+// Every version fact this project has, in one document, so that nothing else
+// has to keep a copy: which schemas exist, which versions of each are published,
+// which of those is current and which is merely still served, what each release
+// names, and which release is current.
+//
+// It is built from the same list the integrity manifest is written from. Two
+// independent walks of the published tree can disagree — one of them has to be
+// wrong and neither knows which — so there is only one walk.
+
+const MANIFEST = join(ROOT, 'specification/releases.json');
+
+const MANIFEST_COMMENT =
+  'Generated by scripts/build-schemas.mjs from the published schemas — do not ' +
+  'edit by hand; run `npm run build:schemas`. A release names a *set* of schema ' +
+  'versions, not a version they all share. status "current" is the version ' +
+  'documentation and packages should point at; "superseded" is still published ' +
+  'and still frozen, because an older release names it; "withdrawn" was named by ' +
+  'a release and is no longer served, so it has no bytes to hash. kind separates ' +
+  'an entity a provider can export from a definition library whose root ' +
+  'validates nothing (prescription) and from tooling configuration that is not ' +
+  'part of any release (the transformer mapping schema).';
+
+/**
+ * The manifest, and the problems found building it.
+ *
+ * `published` is the single traversal: one record per published schema, already
+ * carrying the hash and freeze state the integrity manifest is written from.
+ */
+function buildManifest(published) {
+  const problems = [];
+  const schemas = {};
+
+  const entryFor = (name, kind) => {
+    const entry = (schemas[name] ??= { kind, current: null, versions: {} });
+    if (entry.kind !== kind) {
+      problems.push(`CONFLICT   "${name}" is declared as both ${entry.kind} and ${kind}`);
+    }
+    return entry;
+  };
+
+  for (const schema of published) {
+    entryFor(schema.name, schema.kind).versions[schema.version] = {
+      // Provisional. Which version is current is decided once every version of
+      // that schema is in hand, below.
+      status: 'superseded',
+      path: schema.path,
+      $id: schema.$id,
+      frozen: schema.frozen,
+      sha256: schema.sha256,
+    };
+  }
+
+  for (const [name, versions] of Object.entries(WITHDRAWN)) {
+    const entry = schemas[name];
+    if (!entry) {
+      problems.push(`WITHDRAWN  "${name}" is recorded as withdrawn but nothing publishes it`);
+      continue;
+    }
+    for (const version of versions) {
+      if (entry.versions[version]) {
+        problems.push(
+          `WITHDRAWN  ${name} ${version} is recorded as withdrawn but is still published`
+        );
+        continue;
+      }
+      entry.versions[version] = { status: 'withdrawn' };
+    }
+  }
+
+  for (const [name, entry] of Object.entries(schemas)) {
+    // The current version is the greatest one still served. Derived rather than
+    // declared, so a superseded version that is published later than the current
+    // one — the shape of the workout 1.0.0 entry — cannot be mistaken for it.
+    const served = Object.keys(entry.versions)
+      .filter((version) => entry.versions[version].status !== 'withdrawn')
+      .sort(compareVersions);
+    entry.current = served.at(-1);
+    entry.versions[entry.current].status = 'current';
+    entry.versions = ordered(entry.versions, compareVersions);
+  }
+
+  // A generated schema's version is the one ENTITIES points the build at. If
+  // that is not the greatest published, something newer is being served that
+  // nothing regenerates — which is how a superseded copy quietly becomes the
+  // one implementers fetch.
+  for (const declaration of ENTITIES) {
+    const declared = versionFromPath(declaration.path);
+    const current = schemas[declaration.name]?.current;
+    if (current !== declared) {
+      problems.push(
+        `CURRENT    ${declaration.name} is built at ${declared} but ${current} is published — ` +
+          'the greatest published version must be the one this build generates.'
+      );
+    }
+  }
+
+  const releases = {};
+  for (const release of Object.keys(RELEASES).sort(compareVersions)) {
+    const named = RELEASES[release];
+    const entities = {};
+    const libraries = {};
+
+    // Declaration order, not alphabetical. It is the order ENTITIES builds in,
+    // and the transformer walks the map to decide what to fetch — sorting here
+    // would silently reorder the requests a consumer makes.
+    for (const [name, version] of Object.entries(named)) {
+      const entry = schemas[name];
+      if (!entry) {
+        problems.push(`RELEASE    ${release} names "${name}", which is not a published schema`);
+        continue;
+      }
+      if (!entry.versions[version]) {
+        problems.push(
+          `RELEASE    ${release} names ${name} ${version}, which is neither published nor ` +
+            'recorded as withdrawn. Publish it, or record it in WITHDRAWN.'
+        );
+        continue;
+      }
+      if (entry.kind === 'tooling') {
+        problems.push(
+          `RELEASE    ${release} names "${name}", which is tooling configuration. ` +
+            'A release names entities and the libraries they compose, nothing else.'
+        );
+        continue;
+      }
+      (entry.kind === 'library' ? libraries : entities)[name] = version;
+    }
+
+    releases[release] = { entities, libraries };
+  }
+
+  // The current release is the one nobody remembers to update, so it is the one
+  // that is checked against the tree: it must name exactly what this build
+  // publishes, at the versions it publishes them.
+  const expected = Object.fromEntries(
+    ENTITIES.map((entity) => [entity.name, versionFromPath(entity.path)])
+  );
+  const newest = Object.keys(RELEASES).sort(compareVersions).at(-1);
+  if (newest !== CURRENT_RELEASE) {
+    problems.push(
+      `RELEASE    ${newest} is the newest release declared but ${CURRENT_RELEASE} is named as ` +
+        'current. A manifest whose currentRelease is not its newest release describes ' +
+        'a tree nobody has.'
+    );
+  }
+
+  const named = RELEASES[CURRENT_RELEASE];
+  if (!named) {
+    problems.push(
+      `RELEASE    ${CURRENT_RELEASE} is the current release but RELEASES has no entry for it`
+    );
+  } else if (JSON.stringify(ordered(named)) !== JSON.stringify(ordered(expected))) {
+    problems.push(
+      `RELEASE    ${CURRENT_RELEASE} does not name what this build publishes.\n` +
+        `             declared ${JSON.stringify(ordered(named))}\n` +
+        `             built    ${JSON.stringify(ordered(expected))}`
+    );
+  }
+
+  return {
+    manifest: {
+      $comment: MANIFEST_COMMENT,
+      currentRelease: CURRENT_RELEASE,
+      releases,
+      schemas: ordered(schemas),
+    },
+    problems,
+  };
+}
+
+const renderManifest = (manifest) => `${JSON.stringify(manifest, null, 2)}\n`;
+
+
 // ── run ──────────────────────────────────────────────────────────────────────
 
 const check = process.argv.includes('--check');
@@ -419,8 +694,8 @@ function report() {
   if (check) {
     console.error(
       '\nRun `npm run build:schemas` and commit the result.\n' +
-        'Never edit specification/schemas/ or src/schemas/bundled/ by hand — ' +
-        'edit specification/schema-sources/.'
+        'Never edit specification/schemas/, specification/releases.json or ' +
+        'src/schemas/bundled/ by hand — edit specification/schema-sources/.'
     );
   }
   process.exit(1);
@@ -509,6 +784,9 @@ if (problems.length) report();
   }
 }
 
+const { manifest, problems: manifestProblems } = buildManifest(published);
+problems.push(...manifestProblems);
+
 /** Every file this run owns. */
 const bundleDir = join(BUNDLED, `v${CURRENT_RELEASE}`);
 const artifacts = [
@@ -539,6 +817,11 @@ const artifacts = [
       )
     ),
     note: 'the integrity manifest does not match the published tree',
+  },
+  {
+    path: MANIFEST,
+    content: renderManifest(manifest),
+    note: 'the release manifest does not match the published tree',
   },
 ];
 
@@ -596,7 +879,8 @@ if (problems.length) report();
 
 if (check) {
   console.log(
-    '\nPublished schemas, integrity manifest and transformer bundle all match their sources.'
+    '\nPublished schemas, integrity manifest, release manifest and transformer ' +
+      'bundle all match their sources.'
   );
   process.exit(0);
 }
