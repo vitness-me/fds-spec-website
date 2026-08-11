@@ -1,9 +1,53 @@
 name: Deploy to GitHub Pages
 
+# The site serves the frozen schema URLs. A commit that reaches Pages has been
+# published to every consumer that resolves a `$id`, so the gate belongs here
+# and not only in review.
+#
+# ── Why workflow_run, and not `needs:` ───────────────────────────────────────
+#
+# `needs:` orders jobs inside one workflow, and these are two workflows, so it
+# does not apply. Moving the deploy into ci.yml was the alternative and it is
+# worse: ci.yml sets `concurrency: cancel-in-progress: true`, so a merge landing
+# mid-deploy would cancel a Pages deployment part-way through. Deploys must
+# queue, never be interrupted — which is exactly what this workflow's own
+# `pages` group says, and what ci.yml's group says the opposite of.
+#
+# ── What this deploys, and why it is not workflow_run.head_sha ───────────────
+#
+# It deploys the newest commit on main that has a successful CI run, resolved
+# from the API at deploy time. Not the SHA that triggered the event.
+#
+# That distinction does two pieces of work:
+#
+#   - ci.yml cancels a run when a newer push to the same ref supersedes it. A
+#     cancelled run is evidence of nothing, so it must not deploy — but its
+#     commit must not be stranded either. On main the superseding push is a
+#     descendant: its tree contains the cancelled commit's changes, so when its
+#     run passes, "newest green commit" carries those changes to Pages. The
+#     chain is finite, because the last push in a burst is not superseded by
+#     anything, so some run always reaches a terminal conclusion.
+#
+#   - workflow_run events are not ordered. CI for an older commit can finish
+#     after CI for a newer one, and with `cancel-in-progress: false` both
+#     deployments queue rather than cancel. Taking head_sha would let the older
+#     one land last and silently roll the site back to an earlier tree.
+#     Resolving the newest green commit is idempotent under any arrival order:
+#     a late event for an old commit resolves forward, never backward.
+#
+# The costs, stated rather than hidden: the deployed commit can lag the tip of
+# main by a burst of merges, and a red main stops deploying entirely. Both are
+# intended. There is no override — a deploy that needs one is a CI failure that
+# needs fixing first.
+
 on:
-  push:
-    branches:
-      - main
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: [main]
+  # Manual redeploy, for a Pages-side failure rather than a way past the gate:
+  # it resolves the same commit the automatic path would, whatever ref it is
+  # dispatched on.
   workflow_dispatch:
 
 permissions:
@@ -16,11 +60,69 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  gate:
+    name: Gate — newest commit on main with a green CI run
+    # A cancelled or failed CI run has nothing new to offer: re-resolving would
+    # find the same commit the last green run already deployed.
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
+    runs-on: blacksmith-4vcpu-ubuntu-2404
+    permissions:
+      contents: read
+      actions: read
+    outputs:
+      sha: ${{ steps.resolve.outputs.sha }}
+    steps:
+      # main explicitly, not the triggering ref. Pages serves one branch, so a
+      # dispatch on a feature branch must not put that branch on the site.
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 100
+
+      - name: Resolve the commit to deploy
+        id: resolve
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+
+          # `status=` filters on conclusion here. Pull-request runs are excluded
+          # because their head_branch is the source branch, so a branch named
+          # `main` would otherwise let a PR run vouch for a commit that is not
+          # on main.
+          gh api "repos/$REPO/actions/workflows/ci.yml/runs?branch=main&status=success&per_page=100" \
+            --jq '.workflow_runs[] | select(.event != "pull_request") | .head_sha' \
+            | sort -u > green.txt
+
+          # Walking history tip-first, rather than trusting the order runs
+          # completed in, is what makes the result independent of the order
+          # workflow_run events arrive in.
+          sha=""
+          while IFS= read -r candidate; do
+            if grep -qx "$candidate" green.txt; then sha="$candidate"; break; fi
+          done < <(git rev-list --max-count=100 HEAD)
+
+          if [ -z "$sha" ]; then
+            echo "::error::None of the last 100 commits on main has a successful CI run. Refusing to deploy: the site would be serving an unchecked tree."
+            exit 1
+          fi
+
+          git --no-pager log -1 --format='deploying %h %s' "$sha"
+          echo "sha=$sha" >> "$GITHUB_OUTPUT"
+
   build:
+    name: Build the site from the gated commit
+    needs: gate
     runs-on: blacksmith-4vcpu-ubuntu-2404
     steps:
       - uses: actions/checkout@v4
         with:
+          # The commit CI passed on. Without this, a workflow_run-triggered job
+          # checks out the default branch's *current* head — which is precisely
+          # the unchecked commit this workflow exists to exclude.
+          ref: ${{ needs.gate.outputs.sha }}
           submodules: false  # No need to checkout submodules for website build
 
       - uses: actions/setup-node@v4

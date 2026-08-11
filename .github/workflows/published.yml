@@ -2,10 +2,28 @@ name: Published URLs
 
 # Deployment, not the change in hand. A CDN hiccup or an access-proxy change is
 # real and worth knowing about, but it must not block a documentation edit — so
-# this runs on a schedule and on demand rather than on every pull request.
+# this stays off the pull-request path.
 on:
+  # The weekly sweep catches decay with no deploy involved: a certificate that
+  # expired, a proxy put back in front of the site, a bucket that started
+  # answering HTML. Nothing else looks for that, so it stays.
   schedule:
     - cron: '17 6 * * 1'
+  # A bad deploy used to be invisible until the next Monday. The deployment is
+  # the moment the frozen URLs can start serving different bytes, so it is the
+  # moment to look — this closes a seven-day window to a few minutes without
+  # putting the check in front of a pull request.
+  #
+  # Deploy is itself started by a workflow_run, so this is one workflow_run
+  # chained onto another. Nothing documented forbids that and it is a common
+  # arrangement, but it could not be exercised before merging — neither trigger
+  # fires until its workflow is on the default branch. The first merge to main
+  # is where it gets proved. If no run appears here after a successful deploy,
+  # the chain is the thing that did not work, and the fix is to trigger on
+  # `deployment_status` filtered to the `github-pages` environment instead.
+  workflow_run:
+    workflows: ["Deploy to GitHub Pages"]
+    types: [completed]
   workflow_dispatch:
 
 permissions:
@@ -14,7 +32,13 @@ permissions:
 jobs:
   published:
     name: Published URLs — resolve, JSON, frozen bytes
+    # A deploy that failed did not change what is served, so there is nothing
+    # new to check and a red run here would blame the wrong thing.
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
     runs-on: blacksmith-4vcpu-ubuntu-2404
+    permissions:
+      contents: read
+      issues: write  # see "Where the failure surfaces", below
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -24,8 +48,73 @@ jobs:
         with:
           node-version: 20
 
-      # A $id is a promise the document can be fetched from that address. It was
-      # false for weeks while the site sat behind an access proxy, and nothing
-      # noticed because the only consumer fell back to bundled copies silently.
+      # Pages reports a deployment complete before every edge is serving it.
+      # Checking immediately would read a stale hash as a broken freeze, which
+      # is a false red on the one path where this check has to be believed.
+      - name: Let the deployment settle
+        if: github.event_name == 'workflow_run'
+        run: sleep 60
+
+      # Three attempts rather than one. The claim is a sustained one — these
+      # URLs serve what was frozen — and a single lost response is not evidence
+      # against it. This does not weaken the check: a deployment that is
+      # genuinely wrong fails all three attempts, identically and for the same
+      # reason. Only a transient passes on the second.
       - name: Verify the published URLs
-        run: npm run check:published
+        run: |
+          set -uo pipefail
+          for attempt in 1 2 3; do
+            echo "── attempt $attempt of 3"
+            if npm run check:published; then exit 0; fi
+            if [ "$attempt" -lt 3 ]; then sleep 30; fi
+          done
+          exit 1
+
+      # ── Where the failure surfaces ──────────────────────────────────────────
+      #
+      # The red run is the record, but nobody watches Actions for a job that
+      # runs at 06:17 on a Monday, and GitHub mails a scheduled failure to
+      # whoever last edited the cron file — which is the wrong person by
+      # construction. Post-deploy failures do reach the person who merged, and
+      # they are the ones that matter most, but relying on that alone means the
+      # weekly sweep stays unread.
+      #
+      # So a failure also files an issue: durable, assignable, and visible to
+      # someone who was not in the room. It reuses the open one rather than
+      # filing a second, because "still broken on the fourth Monday" is the
+      # signal, not four identical reports.
+      - name: Report the failure where it will be seen
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          EVENT: ${{ github.event_name }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          set -euo pipefail
+
+          gh label create published-urls --repo "$REPO" --color B60205 \
+            --description 'A published URL is not serving what the repository froze' \
+            2>/dev/null || true
+
+          BODY=$(printf '%s\n' \
+            "\`check:published\` failed three times on the \`$EVENT\` run." \
+            "" \
+            "$RUN_URL" \
+            "" \
+            "One of three things is true, and the run log says which:" \
+            "" \
+            "- the deployment is stale, and a frozen URL is serving the previous bytes;" \
+            "- a frozen URL has changed, which is the promise a \`\$id\` makes being broken;" \
+            "- the site is answering with something that is not JSON — an interstitial," \
+            "  an error page, or an access proxy.")
+
+          EXISTING=$(gh issue list --repo "$REPO" --state open --label published-urls \
+            --json number --jq '.[0].number // empty')
+
+          if [ -n "$EXISTING" ]; then
+            gh issue comment "$EXISTING" --repo "$REPO" --body "$BODY"
+          else
+            gh issue create --repo "$REPO" --label published-urls \
+              --title 'Published URLs are not serving what was frozen' --body "$BODY"
+          fi

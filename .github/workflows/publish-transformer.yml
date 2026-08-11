@@ -1,5 +1,17 @@
 name: Publish FDS Transformer
 
+# What reaches npm must be what CI tested.
+#
+# It was not. This workflow installed with `npm install` and keyed its cache on
+# package.json, while ci.yml installs with `npm ci` keyed on package-lock.json.
+# `npm install` re-resolves every range at install time, so the tree built here
+# was whatever the registry offered that morning, and the tree CI tested was the
+# locked one. Two different builds, and `--provenance` attested the one nobody
+# had run a test against.
+#
+# Both jobs below now install from the lockfile, so the dependency tree is the
+# same in all three places: CI, the gates here, and the published build.
+
 on:
   push:
     tags:
@@ -32,10 +44,12 @@ jobs:
         with:
           node-version: 20
           cache: npm
-          cache-dependency-path: packages/fds-transformer/package.json
+          # The lockfile, as in ci.yml. Keyed on package.json, the cache key
+          # stayed constant while the resolved tree underneath it moved.
+          cache-dependency-path: packages/fds-transformer/package-lock.json
 
-      - name: Install dependencies (including dev for build)
-        run: npm install
+      - name: Install dependencies
+        run: npm ci
 
       - name: Type check
         run: npm run typecheck
@@ -46,12 +60,14 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: dist
-          path: packages/fds-transformer/dist/
-          retention-days: 1
+      # The built dist/ used to be uploaded here and downloaded by the publish
+      # job, which looked like carrying the tested artifact across but was not:
+      # package.json declares `prepublishOnly: npm run build`, so `npm publish`
+      # rebuilt over the downloaded files every time. The hand-off was removed
+      # rather than repaired, because the property it was faking is delivered
+      # properly by both jobs installing the same locked tree — `npm ci` from
+      # one package-lock.json produces one dependency tree, so the rebuild in
+      # the publish job is the same build, not a second one.
 
   publish:
     name: Publish to npm
@@ -72,25 +88,48 @@ jobs:
         with:
           node-version: 20
           registry-url: 'https://registry.npmjs.org'
-
-      - name: Download build artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: dist
-          path: packages/fds-transformer/dist/
+          cache: npm
+          cache-dependency-path: packages/fds-transformer/package-lock.json
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
+
+      - name: Build
+        run: npm run build
 
       - name: Verify package
         run: npm pack --dry-run
+
+      # `files` lists dist/, but npm packs happily when a listed path is absent
+      # — it mentions it in a notice and exits zero. A package published without
+      # its entry point installs without complaint and fails at import, in
+      # someone else's build, which is the worst place to learn about it. So the
+      # tarball is opened and read.
+      - name: The tarball contains the build it claims to
+        run: |
+          set -euo pipefail
+          tarball="$RUNNER_TEMP/$(npm pack --silent --pack-destination "$RUNNER_TEMP")"
+          tar -tzf "$tarball" | sort > "$RUNNER_TEMP/contents"
+          sed 's/^/  /' "$RUNNER_TEMP/contents"
+
+          missing=0
+          for required in package/dist/index.js \
+                          package/dist/index.d.ts \
+                          package/dist/bin/fds-transformer.js \
+                          package/schemas/mapping.schema.json; do
+            grep -qx "$required" "$RUNNER_TEMP/contents" || {
+              echo "::error::$required is missing from the tarball."
+              missing=1
+            }
+          done
+          [ "$missing" -eq 0 ]
 
       - name: Extract version from tag
         if: github.event_name == 'push'
         id: version
         run: |
           TAG="${GITHUB_REF#refs/tags/fds-transformer@}"
-          echo "version=$TAG" >> $GITHUB_OUTPUT
+          echo "version=$TAG" >> "$GITHUB_OUTPUT"
           echo "Publishing version: $TAG"
 
       - name: Verify version matches package.json
@@ -107,10 +146,7 @@ jobs:
         if: ${{ github.event.inputs.dry_run != 'true' }}
         run: npm publish --access public --provenance
 
+      # The contents were already listed and asserted above, on both paths.
       - name: Dry run - skip publish
         if: ${{ github.event.inputs.dry_run == 'true' }}
-        run: |
-          echo "Dry run mode - skipping npm publish"
-          npm pack
-          echo "Package contents:"
-          tar -tzf *.tgz
+        run: echo "Dry run mode - skipping npm publish"

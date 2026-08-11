@@ -1,5 +1,19 @@
 name: Publish FDS Skill
 
+# What reaches npm must have passed what CI runs.
+#
+# It had not. The only gate between this package and the registry was
+# `npm pack --dry-run`, which asserts nothing: it lists the files that would be
+# included and exits zero whatever they contain. Meanwhile ci.yml runs two
+# checks that read this package specifically — `check:skill` and
+# `check:versions` — and publishing ran neither.
+#
+# That is the wrong way round for this package in particular. The skill is a
+# knowledge base an assistant answers from, so a wrong field name in it does not
+# produce an error, it produces confident, specific, invalid output that the
+# person asking has no way to tell from the truth. Publishing freezes that into
+# a release.
+
 on:
   push:
     tags:
@@ -17,32 +31,38 @@ permissions:
   id-token: write  # Required for npm provenance
 
 jobs:
-  build-and-test:
+  gates:
     name: Validate Package
     runs-on: blacksmith-4vcpu-ubuntu-2404
-    defaults:
-      run:
-        working-directory: packages/fds-skill
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
+      # No `cache: npm` and no install: these checks are plain Node reading the
+      # repository, exactly as the schemas job in ci.yml runs them. The root has
+      # no lockfile to key a cache on, which is the honest reason as well as the
+      # practical one.
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: npm
-          cache-dependency-path: packages/fds-skill/package.json
 
-      - name: Install dependencies
-        run: npm install
+      # Every name the knowledge base uses must exist somewhere in the standard
+      # — as a property, a definition, a `const`, an enum member or a
+      # recommended value — and every schema URL it quotes must resolve to a
+      # published file.
+      - name: Verify the skill names fields that exist
+        run: npm run check:skill
 
-      - name: Verify package
-        run: npm pack --dry-run
+      # The skill quotes versions, and every version fact outside
+      # specification/releases.json is a second copy of a number nobody
+      # rechecks. Publishing is exactly when a stale one stops being fixable.
+      - name: Verify every version claim matches the release manifest
+        run: npm run check:versions
 
   publish:
     name: Publish to npm
-    needs: build-and-test
+    needs: gates
     runs-on: blacksmith-4vcpu-ubuntu-2404
     defaults:
       run:
@@ -54,24 +74,68 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      # Deliberately before setup-node. With `cache: npm` and a
+      # cache-dependency-path that resolves to nothing, setup-node fails with
+      # "Some specified paths were not resolved, unable to cache dependencies"
+      # — true, and useless to whoever has to act on it. This says what is
+      # missing and the one command that produces it.
+      #
+      # As of writing there is no packages/fds-skill/package-lock.json, so this
+      # step fails and nothing publishes. That is the intended state: the
+      # package declares no dependencies today, so a lockfile costs nothing and
+      # protects the day it declares one — the day `npm install` would quietly
+      # float a transitive dependency into a published release.
+      - name: The package has a lockfile
+        run: |
+          # shellcheck disable=SC2016  # the backticks are markdown, not a subshell
+          if [ ! -f package-lock.json ]; then
+            echo '::error::packages/fds-skill/package-lock.json is missing. Publishing installs with `npm ci` so the published tree is the checked tree; `npm install` would resolve dependencies afresh at publish time. Create it with `cd packages/fds-skill && npm install --package-lock-only` and commit it.'
+            exit 1
+          fi
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
           registry-url: 'https://registry.npmjs.org'
+          cache: npm
+          cache-dependency-path: packages/fds-skill/package-lock.json
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Verify package
         run: npm pack --dry-run
+
+      # `files` lists directories, and npm packs a listed path that does not
+      # exist without failing. This package *is* its files — a tarball missing
+      # knowledge/ or prompts/ installs cleanly and teaches nothing.
+      - name: The tarball contains the skill it claims to
+        run: |
+          set -euo pipefail
+          tarball="$RUNNER_TEMP/$(npm pack --silent --pack-destination "$RUNNER_TEMP")"
+          tar -tzf "$tarball" | sort > "$RUNNER_TEMP/contents"
+          sed 's/^/  /' "$RUNNER_TEMP/contents"
+
+          missing=0
+          for required in package/SKILL.md \
+                          package/knowledge/schemas.md \
+                          package/knowledge/mappings.md \
+                          package/knowledge/enrichment.md \
+                          package/prompts/exercise-classification.md; do
+            grep -qx "$required" "$RUNNER_TEMP/contents" || {
+              echo "::error::$required is missing from the tarball."
+              missing=1
+            }
+          done
+          [ "$missing" -eq 0 ]
 
       - name: Extract version from tag
         if: github.event_name == 'push'
         id: version
         run: |
           TAG="${GITHUB_REF#refs/tags/fds-skill@}"
-          echo "version=$TAG" >> $GITHUB_OUTPUT
+          echo "version=$TAG" >> "$GITHUB_OUTPUT"
           echo "Publishing version: $TAG"
 
       - name: Verify version matches package.json
@@ -88,10 +152,7 @@ jobs:
         if: ${{ github.event.inputs.dry_run != 'true' }}
         run: npm publish --access public --provenance
 
+      # The contents were already listed and asserted above, on both paths.
       - name: Dry run - skip publish
         if: ${{ github.event.inputs.dry_run == 'true' }}
-        run: |
-          echo "Dry run mode - skipping npm publish"
-          npm pack
-          echo "Package contents:"
-          tar -tzf *.tgz
+        run: echo "Dry run mode - skipping npm publish"
