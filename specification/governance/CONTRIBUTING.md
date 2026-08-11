@@ -47,7 +47,7 @@ npx ajv -s specification/schemas/exercises/v1.1.0/exercise.schema.json \
 
 `npm run check:versions` reads `specification/releases.json` — which is generated from the published schemas — and holds every version claim in the repository against it. A schema URL must resolve to something published; a release number must name a real release; a claim about "the current release" must name the current one. Run it before opening a PR.
 
-Two annotations let you say something the check would otherwise read as drift. Both are plain text inside whatever comment syntax the file already uses, so they survive the byte-for-byte page mirroring.
+Three annotations let you say something the check cannot work out on its own. All are plain text inside whatever comment syntax the file already uses, so they survive the byte-for-byte page mirroring.
 
 <!-- fds:pin workout/v1.0.0/workout.schema.json — named by the worked example below, which shows how to pin the superseded workout version. A marker inside a fenced block is shown rather than made, so this page needs a real one. -->
 
@@ -70,6 +70,18 @@ Ten schemas are published. Seven are entities, …
 The value is checked against the repository on disk, and it must also appear in the surrounding sentence, spelled or in digits, so the marker cannot quietly stop describing the text it annotates. Run `npm run check:versions` with an unknown metric name to see the full list.
 
 Do not mark counts in `CHANGELOG.md`. A changelog entry describes a past release, and pinning it to today's tree would make an accurate historical record fail.
+
+**Claiming a document is complete.** Everything above checks something the document *says*. A document can also be wrong by saying nothing at all: `SCHEMAS.md` shipped with no mention of `program` and every check stayed green, because there was no sentence to be wrong. Where a document enumerates a whole set, say so and the set is taken from the manifest instead:
+
+```markdown
+<!-- fds:covers schemas -->
+<!-- fds:covers entities -->
+<!-- fds:covers releases -->
+```
+
+`schemas` covers the whole file: every published schema URL must appear somewhere in it. `entities` and `releases` annotate the table directly below the marker — the entity-and-version table a release publishes, and the table keyed on release. Prose in the other columns stays yours; which rows exist does not. Order is not checked, so sort a table however reads best.
+
+Adding an entity or cutting a release will fail these until the documents catch up. That is the point: the alternative is a page that quietly stops describing the standard.
 
 ## License
 - By contributing, you agree your contributions are licensed under the VITNESS Open Standards License Agreement.

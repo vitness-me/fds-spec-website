@@ -2,12 +2,15 @@
 
 Every schema published by the Fitness Data Standard, at the version it is published under.
 
+<!-- fds:covers schemas -->
 <!-- fds:count schemas=10 entities=7 libraries=1 tooling=1 superseded=1 -->
 The list here is `specification/schemas/.integrity.json`, which is what the build writes and what `npm run check:published` fetches. Ten schemas are published: seven entities, one definition library, one tooling schema, and one superseded entity version that is still served.
 
 ## A release is a set of entity versions
 
 `spec_version` names a release; it is **not** a version every entity shares. The current release is **1.4.0**, and it publishes:
+
+<!-- fds:covers entities -->
 
 | Entity | Version |
 |---|---|
@@ -19,6 +22,8 @@ The list here is `specification/schemas/.integrity.json`, which is what the buil
 | workout | 1.1.0 |
 | program | 1.0.0 |
 
+<!-- fds:covers releases -->
+
 | Release | Adds |
 |---|---|
 | 1.0.0 | exercise, equipment, muscle, muscle-category, body-atlas |
@@ -28,6 +33,8 @@ The list here is `specification/schemas/.integrity.json`, which is what the buil
 | 1.4.0 | workout moves to 1.1.0 |
 
 There is no `muscle/v1.4.0/`, and there will not be unless muscle itself changes. Build URLs from the entity version, not the release. See `specification/discovery.md`.
+
+Both tables above are published, machine-readable, at **https://spec.vitness.me/releases.json** — the release manifest, generated from the schemas themselves. Read it rather than transcribing this page. It is not frozen: it gains a release every time one is published, which is exactly why it is worth fetching.
 
 ## Production URLs (spec.vitness.me)
 

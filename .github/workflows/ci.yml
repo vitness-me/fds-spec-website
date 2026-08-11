@@ -129,6 +129,13 @@ jobs:
 
       # Every published example must validate against its schema, standalone.
       #
+      # The schemas come from specification/releases.json, which is generated
+      # from one traversal of the published tree. This step used to hard-code
+      # seven paths, and so did scripts/ci-local.sh: publishing an eighth entity
+      # would have left its examples unvalidated in both, with a green run,
+      # because a loop over a shorter list still exits zero. Nothing here names
+      # an entity now, so gaining one changes what CI validates on its own.
+      #
       # No `-r` reference schemas: each entity schema is self-contained, which is
       # what lets an implementer validate one entity without fetching the others.
       # If a cross-schema `$ref` is ever reintroduced, this job fails — which is
@@ -137,11 +144,11 @@ jobs:
       - name: Validate all schema examples
         run: |
           set -euo pipefail
-          SCHEMAS=specification/schemas
           failed=0 total=0
 
           validate() {
-            local schema="$1" dir="$2" example
+            local schema="$1" dir example
+            dir="$(dirname "$schema")"
             for example in "$dir"/*.example*.json; do
               [ -e "$example" ] || continue
               total=$((total + 1))
@@ -158,15 +165,16 @@ jobs:
             done
           }
 
-          validate "$SCHEMAS/exercises/v1.1.0/exercise.schema.json"                     "$SCHEMAS/exercises/v1.1.0"
-          validate "$SCHEMAS/equipment/v1.1.0/equipment.schema.json"                    "$SCHEMAS/equipment/v1.1.0"
-          validate "$SCHEMAS/muscle/v1.0.0/muscle.schema.json"                          "$SCHEMAS/muscle/v1.0.0"
-          validate "$SCHEMAS/muscle/muscle-category/v1.0.0/muscle-category.schema.json" "$SCHEMAS/muscle/muscle-category/v1.0.0"
-          validate "$SCHEMAS/atlas/v1.0.0/body-atlas.schema.json"                       "$SCHEMAS/atlas/v1.0.0"
-          validate "$SCHEMAS/workout/v1.1.0/workout.schema.json"                        "$SCHEMAS/workout/v1.1.0"
-          validate "$SCHEMAS/program/v1.0.0/program.schema.json"                        "$SCHEMAS/program/v1.0.0"
+          while IFS= read -r schema; do
+            [ -n "$schema" ] || continue
+            echo "== $schema"
+            validate "$schema"
+          done < <(node scripts/list-entity-schemas.mjs)
 
           echo "---- $total examples, $failed failed ----"
+          # A loop over an empty list exits zero and reports success — the same
+          # silence this step was changed to remove, arriving another way.
+          [ "$total" -gt 0 ]
           [ "$failed" -eq 0 ]
 
   website:

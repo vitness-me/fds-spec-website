@@ -1,8 +1,28 @@
+import {readFileSync} from 'node:fs';
+import path from 'node:path';
 import {themes as prismThemes} from 'prism-react-renderer';
 import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
+
+/**
+ * The current FDS release, read from the generated release manifest.
+ *
+ * Every page on this site carries this number, and it sat at 1.0.0 for three
+ * releases because it was a string literal nobody had a reason to look at.
+ * specification/releases.json is generated from one traversal of the published
+ * schemas, so reading it here is the difference between the site reporting the
+ * release and the site remembering it.
+ *
+ * Resolved against this file rather than the working directory: the config is
+ * loaded with the site directory as cwd by `docusaurus build` and `start`, but
+ * that is a property of how it happens to be invoked, not of where the manifest
+ * is.
+ */
+const {currentRelease} = JSON.parse(
+  readFileSync(path.join(__dirname, '..', 'specification', 'releases.json'), 'utf8'),
+) as {currentRelease: string};
 
 const config: Config = {
   title: 'Fitness Data Standard (FDS)',
@@ -59,13 +79,13 @@ const config: Config = {
           // The label names the current FDS *release*, which is a set of entity
           // versions rather than a version every entity shares — release 1.4.0
           // serves exercise, equipment and workout at 1.1.0 and the rest at
-          // 1.0.0. Keep it in step with DEFAULT_SCHEMA_VERSION in
-          // packages/fds-transformer/src/schemas/versions.ts; the two naming
-          // different releases is the site telling readers the wrong thing.
+          // 1.0.0. It comes from the release manifest, so it cannot disagree
+          // with DEFAULT_SCHEMA_VERSION in the transformer, which is generated
+          // from the same document.
           lastVersion: 'current',
           versions: {
             current: {
-              label: '1.4.0',
+              label: currentRelease,
               badge: false,  // Don't show version badge on every page
             },
           },
