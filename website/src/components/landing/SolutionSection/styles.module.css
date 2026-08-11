@@ -446,6 +446,24 @@
   color: #fff;
 }
 
+.extensibilityLink {
+  display: block;
+  margin-top: 1.5rem;
+  text-align: center;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #0369a1;
+  text-decoration: none;
+}
+
+.extensibilityLink:hover {
+  text-decoration: underline;
+}
+
+[data-theme='dark'] .extensibilityLink {
+  color: #38bdf8;
+}
+
 /* Responsive */
 @media (max-width: 900px) {
   .hubSection {

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Link from '@docusaurus/Link';
 import { Lock, Wrench, Puzzle, Smartphone, ChevronDown, ChevronUp, X } from 'lucide-react';
 import styles from './styles.module.css';
 
@@ -130,6 +131,12 @@ export default function ProblemSection(): JSX.Element {
             </span>
           ))}
         </div>
+
+        <p className={styles.outro}>
+          <Link to="/docs/getting-started/overview">
+            See what FDS defines instead →
+          </Link>
+        </p>
       </div>
     </section>
   );

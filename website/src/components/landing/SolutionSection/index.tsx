@@ -1,8 +1,11 @@
 import React from 'react';
+import Link from '@docusaurus/Link';
 import { Check, ArrowRight, Tag, Shield, RefreshCw } from 'lucide-react';
 import styles from './styles.module.css';
 
-const platforms = ['FitApp Pro', 'GymTracker', 'WorkoutDB', 'IronLog'];
+// Neutral placeholders, matching the fragmentation diagram above. FDS has no
+// named implementers to point at, and inventing some would be a false claim.
+const platforms = ['App A', 'App B', 'App C', 'App D'];
 
 export default function SolutionSection(): JSX.Element {
   return (
@@ -105,12 +108,16 @@ export default function SolutionSection(): JSX.Element {
             </div>
             <div className={styles.extensibilityCard}>
               <span className={styles.extensibilityIcon}><RefreshCw size={24} /></span>
-              <h4 className={styles.extensibilityCardTitle}>Round-trip Preservation</h4>
+              <h4 className={styles.extensibilityCardTitle}>Promotion Path</h4>
               <p className={styles.extensibilityCardText}>
-                Extensions survive export → import cycles. Data you add comes back intact.
+                An extension several implementers adopt can be proposed into the core schema through the RFC process.
               </p>
             </div>
           </div>
+
+          <Link to="/docs/core-concepts/extensions" className={styles.extensibilityLink}>
+            Read the extension policy →
+          </Link>
         </div>
       </div>
     </section>

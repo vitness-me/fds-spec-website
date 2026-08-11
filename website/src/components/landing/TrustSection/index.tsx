@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from '@docusaurus/Link';
-import { Dumbbell, BarChart3, Plug, FileJson, Globe, Users } from 'lucide-react';
+import { Dumbbell, BarChart3, ClipboardList, FileJson, Globe, Users } from 'lucide-react';
 import styles from './styles.module.css';
 
 interface FeatureCard {
@@ -24,10 +24,10 @@ const featureCards: FeatureCard[] = [
     link: '/docs/schemas',
   },
   {
-    icon: <Plug size={28} />,
-    title: 'Extensibility',
-    description: 'Platform-specific extensions without breaking compatibility. Vendor namespaces and attribute system for custom data.',
-    link: '/docs/core-concepts/extensions',
+    icon: <ClipboardList size={28} />,
+    title: 'Workouts and Programs',
+    description: 'Prescription primitives (RFC-006), one prescribed session (RFC-007), and a schedule of sessions over time (RFC-008). Straight sets, supersets, circuits, EMOM, AMRAP and intervals share one schema.',
+    link: '/docs/specifications/rfc-007-workout-data-model',
   },
   {
     icon: <FileJson size={28} />,

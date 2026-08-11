@@ -35,7 +35,7 @@ function useSafeColorMode(): 'light' | 'dark' {
 }
 
 const minimalExample = `{
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "exerciseId": "550e8400-e29b-41d4-a716-446655440000",
   "canonical": {
     "name": "Back Squat",

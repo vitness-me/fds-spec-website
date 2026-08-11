@@ -339,6 +339,33 @@
   color: #fff;
 }
 
+/* Closing route onward */
+.outro {
+  margin: 2.5rem 0 0;
+  text-align: center;
+  font-size: 0.9375rem;
+  font-weight: 500;
+}
+
+.outro a {
+  color: #000;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.outro a:hover {
+  color: #666;
+  text-decoration: none;
+}
+
+[data-theme='dark'] .outro a {
+  color: #fff;
+}
+
+[data-theme='dark'] .outro a:hover {
+  color: rgba(255, 255, 255, 0.7);
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .problemSection {
