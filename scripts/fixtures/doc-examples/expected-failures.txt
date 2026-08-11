@@ -1,0 +1,48 @@
+  scripts/fixtures/doc-examples/failing-examples.md:11 — does not validate against exercise 1.1.0 (1 error(s)):
+    / must have required property 'metrics'
+
+  scripts/fixtures/doc-examples/failing-examples.md:41 — declares exercise schemaVersion 2.0.0, which is not published.
+    Published: 1.1.0. A reader validating this against the URL it names gets nothing.
+    Validated against the current 1.1.0 instead, so the rest of the errors are still visible.
+
+  scripts/fixtures/doc-examples/failing-examples.md:73 — the snippet does not satisfy #/$defs/repTarget (35 error(s)):
+    / must have required property 'kind'
+    / must NOT have additional properties — method
+    / must NOT have additional properties — basis
+    / must have required property 'kind'
+    / must have required property 'min'
+    / must have required property 'max'
+    / must NOT have additional properties — method
+    / must NOT have additional properties — basis
+    / must NOT have additional properties — value
+    / must have required property 'kind'
+    / must NOT have additional properties — method
+    / must NOT have additional properties — basis
+
+  scripts/fixtures/doc-examples/failing-examples.md:82 — prescription is a $defs library whose root validates nothing.
+    Name the definition the snippet exemplifies: `fds:fragment entity=prescription def=<name>`, or `defs=<property>:<name>,…` for a snippet that combines several.
+
+  scripts/fixtures/doc-examples/failing-examples.md:91 — this block is neither a document nor marked.
+    Top-level names: classification
+    Add `fds:fragment entity=<name>` if it is part of an FDS document, or `fds:ignore <reason>` if it is not FDS data at all.
+
+  scripts/fixtures/doc-examples/failing-examples.md:109 — shape fits body-atlas, equipment, muscle, muscle-category; the document does not say which.
+    Add `fds:document entity=<name>` to the fence. Guessing here is how a document comes to pass against the wrong schema.
+
+  scripts/fixtures/doc-examples/failing-examples.md:124 — a ```json block that is not JSON: Expected double-quoted property name in JSON at position 28 (line 1 column 29)
+    A reader copying it gets a parse error. Fence it as text, or mark it `fds:ignore <reason>`.
+
+  scripts/fixtures/doc-examples/comparison-data.ts:172 — declares exercise schemaVersion 1.0.0, which is withdrawn and no longer served.
+    Published: 1.1.0. A reader validating this against the URL it names gets nothing.
+    Validated against the current 1.1.0 instead, so the rest of the errors are still visible.
+
+  scripts/fixtures/doc-examples/comparison-data.ts:172 — does not validate against exercise 1.1.0 (5 error(s)):
+    / must have required property 'metrics'
+    /classification must have required property 'force'
+    /targets/primary/0 must have required property 'categoryId'
+    /targets/secondary/0 must have required property 'categoryId'
+    /targets/secondary/1 must have required property 'categoryId'
+
+  scripts/fixtures/doc-examples/comparison-data.ts:208 — declares exercise schemaVersion 1.0.0, which is withdrawn and no longer served.
+    Published: 1.1.0. A reader validating this against the URL it names gets nothing.
+    Validated against the current 1.1.0 instead, so the rest of the errors are still visible.

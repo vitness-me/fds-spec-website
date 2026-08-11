@@ -74,6 +74,18 @@ jobs:
       - name: Verify the metrics guide covers the vocabulary
         run: npm run check:metrics
 
+      # Nine checks were green while the landing page shipped an exercise with
+      # no metrics, no classification.force and no categoryId on any muscle.
+      # They all read schemas, sources or fixtures; none read the JSON on the
+      # page. The script proves itself against that recovered document before it
+      # judges anything, so a run that passes has also failed on purpose. Ajv is
+      # installed here rather than reused from the step below because this runs
+      # before it.
+      - name: Verify every documented example validates against its schema
+        run: |
+          npm install --no-save ajv@8 ajv-formats@3
+          npm run check:doc-examples
+
       # An RFC that promises a field the schema rejects, or a schema that carries
       # one no RFC explains, has shipped here twice. Nothing read both until now.
       - name: Verify RFCs and their schemas agree

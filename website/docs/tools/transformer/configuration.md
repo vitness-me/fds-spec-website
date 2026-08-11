@@ -50,7 +50,7 @@ Create a `mapping.json` file in your project:
 
 Specifies which FDS schema to target:
 
-```json
+```json fds:fragment entity=mapping
 {
   "targetSchema": {
     "version": "1.0.0",
@@ -72,7 +72,7 @@ Specifies which FDS schema to target:
 
 Configure registry sources for lookups. Registries provide muscle, equipment, and category data for the `registryLookup` transform.
 
-```json
+```json fds:fragment entity=mapping
 {
   "registries": {
     "muscles": {
@@ -108,7 +108,7 @@ Configure registry sources for lookups. Registries provide muscle, equipment, an
 
 Define how source fields map to FDS fields:
 
-```json
+```json fds:fragment entity=mapping
 {
   "mappings": {
     "canonical.name": {
@@ -139,14 +139,14 @@ Define how source fields map to FDS fields:
 #### Mapping Types
 
 **Simple String Mapping:**
-```json
+```json fds:fragment entity=mapping
 {
   "canonical.name": "name"
 }
 ```
 
 **Object Mapping:**
-```json
+```json fds:fragment entity=mapping
 {
   "canonical.name": {
     "from": "name",
@@ -173,7 +173,7 @@ Define how source fields map to FDS fields:
 
 Use dot notation for nested fields:
 
-```json
+```json fds:fragment entity=mapping
 {
   "canonical.name": "name",
   "canonical.slug": { "from": "name", "transform": "slugify" },
@@ -187,7 +187,7 @@ Use dot notation for nested fields:
 
 Combine multiple source fields:
 
-```json
+```json fds:fragment entity=mapping
 {
   "canonical.name": {
     "from": ["firstName", "lastName"],
@@ -203,7 +203,7 @@ Combine multiple source fields:
 
 Apply multiple transforms in sequence:
 
-```json
+```json fds:fragment entity=mapping
 {
   "canonical.slug": {
     "from": "name",
@@ -218,7 +218,7 @@ Apply multiple transforms in sequence:
 
 Configure AI enrichment. See [AI Enrichment Guide](/docs/tools/transformer/ai-enrichment) for details.
 
-```json
+```json fds:ignore ALLOWANCE mapping 1.0.0 does not allow the enrichment options the transformer implements (tiers, fields, fallback, rateLimit, checkpoint, enricher); remove when a mapping version publishes them
 {
   "enrichment": {
     "enabled": true,
@@ -278,7 +278,7 @@ Configure AI enrichment. See [AI Enrichment Guide](/docs/tools/transformer/ai-en
 
 Configure output validation:
 
-```json
+```json fds:fragment entity=mapping
 {
   "validation": {
     "enabled": true,
@@ -302,7 +302,7 @@ Configure output validation:
 
 Configure output format:
 
-```json
+```json fds:fragment entity=mapping
 {
   "output": {
     "format": "json",
@@ -330,7 +330,7 @@ Configure output format:
 
 Load custom transform plugins:
 
-```json
+```json fds:fragment entity=mapping
 {
   "plugins": [
     "./plugins/my-transforms.js",
@@ -350,7 +350,7 @@ See [Plugin Development](/docs/tools/transformer/plugins) for details.
 
 ## Complete Example
 
-```json
+```json fds:ignore ALLOWANCE mapping 1.0.0 does not allow the enrichment options the transformer implements (tiers, fields, fallback, rateLimit, checkpoint, enricher); remove when a mapping version publishes them
 {
   "$schema": "https://spec.vitness.me/schemas/transformer/v1.0.0/mapping.schema.json",
   "version": "1.0.0",

@@ -228,7 +228,7 @@ output/
 
 Configure in `mapping.json` to output all items to one file:
 
-```json
+```json fds:fragment entity=mapping
 {
   "output": {
     "singleFile": true,

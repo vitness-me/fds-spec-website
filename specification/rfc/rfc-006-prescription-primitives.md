@@ -61,13 +61,13 @@ The key words MUST, MUST NOT, SHOULD, SHOULD NOT and MAY are to be interpreted a
 
 The published schema carries no `schemaVersion`, no identifier and no `metadata` block, because it describes no document. Its root is deliberately unsatisfiable:
 
-```json
+```json fds:ignore a JSON Schema excerpt, not a document
 { "not": {} }
 ```
 
 Validating any document against the library root fails by construction. This is a guardrail, not an inconvenience: a library whose root accepted everything would silently pass any document handed to it, and a consumer would take that as confirmation. Reference a definition instead:
 
-```json
+```json fds:ignore a JSON Schema excerpt, not a document
 { "$ref": "https://spec.vitness.me/schemas/prescription/v1.0.0/prescription.schema.json#/$defs/loadTarget" }
 ```
 
@@ -79,7 +79,7 @@ Because published FDS schemas are self-contained (see the authoring guide), RFC-
 
 Each union therefore enumerates its known members with typed payloads, and adds one final branch for values this version does not define. That branch MUST exclude the known values:
 
-```json
+```json fds:ignore a JSON Schema excerpt, not a document
 {
   "type": "object",
   "required": ["method"],
@@ -284,7 +284,7 @@ npm run check:prescription
 
 A top set at RPE 8 followed by back-off sets at a percentage of a different lift, with a four-second eccentric and three minutes of rest between sets:
 
-```json
+```json fds:fragment entity=prescription defs=load:loadTarget,reps:repTarget,tempo:tempo,rest:restSpec,scheme:setScheme
 {
   "load": { "method": "rpe", "value": 8, "allowHalf": true },
   "reps": { "kind": "range", "min": 3, "max": 5 },

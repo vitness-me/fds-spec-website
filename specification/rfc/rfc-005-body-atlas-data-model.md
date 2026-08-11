@@ -98,7 +98,7 @@ All compliant atlas records **MUST** include:
 
 `metadata` follows the shared definition from RFC-001 — timestamps, status and source. An atlas is versioned reference data like any other entity, and a consumer that has cached one needs to know when it changed.
 
-```json
+```json fds:fragment entity=body-atlas
 {
   "canonical": {
     "name": "FDS Body Atlas v1",
@@ -115,7 +115,7 @@ Each view carries an `id`, a `kind` naming which aspect of the body it shows, an
 
 Views are the reason the atlas exists as a separate entity: the same muscle appears in several of them, at different coordinates, and binding a muscle to one image would make the atlas unusable for any other.
 
-```json
+```json fds:fragment entity=body-atlas
 {
   "views": [
     { "id": "anterior", "kind": "anterior", "asset": { "type": "svg", "uri": "https://cdn.example.com/atlas/body-v1/anterior.svg" } },
@@ -130,7 +130,7 @@ An area is a clickable region. It carries an `id`, its own `canonical` block —
 
 Each binding pairs a `viewId` with a `selector` into that view's asset. An area may bind to several views, which is what lets a single highlight follow a muscle from the front illustration to the back one.
 
-```json
+```json fds:fragment entity=body-atlas
 {
   "areas": [
     {
@@ -159,7 +159,7 @@ Each binding pairs a `viewId` with a `selector` into that view's asset. An area 
 ### 6.1. Referencing from Muscles
 
 Muscles MAY reference atlas areas to express heatmaps (see RFC‑003):
-```json
+```json fds:fragment entity=muscle
 {
   "heatmap": {
     "atlasId": "atlas.body.v1",

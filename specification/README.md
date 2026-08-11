@@ -60,12 +60,14 @@ External reference mapping (`externalRefs`):
 - Use cases include: data migration, multi‑platform synchronization, legacy system mapping, and third‑party integrations.
 
 Example:
-```json
-"metadata": {
-  "externalRefs": [
-    { "system": "platform-a", "id": "ex-back-squat-001" },
-    { "system": "legacy-system", "id": "squat_barbell_back" }
-  ]
+```json fds:fragment entity=exercise partial
+{
+  "metadata": {
+    "externalRefs": [
+      { "system": "platform-a", "id": "ex-back-squat-001" },
+      { "system": "legacy-system", "id": "squat_barbell_back" }
+    ]
+  }
 }
 ```
 

@@ -38,7 +38,7 @@ export OPENROUTER_API_KEY=your-api-key-here
 
 Add the `enrichment` section to your `mapping.json`:
 
-```json
+```json fds:ignore ALLOWANCE mapping 1.0.0 does not allow the enrichment options the transformer implements (tiers, fields, fallback, rateLimit, checkpoint, enricher); remove when a mapping version publishes them
 {
   "enrichment": {
     "enabled": true,
@@ -233,7 +233,7 @@ Output:
 
 Configure graceful degradation:
 
-```json
+```json fds:ignore ALLOWANCE mapping 1.0.0 does not allow the enrichment options the transformer implements (tiers, fields, fallback, rateLimit, checkpoint, enricher); remove when a mapping version publishes them
 {
   "enrichment": {
     "fallback": {
@@ -261,7 +261,7 @@ Configure graceful degradation:
 
 Control API request rate:
 
-```json
+```json fds:ignore ALLOWANCE mapping 1.0.0 does not allow the enrichment options the transformer implements (tiers, fields, fallback, rateLimit, checkpoint, enricher); remove when a mapping version publishes them
 {
   "enrichment": {
     "rateLimit": {
@@ -285,7 +285,7 @@ Control API request rate:
 
 Enable checkpoint saving for long runs:
 
-```json
+```json fds:ignore ALLOWANCE mapping 1.0.0 does not allow the enrichment options the transformer implements (tiers, fields, fallback, rateLimit, checkpoint, enricher); remove when a mapping version publishes them
 {
   "enrichment": {
     "checkpoint": {
@@ -326,7 +326,7 @@ This outputs:
 
 For simpler use cases or when you need fine-grained control, configure enrichment per-field in mappings:
 
-```json
+```json fds:fragment entity=mapping
 {
   "mappings": {
     "canonical.description": {
