@@ -18,13 +18,15 @@
  * and nothing is ever rewritten to point into `properties` — a pointer into an
  * entity's instance shape is not a stable contract.
  *
- * Three artifacts come out of one run, so they cannot disagree:
+ * Everything comes out of one run and one traversal of the published tree, so no
+ * two of them can disagree about what is published, at what version, or with
+ * what bytes:
  *   1. specification/schemas/                  the published schemas
  *   2. specification/schemas/.integrity.json   hash + freeze state per schema
  *   3. packages/fds-transformer/.../bundled/   the transformer's offline copies
  *
  * Usage:
- *   node scripts/build-schemas.mjs           write all three
+ *   node scripts/build-schemas.mjs           write all of them
  *   node scripts/build-schemas.mjs --check   verify they match sources (CI)
  */
 
@@ -45,6 +47,10 @@ const BUNDLED = join(ROOT, 'packages/fds-transformer/src/schemas/bundled');
  * Entities version independently: a change to the exercise model must not force
  * a new muscle URL, and once RFC-006..008 land, a new workout entity must not
  * drag exercise to a version it did not change in.
+ *
+ * `kind` defaults to `entity` — something a provider can export and a consumer
+ * can validate a document against. `library` is a bag of definitions with a root
+ * that validates nothing.
  */
 const ENTITIES = [
   { name: 'exercise', path: 'exercises/v1.1.0/exercise.schema.json' },
@@ -56,7 +62,12 @@ const ENTITIES = [
   // document", so the transformer has nothing to validate against it. RFC-007 and
   // RFC-008 reference these definitions, and flattening copies them into those
   // schemas, so a bundled copy would be dead weight the loader never asks for.
-  { name: 'prescription', path: 'prescription/v1.0.0/prescription.schema.json', bundled: false },
+  //
+  // `kind` states that once. The bundle list, the release manifest and the
+  // transformer's entity map all read it, so "is not an entity" and "is not
+  // bundled" cannot come apart — which they could while the only marker here
+  // was a `bundled: false` flag that said nothing about what the schema is.
+  { name: 'prescription', kind: 'library', path: 'prescription/v1.0.0/prescription.schema.json' },
   // After prescription: workout composes its definitions, and a library must be
   // built before anything that references it.
   { name: 'workout', path: 'workout/v1.1.0/workout.schema.json' },
@@ -65,12 +76,20 @@ const ENTITIES = [
   { name: 'program', path: 'program/v1.0.0/program.schema.json' },
 ];
 
-/** Entities the transformer carries an offline copy of. */
-const BUNDLED_ENTITIES = ENTITIES.filter((entity) => entity.bundled !== false);
+/** What a published schema is. Anything unmarked is an entity. */
+const kindOf = (declaration) => declaration.kind ?? 'entity';
 
 /**
- * The FDS release the bundled entity set constitutes, and the directory the
- * transformer bundles it under.
+ * Entities the transformer carries an offline copy of.
+ *
+ * A library is never one: nothing validates against its root, so the loader
+ * would never ask for it.
+ */
+const BUNDLED_ENTITIES = ENTITIES.filter((entity) => kindOf(entity) === 'entity');
+
+/**
+ * The current FDS release — the newest one published, the one the transformer
+ * bundles, and the directory it bundles it under.
  *
  * Adding an entity changes what a release *contains*, so it gets a new release
  * name rather than being folded into the last one — a consumer pinned to 1.1.0
@@ -81,7 +100,7 @@ const BUNDLED_ENTITIES = ENTITIES.filter((entity) => entity.bundled !== false);
  * `v1.2.0` predates program; all are checked-in historical artifacts kept for
  * consumers pinned to them.
  */
-const BUNDLE_RELEASE = '1.4.0';
+const CURRENT_RELEASE = '1.4.0';
 
 /**
  * Published schemas that are served but not generated from an authoring source.
@@ -99,13 +118,18 @@ const BUNDLE_RELEASE = '1.4.0';
  * leave two shipped releases pointing at nothing. It is served, hashed and
  * frozen; it is simply never rendered again.
  *
+ * Each entry carries the same `name` and `kind` a generated one does, because
+ * the release manifest has to describe these too and inferring either from a
+ * file path is how a tooling schema ends up listed as an entity a provider can
+ * export.
+ *
  * Adding a file here is a deliberate, reviewable act. That is the point: the
  * integrity manifest is derived from what is actually published, so nothing can
  * reach the published tree without appearing in one of these two lists.
  */
 const UNGENERATED = [
-  'transformer/v1.0.0/mapping.schema.json',
-  'workout/v1.0.0/workout.schema.json',
+  { name: 'mapping', kind: 'tooling', path: 'transformer/v1.0.0/mapping.schema.json' },
+  { name: 'workout', kind: 'entity', path: 'workout/v1.0.0/workout.schema.json' },
 ];
 
 /** Every `*.schema.json` under the published tree, relative to it. */
@@ -119,6 +143,26 @@ async function publishedSchemaFiles() {
 
 const SCHEMA_BASE = 'https://spec.vitness.me/schemas/';
 const COMMON_REL = 'common/v1.0.0/common.schema.json';
+
+/**
+ * The version a published path carries.
+ *
+ * The path is where the version actually lives — it is the URL segment an
+ * implementer types — so it is what the manifest reports, rather than a second
+ * copy of the number kept beside it.
+ */
+function versionFromPath(path) {
+  const match = /\/v(\d+\.\d+\.\d+)\//.exec(`/${path}`);
+  if (!match) throw new Error(`no /vX.Y.Z/ segment in published path: ${path}`);
+  return match[1];
+}
+
+/** An object with its keys in a stated order, so generated output is stable. */
+const ordered = (object, compare) =>
+  Object.fromEntries(Object.keys(object).sort(compare).map((k) => [k, object[k]]));
+
+/** A schema name as a JS object key — quoted only when it has to be. */
+const key = (name) => (/^[a-z][a-zA-Z]*$/.test(name) ? name : `'${name}'`);
 
 /**
  * Definition libraries an entity may reference, keyed by `$id`.
@@ -291,10 +335,10 @@ function renderBundleIndex(release, entities) {
     .map((e) => `import ${ident(e.name)} from './${e.name}.schema.json' assert { type: 'json' };`)
     .join('\n');
   const map = entities
-    .map((e) => `  ${/^[a-z][a-zA-Z]*$/.test(e.name) ? e.name : `'${e.name}'`}: ${ident(e.name)},`)
+    .map((e) => `  ${key(e.name)}: ${ident(e.name)},`)
     .join('\n');
   const versions = entities
-    .map((e) => `  ${/^[a-z][a-zA-Z]*$/.test(e.name) ? e.name : `'${e.name}'`}: '${e.path.match(/\/v([^/]+)\//)[1]}',`)
+    .map((e) => `  ${key(e.name)}: '${versionFromPath(e.path)}',`)
     .join('\n');
 
   return `/**
@@ -354,7 +398,7 @@ const renderIntegrity = (schemas) =>
   `${JSON.stringify(
     {
       $comment: INTEGRITY_COMMENT,
-      schemas: Object.fromEntries(Object.keys(schemas).sort().map((k) => [k, schemas[k]])),
+      schemas: ordered(schemas),
     },
     null,
     2
@@ -369,115 +413,7 @@ const integrity = await readIntegrity();
 const recorded = integrity.schemas ?? {};
 const problems = [];
 
-const rendered = new Map();
-for (const entity of ENTITIES) {
-  rendered.set(entity.name, await build(entity));
-}
-
-/**
- * Every file this run owns.
- *
- * `key` marks a *published* schema — the ones the integrity manifest tracks; the
- * bundled copies inherit their fate. `content: null` means the file is tracked
- * but not rendered (see UNGENERATED): it is hashed and freezable, never rewritten.
- */
-const bundleDir = join(BUNDLED, `v${BUNDLE_RELEASE}`);
-const artifacts = [
-  ...ENTITIES.map((e) => ({
-    key: e.path,
-    path: join(OUT, e.path),
-    content: rendered.get(e.name),
-    note: 'published file does not match its authoring source',
-  })),
-  ...UNGENERATED.map((rel) => ({
-    key: rel,
-    path: join(OUT, rel),
-    content: null,
-  })),
-  ...BUNDLED_ENTITIES.map((e) => ({
-    path: join(bundleDir, `${e.name}.schema.json`),
-    content: rendered.get(e.name),
-    note: 'bundled copy does not match the published schema',
-  })),
-  {
-    path: join(bundleDir, 'index.ts'),
-    content: renderBundleIndex(BUNDLE_RELEASE, BUNDLED_ENTITIES),
-    note: 'bundled barrel does not match the entity set',
-  },
-];
-
-/**
- * Derive the tracked set from what is actually on disk, not from ENTITIES.
- *
- * A manifest built only from the entity list can only describe what someone
- * remembered to list — a schema published without being registered would be
- * unhashed, unfrozen and invisible, which is exactly how mapping.schema.json
- * went untracked. Every published schema must be generated or declared.
- */
-{
-  const declared = new Set([...ENTITIES.map((e) => e.path), ...UNGENERATED]);
-  for (const rel of await publishedSchemaFiles()) {
-    if (declared.has(rel)) continue;
-    problems.push(
-      `UNTRACKED  ${rel} — published but neither generated nor declared.\n` +
-        `             Add it to ENTITIES (generated from schema-sources) or to ` +
-        `UNGENERATED (served as-is) in ${relative(ROOT, fileURLToPath(import.meta.url))}.`
-    );
-  }
-}
-
-// Phase 1 — decide. Nothing is written until every artifact passes, so a frozen
-// violation cannot leave the published tree and the bundle half-updated.
-for (const artifact of artifacts) {
-  const label = relative(ROOT, artifact.path);
-  const current = await readFile(artifact.path, 'utf8').catch(() => null);
-
-  // A generated file legitimately does not exist on a first build. A tracked but
-  // ungenerated one cannot be conjured, so its absence is always a problem.
-  if (current === null) {
-    if (check || artifact.content === null) {
-      problems.push(
-        `MISSING    ${label}` +
-          (artifact.content === null ? ' — declared as ungenerated but not present' : '')
-      );
-      continue;
-    }
-  }
-
-  if (check) {
-    if (artifact.content === null) console.log(`checked  ${label} (tracked, not generated)`);
-    else if (current !== artifact.content) problems.push(`DRIFT      ${label} — ${artifact.note}`);
-    else console.log(`checked  ${label}`);
-  }
-
-  if (!artifact.key) continue;
-  const entry = recorded[artifact.key];
-
-  // What this run considers authoritative: the render for generated schemas,
-  // the file itself for the ones served as-is.
-  const authoritative = artifact.content ?? current;
-
-  if (check) {
-    // Hash the file on disk, not the render: a hand-edit to a published schema
-    // must fail here even when the render happens to agree with it.
-    if (!entry) {
-      problems.push(`UNRECORDED ${artifact.key} — absent from ${relative(ROOT, INTEGRITY)}`);
-    } else if (sha256(current) !== entry.sha256) {
-      problems.push(
-        `INTEGRITY  ${artifact.key} — sha256 ${sha256(current).slice(0, 12)}… does not match ` +
-          `recorded ${entry.sha256.slice(0, 12)}…${entry.frozen ? ' (frozen)' : ''}`
-      );
-    }
-  } else if (entry?.frozen && entry.sha256 !== sha256(authoritative)) {
-    problems.push(
-      `FROZEN     ${artifact.key} — content changed but this version is frozen.\n` +
-        `             Publish a new version directory, or unfreeze deliberately in ` +
-        `${relative(ROOT, INTEGRITY)}.`
-    );
-  }
-}
-
-if (problems.length) {
+function report() {
   console.error(`\n${problems.length} problem(s):\n`);
   for (const problem of problems) console.error(`  ${problem}`);
   if (check) {
@@ -490,8 +426,178 @@ if (problems.length) {
   process.exit(1);
 }
 
+const rendered = new Map();
+for (const entity of ENTITIES) {
+  rendered.set(entity.name, await build(entity));
+}
+
+/**
+ * Every published schema, generated and served-as-is alike.
+ *
+ * This is the single traversal. The integrity manifest, the release manifest and
+ * the transformer's release map are all written from this list and from nothing
+ * else, so none of them can describe a tree the others do not.
+ *
+ * `content: null` means the file is tracked but not rendered (see UNGENERATED):
+ * hashed and freezable, never rewritten.
+ */
+const published = [
+  ...ENTITIES.map((entity) => ({
+    name: entity.name,
+    kind: kindOf(entity),
+    path: entity.path,
+    content: rendered.get(entity.name),
+    note: 'published file does not match its authoring source',
+  })),
+  ...UNGENERATED.map((schema) => ({
+    name: schema.name,
+    kind: schema.kind,
+    path: schema.path,
+    content: null,
+  })),
+];
+
+for (const schema of published) {
+  schema.onDisk = await readFile(join(OUT, schema.path), 'utf8').catch(() => null);
+
+  // What this run considers authoritative: the render for generated schemas,
+  // the file itself for the ones served as-is.
+  const authoritative = schema.content ?? schema.onDisk;
+  if (authoritative === null) {
+    problems.push(
+      `MISSING    specification/schemas/${schema.path} — declared as ungenerated but not present`
+    );
+    continue;
+  }
+
+  schema.version = versionFromPath(schema.path);
+  schema.$id = JSON.parse(authoritative).$id;
+  schema.sha256 = sha256(authoritative);
+  schema.frozen = recorded[schema.path]?.frozen ?? false;
+
+  // A `$id` is a promise that the document can be fetched from that address.
+  // `build()` already holds generated schemas to it; the ones served as-is are
+  // exactly the ones nothing regenerates, so nothing else would notice.
+  if (schema.$id !== `${SCHEMA_BASE}${schema.path}`) {
+    problems.push(
+      `IDENTITY   ${schema.path} — $id is "${schema.$id ?? '(absent)'}" but its ` +
+        `published URL is "${SCHEMA_BASE}${schema.path}"`
+    );
+  }
+}
+
+// Nothing downstream can describe a tree it was unable to read.
+if (problems.length) report();
+
+/**
+ * Derive the tracked set from what is actually on disk, not from ENTITIES.
+ *
+ * A manifest built only from the entity list can only describe what someone
+ * remembered to list — a schema published without being registered would be
+ * unhashed, unfrozen and invisible, which is exactly how mapping.schema.json
+ * went untracked. Every published schema must be generated or declared.
+ */
+{
+  const declared = new Set(published.map((schema) => schema.path));
+  for (const rel of await publishedSchemaFiles()) {
+    if (declared.has(rel)) continue;
+    problems.push(
+      `UNTRACKED  ${rel} — published but neither generated nor declared.\n` +
+        `             Add it to ENTITIES (generated from schema-sources) or to ` +
+        `UNGENERATED (served as-is) in ${relative(ROOT, fileURLToPath(import.meta.url))}.`
+    );
+  }
+}
+
+/** Every file this run owns. */
+const bundleDir = join(BUNDLED, `v${CURRENT_RELEASE}`);
+const artifacts = [
+  ...published.map((schema) => ({
+    path: join(OUT, schema.path),
+    content: schema.content,
+    note: schema.note,
+  })),
+  ...BUNDLED_ENTITIES.map((e) => ({
+    path: join(bundleDir, `${e.name}.schema.json`),
+    content: rendered.get(e.name),
+    note: 'bundled copy does not match the published schema',
+  })),
+  {
+    path: join(bundleDir, 'index.ts'),
+    content: renderBundleIndex(CURRENT_RELEASE, BUNDLED_ENTITIES),
+    note: 'bundled barrel does not match the entity set',
+  },
+  {
+    // Diff-checked like everything else, not merely consulted. Its hashes are an
+    // output of this run, so a hand-edit to one is a claim about the tree that
+    // nothing else would contradict. Freeze flags are the input here, and they
+    // survive: they are read back in before the render.
+    path: INTEGRITY,
+    content: renderIntegrity(
+      Object.fromEntries(
+        published.map((schema) => [schema.path, { sha256: schema.sha256, frozen: schema.frozen }])
+      )
+    ),
+    note: 'the integrity manifest does not match the published tree',
+  },
+];
+
+// Phase 1 — decide. Nothing is written until every artifact passes, so a frozen
+// violation cannot leave the published tree and the bundle half-updated.
+for (const artifact of artifacts) {
+  const label = relative(ROOT, artifact.path);
+
+  // Tracked but not rendered: there is nothing to compare it against.
+  if (artifact.content === null) {
+    if (check) console.log(`checked  ${label} (tracked, not generated)`);
+    continue;
+  }
+
+  if (!check) continue;
+
+  // A generated file legitimately does not exist on a first build, but a --check
+  // run is asking whether the committed tree is up to date, and an absent file
+  // is not.
+  const current = await readFile(artifact.path, 'utf8').catch(() => null);
+  if (current === null) problems.push(`MISSING    ${label}`);
+  else if (current !== artifact.content) problems.push(`DRIFT      ${label} — ${artifact.note}`);
+  else console.log(`checked  ${label}`);
+}
+
+for (const schema of published) {
+  const entry = recorded[schema.path];
+
+  if (check) {
+    // Absent from the tree entirely — the artifacts loop has already said so,
+    // and there are no bytes to hash.
+    if (schema.onDisk === null) continue;
+
+    // Hash the file on disk, not the render: a hand-edit to a published schema
+    // must fail here even when the render happens to agree with it.
+    const actual = sha256(schema.onDisk);
+    if (!entry) {
+      problems.push(`UNRECORDED ${schema.path} — absent from ${relative(ROOT, INTEGRITY)}`);
+    } else if (actual !== entry.sha256) {
+      problems.push(
+        `INTEGRITY  ${schema.path} — sha256 ${actual.slice(0, 12)}… does not match ` +
+          `recorded ${entry.sha256.slice(0, 12)}…${entry.frozen ? ' (frozen)' : ''}`
+      );
+    }
+  } else if (entry?.frozen && entry.sha256 !== schema.sha256) {
+    problems.push(
+      `FROZEN     ${schema.path} — content changed but this version is frozen.\n` +
+        `             Publish a new version directory, or unfreeze deliberately in ` +
+        `${relative(ROOT, INTEGRITY)}.`
+    );
+  }
+}
+
+if (problems.length) report();
+
 if (check) {
-  console.log('\nPublished schemas, integrity manifest and transformer bundle all match their sources.');
+  console.log(
+    '\nPublished schemas, integrity manifest and transformer bundle all match their sources.'
+  );
   process.exit(0);
 }
 
@@ -499,32 +605,13 @@ if (check) {
 for (const artifact of artifacts) {
   const label = relative(ROOT, artifact.path);
 
-  // Ungenerated schemas are tracked, not produced: hash what is there.
+  // Ungenerated schemas are tracked, not produced. Their hash was taken above.
   if (artifact.content === null) {
-    recorded[artifact.key] = {
-      sha256: sha256(await readFile(artifact.path, 'utf8')),
-      frozen: recorded[artifact.key]?.frozen ?? false,
-    };
     console.log(`tracked  ${label}`);
     continue;
   }
 
   await mkdir(dirname(artifact.path), { recursive: true });
   await writeFile(artifact.path, artifact.content);
-  if (artifact.key) {
-    recorded[artifact.key] = {
-      sha256: sha256(artifact.content),
-      frozen: recorded[artifact.key]?.frozen ?? false,
-    };
-  }
   console.log(`built    ${label}`);
 }
-
-// Drop entries for schemas that are no longer published — a superseded version
-// leaves the tree, so its hash should leave the manifest with it.
-const tracked = new Set([...ENTITIES.map((e) => e.path), ...UNGENERATED]);
-for (const key of Object.keys(recorded)) {
-  if (!tracked.has(key)) delete recorded[key];
-}
-await writeFile(INTEGRITY, renderIntegrity(recorded));
-console.log(`built    ${relative(ROOT, INTEGRITY)}`);
