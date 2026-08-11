@@ -18,16 +18,23 @@ Enable data portability and interoperability across fitness applications by prov
 
 ### Current Scope
 
-**In scope:**
-- Exercise data model (RFC-001)
-- Registry entities: Equipment (RFC-002), Muscles (RFC-003), Muscle Categories (RFC-004), Body Atlas (RFC-005)
+**In scope** — eight published RFCs:
 
-**Out of scope (for now):**
-- Workout/programming models
-- User progress tracking
-- Authentication/Authorization
+- **Exercise data model** (RFC-001)
+- **Catalog entities**: Equipment (RFC-002), Muscles (RFC-003), Muscle Categories (RFC-004), Body Atlas (RFC-005)
+- **Prescription primitives** (RFC-006) — load, repetitions, tempo, rest, intensity zones, set schemes and progression rules, defined once so a set means the same thing wherever it appears
+- **Workout data model** (RFC-007) — one prescribed session, as blocks of items with an execution mode per block
+- **Training program data model** (RFC-008) — a schedule of workout references over time, with cycles, weeks, progression and conditional branching
 
-These will be covered by future RFCs.
+**Out of scope** — by decision, not by omission:
+
+- **Personal data**: athlete identity, bodyweight, one-rep maxes, and what was actually performed
+- **Authentication and authorization**: FDS is a data format, not a protocol
+- **Generated exercise selection**: a program day references a workout that exists, so a plan can be read without the generator that produced it
+
+Carrying no personal values is what makes everything else portable. A catalog, a session or a plan can be published, cached, mirrored and diffed freely precisely because none of them describes a person — and that property is worth more than the convenience of putting a bodyweight in a document. Recording performed results therefore waits on a consent and privacy model rather than on schema design.
+
+See the [roadmap](/docs/governance/roadmap) for what each exclusion costs and what is under consideration.
 
 ## Versioning & Compatibility
 

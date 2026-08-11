@@ -20,15 +20,21 @@ Enable **data portability** and **interoperability** across fitness applications
 
 ## Current Scope
 
-**In Scope:**
-- **Exercise data model** (RFC-001)
-- **Registry entities**: Equipment (RFC-002), Muscles (RFC-003), Muscle Categories (RFC-004), Body Atlas (RFC-005)
+**In Scope** — eight published RFCs:
 
-**Out of Scope** (for now):
-- Workout/programming models
-- User progress tracking
-- Authentication/Authorization
-- *(These will be covered by future RFCs)*
+- **Exercise data model** (RFC-001)
+- **Catalog entities**: Equipment (RFC-002), Muscles (RFC-003), Muscle Categories (RFC-004), Body Atlas (RFC-005)
+- **Prescription primitives** (RFC-006): load, repetitions, tempo, rest, intensity zones, set schemes and progression rules
+- **Workout data model** (RFC-007): one prescribed session, as blocks of items with an execution mode per block
+- **Training program data model** (RFC-008): a schedule of workout references over time
+
+**Out of Scope** — by decision, not by omission:
+
+- **Personal data**: athlete identity, bodyweight, one-rep maxes, and what was actually performed
+- **Authentication and authorization**: a data format, not a protocol
+- **Generated exercise selection**: a program day references a workout that exists
+
+Carrying no personal values is what makes everything else portable — a catalog, a session or a plan can be published, cached, mirrored and diffed freely precisely because none of them describes a person. See the [roadmap](./governance/roadmap) for what each exclusion costs.
 
 ## Quick Start
 
