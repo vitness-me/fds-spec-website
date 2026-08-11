@@ -68,6 +68,7 @@ function CTASection() {
             GitHub Repository
           </Link>
         </div>
+        {/* fds:count rfcs=8 */}
         <p className={styles.ctaRoadmap}>
           Eight RFCs are published: the exercise catalog and its registries, prescription
           primitives, workouts and programs. What comes next — and what is deliberately

@@ -2,6 +2,7 @@
 
 Every schema published by the Fitness Data Standard, at the version it is published under.
 
+<!-- fds:count schemas=10 entities=7 libraries=1 tooling=1 superseded=1 -->
 The list here is `specification/schemas/.integrity.json`, which is what the build writes and what `npm run check:published` fetches. Ten schemas are published: seven entities, one definition library, one tooling schema, and one superseded entity version that is still served.
 
 ## A release is a set of entity versions
@@ -67,11 +68,13 @@ There is no `muscle/v1.4.0/`, and there will not be unless muscle itself changes
 ### Workout Schema (v1.1.0)
 - **Schema**: https://spec.vitness.me/schemas/workout/v1.1.0/workout.schema.json
 - 1.1.0 added per-set intensity zones and machine settings — RFC-007 §6
+<!-- fds:count examples:workout=46 scenarios:workout=46 -->
 - **Examples**: 46 worked sessions, one per row of the scenario coverage matrix —
   `workout.<scenario>.example.json` alongside the schema, indexed in its README
 
 ### Program Schema (v1.0.0)
 - **Schema**: https://spec.vitness.me/schemas/program/v1.0.0/program.schema.json
+<!-- fds:count examples:program=18 -->
 - **Examples**: 18 worked programs — `program.<scenario>.example.json` alongside the schema,
   covering linear, undulating, block, conjugate and adaptive structures
 
@@ -88,6 +91,8 @@ There is no `muscle/v1.4.0/`, and there will not be unless muscle itself changes
   not exported data. Documented with the tool, in `website/docs/tools/transformer/configuration.md`
 
 ## Superseded, still served
+
+<!-- fds:pin workout/v1.0.0/workout.schema.json — listed on purpose: releases 1.2.0 and 1.3.0 declare workout at 1.0.0, so a client pinned to either must keep resolving this URL. It is frozen, and this section says it is not for new work. -->
 
 ### Workout Schema (v1.0.0)
 - **Schema**: https://spec.vitness.me/schemas/workout/v1.0.0/workout.schema.json

@@ -245,6 +245,8 @@ This entity follows the versioning rules in RFC-001 §5. Its published URL is a 
 
 Adding a `mode` is a MINOR change: documents valid under the old version remain valid, because the new mode previously validated through the catch-all branch.
 
+<!-- fds:pin workout/v1.0.0/workout.schema.json — this document names the superseded version deliberately, in §6 and again in §9, because releases 1.2.0 and 1.3.0 declare workout at 1.0.0 and a client pinned to either must keep resolving it. New work uses 1.1.0. -->
+
 **1.1.0** added `settings` on items and sets, and `zone` on a set. Both are optional additions to closed objects, so every 1.0.0 document remains valid unchanged — but a 1.1.0 document using either is rejected by the 1.0.0 schema, which is what makes this a version rather than an edit. `workout/v1.0.0/workout.schema.json` stays published and frozen; releases 1.2.0 and 1.3.0 declare workout at 1.0.0 and continue to resolve. Release 1.4.0 is the first to declare it at 1.1.0.
 
 Entities version independently. A new workout version does not oblige exercise, equipment or the prescription library to move, and none of their versions oblige this one.
