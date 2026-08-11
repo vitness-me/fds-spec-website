@@ -145,6 +145,27 @@ describe('RegistryManager', () => {
     });
   });
 
+  // What a mocked fetch can and cannot prove.
+  //
+  // Everything below asserts *construction* — that the loader calls fetch with
+  // the URL it was told to, and shapes the answer correctly. That is worth
+  // asserting and it is all a mock can do. It cannot prove the endpoint exists,
+  // and asserting a URL against a mock reads exactly the same whether the URL
+  // resolves or 404s. This suite used to assert
+  // `.../registries/muscles.registry.json`, which has never been published; the
+  // test passed for the whole life of the package while every real consumer of
+  // `source: "remote"` got a hard throw.
+  //
+  // Existence is proved elsewhere, on purpose, because proving it needs the
+  // network and the network must not gate a pull request:
+  //
+  //   check:versions  offline, on every PR — the URLs this file's source
+  //                   *builds* name files in the published tree (rule 8).
+  //   check:published network, scheduled — every file in the published tree is
+  //                   actually served, as JSON, in the shape a catalog has.
+  //
+  // The two compose into "the URL this code builds resolves", with neither half
+  // on the PR path. A URL asserted here and nowhere else proves nothing.
   describe('load from remote URL', () => {
     it('should load muscles from remote URL', async () => {
       mockFetch.mockResolvedValue({
@@ -165,7 +186,53 @@ describe('RegistryManager', () => {
       expect(manager.getMuscles()).toHaveLength(2);
     });
 
-    it('should use default URL when no URL provided', async () => {
+    it('should refuse a remote source with no URL, and name the illustrative catalog', async () => {
+      const config: RegistriesConfig = {
+        muscles: {
+          source: 'remote'
+        }
+      };
+
+      await expect(manager.load(config)).rejects.toThrow(
+        /no default remote source/i
+      );
+      // The message has to hand over something the reader can act on. FDS
+      // publishes muscles only as an illustrative catalog, so the loader names
+      // that catalog rather than resolving to it — the caller decides whether
+      // ids that belong to no provider are acceptable in their output.
+      await expect(manager.load(config)).rejects.toThrow(
+        'https://spec.vitness.me/registries/muscles.registry.example.json'
+      );
+      // Nothing was fetched. The failure is in the configuration, and it is
+      // raised before a round trip that could only ever 404.
+      expect(mockFetch).not.toHaveBeenCalled();
+    });
+
+    it('should refuse a remote source for every entity registry', async () => {
+      await expect(manager.load({ equipment: { source: 'remote' } })).rejects.toThrow(
+        'https://spec.vitness.me/registries/equipment.registry.example.json'
+      );
+      await expect(manager.load({ muscleCategories: { source: 'remote' } })).rejects.toThrow(
+        'https://spec.vitness.me/registries/muscle-categories.registry.example.json'
+      );
+    });
+
+    it('should not let a fallback mask a source that does not exist', async () => {
+      // A fallback is for a flaky endpoint, not for a config naming a source
+      // that cannot exist. Falling back here would leave a permanently broken
+      // `source: "remote"` working by accident and never reported.
+      const config: RegistriesConfig = {
+        muscles: {
+          source: 'remote',
+          fallback: 'local',
+          local: './muscles.json'
+        }
+      };
+
+      await expect(manager.load(config)).rejects.toThrow(/no default remote source/i);
+    });
+
+    it('should still honour an explicit URL for an illustrative catalog', async () => {
       mockFetch.mockResolvedValue({
         ok: true,
         json: () => Promise.resolve(sampleMuscles)
@@ -173,13 +240,36 @@ describe('RegistryManager', () => {
 
       const config: RegistriesConfig = {
         muscles: {
-          source: 'remote'
+          source: 'remote',
+          url: 'https://spec.vitness.me/registries/muscles.registry.example.json'
         }
       };
 
       await manager.load(config);
-      
-      expect(mockFetch).toHaveBeenCalledWith('https://spec.vitness.me/registries/muscles.registry.json');
+
+      expect(mockFetch).toHaveBeenCalledWith(
+        'https://spec.vitness.me/registries/muscles.registry.example.json'
+      );
+      expect(manager.getMuscles()).toHaveLength(2);
+    });
+
+    it('should reject a document that is not a catalog', async () => {
+      // The normative vocabulary registries live in the same directory and are
+      // objects wrapping `entries`. Pointing `url` at one is the easy mistake,
+      // and it must fail at the URL rather than at the first lookup.
+      mockFetch.mockResolvedValue({
+        ok: true,
+        json: () => Promise.resolve({ registry: 'exercise-type', entries: [] })
+      });
+
+      const config: RegistriesConfig = {
+        muscles: {
+          source: 'remote',
+          url: 'https://spec.vitness.me/registries/exercise-type.registry.json'
+        }
+      };
+
+      await expect(manager.load(config)).rejects.toThrow(/is not a catalog/);
     });
 
     it('should throw error on failed fetch', async () => {

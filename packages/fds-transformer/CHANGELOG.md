@@ -7,6 +7,42 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- **`source: "remote"` never worked for muscles, equipment or muscle categories.**
+  `RegistryManager` built `https://spec.vitness.me/registries/<name>.registry.json`
+  for all three. No such file has ever been published — FDS serves these as
+  `<name>.registry.example.json` — so every consumer of the remote path got a
+  hard throw from the first release onwards. The unit test asserted the broken
+  URL against a mocked fetch, which proves a URL is *constructed* and cannot
+  prove it resolves, so the defect shipped green.
+
+### Changed
+
+- **There is no default remote source for these three registries.** Asking for
+  one now fails immediately, naming the illustrative catalog and explaining the
+  choice, instead of fetching a URL that 404s. This is deliberate rather than a
+  rename: `specification/registries/README.md` distinguishes a normative
+  vocabulary (`*.registry.json`) from an illustrative catalog
+  (`*.registry.example.json`), and only the second exists for these entities.
+  A registry lookup yields an id that lands in your output and then in your
+  database; the illustrative ids belong to no provider and the spec reserves the
+  right to change them, so defaulting there would trade a loud failure at load
+  for silently wrong ids found much later. Set `url`, `local` or `inline` —
+  including `url` pointing at the illustrative catalog, which is now a visible
+  decision in your own config.
+
+  Nothing can have depended on the previous behaviour: it threw.
+
+- A remote source that cannot be resolved is raised before the `fallback` path.
+  A fallback exists to survive a flaky endpoint, not to mask a configuration
+  naming a source that does not exist.
+
+- A remote registry that does not deserialise to an array of entity documents is
+  rejected at the URL. Pointing `url` at one of the normative vocabulary
+  registries — objects wrapping `entries`, published in the same directory — used
+  to surface as `registry.find is not a function` at the first lookup.
+
 ## [0.1.0] - 2026-01-27
 
 ### Added
