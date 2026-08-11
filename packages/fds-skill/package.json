@@ -3,13 +3,20 @@
   "version": "0.1.0",
   "description": "FDS (Fitness Data Standard) AI skill and knowledge base for schema transformation and enrichment",
   "type": "module",
-  "main": "./SKILL.md",
+  "exports": {
+    "./package.json": "./package.json",
+    "./SKILL.md": "./SKILL.md",
+    "./knowledge/*": "./knowledge/*",
+    "./prompts/*": "./prompts/*",
+    "./examples/*": "./examples/*"
+  },
   "files": [
     "SKILL.md",
-    "CLAUDE.md",
     "knowledge",
     "prompts",
-    "examples"
+    "examples",
+    "LICENSE",
+    "README.md"
   ],
   "keywords": [
     "fds",
