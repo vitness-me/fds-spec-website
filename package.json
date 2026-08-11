@@ -16,6 +16,7 @@
     "check:prescription": "node scripts/check-prescription.mjs",
     "check:rfc": "node scripts/check-rfc-fields.mjs",
     "check:mirrors": "node scripts/check-doc-mirrors.mjs",
+    "check:usecases": "node scripts/check-usecases.mjs",
     "check:scenarios": "node scripts/check-scenarios.mjs",
     "check:registries": "node scripts/check-registries.mjs",
     "check:skill": "node scripts/check-skill.mjs --self-test && node scripts/check-skill.mjs",
