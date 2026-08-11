@@ -109,6 +109,24 @@ jobs:
       - name: Verify the mapping schema names what the transformer reads
         run: npm run check:mapping
 
+      # Every check in this job reads something. None of them ran the
+      # transformer and asked whether what came out validates — and two
+      # committed configurations had been writing a media type no schema allows,
+      # stamped with a withdrawn version, since the day they were written. This
+      # takes the deterministic fixture through the built CLI and validates the
+      # result against the published schema each document declares, then reads
+      # every committed mapping configuration — including the ones that need an
+      # API key and so cannot be run — for constants their schema rejects.
+      #
+      # Builds the CLI here because jobs do not share a filesystem; the
+      # transformer job's build is not available to this one. Ajv comes from the
+      # doc-examples step above, which runs in the same job.
+      - name: Verify the transformer produces valid FDS
+        run: |
+          npm --prefix packages/fds-transformer ci
+          npm --prefix packages/fds-transformer run build
+          npm run check:transform
+
       # An RFC that promises a field the schema rejects, or a schema that carries
       # one no RFC explains, has shipped here twice. Nothing read both until now.
       - name: Verify RFCs and their schemas agree

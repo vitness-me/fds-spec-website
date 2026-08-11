@@ -75,6 +75,19 @@ if run_job schemas; then
 
   try "documented examples validate" npm run check:doc-examples
   try "the mapping schema names what the tool reads" npm run check:mapping
+
+  # The round trip runs the built CLI. The transformer job above builds it, but
+  # this job runs standalone too (`ci-local.sh schemas`), so build on demand —
+  # the same shape as the ajv-cli install above. In CI the two jobs do not share
+  # a filesystem and the workflow step installs and builds unconditionally.
+  if [[ ! -f packages/fds-transformer/dist/bin/fds-transformer.js ]]; then
+    step "build the transformer for the round trip"
+    if npm --prefix packages/fds-transformer ci --no-fund --no-audit >/dev/null 2>&1 &&
+       npm --prefix packages/fds-transformer run build >/dev/null 2>&1; then ok
+    else bad "build the transformer for the round trip"; fi
+  fi
+
+  try "the transformer produces valid FDS" npm run check:transform
   try "prescription fixtures match their definitions" npm run check:prescription
   try "RFCs and schemas agree" npm run check:rfc
   try "website pages match their sources" npm run check:mirrors
