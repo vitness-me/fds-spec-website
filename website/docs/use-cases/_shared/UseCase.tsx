@@ -2,6 +2,7 @@ import React from 'react';
 import Link from '@docusaurus/Link';
 import EditorPanel from '@site/src/components/EditorPanel';
 import {PERSONAS} from './registry';
+import {useLocaleString} from './strings';
 import styles from './styles.module.css';
 
 /**
@@ -36,6 +37,7 @@ export function SpecExample({
   children?: React.ReactNode;
 }): React.ReactElement {
   const filename = source.split('/').pop();
+  const str = useLocaleString();
   return (
     <figure className={styles.example}>
       {/* No line numbers: these panels show a whole published file, so a
@@ -50,7 +52,7 @@ export function SpecExample({
       />
       {children ? <figcaption className={styles.caption}>{children}</figcaption> : null}
       <p className={styles.source}>
-        Backed by <code>{source}</code>
+        {str('usecase.backedBy')} <code>{source}</code>
       </p>
     </figure>
   );
@@ -68,9 +70,10 @@ export function Panel({
   kind: 'before' | 'after';
   children: React.ReactNode;
 }): React.ReactElement {
+  const str = useLocaleString();
   return (
     <div className={kind === 'after' ? styles.panelAfter : styles.panelBefore}>
-      <p className={styles.panelLabel}>{kind === 'after' ? 'With FDS' : 'Today'}</p>
+      <p className={styles.panelLabel}>{str(kind === 'after' ? 'usecase.panelAfter' : 'usecase.panelBefore')}</p>
       {children}
     </div>
   );
@@ -78,12 +81,13 @@ export function Panel({
 
 /** Persona chips. Each id is resolved to its label from the shared registry. */
 export function Audience({ids}: {ids: string[]}): React.ReactElement {
+  const str = useLocaleString();
   return (
     <p className={styles.audience}>
-      <span className={styles.audienceLead}>Who this is for</span>
+      <span className={styles.audienceLead}>{str('usecase.audienceLead')}</span>
       {ids.map((id) => (
         <span key={id} className={styles.chip}>
-          {PERSONAS[id] ?? id}
+          {id in PERSONAS ? str(`usecase.persona.${id}`) : id}
         </span>
       ))}
     </p>
@@ -92,9 +96,10 @@ export function Audience({ids}: {ids: string[]}): React.ReactElement {
 
 /** The closing two links — one business-shaped, one technical-shaped. */
 export function NextSteps({children}: {children: React.ReactNode}): React.ReactElement {
+  const str = useLocaleString();
   return (
     <div className={styles.next}>
-      <p className={styles.nextLead}>What next</p>
+      <p className={styles.nextLead}>{str('usecase.nextLead')}</p>
       <div className={styles.nextLinks}>{children}</div>
     </div>
   );

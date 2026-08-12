@@ -1,6 +1,10 @@
 {
   "defaultLocale": "en",
-  "locales": ["en", "es", "sr-Latn"],
+  "locales": [
+    "en",
+    "es",
+    "sr-Latn"
+  ],
   "localeConfigs": {
     "en": {
       "label": "English",
@@ -18,15 +22,72 @@
   "strings": {
     "en": {
       "releaseDropdownHeading": "Release {release} publishes",
-      "helpTranslateLabel": "Help translate"
+      "helpTranslateLabel": "Help translate",
+      "usecase.backedBy": "Backed by",
+      "usecase.panelBefore": "Today",
+      "usecase.panelAfter": "With FDS",
+      "usecase.audienceLead": "Who this is for",
+      "usecase.nextLead": "What next",
+      "usecase.persona.app-developer": "App developers",
+      "usecase.persona.platform-lead": "Platform & product leads",
+      "usecase.persona.oem-engineer": "Equipment & wearable engineers",
+      "usecase.persona.coach": "Coaches & program authors",
+      "usecase.persona.researcher": "Sports scientists & researchers",
+      "usecase.persona.athlete": "People who own their training",
+      "usecase.page.workout": "Authoring workouts",
+      "usecase.page.prescription": "Prescription primitives",
+      "usecase.page.program": "Programming",
+      "coverage.intro": "The scenario coverage matrix behind that claim — {total} training structures, from straight sets to wave loading to a peaking program. Every row names a committed example file that validates against its published schema in CI, and each description below is read from the README that ships beside those fixtures. Nothing on this list is retyped for the website.",
+      "coverage.seeInUse": "See these structures in use: {label} →",
+      "coverage.footnoteBefore": "Two sections of the planning matrix are absent on purpose: performed results (logging) are deferred until a consent and privacy model exists, because FDS models no person; and the cross-cutting concerns are answered in the RFCs rather than by fixtures. The",
+      "coverage.footnoteLink": "roadmap",
+      "coverage.footnoteAfter": "says which is which."
     },
     "es": {
       "releaseDropdownHeading": "El lanzamiento {release} publica",
-      "helpTranslateLabel": "Ayude a traducir"
+      "helpTranslateLabel": "Ayude a traducir",
+      "usecase.backedBy": "Respaldado por",
+      "usecase.panelBefore": "Hoy",
+      "usecase.panelAfter": "Con FDS",
+      "usecase.audienceLead": "Para quién es",
+      "usecase.nextLead": "Próximos pasos",
+      "usecase.persona.app-developer": "Desarrolladores de aplicaciones",
+      "usecase.persona.platform-lead": "Responsables de plataforma y producto",
+      "usecase.persona.oem-engineer": "Ingenieros de equipamiento y wearables",
+      "usecase.persona.coach": "Entrenadores y autores de programas",
+      "usecase.persona.researcher": "Científicos del deporte e investigadores",
+      "usecase.persona.athlete": "Personas dueñas de su entrenamiento",
+      "usecase.page.workout": "Creación de sesiones",
+      "usecase.page.prescription": "Primitivas de prescripción",
+      "usecase.page.program": "Programación",
+      "coverage.intro": "La matriz de cobertura de escenarios detrás de esa afirmación — {total} estructuras de entrenamiento, desde series simples hasta cargas en ola y un programa de puesta a punto. Cada fila nombra un archivo de ejemplo confirmado en el repositorio que valida contra su esquema publicado en CI, y cada descripción a continuación se lee del README que acompaña esos archivos. Nada de esta lista se vuelve a escribir para el sitio web.",
+      "coverage.seeInUse": "Ver estas estructuras en uso: {label} →",
+      "coverage.footnoteBefore": "Dos secciones de la matriz de planificación están ausentes a propósito: los resultados realizados (el registro de lo ejecutado) se posponen hasta que exista un modelo de consentimiento y privacidad, porque FDS no modela a ninguna persona; y las cuestiones transversales se responden en los RFC y no mediante archivos de ejemplo. La",
+      "coverage.footnoteLink": "hoja de ruta",
+      "coverage.footnoteAfter": "dice cuál es cuál."
     },
     "sr-Latn": {
       "releaseDropdownHeading": "Izdanje {release} objavljuje",
-      "helpTranslateLabel": "Pomozite u prevođenju"
+      "helpTranslateLabel": "Pomozite u prevođenju",
+      "usecase.backedBy": "Zasnovano na",
+      "usecase.panelBefore": "Danas",
+      "usecase.panelAfter": "Sa FDS-om",
+      "usecase.audienceLead": "Kome je namenjeno",
+      "usecase.nextLead": "Šta dalje",
+      "usecase.persona.app-developer": "Programeri aplikacija",
+      "usecase.persona.platform-lead": "Rukovodioci platformi i proizvoda",
+      "usecase.persona.oem-engineer": "Inženjeri opreme i nosivih uređaja",
+      "usecase.persona.coach": "Treneri i autori programa",
+      "usecase.persona.researcher": "Sportski naučnici i istraživači",
+      "usecase.persona.athlete": "Ljudi koji su vlasnici svog treninga",
+      "usecase.page.workout": "Sastavljanje treninga",
+      "usecase.page.prescription": "Primitivi preskripcije",
+      "usecase.page.program": "Programiranje",
+      "coverage.intro": "Matrica pokrivenosti scenarija koja stoji iza te tvrdnje — broj struktura treninga: {total} — od klasičnih serija preko talasnog opterećenja do programa za tempiranje forme. Svaki red imenuje datoteku primera u repozitorijumu koja se u CI-ju validira prema svojoj objavljenoj šemi, a svaki opis ispod čita se iz README datoteke koja se isporučuje uz te primere. Ništa sa ovog spiska nije prekucano za sajt.",
+      "coverage.seeInUse": "Pogledajte ove strukture u upotrebi: {label} →",
+      "coverage.footnoteBefore": "Dva odeljka matrice planiranja namerno nedostaju: ostvareni rezultati (evidentiranje) čekaju dok ne bude postojao model saglasnosti i privatnosti, jer FDS ne modeluje nijednu osobu; a međusobno prožimajuća pitanja odgovorena su u RFC dokumentima, a ne primerima.",
+      "coverage.footnoteLink": "Plan razvoja",
+      "coverage.footnoteAfter": "kaže šta je šta."
     }
   }
 }
