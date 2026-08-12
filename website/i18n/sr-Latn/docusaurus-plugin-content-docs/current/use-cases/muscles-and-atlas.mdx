@@ -1,0 +1,81 @@
+---
+title: Povežite mišiće sa telom bez posedovanja grafike
+sidebar_label: Mišići i atlas tela
+description: Imenujte anatomski region jednom; svaki prikazivač ga crta, a nijedan od njih ne mora da se slaže oko crteža.
+usecase_promise: Imenujte region jednom; svaki prikazivač ga crta, a nijedan ne mora da se slaže oko crteža.
+usecase_family: foundations
+usecase_audiences: [app-developer, researcher]
+usecase_sources:
+  - specification/schemas/muscle/v1.0.0/muscle.example.json
+  - specification/schemas/muscle/muscle-category/v1.0.0/muscle-category.example.json
+  - specification/schemas/atlas/v1.0.0/body-atlas.example.json
+---
+
+import {SpecExample, BeforeAfter, Panel, Audience, NextSteps, Next} from '@site/docs/use-cases/_shared/UseCase';
+import quadriceps from '@site/../specification/schemas/muscle/v1.0.0/muscle.example.json';
+import legs from '@site/../specification/schemas/muscle/muscle-category/v1.0.0/muscle-category.example.json';
+import atlas from '@site/../specification/schemas/atlas/v1.0.0/body-atlas.example.json';
+
+# Povežite mišiće sa telom bez posedovanja grafike
+
+> Imenujte region jednom; svaki prikazivač ga crta, a nijedan ne mora da se slaže oko crteža.
+
+<Audience ids={['app-developer', 'researcher']} />
+
+<BeforeAfter>
+  <Panel kind="before">
+    Svaka aplikacija tvrdo kodira mapiranje od mišića do putanje u jednom konkretnom
+    SVG-u. Naručite novu ilustraciju i anatomija mora da se radi iznova; podelite
+    isticanje između dve aplikacije i ono se ne poklapa, jer se nijedna ne slaže oko
+    crteža ispod.
+  </Panel>
+  <Panel kind="after">
+    Mišić imenuje regione koje zauzima kao id-eve i težinu. Atlas mapira svaki region
+    na selektor unutar prikaza. Zamenite grafiku, zadržite semantiku — vezivanje je
+    sloj indirekcije, a geometrija ostaje van podataka.
+  </Panel>
+</BeforeAfter>
+
+## Tri zapisa koja se slažu u celinu
+
+Mišić nosi `heatmap` koji imenuje regione atlasa po id-u, svaki sa težinom —
+nikada putanju, nikada boju.
+
+<SpecExample source="specification/schemas/muscle/v1.0.0/muscle.example.json" data={quadriceps}>
+  Kvadriceps, vezan za dve oblasti atlasa punom težinom. `classification.categoryId`
+  pokazuje na kategoriju ispod.
+</SpecExample>
+
+Kategorija mišića grupiše mišiće za čitaoca, i sama je samo id, ime i klasifikacija.
+
+<SpecExample source="specification/schemas/muscle/muscle-category/v1.0.0/muscle-category.example.json" data={legs}>
+  Kategorija „Legs“ kojoj kvadriceps pripada, referencirana preko `cat.legs`.
+</SpecExample>
+
+Atlas razrešava te id-eve regiona u selektore unutar imenovanih prikaza — a sam ne
+isporučuje nikakvu geometriju. Crtež živi iza `asset.uri`; atlas je mapa od id-a
+regiona do selektora u njemu.
+
+<SpecExample source="specification/schemas/atlas/v1.0.0/body-atlas.example.json" data={atlas}>
+  Četiri oblasti, od kojih svaka vezuje `viewId` i `selector` kao što je
+  `#area-thigh-left`. Selektor pokazuje u *vaš* SVG — standard se ne obavezuje ni na
+  jedan.
+</SpecExample>
+
+## Kako funkcioniše
+
+Indirekcija je odlika, a ne nedostatak. Mišić kaže *koje regione i koliko snažno*;
+atlas kaže *gde su ti regioni u datom prikazu*; grafika je vaša i zamenljiva. Pošto
+nijedna koordinata ni putanja ne živi u zapisima entiteta, biblioteka mišića može da
+se kešira i poredi po razlikama, a nova ilustracija je novo vezivanje atlasa, a ne
+izmena anatomije.
+
+Obratite pažnju na ono što standard namerno **ne** isporučuje: ovaj primer atlasa
+nosi četiri oblasti i nijedan crtež — `asset.uri` pokazuje na resurs koji atlas ne
+definiše, a agregacija preko težina je savetodavna, ne propisana. Mapa je normativna;
+slika je implementaciona odluka.
+
+<NextSteps>
+  <Next to="/docs/use-cases/exercise-catalog">Pogledajte mišić referenciran iz vežbe</Next>
+  <Next to="/docs/schemas/body-atlas">Pročitajte šemu atlasa tela</Next>
+</NextSteps>

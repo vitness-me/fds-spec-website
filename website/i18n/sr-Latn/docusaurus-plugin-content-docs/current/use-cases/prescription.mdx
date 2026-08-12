@@ -1,0 +1,83 @@
+---
+title: Propišite intenzitet, a da nikada ne sačuvate osobu
+sidebar_label: Primitivi preskripcije
+description: Izrazite koliko opterećenja, koliko ponavljanja, koliko odmora — kao primitive za višekratnu upotrebu koji referenciraju brojeve osobe umesto da ih nose.
+usecase_promise: Propišite opterećenje, ponavljanja i odmor kao primitive koji referenciraju brojeve osobe, a nikada ih ne nose.
+usecase_family: prescription
+usecase_audiences: [coach, app-developer]
+usecase_sources:
+  - specification/schemas/prescription/v1.0.0/loadTarget.percent1RM.example.json
+  - specification/schemas/prescription/v1.0.0/loadTarget.rpe.example.json
+  - specification/schemas/prescription/v1.0.0/loadTarget.percent-bodyweight.example.json
+---
+
+import {SpecExample, BeforeAfter, Panel, Audience, NextSteps, Next} from '@site/docs/use-cases/_shared/UseCase';
+import percent1RM from '@site/../specification/schemas/prescription/v1.0.0/loadTarget.percent1RM.example.json';
+import rpe from '@site/../specification/schemas/prescription/v1.0.0/loadTarget.rpe.example.json';
+import percentBodyweight from '@site/../specification/schemas/prescription/v1.0.0/loadTarget.percent-bodyweight.example.json';
+
+# Propišite intenzitet, a da nikada ne sačuvate osobu
+
+> Propišite opterećenje, ponavljanja i odmor kao primitive koji referenciraju brojeve osobe, a nikada ih ne nose.
+
+<Audience ids={['coach', 'app-developer']} />
+
+<BeforeAfter>
+  <Panel kind="before">
+    Intenzitet se spljošti u jedan broj — težinu — koji nešto znači samo za jednog
+    sportistu jednog dana. Sve bogatije od toga (procenat, RPE, ciljna brzina)
+    iznova se izmišlja od aplikacije do aplikacije, a čuvanje u vidu apsolutnog
+    opterećenja uvlači subjekta podataka i njegovu telesnu masu ili maksimum za
+    jedno ponavljanje u svaki zapis.
+  </Panel>
+  <Panel kind="after">
+    Ciljno opterećenje je mali, diskriminisani primitiv: metoda i vrednosti koje su
+    toj metodi potrebne. Procenat maksimuma referencira vežbu; ne ugrađuje maksimum.
+    Preskripcija je potpuna i deljiva, a lični broj prema kome se razrešava ostaje
+    kod osobe, van dokumenta.
+  </Panel>
+</BeforeAfter>
+
+## Isti slot, tri namere
+
+Procenat sopstvenog maksimuma za jedno ponavljanje propisane vežbe. Dva ključa — i
+nigde broj za maksimum, jer maksimum pripada sportisti koga ovaj dokument nikada ne
+imenuje.
+
+<SpecExample source="specification/schemas/prescription/v1.0.0/loadTarget.percent1RM.example.json" data={percent1RM}>
+  82,5% sopstvenog maksimuma za jedno ponavljanje propisane vežbe — slučaj vođen
+  procentom.
+</SpecExample>
+
+RPE cilj prepušta odluku o opterećenju sportisti za šipkom, pa ništa uopšte ne mora
+unapred da se razrešava.
+
+<SpecExample source="specification/schemas/prescription/v1.0.0/loadTarget.rpe.example.json" data={rpe}>
+  RPE 8, dozvoljene polovine poena. Sportista bira opterećenje; preskripcija iskazuje napor.
+</SpecExample>
+
+A procenat telesne mase — namerno **nerazrešiv unutar FDS-a**, jer u dokumentu nema
+sportiste iz koga bi se pročitala telesna masa.
+
+<SpecExample source="specification/schemas/prescription/v1.0.0/loadTarget.percent-bodyweight.example.json" data={percentBodyweight}>
+  60% telesne mase. Dokument kaže šta da se izračuna; osoba isporučuje broj, drugde.
+</SpecExample>
+
+## Kako funkcioniše
+
+Svaki primitiv je diskriminisani oblik — `method` i tačno ona polja koja ta metoda
+zahteva — pa konzument pročita metodu i zna šta da očekuje. Metode koje bi *inače*
+zahtevale lične podatke referenciraju ih umesto da ih nose: procenat imenuje vežbu,
+osnova trenažnog maksimuma imenuje slot, zona imenuje sistem. Granica je namerna i u
+njoj je poenta — biblioteka preskripcija ne nosi nijednog subjekta podataka, i upravo
+to joj omogućava da se slobodno objavljuje, kešira i poredi po razlikama.
+
+Pošto je preskripcija biblioteka definicija, a ne entitet, ovi fragmenti se validiraju
+prema definiciji koju imenuju, a ne prema korenu dokumenta. Provajder nikada ne
+oglašava „preskripciju“ kao nešto što izvozi; primitivi žive unutar treninga i
+programa koji ih koriste.
+
+<NextSteps>
+  <Next to="/docs/use-cases/authoring-workouts">Pogledajte preskripcije unutar treninga</Next>
+  <Next to="/docs/schemas/prescription">Pročitajte biblioteku preskripcije</Next>
+</NextSteps>
