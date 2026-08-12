@@ -154,6 +154,74 @@ a:hover {
   font-size: 0.9375rem;
 }
 
+/* The navbar carries eight labelled items plus two dropdowns, search and
+ * the color-mode toggle. Between the theme's mobile breakpoint (996px) and
+ * roughly 1340px the two sides of the bar collide — in English "Contribute"
+ * runs into "GitHub", and Spanish and Serbian labels run longer still. The
+ * theme's breakpoint is not configurable, so this band tightens item
+ * spacing and the search box instead of hiding anything. Tighter again
+ * under 1160px, where the longest locale's labels need it. */
+@media (min-width: 997px) {
+  .navbar__items .navbar__item {
+    white-space: nowrap;
+  }
+}
+
+@media (min-width: 997px) and (max-width: 1340px) {
+  .navbar__item {
+    padding-left: 0.45rem;
+    padding-right: 0.45rem;
+  }
+  .navbar__link {
+    font-size: 0.875rem;
+  }
+  .navbar__search-input,
+  input[class*='searchQueryInput'] {
+    width: 9rem;
+  }
+}
+
+@media (min-width: 997px) and (max-width: 1160px) {
+  .navbar__item {
+    padding-left: 0.3rem;
+    padding-right: 0.3rem;
+  }
+  .navbar__link {
+    font-size: 0.8125rem;
+  }
+  .navbar__search-input,
+  input[class*='searchQueryInput'] {
+    width: 6.5rem;
+  }
+  .navbar__title {
+    display: none;
+  }
+}
+
+/* The last stretch above the mobile breakpoint. The drawer cannot be
+ * summoned early (the theme decides mobile in JS, not CSS), so this band
+ * gives up horizontal air instead: minimal padding, the narrowest search
+ * box that still reads, no logo. Verified against the longest labels the
+ * site ships (Serbian) at 1000px. */
+@media (min-width: 997px) and (max-width: 1100px) {
+  .navbar__item {
+    padding-left: 0.22rem;
+    padding-right: 0.22rem;
+  }
+  .navbar__search-input,
+  input[class*='searchQueryInput'] {
+    /* !important because the search plugin sets its own width at equal
+     * specificity, and stylesheet order is not something to depend on. */
+    width: 4.5rem !important;
+  }
+  .navbar__logo {
+    display: none;
+  }
+  .navbar__items--right {
+    gap: 0;
+  }
+}
+
 /* Mobile navbar sidebar - COMMENTED OUT - Testing Docusaurus defaults
  * Previous custom CSS was causing navigation items to be hidden on mobile.
  * Removed to test if Docusaurus default behavior works correctly.
