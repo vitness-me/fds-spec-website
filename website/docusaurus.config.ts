@@ -44,8 +44,21 @@ const localeManifest = JSON.parse(
  * The lookup throws on a missing entry instead of falling back to English:
  * a locale that goes live without these strings should fail its build, not
  * quietly regrow the defect this exists to fix.
+ *
+ * "No locale was specified" is a different condition from "a live locale is
+ * missing its strings", and conflating them killed `docusaurus start`: the
+ * dev server without --locale assigns an undefined CLI option into
+ * process.env, which coerces to the literal string "undefined" — so a
+ * `??` fallback never fires and the guard threw before the server could
+ * boot, while every gated path stayed green because `docusaurus build`
+ * sets the variable properly per locale. Unset, empty and "undefined" all
+ * mean the default locale; check-translations.mjs runs the extraction
+ * under the dev server's exact environment so a config that cannot boot
+ * `docusaurus start` cannot pass CI either.
  */
-const currentBuildLocale = process.env.DOCUSAURUS_CURRENT_LOCALE ?? localeManifest.defaultLocale;
+const envLocale = process.env.DOCUSAURUS_CURRENT_LOCALE;
+const currentBuildLocale =
+  envLocale && envLocale !== 'undefined' ? envLocale : localeManifest.defaultLocale;
 const localeString = (key: string): string => {
   const value = localeManifest.strings[currentBuildLocale]?.[key];
   if (value === undefined) {
