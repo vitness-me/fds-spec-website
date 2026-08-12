@@ -1,10 +1,8 @@
 import React from 'react';
 import Link from '@docusaurus/Link';
-import { Snowflake, ShieldCheck, GitPullRequestArrow } from 'lucide-react';
 import styles from './styles.module.css';
 
 interface FeatureCard {
-  icon: React.ReactNode;
   title: string;
   description: string;
   link: string;
@@ -13,7 +11,6 @@ interface FeatureCard {
 
 const featureCards: FeatureCard[] = [
   {
-    icon: <Snowflake size={28} />,
     title: 'Frozen at permanent URLs',
     description:
       'Every published schema is pinned by sha256 and never changes. A new version ships in a new directory beside the old one, which stays served — so a client pinned to an older release keeps resolving.',
@@ -21,7 +18,6 @@ const featureCards: FeatureCard[] = [
     linkLabel: 'How versioning works →',
   },
   {
-    icon: <ShieldCheck size={28} />,
     title: 'Versioned per entity',
     description:
       'A release names a set of entity versions, not one number they all share. Entities move independently, and the release manifest is generated from the published tree — so what the site says is published is what is published.',
@@ -29,7 +25,6 @@ const featureCards: FeatureCard[] = [
     linkLabel: 'Read the overview →',
   },
   {
-    icon: <GitPullRequestArrow size={28} />,
     title: 'Open, additive governance',
     description:
       'Every entity arrived through a public RFC, and changes are additive by rule. The standard is developed in the open so no single vendor can quietly redefine the format under you.',
@@ -40,12 +35,17 @@ const featureCards: FeatureCard[] = [
 
 export default function TrustSection(): JSX.Element {
   return (
-    <section className={styles.trustSection}>
-      <div className={styles.container}>
-        <h2 className={styles.sectionTitle}>Built to be depended on</h2>
-        <p className={styles.sectionSubtitle}>
-          A format you integrate once should not move under you.
-        </p>
+    <section className="fdsSection">
+      <div className="fdsContainer">
+        <div className="fdsSectionHead">
+          <p className="fdsEyebrow">
+            <span>{'//'}</span> stability
+          </p>
+          <h2 className="fdsH2">Built to be depended on</h2>
+          <p className="fdsSub">
+            A format you integrate once should not move under you.
+          </p>
+        </div>
 
         <div className={styles.statStrip}>
           <div className={styles.stat}>
@@ -71,12 +71,11 @@ export default function TrustSection(): JSX.Element {
         </div>
 
         <div className={styles.featureGrid}>
-          {featureCards.map((card, idx) => (
-            <div key={idx} className={styles.featureCard}>
-              <span className={styles.cardIcon}>{card.icon}</span>
+          {featureCards.map((card) => (
+            <div key={card.title} className={styles.featureCard}>
               <h3 className={styles.cardTitle}>{card.title}</h3>
               <p className={styles.cardDescription}>{card.description}</p>
-              <Link to={card.link} className={styles.cardLink}>
+              <Link to={card.link} className="fdsQuietLink">
                 {card.linkLabel}
               </Link>
             </div>

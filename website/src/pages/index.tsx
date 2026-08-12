@@ -12,13 +12,16 @@ import QuickStart from '@site/src/components/landing/QuickStart';
 import TrustSection from '@site/src/components/landing/TrustSection';
 
 import styles from './index.module.css';
+import '../css/landing.css';
 
 function HomepageHeader() {
   return (
     <header className={styles.heroBanner}>
       <div className={styles.heroContainer}>
         <div className={styles.heroContent}>
-          <span className={styles.badge}>Open Standard</span>
+          <p className={styles.heroEyebrow}>
+            <span>{'//'}</span> an open standard for fitness data
+          </p>
           <Heading as="h1" className={styles.heroTitle}>
             A back squat should mean the same thing everywhere.
           </Heading>
@@ -33,19 +36,15 @@ function HomepageHeader() {
             For app developers, platforms, coaches and researchers who need
             training data to move between systems.
           </p>
-          <div className={styles.coverageBadges}>
-            <span className={styles.coverageBadge}>Exercises</span>
-            <span className={styles.coverageBadge}>Equipment, Muscles &amp; Body Atlas</span>
-            <span className={styles.coverageBadge}>Workouts</span>
-            <span className={styles.coverageBadge}>Programs</span>
-          </div>
+          <p className={styles.heroCoverage}>
+            exercises<span>·</span>equipment<span>·</span>muscles<span>·</span>body
+            atlas<span>·</span>workouts<span>·</span>programs
+          </p>
           <div className={styles.heroButtons}>
-            <a className={styles.primaryButton} href="#see-it-work">
+            <a className="fdsButtonPrimary" href="#see-it-work">
               See a real mapping
             </a>
-            <Link
-              className={styles.secondaryButton}
-              to="/docs/getting-started/overview">
+            <Link className="fdsButtonGhost" to="/docs/getting-started/overview">
               Read the spec
             </Link>
           </div>
@@ -68,10 +67,10 @@ function CTASection() {
           open.
         </p>
         <div className={styles.ctaButtons}>
-          <Link className={styles.primaryButton} to="/docs/getting-started/overview">
+          <Link className="fdsButtonPrimary" to="/docs/getting-started/overview">
             Read the Documentation
           </Link>
-          <Link className={styles.secondaryButton} to="https://github.com/vitness-me/fds-spec-website">
+          <Link className="fdsButtonGhost" to="https://github.com/vitness-me/fds-spec-website">
             GitHub Repository
           </Link>
         </div>
@@ -104,7 +103,7 @@ export default function Home(): ReactNode {
       title="Fitness Data Standard"
       description="An open, vendor-neutral standard for fitness domain data — exercises, equipment, muscles, workouts and programs. One shared vocabulary, published as JSON Schemas at frozen URLs.">
       <HomepageHeader />
-      <main>
+      <main className="fdsPage">
         <ProblemSection />
         <CapabilityLayer />
         <BeforeAfter />

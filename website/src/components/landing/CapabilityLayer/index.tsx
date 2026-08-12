@@ -1,6 +1,5 @@
 import React from 'react';
 import Link from '@docusaurus/Link';
-import { Library, ClipboardList } from 'lucide-react';
 import styles from './styles.module.css';
 
 interface Entity {
@@ -10,7 +9,6 @@ interface Entity {
 }
 
 interface Layer {
-  icon: React.ReactNode;
   tag: string;
   title: string;
   blurb: string;
@@ -19,8 +17,7 @@ interface Layer {
 
 const layers: Layer[] = [
   {
-    icon: <Library size={22} />,
-    tag: 'Layer one',
+    tag: 'layer 1',
     title: 'The shared library',
     blurb:
       'A common vocabulary for the fitness domain. Static, cacheable, mirrorable, diffable. Adopt it alone if all you want is a canonical exercise list every system reads the same way.',
@@ -32,8 +29,7 @@ const layers: Layer[] = [
     ],
   },
   {
-    icon: <ClipboardList size={22} />,
-    tag: 'Layer two',
+    tag: 'layer 2',
     title: 'The prescription layer',
     blurb:
       'How to train, composed from the library. Sets, reps, tempo, load, rest and zones assemble into sessions, and sessions into multi-week plans — one schema each, however the training is structured.',
@@ -47,28 +43,29 @@ const layers: Layer[] = [
 
 export default function CapabilityLayer(): JSX.Element {
   return (
-    <section id="capabilities" className={styles.capabilitySection}>
-      <div className={styles.container}>
-        <h2 className={styles.sectionTitle}>One standard, two layers</h2>
-        <p className={styles.sectionSubtitle}>
-          FDS defines a shared vocabulary and, on top of it, how to prescribe
-          training with that vocabulary. Either layer can be adopted on its own.
-        </p>
+    <section id="capabilities" className="fdsSection">
+      <div className="fdsContainer">
+        <div className="fdsSectionHead">
+          <p className="fdsEyebrow">
+            <span>{'//'}</span> what fds defines
+          </p>
+          <h2 className="fdsH2">One standard, two layers</h2>
+          <p className="fdsSub">
+            FDS defines a shared vocabulary and, on top of it, how to prescribe
+            training with that vocabulary. Either layer can be adopted on its
+            own.
+          </p>
+        </div>
 
         <div className={styles.layers}>
-          {layers.map((layer, idx) => (
-            <div key={idx} className={styles.layerCard}>
-              <div className={styles.layerHeader}>
-                <span className={styles.layerIcon}>{layer.icon}</span>
-                <div>
-                  <span className={styles.layerTag}>{layer.tag}</span>
-                  <h3 className={styles.layerTitle}>{layer.title}</h3>
-                </div>
-              </div>
+          {layers.map((layer) => (
+            <div key={layer.tag} className={styles.layer}>
+              <p className={styles.layerTag}>{layer.tag}</p>
+              <h3 className={styles.layerTitle}>{layer.title}</h3>
               <p className={styles.layerBlurb}>{layer.blurb}</p>
               <ul className={styles.entityList}>
-                {layer.entities.map((entity, i) => (
-                  <li key={i} className={styles.entity}>
+                {layer.entities.map((entity) => (
+                  <li key={entity.name} className={styles.entity}>
                     <Link to={entity.to} className={styles.entityName}>
                       {entity.name}
                     </Link>

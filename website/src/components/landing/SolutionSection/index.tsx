@@ -1,123 +1,83 @@
 import React from 'react';
 import Link from '@docusaurus/Link';
-import { Check, ArrowRight, Tag, Shield, RefreshCw } from 'lucide-react';
 import styles from './styles.module.css';
-
-// Neutral placeholders, matching the fragmentation diagram above. FDS has no
-// named implementers to point at, and inventing some would be a false claim.
-const platforms = ['App A', 'App B', 'App C', 'App D'];
 
 export default function SolutionSection(): JSX.Element {
   return (
-    <section className={styles.solutionSection}>
-      <div className={styles.container}>
-        <h2 className={styles.sectionTitle}>How FDS Works</h2>
-        <p className={styles.sectionSubtitle}>
-          One standard replaces countless point-to-point integrations
-        </p>
+    <section className="fdsSection">
+      <div className="fdsContainer">
+        <div className="fdsSectionHead">
+          <p className="fdsEyebrow">
+            <span>{'//'}</span> the shape of the fix
+          </p>
+          <h2 className="fdsH2">How FDS works</h2>
+          <p className="fdsSub">
+            One standard replaces point-to-point integrations. Each platform
+            writes one exporter and one importer against FDS, and connects to
+            everyone who did the same.
+          </p>
+        </div>
 
-        {/* Hub Diagram */}
-        <div className={styles.hubSection}>
-          <div className={styles.hubDiagram}>
-            <div className={styles.platformsGrid}>
-              {platforms.map((platform, idx) => (
-                <div key={idx} className={styles.platformItem}>
-                  <div className={styles.platformNode}>
-                    <span className={styles.platformLabel}>{platform}</span>
-                  </div>
-                  <div className={styles.connectorLine} />
-                </div>
-              ))}
-            </div>
-            <div className={styles.hubCenter}>
-              <span className={styles.hubLabel}>FDS</span>
-              <span className={styles.hubSublabel}>Common Language</span>
-            </div>
+        <div className={`fdsTile ${styles.comparison}`}>
+          <div className={styles.comparisonSide}>
+            <span className={styles.comparisonTag}>without a standard</span>
+            <span className={styles.comparisonFormula}>N × (N−1)</span>
+            <span className={styles.comparisonExample}>
+              4 platforms, 12 bespoke integrations
+            </span>
           </div>
+          <div className={styles.comparisonSide}>
+            <span className={styles.comparisonTag}>with fds</span>
+            <span className={styles.comparisonFormula}>N</span>
+            <span className={styles.comparisonExample}>
+              4 platforms, 4 mappings to one format
+            </span>
+          </div>
+        </div>
 
-          <div className={styles.hubExplanation}>
-            <div className={styles.comparison}>
-              <div className={styles.comparisonItem}>
-                <span className={styles.comparisonBad}>Without FDS</span>
-                <span className={styles.comparisonFormula}>N × (N-1) integrations</span>
-                <span className={styles.comparisonExample}>4 apps = 12 integrations</span>
-              </div>
-              <div className={styles.comparisonDivider}><ArrowRight size={20} /></div>
-              <div className={styles.comparisonItem}>
-                <span className={styles.comparisonGood}>With FDS</span>
-                <span className={styles.comparisonFormula}>N integrations</span>
-                <span className={styles.comparisonExample}>4 apps = 4 integrations</span>
-              </div>
-            </div>
-            <p className={styles.hubDescription}>
-              Each platform writes one exporter and one importer.
-              FDS handles the translation, so you integrate once and connect to everyone.
+        <ul className={styles.highlights}>
+          <li>No forced architecture changes — FDS is an exchange format, not your database schema.</li>
+          <li>Every document validates against a published JSON Schema.</li>
+          <li>Any stack that can read JSON can implement it.</li>
+        </ul>
+
+        <div className={styles.extensibility}>
+          <div className={styles.extHead}>
+            <h3 className={styles.extTitle}>Built-in extensibility</h3>
+            <p className={styles.extSubtitle}>
+              Add custom fields without breaking compatibility.
             </p>
           </div>
-        </div>
 
-        {/* Core Benefits */}
-        <div className={styles.highlights}>
-          <div className={styles.highlight}>
-            <span className={styles.highlightIcon}><Check size={16} /></span>
-            <span className={styles.highlightText}>No forced architecture changes</span>
+          <div className={styles.extGrid}>
+            <div className={styles.extItem}>
+              <h4 className={styles.extItemTitle}>Vendor namespaces</h4>
+              <p className={styles.extItemText}>
+                Prefix custom fields with <code>x:yourapp.</code> to add
+                platform-specific data that travels with the standard.
+              </p>
+            </div>
+            <div className={styles.extItem}>
+              <h4 className={styles.extItemTitle}>Safe extensions</h4>
+              <p className={styles.extItemText}>
+                Other platforms ignore unknown namespaces. Your custom data
+                never breaks their imports.
+              </p>
+            </div>
+            <div className={styles.extItem}>
+              <h4 className={styles.extItemTitle}>Promotion path</h4>
+              <p className={styles.extItemText}>
+                An extension several implementers adopt can be proposed into
+                the core schema through the RFC process.
+              </p>
+            </div>
           </div>
-          <div className={styles.highlight}>
-            <span className={styles.highlightIcon}><Check size={16} /></span>
-            <span className={styles.highlightText}>Validated data exchange</span>
-          </div>
-          <div className={styles.highlight}>
-            <span className={styles.highlightIcon}><Check size={16} /></span>
-            <span className={styles.highlightText}>Works with any tech stack</span>
-          </div>
-        </div>
 
-        {/* Tool Callout */}
-        <div className={styles.toolCallout}>
-          <h3 className={styles.toolTitle}>Schema Transformer & Validation</h3>
-          <p className={styles.toolDescription}>
-            Automated mapping from your existing schema to FDS format.
-            Optional AI assistance fills gaps when source data fields are missing.
+          <p className={styles.extOutro}>
+            <Link to="/docs/core-concepts/extensions" className="fdsQuietLink">
+              Read the extension policy →
+            </Link>
           </p>
-          <a href="#quick-start" className={styles.toolLink}>
-            Get Started Below
-          </a>
-        </div>
-
-        {/* Extensibility Section */}
-        <div className={styles.extensibilitySection}>
-          <h3 className={styles.extensibilityTitle}>Built-in Extensibility</h3>
-          <p className={styles.extensibilitySubtitle}>
-            Add custom fields without breaking compatibility
-          </p>
-
-          <div className={styles.extensibilityGrid}>
-            <div className={styles.extensibilityCard}>
-              <span className={styles.extensibilityIcon}><Tag size={24} /></span>
-              <h4 className={styles.extensibilityCardTitle}>Vendor Namespaces</h4>
-              <p className={styles.extensibilityCardText}>
-                Prefix custom fields with <code>x:yourapp.</code> to add platform-specific data that travels with the standard.
-              </p>
-            </div>
-            <div className={styles.extensibilityCard}>
-              <span className={styles.extensibilityIcon}><Shield size={24} /></span>
-              <h4 className={styles.extensibilityCardTitle}>Safe Extensions</h4>
-              <p className={styles.extensibilityCardText}>
-                Other platforms ignore unknown namespaces. Your custom data never breaks their imports.
-              </p>
-            </div>
-            <div className={styles.extensibilityCard}>
-              <span className={styles.extensibilityIcon}><RefreshCw size={24} /></span>
-              <h4 className={styles.extensibilityCardTitle}>Promotion Path</h4>
-              <p className={styles.extensibilityCardText}>
-                An extension several implementers adopt can be proposed into the core schema through the RFC process.
-              </p>
-            </div>
-          </div>
-
-          <Link to="/docs/core-concepts/extensions" className={styles.extensibilityLink}>
-            Read the extension policy →
-          </Link>
         </div>
       </div>
     </section>

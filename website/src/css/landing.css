@@ -1,0 +1,281 @@
+/**
+ * Landing page design system.
+ *
+ * One idea: a spec should look like a document, not a brochure. The entire
+ * hierarchy system is four tiers of foreground color plus 1px hairlines at
+ * low alpha — emphasis is made by stepping text up a tier, never by adding
+ * color. Sections are chapters: a hairline top border and generous padding,
+ * no alternating background bands. The mono font is a semantic signal
+ * (eyebrows, filenames, versions, numbers), never decoration.
+ *
+ * Everything is alpha-based so both themes fall out of the same rules; the
+ * dark block below only re-anchors the four tiers and the hairline alpha.
+ *
+ * Scope discipline: every class here is prefixed `fds` and this file is
+ * imported only by src/pages/index.tsx, so nothing leaks into the docs.
+ */
+
+:root {
+  --fds-bg: #ffffff;
+  --fds-fg: #09090b;
+  --fds-fg-muted: #52525b;
+  --fds-fg-dim: #71717a;
+  --fds-fg-faint: #a1a1aa;
+  --fds-border: rgba(0, 0, 0, 0.09);
+  --fds-border-strong: rgba(0, 0, 0, 0.18);
+  --fds-hairline: rgba(0, 0, 0, 0.05);
+  --fds-tile: rgba(0, 0, 0, 0.015);
+  --fds-tile-head: rgba(0, 0, 0, 0.03);
+  --fds-inverse-bg: #09090b;
+  --fds-inverse-fg: #ffffff;
+  --fds-ok: #15803d;
+  --fds-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', Monaco, 'Roboto Mono', monospace;
+}
+
+[data-theme='dark'] {
+  --fds-bg: #0a0a0a;
+  --fds-fg: #fafafa;
+  --fds-fg-muted: #a1a1aa;
+  --fds-fg-dim: #71717a;
+  --fds-fg-faint: #52525b;
+  --fds-border: rgba(255, 255, 255, 0.1);
+  --fds-border-strong: rgba(255, 255, 255, 0.22);
+  --fds-hairline: rgba(255, 255, 255, 0.055);
+  --fds-tile: rgba(255, 255, 255, 0.02);
+  --fds-tile-head: rgba(255, 255, 255, 0.04);
+  --fds-inverse-bg: #fafafa;
+  --fds-inverse-fg: #09090b;
+  --fds-ok: #4ade80;
+}
+
+/* ── section rhythm ─────────────────────────────────────────────────────── */
+
+.fdsPage {
+  background: var(--fds-bg);
+}
+
+.fdsSection {
+  border-top: 1px solid var(--fds-border);
+  padding: 6rem 0;
+  background: var(--fds-bg);
+}
+
+.fdsContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.fdsSectionHead {
+  max-width: 720px;
+  margin-bottom: 3.5rem;
+}
+
+/* ── the header trio ────────────────────────────────────────────────────── */
+
+.fdsEyebrow {
+  font-family: var(--fds-mono);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fds-fg-dim);
+  margin: 0 0 1.125rem;
+}
+
+.fdsEyebrow > span {
+  color: var(--fds-fg-faint);
+  margin-right: 0.375rem;
+  letter-spacing: 0;
+}
+
+.fdsH2 {
+  font-size: clamp(1.875rem, 3.6vw, 2.75rem);
+  font-weight: 500;
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+  color: var(--fds-fg);
+  margin: 0 0 1.125rem;
+}
+
+.fdsSub {
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  letter-spacing: -0.005em;
+  color: var(--fds-fg-muted);
+  max-width: 620px;
+  margin: 0;
+}
+
+.fdsSub a,
+.fdsFootnote a {
+  color: var(--fds-fg);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--fds-border-strong);
+}
+
+.fdsSub a:hover,
+.fdsFootnote a:hover {
+  text-decoration-color: var(--fds-fg);
+}
+
+/* ── tiles: the one card shape ──────────────────────────────────────────── */
+
+.fdsTile {
+  border: 1px solid var(--fds-border);
+  border-radius: 12px;
+  background: linear-gradient(var(--fds-tile), transparent);
+  overflow: hidden;
+}
+
+.fdsTileHead {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.625rem 1rem;
+  border-bottom: 1px solid var(--fds-border);
+  background: var(--fds-tile-head);
+  font-family: var(--fds-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.02em;
+  color: var(--fds-fg-dim);
+}
+
+/* Code inside a landing tile sits on the tile itself — undo the boxed
+   treatment custom.css gives docs code blocks (its rules are !important,
+   so these must be too, at higher specificity for both themes). */
+.fdsTile pre[class*='prism'],
+[data-theme='dark'] .fdsTile pre[class*='prism'] {
+  background: transparent !important;
+  padding: 0 !important;
+  font-size: inherit !important;
+  line-height: inherit !important;
+}
+
+/* ── mono grammar ───────────────────────────────────────────────────────── */
+
+.fdsMono {
+  font-family: var(--fds-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.fdsPill {
+  display: inline-block;
+  font-family: var(--fds-mono);
+  font-size: 0.625rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 2px 8px;
+  border: 1px solid var(--fds-border-strong);
+  border-radius: 999px;
+  color: var(--fds-fg-muted);
+}
+
+.fdsPillOk {
+  color: var(--fds-ok);
+  border-color: currentColor;
+}
+
+/* ── buttons ────────────────────────────────────────────────────────────── */
+
+.fdsButtonRow {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.fdsButtonPrimary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.625rem 1.375rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  color: var(--fds-inverse-fg);
+  background: var(--fds-inverse-bg);
+  border: 1px solid var(--fds-inverse-bg);
+  border-radius: 8px;
+  text-decoration: none;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+.fdsButtonPrimary:hover {
+  transform: translateY(-1px);
+  opacity: 0.9;
+  color: var(--fds-inverse-fg);
+  text-decoration: none;
+}
+
+.fdsButtonGhost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.625rem 1.375rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: -0.005em;
+  color: var(--fds-fg-muted);
+  background: transparent;
+  border: 1px solid var(--fds-border);
+  border-radius: 8px;
+  text-decoration: none;
+  transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+}
+
+.fdsButtonGhost:hover {
+  border-color: var(--fds-border-strong);
+  color: var(--fds-fg);
+  background: var(--fds-tile-head);
+  text-decoration: none;
+}
+
+/* ── quiet links ("read more →") ────────────────────────────────────────── */
+
+.fdsQuietLink {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--fds-fg-muted);
+  text-decoration: none;
+}
+
+.fdsQuietLink:hover {
+  color: var(--fds-fg);
+  text-decoration: none;
+}
+
+.fdsFootnote {
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--fds-fg-dim);
+}
+
+/* ── responsive ─────────────────────────────────────────────────────────── */
+
+@media (max-width: 820px) {
+  .fdsSection {
+    padding: 4rem 0;
+  }
+
+  .fdsContainer {
+    padding: 0 1.25rem;
+  }
+
+  .fdsSectionHead {
+    margin-bottom: 2.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fdsButtonPrimary,
+  .fdsButtonGhost {
+    transition: none;
+  }
+
+  .fdsButtonPrimary:hover {
+    transform: none;
+  }
+}
