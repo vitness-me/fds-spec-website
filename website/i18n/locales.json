@@ -1,6 +1,6 @@
 {
   "defaultLocale": "en",
-  "locales": ["en"],
+  "locales": ["en", "es", "sr-Latn"],
   "localeConfigs": {
     "en": {
       "label": "English",

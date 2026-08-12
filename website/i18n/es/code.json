@@ -1,0 +1,886 @@
+{
+  "fds.translationNotice": {
+    "message": "Esta página es una traducción, ofrecida por conveniencia. Tiene carácter únicamente informativo: la {englishPageLink} es el texto normativo y, en caso de discrepancia, el texto en inglés prevalece.",
+    "description": "Notice at the top of every translated documentation page"
+  },
+  "fds.translationNotice.linkLabel": {
+    "message": "versión en inglés"
+  },
+  "landing.beforeAfter.badge.validFds": {
+    "message": "fds válido",
+    "description": "Badge on the output panel of the transformer demo"
+  },
+  "landing.beforeAfter.badge.vendorExport": {
+    "message": "exportación del proveedor",
+    "description": "Badge on the source panel of the transformer demo"
+  },
+  "landing.beforeAfter.badge.writtenOnce": {
+    "message": "escrito una vez",
+    "description": "Badge on the mapping panel of the transformer demo"
+  },
+  "landing.beforeAfter.docsLink": {
+    "message": "Leer la documentación del transformador →"
+  },
+  "landing.beforeAfter.eyebrow": {
+    "message": "el transformador",
+    "description": "Small label above the transformer demo section title"
+  },
+  "landing.beforeAfter.outro": {
+    "message": "El panel de salida muestra el primero de los tres documentos que produce este caso de prueba, tal cual está en el archivo del repositorio. Donde los datos de origen tienen vacíos reales — una descripción, una clasificación — la CLI puede completarlos con enriquecimiento opcional mediante IA. {docsLink}"
+  },
+  "landing.beforeAfter.subtitle": {
+    "message": "La exportación de un proveedor, un mapeo que se escribe una sola vez y el documento que produce la CLI — una sentadilla trasera que cualquier lector de FDS puede validar. Los tres paneles son archivos incluidos en este repositorio, y CI ejecuta exactamente esta transformación contra el esquema publicado en cada cambio."
+  },
+  "landing.beforeAfter.title": {
+    "message": "Véalo funcionar con una sentadilla trasera"
+  },
+  "landing.capabilities.bodyAtlas.name": {
+    "message": "Atlas corporal"
+  },
+  "landing.capabilities.bodyAtlas.purpose": {
+    "message": "Regiones anatómicas y los vínculos que permiten a cualquier ilustración dibujarlas."
+  },
+  "landing.capabilities.equipment.name": {
+    "message": "Equipamiento"
+  },
+  "landing.capabilities.equipment.purpose": {
+    "message": "Lo que un movimiento necesita y cómo carga una máquina — para que una prescripción siga siendo reproducible."
+  },
+  "landing.capabilities.exercises.name": {
+    "message": "Ejercicios"
+  },
+  "landing.capabilities.exercises.purpose": {
+    "message": "Un movimiento descrito una sola vez — clasificación, músculos objetivo, equipamiento, métricas."
+  },
+  "landing.capabilities.eyebrow": {
+    "message": "qué define fds",
+    "description": "Small label above the capabilities section title"
+  },
+  "landing.capabilities.layer1.blurb": {
+    "message": "Un vocabulario común para el dominio del fitness. Estático, cacheable, replicable, comparable. Puede adoptarse por sí solo si lo único que se busca es una lista canónica de ejercicios que todos los sistemas lean igual."
+  },
+  "landing.capabilities.layer1.tag": {
+    "message": "capa 1"
+  },
+  "landing.capabilities.layer1.title": {
+    "message": "La biblioteca compartida"
+  },
+  "landing.capabilities.layer2.blurb": {
+    "message": "Cómo entrenar, compuesto a partir de la biblioteca. Series, repeticiones, tempo, carga, descanso y zonas se ensamblan en sesiones, y las sesiones en planes de varias semanas — un esquema para cada uno, sea cual sea la estructura del entrenamiento."
+  },
+  "landing.capabilities.layer2.tag": {
+    "message": "capa 2"
+  },
+  "landing.capabilities.layer2.title": {
+    "message": "La capa de prescripción"
+  },
+  "landing.capabilities.muscles.name": {
+    "message": "Músculos"
+  },
+  "landing.capabilities.muscles.purpose": {
+    "message": "Anatomía con nombre a la que renderizadores y taxonomías pueden vincularse sin ponerse de acuerdo en las ilustraciones."
+  },
+  "landing.capabilities.prescription.name": {
+    "message": "Primitivos de prescripción"
+  },
+  "landing.capabilities.prescription.purpose": {
+    "message": "Carga, repeticiones, tempo, descanso, RPE/RIR y esquemas de series — el vocabulario de la intensidad."
+  },
+  "landing.capabilities.programs.name": {
+    "message": "Programas"
+  },
+  "landing.capabilities.programs.purpose": {
+    "message": "Un calendario de sesiones a lo largo de semanas — periodización y progresión, por referencia y no por copia."
+  },
+  "landing.capabilities.subtitle": {
+    "message": "FDS define un vocabulario compartido y, sobre él, cómo prescribir el entrenamiento con ese vocabulario. Cada capa puede adoptarse por separado."
+  },
+  "landing.capabilities.title": {
+    "message": "Un estándar, dos capas"
+  },
+  "landing.capabilities.workouts.name": {
+    "message": "Sesiones de entrenamiento"
+  },
+  "landing.capabilities.workouts.purpose": {
+    "message": "Una sesión. Series simples, superseries, circuitos, EMOM, AMRAP e intervalos comparten un único esquema."
+  },
+  "landing.cta.description": {
+    "message": "Los esquemas, el transformador y el paquete de conocimiento para IA están listos hoy para construir sobre ellos. Lo que fijará la primera versión estable sigue abierto."
+  },
+  "landing.cta.docsButton": {
+    "message": "Leer la documentación"
+  },
+  "landing.cta.earlyAdoptersLink": {
+    "message": "Conviértase en adoptante temprano →"
+  },
+  "landing.cta.earlyAdoptersText": {
+    "message": "FDS es nuevo. Todavía no hay implementaciones de terceros que señalar, y no inventaremos un muro de logotipos para aparentar lo contrario — la biblioteca de referencia y el transformador son sus primeros usuarios. Si construye sobre FDS, cuéntenoslo: los adoptantes tempranos deciden a qué se compromete la primera versión estable."
+  },
+  "landing.cta.githubButton": {
+    "message": "Repositorio en GitHub"
+  },
+  "landing.cta.roadmap": {
+    "message": "Hay ocho RFC publicadas: el catálogo de ejercicios y sus registros, los primitivos de prescripción, las sesiones de entrenamiento y los programas. Lo que viene después — y lo que se deja fuera deliberadamente — está en la {roadmapLink}."
+  },
+  "landing.cta.roadmapLink": {
+    "message": "hoja de ruta"
+  },
+  "landing.cta.title": {
+    "message": "Ayude a dar forma a la primera versión estable"
+  },
+  "landing.hero.audience": {
+    "message": "Para desarrolladores de aplicaciones, plataformas, entrenadores e investigadores que necesitan que los datos de entrenamiento se muevan entre sistemas."
+  },
+  "landing.hero.coverage.bodyAtlas": {
+    "message": "atlas corporal"
+  },
+  "landing.hero.coverage.equipment": {
+    "message": "equipamiento"
+  },
+  "landing.hero.coverage.exercises": {
+    "message": "ejercicios"
+  },
+  "landing.hero.coverage.muscles": {
+    "message": "músculos"
+  },
+  "landing.hero.coverage.programs": {
+    "message": "programas"
+  },
+  "landing.hero.coverage.workouts": {
+    "message": "sesiones"
+  },
+  "landing.hero.eyebrow": {
+    "message": "un estándar abierto para datos de fitness",
+    "description": "Small label above the hero title"
+  },
+  "landing.hero.readSpecButton": {
+    "message": "Leer la especificación"
+  },
+  "landing.hero.subtitle": {
+    "message": "Cada plataforma de fitness describe los ejercicios, el equipamiento y la programación a su manera, así que cada integración es a medida y cada exportación un callejón sin salida. FDS es un estándar neutral respecto al proveedor que da al dominio del fitness un único vocabulario compartido — publicado como JSON Schemas en URL congeladas, con una CLI que mapea sus datos existentes hacia él."
+  },
+  "landing.hero.title": {
+    "message": "Una sentadilla trasera debería significar lo mismo en todas partes."
+  },
+  "landing.hero.useCasesButton": {
+    "message": "Casos de uso"
+  },
+  "landing.hero.whyFdsButton": {
+    "message": "Por qué FDS"
+  },
+  "landing.meta.description": {
+    "message": "Un estándar abierto y neutral respecto al proveedor para los datos del dominio del fitness — ejercicios, equipamiento, músculos, sesiones de entrenamiento y programas. Un vocabulario compartido, publicado como JSON Schemas en URL congeladas.",
+    "description": "Meta description of the landing page"
+  },
+  "landing.meta.title": {
+    "message": "Fitness Data Standard",
+    "description": "Browser tab title of the landing page"
+  },
+  "landing.noPersonalData.cached.detail": {
+    "message": "Una biblioteca vive detrás de una CDN como cualquier otro recurso estático."
+  },
+  "landing.noPersonalData.cached.label": {
+    "message": "En caché"
+  },
+  "landing.noPersonalData.diffed.detail": {
+    "message": "Dos versiones se comparan limpiamente, porque nada en ellas es una persona."
+  },
+  "landing.noPersonalData.diffed.label": {
+    "message": "Comparado"
+  },
+  "landing.noPersonalData.eyebrow": {
+    "message": "por diseño",
+    "description": "Small label above the no-personal-data section title"
+  },
+  "landing.noPersonalData.footnote": {
+    "message": "Un documento que no describe a nadie es uno que puede publicarse libremente. Lo que esto excluye deliberadamente, y por qué, está en la {roadmapLink}."
+  },
+  "landing.noPersonalData.mirrored.detail": {
+    "message": "Cualquiera puede republicar un catálogo sin heredar una obligación."
+  },
+  "landing.noPersonalData.mirrored.label": {
+    "message": "Replicado"
+  },
+  "landing.noPersonalData.roadmapLink": {
+    "message": "hoja de ruta"
+  },
+  "landing.noPersonalData.shared.detail": {
+    "message": "Ningún consentimiento, DPA ni revisión de privacidad condiciona un intercambio."
+  },
+  "landing.noPersonalData.shared.label": {
+    "message": "Compartido"
+  },
+  "landing.noPersonalData.subtitle": {
+    "message": "Sin identidad del atleta, sin peso corporal, sin máximos de una repetición, sin resultados realizados ni registrados — nada de eso está en el estándar, y nada de eso estará nunca. Una prescripción que necesitaría un número personal lo referencia en lugar de llevarlo. Esa restricción es exactamente la razón por la que un documento FDS puede ser:"
+  },
+  "landing.noPersonalData.title": {
+    "message": "FDS no modela a ninguna persona"
+  },
+  "landing.problem.eyebrow": {
+    "message": "el problema",
+    "description": "Small label above the problem section title"
+  },
+  "landing.problem.fragmentation.description": {
+    "message": "Las aplicaciones no pueden interoperar. El mismo ejercicio tiene IDs, nombres y estructuras distintos en cada lugar."
+  },
+  "landing.problem.fragmentation.title": {
+    "message": "Fragmentación del ecosistema"
+  },
+  "landing.problem.lockIn.description": {
+    "message": "Su biblioteca de ejercicios, sus sesiones y sus programas viven en el formato privado de una aplicación. Si cambia, vuelve a introducirlos a mano o los deja atrás."
+  },
+  "landing.problem.lockIn.title": {
+    "message": "Contenido cautivo"
+  },
+  "landing.problem.outro": {
+    "message": "¿Y qué define FDS exactamente? →"
+  },
+  "landing.problem.overhead.description": {
+    "message": "¿Construyendo desde cero o añadiendo integraciones? En ambos casos define los modelos de ejercicio en solitario. Sin un vocabulario compartido sobre el que construir."
+  },
+  "landing.problem.overhead.title": {
+    "message": "Sobrecarga para el desarrollador"
+  },
+  "landing.problem.subtitle": {
+    "message": "La misma sentadilla trasera, cuatro grafías privadas. Ninguna puede leer a las otras, así que cada integración se construye a mano y cada exportación es un callejón sin salida."
+  },
+  "landing.problem.title": {
+    "message": "Cada plataforma habla un idioma distinto"
+  },
+  "landing.quickStart.exampleFooter": {
+    "message": "El ejemplo publicado para la entidad de ejercicio — una sentadilla trasera, literal de la especificación.",
+    "description": "Caption under the example document panel in the quick start section"
+  },
+  "landing.quickStart.eyebrow": {
+    "message": "inicio rápido",
+    "description": "Small label above the quick start section title"
+  },
+  "landing.quickStart.step1.description": {
+    "message": "Descargue el JSON Schema para validar sus datos de ejercicios."
+  },
+  "landing.quickStart.step1.link": {
+    "message": "Ver el esquema de ejercicio →"
+  },
+  "landing.quickStart.step1.title": {
+    "message": "Obtenga el esquema"
+  },
+  "landing.quickStart.step2.description": {
+    "message": "Estructure sus datos de ejercicios con el formato FDS. Empiece con lo mínimo y amplíe según lo necesite."
+  },
+  "landing.quickStart.step2.title": {
+    "message": "Modele sus datos"
+  },
+  "landing.quickStart.step3.description": {
+    "message": "Use cualquier validador de JSON Schema (ajv, jsonschema, etc.) para asegurar la conformidad."
+  },
+  "landing.quickStart.step3.link": {
+    "message": "Guía de validación →"
+  },
+  "landing.quickStart.step3.title": {
+    "message": "Valide"
+  },
+  "landing.quickStart.step4.description": {
+    "message": "Use la CLI FDS Transformer para convertir sus datos existentes al formato FDS, con enriquecimiento opcional mediante IA."
+  },
+  "landing.quickStart.step4.link": {
+    "message": "Documentación del transformador →"
+  },
+  "landing.quickStart.step4.title": {
+    "message": "Transforme sus datos"
+  },
+  "landing.quickStart.subtitle": {
+    "message": "FDS es JSON Schema en URL estables. Si su stack puede leer JSON, puede implementar el estándar — empiece con el esquema y el validador que ya use."
+  },
+  "landing.quickStart.title": {
+    "message": "No se necesita SDK"
+  },
+  "landing.solution.ext.namespaces.text": {
+    "message": "Anteponga a los campos personalizados el prefijo {prefix} para añadir datos específicos de su plataforma que viajan con el estándar."
+  },
+  "landing.solution.ext.namespaces.title": {
+    "message": "Espacios de nombres de proveedor"
+  },
+  "landing.solution.ext.outro": {
+    "message": "Leer la política de extensiones →"
+  },
+  "landing.solution.ext.promotion.text": {
+    "message": "Una extensión que varios implementadores adoptan puede proponerse para el esquema central a través del proceso de RFC."
+  },
+  "landing.solution.ext.promotion.title": {
+    "message": "Vía de promoción"
+  },
+  "landing.solution.ext.safe.text": {
+    "message": "Las demás plataformas ignoran los espacios de nombres desconocidos. Sus datos personalizados nunca rompen las importaciones ajenas."
+  },
+  "landing.solution.ext.safe.title": {
+    "message": "Extensiones seguras"
+  },
+  "landing.solution.ext.subtitle": {
+    "message": "Añada campos personalizados sin romper la compatibilidad."
+  },
+  "landing.solution.ext.title": {
+    "message": "Extensibilidad integrada"
+  },
+  "landing.solution.eyebrow": {
+    "message": "la forma de la solución",
+    "description": "Small label above the solution section title"
+  },
+  "landing.solution.highlight.anyStack": {
+    "message": "Cualquier stack que pueda leer JSON puede implementarlo."
+  },
+  "landing.solution.highlight.exchangeFormat": {
+    "message": "Sin cambios de arquitectura forzados — FDS es un formato de intercambio, no el esquema de su base de datos."
+  },
+  "landing.solution.highlight.validates": {
+    "message": "Cada documento valida contra un JSON Schema publicado."
+  },
+  "landing.solution.subtitle": {
+    "message": "Un estándar sustituye a las integraciones punto a punto. Cada plataforma escribe un exportador y un importador contra FDS, y conecta con todos los que hicieron lo mismo."
+  },
+  "landing.solution.title": {
+    "message": "Cómo funciona FDS"
+  },
+  "landing.solution.with.example": {
+    "message": "4 plataformas, 4 mapeos a un formato"
+  },
+  "landing.solution.with.tag": {
+    "message": "con fds"
+  },
+  "landing.solution.without.example": {
+    "message": "4 plataformas, 12 integraciones a medida"
+  },
+  "landing.solution.without.tag": {
+    "message": "sin un estándar"
+  },
+  "landing.trust.eyebrow": {
+    "message": "estabilidad",
+    "description": "Small label above the stability section title"
+  },
+  "landing.trust.frozen.description": {
+    "message": "Cada esquema publicado está fijado por sha256 y nunca cambia. Una versión nueva llega en un directorio nuevo junto al anterior, que se sigue sirviendo — así, un cliente fijado a un lanzamiento anterior sigue resolviendo."
+  },
+  "landing.trust.frozen.linkLabel": {
+    "message": "Cómo funciona el versionado →"
+  },
+  "landing.trust.frozen.title": {
+    "message": "Congelados en URL permanentes"
+  },
+  "landing.trust.governance.description": {
+    "message": "Cada entidad llegó a través de una RFC pública, y los cambios son aditivos por regla. El estándar se desarrolla en abierto, de modo que ningún proveedor puede redefinir el formato en silencio."
+  },
+  "landing.trust.governance.linkLabel": {
+    "message": "Ver cómo se gobierna →"
+  },
+  "landing.trust.governance.title": {
+    "message": "Gobernanza abierta y aditiva"
+  },
+  "landing.trust.perEntity.description": {
+    "message": "Un lanzamiento nombra un conjunto de versiones de entidades, no un número que todas compartan. Las entidades avanzan de forma independiente, y el manifiesto de lanzamiento se genera a partir del árbol publicado — lo que el sitio dice que está publicado es lo que está publicado."
+  },
+  "landing.trust.perEntity.linkLabel": {
+    "message": "Leer la visión general →"
+  },
+  "landing.trust.perEntity.title": {
+    "message": "Versionado por entidad"
+  },
+  "landing.trust.stat.entities": {
+    "message": "esquemas de entidad, cada uno congelado en una URL permanente"
+  },
+  "landing.trust.stat.examples": {
+    "message": "ejemplos resueltos publicados junto a los esquemas"
+  },
+  "landing.trust.stat.rfcs": {
+    "message": "RFC públicas detrás del diseño"
+  },
+  "landing.trust.stat.scenarios": {
+    "message": "escenarios de entrenamiento, cada uno con un ejemplo resuelto"
+  },
+  "landing.trust.subtitle": {
+    "message": "Un formato que se integra una sola vez no debería moverse bajo sus pies."
+  },
+  "landing.trust.title": {
+    "message": "Hecho para que dependan de él"
+  },
+  "theme.admonition.caution": {
+    "message": "precaución",
+    "description": "The default label used for the Caution admonition (:::caution)"
+  },
+  "theme.admonition.danger": {
+    "message": "peligro",
+    "description": "The default label used for the Danger admonition (:::danger)"
+  },
+  "theme.admonition.info": {
+    "message": "info",
+    "description": "The default label used for the Info admonition (:::info)"
+  },
+  "theme.admonition.note": {
+    "message": "nota",
+    "description": "The default label used for the Note admonition (:::note)"
+  },
+  "theme.admonition.tip": {
+    "message": "tip",
+    "description": "The default label used for the Tip admonition (:::tip)"
+  },
+  "theme.admonition.warning": {
+    "message": "aviso",
+    "description": "The default label used for the Warning admonition (:::warning)"
+  },
+  "theme.AnnouncementBar.closeButtonAriaLabel": {
+    "message": "Cerrar",
+    "description": "The ARIA label for close button of announcement bar"
+  },
+  "theme.BackToTopButton.buttonAriaLabel": {
+    "message": "Volver al principio",
+    "description": "The ARIA label for the back to top button"
+  },
+  "theme.blog.archive.description": {
+    "message": "Archivo",
+    "description": "The page & hero description of the blog archive page"
+  },
+  "theme.blog.archive.title": {
+    "message": "Archivo",
+    "description": "The page & hero title of the blog archive page"
+  },
+  "theme.blog.author.noPosts": {
+    "message": "This author has not written any posts yet.",
+    "description": "The text for authors with 0 blog post"
+  },
+  "theme.blog.author.pageTitle": {
+    "message": "{authorName} - {nPosts}",
+    "description": "The title of the page for a blog author"
+  },
+  "theme.blog.authorsList.pageTitle": {
+    "message": "Authors",
+    "description": "The title of the authors page"
+  },
+  "theme.blog.authorsList.viewAll": {
+    "message": "View All Authors",
+    "description": "The label of the link targeting the blog authors page"
+  },
+  "theme.blog.paginator.navAriaLabel": {
+    "message": "Navegación por la página de la lista de blogs ",
+    "description": "The ARIA label for the blog pagination"
+  },
+  "theme.blog.paginator.newerEntries": {
+    "message": "Entradas más recientes",
+    "description": "The label used to navigate to the newer blog posts page (previous page)"
+  },
+  "theme.blog.paginator.olderEntries": {
+    "message": "Entradas más antiguas",
+    "description": "The label used to navigate to the older blog posts page (next page)"
+  },
+  "theme.blog.post.paginator.navAriaLabel": {
+    "message": "Barra de paginación de publicaciones del blog",
+    "description": "The ARIA label for the blog posts pagination"
+  },
+  "theme.blog.post.paginator.newerPost": {
+    "message": "Publicación más reciente",
+    "description": "The blog post button label to navigate to the newer/previous post"
+  },
+  "theme.blog.post.paginator.olderPost": {
+    "message": "Publicación más antigua",
+    "description": "The blog post button label to navigate to the older/next post"
+  },
+  "theme.blog.post.plurals": {
+    "message": "Una publicación|{count} publicaciones",
+    "description": "Pluralized label for \"{count} posts\". Use as much plural forms (separated by \"|\") as your language support (see https://www.unicode.org/cldr/cldr-aux/charts/34/supplemental/language_plural_rules.html)"
+  },
+  "theme.blog.post.readingTime.plurals": {
+    "message": "Lectura de un minuto|{readingTime} min de lectura",
+    "description": "Pluralized label for \"{readingTime} min read\". Use as much plural forms (separated by \"|\") as your language support (see https://www.unicode.org/cldr/cldr-aux/charts/34/supplemental/language_plural_rules.html)"
+  },
+  "theme.blog.post.readMore": {
+    "message": "Leer Más",
+    "description": "The label used in blog post item excerpts to link to full blog posts"
+  },
+  "theme.blog.post.readMoreLabel": {
+    "message": "Leer más acerca de {title}",
+    "description": "The ARIA label for the link to full blog posts from excerpts"
+  },
+  "theme.blog.sidebar.navAriaLabel": {
+    "message": "Navegación de publicaciones recientes",
+    "description": "The ARIA label for recent posts in the blog sidebar"
+  },
+  "theme.blog.tagTitle": {
+    "message": "{nPosts} etiquetados con \"{tagName}\"",
+    "description": "The title of the page for a blog tag"
+  },
+  "theme.CodeBlock.copied": {
+    "message": "Copiado",
+    "description": "The copied button label on code blocks"
+  },
+  "theme.CodeBlock.copy": {
+    "message": "Copiar",
+    "description": "The copy button label on code blocks"
+  },
+  "theme.CodeBlock.copyButtonAriaLabel": {
+    "message": "Copiar código",
+    "description": "The ARIA label for copy code blocks button"
+  },
+  "theme.CodeBlock.wordWrapToggle": {
+    "message": "Alternar ajuste de palabras",
+    "description": "The title attribute for toggle word wrapping button of code block lines"
+  },
+  "theme.colorToggle.ariaLabel": {
+    "message": "Cambiar entre modo oscuro y claro (actualmente {mode})",
+    "description": "The ARIA label for the color mode toggle"
+  },
+  "theme.colorToggle.ariaLabel.mode.dark": {
+    "message": "modo oscuro",
+    "description": "The name for the dark color mode"
+  },
+  "theme.colorToggle.ariaLabel.mode.light": {
+    "message": "modo claro",
+    "description": "The name for the light color mode"
+  },
+  "theme.colorToggle.ariaLabel.mode.system": {
+    "message": "system mode",
+    "description": "The name for the system color mode"
+  },
+  "theme.common.editThisPage": {
+    "message": "Editar esta página",
+    "description": "The link label to edit the current page"
+  },
+  "theme.common.headingLinkTitle": {
+    "message": "Enlace directo al {heading}",
+    "description": "Title for link to heading"
+  },
+  "theme.common.skipToMainContent": {
+    "message": "Saltar al contenido principal",
+    "description": "The skip to content label used for accessibility, allowing to rapidly navigate to main content with keyboard tab/enter navigation"
+  },
+  "theme.contentVisibility.draftBanner.message": {
+    "message": "This page is a draft. It will only be visible in dev and be excluded from the production build.",
+    "description": "The draft content banner message"
+  },
+  "theme.contentVisibility.draftBanner.title": {
+    "message": "Draft page",
+    "description": "The draft content banner title"
+  },
+  "theme.contentVisibility.unlistedBanner.message": {
+    "message": "Esta página está sin clasificar. Los motores de búsqueda no la indexaran, y solo los usuarios con el enlace directo podrán acceder a esta.",
+    "description": "The unlisted content banner message"
+  },
+  "theme.contentVisibility.unlistedBanner.title": {
+    "message": "Página sin clasificar",
+    "description": "The unlisted content banner title"
+  },
+  "theme.docs.breadcrumbs.home": {
+    "message": "Página de Inicio",
+    "description": "The ARIA label for the home page in the breadcrumbs"
+  },
+  "theme.docs.breadcrumbs.navAriaLabel": {
+    "message": "Rastro de navegación",
+    "description": "The ARIA label for the breadcrumbs"
+  },
+  "theme.docs.DocCard.categoryDescription.plurals": {
+    "message": "1 artículo|{count} artículos",
+    "description": "The default description for a category card in the generated index about how many items this category includes"
+  },
+  "theme.docs.paginator.navAriaLabel": {
+    "message": "Página del documento",
+    "description": "The ARIA label for the docs pagination"
+  },
+  "theme.docs.paginator.next": {
+    "message": "Siguiente",
+    "description": "The label used to navigate to the next doc"
+  },
+  "theme.docs.paginator.previous": {
+    "message": "Anterior",
+    "description": "The label used to navigate to the previous doc"
+  },
+  "theme.docs.sidebar.closeSidebarButtonAriaLabel": {
+    "message": "Cerrar barra de lateral",
+    "description": "The ARIA label for close button of mobile sidebar"
+  },
+  "theme.docs.sidebar.collapseButtonAriaLabel": {
+    "message": "Colapsar barra lateral",
+    "description": "The title attribute for collapse button of doc sidebar"
+  },
+  "theme.docs.sidebar.collapseButtonTitle": {
+    "message": "Colapsar barra lateral",
+    "description": "The title attribute for collapse button of doc sidebar"
+  },
+  "theme.docs.sidebar.expandButtonAriaLabel": {
+    "message": "Expandir barra lateral",
+    "description": "The ARIA label and title attribute for expand button of doc sidebar"
+  },
+  "theme.docs.sidebar.expandButtonTitle": {
+    "message": "Expandir barra lateral",
+    "description": "The ARIA label and title attribute for expand button of doc sidebar"
+  },
+  "theme.docs.sidebar.navAriaLabel": {
+    "message": "Barra lateral de Documentos",
+    "description": "The ARIA label for the sidebar navigation"
+  },
+  "theme.docs.sidebar.toggleSidebarButtonAriaLabel": {
+    "message": "Alternar barra lateral",
+    "description": "The ARIA label for hamburger menu button of mobile navigation"
+  },
+  "theme.docs.tagDocListPageTitle": {
+    "message": "{nDocsTagged} con \"{tagName}\"",
+    "description": "The title of the page for a docs tag"
+  },
+  "theme.docs.tagDocListPageTitle.nDocsTagged": {
+    "message": "Un documento etiquetado|{count} documentos etiquetados",
+    "description": "Pluralized label for \"{count} docs tagged\". Use as much plural forms (separated by \"|\") as your language support (see https://www.unicode.org/cldr/cldr-aux/charts/34/supplemental/language_plural_rules.html)"
+  },
+  "theme.docs.versionBadge.label": {
+    "message": "Version: {versionLabel}"
+  },
+  "theme.docs.versions.latestVersionLinkLabel": {
+    "message": "última versión",
+    "description": "The label used for the latest version suggestion link label"
+  },
+  "theme.docs.versions.latestVersionSuggestionLabel": {
+    "message": "Para la documentación actualizada, vea {latestVersionLink} ({versionLabel}).",
+    "description": "The label used to tell the user to check the latest version"
+  },
+  "theme.docs.versions.unmaintainedVersionLabel": {
+    "message": "Esta es la documentación para {siteTitle} {versionLabel}, que ya no se mantiene activamente.",
+    "description": "The label used to tell the user that he's browsing an unmaintained doc version"
+  },
+  "theme.docs.versions.unreleasedVersionLabel": {
+    "message": "Esta es la documentación sin publicar para {siteTitle}, versión {versionLabel}.",
+    "description": "The label used to tell the user that he's browsing an unreleased doc version"
+  },
+  "theme.DocSidebarItem.collapseCategoryAriaLabel": {
+    "message": "Colapsar categoría '{label}' de la barra lateral",
+    "description": "The ARIA label to collapse the sidebar category"
+  },
+  "theme.DocSidebarItem.expandCategoryAriaLabel": {
+    "message": "Ampliar la categoría '{label}' de la barra lateral",
+    "description": "The ARIA label to expand the sidebar category"
+  },
+  "theme.ErrorPageContent.title": {
+    "message": "Esta página ha fallado.",
+    "description": "The title of the fallback page when the page crashed"
+  },
+  "theme.ErrorPageContent.tryAgain": {
+    "message": "Intente de nuevo",
+    "description": "The label of the button to try again rendering when the React error boundary captures an error"
+  },
+  "theme.IconExternalLink.ariaLabel": {
+    "message": "(opens in new tab)",
+    "description": "The ARIA label for the external link icon"
+  },
+  "theme.lastUpdated.atDate": {
+    "message": " en {date}",
+    "description": "The words used to describe on which date a page has been last updated"
+  },
+  "theme.lastUpdated.byUser": {
+    "message": " por {user}",
+    "description": "The words used to describe by who the page has been last updated"
+  },
+  "theme.lastUpdated.lastUpdatedAtBy": {
+    "message": "Última actualización{atDate}{byUser}",
+    "description": "The sentence used to display when a page has been last updated, and by who"
+  },
+  "theme.navbar.mobileDropdown.collapseButton.collapseAriaLabel": {
+    "message": "Collapse the dropdown",
+    "description": "The ARIA label of the button to collapse the mobile dropdown navbar item"
+  },
+  "theme.navbar.mobileDropdown.collapseButton.expandAriaLabel": {
+    "message": "Expand the dropdown",
+    "description": "The ARIA label of the button to expand the mobile dropdown navbar item"
+  },
+  "theme.navbar.mobileLanguageDropdown.label": {
+    "message": "Idiomas",
+    "description": "The label for the mobile language switcher dropdown"
+  },
+  "theme.navbar.mobileSidebarSecondaryMenu.backButtonLabel": {
+    "message": "← Volver al menú principal",
+    "description": "The label of the back button to return to main menu, inside the mobile navbar sidebar secondary menu (notably used to display the docs sidebar)"
+  },
+  "theme.navbar.mobileVersionsDropdown.label": {
+    "message": "Versiones",
+    "description": "The label for the navbar versions dropdown on mobile view"
+  },
+  "theme.NavBar.navAriaLabel": {
+    "message": "Principal",
+    "description": "The ARIA label for the main navigation"
+  },
+  "theme.NotFound.p1": {
+    "message": "No pudimos encontrar lo que buscaba.",
+    "description": "The first paragraph of the 404 page"
+  },
+  "theme.NotFound.p2": {
+    "message": "Comuníquese con el dueño del sitio que le proporcionó la URL original y hágale saber que su vínculo está roto.",
+    "description": "The 2nd paragraph of the 404 page"
+  },
+  "theme.NotFound.title": {
+    "message": "Página No Encontrada",
+    "description": "The title of the 404 page"
+  },
+  "theme.SearchBar.label": {
+    "message": "Buscar",
+    "description": "The ARIA label and placeholder for search button"
+  },
+  "theme.SearchBar.noResultsText": {
+    "message": "Sin resultados"
+  },
+  "theme.SearchBar.searchInContext": {
+    "message": "Ver todos los resultados dentro de \"{context}\""
+  },
+  "theme.SearchBar.seeAll": {
+    "message": "Ver todos los resultados"
+  },
+  "theme.SearchBar.seeAllOutsideContext": {
+    "message": "Ver todos los resultados fuera de \"{context}\""
+  },
+  "theme.SearchPage.documentsFound.plurals": {
+    "message": "1 documento encontrado|{count} documentos encontrados",
+    "description": "Pluralized label for \"{count} documents found\". Use as much plural forms (separated by \"|\") as your language support (see https://www.unicode.org/cldr/cldr-aux/charts/34/supplemental/language_plural_rules.html)"
+  },
+  "theme.SearchPage.emptyResultsTitle": {
+    "message": "Buscar en la documentación",
+    "description": "The search page title for empty query"
+  },
+  "theme.SearchPage.existingResultsTitle": {
+    "message": "Resultados de búsqueda para \"{query}\"",
+    "description": "The search page title for non-empty query"
+  },
+  "theme.SearchPage.noResultsText": {
+    "message": "No se encontraron documentos",
+    "description": "The paragraph for empty search result"
+  },
+  "theme.SearchPage.searchContext.everywhere": {
+    "message": "En todas partes"
+  },
+  "theme.tags.tagsListLabel": {
+    "message": "Etiquetas:",
+    "description": "The label alongside a tag list"
+  },
+  "theme.tags.tagsPageLink": {
+    "message": "Ver Todas las Etiquetas",
+    "description": "The label of the link targeting the tag list page"
+  },
+  "theme.tags.tagsPageTitle": {
+    "message": "Etiquetas",
+    "description": "The title of the tag list page"
+  },
+  "theme.TOCCollapsible.toggleButtonLabel": {
+    "message": "En esta página",
+    "description": "The label used by the button on the collapsible TOC component"
+  },
+  "whyFds.aside.lead": {
+    "message": "la evidencia"
+  },
+  "whyFds.audience": {
+    "message": "Para responsables de plataformas, jefes de producto y entrenadores que deciden en qué formato vive su contenido de entrenamiento. En esta página no hay esquemas — los {useCasesLink} muestran el mismo argumento con los archivos reales."
+  },
+  "whyFds.audience.useCasesLink": {
+    "message": "casos de uso"
+  },
+  "whyFds.close.ghostButton": {
+    "message": "Qué puede hacer con él"
+  },
+  "whyFds.close.primaryButton": {
+    "message": "Véalo funcionar con una sentadilla trasera"
+  },
+  "whyFds.close.text": {
+    "message": "El camino más corto hacia una decisión es verlo funcionar: la exportación real de un proveedor, mapeada una sola vez, convertida en un documento que cualquier lector de FDS valida."
+  },
+  "whyFds.eyebrow": {
+    "message": "por qué FDS",
+    "description": "Small label above the /why-fds page title"
+  },
+  "whyFds.independence.asideLink": {
+    "message": "Todos los esquemas publicados →"
+  },
+  "whyFds.independence.asideNote": {
+    "message": "Cada entidad en su propia versión, cada URL congelada. Las versiones sustituidas se siguen sirviendo."
+  },
+  "whyFds.independence.body1": {
+    "message": "Un formato privado cambia cuando su dueño lo necesita. FDS está construido para que eso no pueda pasarle a usted: cada esquema publicado está congelado en una URL pública permanente y nunca se edita en el sitio. Las versiones nuevas son aditivas y llegan junto a las anteriores, que se siguen sirviendo — así, un sistema construido contra el estándar sigue funcionando, con el calendario que usted elija."
+  },
+  "whyFds.independence.body2": {
+    "message": "El estándar mismo se desarrolla en abierto, mediante RFC públicas — ninguna empresa puede redefinir en silencio lo que significan sus documentos. Y adoptarlo no requiere SDK ni herramientas propietarias: es JSON plano con esquemas publicados, validado por herramientas que su equipo ya usa."
+  },
+  "whyFds.independence.title": {
+    "message": "Independencia: un formato que ningún proveedor puede mover bajo sus pies"
+  },
+  "whyFds.interoperability.asideLink": {
+    "message": "Véalo funcionar con una sentadilla trasera →"
+  },
+  "whyFds.interoperability.asideNote": {
+    "message": "La exportación real de un proveedor, un mapeo y la salida que valida — los tres son archivos del repositorio."
+  },
+  "whyFds.interoperability.body1": {
+    "message": "Cada integración entre dos sistemas de fitness empieza hoy con la misma reunión: qué cuenta como ejercicio, qué taxonomía muscular gana, cómo se escribe una superserie. El resultado es un mapeo a medida que se rompe cuando cualquiera de las partes cambia — multiplicado por cada socio que se añade."
+  },
+  "whyFds.interoperability.body2": {
+    "message": "Un vocabulario compartido lo reduce a un solo mapeo: el suyo, hacia el estándar, escrito una sola vez. Dos sistemas que hablan FDS encajan sin haberse conocido. La {transformerLink} hace el mapeo con los datos que ya tiene — la página de inicio la muestra funcionando sobre la exportación real de un proveedor."
+  },
+  "whyFds.interoperability.title": {
+    "message": "Interoperabilidad: integrar una vez, no una vez por socio"
+  },
+  "whyFds.interoperability.transformerLink": {
+    "message": "CLI del transformador"
+  },
+  "whyFds.lede": {
+    "message": "Las bibliotecas de ejercicios, los catálogos de equipamiento y los programas de entrenamiento son activos. Hoy se guardan en la forma privada que cada plataforma inventó, lo que en silencio los convierte en pasivos: difíciles de mover, caros de conectar, perdidos cuando un proveedor desaparece. FDS es un formato abierto y neutral que los convierte en documentos — portables, conectables y legibles por sí mismos."
+  },
+  "whyFds.meta.description": {
+    "message": "El argumento de negocio para el Fitness Data Standard: contenido de entrenamiento que sobrevive a la aplicación que lo creó, integraciones construidas una sola vez y un formato que ningún proveedor puede mover bajo sus pies.",
+    "description": "Meta description of the /why-fds page"
+  },
+  "whyFds.meta.title": {
+    "message": "Por qué adoptar FDS",
+    "description": "Browser tab title of the /why-fds page"
+  },
+  "whyFds.noPeople.asideLink": {
+    "message": "Primitivos de prescripción →"
+  },
+  "whyFds.noPeople.asideNote": {
+    "message": "Cómo un programa referencia los números de una persona sin llevarlos nunca consigo."
+  },
+  "whyFds.noPeople.body1": {
+    "message": "FDS describe contenido de entrenamiento, no a las personas que entrenan. No hay identidad del atleta, ni peso corporal, ni ningún resultado registrado en ninguna parte del estándar. Un catálogo o un programa en FDS es un documento sobre nadie — puede publicarse, compartirse con socios, cachearse y replicarse sin arrastrar obligaciones de datos personales."
+  },
+  "whyFds.noPeople.body2": {
+    "message": "Donde un programa necesita un número personal — un porcentaje del máximo de alguien, por ejemplo — lo referencia en lugar de llevarlo. Los resultados realizados quedan deliberadamente fuera del alcance hasta que exista un modelo de consentimiento y privacidad a su altura; la {roadmapLink} es explícita sobre esa línea."
+  },
+  "whyFds.noPeople.roadmapLink": {
+    "message": "hoja de ruta"
+  },
+  "whyFds.noPeople.title": {
+    "message": "Nada sobre personas, a propósito"
+  },
+  "whyFds.portability.asideLink": {
+    "message": "Caso de uso: catálogo de ejercicios →"
+  },
+  "whyFds.portability.asideNote": {
+    "message": "Un ejercicio completo de un archivo publicado — el documento que se mueve."
+  },
+  "whyFds.portability.body1": {
+    "message": "La mayoría de las plataformas de fitness le darán sus datos a la salida. Lo que le dan es un archivo que solo ellas entienden — cada nombre de ejercicio, lista de músculos y estructura de series codificados en su vocabulario privado. En la práctica, migrar significa reconstruir su contenido a mano al otro lado."
+  },
+  "whyFds.portability.body2": {
+    "message": "En FDS, un catálogo o un programa es un documento en un formato publicado. Cualquier sistema que lea el estándar lo lee, con el significado intacto — una sentadilla trasera llega como una sentadilla trasera, con los músculos que trabaja y la forma en que se mide. Cambiar de plataforma pasa a ser mover archivos."
+  },
+  "whyFds.portability.title": {
+    "message": "Portabilidad: una exportación que significa algo"
+  },
+  "whyFds.title": {
+    "message": "El contenido de entrenamiento debería sobrevivir al software que lo creó."
+  },
+  "whyFds.today.asideLink": {
+    "message": "La matriz de cobertura de escenarios →"
+  },
+  "whyFds.today.asideNote": {
+    "message": "Cada estructura de entrenamiento que los esquemas expresan, cada fila respaldada por un ejemplo que CI valida."
+  },
+  "whyFds.today.body1": {
+    "message": "FDS es nuevo. Los esquemas, el transformador y el paquete de conocimiento para IA están publicados y listos para construir sobre ellos, y las herramientas de referencia de este repositorio son su primer usuario. Todavía no hay adoptantes de terceros que señalar, y este sitio no los inventará — lo que ve afirmado es lo que el repositorio puede demostrar."
+  },
+  "whyFds.today.body2": {
+    "message": "Ese momento es la oportunidad disfrazada: lo que fijará la primera versión estable sigue abierto, y los {earlyAdoptersLink} son quienes lo están decidiendo."
+  },
+  "whyFds.today.earlyAdoptersLink": {
+    "message": "adoptantes tempranos"
+  },
+  "whyFds.today.title": {
+    "message": "Dónde está hoy"
+  }
+}
