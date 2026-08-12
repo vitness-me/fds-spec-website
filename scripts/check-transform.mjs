@@ -44,6 +44,15 @@
  *     source record
  *   - every document validates against the published schema for the version it
  *     declares, resolved through the release manifest
+ *   - the documents match `fixtures/roundtrip/expected/exercises.json`, field
+ *     for field, once the values only a run can know — the generated UUID and
+ *     the two timestamps — are checked for shape and set aside. That file is a
+ *     committed copy of the CLI's own output, and the website's landing page
+ *     renders it as "what the transformer produces". A demo that quotes a tool
+ *     is asserted in one place and implemented in another, which is this
+ *     repository's recurring defect; the comparison is what closes the gap. If
+ *     it fails because the transformer legitimately changed, re-run the
+ *     transform into `fixtures/roundtrip/expected/` and commit the result.
  *   - no registry lookup silently resolved to nothing — a lookup that was asked
  *     for and matched nothing returns an empty array, which validates, writes,
  *     and is indistinguishable from a field nobody asked to fill
@@ -312,6 +321,91 @@ export function inspectDocuments({
   return problems;
 }
 
+// ── the committed expected output ────────────────────────────────────────────
+
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+const ISO_INSTANT = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$/;
+
+/** Fields a fresh run cannot reproduce, each with the shape it must still have. */
+const RUN_DEPENDENT = [
+  { path: 'exerciseId', pattern: UUID, expects: 'a UUID' },
+  { path: 'metadata.createdAt', pattern: ISO_INSTANT, expects: 'an ISO 8601 instant' },
+  { path: 'metadata.updatedAt', pattern: ISO_INSTANT, expects: 'an ISO 8601 instant' },
+];
+
+function valueAt(node, dotted) {
+  return dotted.split('.').reduce((current, key) => (current == null ? current : current[key]), node);
+}
+
+/** Every path at which two JSON values differ, depth-first, capped by the caller. */
+function diffPaths(actual, expected, path = '') {
+  if (actual === expected) return [];
+  const kind = (value) =>
+    Array.isArray(value) ? 'array' : value === null ? 'null' : typeof value;
+
+  if (kind(actual) !== kind(expected) || kind(actual) !== 'object' && kind(actual) !== 'array') {
+    return [`${path || '/'}: ${JSON.stringify(actual)} != ${JSON.stringify(expected)}`];
+  }
+
+  const keys = [...new Set([...Object.keys(actual), ...Object.keys(expected)])];
+  return keys.flatMap((key) => diffPaths(actual[key], expected[key], path ? `${path}.${key}` : key));
+}
+
+/**
+ * The run's documents against the committed expected output.
+ *
+ * Both sides are compared with the run-dependent fields replaced by a
+ * placeholder — after each is checked, on the *run* side, for the shape it
+ * cannot help having. The expected file is a real CLI run committed verbatim,
+ * so its own UUIDs and timestamps stay in the repository and in what the
+ * website renders, but never decide this comparison.
+ */
+export function compareToExpected({ documents, expected }) {
+  const problems = [];
+
+  if (!Array.isArray(expected) || expected.length !== documents.length) {
+    problems.push(
+      `the committed expected output has ${Array.isArray(expected) ? expected.length : 'no'} ` +
+        `document(s); the transform produced ${documents.length}.\n` +
+        '    Re-run the transform into fixtures/roundtrip/expected/ and commit the result.'
+    );
+    return problems;
+  }
+
+  for (const [index, document] of documents.entries()) {
+    const where = `document ${index + 1}`;
+    const masked = { actual: structuredClone(document), expected: structuredClone(expected[index]) };
+
+    for (const { path, pattern, expects } of RUN_DEPENDENT) {
+      const produced = valueAt(document, path);
+      if (typeof produced !== 'string' || !pattern.test(produced)) {
+        problems.push(
+          `${where}: ${path} is ${JSON.stringify(produced)}, not ${expects}.\n` +
+            '    This field is excused from the expected-output comparison because a ' +
+            'fresh run cannot reproduce it — but only while it keeps its shape.'
+        );
+      }
+      for (const side of Object.values(masked)) {
+        const parent = valueAt(side, path.split('.').slice(0, -1).join('.')) ?? side;
+        if (parent && typeof parent === 'object') parent[path.split('.').at(-1)] = '<run-dependent>';
+      }
+    }
+
+    const diverged = diffPaths(masked.actual, masked.expected);
+    if (diverged.length) {
+      problems.push(
+        `${where} does not match fixtures/roundtrip/expected/exercises.json:\n` +
+          diverged.slice(0, 6).map((line) => `      ${line}`).join('\n') +
+          '\n    The website renders the committed file as what the transformer ' +
+          'produces. If the transformer legitimately changed, re-run the transform ' +
+          'into fixtures/roundtrip/expected/ and commit the result.'
+      );
+    }
+  }
+
+  return problems;
+}
+
 /** Mapping targets filled by a registry lookup, taken from the configuration. */
 export function registryLookups(mappings) {
   return Object.entries(mappings ?? {})
@@ -448,6 +542,48 @@ function selfTest(context) {
     '3 source record(s) in, 0 document(s) out'
   );
 
+  const produced = {
+    exerciseId: '00000000-0000-4000-8000-000000000000',
+    canonical: { name: 'Back Squat' },
+    metadata: {
+      createdAt: '2026-01-01T00:00:00.000Z',
+      updatedAt: '2026-01-01T00:00:00.000Z',
+    },
+  };
+  const committed = structuredClone(produced);
+  committed.exerciseId = '11111111-1111-4111-8111-111111111111'; // differs; must not matter
+
+  expect(
+    'a field that drifted from the committed expected output',
+    compareToExpected({
+      documents: [produced],
+      expected: [{ ...committed, canonical: { name: 'Front Squat' } }],
+    }),
+    'does not match fixtures/roundtrip/expected/exercises.json'
+  );
+
+  expect(
+    'an exerciseId that stopped being a UUID',
+    compareToExpected({
+      documents: [{ ...produced, exerciseId: 'not-a-uuid' }],
+      expected: [committed],
+    }),
+    'not a UUID'
+  );
+
+  expect(
+    'an expected file with the wrong document count',
+    compareToExpected({ documents: [produced], expected: [] }),
+    'Re-run the transform'
+  );
+
+  if (compareToExpected({ documents: [produced], expected: [committed] }).length) {
+    cases += 1;
+    failures.push(
+      'self-test: documents differing only in run-dependent fields were reported as drift'
+    );
+  }
+
   return { failures, cases };
 }
 
@@ -570,6 +706,11 @@ try {
   }
 
   if (documents) {
+    const expected = JSON.parse(
+      await readFile(join(ROOT, FIXTURE_DIR, 'expected', outputName), 'utf8')
+    );
+    problems.push(...compareToExpected({ documents, expected }));
+
     problems.push(
       ...inspectDocuments({
         documents,

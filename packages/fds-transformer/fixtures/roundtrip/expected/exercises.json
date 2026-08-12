@@ -1,0 +1,176 @@
+[
+  {
+    "exerciseId": "47b06e82-3215-4ab8-8a32-ce1ad70ee1cb",
+    "schemaVersion": "1.1.0",
+    "canonical": {
+      "name": "Back Squat",
+      "slug": "back-squat"
+    },
+    "classification": {
+      "exerciseType": "strength",
+      "movement": "squat",
+      "mechanics": "compound",
+      "force": "push",
+      "level": "intermediate"
+    },
+    "targets": {
+      "primary": [
+        {
+          "id": "mus.quadriceps",
+          "name": "Quadriceps",
+          "slug": "quadriceps",
+          "categoryId": "cat.legs"
+        }
+      ]
+    },
+    "equipment": {
+      "required": [
+        {
+          "id": "eq.barbell",
+          "name": "Barbell",
+          "slug": "barbell"
+        }
+      ]
+    },
+    "metrics": {
+      "primary": {
+        "type": "weight",
+        "unit": "kg"
+      }
+    },
+    "media": [
+      {
+        "type": "image",
+        "uri": "https://example.com/media/back-squat.gif"
+      }
+    ],
+    "metadata": {
+      "status": "active",
+      "createdAt": "2026-08-12T00:10:17.705Z",
+      "updatedAt": "2026-08-12T00:10:17.706Z",
+      "source": "roundtrip.fixture",
+      "externalRefs": [
+        {
+          "system": "roundtrip",
+          "id": "SRC-1"
+        }
+      ]
+    }
+  },
+  {
+    "exerciseId": "8ee67200-336c-4912-afbe-e671d0891f72",
+    "schemaVersion": "1.1.0",
+    "canonical": {
+      "name": "Lat Pulldown",
+      "slug": "lat-pulldown"
+    },
+    "classification": {
+      "exerciseType": "strength",
+      "movement": "pull-vertical",
+      "mechanics": "compound",
+      "force": "pull",
+      "level": "beginner"
+    },
+    "targets": {
+      "primary": [
+        {
+          "id": "mus.lats",
+          "name": "Latissimus Dorsi",
+          "slug": "latissimus-dorsi",
+          "categoryId": "cat.back"
+        }
+      ]
+    },
+    "equipment": {
+      "required": [
+        {
+          "id": "eq.latPulldown",
+          "name": "Lat Pulldown Machine",
+          "slug": "lat-pulldown-machine"
+        }
+      ]
+    },
+    "metrics": {
+      "primary": {
+        "type": "weight",
+        "unit": "kg"
+      }
+    },
+    "media": [
+      {
+        "type": "image",
+        "uri": "https://example.com/media/lat-pulldown.gif"
+      }
+    ],
+    "metadata": {
+      "status": "active",
+      "createdAt": "2026-08-12T00:10:17.705Z",
+      "updatedAt": "2026-08-12T00:10:17.706Z",
+      "source": "roundtrip.fixture",
+      "externalRefs": [
+        {
+          "system": "roundtrip",
+          "id": "SRC-2"
+        }
+      ]
+    }
+  },
+  {
+    "exerciseId": "ae002ef8-3aaf-4fe9-91a2-4618d5506290",
+    "schemaVersion": "1.1.0",
+    "canonical": {
+      "name": "Dumbbell Crunch",
+      "slug": "dumbbell-crunch"
+    },
+    "classification": {
+      "exerciseType": "strength",
+      "movement": "core-anti-extension",
+      "mechanics": "isolation",
+      "force": "pull",
+      "level": "beginner"
+    },
+    "targets": {
+      "primary": [
+        {
+          "id": "mus.rectusAbdominis",
+          "name": "Rectus Abdominis",
+          "slug": "rectus-abdominis",
+          "categoryId": "cat.core"
+        }
+      ]
+    },
+    "equipment": {
+      "required": [
+        {
+          "id": "eq.dumbbell",
+          "name": "Dumbbell",
+          "slug": "dumbbell"
+        }
+      ]
+    },
+    "metrics": {
+      "primary": {
+        "type": "reps",
+        "unit": "count"
+      }
+    },
+    "media": [
+      {
+        "type": "image",
+        "uri": "https://example.com/media/dumbbell-crunch.gif"
+      }
+    ],
+    "metadata": {
+      "status": "active",
+      "createdAt": "2026-08-12T00:10:17.705Z",
+      "updatedAt": "2026-08-12T00:10:17.706Z",
+      "source": "roundtrip.fixture",
+      "externalRefs": [
+        {
+          "system": "roundtrip",
+          "id": "SRC-3"
+        }
+      ]
+    }
+  }
+]
