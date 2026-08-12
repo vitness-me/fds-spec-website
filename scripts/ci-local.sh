@@ -157,6 +157,9 @@ if run_job website; then
   pushd website >/dev/null
   try "build"   npm run build
   popd >/dev/null
+  # After the build, because it reads the built output: the /en/* redirect
+  # stubs are emitted by the default locale's build.
+  try "/en/* answers with the page it means" npm run check:redirects
 fi
 
 # ── result ─────────────────────────────────────────────────────────────────────

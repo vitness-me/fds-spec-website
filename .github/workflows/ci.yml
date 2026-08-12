@@ -280,3 +280,9 @@ jobs:
 
       - name: Build
         run: npm run build
+
+      # After the build, because it reads the built output: the /en/*
+      # redirect stubs are emitted by the default locale's build.
+      - name: /en/* answers with the page it means
+        run: npm run check:redirects
+        working-directory: .

@@ -233,6 +233,29 @@ const config: Config = {
     // importing through webpack, and for the drift rule: a matrix row the
     // READMEs cannot describe fails the build.
     './plugins/coverage-matrix.mjs',
+
+    // The default locale builds to the site root — there is no /en tree, and
+    // by Docusaurus's model there should not be. But a site that serves /es/
+    // and /sr-Latn/ teaches readers the prefix pattern, and /en/... arrives
+    // anyway: typed, pasted, rewritten by tools. GitHub Pages has no server
+    // to answer it, so the default locale's build emits a client-redirect
+    // stub at /en/<path> for every page it builds. Default locale only: in a
+    // translated locale's build these paths would land under that locale's
+    // tree (/es/en/...), which is why the spread is conditional rather than
+    // the plugin unconditional. scripts/check-locale-redirects.mjs holds
+    // both properties against the built output.
+    ...(currentBuildLocale === localeManifest.defaultLocale
+      ? [
+          [
+            '@docusaurus/plugin-client-redirects',
+            {
+              createRedirects: (existingPath: string) => [
+                `/${localeManifest.defaultLocale}${existingPath}`,
+              ],
+            },
+          ] as const,
+        ]
+      : []),
   ],
 
   themes: [
