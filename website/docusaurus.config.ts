@@ -26,6 +26,35 @@ const localeManifest = JSON.parse(
   defaultLocale: string;
   locales: string[];
   localeConfigs: Record<string, {label: string; htmlLang: string}>;
+  strings: Record<string, Record<string, string>>;
+};
+
+/**
+ * The locale this config is being evaluated for.
+ *
+ * Two navbar strings live in this file rather than in a component — the
+ * release dropdown's heading (a `type: 'html'` item, which the string
+ * extractor does not see) and the locale dropdown's "help translate" link —
+ * and both shipped in English on every translated page until a language
+ * review caught them. Docusaurus builds each locale in its own pass and
+ * exposes the locale to the config through this env var (its documented
+ * escape hatch, facebook/docusaurus#4542); `docusaurus start` sets it only
+ * when `--locale` is passed, hence the default-locale fallback.
+ *
+ * The lookup throws on a missing entry instead of falling back to English:
+ * a locale that goes live without these strings should fail its build, not
+ * quietly regrow the defect this exists to fix.
+ */
+const currentBuildLocale = process.env.DOCUSAURUS_CURRENT_LOCALE ?? localeManifest.defaultLocale;
+const localeString = (key: string): string => {
+  const value = localeManifest.strings[currentBuildLocale]?.[key];
+  if (value === undefined) {
+    throw new Error(
+      `i18n/locales.json: strings.${currentBuildLocale}.${key} is missing — ` +
+        `every live locale needs the config-level navbar strings translated`,
+    );
+  }
+  return value;
 };
 
 const {currentRelease, releases} = JSON.parse(
@@ -308,7 +337,9 @@ const config: Config = {
           items: [
             {
               type: 'html',
-              value: `<span class="fds-dropdown-heading">Release ${currentRelease} publishes</span>`,
+              value: `<span class="fds-dropdown-heading">${localeString(
+                'releaseDropdownHeading',
+              ).replace('{release}', currentRelease)}</span>`,
             },
             ...releaseDropdownItems,
             {type: 'html', value: '<hr class="dropdown-separator">'},
@@ -333,7 +364,7 @@ const config: Config = {
           dropdownItemsAfter: [
             {
               href: 'https://github.com/vitness-me/fds-spec-website/issues/new?title=Translation%20help&labels=i18n',
-              label: 'Help translate',
+              label: localeString('helpTranslateLabel'),
             },
           ],
         },
