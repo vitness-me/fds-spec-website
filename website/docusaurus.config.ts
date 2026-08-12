@@ -20,6 +20,14 @@ import type * as Preset from '@docusaurus/preset-classic';
  * that is a property of how it happens to be invoked, not of where the manifest
  * is.
  */
+const localeManifest = JSON.parse(
+  readFileSync(path.join(__dirname, 'i18n', 'locales.json'), 'utf8'),
+) as {
+  defaultLocale: string;
+  locales: string[];
+  localeConfigs: Record<string, {label: string; htmlLang: string}>;
+};
+
 const {currentRelease, releases} = JSON.parse(
   readFileSync(path.join(__dirname, '..', 'specification', 'releases.json'), 'utf8'),
 ) as {
@@ -123,12 +131,23 @@ const config: Config = {
     },
   },
 
-  // Even if you don't use internationalization, you can use this field to set
-  // useful metadata like html lang. For example, if your site is Chinese, you
-  // may want to replace "en" with "zh-Hans".
+  // The locale set, read from i18n/locales.json rather than written here.
+  //
+  // Two things need the same answer to "which locales does this site serve":
+  // this config, and scripts/check-translations.mjs, which walks the i18n
+  // tree and compares every translation against its English source. Two
+  // hand-kept copies of that list is the drift this repository keeps
+  // finding, so there is one file and both read it. localeConfigs may
+  // describe locales that are not live yet — a locale ships only when it is
+  // added to `locales`, which is why the configs are filtered here.
   i18n: {
-    defaultLocale: 'en',
-    locales: ['en'],
+    defaultLocale: localeManifest.defaultLocale,
+    locales: localeManifest.locales,
+    localeConfigs: Object.fromEntries(
+      Object.entries(localeManifest.localeConfigs).filter(([locale]) =>
+        localeManifest.locales.includes(locale),
+      ),
+    ),
   },
 
   presets: [
