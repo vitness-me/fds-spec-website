@@ -22,6 +22,20 @@ const GLYPHS: Record<string, 'glyphOk' | 'glyphStep' | 'glyphFrame'> = {
 };
 
 function OutputLine({line}: {line: string}): React.ReactElement {
+  if (line === '│') {
+    // A row that is nothing but the trunk: @clack/prompts prints one between
+    // every pair of steps. The recorded byte stays in the DOM (it survives a
+    // copy-paste), but the row is drawn far shorter than a content row and
+    // the rule is drawn by CSS at the glyph column — at full content height
+    // the dim glyph read as a blank line, not as the vertical rule the CLI
+    // prints to connect its steps.
+    return (
+      <div className={`${styles.line} ${styles.connector}`}>
+        <span className={styles.trunk}>{line}</span>
+      </div>
+    );
+  }
+
   const glyphClass = GLYPHS[line.charAt(0)];
 
   if (!glyphClass) {
