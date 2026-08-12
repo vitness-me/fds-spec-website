@@ -172,6 +172,31 @@ for (const dir of localeDirs) {
   }
 }
 
+// The manifest's `strings` block carries UI strings for components the
+// extractor cannot see (docs-dir components, the navbar release dropdown).
+// It is the one translation surface outside the extraction snapshot, so it
+// gets the same parity rule the snapshot gets: every locale carries exactly
+// the default locale's keys. A missing key is an untranslated string that
+// would silently fall back to English; an extra key is a translation of a
+// string that no longer exists.
+if (manifest.strings) {
+  const templateKeys = new Set(Object.keys(manifest.strings[defaultLocale] ?? {}));
+  for (const locale of locales) {
+    if (locale === defaultLocale) continue;
+    const localeKeys = new Set(Object.keys(manifest.strings[locale] ?? {}));
+    for (const key of templateKeys) {
+      if (!localeKeys.has(key)) {
+        problem(`${rel(LOCALES_JSON)}: strings["${locale}"] is missing "${key}" — every locale carries the same string keys as "${defaultLocale}"; add the translation`);
+      }
+    }
+    for (const key of localeKeys) {
+      if (!templateKeys.has(key)) {
+        problem(`${rel(LOCALES_JSON)}: strings["${locale}"] has "${key}", which "${defaultLocale}" does not — a translation of a string that no longer exists; remove it`);
+      }
+    }
+  }
+}
+
 // ── the English extraction snapshot is current with the source code ──────────
 //
 // Re-run the extraction, diff against the committed snapshot, restore the tree
@@ -468,6 +493,8 @@ if (SELF_TEST) {
   // exactly these, or the gate itself is broken.
   const expected = [
     'website/i18n/pt: locale directory not named in website/i18n/locales.json localeConfigs — add it there or remove the directory',
+    'website/i18n/locales.json: strings["es"] is missing "landing.cta" — every locale carries the same string keys as "en"; add the translation',
+    'website/i18n/locales.json: strings["es"] has "landing.extra", which "en" does not — a translation of a string that no longer exists; remove it',
     'website/i18n/es/docusaurus-theme-classic/navbar.json: missing — the English template has it; run `npm --prefix website run write-translations -- --locale es` and translate the new strings',
     'website/i18n/es/code.json: missing translation for "landing.trust.title" — the English template has it',
     'website/i18n/es/code.json: key "landing.removed.key" is not in the English template — a translation of a string that no longer exists; remove it',

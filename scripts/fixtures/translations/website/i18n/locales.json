@@ -1,9 +1,33 @@
 {
   "defaultLocale": "en",
-  "locales": ["en", "es", "sr-Latn"],
+  "locales": [
+    "en",
+    "es",
+    "sr-Latn"
+  ],
   "localeConfigs": {
-    "en": { "label": "English", "htmlLang": "en" },
-    "es": { "label": "Español", "htmlLang": "es" },
-    "sr-Latn": { "label": "Srpski", "htmlLang": "sr-Latn" }
+    "en": {
+      "label": "English",
+      "htmlLang": "en"
+    },
+    "es": {
+      "label": "Español",
+      "htmlLang": "es"
+    },
+    "sr-Latn": {
+      "label": "Srpski",
+      "htmlLang": "sr-Latn"
+    }
+  },
+  "strings": {
+    "en": {
+      "landing.cta": "Read the overview"
+    },
+    "es": {
+      "landing.extra": "Una cadena sobrante"
+    },
+    "sr-Latn": {
+      "landing.cta": "Pročitajte pregled"
+    }
   }
 }

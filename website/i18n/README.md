@@ -12,7 +12,7 @@ anything in this tree, run it; CI runs it on every pull request.
 
 | Path | What it is |
 |---|---|
-| `locales.json` | The one statement of which locales the site serves. `docusaurus.config.ts` reads it, and so does the gate. A locale ships when it enters `locales`; its label lives in `localeConfigs`. |
+| `locales.json` | The one statement of which locales the site serves. `docusaurus.config.ts` reads it, and so does the gate. A locale ships when it enters `locales`; its label lives in `localeConfigs`. Its `strings` block carries the UI strings the extractor cannot see — components under `website/docs/` (the use-case chrome) and the navbar release dropdown — and the gate holds every locale to the default locale's key set, so a key added there cannot ship untranslated silently. |
 | `en/**/*.json` | The committed extraction snapshot — every translatable string the source code, theme and plugin configuration currently contain, as `docusaurus write-translations` finds them. Generated, never edited by hand. |
 | `<locale>/**/*.json` | That locale's translations of the snapshot, file-for-file and key-for-key. |
 | `<locale>/docusaurus-plugin-content-docs/current/**` | Translated documentation pages, mirroring `website/docs/**` path-for-path. |

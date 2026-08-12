@@ -1,5 +1,6 @@
 import React from 'react';
 import {usePluginData} from '@docusaurus/useGlobalData';
+import {useLocaleString} from './strings';
 import styles from './styles.module.css';
 
 /**
@@ -27,10 +28,10 @@ type CoverageData = {sections: Section[]; total: number};
  * best serves a reader — so it lives here rather than being derived. An
  * entity with no page listed renders no link, never a guessed one.
  */
-const USE_CASE_PAGES: Record<string, {to: string; label: string}> = {
-  workout: {to: '/docs/use-cases/authoring-workouts', label: 'Authoring workouts'},
-  prescription: {to: '/docs/use-cases/prescription', label: 'Prescription primitives'},
-  program: {to: '/docs/use-cases/programming', label: 'Programming'},
+const USE_CASE_PAGES: Record<string, {to: string; labelKey: string}> = {
+  workout: {to: '/docs/use-cases/authoring-workouts', labelKey: 'usecase.page.workout'},
+  prescription: {to: '/docs/use-cases/prescription', labelKey: 'usecase.page.prescription'},
+  program: {to: '/docs/use-cases/programming', labelKey: 'usecase.page.program'},
 };
 
 /** Minimal inline markdown: `code`, **strong**, *em*. Everything else literal. */
@@ -50,17 +51,11 @@ function Inline({text}: {text: string}): React.ReactElement {
 
 export function CoverageMatrix(): React.ReactElement {
   const {sections, total} = usePluginData('coverage-matrix') as CoverageData;
+  const str = useLocaleString();
 
   return (
     <section>
-      <p>
-        The scenario coverage matrix behind that claim — {total} training
-        structures, from straight sets to wave loading to a peaking program.
-        Every row names a committed example file that validates against its
-        published schema in CI, and each description below is read from the
-        README that ships beside those fixtures. Nothing on this list is
-        retyped for the website.
-      </p>
+      <p>{str('coverage.intro').replace('{total}', String(total))}</p>
       {sections.map((section, index) => (
         // The first section ships open: the matrix is the site's strongest
         // evidence, and fully collapsed it reads as a list of doors instead.
@@ -83,18 +78,16 @@ export function CoverageMatrix(): React.ReactElement {
           {USE_CASE_PAGES[section.entity] ? (
             <p className={styles.coverageUseCase}>
               <a href={USE_CASE_PAGES[section.entity].to}>
-                See these structures in use: {USE_CASE_PAGES[section.entity].label} →
+                {str('coverage.seeInUse').replace('{label}', str(USE_CASE_PAGES[section.entity].labelKey))}
               </a>
             </p>
           ) : null}
         </details>
       ))}
       <p className={styles.coverageFootnote}>
-        Two sections of the planning matrix are absent on purpose: performed
-        results (logging) are deferred until a consent and privacy model
-        exists, because FDS models no person; and the cross-cutting concerns
-        are answered in the RFCs rather than by fixtures. The{' '}
-        <a href="/docs/governance/roadmap">roadmap</a> says which is which.
+        {str('coverage.footnoteBefore')}{' '}
+        <a href="/docs/governance/roadmap">{str('coverage.footnoteLink')}</a>{' '}
+        {str('coverage.footnoteAfter')}
       </p>
     </section>
   );
