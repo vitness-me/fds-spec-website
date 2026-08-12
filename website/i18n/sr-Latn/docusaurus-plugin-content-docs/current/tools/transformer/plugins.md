@@ -1,6 +1,6 @@
 ---
 title: Razvoj dodataka
-description: Pravljenje prilagođenih dodataka za transformacije u FDS Transformer alatu
+description: Pravljenje prilagođenih dodataka za transformacije u FDS Transformeru
 sidebar_position: 7
 ---
 
@@ -339,7 +339,7 @@ const plugin: TransformPlugin = {
 export default plugin;
 ```
 
-**Nijedan konfiguracioni ključ ih ne bira.** `enrichers` je deo tipa `TransformPlugin`, ali transformator registruje samo `transforms` dodatka — pod `<plugin>:<name>` — i ništa ne čita `enrichers`. Ne postoji ključ u `mapping.json` koji imenuje obogaćivač iz dodatka, a nema ga ni šema mapiranja, jer je šema koja prihvata ključ koji alat ignoriše gora od nepostojanja šeme: govori vam da je konfiguracija ispravna dok se obogaćivač nikada ne izvršava.
+**Nijedan konfiguracioni ključ ih ne bira.** `enrichers` je deo tipa `TransformPlugin`, ali transformator registruje samo `transforms` dodatka — pod `<plugin>:<name>` — i ništa ne čita `enrichers`. Ne postoji ključ u `mapping.json` koji imenuje obogaćivač iz dodatka, a nema ga ni šema mapiranja, jer je šema koja prihvata ključ koji alat ignoriše gora od nepostojanja šeme: govori vam da je konfiguracija ispravna, a obogaćivač se pritom nikada ne izvršava.
 
 Dok obogaćivači ne postanu dostupni iz konfiguracije, obavite posao u transformaciji. Transformacija prima isti `TransformContext` — izvorni zapis, delimično izgrađen cilj i učitane registre — pa sve što bi obogaćivač mogao da izračuna, može i transformacija:
 
@@ -369,7 +369,7 @@ import type {
 } from '@vitness/fds-transformer';
 ```
 
-Izgradite pomoću:
+Prevedite (build) pomoću:
 
 ```json title="tsconfig.json" fds:ignore a tsconfig.json excerpt
 {
@@ -495,6 +495,6 @@ describe('string-transforms plugin', () => {
 
 ## Pogledajte i
 
-- [Ugrađene transformacije](/docs/tools/transformer/transforms) - referenca ugrađenih transformacija
-- [Konfiguracija](/docs/tools/transformer/configuration) - referenca konfiguracije mapiranja
-- [Primeri](/docs/tools/transformer/examples) - kompletni tokovi rada
+- [Ugrađene transformacije](/docs/tools/transformer/transforms) - Referenca ugrađenih transformacija
+- [Konfiguracija](/docs/tools/transformer/configuration) - Referenca konfiguracije mapiranja
+- [Primeri](/docs/tools/transformer/examples) - Kompletni tokovi rada

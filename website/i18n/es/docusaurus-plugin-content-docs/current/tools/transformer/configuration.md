@@ -40,13 +40,13 @@ Crear un archivo `mapping.json` en el proyecto:
 | `targetSchema` | object | Sí | Configuración del esquema FDS de destino |
 | `registries` | object | No | Fuentes de registros para búsquedas |
 | `mappings` | object | Sí | Definiciones de mapeo de campos |
-| `allowUnsafeEval` | boolean | No | Evalúa las expresiones `condition` de los mapeos (por defecto `false`) |
+| `allowUnsafeEval` | boolean | No | Evalúa las expresiones `condition` de los mapeos (predeterminado: `false`) |
 | `enrichment` | object | No | Configuración del enriquecimiento con IA |
 | `validation` | object | No | Ajustes de validación |
 | `output` | object | No | Ajustes del formato de salida |
 | `plugins` | array | No | Plugins de transformación personalizados |
 
-El esquema de mapeo cierra `additionalProperties` en todos los niveles. Una clave que no figura en él es una clave que el transformador no lee, de modo que un editor apuntado a `$schema` señalará un error de escritura en lugar de dejarlo pasar en silencio hacia una ejecución que lo ignora.
+El esquema de mapeo cierra `additionalProperties` en todos los niveles. Una clave que no figura en él es una clave que el transformador no lee, de modo que un editor que apunte a `$schema` señalará un error de escritura en lugar de dejarlo pasar en silencio hacia una ejecución que lo ignora.
 
 ---
 
@@ -170,7 +170,7 @@ Define cómo los campos de origen se mapean a campos FDS:
 | `from` | string \| string[] \| null | Ruta(s) del campo de origen, o `null` para valores generados |
 | `transform` | string \| string[] | Función(es) de transformación a aplicar |
 | `options` | object | Opciones pasadas a la función de transformación |
-| `default` | any | Valor por defecto si falta el origen |
+| `default` | any | Valor predeterminado si falta el origen |
 | `required` | boolean | Si el campo es obligatorio |
 | `condition` | string | Expresión de condición para mapeo condicional; se evalúa solo cuando el `allowUnsafeEval` raíz es `true`, y en caso contrario se omite con una advertencia |
 | `enrichment` | object | Configuración de enriquecimiento con IA a nivel de campo |
@@ -300,7 +300,7 @@ Configura la validación de la salida:
 }
 ```
 
-| Propiedad | Tipo | Por defecto | Descripción |
+| Propiedad | Tipo | Valor predeterminado | Descripción |
 |----------|------|---------|-------------|
 | `enabled` | boolean | `true` | Habilita la validación de esquema |
 | `strict` | boolean | `false` | Falla ante cualquier error de validación |
@@ -326,7 +326,7 @@ Configura el formato de salida:
 }
 ```
 
-| Propiedad | Tipo | Por defecto | Descripción |
+| Propiedad | Tipo | Valor predeterminado | Descripción |
 |----------|------|---------|-------------|
 | `format` | string | `json` | Formato de salida: `json`, `jsonl`, `ndjson` |
 | `pretty` | boolean | `true` | Imprime el JSON con formato legible |
@@ -476,7 +476,7 @@ Ver [Desarrollo de plugins](/docs/tools/transformer/plugins) para más detalles.
 
 ---
 
-## Ver también
+## Véase también
 
 - [Transformaciones integradas](/docs/tools/transformer/transforms) - Funciones de transformación disponibles
 - [Enriquecimiento con IA](/docs/tools/transformer/ai-enrichment) - Configuración del enriquecimiento por niveles

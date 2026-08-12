@@ -9,7 +9,7 @@ Esta guía define cómo los proveedores extienden el Fitness Data Standard (FDS)
 
 ## Objetivos
 - Evitar colisiones de claves entre proveedores.
-- Mantener las extensiones autodescriptivas y descubribles.
+- Mantener las extensiones autodescriptivas y detectables.
 - Ofrecer una vía para estandarizar patrones ampliamente adoptados.
 
 ## Dónde extender

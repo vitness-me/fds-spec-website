@@ -615,7 +615,7 @@ fds-transformer transform \
 
 ---
 
-## Ver también
+## Véase también
 
 - [Referencia de la CLI](/docs/tools/transformer/cli-reference) - Todos los comandos y opciones
 - [Configuración](/docs/tools/transformer/configuration) - Referencia de la configuración de mapeo

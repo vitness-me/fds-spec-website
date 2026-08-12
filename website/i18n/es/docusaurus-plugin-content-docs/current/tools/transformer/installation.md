@@ -122,7 +122,7 @@ npx dotenv-cli -- fds-transformer transform --config ./mapping.json
 | Variable | Descripción | Valor predeterminado |
 |----------|-------------|---------|
 | `OPENROUTER_API_KEY` | Clave de API para OpenRouter (requerida para el enriquecimiento con IA) | - |
-| `FDS_TRANSFORMER_MODEL` | Anula el modelo de IA predeterminado | Valores predeterminados por nivel |
+| `FDS_TRANSFORMER_MODEL` | Reemplaza el modelo de IA predeterminado | Valores predeterminados por nivel |
 | `DEBUG_ENRICHMENT` | Habilita el registro detallado del enriquecimiento | `false` |
 
 ## Verificación de la instalación

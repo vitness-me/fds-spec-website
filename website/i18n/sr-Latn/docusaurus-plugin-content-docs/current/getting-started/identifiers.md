@@ -9,7 +9,7 @@ sidebar_position: 3
 ## Produkcioni identifikatori
 
 **Normativna politika:**
-- Svi identifikatori resursa u produkcionim podacima **MORAJU** biti UUIDv4 niske
+- Svi identifikatori resursa u produkcionim podacima **MORAJU** biti UUIDv4 stringovi
 - Ovo važi za identifikatore kao što su `exerciseId`, `id` opreme/mišića/kategorije i sve reference između entiteta
 
 ## Identifikatori u dokumentaciji

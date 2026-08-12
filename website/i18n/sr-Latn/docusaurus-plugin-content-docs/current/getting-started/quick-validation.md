@@ -30,7 +30,7 @@ npx --package=ajv-cli --package=ajv-formats ajv validate --spec=draft2020 -c ajv
 
 ## Lokacije šema
 
-Svaka šema se služi i sa zamrznutog URL-a pod `https://spec.vitness.me/schemas/` — isti bajtovi kao kopije u repozitorijumu. Kompletan skup, u verzijama koje trenutno izdanje objavljuje, nalazi se u mašinski čitljivom manifestu izdanja na [https://spec.vitness.me/releases.json](https://spec.vitness.me/releases.json); [referenca šema](/docs/schemas) na ovom sajtu dokumentuje svaku od njih.
+Svaka šema je dostupna i na zamrznutom URL-u pod `https://spec.vitness.me/schemas/` — isti bajtovi kao kopije u repozitorijumu. Kompletan skup, u verzijama koje trenutno izdanje objavljuje, nalazi se u mašinski čitljivom manifestu izdanja na [https://spec.vitness.me/releases.json](https://spec.vitness.me/releases.json); [referenca šema](/docs/schemas) na ovom sajtu dokumentuje svaku od njih.
 
 Ako radite bez preuzete kopije repozitorijuma, preuzmite šemu sa njenog URL-a i prosledite ime preuzete datoteke opciji `-s` — `ajv-cli` čita šeme sa diska, ne preuzima URL-ove.
 

@@ -14,7 +14,7 @@ Transformišite bilo koju izvornu šemu u FDS (Fitness Data Standard) format uz 
 
 ## Pregled
 
-FDS Transformer je CLI alat i biblioteka koja konvertuje vaše postojeće fitnes podatke u JSON usklađen sa FDS-om. Preuzima na sebe složenost mapiranja proizvoljnih izvornih šema u standardizovani FDS format, uz opciono AI obogaćivanje za generisanje polja koja nedostaju.
+FDS Transformer je CLI alat i biblioteka koji konvertuju vaše postojeće fitnes podatke u JSON usklađen sa FDS-om. Preuzima na sebe složenost mapiranja proizvoljnih izvornih šema u standardizovani FDS format, uz opciono AI obogaćivanje za generisanje polja koja nedostaju.
 
 ## Ključne funkcionalnosti
 

@@ -63,11 +63,11 @@ Entiteti se verzionišu nezavisno. Izdanje 1.4.0 objavljuje exercise, equipment 
 
 Zamenjena verzija entiteta ostaje dostupna. `workout/v1.0.0/` je i dalje objavljen i i dalje zamrznut, jer izdanja 1.2.0 i 1.3.0 deklarišu workout na 1.0.0, a klijent fiksiran na bilo koje od njih mora i dalje moći da razrešava.
 
-Provajderi stoga TREBALO BI da emituju `entity_versions`, mapirajući svaki podržani entitet na verziju entiteta koju služe. Klijent koji to polje ima može direktno konstruisati URL-ove šema. Klijent koji ga nema mora izdanje razrešiti u njegove verzije entiteta na neki drugi način, a nagađanje je upravo neuspeh koji ovo polje postoji da spreči.
+Provajderi stoga TREBALO BI da emituju `entity_versions`, mapirajući svaki podržani entitet na verziju entiteta koju služe. Klijent koji to polje ima može direktno konstruisati URL-ove šema. Klijent koji ga nema mora izdanje razrešiti u njegove verzije entiteta na neki drugi način, a nagađanje je upravo neuspeh koji ovo polje i postoji da bi sprečilo.
 
 Taj drugi način je objavljen: **https://spec.vitness.me/releases.json** je manifest izdanja i mapira svako izdanje na verzije entiteta i biblioteka koje to izdanje imenuje, uz status svake objavljene verzije šeme — `current`, `superseded` ili `withdrawn`. Generiše se iz objavljenih šema, pa je to isti dokument prema kojem se ova specifikacija proverava. Klijent koji dobije `spec_version` i ništa više može ga tamo razrešiti umesto da pretpostavlja.
 
-Za razliku od šeme, manifest nije zamrznut. Dobija novo izdanje svaki put kada FDS neko objavi, što je i ceo razlog da se preuzima umesto da se kopira.
+Za razliku od šeme, manifest nije zamrznut. Dobija novo izdanje svaki put kada FDS objavi novo izdanje, što je i ceo razlog da se preuzima umesto da se kopira.
 
 <!-- fds:covers releases -->
 
@@ -91,7 +91,7 @@ Dobijanje novog entiteta jeste novo izdanje čak i kada se ništa postojeće nij
 
 Klijent koji preuzima programe neće uz njih dobiti treninge. Program je raspored referenci na treninge (RFC-008 §3.2), pa provajder koji izvozi programe **MORA** izložiti i treninge koje ti programi referenciraju, a klijent **TREBALO BI** da ih razreši pre prikazivanja plana.
 
-Provajderi TREBALO BI da zadrže `workout` u `supported_entities` kad god je `program` prisutan. Provajder koji oglašava programe, a ne i treninge, oglašava dokumente koje niko ne može izvesti.
+Provajderi TREBALO BI da zadrže `workout` u `supported_entities` kad god je `program` prisutan. Provajder koji oglašava programe, a ne i treninge, oglašava dokumente koje niko ne može sprovesti.
 
 ## Šta krajnja tačka za otkrivanje ne nosi
 

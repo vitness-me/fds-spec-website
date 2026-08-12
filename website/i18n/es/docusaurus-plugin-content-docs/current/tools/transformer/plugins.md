@@ -339,9 +339,9 @@ const plugin: TransformPlugin = {
 export default plugin;
 ```
 
-**Ninguna clave de configuración selecciona uno.** `enrichers` forma parte del tipo `TransformPlugin`, pero el transformador registra solo las `transforms` de un plugin — bajo `<plugin>:<name>` — y nada lee `enrichers`. No hay ninguna clave de `mapping.json` que nombre un enriquecedor de plugin, y el esquema de mapeo tampoco la tiene, porque un esquema que acepta una clave que la herramienta ignora es peor que ningún esquema: indica que la configuración es correcta mientras el enriquecedor nunca se ejecuta.
+**Ninguna clave de configuración selecciona uno.** `enrichers` forma parte del tipo `TransformPlugin`, pero el transformador registra solo las `transforms` de un plugin — bajo `<plugin>:<name>` — y nada lee `enrichers`. No hay ninguna clave de `mapping.json` que nombre un enriquecedor de plugin, y el esquema de mapeo tampoco la tiene, porque un esquema que acepta una clave que la herramienta ignora es peor que no tener esquema alguno: indica que la configuración es correcta mientras el enriquecedor nunca se ejecuta.
 
-Hasta que los enriquecedores sean accesibles desde la configuración, hacer el trabajo en una transformación. Una transformación recibe el mismo `TransformContext` — los datos de origen, el destino parcialmente construido y los registros cargados —, de modo que todo lo que un enriquecedor podría calcular, una transformación también puede:
+Hasta que los enriquecedores sean accesibles desde la configuración, hacer el trabajo en una transformación. Una transformación recibe el mismo `TransformContext` — los datos de origen, el destino parcialmente construido y los registros cargados —, de modo que todo lo que un enriquecedor podría calcular, también lo puede calcular una transformación:
 
 ```json fds:fragment entity=mapping
 {
@@ -493,7 +493,7 @@ describe('string-transforms plugin', () => {
 });
 ```
 
-## Ver también
+## Véase también
 
 - [Transformaciones integradas](/docs/tools/transformer/transforms) - Referencia de las transformaciones integradas
 - [Configuración](/docs/tools/transformer/configuration) - Referencia de la configuración de mapeo

@@ -1,6 +1,6 @@
 ---
-title: Redactar cualquier sesión, desde series simples hasta Tabata
-sidebar_label: Redacción de sesiones
+title: Crear cualquier sesión, desde series simples hasta Tabata
+sidebar_label: Creación de sesiones
 description: Modelar toda estructura de entrenamiento — superseries, EMOM, AMRAP, Tabata, intervalos — con un solo esquema de sesión y un solo campo.
 usecase_promise: Un esquema y un campo expresan todas las formas en que se estructura una sesión.
 usecase_family: composition
@@ -16,7 +16,7 @@ import straight from '@site/../specification/schemas/workout/v1.1.0/workout.stra
 import emom from '@site/../specification/schemas/workout/v1.1.0/workout.emom.example.json';
 import tabata from '@site/../specification/schemas/workout/v1.1.0/workout.tabata.example.json';
 
-# Redactar cualquier sesión, desde series simples hasta Tabata
+# Crear cualquier sesión, desde series simples hasta Tabata
 
 > Un esquema y un campo expresan todas las formas en que se estructura una sesión.
 
@@ -48,8 +48,8 @@ máxima (1RM).
   Tres series idénticas. `mode: "sequential"`, y no se necesita ningún `modeParams`.
 </SpecExample>
 
-Sin cambiar nada más que el modo, la misma forma se convierte en una pieza de
-acondicionamiento a cada minuto en punto. Ahora es el reloj el que termina cada
+Sin cambiar nada más que el modo, la misma forma se convierte en un trabajo de
+acondicionamiento cada minuto en punto. Ahora es el reloj el que termina cada
 intervalo, y por eso `modeParams` lleva `rounds` y un `interval`.
 
 <SpecExample source="specification/schemas/workout/v1.1.0/workout.emom.example.json" data={emom}>
@@ -77,8 +77,8 @@ Las series de un elemento se dan mediante un conteo `sets` **o** mediante un `sc
 nunca ambos — el esquema lo exige — de modo que hay exactamente un lugar donde leer
 cómo progresa una serie.
 
-La recompensa es que un consumidor escrito una sola vez lee todas las sesiones. Añadir
-una nueva forma de entrenar no añade un esquema, una columna de tabla ni una
+La recompensa es que un consumidor escrito una sola vez lee todas las sesiones. Agregar
+una nueva forma de entrenar no agrega un esquema, una columna de tabla ni una
 bifurcación; es un valor nuevo de un solo campo, y a un consumidor que no lo reconoce
 el estándar le dice exactamente qué es lo que no debe asumir.
 

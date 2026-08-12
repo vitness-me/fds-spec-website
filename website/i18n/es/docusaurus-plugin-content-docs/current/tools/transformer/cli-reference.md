@@ -35,7 +35,7 @@ fds-transformer transform [options]
 | `-o, --output <path>` | Directorio de salida | Directorio actual |
 | `--version <version>` | Versión de destino del esquema FDS | `1.0.0` |
 | `--dry-run` | Vista previa sin escribir archivos | `false` |
-| `--no-ai` | Deshabilita el enriquecimiento con IA (heredada) | `false` |
+| `--no-ai` | Deshabilita el enriquecimiento con IA (opción heredada) | `false` |
 | `--no-enrichment` | Omite por completo el enriquecimiento con IA | `false` |
 | `--api-key <key>` | Clave de API para el proveedor de enriquecimiento | `$OPENROUTER_API_KEY` |
 | `--model <model>` | Modelo de IA (modo heredado de modelo único) | - |

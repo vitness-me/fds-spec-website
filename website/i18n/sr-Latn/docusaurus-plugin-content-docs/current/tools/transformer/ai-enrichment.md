@@ -23,7 +23,7 @@ Ovaj pristup:
 - **Poboljšava tačnost** posvećivanjem moćnijih modela složenoj analizi
 - **Omogućava paketnu obradu** radi smanjenja broja API poziva
 
-## Preduslovi
+## Zahtevi
 
 - **OpenRouter API ključ** - nabavite ga na [openrouter.ai](https://openrouter.ai/)
 - Postavite promenljivu okruženja:
@@ -276,7 +276,7 @@ Kontrolišite učestalost API zahteva:
 }
 ```
 
-| Svojstvo | Tip | Podrazumevano | Opis |
+| Svojstvo | Tip | Podrazumevana vrednost | Opis |
 |----------|------|---------|-------------|
 | `requestsPerMinute` | number | 50 | Maksimalan broj zahteva u minuti |
 | `backoffStrategy` | string | `exponential` | Tip odlaganja (backoff): `exponential`, `linear`, `fixed` |
@@ -309,7 +309,7 @@ fds-transformer transform \
 
 ## Režim otklanjanja grešaka
 
-Uključite detaljno beleženje:
+Uključite detaljno logovanje:
 
 ```bash
 DEBUG_ENRICHMENT=true fds-transformer transform \
@@ -360,7 +360,7 @@ Za jednostavnije slučajeve upotrebe ili kada vam treba precizna kontrola, konfi
 |----------|-------------|
 | `OPENROUTER_API_KEY` | API ključ za OpenRouter (obavezan) |
 | `FDS_TRANSFORMER_MODEL` | Zamenjuje podrazumevani model za sve nivoe |
-| `DEBUG_ENRICHMENT` | Postavite na `true` za detaljno beleženje |
+| `DEBUG_ENRICHMENT` | Postavite na `true` za detaljno logovanje |
 
 ## Najbolje prakse
 
@@ -373,6 +373,6 @@ Za jednostavnije slučajeve upotrebe ili kada vam treba precizna kontrola, konfi
 
 ## Pogledajte i
 
-- [Konfiguracija](/docs/tools/transformer/configuration) - kompletna referenca konfiguracije
-- [CLI referenca](/docs/tools/transformer/cli-reference) - opcije komandi
-- [Primeri](/docs/tools/transformer/examples) - kompletni tokovi rada
+- [Konfiguracija](/docs/tools/transformer/configuration) - Kompletna referenca konfiguracije
+- [CLI referenca](/docs/tools/transformer/cli-reference) - Opcije komandi
+- [Primeri](/docs/tools/transformer/examples) - Kompletni tokovi rada

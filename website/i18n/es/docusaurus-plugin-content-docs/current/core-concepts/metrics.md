@@ -79,7 +79,7 @@ El esquema de ejercicio restringe la *estructura* de `metrics` y la pertenencia 
 | plyometric    | `reps`                         | `height`, `duration`, `rest`                                     |
 
 Notas:
-- El registro de fuerza DEBERÍA admitir como mínimo `reps`; `weight` es muy recomendable cuando aplica.
+- El registro de fuerza DEBERÍA admitir como mínimo `reps`; `weight` es muy recomendable cuando corresponde.
 - El registro de cardio DEBERÍA incluir `duration` y, además, `distance` o `pace` (derivar una de la otra cuando sea posible).
 - Movilidad e isométricos DEBERÍAN usar `duration` como métrica principal; evitar `reps` salvo que el dominio lo requiera.
 - El trabajo basado en velocidad empareja `velocity` con `percent1RM`, y a menudo `duration` en `ms` para el tiempo concéntrico. Ambas son secundarias respecto de `reps`.

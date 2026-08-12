@@ -106,7 +106,7 @@ Konfigurišite izvore registara za pretrage. Registri obezbeđuju podatke o miš
 
 > **Napomena:** Morate obezbediti sopstvene datoteke registara. Transformator se ne isporučuje sa unapred pripremljenim registrima.
 
-> **`remote` zahteva `url`.** FDS objavljuje mišiće, opremu i kategorije mišića samo kao *ilustrativne kataloge* — oni pokazuju oblik koji proizvođač podataka služi, i ništa u FDS-u ne zahteva njihove unose. Njihovi id-jevi ne pripadaju nijednom proizvođaču podataka, a pretraga registra upisuje id direktno u vaš izlaz, pa ne postoji podrazumevani udaljeni izvor na koji bi se moglo osloniti. `source: "remote"` bez `url` polja ne uspeva pri učitavanju umesto da preuzima. Imenujte katalog na koji mislite.
+> **`remote` zahteva `url`.** FDS objavljuje mišiće, opremu i kategorije mišića samo kao *ilustrativne kataloge* — oni pokazuju oblik koji provajder poslužuje, i ništa u FDS-u ne zahteva njihove unose. Njihovi id-jevi ne pripadaju nijednom provajderu, a pretraga registra upisuje id direktno u vaš izlaz, pa ne postoji podrazumevani udaljeni izvor na koji bi se moglo osloniti. `source: "remote"` bez `url` polja ne uspeva pri učitavanju umesto da preuzima. Imenujte katalog na koji mislite.
 
 ---
 
@@ -300,7 +300,7 @@ Konfigurišite validaciju izlaza:
 }
 ```
 
-| Svojstvo | Tip | Podrazumevano | Opis |
+| Svojstvo | Tip | Podrazumevana vrednost | Opis |
 |----------|------|---------|-------------|
 | `enabled` | boolean | `true` | Uključuje validaciju prema šemi |
 | `strict` | boolean | `false` | Neuspeh pri bilo kojoj grešci validacije |
@@ -326,7 +326,7 @@ Konfigurišite izlazni format:
 }
 ```
 
-| Svojstvo | Tip | Podrazumevano | Opis |
+| Svojstvo | Tip | Podrazumevana vrednost | Opis |
 |----------|------|---------|-------------|
 | `format` | string | `json` | Izlazni format: `json`, `jsonl`, `ndjson` |
 | `pretty` | boolean | `true` | Formatiran (pretty-print) JSON ispis |
@@ -478,7 +478,7 @@ Za detalje pogledajte [razvoj dodataka](/docs/tools/transformer/plugins).
 
 ## Pogledajte i
 
-- [Ugrađene transformacije](/docs/tools/transformer/transforms) - dostupne funkcije transformacija
-- [AI obogaćivanje](/docs/tools/transformer/ai-enrichment) - konfiguracija višestepenog obogaćivanja
-- [Razvoj dodataka](/docs/tools/transformer/plugins) - pravljenje prilagođenih transformacija
-- [Primeri](/docs/tools/transformer/examples) - kompletni primeri tokova rada
+- [Ugrađene transformacije](/docs/tools/transformer/transforms) - Dostupne funkcije transformacija
+- [AI obogaćivanje](/docs/tools/transformer/ai-enrichment) - Konfiguracija višestepenog obogaćivanja
+- [Razvoj dodataka](/docs/tools/transformer/plugins) - Pravljenje prilagođenih transformacija
+- [Primeri](/docs/tools/transformer/examples) - Kompletni primeri tokova rada

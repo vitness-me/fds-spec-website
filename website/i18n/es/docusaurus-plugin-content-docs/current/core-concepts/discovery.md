@@ -51,7 +51,7 @@ Este documento define un endpoint HTTP de descubrimiento opcional que permite a 
 
 ## Notas
 - `spec_version` DEBE indicar el lanzamiento de FDS que el proveedor admite.
-- `supported_extensions` DEBERÍA listar los espacios de nombres de proveedor que el proveedor anuncia; su omisión implica que no hay ninguno.
+- `supported_extensions` DEBERÍA listar los espacios de nombres de proveedor anunciados; su omisión implica que no hay ninguno.
 - Los `export_endpoints` son ilustrativos; los proveedores PUEDEN usar cualquier estructura de rutas. Los endpoints DEBERÍAN devolver NDJSON o arreglos JSON con un `schemaVersion` por registro.
 - La autenticación y los límites de tasa quedan fuera del alcance; los proveedores DEBERÍAN documentar cualquier requisito.
 
@@ -67,7 +67,7 @@ Los proveedores DEBERÍAN, por lo tanto, emitir `entity_versions`, mapeando cada
 
 Esa otra manera está publicada: **https://spec.vitness.me/releases.json** es el manifiesto de lanzamientos, y mapea cada lanzamiento a las versiones de entidades y de biblioteca que ese lanzamiento nombra, junto con el estado de cada versión de esquema publicada — `current`, `superseded` o `withdrawn`. Se genera a partir de los esquemas publicados, de modo que es el mismo documento contra el que se verifica esta especificación. Un cliente que recibe un `spec_version` y nada más puede resolverlo allí en lugar de asumir.
 
-A diferencia de un esquema, el manifiesto no está congelado. Gana un lanzamiento cada vez que FDS publica uno, y esa es toda la razón para obtenerlo en lugar de copiarlo.
+A diferencia de un esquema, el manifiesto no está congelado. Gana un lanzamiento cada vez que FDS publica uno, y precisamente por eso conviene obtenerlo en lugar de copiarlo.
 
 <!-- fds:covers releases -->
 
@@ -85,7 +85,7 @@ Incorporar una entidad es un lanzamiento nuevo aun cuando nada de lo existente h
 
 `prescription` se publica en `prescription/v1.0.0/prescription.schema.json` y define las primitivas de carga, repetición, tempo, descanso, zona y esquema de series que las sesiones de entrenamiento y los programas componen (RFC-006).
 
-**NO DEBE** aparecer en `supported_entities`. Su raíz de esquema no valida nada por construcción — no existe tal cosa como un documento de prescripción para exportar, y un endpoint que ofreciera uno estaría respondiendo una pregunta que nadie hizo. Un proveedor que admite sesiones de entrenamiento ya admite la prescripción; eso es lo que significa admitir sesiones de entrenamiento.
+**NO DEBE** aparecer en `supported_entities`. Su raíz de esquema no valida nada por construcción — no existe un documento de prescripción que exportar, y un endpoint que ofreciera uno estaría respondiendo una pregunta que nadie hizo. Un proveedor que admite sesiones de entrenamiento ya admite la prescripción; eso es lo que significa admitir sesiones de entrenamiento.
 
 ## Las sesiones de entrenamiento y los programas referencian; no contienen
 
