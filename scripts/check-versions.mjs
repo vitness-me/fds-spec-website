@@ -182,9 +182,16 @@ const isInvalid = (name) => name.includes('.invalid.') && name.endsWith('.json')
  * Every count a document is allowed to assert, and how it is derived.
  *
  * Derived from disk and from the manifest, never from parsing the sentence that
- * makes the claim: "eight reps at one hundred kilograms" and "Node.js 18+" are
- * both numbers next to a noun, and neither is a count of anything in this
- * repository. A marker is what separates a claim from a sentence.
+ * makes the claim: "eight reps at one hundred kilograms" and "three sets of
+ * five" are both numbers next to a noun, and neither is a count of anything in
+ * this repository. A marker is what separates a claim from a sentence.
+ *
+ * Not every metric is a cardinality. `ci-node-major` is the Node major
+ * `.github/workflows/ci.yml` pins, which is a number a document may assert and
+ * be wrong about in exactly the same way — the root README told readers to
+ * install Node 18 for a repository whose website has required 20 since it was
+ * set up. The marker machinery does not care what the number counts, only that
+ * something derives it.
  */
 async function deriveCounts({ manifest, byPath, currentOf }) {
   const counts = new Map();
@@ -192,6 +199,14 @@ async function deriveCounts({ manifest, byPath, currentOf }) {
 
   const rfcs = await readdir(join(ROOT, 'specification/rfc'));
   set('rfcs', rfcs.filter((f) => /^rfc-\d+.*\.md$/.test(f)).length);
+
+  // The same line `scripts/ci-local.sh` reads to warn about a local Node major
+  // that differs from CI's, so a document and that warning cannot disagree.
+  // Left unset when the workflow stops declaring one, which makes any marker
+  // naming it fail rather than pass against a value nothing produced.
+  const workflow = await readFile(join(ROOT, '.github/workflows/ci.yml'), 'utf8').catch(() => '');
+  const nodeMajor = /node-version:\s*'?"?(\d+)/.exec(workflow)?.[1];
+  if (nodeMajor) set('ci-node-major', Number(nodeMajor));
 
   set('releases', Object.keys(manifest.releases ?? {}).length);
   set('schemas', byPath.size);
@@ -315,11 +330,16 @@ function reconcile(expected, actual) {
  *             discovery `check:mirrors` uses — so an index of the RFCs cannot
  *             silently omit the ninth one the way SCHEMAS.md omitted
  *             `program`. The "Specifies" prose stays editorial.
+ *   packages  the table below, keyed on the scoped npm name anywhere in the
+ *             row. The set is every publishable manifest under `packages/`, so
+ *             a document that introduces a reader to what this repository ships
+ *             cannot stop at the packages that existed when it was written. The
+ *             description column stays editorial.
  *
  * Order is deliberately not checked. A table sorted for the reader is good
  * documentation, and completeness is the thing that was missing.
  */
-function coverage({ manifest, byPath, rfcIds }, file, lines, index) {
+function coverage({ manifest, byPath, rfcIds, packageNames }, file, lines, index) {
   const at = `${file}:${index + 1}`;
 
   const fromTable = (pick) => {
@@ -397,6 +417,32 @@ function coverage({ manifest, byPath, rfcIds }, file, lines, index) {
           (unexpected.length ? `        not an RFC: ${unexpected.join(', ')}\n` : '') +
           '    Publishing an RFC adds a row here. An index that stops at the RFC before last ' +
           'lists\n    a standard nobody is reading.',
+      ];
+    },
+
+    packages() {
+      const expected = packageNames;
+      const actual = fromTable((row) => {
+        const match = row.join(' ').match(/@[\w.-]+\/[\w.-]+/);
+        return match ? match[0] : null;
+      });
+      if (actual === null) {
+        return [
+          `${at}: fds:covers packages — no table below it.\n` +
+            '    The marker annotates a table with one row per published package. Put it ' +
+            'directly above one, or delete it.',
+        ];
+      }
+      const { missing, unexpected } = reconcile(expected, actual);
+      if (!missing.length && !unexpected.length) return [];
+      return [
+        `${at}: fds:covers packages — the table below does not name every package under ` +
+          'packages/.\n' +
+          (missing.length ? `        missing:      ${missing.join(', ')}\n` : '') +
+          (unexpected.length ? `        not a package: ${unexpected.join(', ')}\n` : '') +
+          '    The set is read from each packages/*/package.json. Adding a package adds a row ' +
+          'here;\n    renaming one renames it here, because a name a reader types into npm has ' +
+          'to be the\n    name npm publishes.',
       ];
     },
 
@@ -625,6 +671,28 @@ const { manifest, byPath, currentOf, versionsOf } = loaded;
 loaded.rfcIds = (await readdir(join(ROOT, 'specification/rfc')))
   .filter((name) => /^rfc-\d+.*\.md$/.test(name))
   .map((name) => name.replace(/\.md$/, ''))
+  .sort();
+
+// The published package set, for `fds:covers packages`. A directory under
+// `packages/` with no manifest is a workspace in progress and names nothing; a
+// manifest marked private is deliberately not published, and a document that
+// omits it is right to.
+loaded.packageNames = (
+  await Promise.all(
+    (await readdir(join(ROOT, 'packages'), { withFileTypes: true }))
+      .filter((entry) => entry.isDirectory())
+      .map(async (entry) => {
+        const raw = await readFile(
+          join(ROOT, 'packages', entry.name, 'package.json'),
+          'utf8'
+        ).catch(() => null);
+        if (raw === null) return null;
+        const pkg = JSON.parse(raw);
+        return pkg.private ? null : pkg.name;
+      })
+  )
+)
+  .filter(Boolean)
   .sort();
 
 // Rule 1 — the assumption every other rule rests on. Nothing below can report
