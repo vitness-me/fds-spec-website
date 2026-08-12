@@ -54,3 +54,37 @@ polja šema, komande i identifikatori se ne prevode.
 | worked example | razrađen primer | |
 | early adopter | rani usvajač | |
 | knowledge pack | paket znanja | |
+| producer / consumer | proizvođač podataka / konzument | „podataka“ je obavezno, da se ne meša sa *vendor* → „proizvođač“ |
+| block / item | blok / stavka | identifikatori (`blocks[].mode`, `items`) se ne prevode |
+| rest day | dan odmora | |
+| deload | rasterećenje | „nedelja rasterećenja“ |
+| training max | trenažni maksimum | slot deklariše vežbu; nikada ne nosi vrednost |
+| schedule | raspored | |
+| denormalized | denormalizovan | |
+| heatmap | toplotna mapa | polje `heatmap` se ne prevodi |
+| endpoint | krajnja tačka | |
+| slug | slug | vrednost u podacima, ne proza; ne prevodi se |
+| locale | lokalitet | |
+| language tag | jezička oznaka | |
+| EMOM / AMRAP / Tabata | EMOM / AMRAP / Tabata | imena metoda treninga; ne prevode se |
+| transform (operation) | transformacija | funkcija `transform` i imena ugrađenih transformacija (`slugify`, `titleCase`…) se ne prevode |
+| field mapping | mapiranje polja | |
+| plugin | dodatak | u prozi; identifikatori i naslovi koda (`plugins`) se ne prevode |
+| AI | AI | bez prevođenja; nikada „VI“ |
+| AI enrichment | AI obogaćivanje | |
+| AI provider | AI provajder | uvek sa „AI“, da se ne meša sa *vendor* → „proizvođač“ |
+| tier / tiered | nivo / višestepeni | „višestepeno AI obogaćivanje“ |
+| pipeline | pipeline | bez prevođenja; ustaljeno u CI/CD |
+| dry run | probno izvršavanje | opcija `--dry-run` se ne prevodi |
+| batch processing | paketna obrada | |
+| cache | keš | |
+| fallback | rezervni | pridev: „rezervni model“, „rezervni lokalitet“ |
+| checkpoint / resume | kontrolna tačka / nastavljanje | |
+| wizard | čarobnjak | |
+| fuzzy matching | približno poklapanje | |
+| lookup | pretraga | |
+| template | šablon | |
+| API key | API ključ | |
+| rate limit | ograničenje broja zahteva | |
+| cost estimation | procena troškova | |
+| MUST / MUST NOT / SHOULD / MAY | MORA / NE SME / TREBALO BI / MOŽE | ključne reči RFC 2119, uvek velikim slovima; engleski tekst ostaje normativan |

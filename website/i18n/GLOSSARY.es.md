@@ -56,3 +56,37 @@ En las cadenas de la interfaz se usan comillas inglesas ("…"); las angulares
 | worked example | ejemplo resuelto | |
 | early adopter | adoptante temprano | |
 | knowledge pack | paquete de conocimiento | |
+| producer / consumer | productor / consumidor | los roles de conformidad («Conforming Producer/Consumer») |
+| block / item | bloque / elemento | los identificadores (`blocks[].mode`, `items`) no se traducen |
+| rest day | día de descanso | |
+| deload | descarga | «semana de descarga» |
+| training max | máximo de entrenamiento | el *slot* declara el levantamiento; nunca carga el valor |
+| schedule | cronograma | «calendario» queda reservado para el modelo `calendar` |
+| denormalized | desnormalizado | |
+| heatmap | mapa de calor | el campo `heatmap` no se traduce |
+| endpoint | endpoint | masculino, sin traducir |
+| slug | slug | masculino, sin traducir — es un valor de datos, no prosa |
+| locale | locale | masculino, sin traducir en prosa técnica |
+| language tag | etiqueta de idioma | |
+| EMOM / AMRAP / Tabata | EMOM / AMRAP / Tabata | nombres de métodos de entrenamiento; no se traducen |
+| transform (operation) | transformación | la función `transform` y los nombres de transformaciones integradas (`slugify`, `titleCase`…) no se traducen |
+| field mapping | mapeo de campos | |
+| plugin | plugin | masculino; «complemento» no se usa en este sitio |
+| AI | IA | |
+| AI enrichment | enriquecimiento con IA | |
+| AI provider | proveedor de IA | siempre calificado con «de IA», para no chocar con *vendor* → «proveedor» |
+| tier / tiered | nivel / por niveles | «enriquecimiento por niveles» |
+| pipeline | pipeline | masculino, sin traducir; uso asentado en CI/CD |
+| dry run | ejecución de prueba | la opción `--dry-run` no se traduce |
+| batch processing | procesamiento por lotes | |
+| cache | caché | femenino: «la caché» |
+| fallback | respaldo | «modelo de respaldo», «locale de respaldo» |
+| checkpoint / resume | punto de control / reanudar | |
+| wizard | asistente | |
+| fuzzy matching | coincidencia aproximada | |
+| lookup | búsqueda | |
+| template | plantilla | |
+| API key | clave de API | |
+| rate limit | límite de tasa | |
+| cost estimation | estimación de costos | «costos», forma americana — nunca «costes» |
+| MUST / MUST NOT / SHOULD / MAY | DEBE / NO DEBE / DEBERÍA / PUEDE | palabras clave RFC 2119, siempre en mayúsculas; el inglés queda normativo |
