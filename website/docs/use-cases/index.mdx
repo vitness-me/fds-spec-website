@@ -5,6 +5,7 @@ description: The capability layer of the Fitness Data Standard — what the stan
 ---
 
 import {Gallery, Card} from './_shared/UseCase';
+import {CoverageMatrix} from './_shared/Coverage';
 
 # What can you do with FDS?
 
@@ -54,6 +55,13 @@ renamed or a version bumped, the build fails before the page can go stale.
     A program points at sessions; fix one session and every plan using it is fixed.
   </Card>
 </Gallery>
+
+## Can it express how you actually train?
+
+The composition pages above claim one schema expresses every way people
+structure training. That claim has a checklist.
+
+<CoverageMatrix />
 
 ## What FDS deliberately does not do
 
