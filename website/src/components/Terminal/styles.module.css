@@ -71,10 +71,14 @@
   line-height: 1.75;
 }
 
-/* Terminals wrap long lines; so does this one. */
+/* Terminals wrap long lines; so does this one. The hanging indent keeps
+   continuation lines aligned under the text rather than under the prompt
+   or glyph, so a wrapped command still reads as one command. */
 .line {
   white-space: pre-wrap;
   overflow-wrap: anywhere;
+  padding-left: 2ch;
+  text-indent: -2ch;
 }
 
 .prompt {

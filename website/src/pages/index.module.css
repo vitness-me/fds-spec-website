@@ -110,7 +110,7 @@
 
 .ctaSection {
   border-top: 1px solid var(--fds-border);
-  padding: 7.5rem 0;
+  padding: 8.5rem 0 9rem;
   background: var(--fds-bg);
   text-align: center;
 }
@@ -122,20 +122,20 @@
 }
 
 .ctaTitle {
-  font-size: clamp(1.75rem, 3.6vw, 2.5rem);
+  font-size: clamp(2rem, 4.2vw, 3rem);
   font-weight: 500;
   letter-spacing: -0.03em;
   line-height: 1.08;
   text-wrap: balance;
   color: var(--fds-fg);
-  margin-bottom: 1rem;
+  margin-bottom: 1.125rem;
 }
 
 .ctaDescription {
   font-size: 1.0625rem;
   line-height: 1.6;
   color: var(--fds-fg-muted);
-  margin-bottom: 2rem;
+  margin-bottom: 2.25rem;
 }
 
 .ctaButtons {
