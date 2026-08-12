@@ -143,17 +143,6 @@
   color: var(--fds-fg-dim);
 }
 
-/* Code inside a landing tile sits on the tile itself — undo the boxed
-   treatment custom.css gives docs code blocks (its rules are !important,
-   so these must be too, at higher specificity for both themes). */
-.fdsTile pre[class*='prism'],
-[data-theme='dark'] .fdsTile pre[class*='prism'] {
-  background: transparent !important;
-  padding: 0 !important;
-  font-size: inherit !important;
-  line-height: inherit !important;
-}
-
 /* ── mono grammar ───────────────────────────────────────────────────────── */
 
 .fdsMono {

@@ -37,26 +37,6 @@
   color: var(--fds-fg-muted);
 }
 
-.codeBlock {
-  padding: 1rem 1.25rem;
-  overflow-x: auto;
-  font-size: 0.75rem;
-  line-height: 1.65;
-}
-
-.codeBlock pre {
-  font-family: var(--fds-mono);
-}
-
-/* The output document is the payoff, but it is long: cap it, scroll it,
-   and fade the cut edge so the crop reads as deliberate. */
-.codeBlockTall {
-  max-height: 30rem;
-  overflow-y: auto;
-  -webkit-mask-image: linear-gradient(#000 calc(100% - 3rem), transparent);
-  mask-image: linear-gradient(#000 calc(100% - 3rem), transparent);
-}
-
 /* ── mapping rows, derived from the committed config ────────────────────── */
 
 .mappingList {
@@ -114,9 +94,5 @@
 @media (max-width: 996px) {
   .panels {
     grid-template-columns: 1fr;
-  }
-
-  .codeBlockTall {
-    max-height: 24rem;
   }
 }

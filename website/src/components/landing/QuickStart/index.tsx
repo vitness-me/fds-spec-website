@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Link from '@docusaurus/Link';
-import { Highlight, themes } from 'prism-react-renderer';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import EditorPanel from '@site/src/components/EditorPanel';
 import styles from './styles.module.css';
 
 // The published example for the exercise entity, verbatim — the same file
@@ -16,38 +16,9 @@ const example = JSON.stringify(exampleDocument, null, 2);
 // The version badge shows the imported document's own claim, read from the
 // file rather than typed here.
 // fds:ignore an accessor into the imported published example, not an embedded document; the file it reads is validated where it lives
-const exampleVersion: string = (exampleDocument as Record<string, string>).schemaVersion;
+const exampleVersion: string = (exampleDocument as unknown as Record<string, string>).schemaVersion;
 
-/**
- * Custom hook to safely detect dark mode during SSR
- * Falls back to light mode during server-side rendering
- */
-function useSafeColorMode(): 'light' | 'dark' {
-  const [colorMode, setColorMode] = useState<'light' | 'dark'>('light');
-
-  useEffect(() => {
-    const read = () =>
-      document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
-    setColorMode(read());
-    const observer = new MutationObserver(() => setColorMode(read()));
-    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
-    return () => observer.disconnect();
-  }, []);
-
-  return colorMode;
-}
-
-export default function QuickStart(): JSX.Element {
-  const [copied, setCopied] = useState(false);
-  const colorMode = useSafeColorMode();
-  const theme = colorMode === 'dark' ? themes.vsDark : themes.vsLight;
-
-  const handleCopy = () => {
-    navigator.clipboard.writeText(example);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
-
+export default function QuickStart(): React.ReactElement {
   return (
     <section id="quick-start" className="fdsSection">
       <div className="fdsContainer">
@@ -131,35 +102,15 @@ export default function QuickStart(): JSX.Element {
             </div>
           </div>
 
-          <div className={`fdsTile ${styles.examplePanel}`}>
-            <div className="fdsTileHead">
-              <span className={styles.fileName}>exercise.example.json</span>
-              <span className="fdsPill">v{exampleVersion}</span>
-              <button className={styles.copyButton} onClick={handleCopy} type="button">
-                {copied ? 'Copied!' : 'Copy'}
-              </button>
-            </div>
-            <div className={styles.codeBlock}>
-              <Highlight theme={theme} code={example} language="json">
-                {({ className, style, tokens, getLineProps, getTokenProps }) => (
-                  <pre
-                    className={className}
-                    style={{ ...style, background: 'transparent', backgroundColor: 'transparent', margin: 0 }}>
-                    {tokens.map((line, i) => (
-                      <div key={i} {...getLineProps({ line })}>
-                        {line.map((token, key) => (
-                          <span key={key} {...getTokenProps({ token })} />
-                        ))}
-                      </div>
-                    ))}
-                  </pre>
-                )}
-              </Highlight>
-            </div>
-            <p className={styles.exampleCaption}>
-              The published example for the exercise entity — a back squat,
-              verbatim from the spec.
-            </p>
+          <div className={styles.examplePanel}>
+            <EditorPanel
+              filename="exercise.example.json"
+              badge={`v${exampleVersion}`}
+              code={example}
+              maxHeight="34rem"
+              size="sm"
+              footer="The published example for the exercise entity — a back squat, verbatim from the spec."
+            />
           </div>
         </div>
       </div>
