@@ -271,5 +271,12 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # Here rather than in the schemas job because the check re-runs the
+      # string extraction, which needs the website's dependencies — this job
+      # is the one that has just installed them.
+      - name: Translations current with their sources
+        run: npm run check:translations
+        working-directory: .
+
       - name: Build
         run: npm run build
