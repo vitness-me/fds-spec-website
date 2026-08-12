@@ -106,7 +106,37 @@
 }
 
 .glyphFrame {
-  color: #47474f;
+  color: #585862;
+}
+
+/* ── the trunk ──────────────────────────────────────────────────────────── */
+
+/* A connector-only row: @clack/prompts prints a bare "│" between steps so
+   the session reads as one vertical tree. The byte is in the DOM verbatim;
+   what changes here is presentation — a compact row instead of a full
+   content-height one, and the rule drawn as an actual 1px line so it reads
+   as the trunk connecting the steps rather than as double-spacing. */
+.connector {
+  position: relative;
+  height: 0.5rem;
+}
+
+.connector .trunk {
+  /* The recorded character, kept selectable; the painted rule below stands
+     in for its ink so the trunk's length matches the row, not the glyph. */
+  color: transparent;
+}
+
+.connector::before {
+  content: '';
+  position: absolute;
+  /* Bleed into the leading of the rows above and below so the trunk meets
+     the step glyphs instead of floating between them as a dash. */
+  top: -0.3125rem;
+  bottom: -0.3125rem;
+  left: 0.5ch;
+  width: 1px;
+  background: #585862;
 }
 
 .caret {
