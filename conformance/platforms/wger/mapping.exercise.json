@@ -60,7 +60,10 @@
       "from": "id",
       "transform": "template",
       "options": { "template": [{ "system": "wger", "id": "{{value}}" }] }
-    }
+    },
+
+    "attributes.contentLicense": { "from": "license" },
+    "attributes.licenseAuthor": { "from": "license_author" }
   },
 
   "validation": { "enabled": true, "strict": true },

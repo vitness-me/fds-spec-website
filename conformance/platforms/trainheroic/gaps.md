@@ -1,7 +1,9 @@
 # TrainHeroic — RFC gap report
 
-The headline result here is a **pass**: FDS expresses TrainHeroic's defining construct — per-set
-percentage-of-working-max — without strain. The gaps are narrow and specific.
+**The test direction is one-way.** FDS is the standard; TrainHeroic conforms *to* it. The finding
+that counts is whether FDS can **receive** everything TrainHeroic emits. The headline result is a
+**pass**: FDS expresses TrainHeroic's defining construct — per-set percentage-of-working-max — without
+strain. The remaining gaps are narrow and specific.
 
 ## Clean — the prescription primitives hold
 
@@ -33,6 +35,11 @@ percentage-of-working-max — without strain. The gaps are narrow and specific.
   to a specific FDS field, so there is no data loss **today** — but a coach who repurposes a slot in a
   way TrainHeroic allows and FDS has no field for would have nowhere to land. **Severity: low.** Noted
   as a structural watch-item, not a present defect.
+- **Competitive `leaderboard` blocks.** TrainHeroic blocks carry a `leaderboard` flag for benchmark/
+  competitive sessions (a team ranks on a scored workout). FDS `block` (RFC-007 §4.2) has no
+  leaderboard or scoring concept, so it can only ride in `extensions`. **Severity: low.** It is a
+  delivery/engagement feature more than a prescription one, but it is real emitted structure with no
+  first-class home.
 
 ## FDS is richer — the loss is on import, not in the spec
 

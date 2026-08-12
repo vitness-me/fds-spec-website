@@ -1,5 +1,10 @@
 # Trainerize — RFC gap report
 
+**The test direction is one-way.** FDS is the standard; Trainerize conforms *to* it. Every finding
+below is the same shape: **something Trainerize produces that FDS has no first-class place to hold.**
+Where FDS is merely stricter or richer than Trainerize, that is Trainerize's to adapt, and is called
+out as *not* a gap.
+
 ## Headline: the delivery/assignment layer has no FDS home
 
 **Severity: high (a genuine boundary, arguably correct — but undocumented).**
@@ -34,16 +39,22 @@ dated calendar is out of scope by design rather than by omission.
   video-only session is closer to `media` on an otherwise-empty structure than to a prescribed
   session; RFC-007 could say whether a structureless media workout is in scope at all.
 
-## Clean — and a place FDS is richer
+- **"Display-only" exercises.** Trainerize's General (Display Only) exercise type tracks no metric —
+  it is purely instructional. FDS requires `metrics.primary` on every exercise (RFC-001 §4.5), so a
+  metric-less instructional movement has no honest FDS shape without inventing a metric. **Severity:
+  low.** It sits on the edge between a coverage gap and a strictness question; noted because Trainerize
+  genuinely emits such exercises.
+
+## FDS covers these — not gaps (Trainerize's to adapt)
 
 - **Supersets, circuits, intervals** all map exactly onto RFC-007 block modes; `groupLabel` captures
   the superset linking Trainerize does by adjacency.
 - **Tempo.** Trainerize stores tempo as a "3-1-1" string; FDS `tempo` phases (RFC-006 §4.3) carry it
-  structurally, so the import *gains* resolution.
-- **RPE/RIR — FDS is richer, not blocked.** Trainerize has no structured RPE or RIR; coaches type
-  them into notes. FDS `loadTarget.method: rpe`/`rir` (RFC-006 §4.1) can hold them as first-class, so
-  a Trainerize→FDS import can only recover them from free text, but FDS itself has no gap here — the
-  limitation is upstream. This is the mirror image of the TrainHeroic finding.
+  structurally, so the import *gains* resolution — FDS is the superset.
+- **RPE/RIR.** Trainerize has no structured RPE/RIR (coaches type them into notes); FDS
+  `loadTarget.method: rpe`/`rir` (RFC-006 §4.1) holds them first-class. FDS is richer, so there is no
+  coverage gap — the limitation is upstream, and a Trainerize→FDS import simply recovers less than FDS
+  could carry.
 
 ## Confidence caveat
 

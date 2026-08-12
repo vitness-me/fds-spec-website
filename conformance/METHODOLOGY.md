@@ -8,6 +8,12 @@ example); it is **"does FDS survive contact with what this product actually ship
 Follow it in order. Each step has an output that the next step depends on, and the last step is a gate
 that fails if any of the earlier ones was skipped.
 
+**The direction is one-way.** FDS is the standard; the platform conforms to FDS. You are not checking
+whether the platform has what FDS wants — a required field the platform lacks is the platform's to
+enrich on adoption. You are checking the reverse: **can FDS receive everything the platform emits, or
+does the platform produce something in the wild that FDS has no first-class place to hold?** That
+second case is the only kind of finding that counts as an FDS gap.
+
 ## 1. Scope the platform to an archetype
 
 Every platform belongs to an archetype (see `landscape.md`), and the archetype decides what to test,
@@ -50,23 +56,31 @@ robust while the exact serialization is not.
 Register the choice in `corpus.json`. A `transform` row names its config, source and output; a
 `fidelity` row just declares what it `produces` (fixtures are discovered by convention).
 
-## 4. Map honestly — mark what is not the platform's data
+## 4. Map honestly — and watch for what has nowhere to land
 
-Map every field the platform genuinely has. Where FDS **requires** something the platform does not
-carry (wger and FDS's required classification is the archetypal case), you have two honest options:
-supply it as clearly-marked enrichment (the `fds_` prefix convention in the wger source), or, in
-fidelity mode, annotate the fixture. Never quietly invent platform data to make a document validate —
-the whole value of the corpus is that it tells the truth about what did not fit.
+Map every field the platform emits. Two things to watch, in opposite directions:
+
+- **Platform emits X, FDS has no first-class field for X.** This is the finding. If the only place it
+  fits is `attributes`/`extensions`, that *is* the gap — the escape hatch means "not interoperable,"
+  because no consumer is obligated to read it. Record where it landed (the wger content-licence →
+  `attributes` case is the worked example).
+- **FDS requires Y, the platform lacks Y.** Not a gap — the platform's enrichment burden on adoption.
+  Supply it as clearly-marked enrichment (the `fds_` prefix convention in the wger source) or annotate
+  the fixture. Never quietly invent platform data to make a document validate.
 
 ## 5. Score against the RFCs — the gap report is the deliverable
 
-Write `gaps.md` in three buckets:
+Write `gaps.md` in these buckets, all judged in the one-way direction (can FDS receive what the
+platform emits):
 
-1. **Clean** — what mapped without loss (and where FDS is *richer* than the platform, which is not a
-   gap but is worth recording).
-2. **Real gaps** — what FDS could not represent, each pinned to the RFC section that would have to
-   change (`RFC-00N §X.Y`), with a severity and a candidate resolution. This bucket is the payload.
-3. **Out of scope** — what FDS deliberately does not model (performed/personal data, RFC-009), so a
+1. **Real coverage gaps** — a construct the platform emits that FDS cannot hold first-class (or holds
+   only in an escape hatch), each pinned to the RFC section that would have to change (`RFC-00N §X.Y`),
+   with a severity and a candidate resolution. This bucket is the payload.
+2. **FDS covers these — not gaps** — what mapped without loss, including where FDS is *richer* than the
+   platform (that is FDS being a good superset, not a gap).
+3. **Not an FDS gap — the platform's to adapt** — required fields the platform lacks. Record once, so a
+   reader sees it was considered and correctly excluded.
+4. **Out of scope** — what FDS deliberately does not model (performed/personal data, RFC-009), so a
    reader does not mistake a boundary for a bug.
 
 Every `RFC-00N §X.Y` citation must name a section that RFC actually has — the gate checks this, so a

@@ -14,6 +14,15 @@ That gap picture, rolled up in [`gaps/RFC-GAPS.md`](gaps/RFC-GAPS.md), is the po
 think RFC-007 is complete" into "RFC-007 round-trips three archetypes; here is the field that does
 not fit."
 
+## The test direction is one-way
+
+FDS is the standard; **platforms conform to FDS, not the other way round.** So a field FDS *requires*
+that a platform does not carry is the platform's to enrich when it adopts FDS — it is not counted as a
+gap here. The only finding that counts is the reverse: **a construct a real platform produces, in the
+wild, that FDS has no first-class place to hold.** The corpus's job is to prove FDS is a complete-
+enough superset of what the real world emits — and to name every spot where it is not, so the RFCs can
+close it before a real integration hits it.
+
 ## Layout
 
 ```
@@ -52,8 +61,10 @@ one.
 
 ## The result so far
 
-Three archetypes, six validating artifacts. The prescription and workout primitives held — TrainHeroic's
-percentage-of-working-max, per-set loads and training-max slots all expressed natively. The sharpest
-findings are at the edges: wger shows FDS **requires classification a large open library does not
-carry** (RFC-001), and Trainerize shows the **delivery/assignment layer of a coaching business is out
-of scope by design but undocumented** (RFC-008). Read `gaps/RFC-GAPS.md` for the whole picture.
+Three archetypes, six validating artifacts. FDS proved a near-complete superset of what they emit: the
+prescription and workout primitives held — TrainHeroic's percentage-of-working-max, per-set loads and
+training-max slots all expressed natively. The genuine coverage gaps — things a platform emits that
+FDS cannot hold first-class — cluster at the edges: no **exercise-level licence** field for an open
+library's CC-BY-SA content (wger, RFC-001), no home for **non-lifting scheduled days or client
+delivery** (Trainerize, RFC-008), and no **training-max lifecycle state** (TrainHeroic, RFC-008). Read
+`gaps/RFC-GAPS.md` for the whole picture.

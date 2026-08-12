@@ -35,6 +35,9 @@ projection the transformer's registry lookup needs.
 | `targets.secondary` | `muscles_secondary[].name` | wger native | |
 | `equipment.required` | `equipment[].name` | wger native | incl. `none (bodyweight exercise)` → `eq.bodyweight` |
 | `metadata.externalRefs` | `id` | wger native | preserves the integer wger id as an external ref |
+| `canonical.localized` | `Translation` rows | wger native | multilingual names/descriptions — FDS covers this first-class |
+| `attributes.contentLicense` | `license` | wger native | **only fits the escape hatch** — no first-class exercise licence field. See `gaps.md` |
+| `attributes.licenseAuthor` | `license_author` | wger native | same — the attribution CC-BY-SA requires has no first-class home |
 | `metadata.source` | — | constant | `wger.de` |
 | `classification.exerciseType` | `fds_exerciseType` | **importer-enriched** | wger has no equivalent |
 | `classification.movement` | `fds_movement` | **importer-enriched** | wger has no movement-pattern field |
@@ -43,13 +46,12 @@ projection the transformer's registry lookup needs.
 | `classification.level` | `fds_level` | **importer-enriched** | wger has no difficulty field |
 | `metrics.primary` | `fds_metricType` / `fds_metricUnit` | **importer-enriched** | wger measures at log time, not on the exercise |
 
-The `fds_`-prefixed fields are **not wger data**. wger's `Exercise` model carries `category`,
-`muscles`, `muscles_secondary`, `equipment`, `variation_group` and licence fields — and nothing that
-names a movement pattern, mechanics, force vector, difficulty level, or a per-exercise metric. FDS
-requires all of those (`exercise.schema.json` requires `classification` with five sub-fields and
-`metrics.primary`). So a wger importer **must** supply them; they are shown pre-filled here only so
-the transform is runnable end-to-end. That requirement is this platform's headline finding — see
-`gaps.md`.
+The `fds_`-prefixed fields are **not wger data** — they are the enrichment a wger→FDS adapter supplies
+to satisfy FDS's required classification, shown pre-filled so the transform runs end-to-end. Under the
+one-way rule (platforms conform to FDS), that enrichment is wger's burden, not an FDS gap. The
+finding that *does* count is the reverse: the one field wger emits that FDS cannot receive
+first-class — the per-exercise **content licence**, which the mapping can only park in `attributes`.
+That, not the enrichment, is this platform's headline. See `gaps.md`.
 
 ## Licence
 
