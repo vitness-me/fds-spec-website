@@ -4,7 +4,7 @@
     "description": "The footer copyright"
   },
   "link.item.label.Authoring workouts": {
-    "message": "Kreiranje treninga",
+    "message": "Sastavljanje treninga",
     "description": "The label of footer link with label=Authoring workouts linking to docs/use-cases/authoring-workouts"
   },
   "link.item.label.Contributing": {
