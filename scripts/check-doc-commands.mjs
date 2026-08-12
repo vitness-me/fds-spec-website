@@ -122,27 +122,12 @@ const TIMEOUT_MS = 300_000;
  * the same heading, and an allowance that matches nothing is itself an error —
  * which is what makes the list self-expiring. When the owning change lands,
  * this check fails until the entry is deleted.
+ *
+ * Empty. The last entries — three RFCs whose `npx ajv` named no package, and
+ * two pages teaching a global install against a URL ajv-cli cannot fetch —
+ * expired when those documents were fixed.
  */
-const TEMPORARY_ALLOWANCES = [
-  {
-    files: /^(specification\/rfc|website\/docs\/specifications)\/rfc-00[234]-/,
-    rule: 'npx-package',
-    reason:
-      'RFC-002, RFC-003 and RFC-004 carry `npx ajv validate --spec=draft2020 -c ajv-formats`, ' +
-      'which runs only where ajv-cli is already installed. They are the same one-line change ' +
-      'as RFC-001 and RFC-005 and belong to whoever owns those three files. Delete this entry ' +
-      'with that change.',
-  },
-  {
-    files: /^(SCHEMAS\.md|website\/docs\/getting-started\/quick-validation\.md)$/,
-    rule: 'npx-required',
-    reason:
-      'Both document `ajv validate -s <https URL> -d your-exercise.json` against a global ' +
-      'install. Three things are wrong at once — the global install, the placeholder document, ' +
-      'and the URL, which ajv-cli resolves as a file path and cannot fetch — so repairing them ' +
-      'is a rewrite of what those two pages teach, not a flag. Delete this entry with it.',
-  },
-];
+const TEMPORARY_ALLOWANCES = [];
 
 function allowanceFor(rule, files) {
   for (const allowance of TEMPORARY_ALLOWANCES) {

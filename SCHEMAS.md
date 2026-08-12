@@ -134,15 +134,15 @@ All schema `$id` fields match their serving URLs:
 
 ## Validation
 
-Use these URLs directly with JSON Schema validators like Ajv:
+The URLs above serve the same bytes as `specification/schemas/` in this repository — that is what `npm run check:published` holds them to. So validate from a checkout, against the local copy of the schema. The command below needs nothing installed: `npx` fetches the validator (`ajv-cli`) and the formats plugin (`ajv-formats`) it names, and `ajv-cli` reads schemas from disk — it does not fetch URLs, which is why the command takes a path rather than an address.
 
 ```bash
-ajv validate \
-  -s https://spec.vitness.me/schemas/exercises/v1.1.0/exercise.schema.json \
-  -d your-exercise.json \
-  --spec=draft2020 \
-  -c ajv-formats
+npx --package=ajv-cli --package=ajv-formats ajv validate --spec=draft2020 -c ajv-formats \
+  -s specification/schemas/exercises/v1.1.0/exercise.schema.json \
+  -d specification/schemas/exercises/v1.1.0/exercise.example.json
 ```
+
+That validates the example shipped beside the schema. To validate your own document, replace the `-d` path with your file. Working without a checkout, download the schema from its URL above first and pass the downloaded filename to `-s`.
 
 ## File Structure
 

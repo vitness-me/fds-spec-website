@@ -317,7 +317,7 @@ Complete JSON Schema available at:
 Validate with Ajv (Draft 2020-12):
 
 ```
-npx ajv validate --spec=draft2020 -c ajv-formats \
+npx --package=ajv-cli --package=ajv-formats ajv validate --spec=draft2020 -c ajv-formats \
   -s specification/schemas/muscle/v1.0.0/muscle.schema.json \
   -d specification/schemas/muscle/v1.0.0/muscle.example.json
 ```
