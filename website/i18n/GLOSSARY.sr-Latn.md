@@ -10,7 +10,7 @@ polja šema, komande i identifikatori se ne prevode.
 | equipment | oprema | |
 | muscle | mišić | |
 | body atlas | atlas tela | |
-| workout | trening | |
+| workout | trening | i „session“ se svodi na „trening“ — zabeležena odluka, ne propust |
 | program | program | |
 | set | serija | |
 | rep / repetition | ponavljanje | |
@@ -40,7 +40,9 @@ polja šema, komande i identifikatori se ne prevode.
 | superseded | zamenjen | |
 | withdrawn | povučen | |
 | entity | entitet | |
-| mapping | mapiranje | |
+| mapping | mapiranje | pažnja: „preslikavanje“ je standardni srpski izraz za mapping, ali je ovde rezervisan za mirror |
+| mirror | preslikavanje | vidi napomenu uz mapping |
+| exporter / importer | izvozni / uvozni modul | nikada „izvoznik/uvoznik“ (označava osobu ili firmu) |
 | transformer | transformator | „FDS Transformer" kao vlastito ime se ne prevodi |
 | registry | registar | |
 | extension | ekstenzija | |

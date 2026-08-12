@@ -38,7 +38,7 @@
     "message": "Atlas tela"
   },
   "landing.capabilities.bodyAtlas.purpose": {
-    "message": "Anatomske regije i veze koje svakoj ilustraciji omogućavaju da ih nacrta."
+    "message": "Anatomske regije i tačke vezivanja koje bilo kojoj ilustraciji omogućavaju da ih iscrta."
   },
   "landing.capabilities.equipment.name": {
     "message": "Oprema"
@@ -66,7 +66,7 @@
     "message": "Zajednička biblioteka"
   },
   "landing.capabilities.layer2.blurb": {
-    "message": "Kako trenirati, sastavljeno iz biblioteke. Serije, ponavljanja, tempo, opterećenje, odmor i zone slažu se u treninge, a treninzi u višenedeljne planove — po jedna šema za svako, ma kako trening bio strukturiran."
+    "message": "Kako trenirati, sastavljeno iz biblioteke. Serije, ponavljanja, tempo, opterećenje, odmor i zone slažu se u treninge, a treninzi u višenedeljne planove — po jedna šema za svaki od njih, ma kako trening bio strukturiran."
   },
   "landing.capabilities.layer2.tag": {
     "message": "sloj 2"
@@ -114,7 +114,7 @@
     "message": "Postanite rani usvajač →"
   },
   "landing.cta.earlyAdoptersText": {
-    "message": "FDS je nov. Još nema implementacija trećih strana na koje bismo pokazali, i nećemo izmišljati zid logotipa da se pravimo drugačije — referentna biblioteka i transformator su njegovi prvi korisnici. Ako gradite na FDS-u, javite nam: rani usvajači odlučuju na šta će se prvo stabilno izdanje obavezati."
+    "message": "FDS je nov. Još nema implementacija trećih strana na koje bismo pokazali, i nećemo izmišljati zid logotipa da se pretvaramo da je drugačije — referentna biblioteka i transformator su njegovi prvi korisnici. Ako gradite na FDS-u, javite nam: rani usvajači odlučuju na šta će se prvo stabilno izdanje obavezati."
   },
   "landing.cta.githubButton": {
     "message": "GitHub repozitorijum"
@@ -211,7 +211,7 @@
     "message": "Deljen"
   },
   "landing.noPersonalData.subtitle": {
-    "message": "Bez identiteta sportiste, bez telesne mase, bez maksimuma za jedno ponavljanje, bez izvedenih ili zabeleženih rezultata — ničega od toga nema u standardu, niti će ikada biti. Preskripcija kojoj bi trebao lični broj referencira ga umesto da ga nosi. Upravo zbog tog ograničenja FDS dokument može biti:"
+    "message": "Bez identiteta sportiste, bez telesne mase, bez maksimuma za jedno ponavljanje, bez ostvarenih ili zabeleženih rezultata — ničega od toga nema u standardu, niti će ikada biti. Preskripcija kojoj je potreban lični broj referencira ga umesto da ga nosi. Upravo zbog tog ograničenja FDS dokument može biti:"
   },
   "landing.noPersonalData.title": {
     "message": "FDS ne modeluje nijednu osobu"
@@ -221,7 +221,7 @@
     "description": "Small label above the problem section title"
   },
   "landing.problem.fragmentation.description": {
-    "message": "Aplikacije ne mogu da sarađuju. Ista vežba svuda ima različite ID-jeve, nazive i strukture."
+    "message": "Aplikacije nisu interoperabilne. Ista vežba svuda ima različite ID-jeve, nazive i strukture."
   },
   "landing.problem.fragmentation.title": {
     "message": "Fragmentacija ekosistema"
@@ -335,7 +335,7 @@
     "message": "Svaki dokument se validira prema objavljenoj JSON šemi."
   },
   "landing.solution.subtitle": {
-    "message": "Jedan standard zamenjuje integracije od tačke do tačke. Svaka platforma napiše jedan izvoznik i jedan uvoznik prema FDS-u i povezuje se sa svima koji su učinili isto."
+    "message": "Jedan standard zamenjuje integracije od tačke do tačke. Svaka platforma napiše po jedan izvozni i jedan uvozni modul za FDS i povezuje se sa svima koji su učinili isto."
   },
   "landing.solution.title": {
     "message": "Kako FDS radi"
@@ -402,11 +402,11 @@
     "message": "Napravljen da se na njega oslonite"
   },
   "theme.admonition.caution": {
-    "message": "caution",
+    "message": "oprez",
     "description": "The default label used for the Caution admonition (:::caution)"
   },
   "theme.admonition.danger": {
-    "message": "danger",
+    "message": "opasnost",
     "description": "The default label used for the Danger admonition (:::danger)"
   },
   "theme.admonition.info": {
@@ -414,19 +414,19 @@
     "description": "The default label used for the Info admonition (:::info)"
   },
   "theme.admonition.note": {
-    "message": "note",
+    "message": "napomena",
     "description": "The default label used for the Note admonition (:::note)"
   },
   "theme.admonition.tip": {
-    "message": "tip",
+    "message": "savet",
     "description": "The default label used for the Tip admonition (:::tip)"
   },
   "theme.admonition.warning": {
-    "message": "warning",
+    "message": "upozorenje",
     "description": "The default label used for the Warning admonition (:::warning)"
   },
   "theme.AnnouncementBar.closeButtonAriaLabel": {
-    "message": "Zatvori",
+    "message": "Zatvorite",
     "description": "The ARIA label for close button of announcement bar"
   },
   "theme.BackToTopButton.buttonAriaLabel": {
@@ -442,7 +442,7 @@
     "description": "The page & hero title of the blog archive page"
   },
   "theme.blog.author.noPosts": {
-    "message": "This author has not written any posts yet.",
+    "message": "Ovaj autor još nije napisao nijedan post.",
     "description": "The text for authors with 0 blog post"
   },
   "theme.blog.author.pageTitle": {
@@ -450,43 +450,43 @@
     "description": "The title of the page for a blog author"
   },
   "theme.blog.authorsList.pageTitle": {
-    "message": "Authors",
+    "message": "Autori",
     "description": "The title of the authors page"
   },
   "theme.blog.authorsList.viewAll": {
-    "message": "View All Authors",
+    "message": "Pogledajte sve autore",
     "description": "The label of the link targeting the blog authors page"
   },
   "theme.blog.paginator.navAriaLabel": {
-    "message": "Navigacija za stranice bloga",
+    "message": "Navigacija liste blog postova",
     "description": "The ARIA label for the blog pagination"
   },
   "theme.blog.paginator.newerEntries": {
-    "message": "Novi postovi",
+    "message": "Noviji postovi",
     "description": "The label used to navigate to the newer blog posts page (previous page)"
   },
   "theme.blog.paginator.olderEntries": {
-    "message": "Stari postovi",
+    "message": "Stariji postovi",
     "description": "The label used to navigate to the older blog posts page (next page)"
   },
   "theme.blog.post.paginator.navAriaLabel": {
-    "message": "Navigacija za stranice bloga",
+    "message": "Navigacija blog posta",
     "description": "The ARIA label for the blog posts pagination"
   },
   "theme.blog.post.paginator.newerPost": {
-    "message": "Novi post",
+    "message": "Noviji post",
     "description": "The blog post button label to navigate to the newer/previous post"
   },
   "theme.blog.post.paginator.olderPost": {
-    "message": "Stari post",
+    "message": "Stariji post",
     "description": "The blog post button label to navigate to the older/next post"
   },
   "theme.blog.post.plurals": {
-    "message": "Jedan post|{count} postova",
+    "message": "{count} post|{count} posta|{count} postova",
     "description": "Pluralized label for \"{count} posts\". Use as much plural forms (separated by \"|\") as your language support (see https://www.unicode.org/cldr/cldr-aux/charts/34/supplemental/language_plural_rules.html)"
   },
   "theme.blog.post.readingTime.plurals": {
-    "message": "Jednominutno čitanje|{readingTime} minuta čitanja",
+    "message": "{readingTime} minut čitanja|{readingTime} minuta čitanja|{readingTime} minuta čitanja",
     "description": "Pluralized label for \"{readingTime} min read\". Use as much plural forms (separated by \"|\") as your language support (see https://www.unicode.org/cldr/cldr-aux/charts/34/supplemental/language_plural_rules.html)"
   },
   "theme.blog.post.readMore": {
@@ -494,7 +494,7 @@
     "description": "The label used in blog post item excerpts to link to full blog posts"
   },
   "theme.blog.post.readMoreLabel": {
-    "message": "Read more about {title}",
+    "message": "Pročitajte više o {title}",
     "description": "The ARIA label for the link to full blog posts from excerpts"
   },
   "theme.blog.sidebar.navAriaLabel": {
@@ -502,7 +502,7 @@
     "description": "The ARIA label for recent posts in the blog sidebar"
   },
   "theme.blog.tagTitle": {
-    "message": "{nPosts} označeni sa \"{tagName}\"",
+    "message": "{nPosts} sa oznakom „{tagName}“",
     "description": "The title of the page for a blog tag"
   },
   "theme.CodeBlock.copied": {
@@ -514,27 +514,27 @@
     "description": "The copy button label on code blocks"
   },
   "theme.CodeBlock.copyButtonAriaLabel": {
-    "message": "Kopiraj kod u memoriju",
+    "message": "Kopirajte kod",
     "description": "The ARIA label for copy code blocks button"
   },
   "theme.CodeBlock.wordWrapToggle": {
-    "message": "Toggle word wrap",
+    "message": "Uključite ili isključite prelamanje redova",
     "description": "The title attribute for toggle word wrapping button of code block lines"
   },
   "theme.colorToggle.ariaLabel": {
-    "message": "Switch between dark and light mode (currently {mode})",
+    "message": "Prebacite između tamnog i svetlog režima (trenutno {mode})",
     "description": "The ARIA label for the color mode toggle"
   },
   "theme.colorToggle.ariaLabel.mode.dark": {
-    "message": "dark mode",
+    "message": "tamni režim",
     "description": "The name for the dark color mode"
   },
   "theme.colorToggle.ariaLabel.mode.light": {
-    "message": "light mode",
+    "message": "svetli režim",
     "description": "The name for the light color mode"
   },
   "theme.colorToggle.ariaLabel.mode.system": {
-    "message": "system mode",
+    "message": "sistemski režim",
     "description": "The name for the system color mode"
   },
   "theme.common.editThisPage": {
@@ -546,39 +546,39 @@
     "description": "Title for link to heading"
   },
   "theme.common.skipToMainContent": {
-    "message": "Pređi na glavni sadržaj",
+    "message": "Pređite na glavni sadržaj",
     "description": "The skip to content label used for accessibility, allowing to rapidly navigate to main content with keyboard tab/enter navigation"
   },
   "theme.contentVisibility.draftBanner.message": {
-    "message": "This page is a draft. It will only be visible in dev and be excluded from the production build.",
+    "message": "Ova stranica je nacrt. Vidljiva je samo tokom razvoja i neće ući u produkcijsku verziju sajta.",
     "description": "The draft content banner message"
   },
   "theme.contentVisibility.draftBanner.title": {
-    "message": "Draft page",
+    "message": "Nacrt stranice",
     "description": "The draft content banner title"
   },
   "theme.contentVisibility.unlistedBanner.message": {
-    "message": "This page is unlisted. Search engines will not index it, and only users having a direct link can access it.",
+    "message": "Ova stranica nije izlistana. Pretraživači je neće indeksirati, a pristup imaju samo korisnici sa direktnom vezom.",
     "description": "The unlisted content banner message"
   },
   "theme.contentVisibility.unlistedBanner.title": {
-    "message": "Unlisted page",
+    "message": "Neizlistana stranica",
     "description": "The unlisted content banner title"
   },
   "theme.docs.breadcrumbs.home": {
-    "message": "Home page",
+    "message": "Početna stranica",
     "description": "The ARIA label for the home page in the breadcrumbs"
   },
   "theme.docs.breadcrumbs.navAriaLabel": {
-    "message": "Breadcrumbs",
+    "message": "Putanja navigacije",
     "description": "The ARIA label for the breadcrumbs"
   },
   "theme.docs.DocCard.categoryDescription.plurals": {
-    "message": "1 item|{count} items",
+    "message": "{count} stavka|{count} stavke|{count} stavki",
     "description": "The default description for a category card in the generated index about how many items this category includes"
   },
   "theme.docs.paginator.navAriaLabel": {
-    "message": "stranice dokumenata",
+    "message": "Stranice dokumentacije",
     "description": "The ARIA label for the docs pagination"
   },
   "theme.docs.paginator.next": {
@@ -590,43 +590,43 @@
     "description": "The label used to navigate to the previous doc"
   },
   "theme.docs.sidebar.closeSidebarButtonAriaLabel": {
-    "message": "Close navigation bar",
+    "message": "Zatvorite bočnu traku",
     "description": "The ARIA label for close button of mobile sidebar"
   },
   "theme.docs.sidebar.collapseButtonAriaLabel": {
-    "message": "Sakrij bočnu listu",
+    "message": "Sakrijte bočnu traku",
     "description": "The title attribute for collapse button of doc sidebar"
   },
   "theme.docs.sidebar.collapseButtonTitle": {
-    "message": "Sakrij bočnu listu",
+    "message": "Sakrijte bočnu traku",
     "description": "The title attribute for collapse button of doc sidebar"
   },
   "theme.docs.sidebar.expandButtonAriaLabel": {
-    "message": "Proširi bočnu listu",
+    "message": "Proširite bočnu traku",
     "description": "The ARIA label and title attribute for expand button of doc sidebar"
   },
   "theme.docs.sidebar.expandButtonTitle": {
-    "message": "Proširi bočnu listu",
+    "message": "Proširite bočnu traku",
     "description": "The ARIA label and title attribute for expand button of doc sidebar"
   },
   "theme.docs.sidebar.navAriaLabel": {
-    "message": "Docs sidebar",
+    "message": "Bočna traka dokumentacije",
     "description": "The ARIA label for the sidebar navigation"
   },
   "theme.docs.sidebar.toggleSidebarButtonAriaLabel": {
-    "message": "Toggle navigation bar",
+    "message": "Prikažite ili sakrijte bočnu traku",
     "description": "The ARIA label for hamburger menu button of mobile navigation"
   },
   "theme.docs.tagDocListPageTitle": {
-    "message": "{nDocsTagged} označeni sa \"{tagName}\"",
+    "message": "{nDocsTagged} oznakom „{tagName}“",
     "description": "The title of the page for a docs tag"
   },
   "theme.docs.tagDocListPageTitle.nDocsTagged": {
-    "message": "Jedan dokument označen|{count} označenih dokumenata",
+    "message": "{count} dokument označen|{count} dokumenta označena|{count} dokumenata označeno",
     "description": "Pluralized label for \"{count} docs tagged\". Use as much plural forms (separated by \"|\") as your language support (see https://www.unicode.org/cldr/cldr-aux/charts/34/supplemental/language_plural_rules.html)"
   },
   "theme.docs.versionBadge.label": {
-    "message": "Version: {versionLabel}"
+    "message": "Verzija: {versionLabel}"
   },
   "theme.docs.versions.latestVersionLinkLabel": {
     "message": "Najnovija verzija",
@@ -641,31 +641,31 @@
     "description": "The label used to tell the user that he's browsing an unmaintained doc version"
   },
   "theme.docs.versions.unreleasedVersionLabel": {
-    "message": "Ovo je neobjavljena dokumentacija za verziju {siteTitle} {versionLabel}.",
+    "message": "Ovo je neobjavljena dokumentacija za {siteTitle}, verziju {versionLabel}.",
     "description": "The label used to tell the user that he's browsing an unreleased doc version"
   },
   "theme.DocSidebarItem.collapseCategoryAriaLabel": {
-    "message": "Collapse sidebar category '{label}'",
+    "message": "Skupite kategoriju „{label}“",
     "description": "The ARIA label to collapse the sidebar category"
   },
   "theme.DocSidebarItem.expandCategoryAriaLabel": {
-    "message": "Expand sidebar category '{label}'",
+    "message": "Proširite kategoriju „{label}“",
     "description": "The ARIA label to expand the sidebar category"
   },
   "theme.ErrorPageContent.title": {
-    "message": "This page crashed.",
+    "message": "Ova stranica se srušila.",
     "description": "The title of the fallback page when the page crashed"
   },
   "theme.ErrorPageContent.tryAgain": {
-    "message": "Try again",
+    "message": "Pokušajte ponovo",
     "description": "The label of the button to try again rendering when the React error boundary captures an error"
   },
   "theme.IconExternalLink.ariaLabel": {
-    "message": "(opens in new tab)",
+    "message": "(otvara se u novoj kartici)",
     "description": "The ARIA label for the external link icon"
   },
   "theme.lastUpdated.atDate": {
-    "message": " na {date}",
+    "message": " {date}",
     "description": "The words used to describe on which date a page has been last updated"
   },
   "theme.lastUpdated.byUser": {
@@ -677,15 +677,15 @@
     "description": "The sentence used to display when a page has been last updated, and by who"
   },
   "theme.navbar.mobileDropdown.collapseButton.collapseAriaLabel": {
-    "message": "Collapse the dropdown",
+    "message": "Skupite padajući meni",
     "description": "The ARIA label of the button to collapse the mobile dropdown navbar item"
   },
   "theme.navbar.mobileDropdown.collapseButton.expandAriaLabel": {
-    "message": "Expand the dropdown",
+    "message": "Proširite padajući meni",
     "description": "The ARIA label of the button to expand the mobile dropdown navbar item"
   },
   "theme.navbar.mobileLanguageDropdown.label": {
-    "message": "Languages",
+    "message": "Jezici",
     "description": "The label for the mobile language switcher dropdown"
   },
   "theme.navbar.mobileSidebarSecondaryMenu.backButtonLabel": {
@@ -697,15 +697,15 @@
     "description": "The label for the navbar versions dropdown on mobile view"
   },
   "theme.NavBar.navAriaLabel": {
-    "message": "Main",
+    "message": "Glavna navigacija",
     "description": "The ARIA label for the main navigation"
   },
   "theme.NotFound.p1": {
-    "message": "Traženi rezultat ne postoji.",
+    "message": "Nismo pronašli stranicu koju tražite.",
     "description": "The first paragraph of the 404 page"
   },
   "theme.NotFound.p2": {
-    "message": "Molimo vas da kontaktirate vlasnika sajta koji vas je uputio ovde i obavestite ga da je njihova veza netačna.",
+    "message": "Kontaktirajte vlasnika sajta koji vas je ovde uputio i obavestite ga da mu veza ne radi.",
     "description": "The 2nd paragraph of the 404 page"
   },
   "theme.NotFound.title": {
@@ -720,16 +720,16 @@
     "message": "Nema rezultata"
   },
   "theme.SearchBar.searchInContext": {
-    "message": "Prikaži sve rezultate unutar „{context}“"
+    "message": "Prikažite sve rezultate unutar „{context}“"
   },
   "theme.SearchBar.seeAll": {
-    "message": "Prikaži sve rezultate"
+    "message": "Prikažite sve rezultate"
   },
   "theme.SearchBar.seeAllOutsideContext": {
-    "message": "Prikaži sve rezultate van „{context}“"
+    "message": "Prikažite sve rezultate van „{context}“"
   },
   "theme.SearchPage.documentsFound.plurals": {
-    "message": "Pronađen je 1 dokument|Pronađeno dokumenata: {count}",
+    "message": "Pronađen je {count} dokument|Pronađena su {count} dokumenta|Pronađeno je {count} dokumenata",
     "description": "Pluralized label for \"{count} documents found\". Use as much plural forms (separated by \"|\") as your language support (see https://www.unicode.org/cldr/cldr-aux/charts/34/supplemental/language_plural_rules.html)"
   },
   "theme.SearchPage.emptyResultsTitle": {
@@ -752,7 +752,7 @@
     "description": "The label alongside a tag list"
   },
   "theme.tags.tagsPageLink": {
-    "message": "Pogledaj sve oznake",
+    "message": "Pogledajte sve oznake",
     "description": "The label of the link targeting the tag list page"
   },
   "theme.tags.tagsPageTitle": {
@@ -767,7 +767,7 @@
     "message": "dokaz"
   },
   "whyFds.audience": {
-    "message": "Za vlasnike platformi, produkt menadžere i trenere koji odlučuju u kom formatu živi njihov sadržaj treninga. Na ovoj stranici nema šema — {useCasesLink} pokazuju isti argument sa stvarnim fajlovima."
+    "message": "Za vlasnike platformi, menadžere proizvoda i trenere koji odlučuju u kom formatu živi njihov sadržaj treninga. Na ovoj stranici nema šema — {useCasesLink} pokazuju isti argument sa stvarnim fajlovima."
   },
   "whyFds.audience.useCasesLink": {
     "message": "slučajevi upotrebe"
@@ -839,7 +839,7 @@
     "message": "FDS opisuje sadržaj treninga, a ne ljude koji treniraju. Nigde u standardu nema identiteta sportiste, telesne mase ni zabeleženog rezultata. Katalog ili program u FDS-u je dokument ni o kome — može se objaviti, deliti sa partnerima, keširati i preslikavati, a da sa sobom ne vuče obaveze zaštite ličnih podataka."
   },
   "whyFds.noPeople.body2": {
-    "message": "Tamo gde je programu potreban lični broj — recimo procenat nečijeg maksimuma — on ga referencira umesto da ga nosi. Izvedeni rezultati su namerno van okvira dok ne postoji model saglasnosti i privatnosti dostojan njih; {roadmapLink} je izričit po pitanju te granice."
+    "message": "Tamo gde je programu potreban lični broj — recimo procenat nečijeg maksimuma — on ga referencira umesto da ga nosi. Ostvareni rezultati su namerno van okvira dok ne postoji model saglasnosti i privatnosti dostojan njih; {roadmapLink} je izričit po pitanju te granice."
   },
   "whyFds.noPeople.roadmapLink": {
     "message": "plan razvoja"
@@ -875,7 +875,7 @@
     "message": "FDS je nov. Šeme, transformator i paket znanja za veštačku inteligenciju su objavljeni i spremni da se na njima gradi, a referentni alati u ovom repozitorijumu su njihov prvi korisnik. Još nema usvajača sa strane na koje bismo pokazali, i ovaj sajt ih neće izmišljati — ono što vidite kao tvrdnju jeste ono što repozitorijum može da dokaže."
   },
   "whyFds.today.body2": {
-    "message": "Baš taj trenutak je prerušena prilika: šta će prvo stabilno izdanje zaključati još je otvoreno, a {earlyAdoptersLink} su ti koji o tome odlučuju."
+    "message": "Upravo u tom trenutku leži prilika: šta će prvo stabilno izdanje zaključati još je otvoreno, a {earlyAdoptersLink} su ti koji o tome odlučuju."
   },
   "whyFds.today.earlyAdoptersLink": {
     "message": "rani usvajači"

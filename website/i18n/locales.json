@@ -14,5 +14,19 @@
       "label": "Srpski",
       "htmlLang": "sr-Latn"
     }
+  },
+  "strings": {
+    "en": {
+      "releaseDropdownHeading": "Release {release} publishes",
+      "helpTranslateLabel": "Help translate"
+    },
+    "es": {
+      "releaseDropdownHeading": "El lanzamiento {release} publica",
+      "helpTranslateLabel": "Ayude a traducir"
+    },
+    "sr-Latn": {
+      "releaseDropdownHeading": "Izdanje {release} objavljuje",
+      "helpTranslateLabel": "Pomozite u prevođenju"
+    }
   }
 }
