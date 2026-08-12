@@ -185,6 +185,13 @@ jobs:
       - name: Verify every version claim matches the release manifest
         run: npm run check:versions
 
+      # Only the self-test runs here. The gate itself drives a real OIDC exchange
+      # and belongs to the publish workflows; what CI can still hold is that its
+      # rules fail on the recorded runs they claim to catch — including the one
+      # that produced five E404s.
+      - name: Verify the publish-credential rules can fail
+        run: npm run check:publish-auth
+
       - name: Install Ajv CLI
         run: npm install --no-save ajv@8 ajv-cli@5 ajv-formats@3
 
