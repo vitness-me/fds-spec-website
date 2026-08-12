@@ -14,6 +14,11 @@ import '../css/landing.css';
  * and open governance are the same ones the landing's trust section makes,
  * which CI checks against the release manifest; this page cites no number at
  * all, so it has nothing to drift.
+ *
+ * Each chapter carries an evidence aside in the right column: the claim is
+ * prose, but somewhere on this site there is an artifact that backs it, and
+ * the aside points there. The rail is why the page is two columns — a
+ * numbered brief with its margin notes, not prose floating in half a page.
  */
 export default function WhyFds(): ReactNode {
   return (
@@ -71,6 +76,15 @@ export default function WhyFds(): ReactNode {
                   Moving platforms becomes moving files.
                 </p>
               </div>
+              <aside className={styles.chapterAside}>
+                <p className={styles.asideLead}>the evidence</p>
+                <Link className={styles.asideLink} to="/docs/use-cases/exercise-catalog">
+                  Exercise catalog use case →
+                </Link>
+                <p className={styles.asideNote}>
+                  A complete exercise from a published file — the document that moves.
+                </p>
+              </aside>
             </article>
 
             <article className={styles.chapter}>
@@ -95,6 +109,15 @@ export default function WhyFds(): ReactNode {
                   it running on a real vendor export.
                 </p>
               </div>
+              <aside className={styles.chapterAside}>
+                <p className={styles.asideLead}>the evidence</p>
+                <Link className={styles.asideLink} to="/#see-it-work">
+                  See it work on a back squat →
+                </Link>
+                <p className={styles.asideNote}>
+                  A real vendor export, one mapping, and the validating output — all three are files in the repository.
+                </p>
+              </aside>
             </article>
 
             <article className={styles.chapter}>
@@ -119,6 +142,15 @@ export default function WhyFds(): ReactNode {
                   schemas, validated by tools your team already uses.
                 </p>
               </div>
+              <aside className={styles.chapterAside}>
+                <p className={styles.asideLead}>the evidence</p>
+                <Link className={styles.asideLink} to="/docs/schemas/">
+                  Every published schema →
+                </Link>
+                <p className={styles.asideNote}>
+                  Each entity at its own version, every URL frozen. Superseded versions stay served.
+                </p>
+              </aside>
             </article>
 
             <article className={styles.chapter}>
@@ -144,6 +176,15 @@ export default function WhyFds(): ReactNode {
                   explicit about that line.
                 </p>
               </div>
+              <aside className={styles.chapterAside}>
+                <p className={styles.asideLead}>the evidence</p>
+                <Link className={styles.asideLink} to="/docs/use-cases/prescription">
+                  Prescription primitives →
+                </Link>
+                <p className={styles.asideNote}>
+                  How a program references a person&apos;s numbers without ever carrying them.
+                </p>
+              </aside>
             </article>
 
             <article className={styles.chapter}>
@@ -167,6 +208,15 @@ export default function WhyFds(): ReactNode {
                   are the ones deciding it.
                 </p>
               </div>
+              <aside className={styles.chapterAside}>
+                <p className={styles.asideLead}>the evidence</p>
+                <Link className={styles.asideLink} to="/docs/use-cases/">
+                  The scenario coverage matrix →
+                </Link>
+                <p className={styles.asideNote}>
+                  Every training structure the schemas express, each row backed by an example CI validates.
+                </p>
+              </aside>
             </article>
 
             <div className={styles.close}>
