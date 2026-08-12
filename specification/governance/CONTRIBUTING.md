@@ -81,9 +81,10 @@ Do not mark counts in `CHANGELOG.md`. A changelog entry describes a past release
 <!-- fds:covers entities -->
 <!-- fds:covers releases -->
 <!-- fds:covers rfcs -->
+<!-- fds:covers packages -->
 ```
 
-`schemas` covers the whole file: every published schema URL must appear somewhere in it. The other three annotate the table directly below the marker — the entity-and-version table a release publishes, the table keyed on release, and the table with one row per RFC in `specification/rfc/`. Prose in the other columns stays yours; which rows exist does not. Order is not checked, so sort a table however reads best.
+`schemas` covers the whole file: every published schema URL must appear somewhere in it. The other four annotate the table directly below the marker — the entity-and-version table a release publishes, the table keyed on release, the table with one row per RFC in `specification/rfc/`, and the table with one row per publishable package under `packages/`. Prose in the other columns stays yours; which rows exist does not. Order is not checked, so sort a table however reads best.
 
 Adding an entity or cutting a release will fail these until the documents catch up. That is the point: the alternative is a page that quietly stops describing the standard.
 
