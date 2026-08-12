@@ -104,6 +104,78 @@
   "landing.capabilities.workouts.purpose": {
     "message": "One session. Straight sets, supersets, circuits, EMOM, AMRAP and intervals share a single schema."
   },
+  "landing.cta.description": {
+    "message": "The schemas, the transformer and the AI knowledge pack are ready to build against today. What the first stable release locks in is still open."
+  },
+  "landing.cta.docsButton": {
+    "message": "Read the Documentation"
+  },
+  "landing.cta.earlyAdoptersLink": {
+    "message": "Become an early adopter →"
+  },
+  "landing.cta.earlyAdoptersText": {
+    "message": "FDS is new. There are no third-party implementations to point to yet, and we won’t invent a logo wall to pretend otherwise — the reference library and the transformer are its first users. If you build on FDS, tell us: early adopters decide what the first stable release commits to."
+  },
+  "landing.cta.githubButton": {
+    "message": "GitHub Repository"
+  },
+  "landing.cta.roadmap": {
+    "message": "Eight RFCs are published: the exercise catalog and its registries, prescription primitives, workouts and programs. What comes next — and what is deliberately left out — is on the {roadmapLink}."
+  },
+  "landing.cta.roadmapLink": {
+    "message": "roadmap"
+  },
+  "landing.cta.title": {
+    "message": "Help shape the first stable release"
+  },
+  "landing.hero.audience": {
+    "message": "For app developers, platforms, coaches and researchers who need training data to move between systems."
+  },
+  "landing.hero.coverage.bodyAtlas": {
+    "message": "body atlas"
+  },
+  "landing.hero.coverage.equipment": {
+    "message": "equipment"
+  },
+  "landing.hero.coverage.exercises": {
+    "message": "exercises"
+  },
+  "landing.hero.coverage.muscles": {
+    "message": "muscles"
+  },
+  "landing.hero.coverage.programs": {
+    "message": "programs"
+  },
+  "landing.hero.coverage.workouts": {
+    "message": "workouts"
+  },
+  "landing.hero.eyebrow": {
+    "message": "an open standard for fitness data",
+    "description": "Small label above the hero title"
+  },
+  "landing.hero.readSpecButton": {
+    "message": "Read the spec"
+  },
+  "landing.hero.subtitle": {
+    "message": "Every fitness platform describes exercises, equipment and programming differently, so every integration is bespoke and every export a dead end. FDS is a vendor-neutral standard that gives the fitness domain one shared vocabulary — published as JSON Schemas at frozen URLs, with a CLI that maps your existing data into it."
+  },
+  "landing.hero.title": {
+    "message": "A back squat should mean the same thing everywhere."
+  },
+  "landing.hero.useCasesButton": {
+    "message": "Use Cases"
+  },
+  "landing.hero.whyFdsButton": {
+    "message": "Why FDS"
+  },
+  "landing.meta.description": {
+    "message": "An open, vendor-neutral standard for fitness domain data — exercises, equipment, muscles, workouts and programs. One shared vocabulary, published as JSON Schemas at frozen URLs.",
+    "description": "Meta description of the landing page"
+  },
+  "landing.meta.title": {
+    "message": "Fitness Data Standard",
+    "description": "Browser tab title of the landing page"
+  },
   "landing.noPersonalData.cached.detail": {
     "message": "A library sits behind a CDN like any other static asset."
   },
