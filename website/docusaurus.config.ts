@@ -175,6 +175,11 @@ const config: Config = {
       },
       items: [
         {
+          to: '/why-fds',
+          position: 'left',
+          label: 'Why FDS',
+        },
+        {
           type: 'docSidebar',
           sidebarId: 'useCasesSidebar',
           position: 'left',
