@@ -1,0 +1,886 @@
+{
+  "fds.translationNotice": {
+    "message": "Ova stranica je prevod, obezbeđen radi lakšeg čitanja. Ima samo informativni karakter: {englishPageLink} je normativni tekst, a tamo gde se razlikuju, merodavan je tekst na engleskom.",
+    "description": "Notice at the top of every translated documentation page"
+  },
+  "fds.translationNotice.linkLabel": {
+    "message": "engleska verzija"
+  },
+  "landing.beforeAfter.badge.validFds": {
+    "message": "validan fds",
+    "description": "Badge on the output panel of the transformer demo"
+  },
+  "landing.beforeAfter.badge.vendorExport": {
+    "message": "izvoz proizvođača",
+    "description": "Badge on the source panel of the transformer demo"
+  },
+  "landing.beforeAfter.badge.writtenOnce": {
+    "message": "napisano jednom",
+    "description": "Badge on the mapping panel of the transformer demo"
+  },
+  "landing.beforeAfter.docsLink": {
+    "message": "Pročitajte dokumentaciju transformatora →"
+  },
+  "landing.beforeAfter.eyebrow": {
+    "message": "transformator",
+    "description": "Small label above the transformer demo section title"
+  },
+  "landing.beforeAfter.outro": {
+    "message": "Izlazni panel prikazuje prvi od tri dokumenta koje ovaj primer proizvodi, doslovno iz fajla u repozitorijumu. Tamo gde izvorni podaci imaju stvarne praznine — opis, klasifikaciju — CLI ih može popuniti opcionim obogaćivanjem pomoću veštačke inteligencije. {docsLink}"
+  },
+  "landing.beforeAfter.subtitle": {
+    "message": "Izvoz jednog proizvođača, mapiranje koje pišete jednom i dokument koji CLI proizvodi — zadnji čučanj koji svaki FDS čitač može da validira. Sva tri panela su fajlovi koji se isporučuju u ovom repozitorijumu, a CI izvršava upravo ovu transformaciju prema objavljenoj šemi pri svakoj izmeni."
+  },
+  "landing.beforeAfter.title": {
+    "message": "Pogledajte kako radi na zadnjem čučnju"
+  },
+  "landing.capabilities.bodyAtlas.name": {
+    "message": "Atlas tela"
+  },
+  "landing.capabilities.bodyAtlas.purpose": {
+    "message": "Anatomske regije i veze koje svakoj ilustraciji omogućavaju da ih nacrta."
+  },
+  "landing.capabilities.equipment.name": {
+    "message": "Oprema"
+  },
+  "landing.capabilities.equipment.purpose": {
+    "message": "Šta je pokretu potrebno i kako mašina opterećuje — da bi preskripcija ostala ponovljiva."
+  },
+  "landing.capabilities.exercises.name": {
+    "message": "Vežbe"
+  },
+  "landing.capabilities.exercises.purpose": {
+    "message": "Pokret opisan jednom — klasifikacija, ciljani mišići, oprema, metrike."
+  },
+  "landing.capabilities.eyebrow": {
+    "message": "šta fds definiše",
+    "description": "Small label above the capabilities section title"
+  },
+  "landing.capabilities.layer1.blurb": {
+    "message": "Zajednički rečnik za domen fitnesa. Statičan, pogodan za keširanje, preslikavanje i poređenje. Može se usvojiti i samostalno, ako vam treba samo kanonska lista vežbi koju svi sistemi čitaju isto."
+  },
+  "landing.capabilities.layer1.tag": {
+    "message": "sloj 1"
+  },
+  "landing.capabilities.layer1.title": {
+    "message": "Zajednička biblioteka"
+  },
+  "landing.capabilities.layer2.blurb": {
+    "message": "Kako trenirati, sastavljeno iz biblioteke. Serije, ponavljanja, tempo, opterećenje, odmor i zone slažu se u treninge, a treninzi u višenedeljne planove — po jedna šema za svako, ma kako trening bio strukturiran."
+  },
+  "landing.capabilities.layer2.tag": {
+    "message": "sloj 2"
+  },
+  "landing.capabilities.layer2.title": {
+    "message": "Sloj preskripcije"
+  },
+  "landing.capabilities.muscles.name": {
+    "message": "Mišići"
+  },
+  "landing.capabilities.muscles.purpose": {
+    "message": "Imenovana anatomija za koju se prikazivači i taksonomije mogu vezati bez dogovora oko ilustracija."
+  },
+  "landing.capabilities.prescription.name": {
+    "message": "Primitivi preskripcije"
+  },
+  "landing.capabilities.prescription.purpose": {
+    "message": "Opterećenje, ponavljanja, tempo, odmor, RPE/RIR i šeme serija — rečnik intenziteta."
+  },
+  "landing.capabilities.programs.name": {
+    "message": "Programi"
+  },
+  "landing.capabilities.programs.purpose": {
+    "message": "Raspored treninga kroz nedelje — periodizacija i progresija, referencom a ne kopijom."
+  },
+  "landing.capabilities.subtitle": {
+    "message": "FDS definiše zajednički rečnik i, povrh njega, kako se tim rečnikom propisuje trening. Svaki sloj može da se usvoji zasebno."
+  },
+  "landing.capabilities.title": {
+    "message": "Jedan standard, dva sloja"
+  },
+  "landing.capabilities.workouts.name": {
+    "message": "Treninzi"
+  },
+  "landing.capabilities.workouts.purpose": {
+    "message": "Jedan trening. Klasične serije, superserije, kružni trening, EMOM, AMRAP i intervali dele jednu šemu."
+  },
+  "landing.cta.description": {
+    "message": "Šeme, transformator i paket znanja za veštačku inteligenciju spremni su za korišćenje već danas. Šta će prvo stabilno izdanje zaključati — još je otvoreno."
+  },
+  "landing.cta.docsButton": {
+    "message": "Pročitajte dokumentaciju"
+  },
+  "landing.cta.earlyAdoptersLink": {
+    "message": "Postanite rani usvajač →"
+  },
+  "landing.cta.earlyAdoptersText": {
+    "message": "FDS je nov. Još nema implementacija trećih strana na koje bismo pokazali, i nećemo izmišljati zid logotipa da se pravimo drugačije — referentna biblioteka i transformator su njegovi prvi korisnici. Ako gradite na FDS-u, javite nam: rani usvajači odlučuju na šta će se prvo stabilno izdanje obavezati."
+  },
+  "landing.cta.githubButton": {
+    "message": "GitHub repozitorijum"
+  },
+  "landing.cta.roadmap": {
+    "message": "Objavljeno je osam RFC dokumenata: katalog vežbi i njegovi registri, primitivi preskripcije, treninzi i programi. Šta sledi — i šta je namerno izostavljeno — nalazi se u {roadmapLink}."
+  },
+  "landing.cta.roadmapLink": {
+    "message": "planu razvoja"
+  },
+  "landing.cta.title": {
+    "message": "Pomozite da se oblikuje prvo stabilno izdanje"
+  },
+  "landing.hero.audience": {
+    "message": "Za programere aplikacija, platforme, trenere i istraživače kojima podaci o treningu moraju da se kreću između sistema."
+  },
+  "landing.hero.coverage.bodyAtlas": {
+    "message": "atlas tela"
+  },
+  "landing.hero.coverage.equipment": {
+    "message": "oprema"
+  },
+  "landing.hero.coverage.exercises": {
+    "message": "vežbe"
+  },
+  "landing.hero.coverage.muscles": {
+    "message": "mišići"
+  },
+  "landing.hero.coverage.programs": {
+    "message": "programi"
+  },
+  "landing.hero.coverage.workouts": {
+    "message": "treninzi"
+  },
+  "landing.hero.eyebrow": {
+    "message": "otvoren standard za fitnes podatke",
+    "description": "Small label above the hero title"
+  },
+  "landing.hero.readSpecButton": {
+    "message": "Pročitajte specifikaciju"
+  },
+  "landing.hero.subtitle": {
+    "message": "Svaka fitnes platforma opisuje vežbe, opremu i programiranje na svoj način, pa je svaka integracija rađena po meri, a svaki izvoz ćorsokak. FDS je standard nezavisan od proizvođača koji domenu fitnesa daje jedan zajednički rečnik — objavljen kao JSON šeme na zamrznutim URL adresama, uz CLI koji vaše postojeće podatke mapira u njega."
+  },
+  "landing.hero.title": {
+    "message": "Zadnji čučanj bi trebalo da znači isto svuda."
+  },
+  "landing.hero.useCasesButton": {
+    "message": "Slučajevi upotrebe"
+  },
+  "landing.hero.whyFdsButton": {
+    "message": "Zašto FDS"
+  },
+  "landing.meta.description": {
+    "message": "Otvoren standard nezavisan od proizvođača za podatke iz domena fitnesa — vežbe, oprema, mišići, treninzi i programi. Jedan zajednički rečnik, objavljen kao JSON šeme na zamrznutim URL adresama.",
+    "description": "Meta description of the landing page"
+  },
+  "landing.meta.title": {
+    "message": "Fitness Data Standard",
+    "description": "Browser tab title of the landing page"
+  },
+  "landing.noPersonalData.cached.detail": {
+    "message": "Biblioteka stoji iza CDN-a kao i svaki drugi statički resurs."
+  },
+  "landing.noPersonalData.cached.label": {
+    "message": "Keširan"
+  },
+  "landing.noPersonalData.diffed.detail": {
+    "message": "Dve verzije se porede čisto, jer ništa u njima nije osoba."
+  },
+  "landing.noPersonalData.diffed.label": {
+    "message": "Upoređen"
+  },
+  "landing.noPersonalData.eyebrow": {
+    "message": "po dizajnu",
+    "description": "Small label above the no-personal-data section title"
+  },
+  "landing.noPersonalData.footnote": {
+    "message": "Dokument koji ne opisuje nikoga jeste dokument koji možete slobodno objaviti. Šta je ovde namerno isključeno, i zašto, stoji u {roadmapLink}."
+  },
+  "landing.noPersonalData.mirrored.detail": {
+    "message": "Svako može ponovo da objavi katalog, ne nasleđujući nikakvu obavezu."
+  },
+  "landing.noPersonalData.mirrored.label": {
+    "message": "Preslikan"
+  },
+  "landing.noPersonalData.roadmapLink": {
+    "message": "planu razvoja"
+  },
+  "landing.noPersonalData.shared.detail": {
+    "message": "Nikakva saglasnost, DPA ni provera privatnosti ne uslovljava razmenu."
+  },
+  "landing.noPersonalData.shared.label": {
+    "message": "Deljen"
+  },
+  "landing.noPersonalData.subtitle": {
+    "message": "Bez identiteta sportiste, bez telesne mase, bez maksimuma za jedno ponavljanje, bez izvedenih ili zabeleženih rezultata — ničega od toga nema u standardu, niti će ikada biti. Preskripcija kojoj bi trebao lični broj referencira ga umesto da ga nosi. Upravo zbog tog ograničenja FDS dokument može biti:"
+  },
+  "landing.noPersonalData.title": {
+    "message": "FDS ne modeluje nijednu osobu"
+  },
+  "landing.problem.eyebrow": {
+    "message": "problem",
+    "description": "Small label above the problem section title"
+  },
+  "landing.problem.fragmentation.description": {
+    "message": "Aplikacije ne mogu da sarađuju. Ista vežba svuda ima različite ID-jeve, nazive i strukture."
+  },
+  "landing.problem.fragmentation.title": {
+    "message": "Fragmentacija ekosistema"
+  },
+  "landing.problem.lockIn.description": {
+    "message": "Vaša biblioteka vežbi, treninzi i programi žive u privatnom formatu jedne aplikacije. Pređete li drugde, unosite ih ponovo rukom ili ih ostavljate za sobom."
+  },
+  "landing.problem.lockIn.title": {
+    "message": "Zarobljen sadržaj"
+  },
+  "landing.problem.outro": {
+    "message": "Pa šta FDS zapravo definiše? →"
+  },
+  "landing.problem.overhead.description": {
+    "message": "Gradite od nule ili dodajete integracije? U oba slučaja modele vežbi definišete sami. Nema zajedničkog rečnika na kome biste gradili."
+  },
+  "landing.problem.overhead.title": {
+    "message": "Teret za programere"
+  },
+  "landing.problem.subtitle": {
+    "message": "Isti zadnji čučanj, četiri privatna zapisa. Nijedan ne ume da pročita ostale, pa se svaka integracija pravi ručno, a svaki izvoz je ćorsokak."
+  },
+  "landing.problem.title": {
+    "message": "Svaka platforma govori drugim jezikom"
+  },
+  "landing.quickStart.exampleFooter": {
+    "message": "Objavljeni primer za entitet vežbe — zadnji čučanj, doslovno iz specifikacije.",
+    "description": "Caption under the example document panel in the quick start section"
+  },
+  "landing.quickStart.eyebrow": {
+    "message": "brzi početak",
+    "description": "Small label above the quick start section title"
+  },
+  "landing.quickStart.step1.description": {
+    "message": "Preuzmite JSON šemu za validaciju svojih podataka o vežbama."
+  },
+  "landing.quickStart.step1.link": {
+    "message": "Pogledajte šemu vežbe →"
+  },
+  "landing.quickStart.step1.title": {
+    "message": "Nabavite šemu"
+  },
+  "landing.quickStart.step2.description": {
+    "message": "Strukturirajte svoje podatke o vežbama u FDS formatu. Počnite minimalno, proširujte po potrebi."
+  },
+  "landing.quickStart.step2.title": {
+    "message": "Modelujte svoje podatke"
+  },
+  "landing.quickStart.step3.description": {
+    "message": "Koristite bilo koji validator JSON šema (ajv, jsonschema itd.) da obezbedite usklađenost."
+  },
+  "landing.quickStart.step3.link": {
+    "message": "Vodič za validaciju →"
+  },
+  "landing.quickStart.step3.title": {
+    "message": "Validirajte"
+  },
+  "landing.quickStart.step4.description": {
+    "message": "Koristite FDS Transformer CLI da svoje postojeće podatke pretvorite u FDS format, uz opciono obogaćivanje pomoću veštačke inteligencije."
+  },
+  "landing.quickStart.step4.link": {
+    "message": "Dokumentacija transformatora →"
+  },
+  "landing.quickStart.step4.title": {
+    "message": "Transformišite svoje podatke"
+  },
+  "landing.quickStart.subtitle": {
+    "message": "FDS je JSON šema na stabilnim URL adresama. Ako vaš stek može da čita JSON, može da implementira standard — počnite od šeme i validatora koji već koristite."
+  },
+  "landing.quickStart.title": {
+    "message": "SDK nije potreban"
+  },
+  "landing.solution.ext.namespaces.text": {
+    "message": "Dodajte prilagođenim poljima prefiks {prefix} da biste uneli podatke specifične za svoju platformu koji putuju sa standardom."
+  },
+  "landing.solution.ext.namespaces.title": {
+    "message": "Imenski prostori proizvođača"
+  },
+  "landing.solution.ext.outro": {
+    "message": "Pročitajte politiku ekstenzija →"
+  },
+  "landing.solution.ext.promotion.text": {
+    "message": "Ekstenzija koju usvoji više implementatora može kroz RFC proces da bude predložena za osnovnu šemu."
+  },
+  "landing.solution.ext.promotion.title": {
+    "message": "Put ka usvajanju"
+  },
+  "landing.solution.ext.safe.text": {
+    "message": "Druge platforme ignorišu nepoznate imenske prostore. Vaši prilagođeni podaci nikada ne lome tuđe uvoze."
+  },
+  "landing.solution.ext.safe.title": {
+    "message": "Bezbedne ekstenzije"
+  },
+  "landing.solution.ext.subtitle": {
+    "message": "Dodajte prilagođena polja bez narušavanja kompatibilnosti."
+  },
+  "landing.solution.ext.title": {
+    "message": "Ugrađena proširivost"
+  },
+  "landing.solution.eyebrow": {
+    "message": "oblik rešenja",
+    "description": "Small label above the solution section title"
+  },
+  "landing.solution.highlight.anyStack": {
+    "message": "Svaki stek koji čita JSON može da ga implementira."
+  },
+  "landing.solution.highlight.exchangeFormat": {
+    "message": "Bez nametnutih promena arhitekture — FDS je format za razmenu, ne šema vaše baze podataka."
+  },
+  "landing.solution.highlight.validates": {
+    "message": "Svaki dokument se validira prema objavljenoj JSON šemi."
+  },
+  "landing.solution.subtitle": {
+    "message": "Jedan standard zamenjuje integracije od tačke do tačke. Svaka platforma napiše jedan izvoznik i jedan uvoznik prema FDS-u i povezuje se sa svima koji su učinili isto."
+  },
+  "landing.solution.title": {
+    "message": "Kako FDS radi"
+  },
+  "landing.solution.with.example": {
+    "message": "4 platforme, 4 mapiranja u jedan format"
+  },
+  "landing.solution.with.tag": {
+    "message": "sa fds-om"
+  },
+  "landing.solution.without.example": {
+    "message": "4 platforme, 12 integracija po meri"
+  },
+  "landing.solution.without.tag": {
+    "message": "bez standarda"
+  },
+  "landing.trust.eyebrow": {
+    "message": "stabilnost",
+    "description": "Small label above the stability section title"
+  },
+  "landing.trust.frozen.description": {
+    "message": "Svaka objavljena šema je fiksirana sha256 hešom i nikada se ne menja. Nova verzija stiže u novom direktorijumu pored stare, koja se i dalje služi — pa klijent vezan za starije izdanje nastavlja da radi."
+  },
+  "landing.trust.frozen.linkLabel": {
+    "message": "Kako funkcioniše verzionisanje →"
+  },
+  "landing.trust.frozen.title": {
+    "message": "Zamrznute na trajnim URL adresama"
+  },
+  "landing.trust.governance.description": {
+    "message": "Svaki entitet je stigao kroz javni RFC, a izmene su po pravilu aditivne. Standard se razvija javno, tako da nijedan proizvođač ne može krišom da redefiniše format."
+  },
+  "landing.trust.governance.linkLabel": {
+    "message": "Pogledajte kako se upravlja →"
+  },
+  "landing.trust.governance.title": {
+    "message": "Otvoreno, aditivno upravljanje"
+  },
+  "landing.trust.perEntity.description": {
+    "message": "Izdanje imenuje skup verzija entiteta, a ne jedan broj koji svi dele. Entiteti napreduju nezavisno, a manifest izdanja se generiše iz objavljenog stabla — ono što sajt kaže da je objavljeno, to i jeste objavljeno."
+  },
+  "landing.trust.perEntity.linkLabel": {
+    "message": "Pročitajte pregled →"
+  },
+  "landing.trust.perEntity.title": {
+    "message": "Verzionisanje po entitetu"
+  },
+  "landing.trust.stat.entities": {
+    "message": "šema entiteta, svaka zamrznuta na trajnoj URL adresi"
+  },
+  "landing.trust.stat.examples": {
+    "message": "razrađenih primera isporučenih uz šeme"
+  },
+  "landing.trust.stat.rfcs": {
+    "message": "javnih RFC dokumenata iza dizajna"
+  },
+  "landing.trust.stat.scenarios": {
+    "message": "scenarija treninga, svaki sa razrađenim primerom"
+  },
+  "landing.trust.subtitle": {
+    "message": "Format koji integrišete jednom ne bi smeo da vam se pomera pod nogama."
+  },
+  "landing.trust.title": {
+    "message": "Napravljen da se na njega oslonite"
+  },
+  "theme.admonition.caution": {
+    "message": "caution",
+    "description": "The default label used for the Caution admonition (:::caution)"
+  },
+  "theme.admonition.danger": {
+    "message": "danger",
+    "description": "The default label used for the Danger admonition (:::danger)"
+  },
+  "theme.admonition.info": {
+    "message": "info",
+    "description": "The default label used for the Info admonition (:::info)"
+  },
+  "theme.admonition.note": {
+    "message": "note",
+    "description": "The default label used for the Note admonition (:::note)"
+  },
+  "theme.admonition.tip": {
+    "message": "tip",
+    "description": "The default label used for the Tip admonition (:::tip)"
+  },
+  "theme.admonition.warning": {
+    "message": "warning",
+    "description": "The default label used for the Warning admonition (:::warning)"
+  },
+  "theme.AnnouncementBar.closeButtonAriaLabel": {
+    "message": "Zatvori",
+    "description": "The ARIA label for close button of announcement bar"
+  },
+  "theme.BackToTopButton.buttonAriaLabel": {
+    "message": "Idi gore",
+    "description": "The ARIA label for the back to top button"
+  },
+  "theme.blog.archive.description": {
+    "message": "Arhiva",
+    "description": "The page & hero description of the blog archive page"
+  },
+  "theme.blog.archive.title": {
+    "message": "Arhiva",
+    "description": "The page & hero title of the blog archive page"
+  },
+  "theme.blog.author.noPosts": {
+    "message": "This author has not written any posts yet.",
+    "description": "The text for authors with 0 blog post"
+  },
+  "theme.blog.author.pageTitle": {
+    "message": "{authorName} - {nPosts}",
+    "description": "The title of the page for a blog author"
+  },
+  "theme.blog.authorsList.pageTitle": {
+    "message": "Authors",
+    "description": "The title of the authors page"
+  },
+  "theme.blog.authorsList.viewAll": {
+    "message": "View All Authors",
+    "description": "The label of the link targeting the blog authors page"
+  },
+  "theme.blog.paginator.navAriaLabel": {
+    "message": "Navigacija za stranice bloga",
+    "description": "The ARIA label for the blog pagination"
+  },
+  "theme.blog.paginator.newerEntries": {
+    "message": "Novi postovi",
+    "description": "The label used to navigate to the newer blog posts page (previous page)"
+  },
+  "theme.blog.paginator.olderEntries": {
+    "message": "Stari postovi",
+    "description": "The label used to navigate to the older blog posts page (next page)"
+  },
+  "theme.blog.post.paginator.navAriaLabel": {
+    "message": "Navigacija za stranice bloga",
+    "description": "The ARIA label for the blog posts pagination"
+  },
+  "theme.blog.post.paginator.newerPost": {
+    "message": "Novi post",
+    "description": "The blog post button label to navigate to the newer/previous post"
+  },
+  "theme.blog.post.paginator.olderPost": {
+    "message": "Stari post",
+    "description": "The blog post button label to navigate to the older/next post"
+  },
+  "theme.blog.post.plurals": {
+    "message": "Jedan post|{count} postova",
+    "description": "Pluralized label for \"{count} posts\". Use as much plural forms (separated by \"|\") as your language support (see https://www.unicode.org/cldr/cldr-aux/charts/34/supplemental/language_plural_rules.html)"
+  },
+  "theme.blog.post.readingTime.plurals": {
+    "message": "Jednominutno čitanje|{readingTime} minuta čitanja",
+    "description": "Pluralized label for \"{readingTime} min read\". Use as much plural forms (separated by \"|\") as your language support (see https://www.unicode.org/cldr/cldr-aux/charts/34/supplemental/language_plural_rules.html)"
+  },
+  "theme.blog.post.readMore": {
+    "message": "Pročitajte više",
+    "description": "The label used in blog post item excerpts to link to full blog posts"
+  },
+  "theme.blog.post.readMoreLabel": {
+    "message": "Read more about {title}",
+    "description": "The ARIA label for the link to full blog posts from excerpts"
+  },
+  "theme.blog.sidebar.navAriaLabel": {
+    "message": "Nedavni postovi na blogu",
+    "description": "The ARIA label for recent posts in the blog sidebar"
+  },
+  "theme.blog.tagTitle": {
+    "message": "{nPosts} označeni sa \"{tagName}\"",
+    "description": "The title of the page for a blog tag"
+  },
+  "theme.CodeBlock.copied": {
+    "message": "Kopirano",
+    "description": "The copied button label on code blocks"
+  },
+  "theme.CodeBlock.copy": {
+    "message": "Kopiraj",
+    "description": "The copy button label on code blocks"
+  },
+  "theme.CodeBlock.copyButtonAriaLabel": {
+    "message": "Kopiraj kod u memoriju",
+    "description": "The ARIA label for copy code blocks button"
+  },
+  "theme.CodeBlock.wordWrapToggle": {
+    "message": "Toggle word wrap",
+    "description": "The title attribute for toggle word wrapping button of code block lines"
+  },
+  "theme.colorToggle.ariaLabel": {
+    "message": "Switch between dark and light mode (currently {mode})",
+    "description": "The ARIA label for the color mode toggle"
+  },
+  "theme.colorToggle.ariaLabel.mode.dark": {
+    "message": "dark mode",
+    "description": "The name for the dark color mode"
+  },
+  "theme.colorToggle.ariaLabel.mode.light": {
+    "message": "light mode",
+    "description": "The name for the light color mode"
+  },
+  "theme.colorToggle.ariaLabel.mode.system": {
+    "message": "system mode",
+    "description": "The name for the system color mode"
+  },
+  "theme.common.editThisPage": {
+    "message": "Uredi ovu stranicu",
+    "description": "The link label to edit the current page"
+  },
+  "theme.common.headingLinkTitle": {
+    "message": "Veza do {heading}",
+    "description": "Title for link to heading"
+  },
+  "theme.common.skipToMainContent": {
+    "message": "Pređi na glavni sadržaj",
+    "description": "The skip to content label used for accessibility, allowing to rapidly navigate to main content with keyboard tab/enter navigation"
+  },
+  "theme.contentVisibility.draftBanner.message": {
+    "message": "This page is a draft. It will only be visible in dev and be excluded from the production build.",
+    "description": "The draft content banner message"
+  },
+  "theme.contentVisibility.draftBanner.title": {
+    "message": "Draft page",
+    "description": "The draft content banner title"
+  },
+  "theme.contentVisibility.unlistedBanner.message": {
+    "message": "This page is unlisted. Search engines will not index it, and only users having a direct link can access it.",
+    "description": "The unlisted content banner message"
+  },
+  "theme.contentVisibility.unlistedBanner.title": {
+    "message": "Unlisted page",
+    "description": "The unlisted content banner title"
+  },
+  "theme.docs.breadcrumbs.home": {
+    "message": "Home page",
+    "description": "The ARIA label for the home page in the breadcrumbs"
+  },
+  "theme.docs.breadcrumbs.navAriaLabel": {
+    "message": "Breadcrumbs",
+    "description": "The ARIA label for the breadcrumbs"
+  },
+  "theme.docs.DocCard.categoryDescription.plurals": {
+    "message": "1 item|{count} items",
+    "description": "The default description for a category card in the generated index about how many items this category includes"
+  },
+  "theme.docs.paginator.navAriaLabel": {
+    "message": "stranice dokumenata",
+    "description": "The ARIA label for the docs pagination"
+  },
+  "theme.docs.paginator.next": {
+    "message": "Dalje",
+    "description": "The label used to navigate to the next doc"
+  },
+  "theme.docs.paginator.previous": {
+    "message": "Nazad",
+    "description": "The label used to navigate to the previous doc"
+  },
+  "theme.docs.sidebar.closeSidebarButtonAriaLabel": {
+    "message": "Close navigation bar",
+    "description": "The ARIA label for close button of mobile sidebar"
+  },
+  "theme.docs.sidebar.collapseButtonAriaLabel": {
+    "message": "Sakrij bočnu listu",
+    "description": "The title attribute for collapse button of doc sidebar"
+  },
+  "theme.docs.sidebar.collapseButtonTitle": {
+    "message": "Sakrij bočnu listu",
+    "description": "The title attribute for collapse button of doc sidebar"
+  },
+  "theme.docs.sidebar.expandButtonAriaLabel": {
+    "message": "Proširi bočnu listu",
+    "description": "The ARIA label and title attribute for expand button of doc sidebar"
+  },
+  "theme.docs.sidebar.expandButtonTitle": {
+    "message": "Proširi bočnu listu",
+    "description": "The ARIA label and title attribute for expand button of doc sidebar"
+  },
+  "theme.docs.sidebar.navAriaLabel": {
+    "message": "Docs sidebar",
+    "description": "The ARIA label for the sidebar navigation"
+  },
+  "theme.docs.sidebar.toggleSidebarButtonAriaLabel": {
+    "message": "Toggle navigation bar",
+    "description": "The ARIA label for hamburger menu button of mobile navigation"
+  },
+  "theme.docs.tagDocListPageTitle": {
+    "message": "{nDocsTagged} označeni sa \"{tagName}\"",
+    "description": "The title of the page for a docs tag"
+  },
+  "theme.docs.tagDocListPageTitle.nDocsTagged": {
+    "message": "Jedan dokument označen|{count} označenih dokumenata",
+    "description": "Pluralized label for \"{count} docs tagged\". Use as much plural forms (separated by \"|\") as your language support (see https://www.unicode.org/cldr/cldr-aux/charts/34/supplemental/language_plural_rules.html)"
+  },
+  "theme.docs.versionBadge.label": {
+    "message": "Version: {versionLabel}"
+  },
+  "theme.docs.versions.latestVersionLinkLabel": {
+    "message": "Najnovija verzija",
+    "description": "The label used for the latest version suggestion link label"
+  },
+  "theme.docs.versions.latestVersionSuggestionLabel": {
+    "message": "Za najnoviju verziju dokumentacije pogledajte {latestVersionLink} ({versionLabel}).",
+    "description": "The label used to tell the user to check the latest version"
+  },
+  "theme.docs.versions.unmaintainedVersionLabel": {
+    "message": "Ovo je dokumentacija za {siteTitle} {versionLabel}, koja se više ne održava",
+    "description": "The label used to tell the user that he's browsing an unmaintained doc version"
+  },
+  "theme.docs.versions.unreleasedVersionLabel": {
+    "message": "Ovo je neobjavljena dokumentacija za verziju {siteTitle} {versionLabel}.",
+    "description": "The label used to tell the user that he's browsing an unreleased doc version"
+  },
+  "theme.DocSidebarItem.collapseCategoryAriaLabel": {
+    "message": "Collapse sidebar category '{label}'",
+    "description": "The ARIA label to collapse the sidebar category"
+  },
+  "theme.DocSidebarItem.expandCategoryAriaLabel": {
+    "message": "Expand sidebar category '{label}'",
+    "description": "The ARIA label to expand the sidebar category"
+  },
+  "theme.ErrorPageContent.title": {
+    "message": "This page crashed.",
+    "description": "The title of the fallback page when the page crashed"
+  },
+  "theme.ErrorPageContent.tryAgain": {
+    "message": "Try again",
+    "description": "The label of the button to try again rendering when the React error boundary captures an error"
+  },
+  "theme.IconExternalLink.ariaLabel": {
+    "message": "(opens in new tab)",
+    "description": "The ARIA label for the external link icon"
+  },
+  "theme.lastUpdated.atDate": {
+    "message": " na {date}",
+    "description": "The words used to describe on which date a page has been last updated"
+  },
+  "theme.lastUpdated.byUser": {
+    "message": " od {user}",
+    "description": "The words used to describe by who the page has been last updated"
+  },
+  "theme.lastUpdated.lastUpdatedAtBy": {
+    "message": "Poslednja izmena {atDate}{byUser}",
+    "description": "The sentence used to display when a page has been last updated, and by who"
+  },
+  "theme.navbar.mobileDropdown.collapseButton.collapseAriaLabel": {
+    "message": "Collapse the dropdown",
+    "description": "The ARIA label of the button to collapse the mobile dropdown navbar item"
+  },
+  "theme.navbar.mobileDropdown.collapseButton.expandAriaLabel": {
+    "message": "Expand the dropdown",
+    "description": "The ARIA label of the button to expand the mobile dropdown navbar item"
+  },
+  "theme.navbar.mobileLanguageDropdown.label": {
+    "message": "Languages",
+    "description": "The label for the mobile language switcher dropdown"
+  },
+  "theme.navbar.mobileSidebarSecondaryMenu.backButtonLabel": {
+    "message": "← Nazad na glavni meni",
+    "description": "The label of the back button to return to main menu, inside the mobile navbar sidebar secondary menu (notably used to display the docs sidebar)"
+  },
+  "theme.navbar.mobileVersionsDropdown.label": {
+    "message": "Verzije",
+    "description": "The label for the navbar versions dropdown on mobile view"
+  },
+  "theme.NavBar.navAriaLabel": {
+    "message": "Main",
+    "description": "The ARIA label for the main navigation"
+  },
+  "theme.NotFound.p1": {
+    "message": "Traženi rezultat ne postoji.",
+    "description": "The first paragraph of the 404 page"
+  },
+  "theme.NotFound.p2": {
+    "message": "Molimo vas da kontaktirate vlasnika sajta koji vas je uputio ovde i obavestite ga da je njihova veza netačna.",
+    "description": "The 2nd paragraph of the 404 page"
+  },
+  "theme.NotFound.title": {
+    "message": "Stranica nije pronađena",
+    "description": "The title of the 404 page"
+  },
+  "theme.SearchBar.label": {
+    "message": "Pretraga",
+    "description": "The ARIA label and placeholder for search button"
+  },
+  "theme.SearchBar.noResultsText": {
+    "message": "Nema rezultata"
+  },
+  "theme.SearchBar.searchInContext": {
+    "message": "Prikaži sve rezultate unutar „{context}“"
+  },
+  "theme.SearchBar.seeAll": {
+    "message": "Prikaži sve rezultate"
+  },
+  "theme.SearchBar.seeAllOutsideContext": {
+    "message": "Prikaži sve rezultate van „{context}“"
+  },
+  "theme.SearchPage.documentsFound.plurals": {
+    "message": "Pronađen je 1 dokument|Pronađeno dokumenata: {count}",
+    "description": "Pluralized label for \"{count} documents found\". Use as much plural forms (separated by \"|\") as your language support (see https://www.unicode.org/cldr/cldr-aux/charts/34/supplemental/language_plural_rules.html)"
+  },
+  "theme.SearchPage.emptyResultsTitle": {
+    "message": "Pretražite dokumentaciju",
+    "description": "The search page title for empty query"
+  },
+  "theme.SearchPage.existingResultsTitle": {
+    "message": "Rezultati pretrage za „{query}“",
+    "description": "The search page title for non-empty query"
+  },
+  "theme.SearchPage.noResultsText": {
+    "message": "Nijedan dokument nije pronađen",
+    "description": "The paragraph for empty search result"
+  },
+  "theme.SearchPage.searchContext.everywhere": {
+    "message": "Svuda"
+  },
+  "theme.tags.tagsListLabel": {
+    "message": "Oznake:",
+    "description": "The label alongside a tag list"
+  },
+  "theme.tags.tagsPageLink": {
+    "message": "Pogledaj sve oznake",
+    "description": "The label of the link targeting the tag list page"
+  },
+  "theme.tags.tagsPageTitle": {
+    "message": "Oznake",
+    "description": "The title of the tag list page"
+  },
+  "theme.TOCCollapsible.toggleButtonLabel": {
+    "message": "Na ovoj stranici",
+    "description": "The label used by the button on the collapsible TOC component"
+  },
+  "whyFds.aside.lead": {
+    "message": "dokaz"
+  },
+  "whyFds.audience": {
+    "message": "Za vlasnike platformi, produkt menadžere i trenere koji odlučuju u kom formatu živi njihov sadržaj treninga. Na ovoj stranici nema šema — {useCasesLink} pokazuju isti argument sa stvarnim fajlovima."
+  },
+  "whyFds.audience.useCasesLink": {
+    "message": "slučajevi upotrebe"
+  },
+  "whyFds.close.ghostButton": {
+    "message": "Šta možete da uradite s njim"
+  },
+  "whyFds.close.primaryButton": {
+    "message": "Pogledajte kako radi na zadnjem čučnju"
+  },
+  "whyFds.close.text": {
+    "message": "Najkraći put do odluke jeste da ga vidite na delu: stvaran izvoz proizvođača, mapiran jednom, postaje dokument koji svaki FDS čitač validira."
+  },
+  "whyFds.eyebrow": {
+    "message": "zašto FDS",
+    "description": "Small label above the /why-fds page title"
+  },
+  "whyFds.independence.asideLink": {
+    "message": "Sve objavljene šeme →"
+  },
+  "whyFds.independence.asideNote": {
+    "message": "Svaki entitet u svojoj verziji, svaka URL adresa zamrznuta. Zamenjene verzije se i dalje služe."
+  },
+  "whyFds.independence.body1": {
+    "message": "Privatni format se menja kada to zatreba njegovom vlasniku. FDS je napravljen tako da vam se to ne može desiti: svaka objavljena šema je zamrznuta na trajnoj javnoj URL adresi i nikada se ne menja na licu mesta. Nove verzije su aditivne i stižu pored starih, koje se i dalje služe — pa sistem izgrađen prema standardu nastavlja da radi, tempom koji sami izaberete."
+  },
+  "whyFds.independence.body2": {
+    "message": "Sam standard se razvija javno, kroz javne RFC dokumente — nijedna kompanija ne može krišom da redefiniše šta vaši dokumenti znače. A za usvajanje nisu potrebni ni SDK ni vlasnički alati: to je čist JSON sa objavljenim šemama, koji se validira alatima koje vaš tim već koristi."
+  },
+  "whyFds.independence.title": {
+    "message": "Nezavisnost: format koji vam nijedan proizvođač ne može pomeriti"
+  },
+  "whyFds.interoperability.asideLink": {
+    "message": "Pogledajte kako radi na zadnjem čučnju →"
+  },
+  "whyFds.interoperability.asideNote": {
+    "message": "Stvaran izvoz proizvođača, jedno mapiranje i izlaz koji se validira — sva tri su fajlovi u repozitorijumu."
+  },
+  "whyFds.interoperability.body1": {
+    "message": "Svaka integracija dva fitnes sistema danas počinje istim sastankom: šta se računa kao vežba, čija taksonomija mišića pobeđuje, kako se zapisuje superserija. Rezultat je mapiranje po meri koje se lomi kad god se bilo koja strana promeni — pomnoženo svakim novim partnerom."
+  },
+  "whyFds.interoperability.body2": {
+    "message": "Zajednički rečnik to svodi na jedno mapiranje: vaše, u standard, napisano jednom. Dva sistema koja govore FDS uklapaju se iako se nikada nisu srela. {transformerLink} obavlja mapiranje za podatke koje već imate — početna stranica ga prikazuje na stvarnom izvozu jednog proizvođača."
+  },
+  "whyFds.interoperability.title": {
+    "message": "Interoperabilnost: integrišite jednom, ne jednom po partneru"
+  },
+  "whyFds.interoperability.transformerLink": {
+    "message": "Transformator (CLI)"
+  },
+  "whyFds.lede": {
+    "message": "Biblioteke vežbi, katalozi opreme i programi treninga su imovina. Danas se čuvaju u privatnom obliku koji je svaka platforma sama izmislila, što ih tiho pretvara u teret: teško se sele, skupo se povezuju, nestaju kad nestane proizvođač. FDS je otvoren format nezavisan od proizvođača koji ih pretvara u dokumente — prenosive, povezive i čitljive same za sebe."
+  },
+  "whyFds.meta.description": {
+    "message": "Poslovni argument za Fitness Data Standard: sadržaj treninga koji nadživljava aplikaciju u kojoj je nastao, integracije napravljene jednom i format koji vam nijedan proizvođač ne može pomeriti.",
+    "description": "Meta description of the /why-fds page"
+  },
+  "whyFds.meta.title": {
+    "message": "Zašto usvojiti FDS",
+    "description": "Browser tab title of the /why-fds page"
+  },
+  "whyFds.noPeople.asideLink": {
+    "message": "Primitivi preskripcije →"
+  },
+  "whyFds.noPeople.asideNote": {
+    "message": "Kako program referencira nečije brojeve, a da ih nikada ne nosi."
+  },
+  "whyFds.noPeople.body1": {
+    "message": "FDS opisuje sadržaj treninga, a ne ljude koji treniraju. Nigde u standardu nema identiteta sportiste, telesne mase ni zabeleženog rezultata. Katalog ili program u FDS-u je dokument ni o kome — može se objaviti, deliti sa partnerima, keširati i preslikavati, a da sa sobom ne vuče obaveze zaštite ličnih podataka."
+  },
+  "whyFds.noPeople.body2": {
+    "message": "Tamo gde je programu potreban lični broj — recimo procenat nečijeg maksimuma — on ga referencira umesto da ga nosi. Izvedeni rezultati su namerno van okvira dok ne postoji model saglasnosti i privatnosti dostojan njih; {roadmapLink} je izričit po pitanju te granice."
+  },
+  "whyFds.noPeople.roadmapLink": {
+    "message": "plan razvoja"
+  },
+  "whyFds.noPeople.title": {
+    "message": "Ništa o ljudima, namerno"
+  },
+  "whyFds.portability.asideLink": {
+    "message": "Slučaj upotrebe: katalog vežbi →"
+  },
+  "whyFds.portability.asideNote": {
+    "message": "Kompletna vežba iz objavljenog fajla — dokument koji se seli."
+  },
+  "whyFds.portability.body1": {
+    "message": "Većina fitnes platformi će vam na izlasku dati vaše podatke. Ono što vam daju je fajl koji samo one razumeju — svaki naziv vežbe, lista mišića i struktura serija kodirani njihovim privatnim rečnikom. U praksi, migracija znači ručno ponovno građenje sadržaja na drugoj strani."
+  },
+  "whyFds.portability.body2": {
+    "message": "U FDS-u, katalog ili program je dokument u objavljenom formatu. Svaki sistem koji čita standard čita i njega, sa netaknutim značenjem — zadnji čučanj stiže kao zadnji čučanj, sa mišićima koje cilja i načinom na koji se meri. Promena platforme postaje premeštanje fajlova."
+  },
+  "whyFds.portability.title": {
+    "message": "Prenosivost: izvoz koji nešto znači"
+  },
+  "whyFds.title": {
+    "message": "Sadržaj treninga bi trebalo da nadživi softver u kome je nastao."
+  },
+  "whyFds.today.asideLink": {
+    "message": "Matrica pokrivenosti scenarija →"
+  },
+  "whyFds.today.asideNote": {
+    "message": "Svaka struktura treninga koju šeme izražavaju, svaki red potkrepljen primerom koji CI validira."
+  },
+  "whyFds.today.body1": {
+    "message": "FDS je nov. Šeme, transformator i paket znanja za veštačku inteligenciju su objavljeni i spremni da se na njima gradi, a referentni alati u ovom repozitorijumu su njihov prvi korisnik. Još nema usvajača sa strane na koje bismo pokazali, i ovaj sajt ih neće izmišljati — ono što vidite kao tvrdnju jeste ono što repozitorijum može da dokaže."
+  },
+  "whyFds.today.body2": {
+    "message": "Baš taj trenutak je prerušena prilika: šta će prvo stabilno izdanje zaključati još je otvoreno, a {earlyAdoptersLink} su ti koji o tome odlučuju."
+  },
+  "whyFds.today.earlyAdoptersLink": {
+    "message": "rani usvajači"
+  },
+  "whyFds.today.title": {
+    "message": "Gde je danas"
+  }
+}

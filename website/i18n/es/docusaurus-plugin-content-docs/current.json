@@ -1,0 +1,46 @@
+{
+  "sidebar.mainSidebar.category.Core Concepts": {
+    "message": "Conceptos clave",
+    "description": "The label for category 'Core Concepts' in sidebar 'mainSidebar'"
+  },
+  "sidebar.mainSidebar.category.FDS Transformer": {
+    "message": "FDS Transformer",
+    "description": "The label for category 'FDS Transformer' in sidebar 'mainSidebar'"
+  },
+  "sidebar.mainSidebar.category.Getting Started": {
+    "message": "Primeros pasos",
+    "description": "The label for category 'Getting Started' in sidebar 'mainSidebar'"
+  },
+  "sidebar.mainSidebar.category.Governance": {
+    "message": "Gobernanza",
+    "description": "The label for category 'Governance' in sidebar 'mainSidebar'"
+  },
+  "sidebar.mainSidebar.category.JSON Schemas": {
+    "message": "JSON Schemas",
+    "description": "The label for category 'JSON Schemas' in sidebar 'mainSidebar'"
+  },
+  "sidebar.mainSidebar.category.Specifications (RFCs)": {
+    "message": "Especificaciones (RFC)",
+    "description": "The label for category 'Specifications (RFCs)' in sidebar 'mainSidebar'"
+  },
+  "sidebar.mainSidebar.category.Tools": {
+    "message": "Herramientas",
+    "description": "The label for category 'Tools' in sidebar 'mainSidebar'"
+  },
+  "sidebar.useCasesSidebar.category.Composition — sessions and plans": {
+    "message": "Composición — sesiones y planes",
+    "description": "The label for category 'Composition — sessions and plans' in sidebar 'useCasesSidebar'"
+  },
+  "sidebar.useCasesSidebar.category.Foundations — the shared library": {
+    "message": "Fundamentos — la biblioteca compartida",
+    "description": "The label for category 'Foundations — the shared library' in sidebar 'useCasesSidebar'"
+  },
+  "sidebar.useCasesSidebar.category.Prescription — the intent primitives": {
+    "message": "Prescripción — los primitivos de intención",
+    "description": "The label for category 'Prescription — the intent primitives' in sidebar 'useCasesSidebar'"
+  },
+  "version.label": {
+    "message": "1.4.0",
+    "description": "The label for version current"
+  }
+}
