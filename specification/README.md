@@ -20,7 +20,9 @@ Out of scope (current):
 
 ## Versioning & Compatibility
 
-**Entities version independently, and a release names a set of entity versions.** Release 1.3.0 serves exercise and equipment at 1.1.0 and everything else at 1.0.0. There is no `muscle/v1.3.0/`, and there will not be unless muscle itself changes — a client that expands a release name into a path segment requests URLs that were never published. Build schema URLs from the entity version.
+**Entities version independently, and a release names a set of entity versions.** Take release 1.3.0: it names exercise and equipment at 1.1.0 and everything else at 1.0.0. There is no `muscle/v1.3.0/`, and there will not be unless muscle itself changes — a client that expands a release name into a path segment requests URLs that were never published. Build schema URLs from the entity version.
+
+The example is a past release on purpose. What 1.3.0 names is frozen, so it cannot go stale — but it is not a statement about what is current either, and reading it as one is how a client ends up requesting the version an entity has since moved off. Which set each release names, including the current one, is in `releases.json`.
 
 Gaining an entity is a new release even when nothing existing changed, because a release names the *set* it publishes: 1.2.0 added workout, 1.3.0 added program.
 
@@ -151,15 +153,7 @@ Notes:
 - The schemas intentionally restrict additional properties at the top level while allowing open extension areas under `attributes` and `extensions`.
 
 ## Repository Layout
-- `specification/rfc/`
-  - RFC‑001 Exercise Data Model
-  - RFC‑002 Equipment Data Model
-  - RFC‑003 Muscle Data Model
-  - RFC‑004 Muscle Category Data Model
-  - RFC‑005 Body Atlas Data Model
-  - RFC‑006 Prescription Primitives
-  - RFC‑007 Workout Data Model
-  - RFC‑008 Training Program Data Model
+- `specification/rfc/` — one file per RFC. Which RFCs exist is listed once, under **In scope** above, and in the gated table in the repository's root `README.md`; a second copy here would be one more list to keep by hand.
 - `specification/schema-sources/` — **authoring**. Entity schemas `$ref` a shared `common` envelope here; hand‑edit these.
 - `specification/schemas/` — **generated and published**. Each file is flattened to be self‑contained, so validating one entity never requires fetching another. Never hand‑edit a `*.schema.json`; the examples and READMEs beside them are hand‑written.
   - `exercises/v1.1.0/`, `equipment/v1.1.0/` schema + examples
