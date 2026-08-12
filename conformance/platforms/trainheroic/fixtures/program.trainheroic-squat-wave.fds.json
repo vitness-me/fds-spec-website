@@ -1,0 +1,78 @@
+{
+  "schemaVersion": "1.0.0",
+  "programId": "7c0de100-0002-4a2b-9c6f-000000000002",
+  "canonical": {
+    "name": "4-Week Squat Wave",
+    "slug": "4-week-squat-wave"
+  },
+  "classification": {
+    "periodization": "wave",
+    "goal": "strength",
+    "level": "advanced",
+    "durationWeeks": 4
+  },
+  "authorship": {
+    "author": "Coach Example",
+    "organization": "Example Barbell Club",
+    "license": "LicenseRef-Proprietary",
+    "attribution": "Sold on the TrainHeroic Marketplace."
+  },
+  "references": {
+    "trainingMaxes": [
+      {
+        "id": "tm.backSquat",
+        "exercise": { "id": "ex.backSquat", "name": "Back Squat" },
+        "method": "estimatedOneRepMax",
+        "notes": "TrainHeroic 'working max': estimated from a submaximal set via the NSCA load chart, then locked once tested. FDS records the derivation method as a slot and never the value — RFC-008 §8.1. TrainHeroic's tested/locked-vs-auto-update state has no FDS field; see gaps.md."
+      }
+    ]
+  },
+  "schedule": {
+    "model": "calendar",
+    "cycles": [
+      {
+        "id": "wave1",
+        "name": "Squat Wave",
+        "type": "meso",
+        "order": 1,
+        "durationWeeks": 4,
+        "intent": "intensification",
+        "notes": "TrainHeroic expresses waves as week ordering plus a rising Weight % each week, all resolving against the back-squat working max. Weeks 1-3 climb; week 4 deloads.",
+        "weeks": [
+          {
+            "index": 1,
+            "days": [
+              { "id": "w1d1", "index": 1, "dayOfWeek": "monday", "workout": { "id": "wo.squatWave", "name": "Session A — Lower (Percentage Wave)" } }
+            ]
+          },
+          {
+            "index": 2,
+            "days": [
+              { "id": "w2d1", "index": 1, "dayOfWeek": "monday", "workout": { "id": "wo.squatWave", "name": "Session A — Lower (Percentage Wave)" }, "overrides": { "loadScaling": 1.05 } }
+            ]
+          },
+          {
+            "index": 3,
+            "days": [
+              { "id": "w3d1", "index": 1, "dayOfWeek": "monday", "workout": { "id": "wo.squatWave", "name": "Session A — Lower (Percentage Wave)" }, "overrides": { "loadScaling": 1.1 } }
+            ]
+          },
+          {
+            "index": 4,
+            "name": "Deload",
+            "deload": true,
+            "days": [
+              { "id": "w4d1", "index": 1, "dayOfWeek": "monday", "workout": { "id": "wo.squatWave", "name": "Session A — Lower (Percentage Wave)" }, "overrides": { "loadScaling": 0.6, "volumeScaling": 0.6 } }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "metadata": {
+    "createdAt": "2026-08-12T00:00:00Z",
+    "updatedAt": "2026-08-12T00:00:00Z",
+    "status": "active",
+    "source": "conformance.trainheroic"
+  }
+}

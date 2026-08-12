@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "1.1.0",
+  "workoutId": "b0a1e2d3-0002-4a2b-9c6f-000000000002",
+  "canonical": {
+    "name": "Core Finisher — Interval",
+    "slug": "core-finisher-interval"
+  },
+  "classification": {
+    "workoutType": "conditioning"
+  },
+  "structure": {
+    "blocks": [
+      {
+        "id": "b1",
+        "name": "Interval circuit",
+        "mode": "interval",
+        "role": "conditioning",
+        "notes": "Trainerize 'Interval' workout: a continuous timed sequence with a countdown per exercise and a short rest between. Voice cues in-app; total reps logged after each interval.",
+        "modeParams": { "rounds": 3, "work": { "value": 40, "unit": "s" }, "rest": { "value": 20, "unit": "s" } },
+        "rest": { "method": "fixed", "appliesTo": "round", "value": 60, "unit": "s" },
+        "items": [
+          {
+            "id": "i1",
+            "exercise": { "id": "ex.mountainClimber", "name": "Mountain Climber" },
+            "reps": { "kind": "time", "value": 40, "unit": "s" }
+          },
+          {
+            "id": "i2",
+            "exercise": { "id": "ex.plankShoulderTap", "name": "Plank Shoulder Tap" },
+            "reps": { "kind": "time", "value": 40, "unit": "s" }
+          },
+          {
+            "id": "i3",
+            "exercise": { "id": "ex.russianTwist", "name": "Russian Twist" },
+            "reps": { "kind": "time", "value": 40, "unit": "s" }
+          }
+        ]
+      }
+    ]
+  },
+  "metadata": {
+    "createdAt": "2026-08-12T00:00:00Z",
+    "updatedAt": "2026-08-12T00:00:00Z",
+    "status": "active",
+    "source": "conformance.trainerize"
+  }
+}

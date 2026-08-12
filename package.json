@@ -13,6 +13,7 @@
     "check:commands": "node scripts/check-doc-commands.mjs --self-test && node scripts/check-doc-commands.mjs",
     "check:mapping": "node scripts/check-mapping-schema.mjs --self-test",
     "check:transform": "node scripts/check-transform.mjs --self-test",
+    "check:conformance": "node scripts/check-conformance.mjs --self-test",
     "check:prescription": "node scripts/check-prescription.mjs",
     "check:rfc": "node scripts/check-rfc-fields.mjs",
     "check:mirrors": "node scripts/check-doc-mirrors.mjs",

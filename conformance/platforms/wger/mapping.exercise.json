@@ -1,0 +1,73 @@
+{
+  "$schema": "https://spec.vitness.me/schemas/transformer/v1.1.0/mapping.schema.json",
+  "version": "1.0.0",
+  "description": "wger exerciseinfo -> FDS exercise. Fields prefixed fds_ in the source are NOT wger data — wger carries no movement pattern, mechanics, force, level or per-exercise metric. They are the enrichment a wger importer must supply to satisfy FDS's required classification, and are the subject of this platform's gaps.md. Everything else maps from a real wger field.",
+
+  "targetSchema": {
+    "version": "1.4.0",
+    "entity": "exercise"
+  },
+
+  "registries": {
+    "muscles": {
+      "source": "local",
+      "local": "./registries/muscles.registry.json"
+    },
+    "equipment": {
+      "source": "local",
+      "local": "./registries/equipment.registry.json"
+    }
+  },
+
+  "mappings": {
+    "exerciseId": { "from": "uuid" },
+    "schemaVersion": { "from": null, "default": "1.1.0" },
+
+    "canonical.name": { "from": "name" },
+    "canonical.slug": { "from": "name", "transform": "slugify" },
+
+    "classification.exerciseType": { "from": "fds_exerciseType" },
+    "classification.movement": { "from": "fds_movement" },
+    "classification.mechanics": { "from": "fds_mechanics" },
+    "classification.force": { "from": "fds_force" },
+    "classification.level": { "from": "fds_level" },
+
+    "targets.primary": {
+      "from": "muscles",
+      "transform": "registryLookup",
+      "options": { "registry": "muscles", "matchField": "name", "toArray": true }
+    },
+    "targets.secondary": {
+      "from": "muscles_secondary",
+      "transform": "registryLookup",
+      "options": { "registry": "muscles", "matchField": "name", "toArray": true }
+    },
+
+    "equipment.required": {
+      "from": "equipment",
+      "transform": "registryLookup",
+      "options": { "registry": "equipment", "matchField": "name", "toArray": true }
+    },
+
+    "metrics.primary.type": { "from": "fds_metricType" },
+    "metrics.primary.unit": { "from": "fds_metricUnit" },
+
+    "metadata.status": { "from": null, "default": "active" },
+    "metadata.createdAt": { "from": null, "transform": "timestamp" },
+    "metadata.updatedAt": { "from": null, "transform": "timestamp" },
+    "metadata.source": { "from": null, "default": "wger.de" },
+    "metadata.externalRefs": {
+      "from": "id",
+      "transform": "template",
+      "options": { "template": [{ "system": "wger", "id": "{{value}}" }] }
+    }
+  },
+
+  "validation": { "enabled": true, "strict": true },
+
+  "output": {
+    "singleFile": true,
+    "singleFileName": "exercises.json",
+    "pretty": true
+  }
+}

@@ -88,6 +88,7 @@ if run_job schemas; then
   fi
 
   try "the transformer produces valid FDS" npm run check:transform
+  try "the conformance corpus validates and cites real RFCs" npm run check:conformance
   try "prescription fixtures match their definitions" npm run check:prescription
   try "RFCs and schemas agree" npm run check:rfc
 

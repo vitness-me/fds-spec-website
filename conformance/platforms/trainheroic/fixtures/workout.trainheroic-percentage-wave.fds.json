@@ -1,0 +1,70 @@
+{
+  "schemaVersion": "1.1.0",
+  "workoutId": "7c0de100-0001-4a2b-9c6f-000000000001",
+  "canonical": {
+    "name": "Session A — Lower (Percentage Wave)",
+    "slug": "session-a-lower-percentage-wave"
+  },
+  "classification": {
+    "workoutType": "strength"
+  },
+  "structure": {
+    "blocks": [
+      {
+        "id": "b1",
+        "name": "A. Back Squat",
+        "mode": "sequential",
+        "role": "primary",
+        "notes": "TrainHeroic param_1_type=reps, param_2_type=weight_pct. The per-set weight array [70,75,80,85] becomes four explicit sets, each a percent1RM load resolved against the athlete's working max for the back squat.",
+        "items": [
+          {
+            "id": "i1",
+            "exercise": { "id": "ex.backSquat", "name": "Back Squat" },
+            "sets": [
+              { "index": 1, "type": "working", "reps": { "kind": "fixed", "value": 5 }, "load": { "method": "percent1RM", "value": 70, "referenceExerciseId": "ex.backSquat" } },
+              { "index": 2, "type": "working", "reps": { "kind": "fixed", "value": 5 }, "load": { "method": "percent1RM", "value": 75, "referenceExerciseId": "ex.backSquat" } },
+              { "index": 3, "type": "working", "reps": { "kind": "fixed", "value": 5 }, "load": { "method": "percent1RM", "value": 80, "referenceExerciseId": "ex.backSquat" } },
+              { "index": 4, "type": "working", "reps": { "kind": "fixed", "value": 5 }, "load": { "method": "percent1RM", "value": 85, "referenceExerciseId": "ex.backSquat" } }
+            ],
+            "rest": { "method": "fixed", "appliesTo": "set", "value": 3, "unit": "min" },
+            "notes": "TrainHeroic carries rest only in block/superset Instructions text; FDS states it structurally here."
+          }
+        ]
+      },
+      {
+        "id": "b2",
+        "name": "B. Superset — RDL + Chin-up",
+        "mode": "superset",
+        "role": "accessory",
+        "notes": "TrainHeroic superset = two linked Exercise Blocks. RPE lives in a first-class rpe field but is conventionally prescribed in Exercise Notes; FDS carries it as an rpe load target.",
+        "rest": { "method": "fixed", "appliesTo": "group", "value": 90, "unit": "s" },
+        "items": [
+          {
+            "id": "i2",
+            "groupLabel": "A1",
+            "exercise": { "id": "ex.romanianDeadlift", "name": "Romanian Deadlift" },
+            "scheme": { "pattern": "straight", "sets": 3 },
+            "reps": { "kind": "fixed", "value": 8 },
+            "load": { "method": "rpe", "value": 8 },
+            "tempo": { "eccentric": 3, "bottomPause": 0, "concentric": 1 },
+            "notes": "TrainHeroic encodes tempo in the exercise name ('Tempo RDL') or notes; FDS carries it as a tempo primitive."
+          },
+          {
+            "id": "i3",
+            "groupLabel": "A2",
+            "exercise": { "id": "ex.chinUp", "name": "Chin-up" },
+            "scheme": { "pattern": "straight", "sets": 3 },
+            "reps": { "kind": "amrap", "min": 8 },
+            "load": { "method": "bodyweight" }
+          }
+        ]
+      }
+    ]
+  },
+  "metadata": {
+    "createdAt": "2026-08-12T00:00:00Z",
+    "updatedAt": "2026-08-12T00:00:00Z",
+    "status": "active",
+    "source": "conformance.trainheroic"
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "schemaVersion": "1.1.0",
+  "workoutId": "b0a1e2d3-0001-4a2b-9c6f-000000000001",
+  "canonical": {
+    "name": "Upper Body A",
+    "slug": "upper-body-a"
+  },
+  "classification": {
+    "workoutType": "strength"
+  },
+  "structure": {
+    "blocks": [
+      {
+        "id": "b1",
+        "name": "A. Bench Press",
+        "mode": "sequential",
+        "role": "primary",
+        "notes": "Trainerize 'Regular' workout, single-exercise block. Rest 90-120s between compound lifts.",
+        "items": [
+          {
+            "id": "i1",
+            "exercise": { "id": "ex.barbellBenchPress", "name": "Barbell Bench Press" },
+            "scheme": { "pattern": "straight", "sets": 4 },
+            "reps": { "kind": "range", "min": 6, "max": 8 },
+            "load": { "method": "absolute", "value": 60, "unit": "kg" },
+            "tempo": { "eccentric": 3, "bottomPause": 1, "concentric": 1 },
+            "rest": { "method": "fixed", "appliesTo": "set", "value": 120, "unit": "s" }
+          }
+        ]
+      },
+      {
+        "id": "b2",
+        "name": "B. Superset — Row + Face Pull",
+        "mode": "superset",
+        "role": "accessory",
+        "notes": "Trainerize superset: two exercises linked, one shared set count, one inline rest after the group.",
+        "rest": { "method": "fixed", "appliesTo": "group", "value": 75, "unit": "s" },
+        "items": [
+          {
+            "id": "i2",
+            "groupLabel": "A1",
+            "exercise": { "id": "ex.dumbbellRow", "name": "Dumbbell Row" },
+            "scheme": { "pattern": "straight", "sets": 3 },
+            "reps": { "kind": "fixed", "value": 10 },
+            "load": { "method": "absolute", "value": 24, "unit": "kg" }
+          },
+          {
+            "id": "i3",
+            "groupLabel": "A2",
+            "exercise": { "id": "ex.facePull", "name": "Face Pull" },
+            "scheme": { "pattern": "straight", "sets": 3 },
+            "reps": { "kind": "fixed", "value": 15 },
+            "load": { "method": "bandResistance", "colour": "red" }
+          }
+        ]
+      }
+    ]
+  },
+  "metadata": {
+    "createdAt": "2026-08-12T00:00:00Z",
+    "updatedAt": "2026-08-12T00:00:00Z",
+    "status": "active",
+    "source": "conformance.trainerize"
+  }
+}

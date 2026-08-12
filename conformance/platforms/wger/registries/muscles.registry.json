@@ -1,0 +1,58 @@
+[
+  {
+    "schemaVersion": "1.0.0",
+    "id": "mus.rectusAbdominis",
+    "canonical": { "name": "Rectus abdominis", "slug": "rectus-abdominis", "aliases": ["Abs"] },
+    "classification": { "categoryId": "cat.core", "region": "core", "laterality": "bilateral" },
+    "metadata": { "createdAt": "2025-01-01T00:00:00Z", "updatedAt": "2025-09-03T00:00:00Z", "status": "active" }
+  },
+  {
+    "schemaVersion": "1.0.0",
+    "id": "mus.pectoralisMajor",
+    "canonical": { "name": "Pectoralis major", "slug": "pectoralis-major", "aliases": ["Chest"] },
+    "classification": { "categoryId": "cat.chest", "region": "upper-front", "laterality": "bilateral" },
+    "metadata": { "createdAt": "2025-01-01T00:00:00Z", "updatedAt": "2025-09-03T00:00:00Z", "status": "active" }
+  },
+  {
+    "schemaVersion": "1.0.0",
+    "id": "mus.tricepsBrachii",
+    "canonical": { "name": "Triceps brachii", "slug": "triceps-brachii", "aliases": ["Triceps"] },
+    "classification": { "categoryId": "cat.arms", "region": "upper-arm", "laterality": "bilateral" },
+    "metadata": { "createdAt": "2025-01-01T00:00:00Z", "updatedAt": "2025-09-03T00:00:00Z", "status": "active" }
+  },
+  {
+    "schemaVersion": "1.0.0",
+    "id": "mus.anteriorDeltoid",
+    "canonical": { "name": "Anterior deltoid", "slug": "anterior-deltoid", "aliases": ["Front delts"] },
+    "classification": { "categoryId": "cat.shoulders", "region": "shoulder", "laterality": "bilateral" },
+    "metadata": { "createdAt": "2025-01-01T00:00:00Z", "updatedAt": "2025-09-03T00:00:00Z", "status": "active" }
+  },
+  {
+    "schemaVersion": "1.0.0",
+    "id": "mus.quadriceps",
+    "canonical": { "name": "Quadriceps femoris", "slug": "quadriceps-femoris", "aliases": ["Quadriceps", "Quads"] },
+    "classification": { "categoryId": "cat.legs", "region": "lower-front", "laterality": "bilateral" },
+    "metadata": { "createdAt": "2025-01-01T00:00:00Z", "updatedAt": "2025-09-03T00:00:00Z", "status": "active" }
+  },
+  {
+    "schemaVersion": "1.0.0",
+    "id": "mus.gluteusMaximus",
+    "canonical": { "name": "Gluteus maximus", "slug": "gluteus-maximus", "aliases": ["Glutes"] },
+    "classification": { "categoryId": "cat.legs", "region": "hip", "laterality": "bilateral" },
+    "metadata": { "createdAt": "2025-01-01T00:00:00Z", "updatedAt": "2025-09-03T00:00:00Z", "status": "active" }
+  },
+  {
+    "schemaVersion": "1.0.0",
+    "id": "mus.bicepsBrachii",
+    "canonical": { "name": "Biceps brachii", "slug": "biceps-brachii", "aliases": ["Biceps"] },
+    "classification": { "categoryId": "cat.arms", "region": "upper-arm", "laterality": "bilateral" },
+    "metadata": { "createdAt": "2025-01-01T00:00:00Z", "updatedAt": "2025-09-03T00:00:00Z", "status": "active" }
+  },
+  {
+    "schemaVersion": "1.0.0",
+    "id": "mus.latissimusDorsi",
+    "canonical": { "name": "Latissimus dorsi", "slug": "latissimus-dorsi", "aliases": ["Lats"] },
+    "classification": { "categoryId": "cat.back", "region": "upper-back", "laterality": "bilateral" },
+    "metadata": { "createdAt": "2025-01-01T00:00:00Z", "updatedAt": "2025-09-03T00:00:00Z", "status": "active" }
+  }
+]

@@ -1,0 +1,30 @@
+[
+  {
+    "schemaVersion": "1.0.0",
+    "id": "eq.barbell",
+    "canonical": { "name": "Barbell", "slug": "barbell", "abbreviation": "BB" },
+    "classification": { "tags": ["free-weight"] },
+    "metadata": { "createdAt": "2025-01-01T00:00:00Z", "updatedAt": "2025-09-03T00:00:00Z", "status": "active" }
+  },
+  {
+    "schemaVersion": "1.0.0",
+    "id": "eq.szBar",
+    "canonical": { "name": "SZ-Bar", "slug": "sz-bar", "aliases": ["EZ-Bar", "EZ Curl Bar"] },
+    "classification": { "tags": ["free-weight"] },
+    "metadata": { "createdAt": "2025-01-01T00:00:00Z", "updatedAt": "2025-09-03T00:00:00Z", "status": "active" }
+  },
+  {
+    "schemaVersion": "1.0.0",
+    "id": "eq.pullUpBar",
+    "canonical": { "name": "Pull-up bar", "slug": "pull-up-bar" },
+    "classification": { "tags": ["bodyweight-support"] },
+    "metadata": { "createdAt": "2025-01-01T00:00:00Z", "updatedAt": "2025-09-03T00:00:00Z", "status": "active" }
+  },
+  {
+    "schemaVersion": "1.0.0",
+    "id": "eq.bodyweight",
+    "canonical": { "name": "none (bodyweight exercise)", "slug": "bodyweight", "aliases": ["Bodyweight", "None"] },
+    "classification": { "tags": ["bodyweight"] },
+    "metadata": { "createdAt": "2025-01-01T00:00:00Z", "updatedAt": "2025-09-03T00:00:00Z", "status": "active" }
+  }
+]

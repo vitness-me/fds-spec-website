@@ -1,0 +1,78 @@
+{
+  "schemaVersion": "1.0.0",
+  "programId": "b0a1e2d3-0003-4a2b-9c6f-000000000003",
+  "canonical": {
+    "name": "12-Week Hypertrophy (Master Program)",
+    "slug": "12-week-hypertrophy"
+  },
+  "classification": {
+    "periodization": "block",
+    "goal": "hypertrophy",
+    "level": "intermediate",
+    "durationWeeks": 4
+  },
+  "authorship": {
+    "author": "Coach Example",
+    "organization": "Example Coaching",
+    "license": "LicenseRef-Proprietary",
+    "attribution": "Authored in Trainerize as a Master Program."
+  },
+  "schedule": {
+    "model": "relative",
+    "cycles": [
+      {
+        "id": "phase1",
+        "name": "Phase 1 — Accumulation",
+        "type": "meso",
+        "order": 1,
+        "durationWeeks": 2,
+        "intent": "accumulation",
+        "notes": "Trainerize 'Training Phase'. The schedule is relative (day-of-phase), projected onto the client's dated calendar by a Start-Date subscription — the delivery layer FDS does not model. See gaps.md.",
+        "weeks": [
+          {
+            "index": 1,
+            "days": [
+              { "id": "p1w1d1", "index": 1, "offsetDays": 0, "workout": { "id": "wo.upperA", "name": "Upper Body A" } },
+              { "id": "p1w1d2", "index": 2, "offsetDays": 1, "rest": true, "notes": "Trainerize scheduled a Zone-2 cardio activity here; FDS models no cardio-activity day, so it is carried as rest + note. See gaps.md." },
+              { "id": "p1w1d3", "index": 3, "offsetDays": 2, "workout": { "id": "wo.interval", "name": "Core Finisher — Interval" } },
+              { "id": "p1w1d4", "index": 4, "offsetDays": 3, "rest": true }
+            ]
+          },
+          {
+            "index": 2,
+            "days": [
+              { "id": "p1w2d1", "index": 1, "offsetDays": 7, "workout": { "id": "wo.upperA", "name": "Upper Body A" } },
+              { "id": "p1w2d2", "index": 2, "offsetDays": 8, "rest": true },
+              { "id": "p1w2d3", "index": 3, "offsetDays": 9, "workout": { "id": "wo.interval", "name": "Core Finisher — Interval" } },
+              { "id": "p1w2d4", "index": 4, "offsetDays": 10, "rest": true }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "phase2",
+        "name": "Phase 2 — Intensification",
+        "type": "meso",
+        "order": 2,
+        "durationWeeks": 2,
+        "intent": "intensification",
+        "weeks": [
+          {
+            "index": 1,
+            "days": [
+              { "id": "p2w1d1", "index": 1, "offsetDays": 14, "workout": { "id": "wo.upperA", "name": "Upper Body A" } },
+              { "id": "p2w1d2", "index": 2, "offsetDays": 15, "rest": true },
+              { "id": "p2w1d3", "index": 3, "offsetDays": 16, "workout": { "id": "wo.upperA", "name": "Upper Body A" } }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "metadata": {
+    "createdAt": "2026-08-12T00:00:00Z",
+    "updatedAt": "2026-08-12T00:00:00Z",
+    "status": "active",
+    "source": "conformance.trainerize"
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "$comment": "The conformance corpus registry. One row per real-world platform whose data model FDS is tested against. This file is the single source of truth for what the corpus covers; check-conformance.mjs reads it and proves that what it declares is on disk, validates, and cites the RFCs honestly. Adding a platform is adding a row here and the files it names — see conformance/METHODOLOGY.md.",
+  "modes": {
+    "transform": "Real source records run through the built fds-transformer CLI; the output must validate against the published schema. Proves FDS can be produced from the platform's actual export shape. Used for flat, record-per-row entities (exercise libraries).",
+    "fidelity": "A real platform artifact modelled by hand as FDS and validated against the published schema, with a documented field-by-field mapping and gap list. Used for the deeply nested entities the transformer's dotted-path engine does not emit (workouts, programs)."
+  },
+  "platforms": [
+    {
+      "slug": "wger",
+      "name": "wger",
+      "archetype": "exercise-library",
+      "mode": "transform",
+      "produces": ["exercise"],
+      "license": "AGPL-3.0-or-later (software); CC-BY-SA-4.0 / CC0-1.0 (exercise database content)",
+      "openData": true,
+      "transform": {
+        "config": "platforms/wger/mapping.exercise.json",
+        "source": "platforms/wger/source.exercise.json",
+        "output": "exercises.json",
+        "entity": "exercise"
+      }
+    },
+    {
+      "slug": "trainerize",
+      "name": "Trainerize",
+      "archetype": "coaching-delivery",
+      "mode": "fidelity",
+      "produces": ["workout", "program"],
+      "license": "proprietary; corpus fixtures are original reconstructions from public documentation, not exported data",
+      "openData": false
+    },
+    {
+      "slug": "trainheroic",
+      "name": "TrainHeroic",
+      "archetype": "strength-programming",
+      "mode": "fidelity",
+      "produces": ["workout", "program"],
+      "license": "proprietary; corpus fixtures are original reconstructions from public documentation, not exported data",
+      "openData": false
+    }
+  ]
+}
