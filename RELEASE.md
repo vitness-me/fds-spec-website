@@ -501,7 +501,12 @@ gh workflow run publish-transformer.yml -f dry_run=true
 ```
 
 This runs the full workflow and skips only `npm publish`. Every gate below still
-executes.
+executes — including the credential check, which performs the same OIDC token
+exchange the real publish would and fails if it comes back empty. That last part
+is new, and it is the whole reason this rehearsal is worth running: `npm publish`
+was the only step that authenticated, `dry_run: true` skipped it, and so a green
+dry run said nothing whatever about whether a publish could. Five of them could
+not.
 
 > **`-f dry_run=true` is not optional.** The input defaults to `false`, so
 > dispatching this workflow without it **publishes**. Worse, the step that checks
@@ -546,6 +551,12 @@ and builds. The second installs the same locked tree, rebuilds, then:
   it;
 - for a tag push, extracts the version from the tag and **fails if it does not
   match `package.json`**;
+- proves it can authenticate before it writes: `scripts/check-publish-auth.mjs`
+  runs `npm publish --dry-run` twice — once with the runner's id-token request
+  variables removed, which must leave npm reporting itself logged out, and once
+  as the job really is, which must not. The pair establishes that the only
+  credential in play is the one this run mints, and it runs on the dry-run path
+  as well;
 - publishes with `--access public --provenance`.
 
 Note what it does **not** run: the schema, mirror, version and document gates
@@ -625,7 +636,8 @@ A `gates` job that runs, against the repository:
 Then a `publish` job that requires the lockfile, installs with `npm ci`, runs the
 tarball checks (`check-packages`, plus an explicit assertion that `SKILL.md`, the
 `knowledge/` files and the `prompts/` files are in the tarball), matches the tag
-against `package.json`, and publishes with provenance.
+against `package.json`, proves it can authenticate (`check-publish-auth`, as in
+flow 3 — on the dry-run path too), and publishes with provenance.
 
 **Proof:**
 
@@ -698,7 +710,10 @@ Stated rather than papered over.
   depends on trusted publishing being configured for these packages on
   npmjs.org — settings that live outside this repository and cannot be read from
   it. If a publish ever fails with an authentication error, the fix is on
-  npmjs.org, not here.
+  npmjs.org, not here. What the repository can do, and now does, is say so before
+  the write instead of after it: the credential check fails with the four fields
+  — organization or user, repository, workflow filename, environment — read off
+  the run itself, to be compared against the trusted publisher on npmjs.org.
 - **Who may push a tag.** Repository collaborator permissions are not visible in
   the tree. No ruleset restricts tags.
 - **How long a deploy takes to reach every edge.** `Published URLs` waits before
