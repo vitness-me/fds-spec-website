@@ -52,7 +52,7 @@ Ovaj vodič definiše kako proizvođači proširuju Fitness Data Standard (FDS) 
 - TREBALO BI da validiraju vrednosti ekstenzija prema lokalnim ugovorima ako su poznati (opciono).
 
 ## Put promocije
-1. Usvajanje: ekstenzija stekne usvojenost kod više nezavisnih implementatora.
+1. Usvajanje: ekstenziju usvoji više nezavisnih implementatora.
 2. Predlog: podnosi se RFC za promociju koncepta u osnovnu šemu ili u standardizovanu specifikaciju ekstenzije.
 3. Pregled: urednici procenjuju semantiku, imenovanje i kompatibilnost.
 4. Standardizacija: ako bude prihvaćena, funkcionalnost prelazi u jezgro (sporedno izdanje) ili u imenovanu standardizovanu ekstenziju.

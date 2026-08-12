@@ -53,7 +53,7 @@ Ovaj vodič precizira važeće i preporučene parove tipa i jedinice metrike, ka
 |-------------------|---------------|-----------------------------------------------------------|
 | `cadence`         | `rpm`, `spm`  | `rpm` za bicikl; `spm` za trčanje, veslanje i plivanje    |
 | `incline`         | `percent`     | Nagib trake za trčanje                                    |
-| `resistanceLevel` | `level`       | Pozicija klina ili položaj u stubu tegova na mašini — neprozirna vrednost, pogledajte ispod |
+| `resistanceLevel` | `level`       | Pozicija klina ili položaj u steku na mašini — neprozirna vrednost, pogledajte ispod |
 
 ### Tipovi koji zahtevaju pažnju
 
@@ -61,7 +61,7 @@ Ovaj vodič precizira važeće i preporučene parove tipa i jedinice metrike, ka
 
 **`oneRepMax`** je referenca *iz* koje se izračunava intenzitet, a ne merenje obavljeno tokom serije. Pripada uz `percent1RM`, a konzument koji ga iscrtava kao metriku po seriji proizvešće besmislicu.
 
-**`resistanceLevel`** je neprozirno podešavanje. „Nivo 7“ dva proizvođača nemaju nikakve veze jedan s drugim, kao ni pozicije klina u dve teretane na nominalno identičnim stubovima tegova. Beležite ga da biste reprodukovali trening na istoj mašini; **ne** pretvarajte ga u opterećenje niti ga poredite između objekata. Tamo gde sprava objavljuje stvarne korake opterećenja, `equipment.loading.increment` je prenosiv odgovor.
+**`resistanceLevel`** je neprozirno podešavanje. „Nivo 7“ jednog proizvođača nema nikakve veze sa „nivoom 7“ drugog, kao ni pozicije klina u dve teretane na nominalno identičnim stekovima. Beležite ga da biste reprodukovali trening na istoj mašini; **ne** pretvarajte ga u opterećenje niti ga poredite između objekata. Tamo gde sprava objavljuje stvarne korake opterećenja, `equipment.loading.increment` je prenosiv odgovor.
 
 ## Očekivanja po tipu vežbe
 
@@ -90,7 +90,7 @@ Napomene:
 
 `exercise.loading` (RFC-001 §4.6) iskazuje da li pokret prima spoljašnje opterećenje, da li je to opterećenje asistivno i da li se strane opterećuju nezavisno.
 
-**Koraci** opterećenja nisu na vežbi. Najmanji upotrebljiv korak je svojstvo sprave — par tegova od 2,5 kg, skok bučice od 5 lb, jedan klin na stubu tegova — pa živi na `equipment.loading.increment` (RFC-002 §4.4). Isti pokret izveden bučicama i šipkom ima dva različita najmanja koraka, što polje na vežbi ne bi moglo da izrazi.
+**Koraci** opterećenja nisu na vežbi. Najmanji upotrebljiv korak je svojstvo sprave — par diskova od 2,5 kg, korak od 5 lb između bučica, jedan klin na steku — pa živi na `equipment.loading.increment` (RFC-002 §4.4). Isti pokret izveden bučicama i šipkom ima dva različita najmanja koraka, što polje na vežbi ne bi moglo da izrazi.
 
 Konzument koji izračunava apsolutno opterećenje iz `percent1RM` TREBALO BI da zaokruži na najbliži ostvariv umnožak koraka sprave, umesto da prikaže opterećenje koje se ne može složiti na spravu.
 

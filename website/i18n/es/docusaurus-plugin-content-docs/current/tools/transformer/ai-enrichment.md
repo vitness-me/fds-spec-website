@@ -254,10 +254,10 @@ Configurar la degradación controlada:
 |----------|------|-------------|
 | `retries` | number | Número de reintentos antes de degradar |
 | `degradeModel` | boolean | Intenta con el modelo del nivel inferior ante un fallo |
-| `useDefaults` | boolean | Usa los valores por defecto ante un fallo total |
+| `useDefaults` | boolean | Usa los valores predeterminados ante un error total |
 | `degradeChain` | object | Cadena de respaldo de modelos |
 
-Las cuatro son obligatorias en conjunto. El transformador usa este objeto *en lugar de* sus valores por defecto, en vez de combinarlos, de modo que un `fallback` sin `degradeChain` deja la ruta de degradación sin definir en el momento en que se necesita: en la ruta de error, donde es más difícil notarlo.
+Las cuatro son obligatorias en conjunto. El transformador usa este objeto *en lugar de* sus valores predeterminados, en vez de combinarlos, de modo que un `fallback` sin `degradeChain` deja la ruta de degradación sin definir en el momento en que se necesita: en la ruta de error, donde es más difícil notarlo.
 
 ## Límite de tasa
 
@@ -276,7 +276,7 @@ Controlar la tasa de solicitudes a la API:
 }
 ```
 
-| Propiedad | Tipo | Por defecto | Descripción |
+| Propiedad | Tipo | Valor predeterminado | Descripción |
 |----------|------|---------|-------------|
 | `requestsPerMinute` | number | 50 | Máximo de solicitudes por minuto |
 | `backoffStrategy` | string | `exponential` | Tipo de backoff: `exponential`, `linear`, `fixed` |
@@ -359,7 +359,7 @@ Para casos de uso más simples o cuando se necesita un control fino, configurar 
 | Variable | Descripción |
 |----------|-------------|
 | `OPENROUTER_API_KEY` | Clave de API para OpenRouter (obligatoria) |
-| `FDS_TRANSFORMER_MODEL` | Reemplaza el modelo por defecto en todos los niveles |
+| `FDS_TRANSFORMER_MODEL` | Reemplaza el modelo de IA predeterminado en todos los niveles |
 | `DEBUG_ENRICHMENT` | Establecer en `true` para registro detallado |
 
 ## Buenas prácticas
@@ -371,7 +371,7 @@ Para casos de uso más simples o cuando se necesita un control fino, configurar 
 5. **Supervisar el uso de tokens** - Revisar la salida de depuración en busca de oportunidades de optimización
 6. **Usar tamaños de lote adecuados** - Los lotes más grandes reducen costos pero pueden aumentar los fallos
 
-## Ver también
+## Véase también
 
 - [Configuración](/docs/tools/transformer/configuration) - Referencia completa de configuración
 - [Referencia de la CLI](/docs/tools/transformer/cli-reference) - Opciones de comandos

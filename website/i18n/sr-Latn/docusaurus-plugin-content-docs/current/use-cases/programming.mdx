@@ -23,8 +23,8 @@ import waves from '@site/../specification/schemas/program/v1.0.0/program.percent
 <BeforeAfter>
   <Panel kind="before">
     Dvanaestonedeljni plan ugrađuje trideset šest gotovo identičnih kopija treninga.
-    Popravite ga u osam njih i plan se sada ne slaže sam sa sobom. Plan i trening su
-    upleteni jedno u drugo, pa ništa od toga ne može ponovo da se upotrebi.
+    Popravite ga u osam od njih i plan se više ne slaže sam sa sobom. Plan i trening su
+    upleteni jedan u drugi, pa ništa od toga ne može ponovo da se upotrebi.
   </Panel>
   <Panel kind="after">
     Program je raspored **referenci** na treninge, od kojih svaka nosi
@@ -41,8 +41,8 @@ god je svako ponavljanje završeno. Obe nedelje su identične — opterećenje s
 plan ne — a dani pokazuju na trening referencom.
 
 <SpecExample source="specification/schemas/program/v1.0.0/program.linear.example.json" data={linear}>
-  Svaki dan je referenca `workout` sa denormalizovanim `name`. Nijedna serija,
-  ponavljanje ni opterećenje ne pojavljuje se u programu — žive u treningu na koji
+  Svaki dan je referenca `workout` sa denormalizovanim `name`. Ni serija, ni
+  ponavljanje, ni opterećenje ne pojavljuju se u programu — žive u treningu na koji
   pokazuje.
 </SpecExample>
 
@@ -65,7 +65,7 @@ ostaje deljen.
 
 Cena je poštena i navedena: program nije izvršiv bez razrešavanja svojih referenci, a
 potpuno personalizovan plan ne prenosi se u oba smera kao jedan samostalan dokument —
-on je plan plus odvojen kontekst razrešavanja. Ta razmena je ono što kupuje svako
+on je plan plus odvojen kontekst razrešavanja. Ta razmena je cena kojom se plaća svako
 drugo svojstvo: plan koji ne nosi ostvarene podatke i nijednu osobu jeste plan koji
 može da se objavi i poredi po razlikama kao svaki drugi dokument.
 

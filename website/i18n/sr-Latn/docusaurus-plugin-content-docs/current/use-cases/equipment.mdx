@@ -24,24 +24,24 @@ import cableStack from '@site/../specification/schemas/equipment/v1.1.0/equipmen
   <Panel kind="before">
     Računica sa diskovima iznova se izvodi u svakoj aplikaciji. „Nivo 7“ jedne mašine
     putuje između sistema kao da svuda znači isto, a nagibi i kadence trpaju se u
-    belešku od slobodnog teksta po kojoj nijedan konzument ne može da postupi.
+    slobodnu tekstualnu belešku po kojoj nijedan konzument ne može da postupi.
   </Panel>
   <Panel kind="after">
     Oprema nosi ono čime se opterećuje i u kojim koracima. `loading.increment` je
     merodavan za računicu sa diskovima i stekom, a `stackBased` kaže da li su ti
     koraci fiksni. Ono što standard ne može da učini prenosivim — proizvođačevu
-    sopstvenu numeraciju — čuva upravo kao to, umesto da se pretvara da se konvertuje.
+    sopstvenu numeraciju — čuva upravo takvom kakva jeste, umesto da se pretvara da se može konvertovati.
   </Panel>
 </BeforeAfter>
 
 ## Šipka sa slobodnim tegovima i stek sa klinom
 
-Šipka je identitet, klasifikacija i lokalizovani i za proizvođača specifični detalji
+Šipka je identitet, klasifikacija i lokalizovani detalji i detalji specifični za proizvođača
 koje teretana želi — ali bez pravila opterećivanja, jer šipka prima bilo koje diskove.
 
 <SpecExample source="specification/schemas/equipment/v1.1.0/equipment.example.json" data={barbell}>
   Šipka. Ekstenzija `x:gym-management` nosi inventar i održavanje koje konzument može
-  da ignoriše; jezgro ostaje o samoj opremi.
+  da ignoriše; jezgro se i dalje tiče same opreme.
 </SpecExample>
 
 Kablovski stek sa klinom je drugačiji: njegovo opterećenje se menja u fiksnim
@@ -58,7 +58,7 @@ koracima, a to je činjenica na koju preskripcija nizvodno mora da se zaokruži.
 zasnovano na steku dovoljni su da se računica sa diskovima ili klinom izvede na isti
 način u svakom konzumentu. Otpor koji menja *koliko je teško* umesto *šta* — točkić
 na mašini, nivo otpora — ostaje preskripcija opterećenja sa imenovanom skalom, a ne
-činjenica o opremi, jer su „nivo 7“ dva proizvođača međusobno nepovezani i standard
+činjenica o opremi, jer „nivo 7“ jednog proizvođača nema nikakve veze sa „nivoom 7“ drugog, a standard
 odbija da nagovesti suprotno.
 
 Praktično pravilo koje model sprovodi: zabeležite ono što je prenosivo kao brojeve, a

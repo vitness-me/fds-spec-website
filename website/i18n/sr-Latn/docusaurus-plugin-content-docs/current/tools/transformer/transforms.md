@@ -37,7 +37,7 @@ Konvertuje string u slug bezbedan za URL.
 **Ponašanje:**
 - Pretvara u mala slova
 - Zamenjuje razmake crticama
-- Uklanja specijalne karaktere
+- Uklanja specijalne znakove
 - Sažima višestruke crtice
 
 ---
@@ -167,7 +167,7 @@ Konvertuje URL-ove u FDS format za medije.
 
 ### `registryLookup`
 
-Pretražuje vrednost u registru uz opciono približno poklapanje.
+Traži vrednost u registru uz opciono približno poklapanje.
 
 **Ulaz:** String ili niz  
 **Izlaz:** Objekat ili niz objekata
@@ -402,7 +402,7 @@ Uobičajen obrazac za mapiranje mišića/opreme:
 
 Ovo:
 1. Upakuje vrednost u niz ako je potrebno
-2. Pretražuje svaku vrednost u registru mišića
+2. Traži svaku vrednost u registru mišića
 3. Vraća FDS referentni format
 
 ---

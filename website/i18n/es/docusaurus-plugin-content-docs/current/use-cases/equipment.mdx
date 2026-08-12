@@ -29,7 +29,7 @@ import cableStack from '@site/../specification/schemas/equipment/v1.1.0/equipmen
   </Panel>
   <Panel kind="after">
     El equipamiento lleva consigo qué lo carga y en qué pasos. `loading.increment` es
-    autoritativo para el cálculo de discos y de placas, y `stackBased` dice si esos
+    la referencia autorizada para el cálculo de discos y de placas, y `stackBased` dice si esos
     pasos son fijos. Lo que el estándar no puede hacer portable — la numeración propia
     de un fabricante — lo conserva exactamente como eso, en lugar de fingir que se convierte.
   </Panel>
@@ -56,9 +56,9 @@ un hecho al que una prescripción aguas abajo necesita redondear.
 
 ## Cómo funciona
 
-`loading` es donde vive la reproducibilidad: el incremento y si es de placas bastan
+`loading` es donde vive la reproducibilidad: el incremento y si está basado en torre de placas bastan
 para hacer el cálculo de discos o de pasador de la misma manera en todos los
-consumidores. La resistencia que cambia *cuán duro* en lugar de *qué* — el dial de una
+consumidores. La resistencia que cambia *cuánto esfuerzo exige* en lugar de *qué se carga* — el dial de una
 máquina, un nivel de resistencia — sigue siendo una prescripción de carga con una
 escala nombrada, no un hecho del equipamiento, porque los "nivel 7" de dos fabricantes
 no guardan relación alguna y el estándar se niega a insinuar lo contrario.

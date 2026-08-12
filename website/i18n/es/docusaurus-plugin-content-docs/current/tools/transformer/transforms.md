@@ -116,7 +116,7 @@ Garantiza que un valor esté envuelto en un arreglo.
 
 ### `toMediaArray`
 
-Convierte URL al formato de medios de FDS.
+Convierte las URL al formato de medios de FDS.
 
 **Entrada:** Cadena, arreglo de cadenas o arreglo de objetos  
 **Salida:** Arreglo de objetos MediaItem
@@ -327,7 +327,7 @@ Aplica una cadena de plantilla con sustitución de variables.
 
 ### `urlTransform`
 
-Transforma URL mediante coincidencia de patrones.
+Transforma las URL mediante coincidencia de patrones.
 
 **Entrada:** Cadena (URL)  
 **Salida:** Cadena

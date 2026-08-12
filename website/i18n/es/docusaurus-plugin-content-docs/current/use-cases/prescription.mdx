@@ -45,7 +45,7 @@ claves — y ningún número para el máximo en ninguna parte, porque el máximo
 a un atleta al que este documento nunca nombra.
 
 <SpecExample source="specification/schemas/prescription/v1.0.0/loadTarget.percent1RM.example.json" data={percent1RM}>
-  82.5% de la repetición máxima (1RM) del propio ejercicio prescrito — el caso impulsado por porcentaje.
+  82.5% de la repetición máxima (1RM) del propio ejercicio prescrito — el caso basado en porcentaje.
 </SpecExample>
 
 Un objetivo de RPE entrega la decisión de la carga al atleta frente a la barra, de
@@ -55,7 +55,7 @@ modo que no hace falta resolver nada por adelantado.
   RPE 8, con medios puntos permitidos. El atleta elige la carga; la prescripción declara el esfuerzo.
 </SpecExample>
 
-Y un porcentaje del peso corporal — deliberadamente **irresoluble dentro de FDS**,
+Y un porcentaje del peso corporal — deliberadamente **imposible de resolver dentro de FDS**,
 porque no hay ningún atleta en el documento del que leer un peso corporal.
 
 <SpecExample source="specification/schemas/prescription/v1.0.0/loadTarget.percent-bodyweight.example.json" data={percentBodyweight}>
@@ -69,8 +69,8 @@ Cada primitiva es una forma discriminada — un `method` y exactamente los campo
 ese método requiere — de modo que un consumidor lee el método y sabe qué esperar. Los
 métodos que *necesitarían* datos personales los referencian en lugar de llevarlos
 consigo: un porcentaje nombra un levantamiento, una base de máximo de entrenamiento
-nombra un slot, una zona nombra un sistema. La frontera es deliberada y es
-precisamente el punto — una biblioteca de prescripciones no lleva ningún titular de
+nombra un slot, una zona nombra un sistema. La frontera es deliberada, y esa es
+precisamente la idea — una biblioteca de prescripciones no lleva ningún titular de
 los datos, que es lo que permite publicarla, almacenarla en caché y diferenciarla
 libremente.
 

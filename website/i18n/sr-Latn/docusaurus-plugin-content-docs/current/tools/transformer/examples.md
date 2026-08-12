@@ -6,7 +6,7 @@ sidebar_position: 8
 
 # Primeri
 
-Ovaj vodič pruža kompletne primere korišćenja FDS Transformer alata od početka do kraja za uobičajene tokove rada.
+Ovaj vodič pruža kompletne primere korišćenja FDS Transformera od početka do kraja za uobičajene tokove rada.
 
 ## Primer 1: Osnovna transformacija
 
@@ -617,7 +617,7 @@ fds-transformer transform \
 
 ## Pogledajte i
 
-- [CLI referenca](/docs/tools/transformer/cli-reference) - sve komande i opcije
-- [Konfiguracija](/docs/tools/transformer/configuration) - referenca konfiguracije mapiranja
-- [AI obogaćivanje](/docs/tools/transformer/ai-enrichment) - vodič za višestepeno obogaćivanje
-- [Ugrađene transformacije](/docs/tools/transformer/transforms) - referenca funkcija transformacija
+- [CLI referenca](/docs/tools/transformer/cli-reference) - Sve komande i opcije
+- [Konfiguracija](/docs/tools/transformer/configuration) - Referenca konfiguracije mapiranja
+- [AI obogaćivanje](/docs/tools/transformer/ai-enrichment) - Vodič za višestepeno obogaćivanje
+- [Ugrađene transformacije](/docs/tools/transformer/transforms) - Referenca funkcija transformacija

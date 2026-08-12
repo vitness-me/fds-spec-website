@@ -37,7 +37,7 @@ import waves from '@site/../specification/schemas/program/v1.0.0/program.percent
 
 ## Un plan es un cronograma, no una pila de sesiones
 
-La progresión lineal es toda la metodología en una sola regla: añadir carga cada vez
+La progresión lineal es toda la metodología en una sola regla: agregar carga cada vez
 que se completan todas las repeticiones. Las dos semanas son idénticas — la carga se
 mueve, el plan no — y los días apuntan a una sesión de entrenamiento por referencia.
 
@@ -57,16 +57,16 @@ de ningún atleta.
 
 ## Cómo funciona
 
-Un día resuelve a una sesión de entrenamiento **o** es un día de descanso — nunca
+Un día se resuelve en una sesión de entrenamiento **o** es un día de descanso — nunca
 ambos, nunca ninguno — y el modelo de cronograma (`calendar`, `relative`, `rolling`,
-`sequence`) decide qué campo de ubicación es autoritativo. La reutilización viene de
+`sequence`) decide qué campo de ubicación es el autorizado. La reutilización viene de
 `overrides`: una semana puede escalarse o marcarse como descarga sin editar la sesión
 a la que apunta, de modo que la sesión sigue compartida.
 
-El costo es honesto y está declarado: un programa no es ejecutable sin resolver sus
-referencias, y un plan totalmente personalizado no hace el viaje de ida y vuelta como
+El costo es explícito y está declarado: un programa no es ejecutable sin resolver sus
+referencias, y un plan totalmente personalizado no puede exportarse y reimportarse como
 un único documento autocontenido — es el plan más un contexto de resolución aparte.
-Ese intercambio es lo que compra todas las demás propiedades: un plan que no lleva
+Esa concesión es la que hace posibles todas las demás propiedades: un plan que no lleva
 datos ejecutados ni persona alguna es uno que puede publicarse y diferenciarse como
 cualquier otro documento.
 
