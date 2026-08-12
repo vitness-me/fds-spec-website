@@ -1,0 +1,62 @@
+{
+  "copyright": {
+    "message": "Copyright © 2026 Vitness. Publicado bajo el <a href=\"/docs/license\">VITNESS Open Standards License Agreement</a>.",
+    "description": "The footer copyright"
+  },
+  "link.item.label.Authoring workouts": {
+    "message": "Crear sesiones de entrenamiento",
+    "description": "The label of footer link with label=Authoring workouts linking to docs/use-cases/authoring-workouts"
+  },
+  "link.item.label.Contributing": {
+    "message": "Contribuir",
+    "description": "The label of footer link with label=Contributing linking to docs/governance/contributing"
+  },
+  "link.item.label.Getting Started": {
+    "message": "Primeros pasos",
+    "description": "The label of footer link with label=Getting Started linking to docs/getting-started/overview"
+  },
+  "link.item.label.GitHub": {
+    "message": "GitHub",
+    "description": "The label of footer link with label=GitHub linking to https://github.com/vitness-me/fds-spec-website"
+  },
+  "link.item.label.Governance": {
+    "message": "Gobernanza",
+    "description": "The label of footer link with label=Governance linking to docs/governance"
+  },
+  "link.item.label.License": {
+    "message": "Licencia",
+    "description": "The label of footer link with label=License linking to docs/license"
+  },
+  "link.item.label.Programming": {
+    "message": "Programación",
+    "description": "The label of footer link with label=Programming linking to docs/use-cases/programming"
+  },
+  "link.item.label.Schemas": {
+    "message": "Esquemas",
+    "description": "The label of footer link with label=Schemas linking to docs/schemas/exercise"
+  },
+  "link.item.label.Specifications": {
+    "message": "Especificaciones",
+    "description": "The label of footer link with label=Specifications linking to docs/specifications/rfc-001-exercise-data-model"
+  },
+  "link.item.label.What can you do with FDS?": {
+    "message": "¿Qué puede hacer con FDS?",
+    "description": "The label of footer link with label=What can you do with FDS? linking to docs/use-cases"
+  },
+  "link.title.Community": {
+    "message": "Comunidad",
+    "description": "The title of the footer links column with title=Community in the footer"
+  },
+  "link.title.Documentation": {
+    "message": "Documentación",
+    "description": "The title of the footer links column with title=Documentation in the footer"
+  },
+  "link.title.Legal": {
+    "message": "Legal",
+    "description": "The title of the footer links column with title=Legal in the footer"
+  },
+  "link.title.Use cases": {
+    "message": "Casos de uso",
+    "description": "The title of the footer links column with title=Use cases in the footer"
+  }
+}

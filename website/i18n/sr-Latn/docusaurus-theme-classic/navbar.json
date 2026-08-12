@@ -1,0 +1,82 @@
+{
+  "item.label.1.4.0": {
+    "message": "1.4.0",
+    "description": "Navbar item with label 1.4.0"
+  },
+  "item.label.body-atlas · v1.0.0": {
+    "message": "body-atlas · v1.0.0",
+    "description": "Navbar item with label body-atlas · v1.0.0"
+  },
+  "item.label.Changelog": {
+    "message": "Istorija izmena",
+    "description": "Navbar item with label Changelog"
+  },
+  "item.label.Contribute": {
+    "message": "Doprinesite",
+    "description": "Navbar item with label Contribute"
+  },
+  "item.label.Documentation": {
+    "message": "Dokumentacija",
+    "description": "Navbar item with label Documentation"
+  },
+  "item.label.equipment · v1.1.0": {
+    "message": "equipment · v1.1.0",
+    "description": "Navbar item with label equipment · v1.1.0"
+  },
+  "item.label.exercise · v1.1.0": {
+    "message": "exercise · v1.1.0",
+    "description": "Navbar item with label exercise · v1.1.0"
+  },
+  "item.label.GitHub": {
+    "message": "GitHub",
+    "description": "Navbar item with label GitHub"
+  },
+  "item.label.How versioning works": {
+    "message": "Kako funkcioniše verzionisanje",
+    "description": "Navbar item with label How versioning works"
+  },
+  "item.label.muscle · v1.0.0": {
+    "message": "muscle · v1.0.0",
+    "description": "Navbar item with label muscle · v1.0.0"
+  },
+  "item.label.muscle-category · v1.0.0": {
+    "message": "muscle-category · v1.0.0",
+    "description": "Navbar item with label muscle-category · v1.0.0"
+  },
+  "item.label.prescription · v1.0.0": {
+    "message": "prescription · v1.0.0",
+    "description": "Navbar item with label prescription · v1.0.0"
+  },
+  "item.label.program · v1.0.0": {
+    "message": "program · v1.0.0",
+    "description": "Navbar item with label program · v1.0.0"
+  },
+  "item.label.Schemas": {
+    "message": "Šeme",
+    "description": "Navbar item with label Schemas"
+  },
+  "item.label.Specifications": {
+    "message": "Specifikacije",
+    "description": "Navbar item with label Specifications"
+  },
+  "item.label.Use cases": {
+    "message": "Slučajevi upotrebe",
+    "description": "Navbar item with label Use cases"
+  },
+  "item.label.Why FDS": {
+    "message": "Zašto FDS",
+    "description": "Navbar item with label Why FDS"
+  },
+  "item.label.workout · v1.1.0": {
+    "message": "workout · v1.1.0",
+    "description": "Navbar item with label workout · v1.1.0"
+  },
+  "logo.alt": {
+    "message": "Fitness Data Standard",
+    "description": "The alt text of navbar logo"
+  },
+  "title": {
+    "message": "FDS",
+    "description": "The title in the navbar"
+  }
+}

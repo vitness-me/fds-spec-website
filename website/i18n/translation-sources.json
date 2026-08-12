@@ -1,1 +1,14 @@
-{}
+{
+  "es": {
+    "code.json": "32a2cac6a0379172e7ae698d74e8404ea8985a018e3406d859c458e8a22a9dc8",
+    "docusaurus-plugin-content-docs/current.json": "4a1dbe5135c18c0778ffb68d95d2a49f9713f2e6bb8a24919d6b0a46de9d8902",
+    "docusaurus-theme-classic/footer.json": "da24ec5755c4e5c1d5c3e8d4490e63c6dc8b5798b6bce0460dfd5c496a8c20de",
+    "docusaurus-theme-classic/navbar.json": "6bc7fa886887dc99a6c3c1a8cf6109bbab8c37994ec16a4c7b93a772ee89b7b5"
+  },
+  "sr-Latn": {
+    "code.json": "32a2cac6a0379172e7ae698d74e8404ea8985a018e3406d859c458e8a22a9dc8",
+    "docusaurus-plugin-content-docs/current.json": "4a1dbe5135c18c0778ffb68d95d2a49f9713f2e6bb8a24919d6b0a46de9d8902",
+    "docusaurus-theme-classic/footer.json": "da24ec5755c4e5c1d5c3e8d4490e63c6dc8b5798b6bce0460dfd5c496a8c20de",
+    "docusaurus-theme-classic/navbar.json": "6bc7fa886887dc99a6c3c1a8cf6109bbab8c37994ec16a4c7b93a772ee89b7b5"
+  }
+}

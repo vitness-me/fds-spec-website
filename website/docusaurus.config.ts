@@ -199,8 +199,11 @@ const config: Config = {
       {
         // `hashed` is recommended for long-term caching
         hashed: true,
-        // For multilingual sites, set this to the default language
-        language: ['en'],
+        // Tokenizers for the search index. English and Spanish have lunr
+        // language support; Serbian does not exist in lunr-languages, so
+        // sr-Latn pages are tokenized with the defaults — searchable, just
+        // without stemming.
+        language: ['en', 'es'],
         // Index blog posts (disabled since blog is disabled)
         indexBlog: false,
         // Index pages (landing page, etc.)
