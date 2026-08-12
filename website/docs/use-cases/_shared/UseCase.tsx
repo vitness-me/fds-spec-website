@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from '@docusaurus/Link';
-import CodeBlock from '@theme/CodeBlock';
+import EditorPanel from '@site/src/components/EditorPanel';
 import {PERSONAS} from './registry';
 import styles from './styles.module.css';
 
@@ -38,9 +38,12 @@ export function SpecExample({
   const filename = source.split('/').pop();
   return (
     <figure className={styles.example}>
-      <CodeBlock language="json" title={filename}>
-        {JSON.stringify(data, null, 2)}
-      </CodeBlock>
+      <EditorPanel
+        filename={filename}
+        language="json"
+        code={JSON.stringify(data, null, 2)}
+        maxHeight="34rem"
+      />
       {children ? <figcaption className={styles.caption}>{children}</figcaption> : null}
       <p className={styles.source}>
         Backed by <code>{source}</code>

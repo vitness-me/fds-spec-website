@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Link from '@docusaurus/Link';
-import { Highlight, themes } from 'prism-react-renderer';
 import Terminal from '@site/src/components/Terminal';
+import EditorPanel from '@site/src/components/EditorPanel';
 import styles from './styles.module.css';
 
 // Every panel in this section is a file that ships in this repository, from
@@ -34,44 +34,7 @@ const mappingRows = Object.entries(mappingConfig.mappings as Record<string, unkn
 // The command shown is the command the recording ran, from the same file.
 const command = `npx @vitness/fds-transformer ${transcript.command.join(' ')}`;
 
-/** Detect dark mode without breaking SSR (mirrors the QuickStart hook). */
-function useSafeColorMode(): 'light' | 'dark' {
-  const [colorMode, setColorMode] = useState<'light' | 'dark'>('light');
-  useEffect(() => {
-    const read = () =>
-      document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
-    setColorMode(read());
-    const observer = new MutationObserver(() => setColorMode(read()));
-    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
-    return () => observer.disconnect();
-  }, []);
-  return colorMode;
-}
-
-function CodePanel({ code, theme }: { code: string; theme: typeof themes.vsDark }): JSX.Element {
-  return (
-    <Highlight theme={theme} code={code} language="json">
-      {({ className, style, tokens, getLineProps, getTokenProps }) => (
-        <pre
-          className={className}
-          style={{ ...style, background: 'transparent', backgroundColor: 'transparent', margin: 0 }}>
-          {tokens.map((line, i) => (
-            <div key={i} {...getLineProps({ line })}>
-              {line.map((token, key) => (
-                <span key={key} {...getTokenProps({ token })} />
-              ))}
-            </div>
-          ))}
-        </pre>
-      )}
-    </Highlight>
-  );
-}
-
-export default function BeforeAfter(): JSX.Element {
-  const colorMode = useSafeColorMode();
-  const theme = colorMode === 'dark' ? themes.vsDark : themes.vsLight;
-
+export default function BeforeAfter(): React.ReactElement {
   return (
     <section id="see-it-work" className="fdsSection">
       <div className="fdsContainer">
@@ -93,15 +56,14 @@ export default function BeforeAfter(): JSX.Element {
         </div>
 
         <div className={styles.panels}>
-          <div className={`fdsTile ${styles.panel}`}>
-            <div className="fdsTileHead">
-              <span className={styles.stepNo}>1</span>
-              <span className={styles.fileName}>source.json</span>
-              <span className="fdsPill">vendor export</span>
-            </div>
-            <div className={styles.codeBlock}>
-              <CodePanel code={before} theme={theme} />
-            </div>
+          <div className={styles.panel}>
+            <EditorPanel
+              step="1"
+              filename="source.json"
+              badge="vendor export"
+              code={before}
+              size="sm"
+            />
           </div>
 
           <div className={`fdsTile ${styles.panel}`}>
@@ -124,15 +86,16 @@ export default function BeforeAfter(): JSX.Element {
             </ul>
           </div>
 
-          <div className={`fdsTile ${styles.panel}`}>
-            <div className="fdsTileHead">
-              <span className={styles.stepNo}>3</span>
-              <span className={styles.fileName}>out/exercises.json</span>
-              <span className="fdsPill fdsPillOk">valid fds</span>
-            </div>
-            <div className={`${styles.codeBlock} ${styles.codeBlockTall}`}>
-              <CodePanel code={after} theme={theme} />
-            </div>
+          <div className={styles.panel}>
+            <EditorPanel
+              step="3"
+              filename="out/exercises.json"
+              badge="valid fds"
+              badgeTone="ok"
+              code={after}
+              maxHeight="30rem"
+              size="sm"
+            />
           </div>
         </div>
 

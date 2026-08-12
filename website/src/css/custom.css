@@ -358,58 +358,63 @@ html {
 }
 
 /* ============================================
-   Modern Code Block Styling
-   ============================================ */
+   Code blocks: the VS Code editor look
+   ============================================
+   The syntax palettes are VS Code's own (vsLight/vsDark, configured in
+   docusaurus.config.ts); this block gives every code panel the matching
+   editor chrome — flat editor surface, a quiet mono title strip like a tab
+   bar, an unruled line-number gutter. One treatment for docs, use-case pages
+   and the landing panels, since they all render through @theme/CodeBlock. */
 
 /* Code block container */
 div[class*='codeBlockContainer'] {
-  border-radius: 12px;
+  border-radius: 10px;
   overflow: hidden;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  box-shadow: none;
   margin: 1.5rem 0;
-  border: 1px solid var(--ifm-color-gray-300);
+  border: 1px solid rgba(0, 0, 0, 0.12);
 }
 
 [data-theme='dark'] div[class*='codeBlockContainer'] {
-  border-color: #2a2a2a;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -2px rgba(0, 0, 0, 0.2);
+  border-color: rgba(255, 255, 255, 0.12);
 }
 
-/* Code block title bar (with language label) */
+/* Title strip (the filename), styled like the editor's tab strip. */
 div[class*='codeBlockTitle'] {
-  background: linear-gradient(to bottom, #f8f9fa, #f1f3f5);
-  border-bottom: 1px solid var(--ifm-color-gray-300);
-  padding: 0.6rem 1rem;
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: var(--ifm-color-gray-700);
+  background: #f3f3f3;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  padding: 0.5rem 1rem;
+  font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', 'Monaco', 'Roboto Mono', monospace;
+  font-size: 0.71875rem;
+  font-weight: 500;
+  color: #57606a;
   letter-spacing: 0.02em;
 }
 
 [data-theme='dark'] div[class*='codeBlockTitle'] {
-  background: linear-gradient(to bottom, #1a1a1a, #141414);
-  border-bottom-color: #2a2a2a;
-  color: #a1a1aa;
+  background: #252526;
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+  color: #9d9da6;
 }
 
-/* The pre element containing code */
+/* The editor surface itself: VS Code's Light+/Dark+ backgrounds. */
 pre[class*='prism'] {
-  background: #fafbfc !important;
-  padding: 1.25rem !important;
+  background: #ffffff !important;
+  padding: 1rem 1.25rem !important;
   margin: 0 !important;
-  font-size: 0.875rem !important;
+  font-size: 0.8125rem !important;
   line-height: 1.7 !important;
   border-radius: 0 !important;
 }
 
 [data-theme='dark'] pre[class*='prism'] {
-  background: #0d0d0d !important;
+  background: #1e1e1e !important;
 }
 
 /* Code inside pre */
 pre[class*='prism'] code {
   font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace !important;
-  font-size: 0.875rem !important;
+  font-size: 0.8125rem !important;
   line-height: 1.7 !important;
   background: transparent !important;
   padding: 0 !important;
@@ -420,26 +425,24 @@ pre[class*='prism'] code {
   padding: 0 1rem;
 }
 
+/* Line-number gutter: dimmed and unruled, as in the editor. */
 span[class*='codeLineNumber'] {
   display: inline-block;
   min-width: 2rem;
-  margin-right: 1rem;
-  padding-right: 1rem;
+  margin-right: 1.25rem;
   text-align: right;
-  color: #9ca3af;
+  color: #6e7781;
   user-select: none;
-  font-size: 0.8rem;
-  border-right: 1px solid #e5e7eb;
+  font-size: 0.75rem;
 }
 
 [data-theme='dark'] span[class*='codeLineNumber'] {
-  color: #6b7280;
-  border-right-color: #3f3f46;
+  color: #6e6e73;
 }
 
-/* Line content */
+/* Line content sits directly after the gutter's own margin. */
 span[class*='codeLineContent'] {
-  padding-left: 1rem;
+  padding-left: 0;
 }
 
 /* Copy button styling */
@@ -516,55 +519,8 @@ div[class*='codeBlockContainer']::before {
   content: none;
 }
 
-/* Enhanced syntax highlighting colors - Light mode */
-.token.comment,
-.token.prolog,
-.token.doctype,
-.token.cdata {
-  color: #6a737d;
-  font-style: italic;
-}
-
-.token.property,
-.token.tag,
-.token.constant,
-.token.symbol,
-.token.deleted {
-  color: #d73a49;
-}
-
-.token.boolean,
-.token.number {
-  color: #005cc5;
-}
-
-.token.string,
-.token.char,
-.token.attr-value,
-.token.inserted {
-  color: #22863a;
-}
-
-.token.operator,
-.token.entity,
-.token.url {
-  color: #d73a49;
-}
-
-.token.atrule,
-.token.keyword {
-  color: #d73a49;
-}
-
-.token.function,
-.token.class-name {
-  color: #6f42c1;
-}
-
-.token.selector,
-.token.attr-name {
-  color: #6f42c1;
-}
+/* Token colors come from the VS Code themes in docusaurus.config.ts — no CSS
+   overrides here, so what the theme says is what renders. */
 
 /* Inline code styling */
 :not(pre) > code {

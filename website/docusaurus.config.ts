@@ -290,8 +290,11 @@ const config: Config = {
       copyright: `Copyright © ${new Date().getFullYear()} Vitness. Licensed under the VITNESS Open Standards License Agreement.`,
     },
     prism: {
-      theme: prismThemes.github,
-      darkTheme: prismThemes.dracula,
+      // VS Code's own palettes (Light+/Dark+ as ported by prism-react-renderer),
+      // so every code panel on the site reads like the editor most readers
+      // already work in. The chrome to match lives in src/css/custom.css.
+      theme: prismThemes.vsLight,
+      darkTheme: prismThemes.vsDark,
       additionalLanguages: ['json', 'typescript', 'bash'],
       magicComments: [
         {

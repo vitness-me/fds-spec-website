@@ -1,0 +1,132 @@
+/**
+ * EditorPanel chrome. Self-contained — no dependency on the landing token
+ * sheet, so the panel renders identically on docs and use-case pages. The
+ * inner surface (backgrounds, tokens, gutter) is the site-wide code-block
+ * treatment from src/css/custom.css; this file only draws the frame.
+ */
+
+.panel {
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 12px;
+  overflow: hidden;
+  background: #ffffff;
+}
+
+:global([data-theme='dark']) .panel {
+  border-color: rgba(255, 255, 255, 0.12);
+  background: #1e1e1e;
+}
+
+/* ── title strip ────────────────────────────────────────────────────────── */
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.625rem 1rem;
+  background: #f3f3f3;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', Monaco, 'Roboto Mono', monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.02em;
+  color: #57606a;
+}
+
+:global([data-theme='dark']) .head {
+  background: #252526;
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+  color: #9d9da6;
+}
+
+.step {
+  color: #8c959f;
+  font-variant-numeric: tabular-nums;
+}
+
+:global([data-theme='dark']) .step {
+  color: #6e6e73;
+}
+
+.filename {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.badge,
+.badgeOk {
+  display: inline-block;
+  font-size: 0.625rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 2px 8px;
+  border: 1px solid rgba(0, 0, 0, 0.18);
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+:global([data-theme='dark']) .badge {
+  border-color: rgba(255, 255, 255, 0.22);
+}
+
+.badgeOk {
+  color: #15803d;
+  border-color: currentColor;
+}
+
+:global([data-theme='dark']) .badgeOk {
+  color: #4ade80;
+}
+
+/* ── the code area ──────────────────────────────────────────────────────── */
+
+/* The panel provides the frame; the CodeBlock inside must not draw its own. */
+.scroller div[class*='codeBlockContainer'] {
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  margin: 0;
+}
+
+.scroller {
+  overflow-y: auto;
+}
+
+.capped {
+  -webkit-mask-image: linear-gradient(#000 calc(100% - 3rem), transparent);
+  mask-image: linear-gradient(#000 calc(100% - 3rem), transparent);
+}
+
+/* Tighter type for multi-column layouts. The module class outranks the
+   site-wide rule it adjusts. */
+.sizeSm pre[class*='prism'],
+.sizeSm pre[class*='prism'] code {
+  font-size: 0.75rem !important;
+  line-height: 1.65 !important;
+}
+
+.sizeSm span[class*='codeLineNumber'] {
+  min-width: 1.5rem;
+  margin-right: 0.875rem;
+  font-size: 0.6875rem;
+}
+
+/* ── footer caption ─────────────────────────────────────────────────────── */
+
+.footer {
+  padding: 0.75rem 1.25rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  font-size: 0.78125rem;
+  line-height: 1.5;
+  color: #57606a;
+  background: #f8f8f8;
+}
+
+:global([data-theme='dark']) .footer {
+  border-top-color: rgba(255, 255, 255, 0.08);
+  color: #9d9da6;
+  background: #232324;
+}
