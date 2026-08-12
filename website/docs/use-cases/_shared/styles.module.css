@@ -316,6 +316,13 @@
   color: var(--ifm-color-emphasis-700);
 }
 
+/* The section's exit: from the checklist to the page that demonstrates it. */
+.coverageUseCase {
+  margin: 0 0 1.25rem;
+  padding-left: 1rem;
+  font-size: 0.8125rem;
+}
+
 .coverageFootnote {
   margin: 1.25rem 0 0;
   font-size: 0.875rem;
