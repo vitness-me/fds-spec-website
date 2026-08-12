@@ -20,9 +20,37 @@ import type * as Preset from '@docusaurus/preset-classic';
  * that is a property of how it happens to be invoked, not of where the manifest
  * is.
  */
-const {currentRelease} = JSON.parse(
+const {currentRelease, releases} = JSON.parse(
   readFileSync(path.join(__dirname, '..', 'specification', 'releases.json'), 'utf8'),
-) as {currentRelease: string};
+) as {
+  currentRelease: string;
+  releases: Record<
+    string,
+    {entities: Record<string, string>; libraries?: Record<string, string>}
+  >;
+};
+
+/**
+ * What the current release names, as navbar dropdown items.
+ *
+ * A release is a set of entity versions, not a version every entity shares —
+ * so a "version dropdown" that offers alternative site versions models the
+ * wrong thing (there is one site, describing one current release). Instead
+ * the dropdown answers the question its label raises: what does this release
+ * actually publish? One item per entity and library, each at its own
+ * version, each going to the schema page that carries its frozen URL and
+ * status. Derived from the manifest at build time, so the menu cannot
+ * advertise a set nobody published.
+ */
+const released = releases[currentRelease] ?? {entities: {}, libraries: {}};
+const releaseDropdownItems = [
+  ...Object.entries(released.entities),
+  ...Object.entries(released.libraries ?? {}),
+].map(([name, version]) => ({
+  label: `${name} · v${version}`,
+  to: `/docs/schemas/${name}`,
+  className: 'fds-dropdown-entity',
+}));
 
 /**
  * The site's syntax palette — quiet on purpose.
@@ -232,13 +260,13 @@ const config: Config = {
         },
         {
           type: 'doc',
-          docId: 'specifications/rfc-001-exercise-data-model',
+          docId: 'specifications/index',
           label: 'Specifications',
           position: 'left',
         },
         {
           type: 'doc',
-          docId: 'schemas/exercise',
+          docId: 'schemas/index',
           label: 'Schemas',
           position: 'left',
         },
@@ -249,10 +277,23 @@ const config: Config = {
           position: 'left',
         },
         {
-          type: 'docsVersionDropdown',
+          // Not a docs-version switcher: the docs are not versioned, and a
+          // dropdown offering one version teaches nothing. This one opens
+          // into the release's actual contents — see releaseDropdownItems.
+          type: 'dropdown',
+          label: currentRelease,
           position: 'left',
-          dropdownActiveClassDisabled: true,
-          dropdownItemsAfter: [
+          items: [
+            {
+              type: 'html',
+              value: `<span class="fds-dropdown-heading">Release ${currentRelease} publishes</span>`,
+            },
+            ...releaseDropdownItems,
+            {type: 'html', value: '<hr class="dropdown-separator">'},
+            {
+              to: '/docs/core-concepts/discovery',
+              label: 'How versioning works',
+            },
             {
               to: '/docs/governance/changelog',
               label: 'Changelog',
