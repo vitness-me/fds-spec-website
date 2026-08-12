@@ -76,7 +76,7 @@ export function Panel({
 export function Audience({ids}: {ids: string[]}): React.ReactElement {
   return (
     <p className={styles.audience}>
-      <span className={styles.audienceLead}>Who this is for:</span>
+      <span className={styles.audienceLead}>Who this is for</span>
       {ids.map((id) => (
         <span key={id} className={styles.chip}>
           {PERSONAS[id] ?? id}
