@@ -12,7 +12,8 @@
  * dark block below only re-anchors the four tiers and the hairline alpha.
  *
  * Scope discipline: every class here is prefixed `fds` and this file is
- * imported only by src/pages/index.tsx, so nothing leaks into the docs.
+ * imported only by the standalone pages (src/pages/index.tsx and
+ * src/pages/why-fds.tsx), so nothing leaks into the docs.
  */
 
 :root {
