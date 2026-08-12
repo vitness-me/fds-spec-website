@@ -66,8 +66,12 @@ const sidebars: SidebarsConfig = {
       type: 'category',
       label: 'Specifications (RFCs)',
       collapsed: false,
+      // The category links to its index doc rather than listing it as a first
+      // item: a listed index renders the breadcrumb twice ("Specifications
+      // (RFCs) › Specifications (RFCs)") because the page's title equals the
+      // category label it sits inside.
+      link: {type: 'doc', id: 'specifications/index'},
       items: [
-        'specifications/index',
         'specifications/rfc-001-exercise-data-model',
         'specifications/rfc-002-equipment-data-model',
         'specifications/rfc-003-muscle-data-model',
@@ -82,8 +86,9 @@ const sidebars: SidebarsConfig = {
       type: 'category',
       label: 'JSON Schemas',
       collapsed: false,
+      // Linked for the same reason as Specifications (RFCs) above.
+      link: {type: 'doc', id: 'schemas/index'},
       items: [
-        'schemas/index',
         'schemas/exercise',
         'schemas/equipment',
         'schemas/muscle',
