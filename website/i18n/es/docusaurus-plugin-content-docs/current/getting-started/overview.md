@@ -19,7 +19,7 @@ Habilitar la portabilidad de datos y la interoperabilidad entre aplicaciones de 
 ### Alcance actual
 
 <!-- fds:count rfcs=8 -->
-**Dentro del alcance** — ocho RFC publicados:
+**Dentro del alcance** — 8 RFC publicados:
 
 - **Modelo de datos de ejercicio** (RFC-001)
 - **Entidades de catálogo**: equipamiento (RFC-002), músculos (RFC-003), categorías de músculos (RFC-004), atlas corporal (RFC-005)
