@@ -110,14 +110,18 @@ a:hover {
   text-decoration: none;
 }
 
-/* Navbar improvements */
+/* Navbar improvements. Translucency is kept, but high enough that scrolling
+   text reads as a glow behind glass rather than legible smear — the dark
+   theme needed noticeably more opacity than the light one. -webkit- prefix
+   because Safari still requires it for backdrop-filter. */
 .navbar {
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
   backdrop-filter: saturate(180%) blur(20px);
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: rgba(255, 255, 255, 0.85);
 }
 
 [data-theme='dark'] .navbar {
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: rgba(5, 5, 5, 0.92);
 }
 
 .navbar__title {
