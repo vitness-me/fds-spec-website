@@ -1,27 +1,52 @@
-/* Shared styling for the use-case page pattern. Theme variables only, so the
-   pages track the site's light and dark palettes without a second definition. */
+/**
+ * Shared styling for the use-case page pattern.
+ *
+ * A docs-side translation of the landing's rules: hierarchy is text tiers
+ * and 1px hairlines, mono is a semantic signal (labels, badges, filenames),
+ * and emphasis is made by stepping text up a tier — never by filling a box
+ * with color. The one accent is the ok-green the site already uses to mean
+ * "validates / passes", and it appears exactly once per page: on the
+ * "With FDS" label.
+ *
+ * Self-contained on purpose — no dependency on src/css/landing.css, which
+ * only the landing page imports (the same rule EditorPanel follows). Greys
+ * come from the ifm emphasis scale so both themes fall out of one
+ * definition; only the green needs an explicit dark value.
+ */
 
 .example {
-  margin: 1.5rem 0;
+  margin: 1.75rem 0 2rem;
 }
 
 .caption {
-  margin: 0.5rem 0 0;
+  margin: 0.625rem 0 0;
+  font-size: 0.9375rem;
+  line-height: 1.6;
   color: var(--ifm-color-emphasis-700);
-  font-style: italic;
 }
 
 .source {
-  margin: 0.25rem 0 0;
-  font-size: 0.85rem;
+  margin: 0.375rem 0 0;
+  font-size: 0.8125rem;
   color: var(--ifm-color-emphasis-600);
 }
+
+/* The path is a filename, not inline code — plain mono, no chip chrome. */
+.source code {
+  background: none;
+  border: none;
+  padding: 0;
+  color: inherit;
+  font-size: 0.8125rem;
+}
+
+/* ── the Today / With FDS contrast ──────────────────────────────────────── */
 
 .beforeAfter {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
-  margin: 1.5rem 0;
+  margin: 1.75rem 0 2rem;
 }
 
 @media (max-width: 768px) {
@@ -30,64 +55,98 @@
   }
 }
 
+/* Both panels are the same hairline tile. The contrast is carried by the
+   label pill and by the body text sitting one tier apart — the "after"
+   reads at full strength, the "before" a step dimmer. */
 .panelBefore,
 .panelAfter {
   border: 1px solid var(--ifm-color-emphasis-300);
-  border-radius: var(--ifm-card-border-radius, 8px);
-  padding: 1rem 1.25rem;
+  border-radius: 12px;
+  padding: 1.125rem 1.25rem;
+  font-size: 0.9375rem;
+  line-height: 1.65;
+}
+
+.panelBefore {
+  color: var(--ifm-color-emphasis-700);
 }
 
 .panelAfter {
-  border-color: var(--ifm-color-primary);
-  background: var(--ifm-color-primary-contrast-background, var(--ifm-color-emphasis-100));
+  color: var(--ifm-font-color-base);
+}
+
+.panelBefore > :last-child,
+.panelAfter > :last-child {
+  margin-bottom: 0;
 }
 
 .panelLabel {
-  margin: 0 0 0.5rem;
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
+  display: inline-block;
+  margin: 0 0 0.75rem;
+  padding: 2px 8px;
+  border: 1px solid var(--ifm-color-emphasis-400);
+  border-radius: 999px;
+  font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', Monaco, 'Roboto Mono', monospace;
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--ifm-color-emphasis-600);
 }
 
 .panelAfter .panelLabel {
-  color: var(--ifm-color-primary);
+  color: #15803d;
+  border-color: currentColor;
 }
+
+:global([data-theme='dark']) .panelAfter .panelLabel {
+  color: #4ade80;
+}
+
+/* ── audience ───────────────────────────────────────────────────────────── */
 
 .audience {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 0.5rem;
-  margin: 1rem 0 1.5rem;
+  margin: 1.25rem 0 2rem;
 }
 
 .audienceLead {
-  font-weight: 600;
-  color: var(--ifm-color-emphasis-700);
+  font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', Monaco, 'Roboto Mono', monospace;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ifm-color-emphasis-600);
 }
 
 .chip {
   display: inline-block;
-  padding: 0.15rem 0.6rem;
+  padding: 2px 10px;
+  border: 1px solid var(--ifm-color-emphasis-300);
   border-radius: 999px;
-  background: var(--ifm-color-emphasis-200);
-  color: var(--ifm-color-emphasis-900);
-  font-size: 0.85rem;
+  font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', Monaco, 'Roboto Mono', monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.02em;
+  color: var(--ifm-color-emphasis-700);
 }
 
+/* ── what next ──────────────────────────────────────────────────────────── */
+
 .next {
-  margin: 2rem 0 1rem;
+  margin: 2.5rem 0 1rem;
   border-top: 1px solid var(--ifm-color-emphasis-300);
-  padding-top: 1rem;
+  padding-top: 1.25rem;
 }
 
 .nextLead {
-  margin: 0 0 0.5rem;
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
+  margin: 0 0 0.75rem;
+  font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', Monaco, 'Roboto Mono', monospace;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--ifm-color-emphasis-600);
 }
@@ -98,15 +157,30 @@
   gap: 0.75rem;
 }
 
+/* The ghost-button grammar: hairline border, muted text, both stepping up
+   on hover. No filled or accent-colored buttons on a docs page. */
 .nextLink {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
   padding: 0.5rem 1rem;
-  border: 1px solid var(--ifm-color-primary);
-  border-radius: var(--ifm-button-border-radius, 6px);
-  font-weight: 600;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--ifm-color-emphasis-800);
+  text-decoration: none;
+  transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
 }
 
-/* Gallery (index) cards */
+.nextLink:hover {
+  border-color: var(--ifm-color-emphasis-500);
+  color: var(--ifm-font-color-base);
+  background: var(--ifm-color-emphasis-100);
+  text-decoration: none;
+}
+
+/* ── gallery (index) cards ──────────────────────────────────────────────── */
+
 .gallery {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -117,26 +191,37 @@
 .card {
   display: block;
   border: 1px solid var(--ifm-color-emphasis-300);
-  border-radius: var(--ifm-card-border-radius, 8px);
-  padding: 1rem 1.25rem;
+  border-radius: 12px;
+  padding: 1.125rem 1.25rem;
   color: inherit;
   text-decoration: none;
   transition: border-color 0.15s ease;
 }
 
 .card:hover {
-  border-color: var(--ifm-color-primary);
+  border-color: var(--ifm-color-emphasis-500);
   text-decoration: none;
   color: inherit;
 }
 
 .cardTitle {
-  margin: 0 0 0.35rem;
-  font-weight: 700;
+  margin: 0 0 0.375rem;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--ifm-font-color-base);
 }
 
 .cardPromise {
   margin: 0;
   color: var(--ifm-color-emphasis-700);
-  font-size: 0.9rem;
+  font-size: 0.875rem;
+  line-height: 1.55;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nextLink,
+  .card {
+    transition: none;
+  }
 }
