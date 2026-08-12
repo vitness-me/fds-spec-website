@@ -41,9 +41,12 @@ function HomepageHeader() {
             atlas<span>·</span>workouts<span>·</span>programs
           </p>
           <div className={styles.heroButtons}>
-            <a className="fdsButtonPrimary" href="#see-it-work">
-              See a real mapping
-            </a>
+            <Link className="fdsButtonPrimary" to="/why-fds">
+              Why FDS
+            </Link>
+            <Link className="fdsButtonGhost" to="/docs/use-cases">
+              Use Cases
+            </Link>
             <Link className="fdsButtonGhost" to="/docs/getting-started/overview">
               Read the spec
             </Link>
