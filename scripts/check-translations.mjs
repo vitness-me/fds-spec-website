@@ -199,6 +199,17 @@ if (!SELF_TEST && !UPDATE) {
       execFileSync('npx', ['docusaurus', 'write-translations', '--locale', defaultLocale], {
         cwd: join(ROOT, 'website'),
         stdio: 'pipe',
+        // The literal string "undefined", on purpose. `docusaurus start`
+        // without --locale assigns an undefined CLI option into process.env,
+        // which coerces to that string — so the config is evaluated with
+        // DOCUSAURUS_CURRENT_LOCALE="undefined" in the one command humans
+        // run all day. A config-time guard once threw on exactly that state:
+        // every gated path was green because build sets the variable
+        // per-locale, and the dev server was dead. Running the extraction
+        // under the dev server's environment makes this gate load the config
+        // the way `docusaurus start` does, so a config that cannot boot the
+        // dev server cannot pass CI either.
+        env: { ...process.env, DOCUSAURUS_CURRENT_LOCALE: 'undefined' },
       });
     } catch (err) {
       extracted = false;

@@ -637,7 +637,7 @@
     "description": "The label used to tell the user to check the latest version"
   },
   "theme.docs.versions.unmaintainedVersionLabel": {
-    "message": "Ovo je dokumentacija za {siteTitle} {versionLabel}, koja se više ne održava",
+    "message": "Ovo je dokumentacija za {siteTitle} {versionLabel}, koja se više ne održava.",
     "description": "The label used to tell the user that he's browsing an unmaintained doc version"
   },
   "theme.docs.versions.unreleasedVersionLabel": {
