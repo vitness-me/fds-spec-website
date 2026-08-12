@@ -125,8 +125,19 @@ jobs:
       # the id-token directly and never touches the registry exchange, which is
       # why the log shows the signature landing and the write failing right
       # after it. Install an npm new enough to do the exchange before publishing.
+      #
+      # Pinned to the 11 line, not `@latest`. `@latest` is npm 12, whose engines
+      # field is `^22.22.2 || ^24.15.0 || >=26.0.0`, so on this runner's Node
+      # 20.20.0 the install itself fails EBADENGINE and the job dies before
+      # `npm publish` is ever reached — the upgrade meant to supply a working npm
+      # could not run on the Node it was being installed under. `npm@11` resolves
+      # to 11.19.0, whose engines are `^20.17.0 || >=22.9.0`: new enough for the
+      # trusted-publishing exchange, and installable here. Raising `node-version`
+      # would also work and Node 20 is deprecated on runners, but that is a
+      # separate change with its own exposure — several gates in this repository
+      # compare recorded output whose wording is V8-version dependent.
       - name: Use an npm new enough for trusted publishing
-        run: npm install -g npm@latest
+        run: npm install -g npm@11
 
       - name: Install dependencies
         run: npm ci
