@@ -1,0 +1,46 @@
+{
+  "sidebar.mainSidebar.category.Core Concepts": {
+    "message": "Core Concepts",
+    "description": "The label for category 'Core Concepts' in sidebar 'mainSidebar'"
+  },
+  "sidebar.mainSidebar.category.FDS Transformer": {
+    "message": "FDS Transformer",
+    "description": "The label for category 'FDS Transformer' in sidebar 'mainSidebar'"
+  },
+  "sidebar.mainSidebar.category.Getting Started": {
+    "message": "Getting Started",
+    "description": "The label for category 'Getting Started' in sidebar 'mainSidebar'"
+  },
+  "sidebar.mainSidebar.category.Governance": {
+    "message": "Governance",
+    "description": "The label for category 'Governance' in sidebar 'mainSidebar'"
+  },
+  "sidebar.mainSidebar.category.JSON Schemas": {
+    "message": "JSON Schemas",
+    "description": "The label for category 'JSON Schemas' in sidebar 'mainSidebar'"
+  },
+  "sidebar.mainSidebar.category.Specifications (RFCs)": {
+    "message": "Specifications (RFCs)",
+    "description": "The label for category 'Specifications (RFCs)' in sidebar 'mainSidebar'"
+  },
+  "sidebar.mainSidebar.category.Tools": {
+    "message": "Tools",
+    "description": "The label for category 'Tools' in sidebar 'mainSidebar'"
+  },
+  "sidebar.useCasesSidebar.category.Composition — sessions and plans": {
+    "message": "Composition — sessions and plans",
+    "description": "The label for category 'Composition — sessions and plans' in sidebar 'useCasesSidebar'"
+  },
+  "sidebar.useCasesSidebar.category.Foundations — the shared library": {
+    "message": "Foundations — the shared library",
+    "description": "The label for category 'Foundations — the shared library' in sidebar 'useCasesSidebar'"
+  },
+  "sidebar.useCasesSidebar.category.Prescription — the intent primitives": {
+    "message": "Prescription — the intent primitives",
+    "description": "The label for category 'Prescription — the intent primitives' in sidebar 'useCasesSidebar'"
+  },
+  "version.label": {
+    "message": "1.4.0",
+    "description": "The label for version current"
+  }
+}
