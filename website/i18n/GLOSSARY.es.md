@@ -90,3 +90,24 @@ En las cadenas de la interfaz se usan comillas inglesas ("…"); las angulares
 | rate limit | límite de tasa | |
 | cost estimation | estimación de costos | «costos», forma americana — nunca «costes» |
 | MUST / MUST NOT / SHOULD / MAY | DEBE / NO DEBE / DEBERÍA / PUEDE | palabras clave RFC 2119, siempre en mayúsculas; el inglés queda normativo |
+| overview | visión general | como en las cadenas de la interfaz ya publicadas; nunca «panorama general» |
+| array | arreglo | forma americana; nunca «matriz» |
+| default | predeterminado | |
+| legacy | heredado | |
+| timestamp | marca de tiempo | |
+| CLI | la CLI | femenino |
+| See Also | Véase también | |
+| edge case | caso límite | |
+| prompt / token / backoff | prompt / token / backoff | masculinos, sin traducir |
+| enricher | enriquecedor | el identificador `enrichers` no se traduce |
+| graceful degradation | degradación controlada | |
+| renderer | renderizador | |
+| data subject | titular de los datos | |
+| payload | carga útil | |
+| audit trail | pista de auditoría | |
+| backward compatible | retrocompatible | |
+| plate / plate math | disco / cálculo de discos | |
+| weight stack / pin | torre de placas / pasador | |
+| treadmill | caminadora | forma americana; nunca «cinta de correr» |
+| wave (5/3/1) | ola | |
+| logging | registro de eventos | *registry* también es «registro»; calificar cuando el contexto no desambigüe |
