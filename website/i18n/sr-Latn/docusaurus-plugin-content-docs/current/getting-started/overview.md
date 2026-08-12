@@ -19,7 +19,7 @@ Omogućiti prenosivost podataka i interoperabilnost među fitnes aplikacijama pr
 ### Trenutni obuhvat
 
 <!-- fds:count rfcs=8 -->
-**U obuhvatu** — osam objavljenih RFC dokumenata:
+**U obuhvatu** — 8 objavljenih RFC dokumenata:
 
 - **Model podataka vežbe** (RFC-001)
 - **Kataloški entiteti**: oprema (RFC-002), mišići (RFC-003), kategorije mišića (RFC-004), atlas tela (RFC-005)

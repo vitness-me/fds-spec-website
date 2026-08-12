@@ -49,7 +49,11 @@ translate the prose, and run `--update`.
   `name`/`description` entries in the published examples), not in the docs
   fences.
 - **`fds:` markers**, in fences and in `<!-- fds:* -->` comments. Also
-  enforced.
+  enforced. A sentence a `fds:count` marker annotates states its number **as
+  a digit** in a translation (`8 RFC publicados`), never spelled out:
+  `check:versions` recognizes digits and English number words, digits are the
+  one form every language shares, and a per-language word list in the checker
+  would be a hand-kept list waiting to drift.
 - Schema field names, entity names, code identifiers, URLs, file names, CLI
   commands, RFC numbers.
 
