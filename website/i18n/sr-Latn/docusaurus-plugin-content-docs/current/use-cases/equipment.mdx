@@ -1,0 +1,71 @@
+---
+title: Modelujte opremu tako da preskripcija ostane ponovljiva
+sidebar_label: Oprema
+description: Recite šta mašina radi u brojevima po kojima druga teretana može da postupi — i recite otvoreno kada ne možete.
+usecase_promise: Recite šta mašina radi u brojevima po kojima druga teretana može da postupi, i recite otvoreno kada ne možete.
+usecase_family: foundations
+usecase_audiences: [oem-engineer, platform-lead]
+usecase_sources:
+  - specification/schemas/equipment/v1.1.0/equipment.example.json
+  - specification/schemas/equipment/v1.1.0/equipment.example.stack.json
+---
+
+import {SpecExample, BeforeAfter, Panel, Audience, NextSteps, Next} from '@site/docs/use-cases/_shared/UseCase';
+import barbell from '@site/../specification/schemas/equipment/v1.1.0/equipment.example.json';
+import cableStack from '@site/../specification/schemas/equipment/v1.1.0/equipment.example.stack.json';
+
+# Modelujte opremu tako da preskripcija ostane ponovljiva
+
+> Recite šta mašina radi u brojevima po kojima druga teretana može da postupi, i recite otvoreno kada ne možete.
+
+<Audience ids={['oem-engineer', 'platform-lead']} />
+
+<BeforeAfter>
+  <Panel kind="before">
+    Računica sa diskovima iznova se izvodi u svakoj aplikaciji. „Nivo 7“ jedne mašine
+    putuje između sistema kao da svuda znači isto, a nagibi i kadence trpaju se u
+    belešku od slobodnog teksta po kojoj nijedan konzument ne može da postupi.
+  </Panel>
+  <Panel kind="after">
+    Oprema nosi ono čime se opterećuje i u kojim koracima. `loading.increment` je
+    merodavan za računicu sa diskovima i stekom, a `stackBased` kaže da li su ti
+    koraci fiksni. Ono što standard ne može da učini prenosivim — proizvođačevu
+    sopstvenu numeraciju — čuva upravo kao to, umesto da se pretvara da se konvertuje.
+  </Panel>
+</BeforeAfter>
+
+## Šipka sa slobodnim tegovima i stek sa klinom
+
+Šipka je identitet, klasifikacija i lokalizovani i za proizvođača specifični detalji
+koje teretana želi — ali bez pravila opterećivanja, jer šipka prima bilo koje diskove.
+
+<SpecExample source="specification/schemas/equipment/v1.1.0/equipment.example.json" data={barbell}>
+  Šipka. Ekstenzija `x:gym-management` nosi inventar i održavanje koje konzument može
+  da ignoriše; jezgro ostaje o samoj opremi.
+</SpecExample>
+
+Kablovski stek sa klinom je drugačiji: njegovo opterećenje se menja u fiksnim
+koracima, a to je činjenica na koju preskripcija nizvodno mora da se zaokruži.
+
+<SpecExample source="specification/schemas/equipment/v1.1.0/equipment.example.stack.json" data={cableStack}>
+  `loading.increment` je 5 kg, a `stackBased` je true — koraci su fiksni, pa konzument
+  zna da preskripcija mora da se poravna sa njima.
+</SpecExample>
+
+## Kako funkcioniše
+
+`loading` je mesto gde živi ponovljivost: inkrement i to da li je opterećenje
+zasnovano na steku dovoljni su da se računica sa diskovima ili klinom izvede na isti
+način u svakom konzumentu. Otpor koji menja *koliko je teško* umesto *šta* — točkić
+na mašini, nivo otpora — ostaje preskripcija opterećenja sa imenovanom skalom, a ne
+činjenica o opremi, jer su „nivo 7“ dva proizvođača međusobno nepovezani i standard
+odbija da nagovesti suprotno.
+
+Praktično pravilo koje model sprovodi: zabeležite ono što je prenosivo kao brojeve, a
+ono što nije prenosivo držite jasno označeno kao specifično za mašinu, tako da je
+trening ponovljiv na istoj mašini i nikada se tiho pogrešno ne konvertuje na drugu.
+
+<NextSteps>
+  <Next to="/docs/use-cases/prescription">Pogledajte kako preskripcija referencira opterećenje</Next>
+  <Next to="/docs/schemas/equipment">Pročitajte šemu opreme</Next>
+</NextSteps>

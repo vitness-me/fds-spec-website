@@ -1,0 +1,65 @@
+---
+title: Objavite katalog vežbi koji drugi sistem može da čita
+sidebar_label: Katalog vežbi
+description: Opišite vežbu jednom, u obliku koji drugi sistem može da konzumira ne pitajući vas šta ste mislili.
+usecase_promise: Opišite vežbu jednom, u obliku koji drugi sistem čita ne pitajući vas šta ste mislili.
+usecase_family: foundations
+usecase_audiences: [app-developer, researcher]
+usecase_sources:
+  - specification/schemas/exercises/v1.1.0/exercise.example.json
+---
+
+import {SpecExample, BeforeAfter, Panel, Audience, NextSteps, Next} from '@site/docs/use-cases/_shared/UseCase';
+import backSquat from '@site/../specification/schemas/exercises/v1.1.0/exercise.example.json';
+
+# Objavite katalog vežbi koji drugi sistem može da čita
+
+> Opišite vežbu jednom, u obliku koji drugi sistem čita ne pitajući vas šta ste mislili.
+
+<Audience ids={['app-developer', 'researcher']} />
+
+<BeforeAfter>
+  <Panel kind="before">
+    Svaka aplikacija izmišlja sopstveni ključ za vežbu — `exercise_id`, `exerciseId`,
+    `eid`, `Exercise_Ref` — i sopstvenu taksonomiju mišića uz njega. Integracija dva
+    kataloga je svaki put iznova poseban projekat mapiranja, a mapiranje truli onog
+    trenutka kada bilo koja strana doda polje.
+  </Panel>
+  <Panel kind="after">
+    Vežba je obavezno jezgro — identitet, klasifikacija, ciljevi, metrike,
+    metapodaci — sa mišićima vezanim kroz `targets`, opremom kroz `equipment`,
+    i rečnikom metrika čija su važeća uparivanja tipa i jedinice zapisana.
+    Dva kataloga koja ga oba govore poklapaju se bez sloja za prevođenje.
+  </Panel>
+</BeforeAfter>
+
+## Potpuna vežba
+
+Sve što je konzumentu potrebno da smesti čučanj u biblioteku: kanonsko ime i slug,
+lokalizovana imena, klasifikacija pokreta i mehanike, mišići koje cilja sa id-evima
+njihovih kategorija, oprema koja joj je potrebna i metrike u kojima se meri. Dodaci
+specifični za proizvođača žive pod imenskim prostorom `x:`, sklonjeni od jezgra.
+
+<SpecExample source="specification/schemas/exercises/v1.1.0/exercise.example.json" data={backSquat}>
+  Zadnji čučanj, potpuno opisan. Obratite pažnju na `targets.primary[].id` — id mišića
+  koji drugi dokument razrešava — i na ključeve ekstenzija `x:vitness.*`, koje
+  konzument koji ih ne poznaje ignoriše.
+</SpecExample>
+
+## Kako funkcioniše
+
+Identitet je stabilan id plus kanonsko ime i slug; svaki tekst namenjen ljudima može
+da se lokalizuje bez diranja id-a. `classification` nosi činjenice o pokretu po
+kojima konzument filtrira i grupiše. `targets` imenuje mišiće po id-u umesto
+slobodnim tekstom, pa se katalog vežbi i biblioteka mišića razrešavaju jedno prema
+drugom — lanac od vežbe do regiona tela je stvaran, a ne opisan.
+
+Polja koja FDS nije predvideo ne nameću račvanje: idu pod imenski prostor ekstenzija
+`x:vendor`, a konzument koji za njih nikada nije čuo i dalje validira dokument. To je
+ono što omogućava da jedan katalog služi mnogim čitaocima, a da se nijedan od njih
+unapred ne složi o svemu što bi katalog mogao da nosi.
+
+<NextSteps>
+  <Next to="/docs/use-cases/muscles-and-atlas">Pratite cilj do regiona tela</Next>
+  <Next to="/docs/schemas/exercise">Pročitajte šemu vežbe</Next>
+</NextSteps>

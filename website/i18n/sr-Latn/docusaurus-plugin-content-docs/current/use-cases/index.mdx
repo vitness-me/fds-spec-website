@@ -1,0 +1,77 @@
+---
+title: Šta možete da uradite sa FDS-om?
+sidebar_label: Šta možete da uradite sa FDS-om?
+description: Sloj mogućnosti standarda Fitness Data Standard — čemu standard zapravo služi, grupisano od temeljnog do složenog.
+---
+
+import {Gallery, Card} from '@site/docs/use-cases/_shared/UseCase';
+import {CoverageMatrix} from '@site/docs/use-cases/_shared/Coverage';
+
+# Šta možete da uradite sa FDS-om?
+
+Fitness Data Standard je zajednički rečnik za fitnes podatke — od jedne vežbe do
+dvanaestonedeljnog plana. Ovaj odeljak odgovara na jedno pitanje: **šta sa njim
+zapravo možete da uradite?**
+
+Mogućnosti se nadograđuju jedna na drugu. **Zajednička biblioteka** je rečnik kojim
+je sve ostalo napisano. Primitivi **preskripcije** izražavaju nameru — koliko
+opterećenja, koliko ponavljanja, koliko odmora — kao delove za višekratnu upotrebu.
+**Kompozicija** ih slaže u treninge i planove. Čitajte ih tim redom, ili skočite na
+onu mogućnost koja odgovara problemu pred vama.
+
+Svaki primer na svakoj stranici ispod učitava se direktno iz objavljene datoteke u
+standardu. Ništa ovde nije samo ilustrativno i ništa nije ručno otkucano — ako se
+datoteka preimenuje ili verzija podigne, build pada pre nego što stranica može da
+zastari.
+
+## Temelji — zajednička biblioteka
+
+<Gallery>
+  <Card to="/docs/use-cases/exercise-catalog" title="Katalog vežbi">
+    Opišite vežbu jednom, u obliku koji drugi sistem čita ne pitajući vas šta ste mislili.
+  </Card>
+  <Card to="/docs/use-cases/equipment" title="Oprema">
+    Recite šta mašina radi u brojevima po kojima druga teretana može da postupi, i recite otvoreno kada ne možete.
+  </Card>
+  <Card to="/docs/use-cases/muscles-and-atlas" title="Mišići i atlas tela">
+    Imenujte region jednom; svaki prikazivač ga crta, a nijedan ne mora da se slaže oko crteža.
+  </Card>
+</Gallery>
+
+## Preskripcija — primitivi namere
+
+<Gallery>
+  <Card to="/docs/use-cases/prescription" title="Primitivi preskripcije">
+    Propišite opterećenje, ponavljanja i odmor kao primitive koji referenciraju brojeve osobe, a nikada ih ne nose.
+  </Card>
+</Gallery>
+
+## Kompozicija — treninzi i planovi
+
+<Gallery>
+  <Card to="/docs/use-cases/authoring-workouts" title="Sastavljanje treninga">
+    Jedna šema i jedno polje izražavaju svaki način na koji ljudi strukturiraju trening.
+  </Card>
+  <Card to="/docs/use-cases/programming" title="Programiranje">
+    Program pokazuje na treninge; popravite jedan trening i popravljen je svaki plan koji ga koristi.
+  </Card>
+</Gallery>
+
+## Da li može da izrazi kako zaista trenirate?
+
+Stranice o kompoziciji iznad tvrde da jedna šema izražava svaki način na koji ljudi
+strukturiraju trening. Ta tvrdnja ima kontrolnu listu.
+
+<CoverageMatrix />
+
+## Šta FDS namerno ne radi
+
+FDS ne modeluje nijednu osobu. Nigde u standardu ne postoji identitet sportiste,
+telesna masa, maksimum za jedno ponavljanje, niti ostvaren ili zabeležen rezultat. To
+je projektna odluka, a ne propust: dokument koji ne opisuje nikoga može slobodno da
+se objavljuje, kešira, preslikava i poredi po razlikama, bez ikakve obaveze
+pristanka, čuvanja ili brisanja podataka. Svaka preskripcija iznad referencira lične
+brojeve koji su joj potrebni umesto da ih nosi — pogledajte
+[Primitive preskripcije](/docs/use-cases/prescription) za način, i
+[plan razvoja](/docs/governance/roadmap) za mesto gde su ostvareni podaci namerno
+van opsega.

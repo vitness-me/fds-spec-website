@@ -1,0 +1,88 @@
+---
+title: Sastavite bilo koji trening, od klasičnih serija do Tabate
+sidebar_label: Sastavljanje treninga
+description: Modelujte svaku strukturu treninga — superserije, EMOM, AMRAP, Tabatu, intervale — jednom šemom treninga i jednim poljem.
+usecase_promise: Jedna šema i jedno polje izražavaju svaki način na koji ljudi strukturiraju trening.
+usecase_family: composition
+usecase_audiences: [app-developer, oem-engineer]
+usecase_sources:
+  - specification/schemas/workout/v1.1.0/workout.straight.example.json
+  - specification/schemas/workout/v1.1.0/workout.emom.example.json
+  - specification/schemas/workout/v1.1.0/workout.tabata.example.json
+---
+
+import {SpecExample, BeforeAfter, Panel, Audience, NextSteps, Next} from '@site/docs/use-cases/_shared/UseCase';
+import straight from '@site/../specification/schemas/workout/v1.1.0/workout.straight.example.json';
+import emom from '@site/../specification/schemas/workout/v1.1.0/workout.emom.example.json';
+import tabata from '@site/../specification/schemas/workout/v1.1.0/workout.tabata.example.json';
+
+# Sastavite bilo koji trening, od klasičnih serija do Tabate
+
+> Jedna šema i jedno polje izražavaju svaki način na koji ljudi strukturiraju trening.
+
+<Audience ids={['app-developer', 'oem-engineer']} />
+
+<BeforeAfter>
+  <Panel kind="before">
+    Vaša tabela treninga dobija novu kolonu svaki put kada trener zatraži nešto
+    novo — `is_circuit`, `emom_interval`, `tabata_rounds`, `superset_group` — i
+    većina ih je null u bilo kom redu. Svaki konzument mora da zna koje kolone važe
+    za koju vrstu treninga, a vrsta treninga koju niko nije planirao nema gde da
+    živi.
+  </Panel>
+  <Panel kind="after">
+    Trening su blokovi stavki, a način izvršavanja bloka je jedno polje:
+    `blocks[].mode`. Klasične serije, superserije, kružni trening, EMOM, AMRAP,
+    Tabata i intervalni rad su isti dokument, koji se razlikuje samo po `mode` i
+    njegovim `modeParams`. Ne postoji šema po stilu niti polje po stilu koje ostaje
+    null.
+  </Panel>
+</BeforeAfter>
+
+## Ista šema, na tri načina
+
+Evo treninga sa klasičnim serijama — polazna tačka od koje sve ostalo odstupa. Tri
+identične serije jedne vežbe, propisane procentom maksimuma za jedno ponavljanje.
+
+<SpecExample source="specification/schemas/workout/v1.1.0/workout.straight.example.json" data={straight}>
+  Tri identične serije. `mode: "sequential"`, i nikakvi `modeParams` nisu potrebni.
+</SpecExample>
+
+Ne promenite ništa osim moda, i isti oblik postaje kondiciona deonica po principu
+„svaki minut na minut“. Sat sada okončava svaki interval, i zato `modeParams` nosi
+`rounds` i `interval`.
+
+<SpecExample source="specification/schemas/workout/v1.1.0/workout.emom.example.json" data={emom}>
+  Svakog minuta na minut, dvanaest intervala. `mode: "emom"`.
+</SpecExample>
+
+I opet isti oblik, kao Tabata blok — mod prosto menja šta konzument mora da uradi da
+bi prošao kroz blok i okončao ga.
+
+<SpecExample source="specification/schemas/workout/v1.1.0/workout.tabata.example.json" data={tabata}>
+  Osam rundi od 20 sekundi rada i 10 sekundi odmora. `mode: "tabata"`.
+</SpecExample>
+
+## Kako funkcioniše
+
+`mode` odlučuje tri stvari koje konzument drugačije ne može da izvede: kako se blok
+**prolazi** (sve serije prve stavke pre druge, ili po jedna serija svake stavke u
+svakom prolazu), kada se **okončava** (posao je završen, ili sat istekne) i koji
+`modeParams` imaju značenje. Sve ostalo u dokumentu identično je u sva tri primera
+iznad.
+
+Grupisanje je **oznaka**, a ne ugnežđavanje: dve stavke koje se smenjuju u
+superseriji nose `groupLabel` `A1` i `A2`, a odmor pada na granicu grupe. Serije
+stavke zadaju se brojem `sets` **ili** šemom `scheme`, nikada i jednim i drugim —
+šema to sprovodi — pa postoji tačno jedno mesto sa koga se čita kako serija
+napreduje.
+
+Isplata je u tome što konzument napisan jednom čita svaki trening. Dodavanje novog
+načina treniranja ne dodaje šemu, kolonu u tabeli niti grananje; to je nova vrednost
+jednog polja, a konzumentu koji je ne prepoznaje standard kaže tačno šta ne sme da
+pretpostavi.
+
+<NextSteps>
+  <Next to="/docs/use-cases/programming">Uvrstite ove treninge u plan</Next>
+  <Next to="/docs/schemas/workout">Pročitajte šemu treninga</Next>
+</NextSteps>

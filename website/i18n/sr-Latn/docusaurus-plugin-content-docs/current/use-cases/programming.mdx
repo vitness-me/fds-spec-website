@@ -1,0 +1,75 @@
+---
+title: Isplanirajte dvanaest nedelja bez kopiranja treninga trideset šest puta
+sidebar_label: Programiranje
+description: Program pokazuje na treninge; popravite jedan trening i popravljen je svaki plan koji ga koristi.
+usecase_promise: Program pokazuje na treninge; popravite jedan trening i popravljen je svaki plan koji ga koristi.
+usecase_family: composition
+usecase_audiences: [coach, researcher]
+usecase_sources:
+  - specification/schemas/program/v1.0.0/program.linear.example.json
+  - specification/schemas/program/v1.0.0/program.percentage-waves.example.json
+---
+
+import {SpecExample, BeforeAfter, Panel, Audience, NextSteps, Next} from '@site/docs/use-cases/_shared/UseCase';
+import linear from '@site/../specification/schemas/program/v1.0.0/program.linear.example.json';
+import waves from '@site/../specification/schemas/program/v1.0.0/program.percentage-waves.example.json';
+
+# Isplanirajte dvanaest nedelja bez kopiranja treninga trideset šest puta
+
+> Program pokazuje na treninge; popravite jedan trening i popravljen je svaki plan koji ga koristi.
+
+<Audience ids={['coach', 'researcher']} />
+
+<BeforeAfter>
+  <Panel kind="before">
+    Dvanaestonedeljni plan ugrađuje trideset šest gotovo identičnih kopija treninga.
+    Popravite ga u osam njih i plan se sada ne slaže sam sa sobom. Plan i trening su
+    upleteni jedno u drugo, pa ništa od toga ne može ponovo da se upotrebi.
+  </Panel>
+  <Panel kind="after">
+    Program je raspored **referenci** na treninge, od kojih svaka nosi
+    denormalizovano ime, pa plan ostaje čitljiv bez razrešavanja bilo čega.
+    Preskripcija živi u treninzima; program kaže samo šta pada kada. Popravite
+    trening jednom i popravljen je svaki plan koji pokazuje na njega.
+  </Panel>
+</BeforeAfter>
+
+## Plan je raspored, a ne gomila treninga
+
+Linearna progresija je cela metodologija u jednom pravilu: dodajte opterećenje kad
+god je svako ponavljanje završeno. Obe nedelje su identične — opterećenje se pomera,
+plan ne — a dani pokazuju na trening referencom.
+
+<SpecExample source="specification/schemas/program/v1.0.0/program.linear.example.json" data={linear}>
+  Svaki dan je referenca `workout` sa denormalizovanim `name`. Nijedna serija,
+  ponavljanje ni opterećenje ne pojavljuje se u programu — žive u treningu na koji
+  pokazuje.
+</SpecExample>
+
+Ista struktura skalira se do talasa u stilu 5/3/1 — i dalje ne nosi brojeve nijednog
+sportiste.
+
+<SpecExample source="specification/schemas/program/v1.0.0/program.percentage-waves.example.json" data={waves}>
+  Slotovi trenažnog maksimuma deklarišu iz kojih vežbi se plan računa; `overrides`
+  nose talas. Nijedna *vrednost* trenažnog maksimuma ne pojavljuje se nigde u
+  dokumentu.
+</SpecExample>
+
+## Kako funkcioniše
+
+Dan se razrešava u trening **ili** je dan odmora — nikada oboje, nikada nijedno — a
+model rasporeda (`calendar`, `relative`, `rolling`, `sequence`) odlučuje koje polje
+smeštanja je merodavno. Ponovna upotreba dolazi iz `overrides`: nedelja može da se
+skalira ili označi kao rasterećenje bez izmene treninga na koji pokazuje, pa trening
+ostaje deljen.
+
+Cena je poštena i navedena: program nije izvršiv bez razrešavanja svojih referenci, a
+potpuno personalizovan plan ne prenosi se u oba smera kao jedan samostalan dokument —
+on je plan plus odvojen kontekst razrešavanja. Ta razmena je ono što kupuje svako
+drugo svojstvo: plan koji ne nosi ostvarene podatke i nijednu osobu jeste plan koji
+može da se objavi i poredi po razlikama kao svaki drugi dokument.
+
+<NextSteps>
+  <Next to="/docs/use-cases/prescription">Pogledajte gde brojevi zaista žive</Next>
+  <Next to="/docs/schemas/program">Pročitajte šemu programa</Next>
+</NextSteps>
