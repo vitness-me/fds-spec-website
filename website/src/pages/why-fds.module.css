@@ -53,7 +53,7 @@
 
 .chapter {
   display: grid;
-  grid-template-columns: 4.5rem minmax(0, 640px);
+  grid-template-columns: 4.5rem minmax(0, 640px) minmax(0, 1fr);
   border-top: 1px solid var(--fds-border);
   padding: 2.75rem 0;
 }
@@ -91,6 +91,46 @@
   color: var(--fds-fg);
 }
 
+/* ── the evidence rail ──────────────────────────────────────────────────────
+   Every chapter's claim has an artifact somewhere on the site that backs it;
+   the right column points at it. On an all-prose page the empty right 40%
+   read as an unfinished column — now it is the page's evidence margin:
+   claim on the left, the thing that proves it on the right. */
+
+.chapterAside {
+  padding-left: 4rem;
+  padding-top: 0.4rem;
+}
+
+.asideLead {
+  margin: 0 0 0.625rem;
+  font-family: var(--fds-mono);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fds-fg-faint);
+}
+
+.asideLink {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--fds-fg-muted);
+  text-decoration: none;
+}
+
+.asideLink:hover {
+  color: var(--fds-fg);
+  text-decoration: none;
+}
+
+.asideNote {
+  margin: 0.5rem 0 0;
+  font-size: 0.8125rem;
+  line-height: 1.55;
+  color: var(--fds-fg-dim);
+}
+
 /* ── the close ──────────────────────────────────────────────────────────── */
 
 .close {
@@ -106,6 +146,21 @@
   margin: 0 0 1.5rem;
 }
 
+/* Between full width and stacked, the rail would be squeezed into a sliver —
+   tuck it under the prose instead, still indented past the chapter number. */
+@media (max-width: 1080px) {
+  .chapter {
+    grid-template-columns: 4.5rem minmax(0, 640px);
+  }
+
+  .chapterAside {
+    grid-column: 2;
+    padding-left: 0;
+    padding-top: 0;
+    margin-top: 1.5rem;
+  }
+}
+
 @media (max-width: 820px) {
   .header {
     padding: 3.5rem 0 2.5rem;
@@ -119,6 +174,11 @@
 
   .chapterNo {
     line-height: 1.4;
+  }
+
+  .chapterAside {
+    grid-column: 1;
+    margin-top: 1rem;
   }
 
   .chapters {
