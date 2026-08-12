@@ -7,10 +7,13 @@ import styles from './styles.module.css';
  *
  * A thin chrome — filename strip, optional badge, optional footer — around
  * Docusaurus's own `@theme/CodeBlock`, which is also what every ```fence in
- * the docs renders through. The syntax palettes are VS Code's (vsLight /
- * vsDark, set in docusaurus.config.ts) and the editor chrome is styled once
- * in src/css/custom.css, so the landing page, the use-case pages and the
- * documentation cannot drift into three code aesthetics.
+ * the docs renders through. The syntax palette is the site's own (the
+ * --fds-code-* variables in src/css/custom.css, consumed by the prism theme
+ * in docusaurus.config.ts) and the panel chrome is styled once in the same
+ * sheet, so the landing page, the use-case pages and the documentation
+ * cannot drift into three code aesthetics. Chrome is for panels arguing
+ * "this is a real file": callers that show one keep the filename strip, and
+ * line numbers stay on only where they mean something.
  *
  * This component takes a `code` string and renders it; what that string is —
  * a published example, a fixture, a transform output — is the caller's claim

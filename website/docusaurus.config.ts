@@ -1,6 +1,6 @@
 import {readFileSync} from 'node:fs';
 import path from 'node:path';
-import {themes as prismThemes} from 'prism-react-renderer';
+import type {PrismTheme} from 'prism-react-renderer';
 import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 
@@ -23,6 +23,45 @@ import type * as Preset from '@docusaurus/preset-classic';
 const {currentRelease} = JSON.parse(
   readFileSync(path.join(__dirname, '..', 'specification', 'releases.json'), 'utf8'),
 ) as {currentRelease: string};
+
+/**
+ * The site's syntax palette — quiet on purpose.
+ *
+ * An IDE theme is tuned for scanning thousands of lines with nothing else on
+ * screen; dropped into a page built on hairlines and four text tiers it is
+ * the loudest element there. This palette makes two decisions instead of
+ * many: keys carry the full-strength text tier (the vocabulary is the
+ * standard's argument), values carry the site's one accent, and everything
+ * structural drops to the dim tier.
+ *
+ * Every color is a CSS custom property (--fds-code-*, defined for both color
+ * modes in src/css/custom.css), so this one object serves light and dark,
+ * and a surface that genuinely needs a louder rendering can re-declare the
+ * variables in its own scope instead of introducing a second theme.
+ */
+const fdsCodeTheme: PrismTheme = {
+  plain: {color: 'var(--fds-code-fg)', backgroundColor: 'var(--fds-code-bg)'},
+  styles: [
+    {
+      // The vocabulary: JSON keys, keywords, commands.
+      types: ['property', 'attr-name', 'keyword', 'builtin', 'tag', 'selector', 'class-name', 'function'],
+      style: {color: 'var(--fds-code-key)'},
+    },
+    {
+      // The data: strings, numbers, booleans.
+      types: ['string', 'char', 'attr-value', 'number', 'boolean', 'inserted', 'url', 'symbol', 'constant', 'regex'],
+      style: {color: 'var(--fds-code-value)'},
+    },
+    {
+      types: ['punctuation', 'operator'],
+      style: {color: 'var(--fds-code-dim)'},
+    },
+    {
+      types: ['comment', 'prolog', 'doctype', 'cdata'],
+      style: {color: 'var(--fds-code-dim)', fontStyle: 'italic'},
+    },
+  ],
+};
 
 const config: Config = {
   title: 'Fitness Data Standard (FDS)',
@@ -304,11 +343,13 @@ const config: Config = {
       copyright: `Copyright © ${new Date().getFullYear()} Vitness. Licensed under the VITNESS Open Standards License Agreement.`,
     },
     prism: {
-      // VS Code's own palettes (Light+/Dark+ as ported by prism-react-renderer),
-      // so every code panel on the site reads like the editor most readers
-      // already work in. The chrome to match lives in src/css/custom.css.
-      theme: prismThemes.vsLight,
-      darkTheme: prismThemes.vsDark,
+      // One theme object for both color modes: every color is a CSS custom
+      // property, defined for light and dark in src/css/custom.css, so the
+      // palette lives with the rest of the site's tokens and a surface that
+      // needs a different rendering can re-declare the variables in scope
+      // rather than growing a second theme.
+      theme: fdsCodeTheme,
+      darkTheme: fdsCodeTheme,
       additionalLanguages: ['json', 'typescript', 'bash'],
       magicComments: [
         {
