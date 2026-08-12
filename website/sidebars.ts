@@ -67,6 +67,7 @@ const sidebars: SidebarsConfig = {
       label: 'Specifications (RFCs)',
       collapsed: false,
       items: [
+        'specifications/index',
         'specifications/rfc-001-exercise-data-model',
         'specifications/rfc-002-equipment-data-model',
         'specifications/rfc-003-muscle-data-model',
