@@ -381,7 +381,7 @@ const config: Config = {
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} Vitness. Licensed under the VITNESS Open Standards License Agreement.`,
+      copyright: `Copyright © ${new Date().getFullYear()} Vitness. Licensed under the <a href="/docs/license">VITNESS Open Standards License Agreement</a>.`,
     },
     prism: {
       // One theme object for both color modes: every color is a CSS custom

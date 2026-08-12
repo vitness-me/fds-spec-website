@@ -61,6 +61,7 @@ const DOC_PAIRS = [
   ['specification/governance/CHANGELOG.md', 'governance/changelog'],
   ['specification/governance/CONTRIBUTING.md', 'governance/contributing'],
   ['specification/governance/GOVERNANCE.md', 'governance/index'],
+  ['specification/VITNESS Open Standards License Agreement.md', 'license'],
 ];
 
 /**
