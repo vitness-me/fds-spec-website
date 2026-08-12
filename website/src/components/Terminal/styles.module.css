@@ -1,0 +1,135 @@
+/**
+ * The terminal window. Deliberately dark in both site themes — its palette is
+ * self-contained rather than token-driven, because a terminal keeps its own
+ * colors regardless of the document around it.
+ */
+
+.terminal {
+  margin: 0;
+  background: #17171b;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 12px;
+  overflow: hidden;
+  /* Grounds the dark panel on the light page; invisible on the dark one. */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+/* ── title bar ──────────────────────────────────────────────────────────── */
+
+.titleBar {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: 0.625rem 1rem;
+  background: rgba(255, 255, 255, 0.04);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.lights {
+  display: inline-flex;
+  gap: 6px;
+}
+
+.lights i {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+}
+
+.lights i:nth-child(1) {
+  background: #ff5f57;
+}
+
+.lights i:nth-child(2) {
+  background: #febc2e;
+}
+
+.lights i:nth-child(3) {
+  background: #28c840;
+}
+
+.title {
+  flex: 1;
+  text-align: center;
+  /* Optically recenter across the width the lights occupy on the left. */
+  margin-right: 45px;
+  font-family: var(--fds-mono, 'JetBrains Mono', 'SF Mono', 'Fira Code', Monaco, monospace);
+  font-size: 0.6875rem;
+  letter-spacing: 0.02em;
+  color: #8b8b93;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ── the transcript ─────────────────────────────────────────────────────── */
+
+.body {
+  padding: 1rem 1.25rem 1.125rem;
+  font-family: var(--fds-mono, 'JetBrains Mono', 'SF Mono', 'Fira Code', Monaco, monospace);
+  font-size: 0.8125rem;
+  line-height: 1.75;
+}
+
+/* Terminals wrap long lines; so does this one. */
+.line {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.prompt {
+  color: #61a5f2;
+}
+
+.command {
+  color: #e8e8ea;
+}
+
+.output {
+  color: #a1a1aa;
+}
+
+.notice {
+  color: #d3b136;
+}
+
+.glyphOk {
+  color: #4ade80;
+}
+
+.glyphStep {
+  color: #9d9da6;
+}
+
+.glyphFrame {
+  color: #47474f;
+}
+
+.caret {
+  display: inline-block;
+  width: 7px;
+  height: 14px;
+  margin-left: 8px;
+  vertical-align: text-bottom;
+  background: #8b8b93;
+  animation: terminalBlink 1s steps(2, end) infinite;
+}
+
+@keyframes terminalBlink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .caret {
+    animation: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .body {
+    padding: 0.875rem 1rem 1rem;
+    font-size: 0.75rem;
+  }
+}

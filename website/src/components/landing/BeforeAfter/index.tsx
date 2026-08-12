@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from '@docusaurus/Link';
 import { Highlight, themes } from 'prism-react-renderer';
+import Terminal from '@site/src/components/Terminal';
 import styles from './styles.module.css';
 
 // Every panel in this section is a file that ships in this repository, from
@@ -11,6 +12,12 @@ import styles from './styles.module.css';
 import source from '../../../../../packages/fds-transformer/fixtures/roundtrip/source.json';
 import mappingConfig from '../../../../../packages/fds-transformer/fixtures/roundtrip/mapping.config.json';
 import expected from '../../../../../packages/fds-transformer/fixtures/roundtrip/expected/exercises.json';
+
+// The terminal session, recorded from the CLI itself: `check:transform`
+// replays this file's command verbatim and diffs the CLI's merged output
+// against these lines, so the transcript cannot say anything the tool
+// does not print.
+import transcript from '../../../../../packages/fds-transformer/fixtures/roundtrip/expected/transcript.json';
 
 // The back squat the hero promises: first record of the fixture.
 const before = JSON.stringify(source[0], null, 2);
@@ -24,8 +31,8 @@ const mappingRows = Object.entries(mappingConfig.mappings as Record<string, unkn
   .filter(({ rule }) => typeof rule?.from === 'string' && rule.from.length > 0)
   .map(({ target, rule }) => ({ from: rule.from as string, target, transform: rule.transform }));
 
-const command = `npx @vitness/fds-transformer transform \\
-    -i source.json -c mapping.config.json -o out/`;
+// The command shown is the command the recording ran, from the same file.
+const command = `npx @vitness/fds-transformer ${transcript.command.join(' ')}`;
 
 /** Detect dark mode without breaking SSR (mirrors the QuickStart hook). */
 function useSafeColorMode(): 'light' | 'dark' {
@@ -81,18 +88,8 @@ export default function BeforeAfter(): JSX.Element {
           </p>
         </div>
 
-        <div className={`fdsTile ${styles.terminal}`}>
-          <div className="fdsTileHead">
-            <span className={styles.dots} aria-hidden="true">
-              <i /><i /><i />
-            </span>
-            <span className={styles.terminalTitle}>~/roundtrip</span>
-          </div>
-          <div className={styles.terminalBody}>
-            <span className={styles.prompt}>$</span>{' '}
-            <span className={styles.terminalCommand}>{command}</span>
-            <span className={styles.caret} aria-hidden="true" />
-          </div>
+        <div className={styles.terminal}>
+          <Terminal title="~/roundtrip" command={command} lines={transcript.lines} />
         </div>
 
         <div className={styles.panels}>
