@@ -53,6 +53,15 @@
  *     repository's recurring defect; the comparison is what closes the gap. If
  *     it fails because the transformer legitimately changed, re-run the
  *     transform into `fixtures/roundtrip/expected/` and commit the result.
+ *   - the terminal on the landing page is a transcript, not an impression:
+ *     `fixtures/roundtrip/expected/transcript.json` is a recorded capture of
+ *     the CLI's merged stdout and stderr for the exact arguments the page
+ *     displays, and the gate replays those arguments in a scratch directory
+ *     holding only the fixture's files and diffs the result. Spinner redraws
+ *     are collapsed to the frame a finished terminal shows, and elapsed-time
+ *     figures are excused the way UUIDs are above. If it fails because the
+ *     CLI's output legitimately changed, re-record with `--record-transcript`
+ *     and commit the result.
  *   - no registry lookup silently resolved to nothing — a lookup that was asked
  *     for and matched nothing returns an empty array, which validates, writes,
  *     and is indistinguishable from a field nobody asked to fill
@@ -76,8 +85,8 @@
  *   node scripts/check-transform.mjs [--self-test]
  */
 
-import { execFile } from 'node:child_process';
-import { access, mkdtemp, readdir, readFile, rm } from 'node:fs/promises';
+import { execFile, spawn } from 'node:child_process';
+import { access, cp, mkdir, mkdtemp, open, readdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { promisify } from 'node:util';
@@ -406,6 +415,105 @@ export function compareToExpected({ documents, expected }) {
   return problems;
 }
 
+// ── the committed terminal transcript ────────────────────────────────────────
+
+const TRANSCRIPT_FILE = `${FIXTURE_DIR}/expected/transcript.json`;
+const RECORD_HINT = 'Re-record it: node scripts/check-transform.mjs --record-transcript';
+
+/**
+ * A raw capture reduced to what a terminal shows once the run has finished.
+ *
+ * The CLI animates a spinner by redrawing one line in place: each redraw
+ * starts with a cursor return (`ESC[999D`, or a bare `\r`) and an erase
+ * (`ESC[J`). On a screen only the text after the last redraw survives, so
+ * that is what the transcript keeps. Cursor hide/show sequences and any
+ * remaining escape codes are styling, not content, and trailing blank lines
+ * are the shell getting its prompt back.
+ */
+export function normalizeTranscript(raw) {
+  return raw
+    .replace(/\x1b\[\?25[lh]/g, '')
+    .split('\n')
+    .map((line) =>
+      line
+        .split(/(?:\x1b\[999D|\x1b\[J|\r)+/)
+        .at(-1)
+        .replace(/\x1b\[[0-9;?]*[A-Za-z]/g, '')
+        .trimEnd()
+    )
+    .join('\n')
+    .replace(/\n+$/, '')
+    .split('\n');
+}
+
+/**
+ * Elapsed-time figures are the transcript's UUIDs: a fresh run cannot
+ * reproduce "in 647ms", so timings never decide the comparison — but the
+ * committed value is still a real run's, and it is what the page renders.
+ */
+const eraseTimings = (line) => line.replace(/\b\d+(?:\.\d+)?m?s\b/g, '<took>');
+
+/**
+ * The committed transcript against a fresh run's normalized output.
+ *
+ * The command is checked for shape here and *replayed verbatim* by the runner
+ * below, so the arguments the page displays, the arguments the gate runs, and
+ * the output the page renders are one thing asserted in one place.
+ */
+export function inspectTranscript({ transcript, lines }) {
+  const problems = [];
+
+  const command = transcript?.command;
+  if (
+    !Array.isArray(command) ||
+    command.length === 0 ||
+    command.some((argument) => typeof argument !== 'string') ||
+    command[0] !== 'transform'
+  ) {
+    problems.push(
+      `${TRANSCRIPT_FILE} does not carry a transform command.\n` +
+        '    The website renders this file as the terminal session and the gate ' +
+        'replays its command verbatim,\n    so it must be an array of strings ' +
+        `starting with "transform". ${RECORD_HINT}`
+    );
+    return problems;
+  }
+
+  const committed = transcript?.lines;
+  if (!Array.isArray(committed) || committed.some((line) => typeof line !== 'string')) {
+    problems.push(
+      `${TRANSCRIPT_FILE} has no lines to render.\n    ${RECORD_HINT}`
+    );
+    return problems;
+  }
+
+  const left = committed.map(eraseTimings);
+  const right = lines.map(eraseTimings);
+  if (left.length === right.length && left.every((line, index) => line === right[index])) {
+    return problems;
+  }
+
+  const diverged = [];
+  for (let index = 0; index < Math.max(left.length, right.length); index += 1) {
+    if (left[index] !== right[index]) {
+      diverged.push(
+        `      line ${index + 1}: committed ${JSON.stringify(committed[index] ?? '<absent>')}, ` +
+          `fresh run ${JSON.stringify(lines[index] ?? '<absent>')}`
+      );
+    }
+  }
+
+  problems.push(
+    `the committed transcript drifted from what the CLI prints:\n` +
+      diverged.slice(0, 6).join('\n') +
+      `\n    The landing page renders ${TRANSCRIPT_FILE} as the CLI's own ` +
+      'output. If the CLI legitimately\n    changed, the recording is stale. ' +
+      RECORD_HINT
+  );
+
+  return problems;
+}
+
 /** Mapping targets filled by a registry lookup, taken from the configuration. */
 export function registryLookups(mappings) {
   return Object.entries(mappings ?? {})
@@ -584,6 +692,46 @@ function selfTest(context) {
     );
   }
 
+  {
+    // A spinner that redraws in place must collapse to its final frame — the
+    // frame a finished terminal shows — or the transcript can never match.
+    cases += 1;
+    const raw =
+      '\u001b[?25l◒  Working\u001b[999D\u001b[J◐  Working\u001b[999D\u001b[J◇  Done\n\u001b[?25h│\n\n';
+    const collapsed = normalizeTranscript(raw);
+    if (collapsed.join('\n') !== '◇  Done\n│') {
+      failures.push(
+        `self-test: spinner redraws were not collapsed to the final frame; got ${JSON.stringify(collapsed)}`
+      );
+    }
+  }
+
+  expect(
+    'a transcript line that drifted from the CLI output',
+    inspectTranscript({
+      transcript: { command: ['transform'], lines: ['◇  Wrote 3 exercises to out/exercises.json'] },
+      lines: ['◇  Wrote 2 exercises to out/exercises.json'],
+    }),
+    'drifted from what the CLI prints'
+  );
+
+  expect(
+    'a transcript whose command is not a transform',
+    inspectTranscript({ transcript: { command: ['echo', 'done'], lines: [] }, lines: [] }),
+    'does not carry a transform command'
+  );
+
+  {
+    cases += 1;
+    const timingOnly = inspectTranscript({
+      transcript: { command: ['transform'], lines: ['●  Processed 3 items in 647ms'] },
+      lines: ['●  Processed 3 items in 12ms'],
+    });
+    if (timingOnly.length) {
+      failures.push('self-test: a timing-only difference was reported as transcript drift');
+    }
+  }
+
   return { failures, cases };
 }
 
@@ -693,6 +841,47 @@ async function transformInto(outDir, cwd) {
 
 const workspace = await mkdtemp(join(tmpdir(), 'fds-roundtrip-'));
 
+/**
+ * The displayed command, run the way a reader would run it: relative paths, in
+ * a directory holding only the fixture's files. Stdout and stderr share one
+ * file descriptor so their interleaving is the kernel's — the same merge a
+ * terminal performs — rather than a race between two pipes. Enrichment
+ * variables are scrubbed so the recorded "no API key" notice is what every
+ * machine prints, including the one with a key in its shell profile.
+ */
+async function captureTranscript(args) {
+  const sessionDir = join(workspace, 'terminal-session');
+  await mkdir(sessionDir, { recursive: true });
+  for (const name of ['source.json', 'mapping.config.json', 'registries']) {
+    await cp(join(ROOT, FIXTURE_DIR, name), join(sessionDir, name), { recursive: true });
+  }
+
+  const capturePath = join(workspace, 'transcript.raw');
+  const captureFd = await open(capturePath, 'w');
+  const env = { ...process.env };
+  delete env.OPENROUTER_API_KEY;
+  delete env.FDS_TRANSFORMER_MODEL;
+  delete env.FORCE_COLOR;
+
+  try {
+    await new Promise((resolve, reject) => {
+      const child = spawn(process.execPath, [join(ROOT, CLI_PATH), ...args], {
+        cwd: sessionDir,
+        env,
+        stdio: ['ignore', captureFd.fd, captureFd.fd],
+      });
+      child.on('error', reject);
+      child.on('close', (code) =>
+        code === 0 ? resolve() : reject(new Error(`the CLI exited ${code}`))
+      );
+    });
+  } finally {
+    await captureFd.close();
+  }
+
+  return normalizeTranscript(await readFile(capturePath, 'utf8'));
+}
+
 try {
   let documents = null;
 
@@ -782,6 +971,61 @@ try {
           'so a caller reading the exit status is told data validated that was ' +
           'never read.'
       );
+    }
+  }
+
+  // ── the terminal transcript ────────────────────────────────────────────────
+
+  const transcript = await readFile(join(ROOT, TRANSCRIPT_FILE), 'utf8')
+    .then(JSON.parse)
+    .catch(() => null);
+
+  if (process.argv.includes('--record-transcript')) {
+    // Recording replays the committed command when there is one, so an edited
+    // command is recorded rather than reverted; a fresh file starts from the
+    // command the roundtrip fixture is built for.
+    const command =
+      transcript?.command?.[0] === 'transform' &&
+      transcript.command.every((argument) => typeof argument === 'string')
+        ? transcript.command
+        : ['transform', '-i', 'source.json', '-c', 'mapping.config.json', '-o', 'out'];
+    const lines = await captureTranscript(command);
+    await writeFile(
+      join(ROOT, TRANSCRIPT_FILE),
+      `${JSON.stringify(
+        {
+          $comment:
+            'Recorded CLI output, rendered verbatim by the landing page terminal. ' +
+            'Generated by `node scripts/check-transform.mjs --record-transcript` — do not edit by hand.',
+          command,
+          lines,
+        },
+        null,
+        2
+      )}\n`
+    );
+    console.log(`  ok    recorded ${TRANSCRIPT_FILE} (${lines.length} line(s))`);
+  } else if (!transcript) {
+    problems.push(
+      `${TRANSCRIPT_FILE} is missing or unreadable.\n` +
+        '    The landing page terminal renders it as the CLI\'s own output. ' +
+        RECORD_HINT
+    );
+  } else {
+    const shaped = inspectTranscript({ transcript, lines: [] });
+    if (shaped.some((problem) => problem.includes('transform command'))) {
+      problems.push(...shaped);
+    } else {
+      try {
+        const lines = await captureTranscript(transcript.command);
+        problems.push(...inspectTranscript({ transcript, lines }));
+      } catch (error) {
+        problems.push(
+          `the transcript's command did not complete: ${error.message}\n` +
+            `    The page displays this command as runnable. Command: ` +
+            `${transcript.command.join(' ')}`
+        );
+      }
     }
   }
 } finally {
