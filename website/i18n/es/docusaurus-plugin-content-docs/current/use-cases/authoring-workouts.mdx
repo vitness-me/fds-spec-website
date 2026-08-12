@@ -1,0 +1,88 @@
+---
+title: Redactar cualquier sesión, desde series simples hasta Tabata
+sidebar_label: Redacción de sesiones
+description: Modelar toda estructura de entrenamiento — superseries, EMOM, AMRAP, Tabata, intervalos — con un solo esquema de sesión y un solo campo.
+usecase_promise: Un esquema y un campo expresan todas las formas en que se estructura una sesión.
+usecase_family: composition
+usecase_audiences: [app-developer, oem-engineer]
+usecase_sources:
+  - specification/schemas/workout/v1.1.0/workout.straight.example.json
+  - specification/schemas/workout/v1.1.0/workout.emom.example.json
+  - specification/schemas/workout/v1.1.0/workout.tabata.example.json
+---
+
+import {SpecExample, BeforeAfter, Panel, Audience, NextSteps, Next} from '@site/docs/use-cases/_shared/UseCase';
+import straight from '@site/../specification/schemas/workout/v1.1.0/workout.straight.example.json';
+import emom from '@site/../specification/schemas/workout/v1.1.0/workout.emom.example.json';
+import tabata from '@site/../specification/schemas/workout/v1.1.0/workout.tabata.example.json';
+
+# Redactar cualquier sesión, desde series simples hasta Tabata
+
+> Un esquema y un campo expresan todas las formas en que se estructura una sesión.
+
+<Audience ids={['app-developer', 'oem-engineer']} />
+
+<BeforeAfter>
+  <Panel kind="before">
+    La tabla de sesiones crece una columna cada vez que un entrenador pide algo nuevo —
+    `is_circuit`, `emom_interval`, `tabata_rounds`, `superset_group` — la mayoría en
+    null en cualquier fila dada. Cada consumidor tiene que saber qué columnas importan
+    para qué tipo de sesión, y un tipo de sesión que nadie previó no tiene dónde vivir.
+  </Panel>
+  <Panel kind="after">
+    Una sesión de entrenamiento es bloques de elementos, y cómo se ejecuta un bloque es
+    un único campo: `blocks[].mode`. Las series simples, las superseries, los circuitos,
+    el EMOM, el AMRAP, el Tabata y el trabajo por intervalos son todos el mismo documento,
+    y difieren solo en `mode` y sus `modeParams`. No hay un esquema por estilo ni un
+    campo por estilo que dejar en null.
+  </Panel>
+</BeforeAfter>
+
+## El mismo esquema, de tres maneras
+
+He aquí una sesión de series simples — la línea base de la que parte todo lo demás.
+Tres series idénticas de un ejercicio, prescritas por porcentaje de una repetición
+máxima (1RM).
+
+<SpecExample source="specification/schemas/workout/v1.1.0/workout.straight.example.json" data={straight}>
+  Tres series idénticas. `mode: "sequential"`, y no se necesita ningún `modeParams`.
+</SpecExample>
+
+Sin cambiar nada más que el modo, la misma forma se convierte en una pieza de
+acondicionamiento a cada minuto en punto. Ahora es el reloj el que termina cada
+intervalo, y por eso `modeParams` lleva `rounds` y un `interval`.
+
+<SpecExample source="specification/schemas/workout/v1.1.0/workout.emom.example.json" data={emom}>
+  Cada minuto en punto, durante doce intervalos. `mode: "emom"`.
+</SpecExample>
+
+Y la misma forma otra vez, como bloque Tabata — el modo simplemente cambia lo que el
+consumidor debe hacer para recorrer y terminar el bloque.
+
+<SpecExample source="specification/schemas/workout/v1.1.0/workout.tabata.example.json" data={tabata}>
+  Ocho rondas de 20 segundos de trabajo y 10 segundos de descanso. `mode: "tabata"`.
+</SpecExample>
+
+## Cómo funciona
+
+`mode` decide tres cosas que un consumidor no puede inferir de otro modo: cómo se
+**recorre** el bloque (todas las series del elemento uno antes del elemento dos, o una
+serie de cada uno por pasada), cuándo **termina** (se acabó el trabajo, o expira un
+reloj) y qué `modeParams` tienen sentido. Todo lo demás del documento es idéntico en
+los tres ejemplos anteriores.
+
+La agrupación es una **etiqueta**, no un anidamiento: dos elementos alternados en una
+superserie llevan `groupLabel` `A1` y `A2`, y el descanso cae en el límite del grupo.
+Las series de un elemento se dan mediante un conteo `sets` **o** mediante un `scheme`,
+nunca ambos — el esquema lo exige — de modo que hay exactamente un lugar donde leer
+cómo progresa una serie.
+
+La recompensa es que un consumidor escrito una sola vez lee todas las sesiones. Añadir
+una nueva forma de entrenar no añade un esquema, una columna de tabla ni una
+bifurcación; es un valor nuevo de un solo campo, y a un consumidor que no lo reconoce
+el estándar le dice exactamente qué es lo que no debe asumir.
+
+<NextSteps>
+  <Next to="/docs/use-cases/programming">Colocar estas sesiones en un plan</Next>
+  <Next to="/docs/schemas/workout">Leer el esquema de sesión de entrenamiento</Next>
+</NextSteps>

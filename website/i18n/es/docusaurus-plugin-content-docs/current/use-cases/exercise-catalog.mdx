@@ -1,0 +1,67 @@
+---
+title: Publicar un catálogo de ejercicios que otro sistema pueda leer
+sidebar_label: Catálogo de ejercicios
+description: Describir un ejercicio una sola vez, en una forma que otro sistema puede consumir sin preguntar qué se quiso decir.
+usecase_promise: Describir un ejercicio una sola vez, en una forma que otro sistema lee sin preguntar qué se quiso decir.
+usecase_family: foundations
+usecase_audiences: [app-developer, researcher]
+usecase_sources:
+  - specification/schemas/exercises/v1.1.0/exercise.example.json
+---
+
+import {SpecExample, BeforeAfter, Panel, Audience, NextSteps, Next} from '@site/docs/use-cases/_shared/UseCase';
+import backSquat from '@site/../specification/schemas/exercises/v1.1.0/exercise.example.json';
+
+# Publicar un catálogo de ejercicios que otro sistema pueda leer
+
+> Describir un ejercicio una sola vez, en una forma que otro sistema lee sin preguntar qué se quiso decir.
+
+<Audience ids={['app-developer', 'researcher']} />
+
+<BeforeAfter>
+  <Panel kind="before">
+    Cada aplicación inventa su propia clave para un ejercicio — `exercise_id`, `exerciseId`,
+    `eid`, `Exercise_Ref` — y su propia taxonomía muscular para acompañarla. Integrar
+    dos catálogos es un proyecto de mapeo a medida cada vez, y el mapeo
+    se pudre en el momento en que cualquiera de las partes añade un campo.
+  </Panel>
+  <Panel kind="after">
+    Un ejercicio es un núcleo obligatorio — identidad, clasificación, objetivos, métricas,
+    metadatos — con los músculos vinculados mediante `targets`, el equipamiento mediante `equipment`,
+    y un vocabulario de métricas cuyas combinaciones válidas de tipo y unidad están escritas.
+    Dos catálogos que lo hablan se alinean sin capa de traducción.
+  </Panel>
+</BeforeAfter>
+
+## Un ejercicio completo
+
+Todo lo que un consumidor necesita para ubicar una sentadilla en una biblioteca:
+nombre canónico y slug, nombres localizados, clasificación de movimiento y mecánica,
+los músculos a los que apunta con los ids de sus categorías, el equipamiento que
+requiere y las métricas en que se mide. Los extras específicos del proveedor viven
+bajo el espacio de nombres `x:`, sin estorbar al núcleo.
+
+<SpecExample source="specification/schemas/exercises/v1.1.0/exercise.example.json" data={backSquat}>
+  Una sentadilla trasera, descrita por completo. Nótese `targets.primary[].id` — un id de
+  músculo que otro documento resuelve — y las claves de extensión `x:vitness.*`, que un
+  consumidor que no las conoce ignora.
+</SpecExample>
+
+## Cómo funciona
+
+La identidad es un id estable más un nombre canónico y un slug; toda cadena orientada
+a personas puede localizarse sin tocar el id. `classification` lleva los hechos del
+movimiento por los que un consumidor filtra y agrupa. `targets` nombra los músculos
+por id y no por texto libre, de modo que un catálogo de ejercicios y una biblioteca
+de músculos se resuelven mutuamente — la cadena que va de un ejercicio a una región
+corporal es real, no descrita.
+
+Los campos que FDS no anticipó no obligan a bifurcar: van bajo el espacio de nombres
+de extensión `x:vendor`, y un consumidor que nunca oyó hablar de ellos sigue validando
+el documento. Eso es lo que permite que un catálogo sirva a muchos lectores sin que
+ninguno acuerde de antemano todo lo que podría llevar.
+
+<NextSteps>
+  <Next to="/docs/use-cases/muscles-and-atlas">Seguir un objetivo hasta una región corporal</Next>
+  <Next to="/docs/schemas/exercise">Leer el esquema de ejercicio</Next>
+</NextSteps>

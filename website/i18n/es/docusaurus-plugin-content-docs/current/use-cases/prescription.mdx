@@ -1,0 +1,85 @@
+---
+title: Prescribir intensidad sin almacenar nunca a una persona
+sidebar_label: Primitivas de prescripción
+description: Expresar cuánta carga, cuántas repeticiones, cuánto descanso — como primitivas reutilizables que referencian los números de una persona en lugar de llevarlos consigo.
+usecase_promise: Prescribir carga, repeticiones y descanso como primitivas que referencian los números de una persona, nunca los llevan consigo.
+usecase_family: prescription
+usecase_audiences: [coach, app-developer]
+usecase_sources:
+  - specification/schemas/prescription/v1.0.0/loadTarget.percent1RM.example.json
+  - specification/schemas/prescription/v1.0.0/loadTarget.rpe.example.json
+  - specification/schemas/prescription/v1.0.0/loadTarget.percent-bodyweight.example.json
+---
+
+import {SpecExample, BeforeAfter, Panel, Audience, NextSteps, Next} from '@site/docs/use-cases/_shared/UseCase';
+import percent1RM from '@site/../specification/schemas/prescription/v1.0.0/loadTarget.percent1RM.example.json';
+import rpe from '@site/../specification/schemas/prescription/v1.0.0/loadTarget.rpe.example.json';
+import percentBodyweight from '@site/../specification/schemas/prescription/v1.0.0/loadTarget.percent-bodyweight.example.json';
+
+# Prescribir intensidad sin almacenar nunca a una persona
+
+> Prescribir carga, repeticiones y descanso como primitivas que referencian los números de una persona, nunca los llevan consigo.
+
+<Audience ids={['coach', 'app-developer']} />
+
+<BeforeAfter>
+  <Panel kind="before">
+    La intensidad queda aplanada en un solo número — un peso — que solo significa
+    algo para un atleta en un día concreto. Cualquier cosa más rica (un porcentaje, un RPE,
+    un objetivo de velocidad) se reinventa en cada aplicación, y almacenarla como carga
+    absoluta arrastra a un titular de los datos, con su peso corporal o su repetición
+    máxima (1RM), a cada registro.
+  </Panel>
+  <Panel kind="after">
+    Un objetivo de carga es una primitiva pequeña y discriminada: un método y los valores
+    que ese método necesita. Un porcentaje del máximo referencia un levantamiento; no
+    incrusta el máximo. La prescripción es completa y compartible, y el número personal
+    contra el que se resuelve queda con la persona, fuera del documento.
+  </Panel>
+</BeforeAfter>
+
+## El mismo slot, tres intenciones
+
+Un porcentaje de la repetición máxima (1RM) del propio levantamiento prescrito. Dos
+claves — y ningún número para el máximo en ninguna parte, porque el máximo pertenece
+a un atleta al que este documento nunca nombra.
+
+<SpecExample source="specification/schemas/prescription/v1.0.0/loadTarget.percent1RM.example.json" data={percent1RM}>
+  82.5% de la repetición máxima (1RM) del propio ejercicio prescrito — el caso impulsado por porcentaje.
+</SpecExample>
+
+Un objetivo de RPE entrega la decisión de la carga al atleta frente a la barra, de
+modo que no hace falta resolver nada por adelantado.
+
+<SpecExample source="specification/schemas/prescription/v1.0.0/loadTarget.rpe.example.json" data={rpe}>
+  RPE 8, con medios puntos permitidos. El atleta elige la carga; la prescripción declara el esfuerzo.
+</SpecExample>
+
+Y un porcentaje del peso corporal — deliberadamente **irresoluble dentro de FDS**,
+porque no hay ningún atleta en el documento del que leer un peso corporal.
+
+<SpecExample source="specification/schemas/prescription/v1.0.0/loadTarget.percent-bodyweight.example.json" data={percentBodyweight}>
+  60% del peso corporal. El documento dice qué computar; la persona aporta el número,
+  en otra parte.
+</SpecExample>
+
+## Cómo funciona
+
+Cada primitiva es una forma discriminada — un `method` y exactamente los campos que
+ese método requiere — de modo que un consumidor lee el método y sabe qué esperar. Los
+métodos que *necesitarían* datos personales los referencian en lugar de llevarlos
+consigo: un porcentaje nombra un levantamiento, una base de máximo de entrenamiento
+nombra un slot, una zona nombra un sistema. La frontera es deliberada y es
+precisamente el punto — una biblioteca de prescripciones no lleva ningún titular de
+los datos, que es lo que permite publicarla, almacenarla en caché y diferenciarla
+libremente.
+
+Como la prescripción es una biblioteca de definiciones y no una entidad, estos
+fragmentos se validan contra la definición que nombran, no contra la raíz de un
+documento. Un proveedor nunca anuncia "prescription" como algo que exporta; las
+primitivas viven dentro de las sesiones de entrenamiento y los programas que las usan.
+
+<NextSteps>
+  <Next to="/docs/use-cases/authoring-workouts">Ver prescripciones dentro de una sesión</Next>
+  <Next to="/docs/schemas/prescription">Leer la biblioteca de prescripción</Next>
+</NextSteps>

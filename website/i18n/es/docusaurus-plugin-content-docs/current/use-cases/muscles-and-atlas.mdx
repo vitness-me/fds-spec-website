@@ -1,0 +1,83 @@
+---
+title: Vincular músculos a un cuerpo sin ser dueño de la ilustración
+sidebar_label: Músculos y atlas corporal
+description: Nombrar una región anatómica una sola vez; cada renderizador la dibuja, y ninguno tiene que ponerse de acuerdo en el dibujo.
+usecase_promise: Nombrar una región una sola vez; cada renderizador la dibuja, y ninguno tiene que ponerse de acuerdo en el dibujo.
+usecase_family: foundations
+usecase_audiences: [app-developer, researcher]
+usecase_sources:
+  - specification/schemas/muscle/v1.0.0/muscle.example.json
+  - specification/schemas/muscle/muscle-category/v1.0.0/muscle-category.example.json
+  - specification/schemas/atlas/v1.0.0/body-atlas.example.json
+---
+
+import {SpecExample, BeforeAfter, Panel, Audience, NextSteps, Next} from '@site/docs/use-cases/_shared/UseCase';
+import quadriceps from '@site/../specification/schemas/muscle/v1.0.0/muscle.example.json';
+import legs from '@site/../specification/schemas/muscle/muscle-category/v1.0.0/muscle-category.example.json';
+import atlas from '@site/../specification/schemas/atlas/v1.0.0/body-atlas.example.json';
+
+# Vincular músculos a un cuerpo sin ser dueño de la ilustración
+
+> Nombrar una región una sola vez; cada renderizador la dibuja, y ninguno tiene que ponerse de acuerdo en el dibujo.
+
+<Audience ids={['app-developer', 'researcher']} />
+
+<BeforeAfter>
+  <Panel kind="before">
+    Cada aplicación codifica de forma fija un mapeo de un músculo a un trazado dentro
+    de un SVG concreto. Si se encarga una ilustración nueva, hay que rehacer la
+    anatomía; si se comparte un resaltado entre dos aplicaciones, no coincide, porque
+    ninguna está de acuerdo en el dibujo subyacente.
+  </Panel>
+  <Panel kind="after">
+    Un músculo nombra las regiones que ocupa como ids y un peso. Un atlas mapea cada
+    región a un selector dentro de una vista. Se cambia la ilustración y se conserva la
+    semántica — la vinculación es una capa de indirección, y la geometría queda fuera
+    de los datos.
+  </Panel>
+</BeforeAfter>
+
+## Tres registros que se componen
+
+Un músculo lleva un `heatmap` que nombra regiones del atlas por id, cada una con un
+peso — nunca un trazado, nunca un color.
+
+<SpecExample source="specification/schemas/muscle/v1.0.0/muscle.example.json" data={quadriceps}>
+  El cuádriceps, vinculado a dos áreas del atlas con peso completo. `classification.categoryId`
+  apunta a la categoría de abajo.
+</SpecExample>
+
+Una categoría de músculos agrupa músculos para el lector, y es en sí misma solo un id,
+un nombre y una clasificación.
+
+<SpecExample source="specification/schemas/muscle/muscle-category/v1.0.0/muscle-category.example.json" data={legs}>
+  La categoría "Legs" a la que pertenece el cuádriceps, referenciada por `cat.legs`.
+</SpecExample>
+
+El atlas resuelve esos ids de región a selectores dentro de vistas con nombre — y no
+incluye geometría alguna. El dibujo vive detrás del `asset.uri`; el atlas es el mapa
+que va de un id de región a un selector dentro de él.
+
+<SpecExample source="specification/schemas/atlas/v1.0.0/body-atlas.example.json" data={atlas}>
+  Cuatro áreas, cada una vinculando un `viewId` y un `selector` como `#area-thigh-left`.
+  El selector apunta hacia *su propio* SVG — el estándar no se compromete con ninguno.
+</SpecExample>
+
+## Cómo funciona
+
+La indirección es la característica. Un músculo dice *qué regiones y con qué
+intensidad*; un atlas dice *dónde están esas regiones en una vista dada*; la
+ilustración es suya e intercambiable. Como ninguna coordenada ni trazado vive en los
+registros de entidad, una biblioteca de músculos es almacenable en caché y
+diferenciable, y una ilustración nueva es una nueva vinculación de atlas y no una
+edición de la anatomía.
+
+Nótese lo que el estándar deliberadamente **no** incluye: este atlas de ejemplo lleva
+cuatro áreas y ningún dibujo — `asset.uri` apunta a un recurso que el atlas no define,
+y la agregación entre pesos es orientativa, no obligatoria. El mapa es normativo; la
+imagen es una decisión de implementación.
+
+<NextSteps>
+  <Next to="/docs/use-cases/exercise-catalog">Ver un músculo referenciado desde un ejercicio</Next>
+  <Next to="/docs/schemas/body-atlas">Leer el esquema del atlas corporal</Next>
+</NextSteps>

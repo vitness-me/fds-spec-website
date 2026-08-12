@@ -1,0 +1,79 @@
+---
+title: ¿Qué se puede hacer con FDS?
+sidebar_label: ¿Qué se puede hacer con FDS?
+description: La capa de capacidades del Fitness Data Standard — para qué sirve realmente el estándar, agrupado de lo fundamental a lo compuesto.
+---
+
+import {Gallery, Card} from '@site/docs/use-cases/_shared/UseCase';
+import {CoverageMatrix} from '@site/docs/use-cases/_shared/Coverage';
+
+# ¿Qué se puede hacer con FDS?
+
+El Fitness Data Standard es un vocabulario compartido para datos de fitness — desde un
+solo ejercicio hasta un plan de doce semanas. Esta sección responde una sola pregunta:
+**¿qué se puede hacer realmente con él?**
+
+Las capacidades se construyen unas sobre otras. La **biblioteca compartida** es el
+vocabulario en el que está escrito todo lo demás. Las primitivas de **prescripción**
+expresan la intención — cuánta carga, cuántas repeticiones, cuánto descanso — como
+piezas reutilizables. La **composición** las une en sesiones y planes. Pueden leerse
+en ese orden, o saltar directamente a la que corresponda al problema que se tenga
+delante.
+
+Cada ejemplo de cada una de las páginas siguientes se carga directamente desde un
+archivo publicado del estándar. Nada aquí es meramente ilustrativo, y nada está
+escrito a mano: si un archivo cambia de nombre o una versión se incrementa, la
+compilación falla antes de que la página pueda quedar obsoleta.
+
+## Fundamentos — la biblioteca compartida
+
+<Gallery>
+  <Card to="/docs/use-cases/exercise-catalog" title="Catálogo de ejercicios">
+    Describir un ejercicio una sola vez, en una forma que otro sistema lee sin preguntar qué se quiso decir.
+  </Card>
+  <Card to="/docs/use-cases/equipment" title="Equipamiento">
+    Decir lo que hace una máquina en números sobre los que otro gimnasio puede actuar, y decir con claridad cuándo no se puede.
+  </Card>
+  <Card to="/docs/use-cases/muscles-and-atlas" title="Músculos y atlas corporal">
+    Nombrar una región una sola vez; cada renderizador la dibuja, y ninguno tiene que ponerse de acuerdo en el dibujo.
+  </Card>
+</Gallery>
+
+## Prescripción — las primitivas de intención
+
+<Gallery>
+  <Card to="/docs/use-cases/prescription" title="Primitivas de prescripción">
+    Prescribir carga, repeticiones y descanso como primitivas que referencian los números de una persona, nunca los llevan consigo.
+  </Card>
+</Gallery>
+
+## Composición — sesiones y planes
+
+<Gallery>
+  <Card to="/docs/use-cases/authoring-workouts" title="Redacción de sesiones">
+    Un esquema y un campo expresan todas las formas en que se estructura una sesión.
+  </Card>
+  <Card to="/docs/use-cases/programming" title="Programación">
+    Un programa apunta a sesiones; se corrige una sesión y queda corregido cada plan que la usa.
+  </Card>
+</Gallery>
+
+## ¿Puede expresar cómo se entrena realmente?
+
+Las páginas de composición anteriores afirman que un solo esquema expresa todas las
+formas en que se estructura el entrenamiento. Esa afirmación tiene una lista de
+verificación.
+
+<CoverageMatrix />
+
+## Lo que FDS deliberadamente no hace
+
+FDS no modela a ninguna persona. No hay identidad del atleta, ni peso corporal, ni
+repetición máxima (1RM), ni ningún resultado ejecutado o registrado en ninguna parte
+del estándar. Es una decisión de diseño, no una carencia: un documento que no describe
+a nadie puede publicarse, almacenarse en caché, replicarse y diferenciarse libremente,
+sin obligación alguna de consentimiento, retención o borrado. Cada prescripción
+anterior referencia los números personales que necesita en lugar de llevarlos
+consigo — véanse las [Primitivas de prescripción](/docs/use-cases/prescription) para
+saber cómo, y la [hoja de ruta](/docs/governance/roadmap) para ver dónde los datos
+ejecutados quedan deliberadamente fuera del alcance.
