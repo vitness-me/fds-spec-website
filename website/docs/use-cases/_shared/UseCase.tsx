@@ -38,11 +38,15 @@ export function SpecExample({
   const filename = source.split('/').pop();
   return (
     <figure className={styles.example}>
+      {/* No line numbers: these panels show a whole published file, so a
+          gutter would count lines and prove nothing. The filename strip and
+          the "Backed by" path below carry the provenance. */}
       <EditorPanel
         filename={filename}
         language="json"
         code={JSON.stringify(data, null, 2)}
         maxHeight="34rem"
+        showLineNumbers={false}
       />
       {children ? <figcaption className={styles.caption}>{children}</figcaption> : null}
       <p className={styles.source}>
