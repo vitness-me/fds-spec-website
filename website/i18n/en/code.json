@@ -1,0 +1,814 @@
+{
+  "fds.translationNotice": {
+    "message": "This page is a translation, provided for convenience. It is informative only: the {englishPageLink} is the normative text, and where the two disagree, the English text governs.",
+    "description": "Notice at the top of every translated documentation page"
+  },
+  "fds.translationNotice.linkLabel": {
+    "message": "English version"
+  },
+  "landing.beforeAfter.badge.validFds": {
+    "message": "valid fds",
+    "description": "Badge on the output panel of the transformer demo"
+  },
+  "landing.beforeAfter.badge.vendorExport": {
+    "message": "vendor export",
+    "description": "Badge on the source panel of the transformer demo"
+  },
+  "landing.beforeAfter.badge.writtenOnce": {
+    "message": "written once",
+    "description": "Badge on the mapping panel of the transformer demo"
+  },
+  "landing.beforeAfter.docsLink": {
+    "message": "Read the transformer docs →"
+  },
+  "landing.beforeAfter.eyebrow": {
+    "message": "the transformer",
+    "description": "Small label above the transformer demo section title"
+  },
+  "landing.beforeAfter.outro": {
+    "message": "The output panel shows the first of the three documents this fixture produces, verbatim from the committed file. Where source data has genuine gaps — a description, a classification — the CLI can fill them with optional AI enrichment. {docsLink}"
+  },
+  "landing.beforeAfter.subtitle": {
+    "message": "A vendor's export, a mapping you write once, and the document the CLI produces — a back squat any FDS reader can validate. All three panels are files that ship in this repository, and CI runs this exact transform against the published schema on every change."
+  },
+  "landing.beforeAfter.title": {
+    "message": "See it work on a back squat"
+  },
+  "landing.capabilities.bodyAtlas.name": {
+    "message": "Body atlas"
+  },
+  "landing.capabilities.bodyAtlas.purpose": {
+    "message": "Anatomical regions and the bindings that let any illustration draw them."
+  },
+  "landing.capabilities.equipment.name": {
+    "message": "Equipment"
+  },
+  "landing.capabilities.equipment.purpose": {
+    "message": "What a movement needs, and how a machine loads — so a prescription stays reproducible."
+  },
+  "landing.capabilities.exercises.name": {
+    "message": "Exercises"
+  },
+  "landing.capabilities.exercises.purpose": {
+    "message": "A movement described once — classification, muscle targets, equipment, metrics."
+  },
+  "landing.capabilities.eyebrow": {
+    "message": "what fds defines",
+    "description": "Small label above the capabilities section title"
+  },
+  "landing.capabilities.layer1.blurb": {
+    "message": "A common vocabulary for the fitness domain. Static, cacheable, mirrorable, diffable. Adopt it alone if all you want is a canonical exercise list every system reads the same way."
+  },
+  "landing.capabilities.layer1.tag": {
+    "message": "layer 1"
+  },
+  "landing.capabilities.layer1.title": {
+    "message": "The shared library"
+  },
+  "landing.capabilities.layer2.blurb": {
+    "message": "How to train, composed from the library. Sets, reps, tempo, load, rest and zones assemble into sessions, and sessions into multi-week plans — one schema each, however the training is structured."
+  },
+  "landing.capabilities.layer2.tag": {
+    "message": "layer 2"
+  },
+  "landing.capabilities.layer2.title": {
+    "message": "The prescription layer"
+  },
+  "landing.capabilities.muscles.name": {
+    "message": "Muscles"
+  },
+  "landing.capabilities.muscles.purpose": {
+    "message": "Named anatomy that renderers and taxonomies can bind to without agreeing on artwork."
+  },
+  "landing.capabilities.prescription.name": {
+    "message": "Prescription primitives"
+  },
+  "landing.capabilities.prescription.purpose": {
+    "message": "Load, reps, tempo, rest, RPE/RIR and set schemes — the vocabulary of intensity."
+  },
+  "landing.capabilities.programs.name": {
+    "message": "Programs"
+  },
+  "landing.capabilities.programs.purpose": {
+    "message": "A schedule of sessions over weeks — periodisation and progression, by reference not by copy."
+  },
+  "landing.capabilities.subtitle": {
+    "message": "FDS defines a shared vocabulary and, on top of it, how to prescribe training with that vocabulary. Either layer can be adopted on its own."
+  },
+  "landing.capabilities.title": {
+    "message": "One standard, two layers"
+  },
+  "landing.capabilities.workouts.name": {
+    "message": "Workouts"
+  },
+  "landing.capabilities.workouts.purpose": {
+    "message": "One session. Straight sets, supersets, circuits, EMOM, AMRAP and intervals share a single schema."
+  },
+  "landing.noPersonalData.cached.detail": {
+    "message": "A library sits behind a CDN like any other static asset."
+  },
+  "landing.noPersonalData.cached.label": {
+    "message": "Cached"
+  },
+  "landing.noPersonalData.diffed.detail": {
+    "message": "Two versions compare cleanly, because nothing in them is a person."
+  },
+  "landing.noPersonalData.diffed.label": {
+    "message": "Diffed"
+  },
+  "landing.noPersonalData.eyebrow": {
+    "message": "by design",
+    "description": "Small label above the no-personal-data section title"
+  },
+  "landing.noPersonalData.footnote": {
+    "message": "A document that describes nobody is one you can publish freely. What this deliberately excludes, and why, is on the {roadmapLink}."
+  },
+  "landing.noPersonalData.mirrored.detail": {
+    "message": "Anyone can republish a catalog without inheriting an obligation."
+  },
+  "landing.noPersonalData.mirrored.label": {
+    "message": "Mirrored"
+  },
+  "landing.noPersonalData.roadmapLink": {
+    "message": "roadmap"
+  },
+  "landing.noPersonalData.shared.detail": {
+    "message": "No consent, DPA or privacy review gates an exchange."
+  },
+  "landing.noPersonalData.shared.label": {
+    "message": "Shared"
+  },
+  "landing.noPersonalData.subtitle": {
+    "message": "No athlete identity, no bodyweight, no one-rep maxes, no performed or logged results — none of it is in the standard, and none of it ever will be. A prescription that would need a personal number references it instead of carrying it. That constraint is exactly why an FDS document can be:"
+  },
+  "landing.noPersonalData.title": {
+    "message": "FDS models no person"
+  },
+  "landing.problem.eyebrow": {
+    "message": "the problem",
+    "description": "Small label above the problem section title"
+  },
+  "landing.problem.fragmentation.description": {
+    "message": "Apps cannot interoperate. The same exercise has different IDs, names, and structures everywhere."
+  },
+  "landing.problem.fragmentation.title": {
+    "message": "Ecosystem fragmentation"
+  },
+  "landing.problem.lockIn.description": {
+    "message": "Your exercise library, workouts and programs live in one app’s private format. Switch, and you re-enter them by hand or leave them behind."
+  },
+  "landing.problem.lockIn.title": {
+    "message": "Content lock-in"
+  },
+  "landing.problem.outro": {
+    "message": "So what does FDS actually define? →"
+  },
+  "landing.problem.overhead.description": {
+    "message": "Building from scratch or adding integrations? Either way, you're defining exercise models alone. No shared vocabulary to build on."
+  },
+  "landing.problem.overhead.title": {
+    "message": "Developer overhead"
+  },
+  "landing.problem.subtitle": {
+    "message": "The same back squat, four private spellings. None of them can read the others, so every integration is built by hand and every export is a dead end."
+  },
+  "landing.problem.title": {
+    "message": "Every platform speaks a different language"
+  },
+  "landing.quickStart.exampleFooter": {
+    "message": "The published example for the exercise entity — a back squat, verbatim from the spec.",
+    "description": "Caption under the example document panel in the quick start section"
+  },
+  "landing.quickStart.eyebrow": {
+    "message": "quick start",
+    "description": "Small label above the quick start section title"
+  },
+  "landing.quickStart.step1.description": {
+    "message": "Download the JSON Schema to validate your exercise data."
+  },
+  "landing.quickStart.step1.link": {
+    "message": "View the exercise schema →"
+  },
+  "landing.quickStart.step1.title": {
+    "message": "Get the schema"
+  },
+  "landing.quickStart.step2.description": {
+    "message": "Structure your exercise data using the FDS format. Start minimal, expand as needed."
+  },
+  "landing.quickStart.step2.title": {
+    "message": "Model your data"
+  },
+  "landing.quickStart.step3.description": {
+    "message": "Use any JSON Schema validator (ajv, jsonschema, etc.) to ensure compliance."
+  },
+  "landing.quickStart.step3.link": {
+    "message": "Validation guide →"
+  },
+  "landing.quickStart.step3.title": {
+    "message": "Validate"
+  },
+  "landing.quickStart.step4.description": {
+    "message": "Use the FDS Transformer CLI to convert your existing data to FDS format with optional AI enrichment."
+  },
+  "landing.quickStart.step4.link": {
+    "message": "Transformer docs →"
+  },
+  "landing.quickStart.step4.title": {
+    "message": "Transform your data"
+  },
+  "landing.quickStart.subtitle": {
+    "message": "FDS is JSON Schema at stable URLs. If your stack can read JSON, it can implement the standard — start with the schema and any validator you already use."
+  },
+  "landing.quickStart.title": {
+    "message": "No SDK required"
+  },
+  "landing.solution.ext.namespaces.text": {
+    "message": "Prefix custom fields with {prefix} to add platform-specific data that travels with the standard."
+  },
+  "landing.solution.ext.namespaces.title": {
+    "message": "Vendor namespaces"
+  },
+  "landing.solution.ext.outro": {
+    "message": "Read the extension policy →"
+  },
+  "landing.solution.ext.promotion.text": {
+    "message": "An extension several implementers adopt can be proposed into the core schema through the RFC process."
+  },
+  "landing.solution.ext.promotion.title": {
+    "message": "Promotion path"
+  },
+  "landing.solution.ext.safe.text": {
+    "message": "Other platforms ignore unknown namespaces. Your custom data never breaks their imports."
+  },
+  "landing.solution.ext.safe.title": {
+    "message": "Safe extensions"
+  },
+  "landing.solution.ext.subtitle": {
+    "message": "Add custom fields without breaking compatibility."
+  },
+  "landing.solution.ext.title": {
+    "message": "Built-in extensibility"
+  },
+  "landing.solution.eyebrow": {
+    "message": "the shape of the fix",
+    "description": "Small label above the solution section title"
+  },
+  "landing.solution.highlight.anyStack": {
+    "message": "Any stack that can read JSON can implement it."
+  },
+  "landing.solution.highlight.exchangeFormat": {
+    "message": "No forced architecture changes — FDS is an exchange format, not your database schema."
+  },
+  "landing.solution.highlight.validates": {
+    "message": "Every document validates against a published JSON Schema."
+  },
+  "landing.solution.subtitle": {
+    "message": "One standard replaces point-to-point integrations. Each platform writes one exporter and one importer against FDS, and connects to everyone who did the same."
+  },
+  "landing.solution.title": {
+    "message": "How FDS works"
+  },
+  "landing.solution.with.example": {
+    "message": "4 platforms, 4 mappings to one format"
+  },
+  "landing.solution.with.tag": {
+    "message": "with fds"
+  },
+  "landing.solution.without.example": {
+    "message": "4 platforms, 12 bespoke integrations"
+  },
+  "landing.solution.without.tag": {
+    "message": "without a standard"
+  },
+  "landing.trust.eyebrow": {
+    "message": "stability",
+    "description": "Small label above the stability section title"
+  },
+  "landing.trust.frozen.description": {
+    "message": "Every published schema is pinned by sha256 and never changes. A new version ships in a new directory beside the old one, which stays served — so a client pinned to an older release keeps resolving."
+  },
+  "landing.trust.frozen.linkLabel": {
+    "message": "How versioning works →"
+  },
+  "landing.trust.frozen.title": {
+    "message": "Frozen at permanent URLs"
+  },
+  "landing.trust.governance.description": {
+    "message": "Every entity arrived through a public RFC, and changes are additive by rule. The standard is developed in the open so no single vendor can quietly redefine the format under you."
+  },
+  "landing.trust.governance.linkLabel": {
+    "message": "See how it is governed →"
+  },
+  "landing.trust.governance.title": {
+    "message": "Open, additive governance"
+  },
+  "landing.trust.perEntity.description": {
+    "message": "A release names a set of entity versions, not one number they all share. Entities move independently, and the release manifest is generated from the published tree — so what the site says is published is what is published."
+  },
+  "landing.trust.perEntity.linkLabel": {
+    "message": "Read the overview →"
+  },
+  "landing.trust.perEntity.title": {
+    "message": "Versioned per entity"
+  },
+  "landing.trust.stat.entities": {
+    "message": "entity schemas, each frozen at a permanent URL"
+  },
+  "landing.trust.stat.examples": {
+    "message": "worked examples shipped beside the schemas"
+  },
+  "landing.trust.stat.rfcs": {
+    "message": "public RFCs behind the design"
+  },
+  "landing.trust.stat.scenarios": {
+    "message": "training scenarios, every one with a worked example"
+  },
+  "landing.trust.subtitle": {
+    "message": "A format you integrate once should not move under you."
+  },
+  "landing.trust.title": {
+    "message": "Built to be depended on"
+  },
+  "theme.admonition.caution": {
+    "message": "caution",
+    "description": "The default label used for the Caution admonition (:::caution)"
+  },
+  "theme.admonition.danger": {
+    "message": "danger",
+    "description": "The default label used for the Danger admonition (:::danger)"
+  },
+  "theme.admonition.info": {
+    "message": "info",
+    "description": "The default label used for the Info admonition (:::info)"
+  },
+  "theme.admonition.note": {
+    "message": "note",
+    "description": "The default label used for the Note admonition (:::note)"
+  },
+  "theme.admonition.tip": {
+    "message": "tip",
+    "description": "The default label used for the Tip admonition (:::tip)"
+  },
+  "theme.admonition.warning": {
+    "message": "warning",
+    "description": "The default label used for the Warning admonition (:::warning)"
+  },
+  "theme.AnnouncementBar.closeButtonAriaLabel": {
+    "message": "Close",
+    "description": "The ARIA label for close button of announcement bar"
+  },
+  "theme.BackToTopButton.buttonAriaLabel": {
+    "message": "Scroll back to top",
+    "description": "The ARIA label for the back to top button"
+  },
+  "theme.blog.archive.description": {
+    "message": "Archive",
+    "description": "The page & hero description of the blog archive page"
+  },
+  "theme.blog.archive.title": {
+    "message": "Archive",
+    "description": "The page & hero title of the blog archive page"
+  },
+  "theme.blog.author.noPosts": {
+    "message": "This author has not written any posts yet.",
+    "description": "The text for authors with 0 blog post"
+  },
+  "theme.blog.author.pageTitle": {
+    "message": "{authorName} - {nPosts}",
+    "description": "The title of the page for a blog author"
+  },
+  "theme.blog.authorsList.pageTitle": {
+    "message": "Authors",
+    "description": "The title of the authors page"
+  },
+  "theme.blog.authorsList.viewAll": {
+    "message": "View all authors",
+    "description": "The label of the link targeting the blog authors page"
+  },
+  "theme.blog.paginator.navAriaLabel": {
+    "message": "Blog list page navigation",
+    "description": "The ARIA label for the blog pagination"
+  },
+  "theme.blog.paginator.newerEntries": {
+    "message": "Newer entries",
+    "description": "The label used to navigate to the newer blog posts page (previous page)"
+  },
+  "theme.blog.paginator.olderEntries": {
+    "message": "Older entries",
+    "description": "The label used to navigate to the older blog posts page (next page)"
+  },
+  "theme.blog.post.paginator.navAriaLabel": {
+    "message": "Blog post page navigation",
+    "description": "The ARIA label for the blog posts pagination"
+  },
+  "theme.blog.post.paginator.newerPost": {
+    "message": "Newer post",
+    "description": "The blog post button label to navigate to the newer/previous post"
+  },
+  "theme.blog.post.paginator.olderPost": {
+    "message": "Older post",
+    "description": "The blog post button label to navigate to the older/next post"
+  },
+  "theme.blog.post.plurals": {
+    "message": "One post|{count} posts",
+    "description": "Pluralized label for \"{count} posts\". Use as much plural forms (separated by \"|\") as your language support (see https://www.unicode.org/cldr/cldr-aux/charts/34/supplemental/language_plural_rules.html)"
+  },
+  "theme.blog.post.readingTime.plurals": {
+    "message": "One min read|{readingTime} min read",
+    "description": "Pluralized label for \"{readingTime} min read\". Use as much plural forms (separated by \"|\") as your language support (see https://www.unicode.org/cldr/cldr-aux/charts/34/supplemental/language_plural_rules.html)"
+  },
+  "theme.blog.post.readMore": {
+    "message": "Read more",
+    "description": "The label used in blog post item excerpts to link to full blog posts"
+  },
+  "theme.blog.post.readMoreLabel": {
+    "message": "Read more about {title}",
+    "description": "The ARIA label for the link to full blog posts from excerpts"
+  },
+  "theme.blog.sidebar.navAriaLabel": {
+    "message": "Blog recent posts navigation",
+    "description": "The ARIA label for recent posts in the blog sidebar"
+  },
+  "theme.blog.tagTitle": {
+    "message": "{nPosts} tagged with \"{tagName}\"",
+    "description": "The title of the page for a blog tag"
+  },
+  "theme.CodeBlock.copied": {
+    "message": "Copied",
+    "description": "The copied button label on code blocks"
+  },
+  "theme.CodeBlock.copy": {
+    "message": "Copy",
+    "description": "The copy button label on code blocks"
+  },
+  "theme.CodeBlock.copyButtonAriaLabel": {
+    "message": "Copy code to clipboard",
+    "description": "The ARIA label for copy code blocks button"
+  },
+  "theme.CodeBlock.wordWrapToggle": {
+    "message": "Toggle word wrap",
+    "description": "The title attribute for toggle word wrapping button of code block lines"
+  },
+  "theme.colorToggle.ariaLabel": {
+    "message": "Switch between dark and light mode (currently {mode})",
+    "description": "The ARIA label for the color mode toggle"
+  },
+  "theme.colorToggle.ariaLabel.mode.dark": {
+    "message": "dark mode",
+    "description": "The name for the dark color mode"
+  },
+  "theme.colorToggle.ariaLabel.mode.light": {
+    "message": "light mode",
+    "description": "The name for the light color mode"
+  },
+  "theme.colorToggle.ariaLabel.mode.system": {
+    "message": "system mode",
+    "description": "The name for the system color mode"
+  },
+  "theme.common.editThisPage": {
+    "message": "Edit this page",
+    "description": "The link label to edit the current page"
+  },
+  "theme.common.headingLinkTitle": {
+    "message": "Direct link to {heading}",
+    "description": "Title for link to heading"
+  },
+  "theme.common.skipToMainContent": {
+    "message": "Skip to main content",
+    "description": "The skip to content label used for accessibility, allowing to rapidly navigate to main content with keyboard tab/enter navigation"
+  },
+  "theme.contentVisibility.draftBanner.message": {
+    "message": "This page is a draft. It will only be visible in dev and be excluded from the production build.",
+    "description": "The draft content banner message"
+  },
+  "theme.contentVisibility.draftBanner.title": {
+    "message": "Draft page",
+    "description": "The draft content banner title"
+  },
+  "theme.contentVisibility.unlistedBanner.message": {
+    "message": "This page is unlisted. Search engines will not index it, and only users having a direct link can access it.",
+    "description": "The unlisted content banner message"
+  },
+  "theme.contentVisibility.unlistedBanner.title": {
+    "message": "Unlisted page",
+    "description": "The unlisted content banner title"
+  },
+  "theme.docs.breadcrumbs.home": {
+    "message": "Home page",
+    "description": "The ARIA label for the home page in the breadcrumbs"
+  },
+  "theme.docs.breadcrumbs.navAriaLabel": {
+    "message": "Breadcrumbs",
+    "description": "The ARIA label for the breadcrumbs"
+  },
+  "theme.docs.DocCard.categoryDescription.plurals": {
+    "message": "1 item|{count} items",
+    "description": "The default description for a category card in the generated index about how many items this category includes"
+  },
+  "theme.docs.paginator.navAriaLabel": {
+    "message": "Docs pages",
+    "description": "The ARIA label for the docs pagination"
+  },
+  "theme.docs.paginator.next": {
+    "message": "Next",
+    "description": "The label used to navigate to the next doc"
+  },
+  "theme.docs.paginator.previous": {
+    "message": "Previous",
+    "description": "The label used to navigate to the previous doc"
+  },
+  "theme.docs.sidebar.closeSidebarButtonAriaLabel": {
+    "message": "Close navigation bar",
+    "description": "The ARIA label for close button of mobile sidebar"
+  },
+  "theme.docs.sidebar.collapseButtonAriaLabel": {
+    "message": "Collapse sidebar",
+    "description": "The title attribute for collapse button of doc sidebar"
+  },
+  "theme.docs.sidebar.collapseButtonTitle": {
+    "message": "Collapse sidebar",
+    "description": "The title attribute for collapse button of doc sidebar"
+  },
+  "theme.docs.sidebar.expandButtonAriaLabel": {
+    "message": "Expand sidebar",
+    "description": "The ARIA label and title attribute for expand button of doc sidebar"
+  },
+  "theme.docs.sidebar.expandButtonTitle": {
+    "message": "Expand sidebar",
+    "description": "The ARIA label and title attribute for expand button of doc sidebar"
+  },
+  "theme.docs.sidebar.navAriaLabel": {
+    "message": "Docs sidebar",
+    "description": "The ARIA label for the sidebar navigation"
+  },
+  "theme.docs.sidebar.toggleSidebarButtonAriaLabel": {
+    "message": "Toggle navigation bar",
+    "description": "The ARIA label for hamburger menu button of mobile navigation"
+  },
+  "theme.docs.tagDocListPageTitle": {
+    "message": "{nDocsTagged} with \"{tagName}\"",
+    "description": "The title of the page for a docs tag"
+  },
+  "theme.docs.tagDocListPageTitle.nDocsTagged": {
+    "message": "One doc tagged|{count} docs tagged",
+    "description": "Pluralized label for \"{count} docs tagged\". Use as much plural forms (separated by \"|\") as your language support (see https://www.unicode.org/cldr/cldr-aux/charts/34/supplemental/language_plural_rules.html)"
+  },
+  "theme.docs.versionBadge.label": {
+    "message": "Version: {versionLabel}"
+  },
+  "theme.docs.versions.latestVersionLinkLabel": {
+    "message": "latest version",
+    "description": "The label used for the latest version suggestion link label"
+  },
+  "theme.docs.versions.latestVersionSuggestionLabel": {
+    "message": "For up-to-date documentation, see the {latestVersionLink} ({versionLabel}).",
+    "description": "The label used to tell the user to check the latest version"
+  },
+  "theme.docs.versions.unmaintainedVersionLabel": {
+    "message": "This is documentation for {siteTitle} {versionLabel}, which is no longer actively maintained.",
+    "description": "The label used to tell the user that he's browsing an unmaintained doc version"
+  },
+  "theme.docs.versions.unreleasedVersionLabel": {
+    "message": "This is unreleased documentation for {siteTitle} {versionLabel} version.",
+    "description": "The label used to tell the user that he's browsing an unreleased doc version"
+  },
+  "theme.DocSidebarItem.collapseCategoryAriaLabel": {
+    "message": "Collapse sidebar category '{label}'",
+    "description": "The ARIA label to collapse the sidebar category"
+  },
+  "theme.DocSidebarItem.expandCategoryAriaLabel": {
+    "message": "Expand sidebar category '{label}'",
+    "description": "The ARIA label to expand the sidebar category"
+  },
+  "theme.ErrorPageContent.title": {
+    "message": "This page crashed.",
+    "description": "The title of the fallback page when the page crashed"
+  },
+  "theme.ErrorPageContent.tryAgain": {
+    "message": "Try again",
+    "description": "The label of the button to try again rendering when the React error boundary captures an error"
+  },
+  "theme.IconExternalLink.ariaLabel": {
+    "message": "(opens in new tab)",
+    "description": "The ARIA label for the external link icon"
+  },
+  "theme.lastUpdated.atDate": {
+    "message": " on {date}",
+    "description": "The words used to describe on which date a page has been last updated"
+  },
+  "theme.lastUpdated.byUser": {
+    "message": " by {user}",
+    "description": "The words used to describe by who the page has been last updated"
+  },
+  "theme.lastUpdated.lastUpdatedAtBy": {
+    "message": "Last updated{atDate}{byUser}",
+    "description": "The sentence used to display when a page has been last updated, and by who"
+  },
+  "theme.navbar.mobileDropdown.collapseButton.collapseAriaLabel": {
+    "message": "Collapse the dropdown",
+    "description": "The ARIA label of the button to collapse the mobile dropdown navbar item"
+  },
+  "theme.navbar.mobileDropdown.collapseButton.expandAriaLabel": {
+    "message": "Expand the dropdown",
+    "description": "The ARIA label of the button to expand the mobile dropdown navbar item"
+  },
+  "theme.navbar.mobileLanguageDropdown.label": {
+    "message": "Languages",
+    "description": "The label for the mobile language switcher dropdown"
+  },
+  "theme.navbar.mobileSidebarSecondaryMenu.backButtonLabel": {
+    "message": "← Back to main menu",
+    "description": "The label of the back button to return to main menu, inside the mobile navbar sidebar secondary menu (notably used to display the docs sidebar)"
+  },
+  "theme.navbar.mobileVersionsDropdown.label": {
+    "message": "Versions",
+    "description": "The label for the navbar versions dropdown on mobile view"
+  },
+  "theme.NavBar.navAriaLabel": {
+    "message": "Main",
+    "description": "The ARIA label for the main navigation"
+  },
+  "theme.NotFound.p1": {
+    "message": "We could not find what you were looking for.",
+    "description": "The first paragraph of the 404 page"
+  },
+  "theme.NotFound.p2": {
+    "message": "Please contact the owner of the site that linked you to the original URL and let them know their link is broken.",
+    "description": "The 2nd paragraph of the 404 page"
+  },
+  "theme.NotFound.title": {
+    "message": "Page Not Found",
+    "description": "The title of the 404 page"
+  },
+  "theme.SearchBar.label": {
+    "message": "Search",
+    "description": "The ARIA label and placeholder for search button"
+  },
+  "theme.SearchBar.noResultsText": {
+    "message": "No results"
+  },
+  "theme.SearchBar.searchInContext": {
+    "message": "See all results within \"{context}\""
+  },
+  "theme.SearchBar.seeAll": {
+    "message": "See all results"
+  },
+  "theme.SearchBar.seeAllOutsideContext": {
+    "message": "See all results outside \"{context}\""
+  },
+  "theme.SearchPage.documentsFound.plurals": {
+    "message": "1 document found|{count} documents found",
+    "description": "Pluralized label for \"{count} documents found\". Use as much plural forms (separated by \"|\") as your language support (see https://www.unicode.org/cldr/cldr-aux/charts/34/supplemental/language_plural_rules.html)"
+  },
+  "theme.SearchPage.emptyResultsTitle": {
+    "message": "Search the documentation",
+    "description": "The search page title for empty query"
+  },
+  "theme.SearchPage.existingResultsTitle": {
+    "message": "Search results for \"{query}\"",
+    "description": "The search page title for non-empty query"
+  },
+  "theme.SearchPage.noResultsText": {
+    "message": "No documents were found",
+    "description": "The paragraph for empty search result"
+  },
+  "theme.SearchPage.searchContext.everywhere": {
+    "message": "Everywhere"
+  },
+  "theme.tags.tagsListLabel": {
+    "message": "Tags:",
+    "description": "The label alongside a tag list"
+  },
+  "theme.tags.tagsPageLink": {
+    "message": "View all tags",
+    "description": "The label of the link targeting the tag list page"
+  },
+  "theme.tags.tagsPageTitle": {
+    "message": "Tags",
+    "description": "The title of the tag list page"
+  },
+  "theme.TOCCollapsible.toggleButtonLabel": {
+    "message": "On this page",
+    "description": "The label used by the button on the collapsible TOC component"
+  },
+  "whyFds.aside.lead": {
+    "message": "the evidence"
+  },
+  "whyFds.audience": {
+    "message": "For platform owners, product leads and coaches deciding what format their training content lives in. No schemas on this page — the {useCasesLink} show the same argument with the actual files."
+  },
+  "whyFds.audience.useCasesLink": {
+    "message": "use cases"
+  },
+  "whyFds.close.ghostButton": {
+    "message": "What you can do with it"
+  },
+  "whyFds.close.primaryButton": {
+    "message": "See it work on a back squat"
+  },
+  "whyFds.close.text": {
+    "message": "The shortest path to a decision is watching it work: a real vendor export, mapped once, becoming a document any FDS reader validates."
+  },
+  "whyFds.eyebrow": {
+    "message": "why FDS",
+    "description": "Small label above the /why-fds page title"
+  },
+  "whyFds.independence.asideLink": {
+    "message": "Every published schema →"
+  },
+  "whyFds.independence.asideNote": {
+    "message": "Each entity at its own version, every URL frozen. Superseded versions stay served."
+  },
+  "whyFds.independence.body1": {
+    "message": "A private format changes when its owner needs it to. FDS is built so that cannot happen to you: every published schema is frozen at a permanent public URL and never edited in place. New versions are additive and ship beside the old ones, which stay served — so a system built against the standard keeps working, on the schedule you choose."
+  },
+  "whyFds.independence.body2": {
+    "message": "The standard itself is developed in the open, through public RFCs — no single company can quietly redefine what your documents mean. And adopting it requires no SDK and no proprietary tooling: it is plain JSON with published schemas, validated by tools your team already uses."
+  },
+  "whyFds.independence.title": {
+    "message": "Independence: a format no vendor can move under you"
+  },
+  "whyFds.interoperability.asideLink": {
+    "message": "See it work on a back squat →"
+  },
+  "whyFds.interoperability.asideNote": {
+    "message": "A real vendor export, one mapping, and the validating output — all three are files in the repository."
+  },
+  "whyFds.interoperability.body1": {
+    "message": "Every integration between two fitness systems today starts with the same meeting: what counts as an exercise, whose muscle taxonomy wins, how a superset is written down. The result is a bespoke mapping that breaks whenever either side changes — multiplied by every partner you add."
+  },
+  "whyFds.interoperability.body2": {
+    "message": "A shared vocabulary collapses that to one mapping: yours, into the standard, written once. Two systems that both speak FDS line up without ever having met. The {transformerLink} does the mapping for data you already have — the landing page shows it running on a real vendor export."
+  },
+  "whyFds.interoperability.title": {
+    "message": "Interoperability: integrate once, not once per partner"
+  },
+  "whyFds.interoperability.transformerLink": {
+    "message": "transformer CLI"
+  },
+  "whyFds.lede": {
+    "message": "Exercise libraries, equipment catalogs and training programs are assets. Today they are stored in whatever private shape each platform invented, which quietly turns them into liabilities: hard to move, expensive to connect, gone when a vendor is. FDS is an open, vendor-neutral format that makes them documents — portable, connectable and readable on their own."
+  },
+  "whyFds.meta.description": {
+    "message": "The business case for the Fitness Data Standard: training content that outlives the app that made it, integrations built once, and a format no vendor can move under you.",
+    "description": "Meta description of the /why-fds page"
+  },
+  "whyFds.meta.title": {
+    "message": "Why adopt FDS",
+    "description": "Browser tab title of the /why-fds page"
+  },
+  "whyFds.noPeople.asideLink": {
+    "message": "Prescription primitives →"
+  },
+  "whyFds.noPeople.asideNote": {
+    "message": "How a program references a person's numbers without ever carrying them."
+  },
+  "whyFds.noPeople.body1": {
+    "message": "FDS describes training content, not the people doing the training. There is no athlete identity, no bodyweight, no logged result anywhere in the standard. A catalog or program in FDS is a document about nobody — it can be published, shared with partners, cached and mirrored without carrying personal-data obligations along with it."
+  },
+  "whyFds.noPeople.body2": {
+    "message": "Where a program needs a personal number — a percentage of someone's max, say — it references it rather than carrying it. Performed results are deliberately out of scope until there is a consent and privacy model worthy of them; the {roadmapLink} is explicit about that line."
+  },
+  "whyFds.noPeople.roadmapLink": {
+    "message": "roadmap"
+  },
+  "whyFds.noPeople.title": {
+    "message": "Nothing about people, on purpose"
+  },
+  "whyFds.portability.asideLink": {
+    "message": "Exercise catalog use case →"
+  },
+  "whyFds.portability.asideNote": {
+    "message": "A complete exercise from a published file — the document that moves."
+  },
+  "whyFds.portability.body1": {
+    "message": "Most fitness platforms will give you your data on the way out. What they give you is a file only they understand — every exercise name, muscle list and set structure encoded in their private vocabulary. In practice, migrating means rebuilding your content by hand on the other side."
+  },
+  "whyFds.portability.body2": {
+    "message": "In FDS, a catalog or a program is a document in a published format. Any system that reads the standard reads it, with the meaning intact — a back squat arrives as a back squat, with the muscles it targets and the way it is measured. Moving platforms becomes moving files."
+  },
+  "whyFds.portability.title": {
+    "message": "Portability: an export that means something"
+  },
+  "whyFds.title": {
+    "message": "Training content should outlive the software that made it."
+  },
+  "whyFds.today.asideLink": {
+    "message": "The scenario coverage matrix →"
+  },
+  "whyFds.today.asideNote": {
+    "message": "Every training structure the schemas express, each row backed by an example CI validates."
+  },
+  "whyFds.today.body1": {
+    "message": "FDS is new. The schemas, the transformer and the AI knowledge pack are published and ready to build against, and the reference tooling in this repository is their first user. There are no third-party adopters to point to yet, and this site will not invent any — what you see claimed is what the repository can prove."
+  },
+  "whyFds.today.body2": {
+    "message": "That timing is the opportunity in disguise: what the first stable release locks in is still open, and {earlyAdoptersLink} are the ones deciding it."
+  },
+  "whyFds.today.earlyAdoptersLink": {
+    "message": "early adopters"
+  },
+  "whyFds.today.title": {
+    "message": "Where it stands today"
+  }
+}

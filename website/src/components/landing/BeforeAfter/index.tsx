@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from '@docusaurus/Link';
+import Translate, {translate} from '@docusaurus/Translate';
 import Terminal from '@site/src/components/Terminal';
 import EditorPanel from '@site/src/components/EditorPanel';
 import styles from './styles.module.css';
@@ -40,14 +41,21 @@ export default function BeforeAfter(): React.ReactElement {
       <div className="fdsContainer">
         <div className="fdsSectionHead">
           <p className="fdsEyebrow">
-            <span>{'//'}</span> the transformer
+            <span>{'//'}</span>{' '}
+            <Translate id="landing.beforeAfter.eyebrow" description="Small label above the transformer demo section title">
+              the transformer
+            </Translate>
           </p>
-          <h2 className="fdsH2">See it work on a back squat</h2>
+          <h2 className="fdsH2">
+            <Translate id="landing.beforeAfter.title">See it work on a back squat</Translate>
+          </h2>
           <p className="fdsSub">
-            A vendor's export, a mapping you write once, and the document the
-            CLI produces — a back squat any FDS reader can validate. All three
-            panels are files that ship in this repository, and CI runs this
-            exact transform against the published schema on every change.
+            <Translate id="landing.beforeAfter.subtitle">
+              A vendor's export, a mapping you write once, and the document the
+              CLI produces — a back squat any FDS reader can validate. All three
+              panels are files that ship in this repository, and CI runs this
+              exact transform against the published schema on every change.
+            </Translate>
           </p>
         </div>
 
@@ -60,7 +68,11 @@ export default function BeforeAfter(): React.ReactElement {
             <EditorPanel
               step="1"
               filename="source.json"
-              badge="vendor export"
+              badge={translate({
+                id: 'landing.beforeAfter.badge.vendorExport',
+                message: 'vendor export',
+                description: 'Badge on the source panel of the transformer demo',
+              })}
               code={before}
               size="sm"
             />
@@ -70,7 +82,11 @@ export default function BeforeAfter(): React.ReactElement {
             <div className="fdsTileHead">
               <span className={styles.stepNo}>2</span>
               <span className={styles.fileName}>mapping.config.json</span>
-              <span className="fdsPill">written once</span>
+              <span className="fdsPill">
+                <Translate id="landing.beforeAfter.badge.writtenOnce" description="Badge on the mapping panel of the transformer demo">
+                  written once
+                </Translate>
+              </span>
             </div>
             <ul className={styles.mappingList}>
               {mappingRows.map((row) => (
@@ -90,7 +106,11 @@ export default function BeforeAfter(): React.ReactElement {
             <EditorPanel
               step="3"
               filename="out/exercises.json"
-              badge="valid fds"
+              badge={translate({
+                id: 'landing.beforeAfter.badge.validFds',
+                message: 'valid fds',
+                description: 'Badge on the output panel of the transformer demo',
+              })}
               badgeTone="ok"
               code={after}
               maxHeight="30rem"
@@ -100,11 +120,19 @@ export default function BeforeAfter(): React.ReactElement {
         </div>
 
         <p className={`fdsFootnote ${styles.outro}`}>
-          The output panel shows the first of the three documents this fixture
-          produces, verbatim from the committed file. Where source data has
-          genuine gaps — a description, a classification — the CLI can fill
-          them with optional AI enrichment.{' '}
-          <Link to="/docs/tools/transformer">Read the transformer docs →</Link>
+          <Translate
+            id="landing.beforeAfter.outro"
+            values={{
+              docsLink: (
+                <Link to="/docs/tools/transformer">
+                  <Translate id="landing.beforeAfter.docsLink">
+                    Read the transformer docs →
+                  </Translate>
+                </Link>
+              ),
+            }}>
+            {'The output panel shows the first of the three documents this fixture produces, verbatim from the committed file. Where source data has genuine gaps — a description, a classification — the CLI can fill them with optional AI enrichment. {docsLink}'}
+          </Translate>
         </p>
       </div>
     </section>

@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from '@docusaurus/Link';
+import Translate, {translate} from '@docusaurus/Translate';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import EditorPanel from '@site/src/components/EditorPanel';
@@ -24,13 +25,20 @@ export default function QuickStart(): React.ReactElement {
       <div className="fdsContainer">
         <div className="fdsSectionHead">
           <p className="fdsEyebrow">
-            <span>{'//'}</span> quick start
+            <span>{'//'}</span>{' '}
+            <Translate id="landing.quickStart.eyebrow" description="Small label above the quick start section title">
+              quick start
+            </Translate>
           </p>
-          <h2 className="fdsH2">No SDK required</h2>
+          <h2 className="fdsH2">
+            <Translate id="landing.quickStart.title">No SDK required</Translate>
+          </h2>
           <p className="fdsSub">
-            FDS is JSON Schema at stable URLs. If your stack can read JSON, it
-            can implement the standard — start with the schema and any
-            validator you already use.
+            <Translate id="landing.quickStart.subtitle">
+              FDS is JSON Schema at stable URLs. If your stack can read JSON, it
+              can implement the standard — start with the schema and any
+              validator you already use.
+            </Translate>
           </p>
         </div>
 
@@ -39,12 +47,18 @@ export default function QuickStart(): React.ReactElement {
             <div className={styles.step}>
               <span className={styles.stepNumber}>1</span>
               <div className={styles.stepContent}>
-                <h3 className={styles.stepTitle}>Get the schema</h3>
+                <h3 className={styles.stepTitle}>
+                  <Translate id="landing.quickStart.step1.title">Get the schema</Translate>
+                </h3>
                 <p className={styles.stepDescription}>
-                  Download the JSON Schema to validate your exercise data.
+                  <Translate id="landing.quickStart.step1.description">
+                    Download the JSON Schema to validate your exercise data.
+                  </Translate>
                 </p>
                 <Link className="fdsQuietLink" to="/docs/schemas/exercise">
-                  View the exercise schema →
+                  <Translate id="landing.quickStart.step1.link">
+                    View the exercise schema →
+                  </Translate>
                 </Link>
               </div>
             </div>
@@ -52,10 +66,14 @@ export default function QuickStart(): React.ReactElement {
             <div className={styles.step}>
               <span className={styles.stepNumber}>2</span>
               <div className={styles.stepContent}>
-                <h3 className={styles.stepTitle}>Model your data</h3>
+                <h3 className={styles.stepTitle}>
+                  <Translate id="landing.quickStart.step2.title">Model your data</Translate>
+                </h3>
                 <p className={styles.stepDescription}>
-                  Structure your exercise data using the FDS format. Start
-                  minimal, expand as needed.
+                  <Translate id="landing.quickStart.step2.description">
+                    Structure your exercise data using the FDS format. Start
+                    minimal, expand as needed.
+                  </Translate>
                 </p>
               </div>
             </div>
@@ -63,13 +81,19 @@ export default function QuickStart(): React.ReactElement {
             <div className={styles.step}>
               <span className={styles.stepNumber}>3</span>
               <div className={styles.stepContent}>
-                <h3 className={styles.stepTitle}>Validate</h3>
+                <h3 className={styles.stepTitle}>
+                  <Translate id="landing.quickStart.step3.title">Validate</Translate>
+                </h3>
                 <p className={styles.stepDescription}>
-                  Use any JSON Schema validator (ajv, jsonschema, etc.) to
-                  ensure compliance.
+                  <Translate id="landing.quickStart.step3.description">
+                    Use any JSON Schema validator (ajv, jsonschema, etc.) to
+                    ensure compliance.
+                  </Translate>
                 </p>
                 <Link className="fdsQuietLink" to="/docs/getting-started/quick-validation">
-                  Validation guide →
+                  <Translate id="landing.quickStart.step3.link">
+                    Validation guide →
+                  </Translate>
                 </Link>
               </div>
             </div>
@@ -77,10 +101,14 @@ export default function QuickStart(): React.ReactElement {
             <div className={styles.step}>
               <span className={styles.stepNumber}>4</span>
               <div className={styles.stepContent}>
-                <h3 className={styles.stepTitle}>Transform your data</h3>
+                <h3 className={styles.stepTitle}>
+                  <Translate id="landing.quickStart.step4.title">Transform your data</Translate>
+                </h3>
                 <p className={styles.stepDescription}>
-                  Use the FDS Transformer CLI to convert your existing data to
-                  FDS format with optional AI enrichment.
+                  <Translate id="landing.quickStart.step4.description">
+                    Use the FDS Transformer CLI to convert your existing data to
+                    FDS format with optional AI enrichment.
+                  </Translate>
                 </p>
                 <div className={styles.installTabs}>
                   <Tabs groupId="package-manager" queryString>
@@ -96,7 +124,9 @@ export default function QuickStart(): React.ReactElement {
                   </Tabs>
                 </div>
                 <Link className="fdsQuietLink" to="/docs/tools/transformer">
-                  Transformer docs →
+                  <Translate id="landing.quickStart.step4.link">
+                    Transformer docs →
+                  </Translate>
                 </Link>
               </div>
             </div>
@@ -109,7 +139,12 @@ export default function QuickStart(): React.ReactElement {
               code={example}
               maxHeight="34rem"
               size="sm"
-              footer="The published example for the exercise entity — a back squat, verbatim from the spec."
+              footer={translate({
+                id: 'landing.quickStart.exampleFooter',
+                message:
+                  'The published example for the exercise entity — a back squat, verbatim from the spec.',
+                description: 'Caption under the example document panel in the quick start section',
+              })}
             />
           </div>
         </div>
