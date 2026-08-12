@@ -87,4 +87,38 @@ polja šema, komande i identifikatori se ne prevode.
 | API key | API ključ | |
 | rate limit | ograničenje broja zahteva | |
 | cost estimation | procena troškova | |
-| MUST / MUST NOT / SHOULD / MAY | MORA / NE SME / TREBALO BI / MOŽE | ključne reči RFC 2119, uvek velikim slovima; engleski tekst ostaje normativan |
+| MUST / MUST NOT / SHOULD / MAY | MORA / NE SME / TREBALO BI / MOŽE | ključne reči RFC 2119, uvek velikim slovima; engleski tekst ostaje normativan; uz množinu se menja isto slovo: MORAJU |
+| overview | pregled | |
+| discovery | otkrivanje | |
+| conformance / conforming | usaglašenost / usaglašen | |
+| identifier | identifikator | |
+| string (JSON type) | string | nikada „niska“; „niz“ je rezervisan za *array* |
+| array / object (types) | niz / objekat | |
+| file | datoteka | nikada „fajl“ |
+| prompt | prompt | „šablon prompta“ |
+| token | token | |
+| backoff | odlaganje | uz „(backoff)“ pri prvom pominjanju |
+| enricher | obogaćivač | |
+| graceful degradation | postepena degradacija | |
+| workflow | tok rada | |
+| feature | funkcionalnost | |
+| package manager | menadžer paketa | |
+| environment variable | promenljiva okruženja | |
+| timestamp | vremenska oznaka | |
+| legacy | nasleđeno | |
+| troubleshooting | rešavanje problema | |
+| edge case | granični slučaj | |
+| major / minor / patch (SemVer) | glavna / sporedna / zakrpa | |
+| breaking change | nekompatibilna izmena | |
+| backward compatible | unazad kompatibilan | |
+| deprecated | zastareo | |
+| renderer | prikazivač | |
+| barbell | šipka | |
+| plate(s) / plate math | disk(ovi) / računica sa diskovima | |
+| weight stack / pin | stek / klin | |
+| data subject | subjekt podataka | |
+| load target | ciljno opterećenje | |
+| provider (discovery) | provajder | *vendor* → „proizvođač“ i *producer* → „proizvođač podataka“ ostaju odvojeni |
+| See Also | Pogledajte i | |
+| pattern (regex) | obrazac | „šablon“ je rezervisan za *template* |
+| placeholder | čuvar mesta | |
