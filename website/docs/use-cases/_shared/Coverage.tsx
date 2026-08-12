@@ -20,6 +20,19 @@ type Row = {name: string; description: string};
 type Section = {title: string; entity: string; rows: Row[]};
 type CoverageData = {sections: Section[]; total: number};
 
+/**
+ * Where each entity's scenarios are put to work. The entity names come from
+ * the matrix module the gates walk; this maps each one to the use-case page
+ * that demonstrates its structures. The mapping is editorial — which page
+ * best serves a reader — so it lives here rather than being derived. An
+ * entity with no page listed renders no link, never a guessed one.
+ */
+const USE_CASE_PAGES: Record<string, {to: string; label: string}> = {
+  workout: {to: '/docs/use-cases/authoring-workouts', label: 'Authoring workouts'},
+  prescription: {to: '/docs/use-cases/prescription', label: 'Prescription primitives'},
+  program: {to: '/docs/use-cases/programming', label: 'Programming'},
+};
+
 /** Minimal inline markdown: `code`, **strong**, *em*. Everything else literal. */
 function Inline({text}: {text: string}): React.ReactElement {
   const parts = text.split(/(`[^`]+`|\*\*[^*]+\*\*|\*[^*]+\*)/g);
@@ -48,8 +61,10 @@ export function CoverageMatrix(): React.ReactElement {
         README that ships beside those fixtures. Nothing on this list is
         retyped for the website.
       </p>
-      {sections.map((section) => (
-        <details key={section.title} className={styles.coverageSection}>
+      {sections.map((section, index) => (
+        // The first section ships open: the matrix is the site's strongest
+        // evidence, and fully collapsed it reads as a list of doors instead.
+        <details key={section.title} className={styles.coverageSection} open={index === 0}>
           <summary className={styles.coverageSummary}>
             <span className={styles.coverageTitle}>{section.title}</span>
             <span className={styles.coverageChip}>{section.entity}</span>
@@ -65,6 +80,13 @@ export function CoverageMatrix(): React.ReactElement {
               </li>
             ))}
           </ul>
+          {USE_CASE_PAGES[section.entity] ? (
+            <p className={styles.coverageUseCase}>
+              <a href={USE_CASE_PAGES[section.entity].to}>
+                See these structures in use: {USE_CASE_PAGES[section.entity].label} →
+              </a>
+            </p>
+          ) : null}
         </details>
       ))}
       <p className={styles.coverageFootnote}>
