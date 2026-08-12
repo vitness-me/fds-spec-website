@@ -1,0 +1,76 @@
+---
+title: Planificar doce semanas sin copiar una sesión treinta y seis veces
+sidebar_label: Programación
+description: Un programa apunta a sesiones; se corrige una sesión y queda corregido cada plan que la usa.
+usecase_promise: Un programa apunta a sesiones; se corrige una sesión y queda corregido cada plan que la usa.
+usecase_family: composition
+usecase_audiences: [coach, researcher]
+usecase_sources:
+  - specification/schemas/program/v1.0.0/program.linear.example.json
+  - specification/schemas/program/v1.0.0/program.percentage-waves.example.json
+---
+
+import {SpecExample, BeforeAfter, Panel, Audience, NextSteps, Next} from '@site/docs/use-cases/_shared/UseCase';
+import linear from '@site/../specification/schemas/program/v1.0.0/program.linear.example.json';
+import waves from '@site/../specification/schemas/program/v1.0.0/program.percentage-waves.example.json';
+
+# Planificar doce semanas sin copiar una sesión treinta y seis veces
+
+> Un programa apunta a sesiones; se corrige una sesión y queda corregido cada plan que la usa.
+
+<Audience ids={['coach', 'researcher']} />
+
+<BeforeAfter>
+  <Panel kind="before">
+    Un plan de doce semanas incrusta treinta y seis copias casi idénticas de una sesión.
+    Se repara en ocho de ellas y el plan ahora discrepa consigo mismo. El plan y la
+    sesión están enredados entre sí, de modo que nada de ninguno de los dos puede
+    reutilizarse.
+  </Panel>
+  <Panel kind="after">
+    Un programa es un cronograma de **referencias** a sesiones, cada una con un nombre
+    desnormalizado para que el plan siga siendo legible sin resolver nada. La
+    prescripción vive en las sesiones; el programa solo dice cuál cae cuándo. Se
+    corrige una sesión una sola vez y queda corregido cada plan que apunta a ella.
+  </Panel>
+</BeforeAfter>
+
+## Un plan es un cronograma, no una pila de sesiones
+
+La progresión lineal es toda la metodología en una sola regla: añadir carga cada vez
+que se completan todas las repeticiones. Las dos semanas son idénticas — la carga se
+mueve, el plan no — y los días apuntan a una sesión de entrenamiento por referencia.
+
+<SpecExample source="specification/schemas/program/v1.0.0/program.linear.example.json" data={linear}>
+  Cada día es una referencia `workout` con un `name` desnormalizado. Ni una serie,
+  repetición o carga aparece en el programa — viven en la sesión a la que apunta.
+</SpecExample>
+
+La misma estructura escala a una ola al estilo 5/3/1 — y sigue sin llevar los números
+de ningún atleta.
+
+<SpecExample source="specification/schemas/program/v1.0.0/program.percentage-waves.example.json" data={waves}>
+  Los slots de máximo de entrenamiento declaran a partir de qué levantamientos se
+  computa el plan; `overrides` lleva la ola. Ningún *valor* de máximo de entrenamiento
+  aparece en parte alguna del documento.
+</SpecExample>
+
+## Cómo funciona
+
+Un día resuelve a una sesión de entrenamiento **o** es un día de descanso — nunca
+ambos, nunca ninguno — y el modelo de cronograma (`calendar`, `relative`, `rolling`,
+`sequence`) decide qué campo de ubicación es autoritativo. La reutilización viene de
+`overrides`: una semana puede escalarse o marcarse como descarga sin editar la sesión
+a la que apunta, de modo que la sesión sigue compartida.
+
+El costo es honesto y está declarado: un programa no es ejecutable sin resolver sus
+referencias, y un plan totalmente personalizado no hace el viaje de ida y vuelta como
+un único documento autocontenido — es el plan más un contexto de resolución aparte.
+Ese intercambio es lo que compra todas las demás propiedades: un plan que no lleva
+datos ejecutados ni persona alguna es uno que puede publicarse y diferenciarse como
+cualquier otro documento.
+
+<NextSteps>
+  <Next to="/docs/use-cases/prescription">Ver dónde viven realmente los números</Next>
+  <Next to="/docs/schemas/program">Leer el esquema de programa</Next>
+</NextSteps>
