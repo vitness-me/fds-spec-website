@@ -219,6 +219,110 @@
   line-height: 1.55;
 }
 
+/* ── the coverage matrix ────────────────────────────────────────────────── */
+/* A reference appendix, so it reads as a document: hairline-ruled disclosure
+   sections, mono for section numbers, names and counts, no boxes. */
+
+.coverageSection {
+  border-top: 1px solid var(--ifm-color-emphasis-300);
+  margin: 0;
+}
+
+.coverageSection:last-of-type {
+  border-bottom: 1px solid var(--ifm-color-emphasis-300);
+}
+
+.coverageSummary {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  padding: 0.875rem 0.25rem;
+  cursor: pointer;
+  list-style: none;
+}
+
+.coverageSummary::-webkit-details-marker {
+  display: none;
+}
+
+.coverageSummary::before {
+  content: '+';
+  font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', Monaco, 'Roboto Mono', monospace;
+  font-size: 0.875rem;
+  color: var(--ifm-color-emphasis-600);
+  width: 1rem;
+}
+
+.coverageSection[open] > .coverageSummary::before {
+  content: '−';
+}
+
+.coverageTitle {
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--ifm-font-color-base);
+}
+
+.coverageChip {
+  font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', Monaco, 'Roboto Mono', monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.02em;
+  color: var(--ifm-color-emphasis-600);
+}
+
+.coverageCount {
+  margin-left: auto;
+  font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', Monaco, 'Roboto Mono', monospace;
+  font-variant-numeric: tabular-nums;
+  font-size: 0.8125rem;
+  color: var(--ifm-color-emphasis-600);
+}
+
+.coverageList {
+  list-style: none;
+  margin: 0 0 1.25rem;
+  padding: 0 0 0 1rem;
+}
+
+.coverageRow {
+  display: grid;
+  grid-template-columns: minmax(11rem, auto) 1fr;
+  gap: 0.25rem 1.25rem;
+  padding: 0.4375rem 0;
+  font-size: 0.875rem;
+  line-height: 1.55;
+}
+
+.coverageRow + .coverageRow {
+  border-top: 1px solid var(--ifm-color-emphasis-200);
+}
+
+@media (max-width: 640px) {
+  .coverageRow {
+    grid-template-columns: 1fr;
+  }
+}
+
+.coverageName {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 0.8125rem;
+  color: var(--ifm-color-emphasis-800);
+  overflow-wrap: anywhere;
+}
+
+.coverageDesc {
+  color: var(--ifm-color-emphasis-700);
+}
+
+.coverageFootnote {
+  margin: 1.25rem 0 0;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--ifm-color-emphasis-600);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .nextLink,
   .card {

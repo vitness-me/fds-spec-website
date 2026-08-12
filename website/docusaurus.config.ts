@@ -98,6 +98,15 @@ const config: Config = {
     ],
   ],
 
+  plugins: [
+    // The scenario coverage matrix, joined with the fixture READMEs and
+    // served as global data for docs/use-cases/_shared/Coverage.tsx. See the
+    // plugin's doc comment for why this reads from disk in Node rather than
+    // importing through webpack, and for the drift rule: a matrix row the
+    // READMEs cannot describe fails the build.
+    './plugins/coverage-matrix.mjs',
+  ],
+
   themes: [
     [
       '@easyops-cn/docusaurus-search-local',
