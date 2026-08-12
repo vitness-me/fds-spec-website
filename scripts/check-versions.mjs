@@ -310,11 +310,16 @@ function reconcile(expected, actual) {
  *             count.
  *   releases  the table below, keyed on its first column. The "Adds" prose is
  *             editorial and stays hand-written; which releases exist is not.
+ *   rfcs      the table below, keyed on the RFC id appearing anywhere in the
+ *             row. The set comes from `specification/rfc/` on disk — the same
+ *             discovery `check:mirrors` uses — so an index of the RFCs cannot
+ *             silently omit the ninth one the way SCHEMAS.md omitted
+ *             `program`. The "Specifies" prose stays editorial.
  *
  * Order is deliberately not checked. A table sorted for the reader is good
  * documentation, and completeness is the thing that was missing.
  */
-function coverage({ manifest, byPath }, file, lines, index) {
+function coverage({ manifest, byPath, rfcIds }, file, lines, index) {
   const at = `${file}:${index + 1}`;
 
   const fromTable = (pick) => {
@@ -365,6 +370,33 @@ function coverage({ manifest, byPath }, file, lines, index) {
           (unexpected.length ? `        not in it:  ${unexpected.join(', ')}\n` : '') +
           '    A release names a set of entity versions. This table is that set, written out ' +
           'for a reader.',
+      ];
+    },
+
+    rfcs() {
+      const expected = rfcIds;
+      // The slug form only — `rfc-001-exercise-data-model` — so a row is
+      // counted by the RFC it links, not by a bare "RFC-001" in its prose.
+      const actual = fromTable((row) => {
+        const match = row.join(' ').match(/rfc-\d+(?:-[a-z0-9]+)+/i);
+        return match ? match[0].toLowerCase() : null;
+      });
+      if (actual === null) {
+        return [
+          `${at}: fds:covers rfcs — no table below it.\n` +
+            '    The marker annotates a table with one row per RFC. Put it directly above one, ' +
+            'or delete it.',
+        ];
+      }
+      const { missing, unexpected } = reconcile(expected, actual);
+      if (!missing.length && !unexpected.length) return [];
+      return [
+        `${at}: fds:covers rfcs — the table below does not name every RFC in ` +
+          'specification/rfc/.\n' +
+          (missing.length ? `        missing:    ${missing.join(', ')}\n` : '') +
+          (unexpected.length ? `        not an RFC: ${unexpected.join(', ')}\n` : '') +
+          '    Publishing an RFC adds a row here. An index that stops at the RFC before last ' +
+          'lists\n    a standard nobody is reading.',
       ];
     },
 
@@ -586,6 +618,14 @@ const note = (problem) => problems.push(problem);
 
 const loaded = await loadManifest();
 const { manifest, byPath, currentOf, versionsOf } = loaded;
+
+// The published RFC set, for `fds:covers rfcs`. Read from disk the same way
+// `check:mirrors` discovers RFC pages, so the two gates cannot disagree about
+// what an RFC is.
+loaded.rfcIds = (await readdir(join(ROOT, 'specification/rfc')))
+  .filter((name) => /^rfc-\d+.*\.md$/.test(name))
+  .map((name) => name.replace(/\.md$/, ''))
+  .sort();
 
 // Rule 1 — the assumption every other rule rests on. Nothing below can report
 // anything meaningful about a manifest that does not describe itself.
