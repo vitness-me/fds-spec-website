@@ -147,6 +147,14 @@ jobs:
       - name: Verify website pages match their sources
         run: npm run check:mirrors
 
+      # The footer named a licence as dead text, the agreement lived twice with
+      # nothing comparing the copies, and a clone carried no LICENSE at all.
+      # One source now: the agreement under specification/. The root LICENSE
+      # must match it byte for byte, and the footer must name it by its own
+      # heading and link it.
+      - name: Verify the licence ships and the footer links it
+        run: npm run check:license
+
       # The use-case layer is a sales pitch, and a sales pitch invents its
       # evidence. These pages sat outside every gate — the same gap that let the
       # landing page ship a fabricated exercise and four invented companies while

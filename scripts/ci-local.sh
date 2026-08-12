@@ -97,6 +97,7 @@ if run_job schemas; then
   # scripts/check-doc-commands.mjs for why that trade was taken.
   try "the documented commands run" npm run check:commands
   try "website pages match their sources" npm run check:mirrors
+  try "the licence ships and the footer links it" npm run check:license
   try "use-case pages stay honest" npm run check:usecases
   try "every matrix scenario has an example" npm run check:scenarios
   try "recommended values are in a registry" npm run check:registries
