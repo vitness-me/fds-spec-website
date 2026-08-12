@@ -77,36 +77,55 @@ jobs:
       run:
         working-directory: packages/fds-transformer
     # No `environment:`. npm trusted publishing keys the OIDC identity on the
-    # repository and the workflow filename, and this package's trusted publisher
-    # is configured with no environment. Declaring `environment: npm` here put an
-    # `environment` claim in the OIDC token that the registry validated against a
-    # config that expects none, so the signature succeeded and the registry write
-    # was refused with a 404. Publishing to a GitHub environment is only worth
-    # reinstating alongside an environment on the npm side — and a protection rule
-    # to justify it, which the `npm` environment did not have.
+    # repository, the workflow filename and — if the npm side names one — the
+    # environment, and an `environment` claim in the token where npm expects none
+    # is refused like any other mismatch. Declaring `environment: npm` here was
+    # removed on the belief that npm expects none; that belief is about a setting
+    # on npmjs.org which cannot be read from this repository, so treat it as
+    # unconfirmed. The credential check below prints the four fields to compare
+    # against it. Publishing to a GitHub environment is only worth reinstating
+    # alongside an environment on the npm side — and a protection rule to justify
+    # it, which the `npm` environment did not have.
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
+      # No `registry-url:`. It reads as "publish to npmjs.org", which this package
+      # already does — `publishConfig.registry` in its package.json says so — but
+      # actions/setup-node@v4 treats it as an authentication setting. It writes
+      # `//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}` into a temporary
+      # npmrc and exports `NODE_AUTH_TOKEN=XXXXX-XXXXX-XXXXX-XXXXX` when the
+      # workflow provides none of its own (src/authutil.ts; the placeholder is
+      # gone from setup-node's main branch but present in every v4). This job
+      # provides none, so npm ran holding a placeholder credential.
+      #
+      # That did not stop the OIDC exchange — npm attempts it whatever is
+      # configured, and overwrites the credential on success (lib/utils/oidc.js).
+      # It hid the exchange having failed. `npm publish` reports ENEEDAUTH, "this
+      # command requires you to be logged in", only when it finds no credential at
+      # all; holding the placeholder it went ahead, PUT the tarball with a token
+      # that authenticates as nobody, and the registry answered 404 — the same 404
+      # it returns for a package that does not exist, so that an anonymous caller
+      # cannot probe which ones do. Five attempts read that as a package problem.
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          registry-url: 'https://registry.npmjs.org'
           cache: npm
           cache-dependency-path: packages/fds-transformer/package-lock.json
 
       # This job authenticates by trusted publishing — no token, an OIDC
       # exchange the npm CLI performs automatically at `npm publish`. That
-      # exchange landed in npm 11.5.1 (2025-07-24); every earlier npm just skips
-      # it. Node 20 ships npm 10.8.2 and Node 22 ships npm 10.9.x, both older, so
-      # `node-version: 20` alone leaves the CLI unable to obtain a publish
-      # credential: it sends an unauthenticated PUT and the registry answers
-      # E404 — 404 not 403, by design, so an anonymous caller cannot tell a
-      # package exists. `--provenance` still succeeds because Sigstore signs from
-      # the id-token directly and never touches the registry exchange, which is
-      # why the log shows the signature landing and the write failing right
-      # after it. Install an npm new enough to do the exchange before publishing.
+      # exchange landed in npm 11.5.1 (2025-07-24); every earlier npm has no
+      # lib/utils/oidc.js at all and never attempts it. Node 20 ships npm 10.8.2
+      # and Node 22 ships npm 10.9.x, both older, so `node-version: 20` alone
+      # leaves the CLI with no way to obtain a publish credential and the write
+      # is refused. `--provenance` still succeeds either way, because Sigstore
+      # signs from the id-token directly and never touches the registry
+      # exchange — which is why the log shows a signature landing and the write
+      # failing right after it, and why that pairing is not evidence about
+      # authentication one way or the other. Install an npm new enough to do the
+      # exchange before publishing.
       #
       # Pinned to the 11 line, not `@latest`. `@latest` is npm 12, whose engines
       # field is `^22.22.2 || ^24.15.0 || >=26.0.0`, so on this runner's Node
@@ -195,11 +214,28 @@ jobs:
             exit 1
           fi
 
+      # The one property every gate above is incapable of testing: that this job
+      # can authenticate. They pack the tarball, open it and run what is inside —
+      # none of them needs a credential — and `dry_run: true` skipped the only
+      # step that does. So five publishes failed on the same authentication error
+      # with every gate green, and the dry run that was meant to de-risk them
+      # could not have caught it.
+      #
+      # This runs on both paths, which is the point: a dry run now proves the
+      # credential as well as the contents. See scripts/check-publish-auth.mjs for
+      # what it does and why one probe is not enough.
+      - name: The publish can authenticate
+        working-directory: .
+        run: |
+          node scripts/check-publish-auth.mjs --self-test
+          node scripts/check-publish-auth.mjs packages/fds-transformer
+
       - name: Publish to npm
         if: ${{ github.event.inputs.dry_run != 'true' }}
         run: npm publish --access public --provenance
 
-      # The contents were already listed and asserted above, on both paths.
+      # The contents were already listed and asserted above, on both paths — and
+      # since the step above, so has the credential the publish would have used.
       - name: Dry run - skip publish
         if: ${{ github.event.inputs.dry_run == 'true' }}
         run: echo "Dry run mode - skipping npm publish"
