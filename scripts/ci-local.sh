@@ -16,6 +16,14 @@ ONLY="${1:-all}"
 FAILED=()
 run_job() { [[ "$ONLY" == "all" || "$ONLY" == "$1" ]]; }
 
+# A job name that matches nothing runs nothing — and a run of nothing used to
+# end in "ALL CHECKS PASSED". A filter that silently selects the empty set is
+# the same defect this suite exists to catch, so an unknown name is an error.
+case "$ONLY" in
+  all|transformer|schemas|website) ;;
+  *) printf 'unknown job "%s" — expected transformer, schemas, website or all\n' "$ONLY" >&2; exit 2 ;;
+esac
+
 # This script's promise is "green here means green there". A different Node
 # major quietly voids it: V8 changes the wording of its own error messages
 # between releases, and a check that compares a recorded message byte for byte
@@ -159,4 +167,9 @@ if [ ${#FAILED[@]} -eq 0 ]; then
 fi
 printf '\033[31m%d CHECK(S) FAILED\033[0m\n' "${#FAILED[@]}"
 printf '  - %s\n' "${FAILED[@]}"
+# The verdict again, on stderr: a run captured with `> log` or piped through
+# a filter has already had "verify was green" asserted about it on the
+# strength of output nobody saw. The duplicate line in a plain terminal is
+# the cost of the failure surviving any single-stream redirect.
+{ printf '%d CHECK(S) FAILED: ' "${#FAILED[@]}"; printf '%s; ' "${FAILED[@]}"; printf '\n'; } >&2
 exit 1
