@@ -1,0 +1,9 @@
+{
+  "defaultLocale": "en",
+  "locales": ["en", "es", "sr-Latn"],
+  "localeConfigs": {
+    "en": { "label": "English", "htmlLang": "en" },
+    "es": { "label": "Español", "htmlLang": "es" },
+    "sr-Latn": { "label": "Srpski", "htmlLang": "sr-Latn" }
+  }
+}

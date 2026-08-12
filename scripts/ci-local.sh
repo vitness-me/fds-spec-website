@@ -142,6 +142,11 @@ if run_job website; then
   hdr "website — build"
   pushd website >/dev/null
   try "npm ci"  npm ci --no-fund --no-audit
+  popd >/dev/null
+  # Between install and build, as in the workflow: the check re-runs the
+  # string extraction, which needs the dependencies just installed.
+  try "translations current with their sources" npm run check:translations
+  pushd website >/dev/null
   try "build"   npm run build
   popd >/dev/null
 fi
