@@ -166,7 +166,10 @@ En las cadenas de la interfaz se usan comillas inglesas ("…"); las angulares
 | barbell / dumbbell / kettlebell | barra / mancuerna / pesa rusa | en prosa; los identificadores no se traducen |
 | bench press | press de banca | |
 | core (anatomía) | core | sin traducir; el valor `core` tampoco |
-| top set / back-off set | serie tope / serie de descenso | «serie de aproximación» descartada; decisión pendiente de revisión nativa |
+| top set / back-off set | serie top / serie back-off | ingleses asentados, por decisión del proyecto — como EMOM y Tabata |
+| drop set | drop set | el sustantivo «descensos» sí traduce las bajadas dentro de la serie |
+| sweet spot / rest-pause / myo-reps | sweet spot / rest-pause / myo-reps | ingleses asentados; no se traducen |
+| cluster | clúster | préstamo con ortografía española; «clúster», «clústeres» |
 | triset / compound set | triserie / serie compuesta | |
 | antagonist pairing | emparejamiento de antagonistas | |
 | partials | repeticiones parciales | |

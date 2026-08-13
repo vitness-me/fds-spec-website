@@ -25,7 +25,7 @@ La prescripción en sí — cuánta carga, cuántas repeticiones, qué tempo, cu
 
 ### 1.1. Antecedentes
 
-Los formatos de intercambio para sesiones de entrenamiento han modelado históricamente una metodología bien y el resto mal. Un formato construido en torno a series y repeticiones no puede expresar un AMRAP; un formato construido en torno a rondas y topes de tiempo no puede expresar una serie tope con series de descenso. Las aplicaciones lo sortean con campos por estilo — `isCircuit`, `emomInterval`, `tabataRounds` — hasta que el modelo es una unión de casos especiales y no hay dos implementaciones que coincidan en cuáles aplican juntos.
+Los formatos de intercambio para sesiones de entrenamiento han modelado históricamente una metodología bien y el resto mal. Un formato construido en torno a series y repeticiones no puede expresar un AMRAP; un formato construido en torno a rondas y topes de tiempo no puede expresar una serie top con series back-off. Las aplicaciones lo sortean con campos por estilo — `isCircuit`, `emomInterval`, `tabataRounds` — hasta que el modelo es una unión de casos especiales y no hay dos implementaciones que coincidan en cuáles aplican juntos.
 
 La observación sobre la que se construye este RFC es que estos estilos difieren en **cómo se ejecuta un grupo de ejercicios**, no en lo que es un ejercicio o una serie. Un circuito y un conjunto de series simples contienen los mismos elementos con las mismas prescripciones; difieren en el orden de recorrido y en la terminación. Una vez que la ejecución es una propiedad de un bloque, los casos especiales colapsan.
 
@@ -289,7 +289,7 @@ npm run verify schemas
 
 ## 10. Ejemplo
 
-Una sesión de tren superior: un bloque de calentamiento, un bloque principal con una serie tope y series de descenso, una superserie de accesorios y un finisher de acondicionamiento.
+Una sesión de tren superior: un bloque de calentamiento, un bloque principal con una serie top y series back-off, una superserie de accesorios y un finisher de acondicionamiento.
 
 ```json
 {
