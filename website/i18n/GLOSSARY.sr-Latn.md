@@ -179,6 +179,9 @@ polja šema, komande i identifikatori se ne prevode.
 | drop set | drop set | „procenti pada“ i dalje opisuju smanjenja unutar serije |
 | sweet spot / rest-pause / myo-reps / chipper / fartlek | sweet spot / rest-pause / myo-reps / chipper / fartlek | ustaljeni engleski; ne prevode se |
 | cluster | klaster | pozajmljenica u domaćem pravopisu, kao „keš“ |
+| decimalni zapis u prozi | zarez | „82,5%“, „0,75 m/s“; vrednosti unutar JSON blokova ostaju sa tačkom |
+| ID (množina u prozi) | ID-jevi | nikada „id-evi“; polje `id` se ne prevodi |
+| publish (u registru) | objaviti u registru | lokativ — „objaviti“ nije glagol smeštanja |
 | failure (mišićni) | otkaz | tehnički / apsolutni otkaz |
 | isometric hold | izdržaj | |
 | range of motion | obim pokreta | |

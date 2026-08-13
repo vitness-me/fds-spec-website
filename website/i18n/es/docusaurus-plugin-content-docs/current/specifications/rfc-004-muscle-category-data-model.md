@@ -384,7 +384,7 @@ function importMuscleCategory(rfc004Data: RFC004MuscleCategory) {
 
 :::danger DEBE
 - Los campos opcionales agregados en versiones minor **NO DEBEN** romper a los consumidores; los consumidores **DEBERÍAN** ignorar los campos opcionales desconocidos.
-- Los nuevos campos obligatorios son un cambio **MAJOR** y requieren actualizaciones coordinadas.
+- Los nuevos campos obligatorios son un cambio **MAYOR** y requieren actualizaciones coordinadas.
 :::
 
 ---

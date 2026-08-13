@@ -275,7 +275,7 @@ Prihvaćena posledica je da **potpuno personalizovan program ne može da napravi
 
 ### 8.2. Izvedeni artefakti
 
-Implementacija koja razreši program prema konkretnom sportisti i sačuva rezultat — upisujući kilograme na mesto procenata kroz dvanaest nedelja — proizvela je lične podatke i nasleđuje te obaveze. Taj artefakt nije program u smislu ovog RFC-a, i NE SME da se objavi u registar programa.
+Implementacija koja razreši program prema konkretnom sportisti i sačuva rezultat — upisujući kilograme na mesto procenata kroz dvanaest nedelja — proizvela je lične podatke i nasleđuje te obaveze. Taj artefakt nije program u smislu ovog RFC-a, i NE SME da se objavi u registru programa.
 
 ## 9. Referenca JSON šeme
 

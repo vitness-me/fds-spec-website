@@ -25,7 +25,7 @@ La prescripción en sí — cuánta carga, cuántas repeticiones, qué tempo, cu
 
 ### 1.1. Antecedentes
 
-Los formatos de intercambio para sesiones de entrenamiento han modelado históricamente una metodología bien y el resto mal. Un formato construido en torno a series y repeticiones no puede expresar un AMRAP; un formato construido en torno a rondas y topes de tiempo no puede expresar una serie top con series back-off. Las aplicaciones lo sortean con campos por estilo — `isCircuit`, `emomInterval`, `tabataRounds` — hasta que el modelo es una unión de casos especiales y no hay dos implementaciones que coincidan en cuáles aplican juntos.
+Los formatos de intercambio para sesiones de entrenamiento han modelado históricamente una metodología bien y el resto mal. Un formato construido en torno a series y repeticiones no puede expresar un AMRAP; un formato construido en torno a rondas y topes de tiempo no puede expresar una serie top con series back-off. Las aplicaciones lo sortean con campos por estilo — `isCircuit`, `emomInterval`, `tabataRounds` — hasta que el modelo es una unión de casos especiales y no hay dos implementaciones que coincidan en cuáles se aplican juntos.
 
 La observación sobre la que se construye este RFC es que estos estilos difieren en **cómo se ejecuta un grupo de ejercicios**, no en lo que es un ejercicio o una serie. Un circuito y un conjunto de series simples contienen los mismos elementos con las mismas prescripciones; difieren en el orden de recorrido y en la terminación. Una vez que la ejecución es una propiedad de un bloque, los casos especiales colapsan.
 
@@ -64,7 +64,7 @@ Las palabras clave DEBE, NO DEBE, DEBERÍA, NO DEBERÍA y PUEDE (MUST, MUST NOT,
 
 `schemaVersion`, `workoutId`, `canonical`, `classification`, `structure` y `metadata`. La envoltura — `canonical`, `metadata`, `attributes`, `extensions`, `additionalProperties` cerrado en el nivel superior — se hereda sin cambios del RFC-001.
 
-`structure.blocks` DEBE contener al menos un bloque, y cada bloque DEBE contener al menos un elemento. Una sesión vacía no es una sesión de entrenamiento; es un error que valida.
+`structure.blocks` DEBE contener al menos un bloque, y cada bloque DEBE contener al menos un elemento. Una sesión vacía no es una sesión de entrenamiento; es un error que pasa la validación.
 
 ### 3.2. Bloques y modos
 
@@ -114,7 +114,7 @@ Son mutuamente excluyentes, lo que se hace cumplir con `not: { required: ["sets"
 
 Los productores DEBERÍAN preferir `sets[]` cuando las series difieren entre sí y `scheme` cuando el patrón es la intención. Un consumidor que no reconoce el patrón de un esquema NO DEBE intentar expandirlo (RFC-006 §4.6).
 
-`load`, `reps`, `tempo` y `rest` a nivel de elemento aplican a cada serie del elemento. Un valor a nivel de serie sobrescribe el del nivel de elemento solo para esa serie.
+`load`, `reps`, `tempo` y `rest` a nivel de elemento se aplican a cada serie del elemento. Un valor a nivel de serie prevalece sobre el del nivel de elemento solo para esa serie.
 
 ### 3.5. Los modos desconocidos no se ejecutan
 
@@ -134,7 +134,7 @@ Esto refleja el RFC-006 §3.3 y por la misma razón. Ejecutar en silencio una es
 
 `id`, `mode` e `items` son obligatorios. `mode` es un `blockMode`; `role` es un clasificador simple cuyos valores recomendados — `warmup`, `primary`, `accessory`, `conditioning`, `cooldown`, `finisher` — se transportan en el esquema como `examples` en lugar de restringirse. Un bloque PUEDE además transportar un `name` para mostrar y `notes` de texto libre.
 
-`rest` es un `restSpec` del RFC-006 y aplica en el límite que su propio `appliesTo` nombra. Las duraciones dentro de `modeParams` — `timeCap`, `work`, `rest`, `interval` — son cada una un `duration`: un `value` con su propia `unit`, por la misma razón que `estimatedDuration`.
+`rest` es un `restSpec` del RFC-006 y se aplica en el límite que su propio `appliesTo` nombra. Las duraciones dentro de `modeParams` — `timeCap`, `work`, `rest`, `interval` — son cada una un `duration`: un `value` con su propia `unit`, por la misma razón que `estimatedDuration`.
 
 ### 4.3. `blockItem`
 
@@ -158,7 +158,7 @@ Desde la versión de esquema 1.1.0 una serie también transporta `zone`. La carg
 
 ### 4.5. `repStyle`
 
-Dos prescripciones de amplio uso no son expresables por nada más en el modelo: las **parciales** (un rango de movimiento deliberadamente reducido) y las **repeticiones de una y media** (una repetición completa seguida de una media, contadas como una). `tempo` gobierna a qué velocidad se realiza una repetición, no su rango ni su composición, y ninguna métrica ni esquema de series los alcanza tampoco.
+Dos prescripciones de amplio uso no son expresables por nada más en el modelo: las **repeticiones parciales** (un rango de movimiento deliberadamente reducido) y las **repeticiones de una y media** (una repetición completa seguida de una media, contadas como una). `tempo` gobierna a qué velocidad se realiza una repetición, no su rango ni su composición, y ninguna métrica ni esquema de series los alcanza tampoco.
 
 ```json fds:fragment entity=workout
 { "repStyle": { "rangeOfMotion": "partial", "segment": "top" } }
@@ -243,7 +243,7 @@ Una sesión de entrenamiento hereda cada requisito de resolución de los objetiv
 
 Esta entidad sigue las reglas de versionado del RFC-001 §5. Su URL publicada es un contrato congelado; las adiciones se publican en una nueva URL de versión.
 
-Agregar un `mode` es un cambio MINOR: los documentos válidos bajo la versión anterior siguen siendo válidos, porque el nuevo modo antes validaba a través de la rama comodín.
+Agregar un `mode` es un cambio MENOR: los documentos válidos bajo la versión anterior siguen siendo válidos, porque el nuevo modo antes validaba a través de la rama comodín.
 
 <!-- fds:pin workout/v1.0.0/workout.schema.json — this document names the superseded version deliberately, in §6 and again in §9, because releases 1.2.0 and 1.3.0 declare workout at 1.0.0 and a client pinned to either must keep resolving it. New work uses 1.1.0. -->
 
@@ -267,7 +267,7 @@ Recalcular `targets` y `equipment` a partir de los elementos cuando la correcci�
 
 ## 8. Consideraciones de seguridad y privacidad
 
-Una sesión de entrenamiento es dato de referencia y no contiene datos personales por construcción. No transporta ningún atleta, ningún peso corporal, ningún máximo de entrenamiento y ningún valor ejecutado — cada prescripción relativa referencia su contexto en lugar de incrustarlo (RFC-006 §5).
+Una sesión de entrenamiento son datos de referencia y no contiene datos personales por construcción. No transporta ningún atleta, ningún peso corporal, ningún máximo de entrenamiento y ningún valor ejecutado — cada prescripción relativa referencia su contexto en lugar de incrustarlo (RFC-006 §5).
 
 Una implementación que resuelve una sesión de entrenamiento contra un atleta específico y almacena el resultado — escribiendo kilogramos reales en lugar de un porcentaje — ha producido datos personales y hereda las obligaciones que los acompañan. Ese artefacto resuelto no es un Workout en el sentido de este RFC.
 
@@ -374,7 +374,7 @@ Junto al esquema se publican ejemplos resueltos para cada esquema de series del 
 
 ## Conformidad
 
-Una implementación conforma con esta especificación si:
+Una implementación es conforme con esta especificación si:
 
 1. Respeta `blocks[].mode` para el recorrido y la terminación, y no ejecuta un modo que no reconoce.
 2. Trata como alternados los elementos que comparten un `groupLabel`.

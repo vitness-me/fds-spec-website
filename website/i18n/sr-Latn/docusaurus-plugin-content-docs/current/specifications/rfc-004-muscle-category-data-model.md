@@ -50,7 +50,7 @@ Ova specifikacija ima za cilj da:
 ## 2. Terminologija
 
 - **Kategorija mišića**: Logičko grupisanje povezanih mišića u trenažne i organizacione svrhe
-- **Kanonski podaci**: Standardizovane identifikacione informacije (ime, slug, alijasi)
+- **Kanonski podaci**: Standardizovane identifikacione informacije (naziv, slug, alijasi)
 - **Klasifikacija**: Fleksibilna kategorizacija pomoću oznaka
 - **Ekstenzija**: Podaci specifični za platformu koji ne narušavaju interoperabilnost
 - **Verzija šeme**: Semantička verzija koja označava kompatibilnost modela podataka
@@ -104,7 +104,7 @@ Uobičajeno podržana opciona polja koja unapređuju interoperabilnost:
 
 ### 3.3. Mehanizmi ekstenzija
 
-Dve tačke proširenja za podatke specifične za platformu:
+Dve tačke ekstenzija za podatke specifične za platformu:
 
 #### 3.3.1. Atributi (strukturirane ekstenzije)
 Za uobičajene ekstenzije koje mogu postati standardizovane:
@@ -134,7 +134,7 @@ Za složene strukture podataka jedinstvene za platformu:
 
 ### 4.1. Kanonske informacije
 
-`canonical` nosi identitet kategorije — prikazno ime, slug, kao i opcione alijase i lokalizovana imena. Imena kategorija su ona koja se najčešće pojavljuju u korisničkom interfejsu, što lokalizaciju ovde čini vidljivijom nego bilo gde drugde u katalogu.
+`canonical` nosi identitet kategorije — prikazni naziv, slug, kao i opcione alijase i lokalizovane nazive. Imena kategorija su ona koja se najčešće pojavljuju u korisničkom interfejsu, što lokalizaciju ovde čini vidljivijom nego bilo gde drugde u katalogu.
 
 ```json fds:fragment entity=muscle-category
 {
@@ -181,7 +181,7 @@ Za složene strukture podataka jedinstvene za platformu:
 
 Prati semantičko verzionisanje:
 - **Glavna**: Nekompatibilne izmene obaveznih polja
-- **Sporedna**: Nova opciona polja ili enum vrednosti
+- **Sporedna**: Nova opciona polja ili vrednosti enuma
 - **Zakrpa**: Ažuriranja dokumentacije i validacije
 
 ### 5.2. Pravila kompatibilnosti
@@ -237,7 +237,7 @@ graph LR
 
 - Ova specifikacija definiše samo format podataka
 - Implementacije moraju validirati prema JSON šemi
-- Sadržaj koji generišu korisnici u ekstenzijama trebalo bi sanitizovati
+- Sadržaj u ekstenzijama koji generišu korisnici trebalo bi sanitizovati
 - Pratite standardne bezbednosne prakse za prenos podataka
 
 ## 8. Referenca JSON šeme
@@ -360,7 +360,7 @@ function importMuscleCategory(rfc004Data: RFC004MuscleCategory) {
 
 :::danger MORA
 - **MORAJU** da emituju JSON koji se validira prema šemi kategorije mišića za deklarisani `schemaVersion`.
-- **MORAJU** da koriste UUIDv4 za sve identifikatore u produkcionim podacima (npr. `id` kategorije). Kratki primeri identifikatora u ovom RFC-u služe samo kao ilustracija.
+- **MORAJU** da koriste UUIDv4 za sve identifikatore u produkcionim podacima (npr. `id` kategorije). Kratki identifikatori korišćeni kao primeri u ovom RFC-u služe samo kao ilustracija.
 - **MORAJU** da popune sva obavezna polja i poštuju enumeracije i strukturu.
 :::
 
