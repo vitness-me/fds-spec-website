@@ -104,7 +104,7 @@ Cuatro campos opcionales transportan la mayor parte de lo que una implementació
 
 `equipment` se divide entre aquello sin lo cual el movimiento no puede realizarse y lo que simplemente ayuda. `media` transporta los recursos de demostración.
 
-`constraints` registra lo que el ejercicio exige antes de intentarse: `contraindications` (condiciones bajo las cuales no debería realizarse), `prerequisites` (competencias que presupone), `progressions` y `regressions` (movimientos más difíciles y más fáciles sobre el mismo patrón) y `environment` (dónde puede hacerse). Se trata de prosa orientativa, no de compuertas verificables por máquina — FDS no modela ningún atleta contra el cual comprobar un prerrequisito.
+`constraints` registra lo que el ejercicio exige antes de intentarse: `contraindications` (condiciones bajo las cuales no debería realizarse), `prerequisites` (competencias que presupone), `progressions` y `regressions` (movimientos más difíciles y más fáciles sobre el mismo patrón) y `environment` (dónde puede hacerse). Se trata de prosa orientativa, no de controles verificables por máquina — FDS no modela ningún atleta contra el cual comprobar un prerrequisito.
 
 `relations` enlaza este ejercicio con otros. Cada entrada transporta un `type` tomado de `relationTypes` — `alternate`, `variation`, `substitute`, `progression`, `regression`, `equipmentVariant`, `accessory`, `mobilityPrep`, `similarPattern`, `unilateralPair`, `contralateralPair` —, un `targetId`, un `confidence` opcional entre 0 y 1 y unas `notes` opcionales.
 

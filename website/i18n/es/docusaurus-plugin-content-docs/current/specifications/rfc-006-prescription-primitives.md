@@ -54,7 +54,7 @@ Modelarlas como un único campo `weight` anulable pierde la distinción. Modelar
 
 ## 2. Terminología
 
-Las palabras clave MUST, MUST NOT, SHOULD, SHOULD NOT y MAY deben interpretarse como se describe en RFC 2119.
+Las palabras clave DEBE, NO DEBE, DEBERÍA, NO DEBERÍA y PUEDE (MUST, MUST NOT, SHOULD, SHOULD NOT, MAY — cuyo texto inglés es el normativo) deben interpretarse como se describe en RFC 2119.
 
 - **Prescripción** — una instrucción sobre cómo realizar el trabajo, independiente de cualquier atleta.
 - **Objetivo de carga** — la instrucción que determina cuánta resistencia usa una serie.
@@ -130,7 +130,7 @@ Trece métodos definidos más la rama de compatibilidad hacia adelante. Todos lo
 
 Tres de estos transportan una semántica que un consumidor puede malinterpretar de un modo que la validación no puede detectar:
 
-**`percent1RM` con `referenceExerciseId`** expresa "70% de tu repetición máxima (1RM) de sentadilla trasera" en un ejercicio que no es la sentadilla trasera — el caso común en el trabajo accesorio y en los programas dirigidos por porcentajes donde cada levantamiento se escala a partir de unos pocos levantamientos de referencia. Ausente, la referencia es el propio ejercicio prescrito.
+**`percent1RM` con `referenceExerciseId`** expresa "70% de tu repetición máxima (1RM) de sentadilla trasera" en un ejercicio que no es la sentadilla trasera — el caso común en el trabajo accesorio y en los programas dirigidos por porcentajes donde cada levantamiento se escala a partir de unos pocos levantamientos de referencia. Si está ausente, la referencia es el propio ejercicio prescrito.
 
 **`assisted`** transporta la magnitud de la asistencia como un número positivo. Más asistencia es *menos* esfuerzo. Un consumidor que grafique la carga a lo largo del tiempo DEBE invertir el sentido para los objetivos asistidos, o mostrará a un atleta retrocediendo a medida que se hace más fuerte. Este método solo es significativo en un ejercicio cuyo `loading.assisted` es true (RFC-001 §4.6).
 
@@ -140,7 +140,7 @@ Tres de estos transportan una semántica que un consumidor puede malinterpretar 
 
 Lo que termina una serie: `fixed`, `range`, `amrap`, `toFailure`, `time`, `distance`, `calories`, `maxHold`, más la rama de compatibilidad hacia adelante.
 
-`toFailure` transporta `technical`, que distingue "detenerse cuando la técnica se degrada" de "detenerse cuando la repetición no puede completarse" — una diferencia que todo entrenador de fuerza hace y que ningún formato de intercambio anterior registra.
+`toFailure` transporta `technical`, que distingue "detenerse cuando la técnica se degrada" de "detenerse cuando la repetición no puede completarse" — una distinción que todo entrenador de fuerza hace y que ningún formato de intercambio anterior registra.
 
 `amrap` acepta tanto un piso `min` como un `cap`. El piso es lo que el programa espera; el tope evita una serie que de otro modo se extendería durante varios minutos.
 
@@ -174,7 +174,7 @@ Nótese la distinción con el tipo de métrica `tempo` del RFC-001, que registra
 
 Un patrón con nombre y sus parámetros, para prescripciones que describen una forma en lugar de enumerar cada serie: `straight`, `ramping`, `reversePyramid`, `drop`, `restPause`, `cluster`, `myoReps`, `wave`, `ladder`, `density`, `topSetBackoff`.
 
-A diferencia de las uniones de carga y repeticiones, `pattern` es un enum **cerrado** sin comodín. Expandir un patrón en series concretas requiere conocer su semántica, así que un consumidor no puede hacer nada útil con un patrón del que nunca ha oído hablar — aceptar uno solo aplazaría la falla hasta el punto donde importa. Los productores que usen un patrón no listado aquí DEBEN expandirlo en series explícitas.
+A diferencia de las uniones de carga y repeticiones, `pattern` es un enum **cerrado** sin comodín. Expandir un patrón en series concretas requiere conocer su semántica, así que un consumidor no puede hacer nada útil con un patrón del que nunca ha oído hablar — aceptarlo solo aplazaría la falla hasta el punto donde importa. Los productores que usen un patrón no listado aquí DEBEN expandirlo en series explícitas.
 
 `params` es deliberadamente abierto: cada patrón toma una forma distinta, y restringir aquí los once congelaría el vocabulario de parámetros de once metodologías distintas en una versión 1.0.0. Las claves convencionales son estas:
 

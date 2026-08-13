@@ -1,6 +1,6 @@
 ---
 title: 'RFC-003: Modelo de datos de músculo'
-description: Modelo de datos estandarizado para la información anatómica de músculos con soporte de visualización de mapas de calor
+description: Modelo de datos estandarizado para la información anatómica de músculos con visualización de mapas de calor
 sidebar_position: 3
 keywords: [muscle, anatomy, data model, json schema, heatmap, interoperability, rfc]
 ---

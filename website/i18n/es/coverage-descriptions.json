@@ -138,7 +138,7 @@
     },
     "workout/v1.1.0/workout.cooldown-block.example.json": {
       "en": "Zone-1 work followed by a `cooldown` block of holds.",
-      "translation": "Trabajo en zona 1 seguido de un bloque `cooldown` de isometrías."
+      "translation": "Trabajo en zona 1 seguido de un bloque `cooldown` de estiramientos sostenidos."
     },
     "workout/v1.1.0/workout.finisher.example.json": {
       "en": "A working block plus a four-minute `finisher` taken to technical failure.",
@@ -322,7 +322,7 @@
     },
     "program/v1.0.0/program.fixed-weekday.example.json": {
       "en": "`model: \"calendar\"` — `dayOfWeek` is authoritative.",
-      "translation": "`model: \"calendar\"` — `dayOfWeek` tiene la autoridad."
+      "translation": "`model: \"calendar\"` — `dayOfWeek` es la fuente autoritativa."
     },
     "program/v1.0.0/program.relative-offsets.example.json": {
       "en": "`model: \"relative\"` — `offsetDays` counted from the program start, week two continuing at 7, 9, 11.",

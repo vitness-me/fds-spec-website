@@ -35,7 +35,7 @@ Habilitar la portabilidad de datos y la interoperabilidad entre aplicaciones de 
 
 No transportar valores personales es lo que hace que todo lo demás sea portable. Un catálogo, una sesión o un plan pueden publicarse, almacenarse en caché, replicarse y diferenciarse libremente precisamente porque ninguno de ellos describe a una persona — y esa propiedad vale más que la comodidad de incluir un peso corporal en un documento. Registrar los resultados ejecutados, por lo tanto, espera a un modelo de consentimiento y privacidad, no a un diseño de esquema.
 
-Ver la [hoja de ruta](/docs/governance/roadmap) para conocer lo que cuesta cada exclusión y lo que está en consideración.
+Véase la [hoja de ruta](/docs/governance/roadmap) para conocer lo que cuesta cada exclusión y lo que está en consideración.
 
 ## Versionado y compatibilidad
 

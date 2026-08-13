@@ -35,7 +35,7 @@ Habilitar la **portabilidad de datos** y la **interoperabilidad** entre aplicaci
 - **Autenticación y autorización**: un formato de datos, no un protocolo
 - **Selección generada de ejercicios**: un día de programa referencia una sesión de entrenamiento que existe
 
-No transportar valores personales es lo que hace que todo lo demás sea portable: un catálogo, una sesión o un plan pueden publicarse, almacenarse en caché, replicarse y diferenciarse libremente precisamente porque ninguno de ellos describe a una persona. Ver la [hoja de ruta](./governance/roadmap) para conocer lo que cuesta cada exclusión.
+No transportar valores personales es lo que hace que todo lo demás sea portable: un catálogo, una sesión o un plan pueden publicarse, almacenarse en caché, replicarse y diferenciarse libremente precisamente porque ninguno de ellos describe a una persona. Véase la [hoja de ruta](./governance/roadmap) para conocer lo que cuesta cada exclusión.
 
 ## Inicio rápido
 
