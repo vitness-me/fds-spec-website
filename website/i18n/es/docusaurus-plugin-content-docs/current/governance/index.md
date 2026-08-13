@@ -8,7 +8,7 @@ sidebar_position: 1
 
 Este documento describe cómo se evoluciona, revisa y lanza el Fitness Data Standard (FDS).
 
-## Principios rectores
+## Principios rectores {#guiding-principles}
 
 Son restricciones sobre lo que FDS aceptará, no una descripción de lo que hoy contiene. Obligan a los contribuidores: una propuesta que viole uno de ellos se rechaza por principio, por bien diseñada que esté. Cada exclusión que sigue es deliberada — una decisión con una razón, no un vacío a la espera de llenarse.
 

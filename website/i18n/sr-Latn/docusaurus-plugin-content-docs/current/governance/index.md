@@ -8,7 +8,7 @@ sidebar_position: 1
 
 Ovaj dokument opisuje kako se standard Fitness Data Standard (FDS) razvija, pregleda i objavljuje.
 
-## Vodeći principi
+## Vodeći principi {#guiding-principles}
 
 Ovo su ograničenja onoga što će FDS prihvatiti, a ne opis onoga što danas slučajno sadrži. Ona obavezuju saradnike: predlog koji krši neki od njih odbija se iz principa, ma koliko dobro bio osmišljen. Svako isključenje ispod je namerno — odluka sa razlogom, a ne praznina koja čeka da bude popunjena.
 
