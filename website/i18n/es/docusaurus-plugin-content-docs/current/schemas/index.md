@@ -40,7 +40,7 @@ Definiciones de equipamiento de fitness con clasificación, características de 
 **Esquema:** `/schemas/equipment/v1.1.0/equipment.schema.json`
 
 ### [Esquema de músculo](/docs/schemas/muscle) — v1.0.0
-Definiciones anatómicas de músculos con soporte de visualización de mapa de calor.
+Definiciones anatómicas de músculos con visualización de mapa de calor.
 
 **Esquema:** `/schemas/muscle/v1.0.0/muscle.schema.json`
 

@@ -34,7 +34,7 @@ Dos decisiones ya están fijadas. Un registro de lo ejecutado llevará una **ins
 
 ### Registros y conformidad
 
-Los registros de valores recomendados están publicados y verificados. Las suites de pruebas de conformidad — un corpus contra el cual un productor puede validar para declarar soporte — son el siguiente paso natural ahora que la matriz de cobertura está completa.
+Los registros de valores recomendados están publicados y verificados. Las suites de pruebas de conformidad — un corpus contra el cual un productor puede validar para declarar conformidad — son el siguiente paso natural ahora que la matriz de cobertura está completa.
 
 ## Deliberadamente fuera del alcance
 

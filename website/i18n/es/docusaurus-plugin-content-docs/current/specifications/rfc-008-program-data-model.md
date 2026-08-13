@@ -52,7 +52,7 @@ Este RFC toma la posición opuesta en ambos casos. Los días apuntan a sesiones 
 
 ## 2. Terminología
 
-Las palabras clave MUST, MUST NOT, SHOULD, SHOULD NOT y MAY deben interpretarse como se describe en RFC 2119.
+Las palabras clave DEBE, NO DEBE, DEBERÍA, NO DEBERÍA y PUEDE (MUST, MUST NOT, SHOULD, SHOULD NOT, MAY — cuyo texto inglés es el normativo) deben interpretarse como se describe en RFC 2119.
 
 - **Programa** — un plan que coloca sesiones en el tiempo.
 - **Ciclo** — un bloque de entrenamiento con una sola intención. Los macrociclos, mesociclos y microciclos son todos ciclos.
@@ -269,7 +269,7 @@ El `id` es un identificador local, para que una regla de progresión o un overri
 
 **Una implementación conforme NO DEBE extender esta estructura con el valor en sí.** Esto se declara de forma normativa porque es lo que un implementador tiene más probabilidades de intentar "arreglar". El *slot* se lee como un objeto al que le falta un campo, y agregarlo parece hacer los programas autocontenidos sin costo alguno.
 
-No es sin costo. Una repetición máxima (1RM) es un dato personal sobre la capacidad física de una persona identificable. Un programa que la transporta ya no es dato de referencia: adquiere un titular, y con el titular llegan obligaciones de consentimiento, retención, portabilidad y supresión que alcanzan a cada sistema por el que pasa el documento. FDS está construido para que los catálogos, las sesiones y los planes puedan publicarse, almacenarse en caché, replicarse y diferenciarse libremente, y eso solo es defendible mientras ninguno de ellos describa a una persona. Un solo campo numérico, agregado por conveniencia, movería el corpus entero de programas al otro lado de esa línea.
+Ese costo existe. Una repetición máxima (1RM) es un dato personal sobre la capacidad física de una persona identificable. Un programa que la transporta ya no es dato de referencia: adquiere un titular, y con el titular llegan obligaciones de consentimiento, retención, portabilidad y supresión que alcanzan a cada sistema por el que pasa el documento. FDS está construido para que los catálogos, las sesiones y los planes puedan publicarse, almacenarse en caché, replicarse y diferenciarse libremente, y eso solo es defendible mientras ninguno de ellos describa a una persona. Un solo campo numérico, agregado por conveniencia, movería el corpus entero de programas al otro lado de esa línea.
 
 La consecuencia aceptada es que **un programa completamente personalizado no puede hacer el *round-trip* como un solo documento autocontenido.** La exportación es el plan más un contexto de resolución separado. Esa es la contrapartida, es deliberada, y es lo que mantiene los RFC-006 a RFC-008 libres de datos personales. El RFC-009 definirá dónde viven los datos ejecutados y personales, con las obligaciones que los acompañan.
 

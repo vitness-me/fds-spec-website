@@ -222,7 +222,7 @@ Aplicar varias transformaciones en secuencia:
 
 ### `enrichment`
 
-Configura el enriquecimiento con IA. Ver la [guía de enriquecimiento con IA](/docs/tools/transformer/ai-enrichment) para más detalles.
+Configura el enriquecimiento con IA. Véase la [guía de enriquecimiento con IA](/docs/tools/transformer/ai-enrichment) para más detalles.
 
 ```json fds:fragment entity=mapping
 {

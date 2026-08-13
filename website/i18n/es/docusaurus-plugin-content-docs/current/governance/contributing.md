@@ -75,7 +75,7 @@ La referencia se escribe exactamente como resuelve — `<directory>/v<version>/<
 Ten schemas are published. Seven are entities, …
 ```
 
-El valor se verifica contra el repositorio en disco, y además debe aparecer en la oración circundante, en letras o en dígitos, para que el marcador no pueda dejar en silencio de describir el texto que anota. Ejecutar `npm run check:versions` con un nombre de métrica desconocido para ver la lista completa.
+El valor se verifica contra el repositorio en disco, y además debe aparecer en la oración circundante, en letras o en dígitos, para que el marcador no pueda dejar de describir en silencio el texto que anota. Ejecutar `npm run check:versions` con un nombre de métrica desconocido para ver la lista completa.
 
 No marcar conteos en `CHANGELOG.md`. Una entrada del registro de cambios describe un lanzamiento pasado, y fijarla al árbol de hoy haría fallar un registro histórico exacto.
 

@@ -31,7 +31,7 @@ Estos muestran la forma que sirve un proveedor: un arreglo de documentos de enti
 - **Músculos**: [`muscles.registry.example.json`](https://spec.vitness.me/registries/muscles.registry.example.json)
 - **Categorías de músculos**: [`muscle-categories.registry.example.json`](https://spec.vitness.me/registries/muscle-categories.registry.example.json)
 
-El `.example.` en el nombre del archivo es la distinción: un archivo llamado `*.registry.json` es el registro; un archivo llamado `*.registry.example.json` es un ejemplo de uno. Ver el [README de registros](https://spec.vitness.me/registries/README.md) para las reglas completas.
+El `.example.` en el nombre del archivo es la distinción: un archivo llamado `*.registry.json` es el registro; un archivo llamado `*.registry.example.json` es un ejemplo de uno. Véase el [README de registros](https://spec.vitness.me/registries/README.md) para las reglas completas.
 
 ## Entidades de ejemplo
 

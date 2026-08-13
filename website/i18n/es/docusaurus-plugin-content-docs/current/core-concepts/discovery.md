@@ -5,7 +5,7 @@ sidebar_position: 1
 
 # Especificación del endpoint de descubrimiento
 
-Este documento define un endpoint HTTP de descubrimiento opcional que permite a los clientes descubrir el soporte de FDS y las capacidades de exportación.
+Este documento define un endpoint HTTP de descubrimiento opcional que permite a los clientes descubrir la compatibilidad con FDS y las capacidades de exportación.
 
 ## Endpoint
 - Método: GET

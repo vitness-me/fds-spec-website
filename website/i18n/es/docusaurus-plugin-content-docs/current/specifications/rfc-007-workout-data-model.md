@@ -50,7 +50,7 @@ La observación sobre la que se construye este RFC es que estos estilos difieren
 
 ## 2. Terminología
 
-Las palabras clave MUST, MUST NOT, SHOULD, SHOULD NOT y MAY deben interpretarse como se describe en RFC 2119.
+Las palabras clave DEBE, NO DEBE, DEBERÍA, NO DEBERÍA y PUEDE (MUST, MUST NOT, SHOULD, SHOULD NOT, MAY — cuyo texto inglés es el normativo) deben interpretarse como se describe en RFC 2119.
 
 - **Sesión de entrenamiento** — una sesión prescrita.
 - **Bloque** — una sección contigua de una sesión ejecutada bajo un solo modo.
