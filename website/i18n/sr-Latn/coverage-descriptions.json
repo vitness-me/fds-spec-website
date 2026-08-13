@@ -1,0 +1,361 @@
+{
+  "rows": {
+    "workout/v1.1.0/workout.straight.example.json": {
+      "en": "Three identical sets. The baseline everything else departs from.",
+      "translation": "Tri identične serije. Osnova od koje sve ostalo polazi."
+    },
+    "workout/v1.1.0/workout.ramping.example.json": {
+      "en": "Ascending load across five sets to a top set.",
+      "translation": "Rastuće opterećenje kroz pet serija do vršne serije."
+    },
+    "workout/v1.1.0/workout.reverse-pyramid.example.json": {
+      "en": "Heaviest set first, dropping 10% each set as fatigue accumulates.",
+      "translation": "Najteža serija prva, uz pad od 10% po seriji kako se umor gomila."
+    },
+    "workout/v1.1.0/workout.drop-sets.example.json": {
+      "en": "Three consecutive drops with no rest, taken to technical failure.",
+      "translation": "Tri uzastopna spuštanja opterećenja bez odmora, izvedena do tehničkog otkaza."
+    },
+    "workout/v1.1.0/workout.rest-pause.example.json": {
+      "en": "One set to near-failure, resumed after 15-second rests.",
+      "translation": "Jedna serija do blizu otkaza, nastavljana posle odmora od po 15 sekundi."
+    },
+    "workout/v1.1.0/workout.cluster.example.json": {
+      "en": "Reps in pairs with programmed rest *inside* the set, so heavy load stays fast.",
+      "translation": "Ponavljanja u parovima sa programiranim odmorom *unutar* serije, tako da teško opterećenje ostaje brzo."
+    },
+    "workout/v1.1.0/workout.myo-reps.example.json": {
+      "en": "An activation set followed by four short mini-sets at RIR 1.",
+      "translation": "Aktivaciona serija praćena sa četiri kratke mini-serije na RIR 1."
+    },
+    "workout/v1.1.0/workout.amrap-reps.example.json": {
+      "en": "A single set of as many reps as possible, with a floor and a cap — AMRAP as a *rep target*, distinct from an AMRAP block.",
+      "translation": "Jedna serija sa što više ponavljanja, sa donjom i gornjom granicom — AMRAP kao *ciljni broj ponavljanja*, različit od AMRAP bloka."
+    },
+    "workout/v1.1.0/workout.top-set-backoff.example.json": {
+      "en": "One heavy top set at RPE 8, then three back-offs 10% lighter.",
+      "translation": "Jedna teška vršna serija na RPE 8, zatim tri back-off serije lakše za 10%."
+    },
+    "workout/v1.1.0/workout.wave-loading.example.json": {
+      "en": "A 3‑2‑1 rep ladder run three times at the same load.",
+      "translation": "Lestvica ponavljanja 3‑2‑1 izvedena tri puta sa istim opterećenjem."
+    },
+    "workout/v1.1.0/workout.ladders.example.json": {
+      "en": "Ascending rungs 1–5 with short rests.",
+      "translation": "Rastuće prečke 1–5 sa kratkim odmorima."
+    },
+    "workout/v1.1.0/workout.density.example.json": {
+      "en": "Maximum sets inside a ten-minute cap — the one scheme where set count is the outcome, not the input.",
+      "translation": "Maksimalan broj serija unutar gornje granice od deset minuta — jedina šema u kojoj je broj serija ishod, a ne ulaz."
+    },
+    "workout/v1.1.0/workout.technical-failure.example.json": {
+      "en": "Both failure kinds in one item: technical failure on set one, absolute failure on set two.",
+      "translation": "Obe vrste otkaza u jednoj stavci: tehnički otkaz u prvoj seriji, apsolutni otkaz u drugoj."
+    },
+    "workout/v1.1.0/workout.tempo-reps.example.json": {
+      "en": "A four-second eccentric with an explosive concentric.",
+      "translation": "Ekscentrična faza od četiri sekunde sa eksplozivnom koncentričnom."
+    },
+    "workout/v1.1.0/workout.paused-reps.example.json": {
+      "en": "A three-second pause at the bottom, which is `tempo.bottomPause` rather than a scheme.",
+      "translation": "Pauza od tri sekunde u donjoj poziciji, što je `tempo.bottomPause`, a ne šema."
+    },
+    "workout/v1.1.0/workout.partials.example.json": {
+      "en": "Full-range reps followed by bottom-half partials. Uses `repStyle` — nothing else in the model reaches range of motion.",
+      "translation": "Ponavljanja punog obima pokreta praćena parcijalnim ponavljanjima u donjoj polovini. Koristi `repStyle` — ništa drugo u modelu ne dotiče obim pokreta."
+    },
+    "workout/v1.1.0/workout.one-and-a-half-reps.example.json": {
+      "en": "A full rep plus a half counted as one, via `repStyle.pattern`.",
+      "translation": "Celo ponavljanje plus polovina računato kao jedno, preko `repStyle.pattern`."
+    },
+    "workout/v1.1.0/workout.isometric-holds.example.json": {
+      "en": "A hold with a floor and a cap, using `repTarget.maxHold`.",
+      "translation": "Izdržaj sa donjom i gornjom granicom, koristeći `repTarget.maxHold`."
+    },
+    "workout/v1.1.0/workout.timed-sets.example.json": {
+      "en": "45-second efforts in a heart-rate zone — the clock terminates the set, not a rep count.",
+      "translation": "Napori od 45 sekundi u zoni srčane frekvencije — seriju prekida sat, a ne broj ponavljanja."
+    },
+    "workout/v1.1.0/workout.single.example.json": {
+      "en": "One exercise, `sequential`. The degenerate case.",
+      "translation": "Jedna vežba, `sequential`. Degenerisan slučaj."
+    },
+    "workout/v1.1.0/workout.superset.example.json": {
+      "en": "Two items alternated via `groupLabel` `A1`/`A2`, rest at the group boundary.",
+      "translation": "Dve stavke koje se smenjuju preko `groupLabel` `A1`/`A2`, odmor na granici grupe."
+    },
+    "workout/v1.1.0/workout.triset.example.json": {
+      "en": "Three items in one group.",
+      "translation": "Tri stavke u jednoj grupi."
+    },
+    "workout/v1.1.0/workout.giant-set.example.json": {
+      "en": "Four items in one group. Nothing in the schema caps group size.",
+      "translation": "Četiri stavke u jednoj grupi. Ništa u šemi ne ograničava veličinu grupe."
+    },
+    "workout/v1.1.0/workout.compound-set.example.json": {
+      "en": "Two items training the same muscle. **Structurally identical to the antagonist pairing below** — see RFC-007 §3.3 for why that is deliberate.",
+      "translation": "Dve stavke koje treniraju isti mišić. **Strukturno identično uparivanju antagonista ispod** — pogledajte RFC-007 §3.3 za razlog zašto je to namerno."
+    },
+    "workout/v1.1.0/workout.antagonist-pairing.example.json": {
+      "en": "Two items training opposing muscles. The difference from a compound set is derivable from the exercises, not encoded here.",
+      "translation": "Dve stavke koje treniraju suprotstavljene mišiće. Razlika u odnosu na složenu seriju izvodi se iz vežbi, a ne kodira se ovde."
+    },
+    "workout/v1.1.0/workout.barbell-complex.example.json": {
+      "en": "One barbell, one load, four movements, no rest until the round ends.",
+      "translation": "Jedna šipka, jedno opterećenje, četiri pokreta, bez odmora dok se runda ne završi."
+    },
+    "workout/v1.1.0/workout.circuit.example.json": {
+      "en": "One set of each item per round, four rounds, rest between rounds.",
+      "translation": "Po jedna serija svake stavke po rundi, četiri runde, odmor između rundi."
+    },
+    "workout/v1.1.0/workout.emom.example.json": {
+      "en": "Every minute on the minute for twelve intervals.",
+      "translation": "Rad na početku svakog minuta, tokom dvanaest intervala."
+    },
+    "workout/v1.1.0/workout.amrap-block.example.json": {
+      "en": "As many rounds as possible in twenty minutes — AMRAP as a *block mode*, distinct from the rep target above.",
+      "translation": "Što više rundi u dvadeset minuta — AMRAP kao *režim bloka*, različit od ciljnog broja ponavljanja iznad."
+    },
+    "workout/v1.1.0/workout.for-time.example.json": {
+      "en": "Fixed work completed as fast as possible, under a cap.",
+      "translation": "Zadati rad završen što je brže moguće, uz gornju vremensku granicu."
+    },
+    "workout/v1.1.0/workout.chipper.example.json": {
+      "en": "One descending pass through five movements, each finished before the next.",
+      "translation": "Jedan opadajući prolaz kroz pet pokreta, svaki završen pre sledećeg."
+    },
+    "workout/v1.1.0/workout.tabata.example.json": {
+      "en": "Eight rounds of 20 seconds work, 10 seconds rest.",
+      "translation": "Osam rundi od 20 sekundi rada i 10 sekundi odmora."
+    },
+    "workout/v1.1.0/workout.ladder-circuit.example.json": {
+      "en": "A scheme and a mode composing: ladder rungs *inside* a circuit.",
+      "translation": "Šema i režim u kompoziciji: prečke lestvice *unutar* kružnog treninga."
+    },
+    "workout/v1.1.0/workout.warmup-block.example.json": {
+      "en": "A `warmup` block preceding the working block, in one session.",
+      "translation": "Blok `warmup` koji prethodi radnom bloku, u jednom treningu."
+    },
+    "workout/v1.1.0/workout.cooldown-block.example.json": {
+      "en": "Zone-1 work followed by a `cooldown` block of holds.",
+      "translation": "Rad u zoni 1 praćen blokom `cooldown` sa izdržajima."
+    },
+    "workout/v1.1.0/workout.finisher.example.json": {
+      "en": "A working block plus a four-minute `finisher` taken to technical failure.",
+      "translation": "Radni blok plus četvorominutni `finisher` izveden do tehničkog otkaza."
+    },
+    "prescription/v1.0.0/loadTarget.absolute.example.json": {
+      "en": "A fixed load. The only method that needs no resolution context.",
+      "translation": "Fiksno opterećenje. Jedini metod kome nije potreban kontekst razrešavanja."
+    },
+    "prescription/v1.0.0/loadTarget.percent1RM.example.json": {
+      "en": "82.5% of the prescribed exercise's own one-rep max — the percentage-driven program case.",
+      "translation": "82.5% maksimuma za jedno ponavljanje same propisane vežbe — slučaj programa vođenog procentima."
+    },
+    "prescription/v1.0.0/loadTarget.percent-bodyweight.example.json": {
+      "en": "60% of bodyweight. Unresolvable inside FDS by design — there is no athlete to read a bodyweight from.",
+      "translation": "60% telesne mase. Nerazrešivo unutar FDS-a po dizajnu — ne postoji sportista od koga bi se očitala telesna masa."
+    },
+    "prescription/v1.0.0/loadTarget.rpe.example.json": {
+      "en": "RPE 8 with half-points allowed. The athlete picks the load.",
+      "translation": "RPE 8 sa dozvoljenim polovinama poena. Sportista bira opterećenje."
+    },
+    "prescription/v1.0.0/loadTarget.rir.example.json": {
+      "en": "Two reps in reserve. The inverse scale to RPE; a bare `count` cannot tell you which was meant, which is why they are separate methods.",
+      "translation": "Dva ponavljanja u rezervi. Obrnuta skala u odnosu na RPE; goli `count` ne može reći na koju se mislilo, i zato su ovo odvojeni metodi."
+    },
+    "prescription/v1.0.0/loadTarget.velocity-with-loss-threshold.example.json": {
+      "en": "Velocity-based training: lift at 0.75 m/s, end the set when bar speed has dropped 20% from the fastest rep. The set length is decided by the bar, not the program.",
+      "translation": "Trening zasnovan na brzini: podizanje na 0.75 m/s, serija se završava kada brzina šipke padne 20% u odnosu na najbrže ponavljanje. Dužinu serije određuje šipka, a ne program."
+    },
+    "prescription/v1.0.0/loadTarget.machine-level.example.json": {
+      "en": "A machine setting, with `scale` naming whose numbering it is. Reproduces a session on *that* machine and means nothing on another.",
+      "translation": "Podešavanje sprave, gde `scale` imenuje čija je numeracija. Reprodukuje trening na *toj* spravi, a na drugoj ne znači ništa."
+    },
+    "prescription/v1.0.0/loadTarget.band-resistance.example.json": {
+      "en": "A green band with an estimated equivalent load. Colour conventions are manufacturer-specific, so `equipment` says whose scale is meant and `estimatedLoad` is explicitly an approximation.",
+      "translation": "Zelena elastična traka sa procenjenim ekvivalentnim opterećenjem. Konvencije boja zavise od proizvođača, pa `equipment` kaže na čiju se skalu misli, a `estimatedLoad` je izričito aproksimacija."
+    },
+    "prescription/v1.0.0/loadTarget.autoregulated.example.json": {
+      "en": "Load deferred to a progression rule resolved at execution time (here, APRE).",
+      "translation": "Opterećenje prepušteno pravilu progresije koje se razrešava u vreme izvršavanja (ovde APRE)."
+    },
+    "prescription/v1.0.0/loadTarget.relative-last-session.example.json": {
+      "en": "Last session plus 2.5 kg. Linear progression, resolvable only against training history.",
+      "translation": "Prošli trening plus 2.5 kg. Linearna progresija, razrešiva samo u odnosu na istoriju treninga."
+    },
+    "prescription/v1.0.0/loadTarget.relative-e1rm.example.json": {
+      "en": "Ten percent *below* an estimated 1RM for a named lift. A negative delta is normal here: e1RM is computed from a set taken near failure, so programming under it is the usual case, not an error.",
+      "translation": "Deset procenata *ispod* procenjenog 1RM za imenovanu vežbu. Negativna delta je ovde normalna: e1RM se izračunava iz serije izvedene blizu otkaza, pa je programiranje ispod njega uobičajen slučaj, a ne greška."
+    },
+    "prescription/v1.0.0/loadTarget.relative-training-max.example.json": {
+      "en": "90% of a training max — the 5/3/1-style basis, where the reference is deliberately below a true max.",
+      "translation": "90% trenažnog maksimuma — osnova u stilu 5/3/1, gde je referenca namerno ispod pravog maksimuma."
+    },
+    "prescription/v1.0.0/loadTarget.percent1RM-of-another-lift.example.json": {
+      "en": "70% of a *different* lift's max. Accessory work is routinely scaled off a main lift, and without `referenceExerciseId` there is nowhere to say so.",
+      "translation": "70% maksimuma *druge* vežbe. Pomoćni rad se rutinski skalira prema glavnoj vežbi, a bez `referenceExerciseId` nema gde to da se kaže."
+    },
+    "prescription/v1.0.0/loadTarget.bodyweight.example.json": {
+      "en": "Bodyweight, unscaled and unloaded.",
+      "translation": "Telesna masa, bez skaliranja i bez dodatnog opterećenja."
+    },
+    "prescription/v1.0.0/loadTarget.assisted.example.json": {
+      "en": "20 kg of *assistance*. The value is positive and more of it is less effort — a consumer plotting this as resistance shows an athlete regressing as they get stronger.",
+      "translation": "20 kg *asistencije*. Vrednost je pozitivna i više nje znači manje napora — konzument koji ovo ucrta kao otpor prikazuje sportistu koji nazaduje dok postaje jači."
+    },
+    "workout/v1.1.0/workout.duration.example.json": {
+      "en": "Thirty minutes in a heart-rate zone. The clock terminates the effort, and no rep count is invented to stand in for one.",
+      "translation": "Trideset minuta u zoni srčane frekvencije. Napor prekida sat, i nikakav broj ponavljanja se ne izmišlja da ga zameni."
+    },
+    "workout/v1.1.0/workout.distance.example.json": {
+      "en": "Five kilometres. Distance terminates the effort, so duration is the outcome rather than the prescription.",
+      "translation": "Pet kilometara. Napor prekida distanca, pa je trajanje ishod, a ne preskripcija."
+    },
+    "workout/v1.1.0/workout.pace.example.json": {
+      "en": "Distance says how far, zone says how fast. Note that a *higher* pace zone means a *lower* time per kilometre — the one place zone ordering and the underlying number run in opposite directions.",
+      "translation": "Distanca kaže koliko daleko, zona kaže koliko brzo. Imajte u vidu da *viša* zona tempa znači *manje* vreme po kilometru — jedino mesto gde redosled zona i broj iza njega idu u suprotnim smerovima."
+    },
+    "workout/v1.1.0/workout.hr-zone.example.json": {
+      "en": "`boundsRef` names the registry entry that defines Z2. The athlete's beats per minute are caller context and never appear here.",
+      "translation": "`boundsRef` imenuje unos u registru koji definiše Z2. Otkucaji u minuti sportiste su kontekst pozivaoca i nikada se ne pojavljuju ovde."
+    },
+    "workout/v1.1.0/workout.power-zone.example.json": {
+      "en": "Sweet-spot intervals against the Coggan seven-zone model. What percentage of threshold power a zone corresponds to belongs to the registry entry, not to the session.",
+      "translation": "Sweet-spot intervali prema Cogganovom modelu sa sedam zona. Kom procentu snage na pragu zona odgovara pripada unosu u registru, a ne treningu."
+    },
+    "workout/v1.1.0/workout.structured-intervals.example.json": {
+      "en": "The canonical 4×4. Work and rest live in `modeParams` because they are properties of the interval structure, not of the exercise performed inside it.",
+      "translation": "Kanonski 4×4. Rad i odmor žive u `modeParams` jer su svojstva strukture intervala, a ne vežbe koja se u njoj izvodi."
+    },
+    "workout/v1.1.0/workout.fartlek.example.json": {
+      "en": "Deliberately unstructured surges. `sequential` rather than `interval` precisely because the surge lengths are the athlete's — it looks like intervals and is not.",
+      "translation": "Namerno nestrukturirana ubrzanja. `sequential` umesto `interval` upravo zato što dužine ubrzanja pripadaju sportisti — liči na intervale, a nije."
+    },
+    "workout/v1.1.0/workout.machine-settings.example.json": {
+      "en": "Incline climbing per set, then cadence with a tolerance band. Shows the 1.1.0 additions doing the work they exist for, and shows the division: resistance is a *load* (`loadTarget.method: \"level\"` with a named scale), incline and cadence are *settings* the athlete dials in.",
+      "translation": "Nagib raste po seriji, zatim kadenca sa opsegom tolerancije. Prikazuje dodatke iz 1.1.0 kako rade posao zbog koga postoje, i prikazuje podelu: otpor je *opterećenje* (`loadTarget.method: \"level\"` sa imenovanom skalom), a nagib i kadenca su *podešavanja* koja sportista namešta."
+    },
+    "workout/v1.1.0/workout.negative-splits.example.json": {
+      "en": "Two halves with ascending pace zones. The relationship between them *is* the session, so it is expressed as two items rather than one item with a note.",
+      "translation": "Dve polovine sa rastućim zonama tempa. Odnos među njima *jeste* trening, pa je izražen kao dve stavke, a ne kao jedna stavka sa napomenom."
+    },
+    "workout/v1.1.0/workout.progressive.example.json": {
+      "en": "Intensity climbing every five minutes and never coming back down. Each step is its own **item** rather than its own set, because `zone` sits on an item and not on a set.",
+      "translation": "Intenzitet raste svakih pet minuta i nikada se ne vraća dole. Svaki korak je zasebna **stavka**, a ne zasebna serija, jer `zone` stoji na stavci, a ne na seriji."
+    },
+    "prescription/v1.0.0/restSpec.fixed.example.json": {
+      "en": "Three minutes between sets. The baseline the other four depart from.",
+      "translation": "Tri minuta između serija. Osnova od koje ostala četiri metoda polaze."
+    },
+    "prescription/v1.0.0/restSpec.range.example.json": {
+      "en": "90–120 seconds between sets.",
+      "translation": "90–120 sekundi između serija."
+    },
+    "prescription/v1.0.0/restSpec.to-heart-rate.example.json": {
+      "en": "Rest until heart rate falls to 120 bpm — needs live data at execution time.",
+      "translation": "Odmor dok srčana frekvencija ne padne na 120 bpm — zahteva podatke uživo u vreme izvršavanja."
+    },
+    "prescription/v1.0.0/restSpec.as-needed.example.json": {
+      "en": "Athlete's discretion, stated rather than omitted.",
+      "translation": "Po proceni sportiste, navedeno umesto izostavljeno."
+    },
+    "prescription/v1.0.0/restSpec.work-to-rest-ratio.example.json": {
+      "en": "1:2, resolved against the work interval's duration.",
+      "translation": "1:2, razrešeno prema trajanju radnog intervala."
+    },
+    "prescription/v1.0.0/restScope.set.example.json": {
+      "en": "The scope value on its own — between sets of one exercise.",
+      "translation": "Vrednost obuhvata sama za sebe — između serija jedne vežbe."
+    },
+    "prescription/v1.0.0/restScope.group.example.json": {
+      "en": "Between the members of a group, where the rest is a transition rather than a recovery.",
+      "translation": "Između članova grupe, gde je odmor prelaz, a ne oporavak."
+    },
+    "prescription/v1.0.0/restScope.round.example.json": {
+      "en": "Between rounds of a circuit.",
+      "translation": "Između rundi kružnog treninga."
+    },
+    "program/v1.0.0/program.linear.example.json": {
+      "en": "The whole methodology in one `progressionRule`: add load whenever every rep is completed. Both weeks are identical — the load moves, the plan does not.",
+      "translation": "Cela metodologija u jednom `progressionRule`: dodaj opterećenje kad god su sva ponavljanja završena. Obe nedelje su identične — opterećenje se pomera, plan ne."
+    },
+    "program/v1.0.0/program.daily-undulating.example.json": {
+      "en": "Three rep ranges across one week, expressed by scheduling three different sessions. The undulation is in the workouts; the program says only which falls on which day.",
+      "translation": "Tri opsega ponavljanja u jednoj nedelji, izražena raspoređivanjem tri različita treninga. Undulacija je u treninzima; program kaže samo koji pada na koji dan."
+    },
+    "program/v1.0.0/program.weekly-undulating.example.json": {
+      "en": "The same two sessions for three weeks, undulated entirely by `overrides.loadScaling` — medium, heavy, light. The workouts stay reusable because nothing was edited into them.",
+      "translation": "Ista dva treninga tokom tri nedelje, undulirana isključivo kroz `overrides.loadScaling` — srednje, teško, lako. Treninzi ostaju ponovo upotrebljivi jer ništa nije menjano u njima."
+    },
+    "program/v1.0.0/program.block.example.json": {
+      "en": "Three `meso` cycles sequenced by `order`, with `intent` `accumulation` → `intensification` → `realization`.",
+      "translation": "Tri `meso` ciklusa poređana pomoću `order`, sa `intent` `accumulation` → `intensification` → `realization`."
+    },
+    "program/v1.0.0/program.conjugate.example.json": {
+      "en": "Rotating max-effort lifts. Rotation is a different `workout` reference each week, which is why no field for it exists.",
+      "translation": "Rotacija vežbi maksimalnog napora. Rotacija je druga `workout` referenca svake nedelje, zbog čega polje za nju ne postoji."
+    },
+    "program/v1.0.0/program.percentage-waves.example.json": {
+      "en": "5/3/1-style waves. Two `trainingMaxes` slots declare which lifts the plan is computed from and how; `overrides.progressionState` carries the wave number. **No training-max value appears** — see RFC-008 §8.1.",
+      "translation": "Talasi u stilu 5/3/1. Dva `trainingMaxes` slota deklarišu iz kojih se vežbi plan izračunava i kako; `overrides.progressionState` nosi broj talasa. **Nijedna vrednost trenažnog maksimuma se ne pojavljuje** — pogledajte RFC-008 §8.1."
+    },
+    "program/v1.0.0/program.deload-weeks.example.json": {
+      "en": "`week.deload` on week four while the cycle `intent` stays `accumulation`. That combination is the reason `deload` is a week flag and not an intent value.",
+      "translation": "`week.deload` na četvrtoj nedelji dok `intent` ciklusa ostaje `accumulation`. Ta kombinacija je razlog zašto je `deload` oznaka nedelje, a ne vrednost namere."
+    },
+    "program/v1.0.0/program.double-progression.example.json": {
+      "en": "Reps first, then load: one rule whose trigger is `topOfRepRange`, with `progressionState` tracking where in the rep range each occurrence sits.",
+      "translation": "Prvo ponavljanja, pa opterećenje: jedno pravilo čiji je okidač `topOfRepRange`, dok `progressionState` prati gde se u opsegu ponavljanja svako pojavljivanje nalazi."
+    },
+    "program/v1.0.0/program.test-weeks.example.json": {
+      "en": "A test week is an ordinary cycle whose `intent` is `test`. The `retest` action updates a training-max *slot*, not a number in the document.",
+      "translation": "Test nedelja je običan ciklus čiji je `intent` `test`. Akcija `retest` ažurira *slot* trenažnog maksimuma, a ne broj u dokumentu."
+    },
+    "program/v1.0.0/program.conditional-branching.example.json": {
+      "en": "Two branches off one day: repeat lighter on `failedPrescribedReps`, skip ahead on `amrapAboveThreshold`. A consumer that cannot evaluate either follows the unconditional schedule.",
+      "translation": "Dve grane iz jednog dana: ponovi lakše na `failedPrescribedReps`, preskoči napred na `amrapAboveThreshold`. Konzument koji ne može da izračuna nijednu prati bezuslovni raspored."
+    },
+    "program/v1.0.0/program.adaptive.example.json": {
+      "en": "Autoregulated adaptation: a fixed skeleton whose loads are decided at execution time against two declared rules. The limit of what FDS expresses — see the note below.",
+      "translation": "Autoregulisana adaptacija: fiksni skelet čija se opterećenja određuju u vreme izvršavanja prema dva deklarisana pravila. Granica onoga što FDS izražava — pogledajte napomenu ispod."
+    },
+    "program/v1.0.0/program.fixed-weekday.example.json": {
+      "en": "`model: \"calendar\"` — `dayOfWeek` is authoritative.",
+      "translation": "`model: \"calendar\"` — `dayOfWeek` je merodavan."
+    },
+    "program/v1.0.0/program.relative-offsets.example.json": {
+      "en": "`model: \"relative\"` — `offsetDays` counted from the program start, week two continuing at 7, 9, 11.",
+      "translation": "`model: \"relative\"` — `offsetDays` se broji od početka programa, druga nedelja nastavlja na 7, 9, 11."
+    },
+    "program/v1.0.0/program.rolling.example.json": {
+      "en": "`model: \"rolling\"` — three on, one off, drifting against the calendar by design. Reading this as `calendar` would collapse the rest pattern the plan is built around.",
+      "translation": "`model: \"rolling\"` — tri dana treninga, jedan odmora, uz namerno klizanje u odnosu na kalendar. Čitanje ovoga kao `calendar` urušilo bi obrazac odmora oko koga je plan izgrađen."
+    },
+    "program/v1.0.0/program.sequence.example.json": {
+      "en": "`model: \"sequence\"` — neither placement field present, which is the point: `index` is the only ordering and the athlete sets the pace.",
+      "translation": "`model: \"sequence\"` — nijedno polje pozicioniranja nije prisutno, što i jeste poenta: `index` je jedini redosled, a sportista određuje tempo."
+    },
+    "program/v1.0.0/program.optional-days.example.json": {
+      "en": "`optional: true` on a conditioning day. An optional day is still a training day; the flag does not turn it into rest.",
+      "translation": "`optional: true` na danu kondicionog treninga. Opcioni dan je i dalje trenažni dan; oznaka ga ne pretvara u odmor."
+    },
+    "program/v1.0.0/program.accessory-days.example.json": {
+      "en": "Accessory work as its own optional session rather than extra blocks on a main day, so it can be dropped whole.",
+      "translation": "Pomoćni rad kao zaseban opcioni trening umesto dodatnih blokova na glavnom danu, tako da može da se izostavi u celini."
+    },
+    "program/v1.0.0/program.rest-days.example.json": {
+      "en": "All seven days stated, three of them `rest`. A prescribed rest day and an absent day are different instructions.",
+      "translation": "Svih sedam dana navedeno, tri od njih `rest`. Propisan dan odmora i odsutan dan su različite instrukcije."
+    }
+  },
+  "sections": {
+    "§4.1 set and rep schemes": "§4.1 šeme serija i ponavljanja",
+    "§4.2 grouping structures": "§4.2 strukture grupisanja",
+    "§4.3 load prescription": "§4.3 preskripcija opterećenja",
+    "§4.4 cardio and endurance": "§4.4 kardio i izdržljivost",
+    "§4.5 rest": "§4.5 odmor",
+    "§4.6 periodization models": "§4.6 modeli periodizacije",
+    "§4.7 scheduling structures": "§4.7 strukture rasporeda"
+  }
+}

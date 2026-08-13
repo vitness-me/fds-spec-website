@@ -1,0 +1,13 @@
+{
+  "sections": [
+    "§4.1 sample schemes",
+    "§4.2 second section",
+    "§4.3 third section"
+  ],
+  "rows": {
+    "workout/v1.0.0/workout.good.example.json": "A row translated correctly.",
+    "workout/v1.0.0/workout.stale.example.json": "The new English text.",
+    "workout/v1.0.0/workout.missing.example.json": "A row the overlay never translated.",
+    "workout/v1.0.0/workout.empty.example.json": "A row with an empty translation."
+  }
+}

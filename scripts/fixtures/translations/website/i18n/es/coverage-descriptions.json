@@ -1,0 +1,25 @@
+{
+  "sections": {
+    "§4.1 sample schemes": "§4.1 esquemas de ejemplo",
+    "§4.3 third section": "",
+    "§9.9 ghost section": "§9.9 sección fantasma"
+  },
+  "rows": {
+    "workout/v1.0.0/workout.good.example.json": {
+      "en": "A row translated correctly.",
+      "translation": "Una fila traducida correctamente."
+    },
+    "workout/v1.0.0/workout.stale.example.json": {
+      "en": "The old English text.",
+      "translation": "El texto viejo."
+    },
+    "workout/v1.0.0/workout.empty.example.json": {
+      "en": "A row with an empty translation.",
+      "translation": ""
+    },
+    "workout/v1.0.0/workout.ghost.example.json": {
+      "en": "A row the matrix no longer has.",
+      "translation": "Una fila fantasma."
+    }
+  }
+}
