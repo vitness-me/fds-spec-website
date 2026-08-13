@@ -29,6 +29,6 @@ Za detaljne informacije o modelu podataka mišića pogledajte [RFC-003: Model po
 - `id`: UUID identifikator
 - `schemaVersion`: string verzije (npr. "1.0.0")
 - `canonical`: standardizovano imenovanje sa slug vrednošću i alijasima
-- `classification`: kategorija mišića, regija, lateralnost
-- `heatmap`: podaci za vizualizaciju sa regijama i vrednostima intenziteta
+- `classification`: kategorija mišića, region, lateralnost
+- `heatmap`: podaci za vizualizaciju sa regionima i vrednostima intenziteta
 - `metadata`: status, vremenske oznake, autorstvo

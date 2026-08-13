@@ -165,3 +165,44 @@ polja šema, komande i identifikatori se ne prevode.
 | license agreement | ugovor o licenci | telo ugovora ostaje na engleskom; prevodi se samo uvodna napomena |
 | legally binding | pravno obavezujući | |
 | registry (vocabulary) | registar vokabulara | „registar preporučenih vrednosti“ kada treba razdvojiti od kataloga |
+| contributor / contribution | saradnik / doprinos | |
+| maintainer | održavalac | |
+| adopter | usvajač | „rani usvajač“ već zabeležen |
+| core (specifikacije) | jezgro | |
+| core (anatomija) | trup | vrednost `core` se ne prevodi |
+| pin (fds:pin) | fiksirati / fiksiran | nikada „pinovati“ — postojeći korpus koristi „fiksiran“ |
+| wearable | nosivi uređaj | |
+| performed data | podaci o izvedenom | |
+| asset (media) | resurs | |
+| view / area / region (atlas) | prikaz / oblast / region | „region“ i za heatmap regione; nikada „regija“ |
+| top set / back-off set | vršna serija / back-off serija | back-off ostaje engleski: „odlaganje“ je API smisao, „rasterećenje“ je deload |
+| failure (mišićni) | otkaz | tehnički / apsolutni otkaz |
+| isometric hold | izdržaj | |
+| range of motion | obim pokreta | |
+| partials | parcijalna ponavljanja | |
+| ladder / rung | lestvica / prečka | |
+| round | krug | „kružni trening“ ostaje za circuit |
+| triset / compound set | triserija / kombinovana serija | nikada „složena serija“ |
+| antagonist pairing | antagonističko uparivanje | |
+| heart rate | srčana frekvencija | |
+| pace | tempo kretanja | „zona tempa kretanja“; razdvojeno od tempa dizanja |
+| machine / setting | sprava / podešavanje | |
+| resistance band | elastična traka | |
+| accessory work / main lift | pomoćni rad / glavna vežba | |
+| linear / undulating / block / conjugate | linearna / undulirana / blok / konjugovana | periodizacija; nikada „talasasta“ — talas je wave loading |
+| discriminated union | diskriminisana unija | |
+| time cap | vremensko ograničenje | `timeCap` se ne prevodi |
+| forward-compatible | unapred kompatibilan | |
+| overlay | prekrivni sloj | |
+| escape hatch | izlaz za nuždu | |
+| finisher | finisher | bez prevođenja; i vrednost `role` |
+| kettlebell / dumbbell / free weight | girja / bučica / slobodni teg | šipka za barbell već zabeležena |
+| pull-up / push-up | zgib / sklek | |
+| bench press | potisak na klupi | |
+| treadmill / incline / cadence | traka za trčanje / nagib / kadenca | |
+| snapshot (zamrznuti) | zamrznuti snimak | |
+| occurrence | pojavljivanje | |
+| interoperability | interoperabilnost | |
+| taxonomy | taksonomija | |
+| semantic versioning | semantičko verzionisanje | |
+| Standards Track | Standards Track | ime RFC procesa; bez prevođenja |

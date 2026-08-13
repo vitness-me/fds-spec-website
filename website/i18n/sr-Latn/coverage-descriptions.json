@@ -98,15 +98,15 @@
     },
     "workout/v1.1.0/workout.antagonist-pairing.example.json": {
       "en": "Two items training opposing muscles. The difference from a compound set is derivable from the exercises, not encoded here.",
-      "translation": "Dve stavke koje treniraju suprotstavljene mišiće. Razlika u odnosu na složenu seriju izvodi se iz vežbi, a ne kodira se ovde."
+      "translation": "Dve stavke koje treniraju suprotstavljene mišiće. Razlika u odnosu na kombinovanu seriju izvodi se iz vežbi, a ne kodira se ovde."
     },
     "workout/v1.1.0/workout.barbell-complex.example.json": {
       "en": "One barbell, one load, four movements, no rest until the round ends.",
-      "translation": "Jedna šipka, jedno opterećenje, četiri pokreta, bez odmora dok se runda ne završi."
+      "translation": "Jedna šipka, jedno opterećenje, četiri pokreta, bez odmora dok se krug ne završi."
     },
     "workout/v1.1.0/workout.circuit.example.json": {
       "en": "One set of each item per round, four rounds, rest between rounds.",
-      "translation": "Po jedna serija svake stavke po rundi, četiri runde, odmor između rundi."
+      "translation": "Po jedna serija svake stavke po krugu, četiri kruga, odmor između krugova."
     },
     "workout/v1.1.0/workout.emom.example.json": {
       "en": "Every minute on the minute for twelve intervals.",
@@ -114,7 +114,7 @@
     },
     "workout/v1.1.0/workout.amrap-block.example.json": {
       "en": "As many rounds as possible in twenty minutes — AMRAP as a *block mode*, distinct from the rep target above.",
-      "translation": "Što više rundi u dvadeset minuta — AMRAP kao *režim bloka*, različit od ciljnog broja ponavljanja iznad."
+      "translation": "Što više krugova u dvadeset minuta — AMRAP kao *režim bloka*, različit od ciljnog broja ponavljanja iznad."
     },
     "workout/v1.1.0/workout.for-time.example.json": {
       "en": "Fixed work completed as fast as possible, under a cap.",
@@ -126,7 +126,7 @@
     },
     "workout/v1.1.0/workout.tabata.example.json": {
       "en": "Eight rounds of 20 seconds work, 10 seconds rest.",
-      "translation": "Osam rundi od 20 sekundi rada i 10 sekundi odmora."
+      "translation": "Osam krugova od 20 sekundi rada i 10 sekundi odmora."
     },
     "workout/v1.1.0/workout.ladder-circuit.example.json": {
       "en": "A scheme and a mode composing: ladder rungs *inside* a circuit.",
@@ -214,7 +214,7 @@
     },
     "workout/v1.1.0/workout.pace.example.json": {
       "en": "Distance says how far, zone says how fast. Note that a *higher* pace zone means a *lower* time per kilometre — the one place zone ordering and the underlying number run in opposite directions.",
-      "translation": "Distanca kaže koliko daleko, zona kaže koliko brzo. Imajte u vidu da *viša* zona tempa znači *manje* vreme po kilometru — jedino mesto gde redosled zona i broj iza njega idu u suprotnim smerovima."
+      "translation": "Distanca kaže koliko daleko, zona kaže koliko brzo. Imajte u vidu da *viša* zona tempa kretanja znači *manje* vreme po kilometru — jedino mesto gde redosled zona i broj iza njega idu u suprotnim smerovima."
     },
     "workout/v1.1.0/workout.hr-zone.example.json": {
       "en": "`boundsRef` names the registry entry that defines Z2. The athlete's beats per minute are caller context and never appear here.",
@@ -238,7 +238,7 @@
     },
     "workout/v1.1.0/workout.negative-splits.example.json": {
       "en": "Two halves with ascending pace zones. The relationship between them *is* the session, so it is expressed as two items rather than one item with a note.",
-      "translation": "Dve polovine sa rastućim zonama tempa. Odnos među njima *jeste* trening, pa je izražen kao dve stavke, a ne kao jedna stavka sa napomenom."
+      "translation": "Dve polovine sa rastućim zonama tempa kretanja. Odnos među njima *jeste* trening, pa je izražen kao dve stavke, a ne kao jedna stavka sa napomenom."
     },
     "workout/v1.1.0/workout.progressive.example.json": {
       "en": "Intensity climbing every five minutes and never coming back down. Each step is its own **item** rather than its own set, because `zone` sits on an item and not on a set.",
@@ -274,7 +274,7 @@
     },
     "prescription/v1.0.0/restScope.round.example.json": {
       "en": "Between rounds of a circuit.",
-      "translation": "Između rundi kružnog treninga."
+      "translation": "Između krugova kružnog treninga."
     },
     "program/v1.0.0/program.linear.example.json": {
       "en": "The whole methodology in one `progressionRule`: add load whenever every rep is completed. Both weeks are identical — the load moves, the plan does not.",

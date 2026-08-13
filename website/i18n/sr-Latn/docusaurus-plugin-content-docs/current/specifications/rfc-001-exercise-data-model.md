@@ -102,7 +102,7 @@ Svi usaglašeni podaci o vežbama **MORAJU** da sadrže ova polja:
 
 Četiri opciona polja nose najveći deo onoga što implementacija zaista prikazuje.
 
-`equipment` se deli na ono bez čega pokret ne može da se izvede i ono što samo pomaže. `media` nosi materijale za demonstraciju.
+`equipment` se deli na ono bez čega pokret ne može da se izvede i ono što samo pomaže. `media` nosi resurse za demonstraciju.
 
 `constraints` beleži šta vežba zahteva pre nego što se pokuša: `contraindications` (stanja pod kojima ne bi trebalo da se izvodi), `prerequisites` (kompetencije koje pretpostavlja), `progressions` i `regressions` (teže i lakše pokrete na istom obrascu) i `environment` (gde može da se izvede). Ovo je savetodavna proza, a ne mašinski sprovodive kapije — FDS ne modeluje nijednog sportistu prema kome bi se preduslov proverio.
 

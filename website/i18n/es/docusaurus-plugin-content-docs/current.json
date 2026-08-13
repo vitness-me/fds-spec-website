@@ -36,7 +36,7 @@
     "description": "The label for category 'Foundations — the shared library' in sidebar 'useCasesSidebar'"
   },
   "sidebar.useCasesSidebar.category.Prescription — the intent primitives": {
-    "message": "Prescripción — los primitivos de intención",
+    "message": "Prescripción — las primitivas de intención",
     "description": "The label for category 'Prescription — the intent primitives' in sidebar 'useCasesSidebar'"
   },
   "version.label": {
