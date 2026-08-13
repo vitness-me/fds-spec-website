@@ -197,6 +197,82 @@ function checkCyrillic(locale, relPath, text) {
   }
 }
 
+/**
+ * A translation that lost its diacritics is still wrong in every line, and
+ * nothing else notices: the Cyrillic check guards Serbian's *script*, but a
+ * Spanish page stripped to "traduccion", "version", "esta" — or a Serbian
+ * one stripped to "cetiri", "sema", "vezba" — passes every structural rule
+ * and reads as broken to any native reader. Absence is the tell: translated
+ * prose of any real length without a single locale-specific mark is
+ * implausible in both languages, so past a floor of translated text this
+ * fails rather than trusting a reviewer to catch it. The floor keeps a
+ * legitimately tiny file (a navbar label set) out of scope; fences, marker
+ * comments, inline code and link targets are excluded because they are
+ * English or identifiers by design, and JSON files contribute only their
+ * translated `message` values — never the extractor's English descriptions.
+ */
+const DIACRITICS = {
+  es: {chars: /[áéíóúñüÁÉÍÓÚÑÜ¡¿]/, name: 'accent, ñ or inverted mark'},
+  'sr-Latn': {chars: /[čćžšđČĆŽŠĐ]/, name: 'č, ć, ž, š or đ'},
+};
+const DIACRITICS_FLOOR = 400;
+
+function translatedProse(relPath, text) {
+  if (relPath.endsWith('.json')) {
+    let parsed;
+    try {
+      parsed = JSON.parse(text);
+    } catch {
+      return ''; // unparseable JSON is reported by the structural checks
+    }
+    const values = [];
+    const collect = (node) => {
+      if (typeof node === 'string') values.push(node);
+      else if (node && typeof node === 'object') {
+        if (typeof node.message === 'string') values.push(node.message); // docusaurus translation entry
+        else if (typeof node.translation === 'string') values.push(node.translation); // coverage overlay row
+        else Object.values(node).forEach(collect);
+      }
+    };
+    collect(parsed);
+    return values.join(' ');
+  }
+  const lines = text.split('\n');
+  const kept = [];
+  let openFence = null;
+  for (const line of lines) {
+    const fence = line.match(/^\s*(`{3,}|~{3,})/);
+    if (openFence) {
+      if (fence && fence[1][0] === openFence[0] && fence[1].length >= openFence.length) openFence = null;
+      continue;
+    }
+    if (fence) {
+      openFence = fence[1];
+      continue;
+    }
+    kept.push(line);
+  }
+  return kept
+    .join(' ')
+    .replace(/<!--[\s\S]*?-->/g, ' ')
+    .replace(/`[^`]*`/g, ' ')
+    .replace(/\]\([^)]*\)/g, ']')
+    .replace(/https?:\/\/\S+/g, ' ');
+}
+
+function checkDiacritics(locale, relPath, text) {
+  const rule = DIACRITICS[locale];
+  if (!rule) return;
+  const prose = translatedProse(relPath, text);
+  if (prose.length < DIACRITICS_FLOOR) return;
+  if (!rule.chars.test(prose)) {
+    problem(
+      `website/i18n/${locale}/${relPath}: ${prose.length} characters of translated text without a single ${rule.name} — ` +
+        `${locale} prose of this size never lacks them all; the translation is accent-stripped or was never translated`,
+    );
+  }
+}
+
 // ── the coverage-matrix overlay's English, derived once ──────────────────────
 //
 // The same derivation the website plugin renders: the matrix module joined
@@ -481,6 +557,7 @@ for (const locale of translatedLocales) {
     if (relPath === COVERAGE_OVERLAY) {
       const text = readFileSync(full, 'utf8');
       checkCyrillic(locale, relPath, text);
+      checkDiacritics(locale, relPath, text);
       checkCoverageOverlay(locale, relPath, text);
       continue;
     }
@@ -577,6 +654,7 @@ for (const locale of translatedLocales) {
     }
 
     checkCyrillic(locale, relPath, text);
+    checkDiacritics(locale, relPath, text);
   }
 
   // Manifest entries whose file is gone.
@@ -647,6 +725,7 @@ if (SELF_TEST) {
     'website/i18n/es/coverage-descriptions.json: row "workout/v1.0.0/workout.empty.example.json" has an empty translation — translate the "en" text recorded beside it',
     'website/i18n/es/coverage-descriptions.json: row "workout/v1.0.0/workout.ghost.example.json" is not in the coverage matrix — a translation of a row that no longer exists; remove it',
     'website/i18n/sr-Latn/coverage-descriptions.json: missing — the coverage matrix on the use-cases page would render English in this locale; create it with a "sections" and a "rows" block and translate every entry',
+    'website/i18n/es/docusaurus-plugin-content-docs/current/plain.md: 571 characters of translated text without a single accent, ñ or inverted mark — es prose of this size never lacks them all; the translation is accent-stripped or was never translated',
     'website/i18n/translation-sources.json: records "es/docusaurus-plugin-content-docs/current/deleted.md" but website/i18n/es/docusaurus-plugin-content-docs/current/deleted.md does not exist — run `node scripts/check-translations.mjs --update`',
   ];
   const got = [...problems].sort();

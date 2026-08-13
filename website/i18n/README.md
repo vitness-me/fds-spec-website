@@ -73,9 +73,17 @@ text, the same promise the hash manifest makes for whole pages.
   constructions over `tú`/`usted`), and one term per domain concept
   throughout — the glossary next to this file is the vocabulary of record.
 - **`sr-Latn` — Serbian, Latin script.** Never Cyrillic; the gate rejects any
-  Cyrillic code point in an `sr-Latn` file. Full diacritics (č, ć, ž, š, đ —
-  never `dj` for `đ`), ijekavian/ekavian: ekavian, and the same
+  Cyrillic code point in an `sr-Latn` file (fenced code is exempt — fences
+  are byte-identical to the English source, and the standard's own examples
+  legitimately carry Cyrillic data). Full diacritics (č, ć, ž, š, đ — never
+  `dj` for `đ`), ijekavian/ekavian: ekavian, and the same
   one-term-per-concept rule.
+- **Diacritics are load-bearing in both languages.** A translation stripped
+  of its accents passes every structural rule and is wrong in every line, so
+  the gate fails any `es` file whose translated text is of real length yet
+  contains no accent, `ñ` or inverted mark, and any `sr-Latn` file of real
+  length with no `č ć ž š đ`. Fences, marker comments, inline code and the
+  extractor's English metadata are excluded before measuring.
 
 Domain terms (exercise, equipment, muscle, workout, program, set, rep, tempo,
 rest, load, superset, circuit, …) get one translation each, recorded in the
