@@ -59,7 +59,8 @@ Esta especificación se propone:
 
 ### 3.1. Campos obligatorios
 
-Seis campos son obligatorios: `schemaVersion`, `exerciseId`, `canonical` (el nombre y el slug por los que se conoce este ejercicio), `classification` (qué clase de movimiento es), `targets` (qué entrena), `metrics` (cómo se mide) y `metadata`.
+<!-- fds:count required:exercise=7 -->
+7 campos son obligatorios: `schemaVersion`, `exerciseId`, `canonical` (el nombre y el slug por los que se conoce este ejercicio), `classification` (qué clase de movimiento es), `targets` (qué entrena), `metrics` (cómo se mide) y `metadata`.
 
 Un ejercicio al que le falte cualquiera de ellos no es identificable, no es clasificable o no es medible, y cada una de esas carencias lo vuelve inutilizable para un consumidor, no meramente incompleto.
 

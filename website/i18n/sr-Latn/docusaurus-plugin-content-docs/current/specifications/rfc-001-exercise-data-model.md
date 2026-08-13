@@ -59,7 +59,8 @@ Ova specifikacija ima za cilj da:
 
 ### 3.1. Obavezna polja
 
-Šest polja je obavezno: `schemaVersion`, `exerciseId`, `canonical` (naziv i slug pod kojima je ova vežba poznata), `classification` (koja je to vrsta pokreta), `targets` (šta trenira), `metrics` (kako se meri) i `metadata`.
+<!-- fds:count required:exercise=7 -->
+Obavezno je 7 polja: `schemaVersion`, `exerciseId`, `canonical` (naziv i slug pod kojima je ova vežba poznata), `classification` (koja je to vrsta pokreta), `targets` (šta trenira), `metrics` (kako se meri) i `metadata`.
 
 Vežba kojoj nedostaje bilo koje od njih ne može se identifikovati, klasifikovati ili meriti, a svaki od tih nedostataka je čini neupotrebljivom za konzumenta, a ne tek nepotpunom.
 

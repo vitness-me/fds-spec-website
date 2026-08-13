@@ -59,7 +59,8 @@ This specification aims to:
 
 ### 3.1. Required Fields
 
-Six fields are required: `schemaVersion`, `exerciseId`, `canonical` (the name and slug this exercise is known by), `classification` (what kind of movement it is), `targets` (what it trains), `metrics` (how it is measured) and `metadata`.
+<!-- fds:count required:exercise=7 -->
+Seven fields are required: `schemaVersion`, `exerciseId`, `canonical` (the name and slug this exercise is known by), `classification` (what kind of movement it is), `targets` (what it trains), `metrics` (how it is measured) and `metadata`.
 
 An exercise missing any of them is not identifiable, not classifiable, or not measurable, and each of those makes it unusable to a consumer rather than merely incomplete.
 
