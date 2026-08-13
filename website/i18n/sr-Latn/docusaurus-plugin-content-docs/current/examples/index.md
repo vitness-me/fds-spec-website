@@ -77,7 +77,7 @@ Kompletni treninzi koji prolaze validaciju — po jedan za svaku šemu serija i 
 
 <!-- fds:count examples:program=18 -->
 ### Primeri programa (18)
-Kompletni programi koji prolaze validaciju, a pokrivaju modele periodizacije i raspoređivanja iz RFC-008 — linearnu, talasastu, blok i konjugovanu periodizaciju, procentualne talase, rasterećenja, uslovno grananje i još ponešto. Nijedan od njih ne sadrži ni seriju, ni ponavljanje, ni opterećenje: program je raspored referenci na treninge, a preskripcija živi u treninzima na koje on pokazuje. Popisani su u [README-ju uz datoteke primera](https://spec.vitness.me/schemas/program/v1.0.0/README.md).
+Kompletni programi koji prolaze validaciju, a pokrivaju modele periodizacije i raspoređivanja iz RFC-008 — linearnu, unduliranu, blok i konjugovanu periodizaciju, procentualne talase, rasterećenja, uslovno grananje i još ponešto. Nijedan od njih ne sadrži ni seriju, ni ponavljanje, ni opterećenje: program je raspored referenci na treninge, a preskripcija živi u treninzima na koje on pokazuje. Popisani su u [README-ju uz datoteke primera](https://spec.vitness.me/schemas/program/v1.0.0/README.md).
 
 ## Obrasci implementacije
 

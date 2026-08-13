@@ -24,7 +24,7 @@ Omogućiti prenosivost podataka i interoperabilnost među fitnes aplikacijama pr
 - **Model podataka vežbe** (RFC-001)
 - **Kataloški entiteti**: oprema (RFC-002), mišići (RFC-003), kategorije mišića (RFC-004), atlas tela (RFC-005)
 - **Primitivi preskripcije** (RFC-006) — opterećenje, ponavljanja, tempo, odmor, zone intenziteta, šeme serija i pravila progresije, definisani jednom, tako da serija znači isto gde god da se pojavi
-- **Model podataka treninga** (RFC-007) — jedan propisan trening, kao blokovi stavki sa režimom izvođenja po bloku
+- **Model podataka treninga** (RFC-007) — jedan propisan trening, kao blokovi stavki sa režimom izvršavanja po bloku
 - **Model podataka trenažnog programa** (RFC-008) — raspored referenci na treninge kroz vreme, sa ciklusima, nedeljama, progresijom i uslovnim grananjem
 
 **Van obuhvata** — odlukom, ne propustom:

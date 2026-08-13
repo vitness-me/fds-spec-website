@@ -169,7 +169,7 @@ Za složene strukture podataka jedinstvene za platformu:
 
 ### 4.3. Reference na medije
 
-`media` prati zajedničku definiciju iz RFC-001: lista materijala, svaki sa tipom i URI-jem, koji ilustruju spravu.
+`media` prati zajedničku definiciju iz RFC-001: lista resursa, svaki sa tipom i URI-jem, koji ilustruju spravu.
 
 ```json fds:fragment entity=equipment
 {

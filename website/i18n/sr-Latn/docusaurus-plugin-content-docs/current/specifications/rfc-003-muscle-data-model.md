@@ -220,7 +220,7 @@ Polje `laterality` opisuje karakteristike simetrije:
 
 ### 4.6. Toplotna mapa preko atlasa tela
 
-Zapisi mišića MOGU da uključe opcioni objekat `heatmap` koji referencira atlas tela. Atlas tela definiše poglede (npr. anteriorni/posteriorni) i imenovane oblasti vezane za oblike unutar materijala (tipično SVG). Mišići referenciraju te oblasti sa težinama intenziteta da bi omogućili interoperabilnu vizuelizaciju.
+Zapisi mišića MOGU da uključe opcioni objekat `heatmap` koji referencira atlas tela. Atlas tela definiše prikaze (npr. anteriorni/posteriorni) i imenovane oblasti vezane za oblike unutar resursa (tipično SVG). Mišići referenciraju te oblasti sa težinama intenziteta da bi omogućili interoperabilnu vizuelizaciju.
 
 Struktura:
 ```json fds:fragment entity=muscle

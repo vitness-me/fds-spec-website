@@ -155,3 +155,39 @@ En las cadenas de la interfaz se usan comillas inglesas ("…"); las angulares
 | license agreement | acuerdo de licencia | el cuerpo del acuerdo permanece en inglés; solo se traduce el preámbulo |
 | legally binding | jurídicamente vinculante | |
 | registry (vocabulary) | registro de vocabulario | «registro de valores recomendados» cuando convenga desambiguar |
+| contributor | contribuidor | por cercanía con «contribución»; nunca «colaborador» |
+| breaking change | cambio incompatible | |
+| major / minor / patch (SemVer) | Mayor / Menor / Parche | |
+| performance / performed data | rendimiento / datos ejecutados | lo prescrito frente a lo ejecutado |
+| pin (fds:pin) | fijar / fijado | |
+| coverage matrix | matriz de cobertura | «matriz de escenarios» para *scenario matrix* |
+| lock-in | cautividad | |
+| asset (media) | recurso | |
+| barbell / dumbbell / kettlebell | barra / mancuerna / pesa rusa | en prosa; los identificadores no se traducen |
+| bench press | press de banca | |
+| core (anatomía) | core | sin traducir; el valor `core` tampoco |
+| top set / back-off set | serie tope / serie de descenso | «serie de aproximación» descartada; decisión pendiente de revisión nativa |
+| triset / compound set | triserie / serie compuesta | |
+| antagonist pairing | emparejamiento de antagonistas | |
+| partials | repeticiones parciales | |
+| to failure | al fallo | fallo técnico / fallo absoluto |
+| isometric hold | isometría | señalada para revisión: los *holds* de un cooldown pueden ser estiramientos |
+| ladder / rung | escalera / peldaño | |
+| round | ronda | |
+| cluster / mini-set | clúster / miniserie | |
+| time cap / floor / cap | tope de tiempo / mínimo / tope | |
+| forward-compatible | compatible hacia adelante | |
+| pace zone / heart-rate zone | zona de ritmo / zona de frecuencia cardíaca | «cardíaca» con tilde, en todo el sitio |
+| occurrence | ocurrencia | |
+| accessory work | trabajo accesorio | |
+| muscle category | categoría muscular | |
+| view / area / binding (atlas) | vista / área / vinculación | |
+| rollup / advisory | resumen agregado / orientativo | |
+| catch-all | rama comodín | |
+| finisher | finisher | sin traducir; también es un valor de `role` |
+| linear / undulating / block / conjugate | lineal / ondulante / por bloques / conjugado | modelos de periodización |
+| percentage waves | olas de porcentaje | |
+| sanitize | sanitizar | |
+| wearable | wearable | «dispositivos wearables» |
+| Standards Track | Standards Track | nombre del proceso RFC; sin traducir |
+| RFC 2119 en plural | DEBEN / DEBERÍAN | la concordancia flexiona la palabra clave, nunca la modalidad |
