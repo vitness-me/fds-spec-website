@@ -244,6 +244,19 @@ async function deriveCounts({ manifest, byPath, currentOf }) {
     // case is not an example of anything.
     set(`fixtures:${name}`, inDir.filter((f) => isExample(f) || isInvalid(f)).length);
     set(`scenarios:${name}`, matrixRows(name));
+
+    // How many top-level fields the current schema requires — read from the
+    // schema itself, so a prose sentence like "Seven fields are required"
+    // is held to the published `required` array rather than to whoever last
+    // counted the list by hand. RFC-001 shipped saying "Six" above a list of
+    // seven; the list was right, the count was not, and nothing noticed
+    // until a translator counted it. Unset for a schema with no top-level
+    // `required` (the prescription library's root validates nothing), so a
+    // marker naming it there fails rather than reads zero.
+    const schema = JSON.parse(
+      await readFile(join(ROOT, PUBLISHED_DIRS.schemas, path), 'utf8'),
+    );
+    if (Array.isArray(schema.required)) set(`required:${name}`, schema.required.length);
   }
   set('scenarios', matrixRows());
 
