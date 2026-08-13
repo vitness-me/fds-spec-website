@@ -122,3 +122,46 @@ polja šema, komande i identifikatori se ne prevode.
 | See Also | Pogledajte i | |
 | pattern (regex) | obrazac | „šablon“ je rezervisan za *template* |
 | placeholder | čuvar mesta | |
+| normative / informative | normativan / informativan | |
+| abstract (RFC odeljak) | sažetak | |
+| background | pozadina | |
+| goals / scope | ciljevi / obuhvat | „out of scope“ → „van obuhvata“; ne „opseg“ — postojeći korpus koristi „obuhvat“ |
+| requirement | zahtev | |
+| required / optional | obavezno / opciono | |
+| constraint | ograničenje | |
+| validation | validacija | |
+| discriminator | diskriminator | |
+| definition library | biblioteka definicija | |
+| fixture | datoteka primera | negativan → „negativan primer“ |
+| rep target | ciljni broj ponavljanja | *load target* → „ciljno opterećenje“ već zabeleženo |
+| intensity zone | zona intenziteta | |
+| progression rule | pravilo progresije | |
+| execution mode | režim izvršavanja | |
+| block role | uloga bloka | |
+| kinetic chain | kinetički lanac | |
+| canonical | kanonski | |
+| snapshot | snimak | „zamrznuti snimak preskripcije“ |
+| opaque reference | neprozirna referenca | |
+| round-trip | round-trip | bez prevođenja, kurzivom |
+| test suite | skup testova | |
+| lifecycle | životni ciklus | |
+| guiding principles | vodeći principi | |
+| steward / stewardship | staralac / staranje | nikada „upravitelj“ — *governance* → „upravljanje“ ostaje odvojeno |
+| capture (standarda) | prisvajanje | „prisvajanje od strane jednog proizvođača“ |
+| lazy consensus | prećutni konsenzus | uz „(lazy consensus)“ pri prvom pominjanju |
+| review | pregled | „period za pregled“ |
+| editor (uloga) | urednik | |
+| implementer | implementator | |
+| issue / pull request (PR) | issue / pull request (PR) | GitHub artefakti; bez prevođenja |
+| fork | fork | bez prevođenja; „napraviti fork“ |
+| vote | glasanje | |
+| amendment | amandman | |
+| responsible disclosure | odgovorno obelodanjivanje | |
+| vulnerability | ranjivost | |
+| migration | migracija | „napomene o migraciji“ |
+| draft / review / accepted / deprecated (statusi) | nacrt / u pregledu / prihvaćen / zastareo | statusi u prozi; vrednosti `draft`, `review`… se ne prevode |
+| consent | saglasnost | |
+| retention / erasure | zadržavanje / brisanje | vokabular zaštite podataka |
+| license agreement | ugovor o licenci | telo ugovora ostaje na engleskom; prevodi se samo uvodna napomena |
+| legally binding | pravno obavezujući | |
+| registry (vocabulary) | registar vokabulara | „registar preporučenih vrednosti“ kada treba razdvojiti od kataloga |
