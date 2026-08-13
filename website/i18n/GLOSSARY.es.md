@@ -111,3 +111,47 @@ En las cadenas de la interfaz se usan comillas inglesas ("…"); las angulares
 | treadmill | caminadora | forma americana; nunca «cinta de correr» |
 | wave (5/3/1) | ola | |
 | logging | registro de eventos | *registry* también es «registro»; calificar cuando el contexto no desambigüe |
+| normative / informative | normativo / informativo | |
+| conformance | conformidad | «Conforming Producer/Consumer» → «productor/consumidor conforme» |
+| abstract (sección RFC) | resumen | |
+| background | antecedentes | |
+| goals / scope | objetivos / alcance | «out of scope» → «fuera del alcance» |
+| requirement | requisito | |
+| required / optional | obligatorio / opcional | |
+| constraint | restricción | |
+| validation | validación | |
+| discriminator | discriminador | |
+| definition library | biblioteca de definiciones | |
+| fixture | archivo de ejemplo | «fixture» entre paréntesis solo si el contexto lo exige; negativo → «ejemplo negativo» |
+| load target / rep target | objetivo de carga / objetivo de repeticiones | |
+| intensity zone | zona de intensidad | |
+| progression rule | regla de progresión | |
+| execution mode | modo de ejecución | |
+| block role | rol del bloque | |
+| kinetic chain | cadena cinética | |
+| canonical | canónico | |
+| snapshot | instantánea | «instantánea congelada de la prescripción» |
+| opaque reference | referencia opaca | |
+| round-trip | round-trip | sin traducir, en cursiva; «no puede hacer el *round-trip*» |
+| test suite | suite de pruebas | femenino: «la suite» |
+| lifecycle | ciclo de vida | |
+| guiding principles | principios rectores | |
+| steward / stewardship | custodio / custodia | nunca «administrador» (colisiona con roles técnicos) |
+| capture (de un estándar) | captura | «captura por un proveedor» |
+| lazy consensus | consenso tácito | «lazy consensus» entre paréntesis en la primera mención |
+| review | revisión | «ventana de revisión» |
+| editor (rol) | editor | |
+| implementer | implementador | |
+| issue / pull request (PR) | issue / pull request (PR) | artefactos de GitHub; masculinos, sin traducir |
+| fork | fork | masculino, sin traducir; «hacer un fork» |
+| vote | votación | |
+| amendment | enmienda | |
+| responsible disclosure | divulgación responsable | |
+| vulnerability | vulnerabilidad | |
+| migration | migración | «notas de migración» |
+| draft / review / accepted / deprecated (estados) | borrador / en revisión / aceptado / obsoleto | estados de ciclo de vida en prosa; los valores `draft`, `review`… no se traducen |
+| consent | consentimiento | |
+| retention / erasure | retención / supresión | vocabulario de protección de datos |
+| license agreement | acuerdo de licencia | el cuerpo del acuerdo permanece en inglés; solo se traduce el preámbulo |
+| legally binding | jurídicamente vinculante | |
+| registry (vocabulary) | registro de vocabulario | «registro de valores recomendados» cuando convenga desambiguar |
