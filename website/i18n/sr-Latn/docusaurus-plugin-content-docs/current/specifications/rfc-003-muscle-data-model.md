@@ -51,7 +51,7 @@ Ova specifikacija ima za cilj da:
 ## 2. Terminologija
 
 - **Mišić**: Anatomsko kontraktilno tkivo koje generiše silu i proizvodi pokret
-- **Kanonski podaci**: Standardizovane identifikujuće informacije (naziv, slug, alijasi)
+- **Kanonski podaci**: Standardizovane identifikacione informacije (naziv, slug, alijasi)
 - **Klasifikacija**: Podaci o anatomskoj kategorizaciji (kategorija, region, lateralnost)
 - **Region**: Grupisanje po anatomskoj lokaciji (upper-front, lower-back itd.)
 - **Lateralnost**: Karakteristika simetrije (bilateral, unilateral, left, right)
@@ -121,7 +121,7 @@ Uobičajeno podržana opciona polja koja unapređuju interoperabilnost:
 
 ### 3.3. Mehanizmi ekstenzija
 
-Dve tačke proširenja za podatke specifične za platformu:
+Dve tačke ekstenzija za podatke specifične za platformu:
 
 #### 3.3.1. Atributi (strukturirane ekstenzije)
 Za uobičajene ekstenzije koje mogu postati standardizovane:
@@ -170,7 +170,7 @@ Za složene strukture podataka jedinstvene za platformu:
 
 ### 4.2. Struktura klasifikacije
 
-`classification` smešta mišić u katalog. `categoryId` je grupa kategorije mišića kojoj pripada (RFC-004) i ono je što omogućava agregaciju obima po grupi bez tabele za pretragu. `tags` su slobodne oznake koje ne nose nikakvu strukturnu posledicu.
+`classification` smešta mišić u katalog. `categoryId` je kategorija mišića kojoj mišić pripada (RFC-004) i upravo to omogućava agregaciju obima po grupi bez tabele za pretragu. `tags` su slobodne oznake koje ne nose nikakvu strukturnu posledicu.
 
 ```json fds:fragment entity=muscle
 {
@@ -244,7 +244,7 @@ Napomene:
 
 ## 5. Verzionisanje i kompatibilnost
 
-### 5.1. Verzionisanje šema
+### 5.1. Verzionisanje šeme
 
 Prema semantičkom verzionisanju:
 - **Glavna**: Nekompatibilne izmene obaveznih polja
@@ -437,7 +437,7 @@ function importMuscle(rfc003Data: RFC003Muscle) {
 
 :::danger MORA
 - **MORAJU** da emituju JSON koji se validira prema šemi Muscle za deklarisani `schemaVersion`.
-- **MORAJU** da koriste UUIDv4 za sve identifikatore u produkcionim podacima (npr. `id` mišića). Kratki primeri ID-jeva u ovom RFC-u su samo ilustrativni.
+- **MORAJU** da koriste UUIDv4 za sve identifikatore u produkcionim podacima (npr. `id` mišića). Kratki ID-jevi korišćeni kao primeri u ovom RFC-u su samo ilustrativni.
 - **MORAJU** da popune sva obavezna polja i poštuju enumeracije i strukturu.
 :::
 
@@ -460,7 +460,7 @@ function importMuscle(rfc003Data: RFC003Muscle) {
 **Kompatibilnost:**
 
 :::danger MORA
-- Opciona polja dodata u sporednim verzijama **NE SMEJU** da naruše konzumente; konzumenti **TREBALO BI** da ignorišu nepoznata opciona polja.
+- Opciona polja dodata u sporednim verzijama **NE SMEJU** da naruše rad konzumenata; konzumenti **TREBALO BI** da ignorišu nepoznata opciona polja.
 - Nova obavezna polja su izmena **GLAVNE** verzije i zahtevaju koordinisane nadogradnje.
 :::
 
@@ -474,7 +474,7 @@ Dodatni resursi:
 
 ### 10.1. Normativne reference
 - [JSON Schema Draft 2020-12](https://json-schema.org/draft/2020-12/schema)
-- [RFC 3339: Date/Time](https://tools.ietf.org/html/rfc3339)
+- [RFC 3339: Datum/vreme](https://tools.ietf.org/html/rfc3339)
 - [RFC-001: Specifikacija modela podataka o vežbi](./rfc-001-exercise-data-model.md)
 - [RFC-002: Specifikacija modela podataka o opremi](./rfc-002-equipment-data-model.md)
  - [RFC-005: Specifikacija modela podataka o atlasu tela](./rfc-005-body-atlas-data-model.md)
@@ -492,7 +492,7 @@ Ovaj dokument podleže pravima, licencama i ograničenjima sadržanim u dokument
 
 ## Smernice za konzumente (agregacija toplotnih mapa)
 
-Konzumenti MOGU da agregiraju toplotne mape više mišića radi vizuelizacije (npr. za prikaz vežbe ili treninga). Kombinujte oblasti po `areaId` unutar istog `atlasId` koristeći ili:
+Konzumenti MOGU da agregiraju toplotne mape više mišića radi vizuelizacije (npr. za prikaz vežbe ili treninga). Kombinujte regione po `areaId` unutar istog `atlasId` koristeći ili:
 - Maks agregaciju: `weight = max(weights)` (jednostavna i stabilna), ili
 - Normalizovani zbir sa gornjom granicom: `weight = min(1.0, sum(weights))` (naglašava preklapanje).
 

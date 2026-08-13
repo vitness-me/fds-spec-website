@@ -170,6 +170,9 @@ En las cadenas de la interfaz se usan comillas inglesas ("…"); las angulares
 | drop set | drop set | el sustantivo «descensos» sí traduce las bajadas dentro de la serie |
 | sweet spot / rest-pause / myo-reps / chipper / fartlek | sweet spot / rest-pause / myo-reps / chipper / fartlek | ingleses asentados; no se traducen |
 | cluster | clúster | préstamo con ortografía española; «clúster», «clústeres» |
+| decimales en prosa | punto | «82.5%», «0.75 m/s» — espejan los valores JSON de los fixtures; convención deliberada de esta locale |
+| compute | calcular | nunca «computar» |
+| conforms to | es conforme con | nunca «conforma con» |
 | triset / compound set | triserie / serie compuesta | |
 | antagonist pairing | emparejamiento de antagonistas | |
 | partials | repeticiones parciales | |

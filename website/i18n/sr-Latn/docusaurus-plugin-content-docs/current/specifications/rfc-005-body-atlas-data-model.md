@@ -88,7 +88,7 @@ Svi usaglašeni zapisi atlasa **MORAJU** da uključuju:
 ```
 
 ### 3.2. Prikazi
-- `views[*].id` je stabilan identifikator koji koristi `areas[*].bindings[*].viewId`.
+- `views[*].id` je stabilan identifikator koji se koristi u `areas[*].bindings[*].viewId`.
 - `views[*].kind` je jedno od `anterior`, `posterior`, `left-lateral`, `right-lateral`, `superior`, `inferior`.
 - `views[*].asset` TREBALO BI da bude SVG radi najbolje prenosivosti (drugi tipovi su dozvoljeni).
 
@@ -159,7 +159,7 @@ Svako vezivanje uparuje `viewId` sa `selector`-om u resurs tog prikaza. Oblast m
 - Zapisi atlasa prate SemVer u `schemaVersion`.
 - Uvođenje novih prikaza ili oblasti je sporedna nadogradnja ako ne poništava postojeće reference.
 - Preimenovanje ili uklanjanje postojećih oblasti je glavna nadogradnja i NE SME da se dogodi u sporednim izdanjima.
-- Više verzija atlasa može postojati istovremeno; entiteti koji referenciraju TREBALO BI da navedu nameravani `atlasId`.
+- Više verzija atlasa može postojati istovremeno; entiteti koji ga referenciraju TREBALO BI da navedu nameravani `atlasId`.
 
 ## 6. Smernice za implementaciju
 

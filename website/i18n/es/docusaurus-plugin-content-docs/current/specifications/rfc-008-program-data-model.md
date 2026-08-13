@@ -231,7 +231,7 @@ Un programa hereda cada requisito de resolución de cada sesión que referencia,
 
 Esta entidad sigue las reglas de versionado del RFC-001 §5. Su URL publicada es un contrato congelado; las adiciones se publican en una nueva URL de versión.
 
-Agregar un `schedule.model`, un `intent` de ciclo, un `kind` de condición o un tipo de `relations` es un cambio MINOR. Los documentos válidos bajo la versión anterior siguen siendo válidos: los clasificadores abiertos ya aceptaban el valor, y un modelo nuevo antes validaba a través de la rama comodín.
+Agregar un `schedule.model`, un `intent` de ciclo, un `kind` de condición o un tipo de `relations` es un cambio MENOR. Los documentos válidos bajo la versión anterior siguen siendo válidos: los clasificadores abiertos ya aceptaban el valor, y un modelo nuevo antes validaba a través de la rama comodín.
 
 Las entidades versionan de forma independiente. Una nueva versión de program no obliga a moverse a workout, a exercise ni a la biblioteca de prescripción, y ninguna de sus versiones obliga a esta.
 
@@ -407,7 +407,7 @@ Junto al esquema se publican ejemplos resueltos para cada modelo de periodizaci�
 
 ## Conformidad
 
-Una implementación conforma con esta especificación si:
+Una implementación es conforme con esta especificación si:
 
 1. Resuelve las referencias `days[].workout` en lugar de esperar sesiones incrustadas, e informa un día cuya referencia no puede resolverse en lugar de omitirlo.
 2. Coloca los días usando el campo nombrado por `schedule.model`, y no ejecuta un modelo que no reconoce.

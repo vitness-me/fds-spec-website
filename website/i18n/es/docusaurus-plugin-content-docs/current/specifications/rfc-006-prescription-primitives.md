@@ -246,9 +246,9 @@ Esto reformula el §3.3 para una falla distinta: el §3.3 gobierna un método qu
 
 Esta biblioteca sigue las reglas de versionado del RFC-001 §5. Su URL publicada es un contrato congelado: los bytes en `prescription/v1.0.0/prescription.schema.json` no cambiarán. Las adiciones se publican como una nueva versión minor en una nueva URL.
 
-Agregar un método a una unión discriminada es un cambio MINOR: los documentos válidos bajo la versión anterior siguen siendo válidos, porque el nuevo método antes validaba a través de la rama comodín. Esa es la propiedad de compatibilidad que la rama comodín existe para proporcionar, y es la razón por la que la rama se especifica en lugar de dejarse a las implementaciones.
+Agregar un método a una unión discriminada es un cambio MENOR: los documentos válidos bajo la versión anterior siguen siendo válidos, porque el nuevo método antes validaba a través de la rama comodín. Esa es la propiedad de compatibilidad que la rama comodín existe para proporcionar, y es la razón por la que la rama se especifica en lugar de dejarse a las implementaciones.
 
-Eliminar un método, o estrechar una carga útil existente, es un cambio MAJOR.
+Eliminar un método, o estrechar una carga útil existente, es un cambio MAYOR.
 
 ## 7. Guía de implementación
 
@@ -309,7 +309,7 @@ Junto al esquema se publican ejemplos resueltos para cada método del §4.1.
 
 ## Conformidad
 
-Una implementación conforma con esta especificación si:
+Una implementación es conforme con esta especificación si:
 
 1. Acepta cada método y cada kind definidos en §4, incluso a través de la rama de compatibilidad hacia adelante.
 2. Ignora los objetivos de carga cuyo método no entiende, advierte, y no sustituye un valor.
