@@ -177,7 +177,7 @@ polja šema, komande i identifikatori se ne prevode.
 | view / area / region (atlas) | prikaz / oblast / region | „region“ i za heatmap regione; nikada „regija“ |
 | top set / back-off set | top serija / back-off serija | ustaljeni engleski, po odluci projekta — kao EMOM i Tabata; „odlaganje“ ostaje API smisao backoff-a |
 | drop set | drop set | „procenti pada“ i dalje opisuju smanjenja unutar serije |
-| sweet spot / rest-pause / myo-reps | sweet spot / rest-pause / myo-reps | ustaljeni engleski; ne prevode se |
+| sweet spot / rest-pause / myo-reps / chipper / fartlek | sweet spot / rest-pause / myo-reps / chipper / fartlek | ustaljeni engleski; ne prevode se |
 | cluster | klaster | pozajmljenica u domaćem pravopisu, kao „keš“ |
 | failure (mišićni) | otkaz | tehnički / apsolutni otkaz |
 | isometric hold | izdržaj | |
