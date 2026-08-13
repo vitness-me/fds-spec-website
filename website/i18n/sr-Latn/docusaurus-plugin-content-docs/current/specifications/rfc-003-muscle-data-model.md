@@ -454,7 +454,7 @@ function importMuscle(rfc003Data: RFC003Muscle) {
 
 :::tip TREBALO BI
 - **TREBALO BI** da tolerišu dodatna opciona polja uvedena u novijim sporednim verzijama.
-- **TREBALO BI** da odbace podatke kojima nedostaju obavezna polja ili imaju nevažeće enumeracije.
+- **TREBALO BI** da odbace podatke kojima nedostaju obavezna polja ili koji imaju nevažeće enumeracije.
 :::
 
 **Kompatibilnost:**

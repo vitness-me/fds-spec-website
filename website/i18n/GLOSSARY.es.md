@@ -168,7 +168,7 @@ En las cadenas de la interfaz se usan comillas inglesas ("…"); las angulares
 | core (anatomía) | core | sin traducir; el valor `core` tampoco |
 | top set / back-off set | serie top / serie back-off | ingleses asentados, por decisión del proyecto — como EMOM y Tabata |
 | drop set | drop set | el sustantivo «descensos» sí traduce las bajadas dentro de la serie |
-| sweet spot / rest-pause / myo-reps | sweet spot / rest-pause / myo-reps | ingleses asentados; no se traducen |
+| sweet spot / rest-pause / myo-reps / chipper / fartlek | sweet spot / rest-pause / myo-reps / chipper / fartlek | ingleses asentados; no se traducen |
 | cluster | clúster | préstamo con ortografía española; «clúster», «clústeres» |
 | triset / compound set | triserie / serie compuesta | |
 | antagonist pairing | emparejamiento de antagonistas | |
