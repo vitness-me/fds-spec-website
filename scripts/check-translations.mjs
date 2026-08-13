@@ -161,11 +161,32 @@ function fdsMarkers(markdown) {
   return (markdown.match(/<!--\s*fds:[\s\S]*?-->/g) ?? []).map((m) => m.replace(/\s+/g, ' ')).sort();
 }
 
-/** Serbian is Latin-script here, by decision. Cyrillic is a defect. */
+/**
+ * Serbian is Latin-script here, by decision. Cyrillic is a defect — in the
+ * translation. Fenced code blocks are exempt in markdown: their bytes are
+ * already forced identical to the English source's, and the standard's own
+ * examples legitimately carry Cyrillic *data* (RFC-001's exercise JSON
+ * localises a name in sr-Cyrl — that is the standard's i18n feature, not a
+ * script violation by the translator). Failing on it would make the fence
+ * rule and the script rule impossible to satisfy at once.
+ */
 function checkCyrillic(locale, relPath, text) {
   if (locale !== 'sr-Latn') return;
+  const markdown = /\.mdx?$/.test(relPath);
   const lines = text.split('\n');
+  let openFence = null;
   for (let i = 0; i < lines.length; i += 1) {
+    if (markdown) {
+      const fence = lines[i].match(/^\s*(`{3,}|~{3,})/);
+      if (openFence) {
+        if (fence && fence[1][0] === openFence[0] && fence[1].length >= openFence.length) openFence = null;
+        continue; // inside a fence, or its closing line — enforced verbatim elsewhere
+      }
+      if (fence) {
+        openFence = fence[1];
+        continue;
+      }
+    }
     const hit = lines[i].match(/[Ѐ-ӿ]/);
     if (hit) {
       problem(
