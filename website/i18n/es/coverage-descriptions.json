@@ -1,0 +1,361 @@
+{
+  "rows": {
+    "workout/v1.1.0/workout.straight.example.json": {
+      "en": "Three identical sets. The baseline everything else departs from.",
+      "translation": "Tres series idénticas. La línea base de la que parte todo lo demás."
+    },
+    "workout/v1.1.0/workout.ramping.example.json": {
+      "en": "Ascending load across five sets to a top set.",
+      "translation": "Carga ascendente a lo largo de cinco series hasta una serie tope."
+    },
+    "workout/v1.1.0/workout.reverse-pyramid.example.json": {
+      "en": "Heaviest set first, dropping 10% each set as fatigue accumulates.",
+      "translation": "La serie más pesada primero, bajando 10% en cada serie a medida que se acumula la fatiga."
+    },
+    "workout/v1.1.0/workout.drop-sets.example.json": {
+      "en": "Three consecutive drops with no rest, taken to technical failure.",
+      "translation": "Tres descensos consecutivos sin descanso, llevados al fallo técnico."
+    },
+    "workout/v1.1.0/workout.rest-pause.example.json": {
+      "en": "One set to near-failure, resumed after 15-second rests.",
+      "translation": "Una serie hasta cerca del fallo, reanudada tras descansos de 15 segundos."
+    },
+    "workout/v1.1.0/workout.cluster.example.json": {
+      "en": "Reps in pairs with programmed rest *inside* the set, so heavy load stays fast.",
+      "translation": "Repeticiones en pares con descanso programado *dentro* de la serie, para que la carga pesada se mantenga rápida."
+    },
+    "workout/v1.1.0/workout.myo-reps.example.json": {
+      "en": "An activation set followed by four short mini-sets at RIR 1.",
+      "translation": "Una serie de activación seguida de cuatro miniseries cortas a RIR 1."
+    },
+    "workout/v1.1.0/workout.amrap-reps.example.json": {
+      "en": "A single set of as many reps as possible, with a floor and a cap — AMRAP as a *rep target*, distinct from an AMRAP block.",
+      "translation": "Una sola serie de tantas repeticiones como sea posible, con un mínimo y un tope — AMRAP como *objetivo de repeticiones*, distinto de un bloque AMRAP."
+    },
+    "workout/v1.1.0/workout.top-set-backoff.example.json": {
+      "en": "One heavy top set at RPE 8, then three back-offs 10% lighter.",
+      "translation": "Una serie tope pesada a RPE 8, luego tres series de descenso un 10% más ligeras."
+    },
+    "workout/v1.1.0/workout.wave-loading.example.json": {
+      "en": "A 3‑2‑1 rep ladder run three times at the same load.",
+      "translation": "Una escalera de repeticiones 3‑2‑1 realizada tres veces con la misma carga."
+    },
+    "workout/v1.1.0/workout.ladders.example.json": {
+      "en": "Ascending rungs 1–5 with short rests.",
+      "translation": "Peldaños ascendentes de 1–5 con descansos cortos."
+    },
+    "workout/v1.1.0/workout.density.example.json": {
+      "en": "Maximum sets inside a ten-minute cap — the one scheme where set count is the outcome, not the input.",
+      "translation": "Máximo de series dentro de un tope de diez minutos — el único esquema donde el número de series es el resultado, no el dato de entrada."
+    },
+    "workout/v1.1.0/workout.technical-failure.example.json": {
+      "en": "Both failure kinds in one item: technical failure on set one, absolute failure on set two.",
+      "translation": "Ambos tipos de fallo en un solo elemento: fallo técnico en la serie uno, fallo absoluto en la serie dos."
+    },
+    "workout/v1.1.0/workout.tempo-reps.example.json": {
+      "en": "A four-second eccentric with an explosive concentric.",
+      "translation": "Una excéntrica de cuatro segundos con una concéntrica explosiva."
+    },
+    "workout/v1.1.0/workout.paused-reps.example.json": {
+      "en": "A three-second pause at the bottom, which is `tempo.bottomPause` rather than a scheme.",
+      "translation": "Una pausa de tres segundos en la posición inferior, que es `tempo.bottomPause` y no un esquema."
+    },
+    "workout/v1.1.0/workout.partials.example.json": {
+      "en": "Full-range reps followed by bottom-half partials. Uses `repStyle` — nothing else in the model reaches range of motion.",
+      "translation": "Repeticiones de rango completo seguidas de parciales de la mitad inferior. Usa `repStyle` — nada más en el modelo llega al rango de movimiento."
+    },
+    "workout/v1.1.0/workout.one-and-a-half-reps.example.json": {
+      "en": "A full rep plus a half counted as one, via `repStyle.pattern`.",
+      "translation": "Una repetición completa más media contada como una, mediante `repStyle.pattern`."
+    },
+    "workout/v1.1.0/workout.isometric-holds.example.json": {
+      "en": "A hold with a floor and a cap, using `repTarget.maxHold`.",
+      "translation": "Una isometría con un mínimo y un tope, usando `repTarget.maxHold`."
+    },
+    "workout/v1.1.0/workout.timed-sets.example.json": {
+      "en": "45-second efforts in a heart-rate zone — the clock terminates the set, not a rep count.",
+      "translation": "Esfuerzos de 45 segundos en una zona de frecuencia cardíaca — el reloj termina la serie, no un conteo de repeticiones."
+    },
+    "workout/v1.1.0/workout.single.example.json": {
+      "en": "One exercise, `sequential`. The degenerate case.",
+      "translation": "Un ejercicio, `sequential`. El caso degenerado."
+    },
+    "workout/v1.1.0/workout.superset.example.json": {
+      "en": "Two items alternated via `groupLabel` `A1`/`A2`, rest at the group boundary.",
+      "translation": "Dos elementos alternados mediante `groupLabel` `A1`/`A2`, con descanso en el límite del grupo."
+    },
+    "workout/v1.1.0/workout.triset.example.json": {
+      "en": "Three items in one group.",
+      "translation": "Tres elementos en un grupo."
+    },
+    "workout/v1.1.0/workout.giant-set.example.json": {
+      "en": "Four items in one group. Nothing in the schema caps group size.",
+      "translation": "Cuatro elementos en un grupo. Nada en el esquema limita el tamaño del grupo."
+    },
+    "workout/v1.1.0/workout.compound-set.example.json": {
+      "en": "Two items training the same muscle. **Structurally identical to the antagonist pairing below** — see RFC-007 §3.3 for why that is deliberate.",
+      "translation": "Dos elementos que entrenan el mismo músculo. **Estructuralmente idéntico al emparejamiento antagonista de abajo** — véase RFC-007 §3.3 para saber por qué es deliberado."
+    },
+    "workout/v1.1.0/workout.antagonist-pairing.example.json": {
+      "en": "Two items training opposing muscles. The difference from a compound set is derivable from the exercises, not encoded here.",
+      "translation": "Dos elementos que entrenan músculos opuestos. La diferencia con una serie compuesta se deriva de los ejercicios, no se codifica aquí."
+    },
+    "workout/v1.1.0/workout.barbell-complex.example.json": {
+      "en": "One barbell, one load, four movements, no rest until the round ends.",
+      "translation": "Una barra, una carga, cuatro movimientos, sin descanso hasta que termina la ronda."
+    },
+    "workout/v1.1.0/workout.circuit.example.json": {
+      "en": "One set of each item per round, four rounds, rest between rounds.",
+      "translation": "Una serie de cada elemento por ronda, cuatro rondas, descanso entre rondas."
+    },
+    "workout/v1.1.0/workout.emom.example.json": {
+      "en": "Every minute on the minute for twelve intervals.",
+      "translation": "Cada minuto en punto durante doce intervalos."
+    },
+    "workout/v1.1.0/workout.amrap-block.example.json": {
+      "en": "As many rounds as possible in twenty minutes — AMRAP as a *block mode*, distinct from the rep target above.",
+      "translation": "Tantas rondas como sea posible en veinte minutos — AMRAP como *modo de bloque*, distinto del objetivo de repeticiones anterior."
+    },
+    "workout/v1.1.0/workout.for-time.example.json": {
+      "en": "Fixed work completed as fast as possible, under a cap.",
+      "translation": "Trabajo fijo completado lo más rápido posible, bajo un tope."
+    },
+    "workout/v1.1.0/workout.chipper.example.json": {
+      "en": "One descending pass through five movements, each finished before the next.",
+      "translation": "Una sola pasada descendente por cinco movimientos, cada uno terminado antes del siguiente."
+    },
+    "workout/v1.1.0/workout.tabata.example.json": {
+      "en": "Eight rounds of 20 seconds work, 10 seconds rest.",
+      "translation": "Ocho rondas de 20 segundos de trabajo y 10 segundos de descanso."
+    },
+    "workout/v1.1.0/workout.ladder-circuit.example.json": {
+      "en": "A scheme and a mode composing: ladder rungs *inside* a circuit.",
+      "translation": "Un esquema y un modo en composición: peldaños de escalera *dentro* de un circuito."
+    },
+    "workout/v1.1.0/workout.warmup-block.example.json": {
+      "en": "A `warmup` block preceding the working block, in one session.",
+      "translation": "Un bloque `warmup` que precede al bloque de trabajo, en una misma sesión."
+    },
+    "workout/v1.1.0/workout.cooldown-block.example.json": {
+      "en": "Zone-1 work followed by a `cooldown` block of holds.",
+      "translation": "Trabajo en zona 1 seguido de un bloque `cooldown` de isometrías."
+    },
+    "workout/v1.1.0/workout.finisher.example.json": {
+      "en": "A working block plus a four-minute `finisher` taken to technical failure.",
+      "translation": "Un bloque de trabajo más un `finisher` de cuatro minutos llevado al fallo técnico."
+    },
+    "prescription/v1.0.0/loadTarget.absolute.example.json": {
+      "en": "A fixed load. The only method that needs no resolution context.",
+      "translation": "Una carga fija. El único método que no necesita contexto de resolución."
+    },
+    "prescription/v1.0.0/loadTarget.percent1RM.example.json": {
+      "en": "82.5% of the prescribed exercise's own one-rep max — the percentage-driven program case.",
+      "translation": "82.5% de la repetición máxima (1RM) del propio ejercicio prescrito — el caso de los programas por porcentajes."
+    },
+    "prescription/v1.0.0/loadTarget.percent-bodyweight.example.json": {
+      "en": "60% of bodyweight. Unresolvable inside FDS by design — there is no athlete to read a bodyweight from.",
+      "translation": "60% del peso corporal. Irresoluble dentro de FDS por diseño — no hay atleta del que leer un peso corporal."
+    },
+    "prescription/v1.0.0/loadTarget.rpe.example.json": {
+      "en": "RPE 8 with half-points allowed. The athlete picks the load.",
+      "translation": "RPE 8 con medios puntos permitidos. El atleta elige la carga."
+    },
+    "prescription/v1.0.0/loadTarget.rir.example.json": {
+      "en": "Two reps in reserve. The inverse scale to RPE; a bare `count` cannot tell you which was meant, which is why they are separate methods.",
+      "translation": "Dos repeticiones en reserva. La escala inversa a RPE; un `count` a secas no puede decir cuál era la intención, y por eso son métodos separados."
+    },
+    "prescription/v1.0.0/loadTarget.velocity-with-loss-threshold.example.json": {
+      "en": "Velocity-based training: lift at 0.75 m/s, end the set when bar speed has dropped 20% from the fastest rep. The set length is decided by the bar, not the program.",
+      "translation": "Entrenamiento basado en velocidad: levantar a 0.75 m/s y terminar la serie cuando la velocidad de la barra haya caído 20% respecto a la repetición más rápida. La duración de la serie la decide la barra, no el programa."
+    },
+    "prescription/v1.0.0/loadTarget.machine-level.example.json": {
+      "en": "A machine setting, with `scale` naming whose numbering it is. Reproduces a session on *that* machine and means nothing on another.",
+      "translation": "Un ajuste de máquina, con `scale` nombrando de quién es la numeración. Reproduce una sesión en *esa* máquina y no significa nada en otra."
+    },
+    "prescription/v1.0.0/loadTarget.band-resistance.example.json": {
+      "en": "A green band with an estimated equivalent load. Colour conventions are manufacturer-specific, so `equipment` says whose scale is meant and `estimatedLoad` is explicitly an approximation.",
+      "translation": "Una banda verde con una carga equivalente estimada. Las convenciones de color dependen del fabricante, así que `equipment` dice de quién es la escala y `estimatedLoad` es explícitamente una aproximación."
+    },
+    "prescription/v1.0.0/loadTarget.autoregulated.example.json": {
+      "en": "Load deferred to a progression rule resolved at execution time (here, APRE).",
+      "translation": "Carga delegada a una regla de progresión resuelta en el momento de la ejecución (aquí, APRE)."
+    },
+    "prescription/v1.0.0/loadTarget.relative-last-session.example.json": {
+      "en": "Last session plus 2.5 kg. Linear progression, resolvable only against training history.",
+      "translation": "La última sesión más 2.5 kg. Progresión lineal, resoluble solo contra el historial de entrenamiento."
+    },
+    "prescription/v1.0.0/loadTarget.relative-e1rm.example.json": {
+      "en": "Ten percent *below* an estimated 1RM for a named lift. A negative delta is normal here: e1RM is computed from a set taken near failure, so programming under it is the usual case, not an error.",
+      "translation": "Diez por ciento *por debajo* de un 1RM estimado para un levantamiento designado. Un delta negativo es normal aquí: el e1RM se calcula a partir de una serie llevada cerca del fallo, así que programar por debajo es el caso habitual, no un error."
+    },
+    "prescription/v1.0.0/loadTarget.relative-training-max.example.json": {
+      "en": "90% of a training max — the 5/3/1-style basis, where the reference is deliberately below a true max.",
+      "translation": "90% de un máximo de entrenamiento — la base al estilo 5/3/1, donde la referencia está deliberadamente por debajo del máximo real."
+    },
+    "prescription/v1.0.0/loadTarget.percent1RM-of-another-lift.example.json": {
+      "en": "70% of a *different* lift's max. Accessory work is routinely scaled off a main lift, and without `referenceExerciseId` there is nowhere to say so.",
+      "translation": "70% del máximo de un levantamiento *distinto*. El trabajo accesorio se escala rutinariamente a partir de un levantamiento principal, y sin `referenceExerciseId` no hay dónde decirlo."
+    },
+    "prescription/v1.0.0/loadTarget.bodyweight.example.json": {
+      "en": "Bodyweight, unscaled and unloaded.",
+      "translation": "Peso corporal, sin escalar y sin carga añadida."
+    },
+    "prescription/v1.0.0/loadTarget.assisted.example.json": {
+      "en": "20 kg of *assistance*. The value is positive and more of it is less effort — a consumer plotting this as resistance shows an athlete regressing as they get stronger.",
+      "translation": "20 kg de *asistencia*. El valor es positivo y más asistencia implica menos esfuerzo — un consumidor que lo grafique como resistencia muestra a un atleta retrocediendo a medida que se hace más fuerte."
+    },
+    "workout/v1.1.0/workout.duration.example.json": {
+      "en": "Thirty minutes in a heart-rate zone. The clock terminates the effort, and no rep count is invented to stand in for one.",
+      "translation": "Treinta minutos en una zona de frecuencia cardíaca. El reloj termina el esfuerzo, y no se inventa un conteo de repeticiones para sustituirlo."
+    },
+    "workout/v1.1.0/workout.distance.example.json": {
+      "en": "Five kilometres. Distance terminates the effort, so duration is the outcome rather than the prescription.",
+      "translation": "Cinco kilómetros. La distancia termina el esfuerzo, así que la duración es el resultado y no la prescripción."
+    },
+    "workout/v1.1.0/workout.pace.example.json": {
+      "en": "Distance says how far, zone says how fast. Note that a *higher* pace zone means a *lower* time per kilometre — the one place zone ordering and the underlying number run in opposite directions.",
+      "translation": "La distancia dice cuán lejos, la zona dice cuán rápido. Nótese que una zona de ritmo *más alta* implica un tiempo por kilómetro *más bajo* — el único lugar donde el orden de las zonas y el número subyacente van en direcciones opuestas."
+    },
+    "workout/v1.1.0/workout.hr-zone.example.json": {
+      "en": "`boundsRef` names the registry entry that defines Z2. The athlete's beats per minute are caller context and never appear here.",
+      "translation": "`boundsRef` nombra la entrada del registro que define la Z2. Las pulsaciones por minuto del atleta son contexto de quien llama y nunca aparecen aquí."
+    },
+    "workout/v1.1.0/workout.power-zone.example.json": {
+      "en": "Sweet-spot intervals against the Coggan seven-zone model. What percentage of threshold power a zone corresponds to belongs to the registry entry, not to the session.",
+      "translation": "Intervalos de sweet spot contra el modelo de siete zonas de Coggan. A qué porcentaje de la potencia umbral corresponde una zona pertenece a la entrada del registro, no a la sesión."
+    },
+    "workout/v1.1.0/workout.structured-intervals.example.json": {
+      "en": "The canonical 4×4. Work and rest live in `modeParams` because they are properties of the interval structure, not of the exercise performed inside it.",
+      "translation": "El 4×4 canónico. El trabajo y el descanso viven en `modeParams` porque son propiedades de la estructura del intervalo, no del ejercicio realizado dentro de él."
+    },
+    "workout/v1.1.0/workout.fartlek.example.json": {
+      "en": "Deliberately unstructured surges. `sequential` rather than `interval` precisely because the surge lengths are the athlete's — it looks like intervals and is not.",
+      "translation": "Aceleraciones deliberadamente no estructuradas. `sequential` en lugar de `interval` precisamente porque la longitud de las aceleraciones es del atleta — parece intervalos y no lo es."
+    },
+    "workout/v1.1.0/workout.machine-settings.example.json": {
+      "en": "Incline climbing per set, then cadence with a tolerance band. Shows the 1.1.0 additions doing the work they exist for, and shows the division: resistance is a *load* (`loadTarget.method: \"level\"` with a named scale), incline and cadence are *settings* the athlete dials in.",
+      "translation": "Inclinación que sube por serie, luego cadencia con una banda de tolerancia. Muestra las adiciones de 1.1.0 haciendo el trabajo para el que existen, y muestra la división: la resistencia es una *carga* (`loadTarget.method: \"level\"` con una escala designada), la inclinación y la cadencia son *ajustes* que el atleta configura."
+    },
+    "workout/v1.1.0/workout.negative-splits.example.json": {
+      "en": "Two halves with ascending pace zones. The relationship between them *is* the session, so it is expressed as two items rather than one item with a note.",
+      "translation": "Dos mitades con zonas de ritmo ascendentes. La relación entre ellas *es* la sesión, así que se expresa como dos elementos y no como un elemento con una nota."
+    },
+    "workout/v1.1.0/workout.progressive.example.json": {
+      "en": "Intensity climbing every five minutes and never coming back down. Each step is its own **item** rather than its own set, because `zone` sits on an item and not on a set.",
+      "translation": "Intensidad que sube cada cinco minutos y nunca vuelve a bajar. Cada escalón es su propio **elemento** y no su propia serie, porque `zone` está en el elemento y no en la serie."
+    },
+    "prescription/v1.0.0/restSpec.fixed.example.json": {
+      "en": "Three minutes between sets. The baseline the other four depart from.",
+      "translation": "Tres minutos entre series. La línea base de la que parten los otros cuatro."
+    },
+    "prescription/v1.0.0/restSpec.range.example.json": {
+      "en": "90–120 seconds between sets.",
+      "translation": "90–120 segundos entre series."
+    },
+    "prescription/v1.0.0/restSpec.to-heart-rate.example.json": {
+      "en": "Rest until heart rate falls to 120 bpm — needs live data at execution time.",
+      "translation": "Descansar hasta que la frecuencia cardíaca baje a 120 bpm — necesita datos en vivo en el momento de la ejecución."
+    },
+    "prescription/v1.0.0/restSpec.as-needed.example.json": {
+      "en": "Athlete's discretion, stated rather than omitted.",
+      "translation": "A discreción del atleta, declarado en lugar de omitido."
+    },
+    "prescription/v1.0.0/restSpec.work-to-rest-ratio.example.json": {
+      "en": "1:2, resolved against the work interval's duration.",
+      "translation": "1:2, resuelto contra la duración del intervalo de trabajo."
+    },
+    "prescription/v1.0.0/restScope.set.example.json": {
+      "en": "The scope value on its own — between sets of one exercise.",
+      "translation": "El valor de alcance por sí solo — entre series de un mismo ejercicio."
+    },
+    "prescription/v1.0.0/restScope.group.example.json": {
+      "en": "Between the members of a group, where the rest is a transition rather than a recovery.",
+      "translation": "Entre los miembros de un grupo, donde el descanso es una transición y no una recuperación."
+    },
+    "prescription/v1.0.0/restScope.round.example.json": {
+      "en": "Between rounds of a circuit.",
+      "translation": "Entre rondas de un circuito."
+    },
+    "program/v1.0.0/program.linear.example.json": {
+      "en": "The whole methodology in one `progressionRule`: add load whenever every rep is completed. Both weeks are identical — the load moves, the plan does not.",
+      "translation": "Toda la metodología en una sola `progressionRule`: agregar carga cuando se completan todas las repeticiones. Las dos semanas son idénticas: la carga se mueve, el plan no."
+    },
+    "program/v1.0.0/program.daily-undulating.example.json": {
+      "en": "Three rep ranges across one week, expressed by scheduling three different sessions. The undulation is in the workouts; the program says only which falls on which day.",
+      "translation": "Tres rangos de repeticiones en una semana, expresados programando tres sesiones distintas. La ondulación está en las sesiones; el programa solo dice cuál cae en qué día."
+    },
+    "program/v1.0.0/program.weekly-undulating.example.json": {
+      "en": "The same two sessions for three weeks, undulated entirely by `overrides.loadScaling` — medium, heavy, light. The workouts stay reusable because nothing was edited into them.",
+      "translation": "Las mismas dos sesiones durante tres semanas, onduladas por completo mediante `overrides.loadScaling` — media, pesada, ligera. Las sesiones siguen siendo reutilizables porque no se editó nada dentro de ellas."
+    },
+    "program/v1.0.0/program.block.example.json": {
+      "en": "Three `meso` cycles sequenced by `order`, with `intent` `accumulation` → `intensification` → `realization`.",
+      "translation": "Tres ciclos `meso` secuenciados por `order`, con `intent` `accumulation` → `intensification` → `realization`."
+    },
+    "program/v1.0.0/program.conjugate.example.json": {
+      "en": "Rotating max-effort lifts. Rotation is a different `workout` reference each week, which is why no field for it exists.",
+      "translation": "Rotación de levantamientos de esfuerzo máximo. La rotación es una referencia `workout` distinta cada semana, y por eso no existe un campo para ella."
+    },
+    "program/v1.0.0/program.percentage-waves.example.json": {
+      "en": "5/3/1-style waves. Two `trainingMaxes` slots declare which lifts the plan is computed from and how; `overrides.progressionState` carries the wave number. **No training-max value appears** — see RFC-008 §8.1.",
+      "translation": "Olas al estilo 5/3/1. Dos *slots* de `trainingMaxes` declaran a partir de qué levantamientos se calcula el plan y cómo; `overrides.progressionState` lleva el número de ola. **Ningún valor de máximo de entrenamiento aparece** — véase RFC-008 §8.1."
+    },
+    "program/v1.0.0/program.deload-weeks.example.json": {
+      "en": "`week.deload` on week four while the cycle `intent` stays `accumulation`. That combination is the reason `deload` is a week flag and not an intent value.",
+      "translation": "`week.deload` en la semana cuatro mientras el `intent` del ciclo sigue siendo `accumulation`. Esa combinación es la razón por la que `deload` es un indicador de semana y no un valor de intención."
+    },
+    "program/v1.0.0/program.double-progression.example.json": {
+      "en": "Reps first, then load: one rule whose trigger is `topOfRepRange`, with `progressionState` tracking where in the rep range each occurrence sits.",
+      "translation": "Primero las repeticiones, luego la carga: una regla cuyo disparador es `topOfRepRange`, con `progressionState` registrando en qué punto del rango de repeticiones está cada ocurrencia."
+    },
+    "program/v1.0.0/program.test-weeks.example.json": {
+      "en": "A test week is an ordinary cycle whose `intent` is `test`. The `retest` action updates a training-max *slot*, not a number in the document.",
+      "translation": "Una semana de prueba es un ciclo ordinario cuyo `intent` es `test`. La acción `retest` actualiza un *slot* de máximo de entrenamiento, no un número en el documento."
+    },
+    "program/v1.0.0/program.conditional-branching.example.json": {
+      "en": "Two branches off one day: repeat lighter on `failedPrescribedReps`, skip ahead on `amrapAboveThreshold`. A consumer that cannot evaluate either follows the unconditional schedule.",
+      "translation": "Dos ramas desde un mismo día: repetir más ligero con `failedPrescribedReps`, saltar adelante con `amrapAboveThreshold`. Un consumidor que no pueda evaluar ninguna de las dos sigue el cronograma incondicional."
+    },
+    "program/v1.0.0/program.adaptive.example.json": {
+      "en": "Autoregulated adaptation: a fixed skeleton whose loads are decided at execution time against two declared rules. The limit of what FDS expresses — see the note below.",
+      "translation": "Adaptación autorregulada: un esqueleto fijo cuyas cargas se deciden en el momento de la ejecución contra dos reglas declaradas. El límite de lo que FDS expresa — véase la nota de abajo."
+    },
+    "program/v1.0.0/program.fixed-weekday.example.json": {
+      "en": "`model: \"calendar\"` — `dayOfWeek` is authoritative.",
+      "translation": "`model: \"calendar\"` — `dayOfWeek` tiene la autoridad."
+    },
+    "program/v1.0.0/program.relative-offsets.example.json": {
+      "en": "`model: \"relative\"` — `offsetDays` counted from the program start, week two continuing at 7, 9, 11.",
+      "translation": "`model: \"relative\"` — `offsetDays` contados desde el inicio del programa, con la semana dos continuando en 7, 9, 11."
+    },
+    "program/v1.0.0/program.rolling.example.json": {
+      "en": "`model: \"rolling\"` — three on, one off, drifting against the calendar by design. Reading this as `calendar` would collapse the rest pattern the plan is built around.",
+      "translation": "`model: \"rolling\"` — tres días de trabajo, uno de descanso, desfasándose del calendario por diseño. Leerlo como `calendar` colapsaría el patrón de descanso alrededor del cual está construido el plan."
+    },
+    "program/v1.0.0/program.sequence.example.json": {
+      "en": "`model: \"sequence\"` — neither placement field present, which is the point: `index` is the only ordering and the athlete sets the pace.",
+      "translation": "`model: \"sequence\"` — ninguno de los dos campos de ubicación presente, y ese es el punto: `index` es el único orden y el atleta marca el ritmo."
+    },
+    "program/v1.0.0/program.optional-days.example.json": {
+      "en": "`optional: true` on a conditioning day. An optional day is still a training day; the flag does not turn it into rest.",
+      "translation": "`optional: true` en un día de acondicionamiento. Un día opcional sigue siendo un día de entrenamiento; el indicador no lo convierte en descanso."
+    },
+    "program/v1.0.0/program.accessory-days.example.json": {
+      "en": "Accessory work as its own optional session rather than extra blocks on a main day, so it can be dropped whole.",
+      "translation": "El trabajo accesorio como su propia sesión opcional en lugar de bloques extra en un día principal, para poder omitirlo completo."
+    },
+    "program/v1.0.0/program.rest-days.example.json": {
+      "en": "All seven days stated, three of them `rest`. A prescribed rest day and an absent day are different instructions.",
+      "translation": "Los siete días declarados, tres de ellos `rest`. Un día de descanso prescrito y un día ausente son instrucciones distintas."
+    }
+  },
+  "sections": {
+    "§4.1 set and rep schemes": "§4.1 esquemas de series y repeticiones",
+    "§4.2 grouping structures": "§4.2 estructuras de agrupación",
+    "§4.3 load prescription": "§4.3 prescripción de carga",
+    "§4.4 cardio and endurance": "§4.4 cardio y resistencia",
+    "§4.5 rest": "§4.5 descanso",
+    "§4.6 periodization models": "§4.6 modelos de periodización",
+    "§4.7 scheduling structures": "§4.7 estructuras de cronograma"
+  }
+}

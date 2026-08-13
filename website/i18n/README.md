@@ -16,6 +16,7 @@ anything in this tree, run it; CI runs it on every pull request.
 | `en/**/*.json` | The committed extraction snapshot — every translatable string the source code, theme and plugin configuration currently contain, as `docusaurus write-translations` finds them. Generated, never edited by hand. |
 | `<locale>/**/*.json` | That locale's translations of the snapshot, file-for-file and key-for-key. |
 | `<locale>/docusaurus-plugin-content-docs/current/**` | Translated documentation pages, mirroring `website/docs/**` path-for-path. |
+| `<locale>/coverage-descriptions.json` | The coverage matrix on the use-cases page, translated: every section title and every row description. The English lives in the READMEs beside the specification fixtures, which stay English-only — so each row records the English text it translated in an `en` field, and the gate re-derives the live English from the same module the site renders and compares per row. Editing a fixture README's description fails exactly the rows it changed, in every locale. Required in every translated locale. |
 | `translation-sources.json` | For every translated file, the sha256 its English source had when the translation was last verified against it. Written by `--update`, never by hand. |
 
 ## The workflow
@@ -40,6 +41,13 @@ translation against *this* version of the English text.
 Translating a documentation page for the first time: copy the English page to
 the same path under `<locale>/docusaurus-plugin-content-docs/current/`,
 translate the prose, and run `--update`.
+
+Editing a coverage-matrix description (a fixture README beside the schemas):
+the gate names the stale rows in every locale's
+`coverage-descriptions.json`. Re-translate each named row's `translation`,
+then copy the current English into its `en` field — that field is the
+per-row record that a human verified the translation against *this* English
+text, the same promise the hash manifest makes for whole pages.
 
 ## What is never translated
 

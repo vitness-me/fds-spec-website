@@ -59,6 +59,21 @@
  *   - `sr-Latn` is Serbian in Latin script. Any Cyrillic code point in an
  *     sr-Latn file fails, with the character and line named.
  *
+ *   - Each locale's `coverage-descriptions.json` translates the coverage
+ *     matrix the use-cases page renders — the section titles, and the row
+ *     descriptions read from the READMEs beside the specification fixtures.
+ *     The specification side stays English-only, so those translations
+ *     cannot live where every other one does (a file mirroring an English
+ *     file); instead each row records the English text it translated in an
+ *     `en` field, and this gate re-derives the live English from the same
+ *     module the site's plugin renders (scripts/lib/coverage-descriptions.mjs)
+ *     and compares per row. A README edit therefore fails exactly the rows
+ *     it changed, in every locale, naming them. Key parity both ways works
+ *     as for JSON templates: a matrix row or section title the overlay lacks
+ *     is an untranslated string; an entry the matrix no longer has is a
+ *     translation of nothing. The overlay is required in every translated
+ *     locale — without it the matrix silently renders English.
+ *
  * A translated file in a location this gate cannot map back to a source —
  * a new content plugin, say — fails rather than passes: an unmappable
  * translation is an unchecked one.
@@ -86,6 +101,7 @@ const LOCALES_JSON = join(I18N, 'locales.json');
 const MANIFEST = join(I18N, 'translation-sources.json');
 
 const DOCS_PLUGIN_PREFIX = 'docusaurus-plugin-content-docs/current/';
+const COVERAGE_OVERLAY = 'coverage-descriptions.json';
 
 const problems = [];
 const problem = (msg) => problems.push(msg);
@@ -143,6 +159,94 @@ function fences(markdown) {
 /** `<!-- fds:* -->` marker comments, as a sorted multiset. */
 function fdsMarkers(markdown) {
   return (markdown.match(/<!--\s*fds:[\s\S]*?-->/g) ?? []).map((m) => m.replace(/\s+/g, ' ')).sort();
+}
+
+/** Serbian is Latin-script here, by decision. Cyrillic is a defect. */
+function checkCyrillic(locale, relPath, text) {
+  if (locale !== 'sr-Latn') return;
+  const lines = text.split('\n');
+  for (let i = 0; i < lines.length; i += 1) {
+    const hit = lines[i].match(/[Ѐ-ӿ]/);
+    if (hit) {
+      problem(
+        `website/i18n/${locale}/${relPath}:${i + 1}: Cyrillic character "${hit[0]}" — sr-Latn is Serbian in Latin script`,
+      );
+      break; // one per file names the problem without flooding
+    }
+  }
+}
+
+// ── the coverage-matrix overlay's English, derived once ──────────────────────
+//
+// The same derivation the website plugin renders: the matrix module joined
+// with the fixture READMEs. Under --self-test the fixtures carry their own
+// small derived set, so the self-test stays hermetic while the derivation
+// path itself is exercised by every real run.
+
+const coverage = await (async () => {
+  if (SELF_TEST) {
+    const fixture = JSON.parse(readFileSync(join(FIXTURES, 'coverage-derived.json'), 'utf8'));
+    return {titles: new Set(fixture.sections), rows: new Map(Object.entries(fixture.rows))};
+  }
+  const {englishMatrix} = await import('./lib/coverage-descriptions.mjs');
+  const {sections} = await englishMatrix(REPO_ROOT);
+  const titles = new Set(sections.map((s) => s.title));
+  const rows = new Map();
+  for (const s of sections) for (const r of s.rows) rows.set(r.key, r.description);
+  return {titles, rows};
+})();
+
+/**
+ * A locale's coverage-matrix overlay carries exactly the matrix: every
+ * section title and every row, each row recording the English text it
+ * translated so a README edit fails the rows it changed and no others.
+ */
+function checkCoverageOverlay(locale, relPath, text) {
+  const where = `website/i18n/${locale}/${relPath}`;
+  let parsed;
+  try {
+    parsed = JSON.parse(text);
+  } catch (err) {
+    problem(`${where}: ${err.message}`);
+    return;
+  }
+  const sections = parsed.sections ?? {};
+  const rows = parsed.rows ?? {};
+
+  for (const title of coverage.titles) {
+    if (!(title in sections)) {
+      problem(`${where}: missing section title "${title}" — the coverage matrix has it; add the translation`);
+    } else if (!String(sections[title]).trim()) {
+      problem(`${where}: section title "${title}" has an empty translation — translate it, or the page silently falls back to English`);
+    }
+  }
+  for (const title of Object.keys(sections)) {
+    if (!coverage.titles.has(title)) {
+      problem(`${where}: section title "${title}" is not in the coverage matrix — a translation of a title that no longer exists; remove it`);
+    }
+  }
+
+  for (const [key, en] of coverage.rows) {
+    const entry = rows[key];
+    if (!entry) {
+      problem(`${where}: missing row "${key}" — the coverage matrix has it; add its en text and a translation`);
+      continue;
+    }
+    if (entry.en !== en) {
+      problem(
+        `${where}: row "${key}" is stale — the English description beside the fixture changed since this translation was recorded; ` +
+          `re-translate it, then record the current English text in its "en" field`,
+      );
+    }
+    if (!String(entry.translation ?? '').trim()) {
+      problem(`${where}: row "${key}" has an empty translation — translate the "en" text recorded beside it`);
+    }
+  }
+  for (const key of Object.keys(rows)) {
+    if (!coverage.rows.has(key)) {
+      problem(`${where}: row "${key}" is not in the coverage matrix — a translation of a row that no longer exists; remove it`);
+    }
+  }
 }
 
 // ── locales.json is sound, and the i18n tree agrees with it ──────────────────
@@ -338,8 +442,28 @@ for (const locale of translatedLocales) {
     }
   }
 
+  // The coverage-matrix overlay is required: without it the use-cases page
+  // silently renders English section titles and row descriptions.
+  if (!relSet.has(COVERAGE_OVERLAY)) {
+    problem(
+      `website/i18n/${locale}/${COVERAGE_OVERLAY}: missing — the coverage matrix on the use-cases page would render English in this locale; ` +
+        `create it with a "sections" and a "rows" block and translate every entry`,
+    );
+  }
+
   for (const relPath of relFiles) {
     const full = join(dir, relPath);
+
+    // The overlay has no single English source file to mirror — its English
+    // is derived from the matrix and the fixture READMEs — so it is checked
+    // against that derivation instead of through the source mapping below.
+    if (relPath === COVERAGE_OVERLAY) {
+      const text = readFileSync(full, 'utf8');
+      checkCyrillic(locale, relPath, text);
+      checkCoverageOverlay(locale, relPath, text);
+      continue;
+    }
+
     const source = sourceFor(relPath);
 
     if (source === null) {
@@ -431,19 +555,7 @@ for (const locale of translatedLocales) {
       }
     }
 
-    // Serbian is Latin-script here, by decision. Cyrillic is a defect.
-    if (locale === 'sr-Latn') {
-      const lines = text.split('\n');
-      for (let i = 0; i < lines.length; i += 1) {
-        const hit = lines[i].match(/[Ѐ-ӿ]/);
-        if (hit) {
-          problem(
-            `website/i18n/${locale}/${relPath}:${i + 1}: Cyrillic character "${hit[0]}" — sr-Latn is Serbian in Latin script`,
-          );
-          break; // one per file names the problem without flooding
-        }
-      }
-    }
+    checkCyrillic(locale, relPath, text);
   }
 
   // Manifest entries whose file is gone.
@@ -506,6 +618,14 @@ if (SELF_TEST) {
     'website/i18n/sr-Latn/code.json: no recorded source hash — after verifying it matches the current English text, run `node scripts/check-translations.mjs --update`',
     'website/i18n/sr-Latn/code.json:3: Cyrillic character "Ћ" — sr-Latn is Serbian in Latin script',
     'website/i18n/sr-Latn/docusaurus-theme-classic/navbar.json: missing — the English template has it; run `npm --prefix website run write-translations -- --locale sr-Latn` and translate the new strings',
+    'website/i18n/es/coverage-descriptions.json: missing section title "§4.2 second section" — the coverage matrix has it; add the translation',
+    'website/i18n/es/coverage-descriptions.json: section title "§4.3 third section" has an empty translation — translate it, or the page silently falls back to English',
+    'website/i18n/es/coverage-descriptions.json: section title "§9.9 ghost section" is not in the coverage matrix — a translation of a title that no longer exists; remove it',
+    'website/i18n/es/coverage-descriptions.json: missing row "workout/v1.0.0/workout.missing.example.json" — the coverage matrix has it; add its en text and a translation',
+    'website/i18n/es/coverage-descriptions.json: row "workout/v1.0.0/workout.stale.example.json" is stale — the English description beside the fixture changed since this translation was recorded; re-translate it, then record the current English text in its "en" field',
+    'website/i18n/es/coverage-descriptions.json: row "workout/v1.0.0/workout.empty.example.json" has an empty translation — translate the "en" text recorded beside it',
+    'website/i18n/es/coverage-descriptions.json: row "workout/v1.0.0/workout.ghost.example.json" is not in the coverage matrix — a translation of a row that no longer exists; remove it',
+    'website/i18n/sr-Latn/coverage-descriptions.json: missing — the coverage matrix on the use-cases page would render English in this locale; create it with a "sections" and a "rows" block and translate every entry',
     'website/i18n/translation-sources.json: records "es/docusaurus-plugin-content-docs/current/deleted.md" but website/i18n/es/docusaurus-plugin-content-docs/current/deleted.md does not exist — run `node scripts/check-translations.mjs --update`',
   ];
   const got = [...problems].sort();
