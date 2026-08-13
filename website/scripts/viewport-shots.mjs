@@ -16,8 +16,9 @@
  *   outDir  where the PNGs land, default "./.viewport-shots" (gitignored)
  *
  * Expects the dev server on http://localhost:3001 (see the port in the repo's
- * dev workflow). Screenshots are taken at each width in WIDTHS, in both color
- * schemes, full page.
+ * dev workflow); set VIEWPORT_BASE to point anywhere else — a production
+ * build served locally, or a localized locale path's server. Screenshots are
+ * taken at each width in WIDTHS, in both color schemes, full page.
  *
  * The Playwright version is pinned: `npx playwright@<other>` insists on its
  * own browser build and exits before taking anything. If you bump it, run
@@ -29,7 +30,7 @@ import { mkdirSync } from 'node:fs';
 import { join } from 'node:path';
 
 const PLAYWRIGHT = 'playwright@1.60.0';
-const BASE = 'http://localhost:3001';
+const BASE = process.env.VIEWPORT_BASE || 'http://localhost:3001';
 
 const WIDTHS = [
   { width: 375, height: 812, name: 'iphone-se-ish' },
