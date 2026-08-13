@@ -6,7 +6,7 @@
     },
     "workout/v1.1.0/workout.ramping.example.json": {
       "en": "Ascending load across five sets to a top set.",
-      "translation": "Rastuće opterećenje kroz pet serija do vršne serije."
+      "translation": "Rastuće opterećenje kroz pet serija do top serije."
     },
     "workout/v1.1.0/workout.reverse-pyramid.example.json": {
       "en": "Heaviest set first, dropping 10% each set as fatigue accumulates.",
@@ -34,7 +34,7 @@
     },
     "workout/v1.1.0/workout.top-set-backoff.example.json": {
       "en": "One heavy top set at RPE 8, then three back-offs 10% lighter.",
-      "translation": "Jedna teška vršna serija na RPE 8, zatim tri back-off serije lakše za 10%."
+      "translation": "Jedna teška top serija na RPE 8, zatim tri back-off serije lakše za 10%."
     },
     "workout/v1.1.0/workout.wave-loading.example.json": {
       "en": "A 3‑2‑1 rep ladder run three times at the same load.",

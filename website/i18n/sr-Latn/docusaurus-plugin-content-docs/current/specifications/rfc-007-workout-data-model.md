@@ -25,7 +25,7 @@ Sama preskripcija — koliko opterećenja, koliko ponavljanja, kojim tempom, kol
 
 ### 1.1. Pozadina
 
-Formati razmene za treninge istorijski su modelovali jednu metodologiju dobro, a ostale loše. Format izgrađen oko serija i ponavljanja ne može da izrazi AMRAP; format izgrađen oko krugova i vremenskih ograničenja ne može da izrazi vršnu seriju sa back-off serijama. Aplikacije to zaobilaze poljima po stilu — `isCircuit`, `emomInterval`, `tabataRounds` — dok model ne postane unija posebnih slučajeva u kojoj se nijedne dve implementacije ne slažu koji od njih važe zajedno.
+Formati razmene za treninge istorijski su modelovali jednu metodologiju dobro, a ostale loše. Format izgrađen oko serija i ponavljanja ne može da izrazi AMRAP; format izgrađen oko krugova i vremenskih ograničenja ne može da izrazi top seriju sa back-off serijama. Aplikacije to zaobilaze poljima po stilu — `isCircuit`, `emomInterval`, `tabataRounds` — dok model ne postane unija posebnih slučajeva u kojoj se nijedne dve implementacije ne slažu koji od njih važe zajedno.
 
 Opažanje na kome je ovaj RFC izgrađen jeste da se ovi stilovi razlikuju u tome **kako se grupa vežbi izvršava**, a ne u tome šta je vežba ili serija. Kružni trening i klasične serije sadrže iste stavke sa istim preskripcijama; razlikuju se u redosledu prolaska i završetku. Kada izvršavanje postane svojstvo bloka, posebni slučajevi se urušavaju.
 
@@ -289,7 +289,7 @@ npm run verify schemas
 
 ## 10. Primer
 
-Trening za gornji deo tela: blok zagrevanja, primarni blok sa vršnom serijom i back-off serijama, pomoćna superserija i kondicioni finisher.
+Trening za gornji deo tela: blok zagrevanja, primarni blok sa top serijom i back-off serijama, pomoćna superserija i kondicioni finisher.
 
 ```json
 {

@@ -181,7 +181,7 @@ Za razliku od unija opterećenja i ponavljanja, `pattern` je **zatvoren** enum b
 | Obrazac | Konvencionalni `params` | Značenje |
 |---|---|---|
 | `straight` | — | Svaka serija identična; `sets` je sam po sebi dovoljan |
-| `ramping` | `startPercent`, `endPercent` | Rastuće opterećenje kroz propisane serije, koje se završava vršnom serijom |
+| `ramping` | `startPercent`, `endPercent` | Rastuće opterećenje kroz propisane serije, koje se završava top serijom |
 | `reversePyramid` | `dropPercent` | Najteža serija prva; svaka sledeća serija opada za ovoliko |
 | `drop` | `drops`, `dropPercent` | Uzastopni padovi opterećenja bez odmora posle radne serije |
 | `restPause` | `miniSets`, `intraSetRest`, `restUnit` | Jedna serija izvedena do blizu otkaza, zatim nastavljena posle kratkih odmora |
@@ -190,7 +190,7 @@ Za razliku od unija opterećenja i ponavljanja, `pattern` je **zatvoren** enum b
 | `wave` | `waves`, `repPattern` | Ponavljajuća lestvica ponavljanja, npr. `[3, 2, 1]`, izvedena kroz više talasa |
 | `ladder` | `rungs`, `direction` | Eksplicitne prečke, rastuće, opadajuće ili gore-dole |
 | `density` | `timeCap`, `timeUnit`, `target` | Maksimalan rad unutar vremenskog ograničenja |
-| `topSetBackoff` | `backoffPercent`, `backoffSets` | Jedna vršna serija, zatim back-off serije sa smanjenim opterećenjem |
+| `topSetBackoff` | `backoffPercent`, `backoffSets` | Jedna top serija, zatim back-off serije sa smanjenim opterećenjem |
 
 Ovi ključevi su konvencionalni, a ne normativni — proizvođač podataka MOŽE da doda sopstvene. Konzument koji prepoznaje obrazac, ali ne i ključ, TREBALO BI da ignoriše ključ i upozori, a NE SME da proširi obrazac ako ključ koji mu je potreban nedostaje.
 

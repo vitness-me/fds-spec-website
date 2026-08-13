@@ -181,7 +181,7 @@ A diferencia de las uniones de carga y repeticiones, `pattern` es un enum **cerr
 | Patrón | `params` convencionales | Significado |
 |---|---|---|
 | `straight` | — | Todas las series idénticas; `sets` por sí solo es suficiente |
-| `ramping` | `startPercent`, `endPercent` | Carga ascendente a lo largo de las series prescritas, terminando en la serie tope |
+| `ramping` | `startPercent`, `endPercent` | Carga ascendente a lo largo de las series prescritas, terminando en la serie top |
 | `reversePyramid` | `dropPercent` | La serie más pesada primero; cada serie siguiente baja esta cantidad |
 | `drop` | `drops`, `dropPercent` | Descensos consecutivos realizados sin descanso tras la serie efectiva |
 | `restPause` | `miniSets`, `intraSetRest`, `restUnit` | Una serie llevada cerca del fallo, luego reanudada tras descansos breves |
@@ -190,7 +190,7 @@ A diferencia de las uniones de carga y repeticiones, `pattern` es un enum **cerr
 | `wave` | `waves`, `repPattern` | Una escalera de repeticiones que se repite, p. ej. `[3, 2, 1]`, ejecutada durante varias olas |
 | `ladder` | `rungs`, `direction` | Peldaños explícitos, ascendentes, descendentes o de ida y vuelta |
 | `density` | `timeCap`, `timeUnit`, `target` | El máximo trabajo dentro de un tope de tiempo |
-| `topSetBackoff` | `backoffPercent`, `backoffSets` | Una serie tope, luego series de descenso a una carga reducida |
+| `topSetBackoff` | `backoffPercent`, `backoffSets` | Una serie top, luego series back-off a una carga reducida |
 
 Estas claves son convencionales, no normativas — un productor PUEDE agregar las suyas. Un consumidor que reconoce el patrón pero no una clave DEBERÍA ignorar la clave y advertir, y NO DEBE expandir el patrón si le falta una clave que necesita.
 
@@ -289,7 +289,7 @@ npm run check:prescription
 
 ## 10. Ejemplo
 
-Una serie tope a RPE 8 seguida de series de descenso a un porcentaje de un levantamiento distinto, con una excéntrica de cuatro segundos y tres minutos de descanso entre series:
+Una serie top a RPE 8 seguida de series back-off a un porcentaje de un levantamiento distinto, con una excéntrica de cuatro segundos y tres minutos de descanso entre series:
 
 ```json fds:fragment entity=prescription defs=load:loadTarget,reps:repTarget,tempo:tempo,rest:restSpec,scheme:setScheme
 {
