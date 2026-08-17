@@ -131,9 +131,6 @@
   "landing.hero.audience": {
     "message": "For app developers, platforms, coaches and researchers who need training data to move between systems."
   },
-  "landing.hero.coverage.bodyAtlas": {
-    "message": "body atlas"
-  },
   "landing.hero.coverage.equipment": {
     "message": "equipment"
   },
@@ -157,10 +154,10 @@
     "message": "Read the spec"
   },
   "landing.hero.subtitle": {
-    "message": "Every fitness platform describes exercises, equipment and programming differently, so every integration is bespoke and every export a dead end. FDS is a vendor-neutral standard that gives the fitness domain one shared vocabulary — published as JSON Schemas at frozen URLs, with a CLI that maps your existing data into it."
+    "message": "FDS is a vendor-neutral standard for exercises, equipment, muscles, workouts and programs, published as JSON Schemas at frozen URLs, with a CLI that maps your existing data into it."
   },
   "landing.hero.title": {
-    "message": "A back squat should mean the same thing everywhere."
+    "message": "One shared vocabulary for the fitness domain."
   },
   "landing.hero.useCasesButton": {
     "message": "Use Cases"
