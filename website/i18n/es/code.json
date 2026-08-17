@@ -131,9 +131,6 @@
   "landing.hero.audience": {
     "message": "Para desarrolladores de aplicaciones, plataformas, entrenadores e investigadores que necesitan que los datos de entrenamiento se muevan entre sistemas."
   },
-  "landing.hero.coverage.bodyAtlas": {
-    "message": "atlas corporal"
-  },
   "landing.hero.coverage.equipment": {
     "message": "equipamiento"
   },
@@ -157,10 +154,10 @@
     "message": "Leer la especificación"
   },
   "landing.hero.subtitle": {
-    "message": "Cada plataforma de fitness describe los ejercicios, el equipamiento y la programación a su manera, así que cada integración es a medida y cada exportación un callejón sin salida. FDS es un estándar independiente del proveedor que da al dominio del fitness un único vocabulario compartido — publicado como JSON Schemas en URL congeladas, con una CLI que mapea sus datos existentes al estándar."
+    "message": "FDS es un estándar independiente del proveedor para ejercicios, equipamiento, músculos, sesiones y programas, publicado como JSON Schemas en URL congeladas, con una CLI que mapea sus datos existentes al estándar."
   },
   "landing.hero.title": {
-    "message": "Una sentadilla trasera debería significar lo mismo en todas partes."
+    "message": "Un único vocabulario compartido para el dominio del fitness."
   },
   "landing.hero.useCasesButton": {
     "message": "Casos de uso"

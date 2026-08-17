@@ -28,16 +28,14 @@ function HomepageHeader() {
           </p>
           <Heading as="h1" className={styles.heroTitle}>
             <Translate id="landing.hero.title">
-              A back squat should mean the same thing everywhere.
+              One shared vocabulary for the fitness domain.
             </Translate>
           </Heading>
           <p className={styles.heroSubtitle}>
             <Translate id="landing.hero.subtitle">
-              Every fitness platform describes exercises, equipment and programming
-              differently, so every integration is bespoke and every export a dead
-              end. FDS is a vendor-neutral standard that gives the fitness domain one
-              shared vocabulary — published as JSON Schemas at frozen URLs, with a
-              CLI that maps your existing data into it.
+              FDS is a vendor-neutral standard for exercises, equipment, muscles,
+              workouts and programs, published as JSON Schemas at frozen URLs,
+              with a CLI that maps your existing data into it.
             </Translate>
           </p>
           <p className={styles.heroAudience}>
@@ -52,8 +50,6 @@ function HomepageHeader() {
             <Translate id="landing.hero.coverage.equipment">equipment</Translate>
             <span>·</span>
             <Translate id="landing.hero.coverage.muscles">muscles</Translate>
-            <span>·</span>
-            <Translate id="landing.hero.coverage.bodyAtlas">body atlas</Translate>
             <span>·</span>
             <Translate id="landing.hero.coverage.workouts">workouts</Translate>
             <span>·</span>

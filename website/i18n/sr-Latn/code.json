@@ -131,9 +131,6 @@
   "landing.hero.audience": {
     "message": "Za programere aplikacija, platforme, trenere i istraživače kojima podaci o treningu moraju da se kreću između sistema."
   },
-  "landing.hero.coverage.bodyAtlas": {
-    "message": "atlas tela"
-  },
   "landing.hero.coverage.equipment": {
     "message": "oprema"
   },
@@ -157,10 +154,10 @@
     "message": "Pročitajte specifikaciju"
   },
   "landing.hero.subtitle": {
-    "message": "Svaka fitnes platforma opisuje vežbe, opremu i programiranje na svoj način, pa je svaka integracija rađena po meri, a svaki izvoz ćorsokak. FDS je standard nezavisan od proizvođača koji domenu fitnesa daje jedan zajednički rečnik — objavljen kao JSON šeme na zamrznutim URL adresama, uz CLI koji vaše postojeće podatke mapira u njega."
+    "message": "FDS je standard nezavisan od proizvođača za vežbe, opremu, mišiće, treninge i programe, objavljen kao JSON šeme na zamrznutim URL adresama, uz CLI koji vaše postojeće podatke mapira u njega."
   },
   "landing.hero.title": {
-    "message": "Zadnji čučanj bi trebalo da znači isto svuda."
+    "message": "Jedan zajednički rečnik za domen fitnesa."
   },
   "landing.hero.useCasesButton": {
     "message": "Slučajevi upotrebe"
