@@ -208,6 +208,12 @@ Short IDs like `eq.barbell`, `mus.biceps`, `cat.legs` are ONLY for documentation
 - Stable identifier (should not change once published)
 - Human-readable, URL-safe
 
+The published schemas enforce this on an entity's own `canonical`. They enforce
+nothing on the `slug` an entity *reference* carries, and nothing on the `name`
+either — a reference with `"name": ""` validates today. Emit a reference that
+satisfies the same rules as the entity it copies: RFC-010 §3 requires it, and
+the schema will enforce it from the next major release.
+
 ---
 
 ## Registry Patterns
@@ -310,8 +316,8 @@ area with an anterior binding, not one area per drawing. `selector` is opaque to
 FDS: the atlas author and the renderer are the two parties that must agree on it,
 and FDS is neither.
 
-Area slugs use a looser pattern than the rest of FDS — `^[a-z0-9-.]+$`, dots
-allowed — so `quad.left` is a legal area slug where it would not be a legal
+Area slugs use a looser pattern than an entity's own slug — `^[a-z0-9-.]+$`,
+dots allowed — so `quad.left` is a legal area slug where it would not be a legal
 exercise slug.
 
 <!-- fds:not-a-field quad, left — halves of an illustrative area slug; `left` is real vocabulary elsewhere but here it is half of an example -->

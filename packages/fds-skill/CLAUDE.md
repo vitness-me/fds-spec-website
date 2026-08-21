@@ -99,7 +99,10 @@ If it is ever surfaced, it goes as a mirrored source and never as a second copy.
 - `^[a-z0-9-]{2,}$`
 - Lowercase, hyphens, numbers only
 - Minimum 2 characters
-- Body-atlas *areas* are the one exception: `^[a-z0-9-.]+$`, dots allowed
+- Body-atlas *areas* use `^[a-z0-9-.]+$`, dots allowed
+- Entity references carry a `slug` the published schemas do not check at all.
+  Emit one that satisfies the pattern anyway: RFC-010 §3.3 requires it, and the
+  schema will enforce it from the next major release.
 
 ### Required Exercise Fields
 All exercises MUST have: `schemaVersion`, `exerciseId`, `canonical` (name, slug), `classification` (all 5 fields), `targets.primary`, `metrics.primary`, `metadata` (createdAt, updatedAt, status)

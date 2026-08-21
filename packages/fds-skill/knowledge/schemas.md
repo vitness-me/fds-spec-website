@@ -357,7 +357,7 @@ selector or element id; the standard does not constrain it, because the atlas
 author and the renderer are the two parties that have to agree, and FDS is
 neither.
 
-The atlas's area slugs use a looser pattern than the rest of FDS —
+The atlas's area slugs use a looser pattern than an entity's own slug —
 `^[a-z0-9-.]+$`, dots allowed — so `quad.left` is a legal area slug where it
 would not be a legal exercise slug.
 
