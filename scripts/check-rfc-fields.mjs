@@ -63,27 +63,36 @@
  *     `loadTarget.method` may go on to discuss `scale` without a second rule
  *     for cross-references. Saying where a field lives is the whole point.
  *
- * Measured over all eight RFCs those four exemptions take the rule from 77
- * reports to 2, both of them real. It is a narrow rule by construction: it sees
- * only sections that show an example, which is roughly one section in four.
+ * Measured over the RFCs that specify a schema, those four exemptions take the
+ * rule from 77 reports to 2, both of them real. It is a narrow rule by
+ * construction: it sees only sections that show an example, which is roughly
+ * one section in four.
  *
  *   node scripts/check-rfc-fields.mjs
  */
 
-import { readFile } from 'node:fs/promises';
+import { readFile, readdir } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { globalVocabulary, vocabularyOf } from './lib/vocabulary.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
+const RFC_DIR = 'specification/rfc';
 
 /**
- * RFCs that specify a schema of their own. All of them.
+ * RFCs that specify a schema of their own.
  *
  * RFC-001..005 predated this check and carried 60 measured gaps between them —
  * every one a field the schema defined that the RFC only ever showed inside a
  * JSON block. Showing a field is not documenting it: a reader learns the name
  * exists and nothing about what it means.
+ *
+ * This is a list, and a list of what exists is the defect this repository spends
+ * most of its effort eliminating: an RFC added without an entry here is not
+ * cross-checked, and nothing says so. It cannot be derived — which schema an RFC
+ * specifies is a fact about the prose, not about the tree — so instead it is
+ * held against the tree below. Every `rfc-*.md` is either here or in NO_SCHEMA,
+ * and neither may name a file that is gone.
  */
 const PAIRS = [
   {
@@ -119,6 +128,21 @@ const PAIRS = [
     source: 'specification/schema-sources/program/v1.0.0/program.schema.json',
   },
 ];
+
+/**
+ * RFCs that specify no schema of their own, and why.
+ *
+ * Being here is an assertion, not a waiver: the RFC is claimed to author no
+ * fields, so there is nothing for the rules above to compare. An RFC that
+ * quietly grows a schema and stays here is the failure this file guards
+ * against, which is why each entry says what it specifies instead.
+ */
+const NO_SCHEMA = new Map([
+  [
+    'specification/rfc/rfc-010-entity-reference-integrity.md',
+    'constrains definitions the entity schemas already publish; it authors none',
+  ],
+]);
 
 /**
  * Words an RFC may legitimately write in code style without them being fields:
@@ -266,6 +290,36 @@ function shapeOf(text) {
 
 const GLOBAL = await globalVocabulary();
 const problems = [];
+
+// Totality: the two lists above, taken together, describe every RFC on disk.
+{
+  const onDisk = new Set(
+    (await readdir(join(ROOT, RFC_DIR)))
+      .filter((name) => name.startsWith('rfc-') && name.endsWith('.md'))
+      .map((name) => `${RFC_DIR}/${name}`)
+  );
+  const listed = new Map([
+    ...PAIRS.map(({ rfc }) => [rfc, 'PAIRS']),
+    ...[...NO_SCHEMA.keys()].map((rfc) => [rfc, 'NO_SCHEMA']),
+  ]);
+
+  for (const rfc of [...onDisk].sort()) {
+    if (listed.has(rfc)) continue;
+    problems.push(
+      `${rfc}\n    is in no list in scripts/check-rfc-fields.mjs, so nothing cross-checks it\n` +
+        `      against a schema.\n` +
+        `      Add it to PAIRS with the schema source it specifies, or to NO_SCHEMA\n` +
+        `      with what it specifies instead.`
+    );
+  }
+  for (const [rfc, where] of [...listed].sort()) {
+    if (onDisk.has(rfc)) continue;
+    problems.push(
+      `${rfc}\n    is named in ${where} but is not on disk.\n` +
+        `      Remove the entry, or correct the path.`
+    );
+  }
+}
 
 for (const { rfc, source } of PAIRS) {
   const schema = JSON.parse(await readFile(join(ROOT, source), 'utf8'));
@@ -421,6 +475,6 @@ if (problems.length) {
 }
 
 console.log(
-  '\nEvery RFC documents its schema, documents nothing the schema lacks, and ' +
-    'puts each field where the schema accepts it.'
+  '\nEvery RFC is accounted for, documents its schema, documents nothing the ' +
+    'schema lacks, and puts each field where the schema accepts it.'
 );
