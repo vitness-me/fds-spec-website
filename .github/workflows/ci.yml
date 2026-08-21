@@ -132,6 +132,12 @@ jobs:
       - name: Verify RFCs and their schemas agree
         run: npm run check:rfc
 
+      # Two unconstrained entity references became five because each new one was
+      # shaped from the last. Fixing them waits on a major release; stopping a
+      # sixth does not.
+      - name: Verify a denormalised reference carries what it copies
+        run: npm run check:refs
+
       # The paths inside the published validation commands were already checked.
       # The command around them was not, so four documents shipped `npx ajv -s …`
       # — real paths, valid example, and a command that fails on its first line.

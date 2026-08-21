@@ -98,6 +98,7 @@ if run_job schemas; then
   try "the transformer produces valid FDS" npm run check:transform
   try "prescription fixtures match their definitions" npm run check:prescription
   try "RFCs and schemas agree" npm run check:rfc
+  try "references carry what they copy" npm run check:refs
 
   # Runs the published validation commands rather than reading them, from a
   # scratch directory with no node_modules. Slower than everything around it and
