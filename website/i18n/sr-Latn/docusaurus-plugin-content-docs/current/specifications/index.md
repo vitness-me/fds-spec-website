@@ -14,8 +14,8 @@ Stranice u ovom odeljku su kopije izvora iz direktorijuma
 `specification/rfc/` u repozitorijumu, bajt za bajt. CI poredi svaku stranicu sa
 njenim izvorom pri svakoj izmeni, tako da je ono što ovde čitate upravo ono što standard kaže.
 
-<!-- fds:count rfcs=8 -->
-Objavljeno je 8 RFC dokumenata:
+<!-- fds:count rfcs=9 -->
+Objavljeno je 9 RFC dokumenata:
 
 <!-- fds:covers rfcs -->
 | RFC | Specifikuje |
@@ -28,6 +28,7 @@ Objavljeno je 8 RFC dokumenata:
 | [RFC-006 — Primitivi preskripcije](/docs/specifications/rfc-006-prescription-primitives) | Biblioteka definicija preskripcije: opterećenje, ponavljanja, odmor i tempo kao delovi za višekratnu upotrebu. Koren njene šeme po dizajnu ne validira ništa. |
 | [RFC-007 — Model podataka o treningu](/docs/specifications/rfc-007-workout-data-model) | Entitet treninga: kako je trening strukturiran. |
 | [RFC-008 — Model podataka o programu treninga](/docs/specifications/rfc-008-program-data-model) | Entitet programa: višenedeljni planovi koji upućuju na treninge umesto da ih iznova iskazuju. |
+| [RFC-010 — Integritet referenci na entitete](/docs/specifications/rfc-010-entity-reference-integrity) | Reference koje entiteti nose jedni na druge, i pravilo da denormalizovana kopija prihvata tačno ono što prihvata polje koje kopira. |
 
 Svaki RFC imenuje verziju šeme koja ga implementira. Za to koje verzije
 entiteta objavljuje tekuće izdanje, pogledajte

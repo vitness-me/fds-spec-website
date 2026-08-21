@@ -20,14 +20,15 @@ Omogućiti **prenosivost podataka** i **interoperabilnost** među fitnes aplikac
 
 ## Trenutni obuhvat
 
-<!-- fds:count rfcs=8 -->
-**U obuhvatu** — 8 objavljenih RFC dokumenata:
+<!-- fds:count rfcs=9 -->
+**U obuhvatu** — 9 objavljenih RFC dokumenata:
 
 - **Model podataka vežbe** (RFC-001)
 - **Kataloški entiteti**: oprema (RFC-002), mišići (RFC-003), kategorije mišića (RFC-004), atlas tela (RFC-005)
 - **Primitivi preskripcije** (RFC-006): opterećenje, ponavljanja, tempo, odmor, zone intenziteta, šeme serija i pravila progresije
 - **Model podataka treninga** (RFC-007): jedan propisan trening, kao blokovi stavki sa režimom izvršavanja po bloku
 - **Model podataka trenažnog programa** (RFC-008): raspored referenci na treninge kroz vreme
+- **Integritet referenci na entitete** (RFC-010): šta mora da nosi referenca između entiteta
 
 **Van obuhvata** — odlukom, ne propustom:
 

@@ -12,6 +12,18 @@ El formato se inspira en Keep a Changelog, y el proyecto se adhiere al Versionad
 
 ## [Sin publicar]
 - Política de espacio de nombres de extensiones (borrador) y secciones de conformidad (planificadas).
+- **RFC-010 Integridad de las referencias entre entidades (borrador).** Las cinco
+  referencias compartidas entre entidades aceptan valores que no aceptan las
+  entidades que copian: el `name` de una referencia puede ser la cadena vacía y
+  su `slug` no se comprueba contra nada, de modo que un documento cuyas
+  referencias están todas en blanco valida y no puede renderizarse. RFC-010
+  enuncia la regla — una copia desnormalizada acepta exactamente lo que acepta
+  el campo que copia — y explica por qué codificarla rechaza documentos que hoy
+  validan y, por tanto, corresponde a un lanzamiento mayor. Ningún esquema
+  cambió y no se cortó ningún lanzamiento. `check:refs` compara cada referencia
+  con su origen y registra las divergencias existentes, de modo que no se pueda
+  añadir una sexta referencia copiando una quinta, que es como dos de ellas
+  llegaron a ser cinco.
 
 ## Herramientas — el esquema de mapeo queda congelado (2026-08-11)
 

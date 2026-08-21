@@ -80,6 +80,7 @@ const sidebars: SidebarsConfig = {
         'specifications/rfc-006-prescription-primitives',
         'specifications/rfc-007-workout-data-model',
         'specifications/rfc-008-program-data-model',
+        'specifications/rfc-010-entity-reference-integrity',
       ],
     },
     {

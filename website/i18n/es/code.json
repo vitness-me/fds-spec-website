@@ -120,7 +120,7 @@
     "message": "Repositorio en GitHub"
   },
   "landing.cta.roadmap": {
-    "message": "Hay ocho RFC publicadas: el catálogo de ejercicios y sus registros, los primitivos de prescripción, las sesiones de entrenamiento y los programas. Lo que viene después — y lo que se deja fuera deliberadamente — está en la {roadmapLink}."
+    "message": "Hay nueve RFC publicadas: el catálogo de ejercicios y sus registros, los primitivos de prescripción, las sesiones de entrenamiento, los programas y las referencias que los enlazan. Lo que viene después — y lo que se deja fuera deliberadamente — está en la {roadmapLink}."
   },
   "landing.cta.roadmapLink": {
     "message": "hoja de ruta"

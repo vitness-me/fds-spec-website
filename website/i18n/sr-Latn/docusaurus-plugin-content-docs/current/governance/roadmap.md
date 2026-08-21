@@ -18,6 +18,8 @@ sidebar_position: 4
 
 **RFC-008 Model podataka trenažnog programa** — raspored referenci na treninge kroz vreme. Ciklusi, nedelje, raspoređivanje po danima, prilagođavanje po pojedinačnom pojavljivanju, progresija i uslovno grananje.
 
+**RFC-010 Integritet referenci na entitete** — šta moraju da nose reference koje entiteti drže jedni na druge, da bi dokument mogao da se prikaže u listi i bez njihovog razrešavanja. Normativan od usvajanja; šeme ne mogu da ga kodiraju do većeg izdanja, jer šema koja počne da odbija prazan string odbija dokumente koji danas prolaze validaciju.
+
 Sve objavljene šeme su zamrznute. Zamrznuti URL nikada ne menja svoje bajtove; izmena znači novu verziju.
 
 ## Sledeće

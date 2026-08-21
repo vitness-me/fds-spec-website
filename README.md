@@ -27,10 +27,10 @@ serves all of it.
 
 ## What the standard covers
 
-<!-- fds:count rfcs=8 -->
-Eight RFCs, one per data model. The RFC is the normative document — what the
-entity means, what its fields are for, what a conforming document must satisfy —
-and the published JSON Schema is that document made machine-checkable.
+<!-- fds:count rfcs=9 -->
+Nine RFCs. Most specify one data model — what the entity means, what its fields
+are for, what a conforming document must satisfy — and the published JSON Schema
+is that document made machine-checkable. The rest specify what the models share.
 
 <!-- fds:covers rfcs -->
 | RFC | Specifies |
@@ -43,6 +43,7 @@ and the published JSON Schema is that document made machine-checkable.
 | [RFC-006 — Prescription primitives](./specification/rfc/rfc-006-prescription-primitives.md) | The prescription definition library: load, reps, rest and tempo as reusable pieces. A definition library, not an entity — its schema root validates nothing by design. |
 | [RFC-007 — Workout data model](./specification/rfc/rfc-007-workout-data-model.md) | The workout entity: how a training session is structured. |
 | [RFC-008 — Training program data model](./specification/rfc/rfc-008-program-data-model.md) | The program entity: multi-week plans that point at sessions rather than restating them. |
+| [RFC-010 — Entity reference integrity](./specification/rfc/rfc-010-entity-reference-integrity.md) | The references entities carry to one another, and the rule that a denormalised copy accepts exactly what the field it copies accepts. |
 
 The website pages under [`/docs/specifications`](https://spec.vitness.me/docs/specifications)
 are byte-for-byte copies of these files, compared on every change.

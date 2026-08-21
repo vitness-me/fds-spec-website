@@ -12,6 +12,17 @@ Format je inspirisan pristupom Keep a Changelog, a projekat se pridržava semant
 
 ## [Neobjavljeno]
 - Politika imenskog prostora ekstenzija (nacrt) i odeljci o usaglašenosti (planirano).
+- **RFC-010 Integritet referenci na entitete (nacrt).** Pet deljenih referenci na
+  entitete prihvata vrednosti koje entiteti koje kopiraju ne prihvataju: `name`
+  na referenci sme da bude prazan string, a `slug` na referenci se ne proverava
+  ni prema čemu, pa dokument čije su sve reference prazne prolazi validaciju i
+  ne može da se prikaže. RFC-010 iznosi pravilo — denormalizovana kopija
+  prihvata tačno ono što prihvata polje koje kopira — i objašnjava zašto
+  njegovo kodiranje odbija dokumente koji danas prolaze validaciju i zato
+  pripada većem izdanju. Nijedna šema nije promenjena i nijedno izdanje nije
+  napravljeno. `check:refs` poredi svaku referencu sa njenim izvorom i beleži
+  postojeća odstupanja, tako da šesta referenca ne može da se doda kopiranjem
+  pete, a upravo tako su dve od njih postale pet.
 
 ## Alati — šema mapiranja je zamrznuta (2026-08-11)
 

@@ -105,7 +105,7 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
  * legitimate and common. `ignored` is JSON that is not FDS, or is deliberately
  * not valid — every one of those is a decision someone made on purpose.
  */
-const EXPECTED = { fragments: 113, ignored: 28 };
+const EXPECTED = { fragments: 119, ignored: 30 };
 
 /**
  * `--self-test` runs the whole check over scripts/fixtures/doc-examples/ and

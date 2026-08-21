@@ -18,6 +18,8 @@ What FDS covers today, what is next, and — the part most roadmaps leave out �
 
 **RFC-008 Training Program Data Model** — a schedule of workout references over time. Cycles, weeks, day placement, per-occurrence adjustment, progression and conditional branching.
 
+**RFC-010 Entity Reference Integrity** — what the references entities carry to one another must contain, so that a document stays listable without resolving them. Normative on adoption; the schemas cannot encode it until a major release, because a schema that newly rejects the empty string rejects documents that validate today.
+
 All published schemas are frozen. A frozen URL never changes its bytes; a change means a new version.
 
 ## Next

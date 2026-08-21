@@ -18,14 +18,15 @@ Enable data portability and interoperability across fitness applications by prov
 
 ### Current Scope
 
-<!-- fds:count rfcs=8 -->
-**In scope** — eight published RFCs:
+<!-- fds:count rfcs=9 -->
+**In scope** — nine published RFCs:
 
 - **Exercise data model** (RFC-001)
 - **Catalog entities**: Equipment (RFC-002), Muscles (RFC-003), Muscle Categories (RFC-004), Body Atlas (RFC-005)
 - **Prescription primitives** (RFC-006) — load, repetitions, tempo, rest, intensity zones, set schemes and progression rules, defined once so a set means the same thing wherever it appears
 - **Workout data model** (RFC-007) — one prescribed session, as blocks of items with an execution mode per block
 - **Training program data model** (RFC-008) — a schedule of workout references over time, with cycles, weeks, progression and conditional branching
+- **Entity reference integrity** (RFC-010) — what the references entities carry to one another must contain, so a document stays readable without resolving them
 
 **Out of scope** — by decision, not by omission:
 

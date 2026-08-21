@@ -18,6 +18,8 @@ Lo que FDS cubre hoy, lo que viene después y — la parte que la mayoría de la
 
 **RFC-008 Modelo de datos de programa de entrenamiento** — un cronograma de referencias a sesiones de entrenamiento a lo largo del tiempo. Ciclos, semanas, ubicación por día, ajuste por ocurrencia, progresión y ramificación condicional.
 
+**RFC-010 Integridad de las referencias entre entidades** — qué deben contener las referencias que las entidades llevan unas a otras, para que un documento siga siendo enumerable sin resolverlas. Normativo desde su adopción; los esquemas no pueden codificarlo hasta un lanzamiento mayor, porque un esquema que empieza a rechazar la cadena vacía rechaza documentos que hoy validan.
+
 Todos los esquemas publicados están congelados. Una URL congelada nunca cambia sus bytes; un cambio significa una nueva versión.
 
 ## Próximos pasos

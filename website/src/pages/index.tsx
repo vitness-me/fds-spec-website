@@ -105,9 +105,9 @@ function CTASection() {
             <Translate id="landing.cta.githubButton">GitHub Repository</Translate>
           </Link>
         </div>
-        {/* fds:count rfcs=8 */}
+        {/* fds:count rfcs=9 */}
         <p className={styles.ctaRoadmap}>
-          <Translate id="landing.cta.roadmap" values={{roadmapLink}}>{'Eight RFCs are published: the exercise catalog and its registries, prescription primitives, workouts and programs. What comes next — and what is deliberately left out — is on the {roadmapLink}.'}</Translate>
+          <Translate id="landing.cta.roadmap" values={{roadmapLink}}>{'Nine RFCs are published: the exercise catalog and its registries, prescription primitives, workouts, programs, and the references that tie them together. What comes next — and what is deliberately left out — is on the {roadmapLink}.'}</Translate>
         </p>
         <div className={styles.earlyAdopters}>
           <p className={styles.earlyAdoptersText}>

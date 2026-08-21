@@ -6,6 +6,16 @@ The format is inspired by Keep a Changelog, and the project adheres to Semantic 
 
 ## [Unreleased]
 - Extension namespace policy (draft) and conformance sections (planned).
+- **RFC-010 Entity Reference Integrity (Draft).** The five shared entity
+  references accept values the entities they copy do not: a reference `name`
+  may be the empty string and a reference `slug` is checked against nothing,
+  so a document whose every reference is blank validates and cannot be
+  rendered. RFC-010 states the rule — a denormalised copy accepts exactly what
+  the field it copies accepts — and says why encoding it rejects documents that
+  validate today and therefore lands in a major release. No schema changed and
+  no release was cut. `check:refs` compares each reference against its source
+  and records the divergences that exist, so a sixth reference cannot be added
+  by copying a fifth, which is how two of them became five.
 
 ## Tooling — the mapping schema is frozen (2026-08-11)
 

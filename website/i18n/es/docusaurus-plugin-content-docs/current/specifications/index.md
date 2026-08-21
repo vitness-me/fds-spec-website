@@ -15,8 +15,8 @@ directorio `specification/rfc/` del repositorio. La CI compara cada página con
 su fuente en cada cambio, de modo que lo que se lee aquí es lo que dice el
 estándar.
 
-<!-- fds:count rfcs=8 -->
-Se publican 8 RFC:
+<!-- fds:count rfcs=9 -->
+Se publican 9 RFC:
 
 <!-- fds:covers rfcs -->
 | RFC | Especifica |
@@ -29,6 +29,7 @@ Se publican 8 RFC:
 | [RFC-006 — Primitivas de prescripción](/docs/specifications/rfc-006-prescription-primitives) | La biblioteca de definiciones de prescripción: carga, repeticiones, descanso y tempo como piezas reutilizables. La raíz de su esquema no valida nada por diseño. |
 | [RFC-007 — Modelo de datos de sesión de entrenamiento](/docs/specifications/rfc-007-workout-data-model) | La entidad de sesión de entrenamiento: cómo se estructura una sesión. |
 | [RFC-008 — Modelo de datos de programa de entrenamiento](/docs/specifications/rfc-008-program-data-model) | La entidad de programa: planes de varias semanas que apuntan a las sesiones en lugar de reformularlas. |
+| [RFC-010 — Integridad de las referencias entre entidades](/docs/specifications/rfc-010-entity-reference-integrity) | Las referencias que las entidades llevan unas a otras, y la regla de que una copia desnormalizada acepta exactamente lo que acepta el campo que copia. |
 
 Cada RFC nombra la versión del esquema que lo implementa. Para saber qué
 versiones de entidades publica el lanzamiento actual, véase la

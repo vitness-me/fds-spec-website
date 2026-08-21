@@ -120,7 +120,7 @@
     "message": "GitHub repozitorijum"
   },
   "landing.cta.roadmap": {
-    "message": "Objavljeno je osam RFC dokumenata: katalog vežbi i njegovi registri, primitivi preskripcije, treninzi i programi. Šta sledi — i šta je namerno izostavljeno — nalazi se u {roadmapLink}."
+    "message": "Objavljeno je devet RFC dokumenata: katalog vežbi i njegovi registri, primitivi preskripcije, treninzi, programi i reference koje ih povezuju. Šta sledi — i šta je namerno izostavljeno — nalazi se u {roadmapLink}."
   },
   "landing.cta.roadmapLink": {
     "message": "planu razvoja"

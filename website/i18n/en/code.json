@@ -120,7 +120,7 @@
     "message": "GitHub Repository"
   },
   "landing.cta.roadmap": {
-    "message": "Eight RFCs are published: the exercise catalog and its registries, prescription primitives, workouts and programs. What comes next — and what is deliberately left out — is on the {roadmapLink}."
+    "message": "Nine RFCs are published: the exercise catalog and its registries, prescription primitives, workouts, programs, and the references that tie them together. What comes next — and what is deliberately left out — is on the {roadmapLink}."
   },
   "landing.cta.roadmapLink": {
     "message": "roadmap"
