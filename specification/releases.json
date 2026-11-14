@@ -94,7 +94,7 @@
           "status": "current",
           "path": "atlas/v1.1.0/body-atlas.schema.json",
           "$id": "https://spec.vitness.me/schemas/atlas/v1.1.0/body-atlas.schema.json",
-          "frozen": false,
+          "frozen": true,
           "sha256": "3b099fd42b0e2083c5ccbb4ac3dfcf6fe7211830d37f5f9c9657a9356b6559f7"
         }
       }

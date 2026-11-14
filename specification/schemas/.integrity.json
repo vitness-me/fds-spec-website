@@ -7,7 +7,7 @@
     },
     "atlas/v1.1.0/body-atlas.schema.json": {
       "sha256": "3b099fd42b0e2083c5ccbb4ac3dfcf6fe7211830d37f5f9c9657a9356b6559f7",
-      "frozen": false
+      "frozen": true
     },
     "equipment/v1.1.0/equipment.schema.json": {
       "sha256": "605f43389f57c97b0902c1fada3eccf18525de9c2ee27e7db6ea35bc4e26acfb",
