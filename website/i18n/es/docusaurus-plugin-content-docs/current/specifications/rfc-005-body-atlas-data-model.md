@@ -166,7 +166,7 @@ Ninguno de los dos campos tiene un enum ni un patrón. La lista SPDX crece, un p
 
 El `v1.1.0` de esa URL es la versión propia de la ilustración. No tiene relación con la versión del esquema.
 
-En el documento completo siguiente, las dos vistas provienen de fuentes distintas. Un consumidor puede redistribuir el dibujo anterior bajo CC-BY-4.0 si muestra el texto de crédito. NO DEBE suponer que puede redistribuir el dibujo posterior, cuyos términos no están declarados.
+En el documento completo siguiente, las dos vistas provienen de fuentes distintas. Un consumidor puede redistribuir el dibujo de la vista anterior bajo CC-BY-4.0 si muestra el texto de crédito. NO DEBE suponer que puede redistribuir el de la vista posterior, cuyos términos no están declarados.
 
 ```json fds:document entity=body-atlas
 {
@@ -210,7 +210,6 @@ En el documento completo siguiente, las dos vistas provienen de fuentes distinta
 }
 ```
 
-
 ### 4.3. Áreas
 
 Un área es una región en la que se puede hacer clic. Transporta un `id`, su propio bloque `canonical` — las áreas se nombran y localizan exactamente igual que las entidades, porque son lo que un usuario ve y toca — y `bindings` que la sitúan en una o más vistas.
@@ -243,7 +242,7 @@ Cada vinculación empareja un `viewId` con un `selector` dentro del recurso de e
 
 <!-- fds:pin atlas/v1.0.0/body-atlas.schema.json — the 1.1.0 revision note names the superseded version deliberately, because releases 1.0.0 through 1.4.0 declare body-atlas at 1.0.0 and a client pinned to any of them must keep resolving it. New work uses 1.1.0. -->
 
-**1.1.0** agregó `license` y `attribution` opcionales en el recurso de una vista (§4.2), para que un atlas pueda declarar los términos de su ilustración como ya lo hacen los elementos multimedia. Ambos son adiciones opcionales a un objeto cerrado. Todo documento 1.0.0 sigue siendo válido sin cambios, pero un documento 1.1.0 que use cualquiera de los dos campos es rechazado por el esquema 1.0.0, y eso es lo que lo convierte en una versión y no en una edición. `atlas/v1.0.0/body-atlas.schema.json` sigue publicada y congelada. Los lanzamientos 1.0.0 a 1.4.0 declaran body-atlas en 1.0.0 y siguen resolviéndose, y el lanzamiento 1.5.0 es el primero que lo declara en 1.1.0.
+**1.1.0** agregó `license` y `attribution` opcionales en el recurso de una vista (§4.2), para que un atlas pueda declarar los términos de su ilustración como ya lo hacen los elementos multimedia. Ambos son adiciones opcionales a un objeto cerrado. Todo documento 1.0.0 sigue siendo válido sin cambios, pero un documento 1.1.0 que use cualquiera de los dos campos es rechazado por el esquema 1.0.0, y eso es lo que lo convierte en una versión y no en una edición. `atlas/v1.0.0/body-atlas.schema.json` sigue publicado y congelado. Los lanzamientos 1.0.0 a 1.4.0 declaran body-atlas en 1.0.0 y siguen resolviéndose, y el lanzamiento 1.5.0 es el primero que lo declara en 1.1.0.
 
 ## 6. Guía de implementación
 
@@ -299,7 +298,6 @@ Véase `/specification/schemas/atlas/v1.1.0/body-atlas.example.json`.
 :::danger DEBE
 - **DEBEN** emitir JSON que valide contra el esquema de Body Atlas para la `schemaVersion` declarada.
 - **DEBEN** proporcionar `views[*].id` y `areas[*].id` estables.
-- **NO DEBEN** declarar una `license` que no hayan establecido. Ningún validador ni consumidor puede detectar una suposición, y una licencia supuesta es peor que una ausente.
 :::
 
 :::tip DEBERÍA
@@ -312,8 +310,7 @@ Véase `/specification/schemas/atlas/v1.1.0/body-atlas.example.json`.
 :::danger DEBE
 - **DEBEN** validar los datos de atlas entrantes.
 - **DEBEN** resolver los pares de `viewId` y `selector` según cada vinculación de área.
-- **NO DEBEN** tratar la ausencia de `license` como permiso para usar el recurso.
-- **DEBEN** renderizar `attribution` como texto plano, nunca como marcado.
+- **NO DEBEN** tratar la ausencia de `license` como permiso para usar, modificar o redistribuir el recurso.
 :::
 
 :::tip DEBERÍA

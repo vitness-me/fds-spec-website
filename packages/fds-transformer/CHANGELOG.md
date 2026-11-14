@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- **Release 1.5.0 is bundled and is the default.** It names body-atlas 1.1.0,
+  which adds optional `license` and `attribution` on a view's asset. 1.0.0
+  through 1.4.0 stay bundled; pin one to keep validating against it.
+
 ## [0.2.0] - 2026-08-11
 
 Everything below shipped between 0.1.0 and this release. Two entries deserve

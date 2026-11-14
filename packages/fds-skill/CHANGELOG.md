@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Documents release 1.5.0: body-atlas 1.1.0 and the optional `license` and
+  `attribution` on a view's asset.
+
 ## [0.2.0] - 2026-08-11
 
 Two things were wrong with 0.1.0 and they are worth stating plainly, because

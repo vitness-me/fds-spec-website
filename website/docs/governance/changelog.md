@@ -13,15 +13,15 @@ The format is inspired by Keep a Changelog, and the project adheres to Semantic 
 ## [Unreleased]
 - Extension namespace policy (draft) and conformance sections (planned).
 
-## Schema release — body-atlas 1.1.0 (unreleased)
+## Schema release — body-atlas 1.1.0 (2026-11-14)
 
 ### Added
 - `license` and `attribution` on a view's `asset`, both optional strings. An
   atlas could not say on what terms its own drawings may be used, though every
   media item in FDS already could. `license` is an SPDX identifier where one
   applies, free text otherwise, and describes the artwork at `uri`, not the
-  atlas document. Absence means unstated, not public domain: a consumer MUST
-  NOT read a missing `license` as permission. RFC-005 §4.2.
+  atlas document. Absence means unstated, not public domain, so a missing
+  `license` is not permission (RFC-005 §4.2).
 
 ### Changed
 - Release **1.5.0** names body-atlas at 1.1.0. Every other entity and the

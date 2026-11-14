@@ -13,7 +13,7 @@ Format je inspirisan pristupom Keep a Changelog, a projekat se pridržava semant
 ## [Neobjavljeno]
 - Politika imenskog prostora ekstenzija (nacrt) i odeljci o usaglašenosti (planirano).
 
-## Izdanje šeme — body-atlas 1.1.0 (neobjavljeno)
+## Izdanje šeme — body-atlas 1.1.0 (2026-11-14)
 
 ### Dodato
 - `license` i `attribution` na `asset` prikaza, oba opciona stringa. Atlas nije
@@ -21,8 +21,8 @@ Format je inspirisan pristupom Keep a Changelog, a projekat se pridržava semant
   iako je svaka medijska stavka u FDS to već mogla. `license` je SPDX
   identifikator kada postoji odgovarajući, a u suprotnom slobodan tekst, i
   opisuje ilustraciju na `uri`, a ne dokument atlasa. Odsustvo znači da uslovi
-  nisu navedeni, a ne javno dobro: konzument NE SME da tumači nedostajuću
-  `license` kao dozvolu. RFC-005 §4.2.
+  nisu navedeni, a ne javno dobro, pa nedostajuća `license` nije dozvola
+  (RFC-005 §4.2).
 
 ### Izmenjeno
 - Izdanje **1.5.0** imenuje body-atlas na 1.1.0. Svi ostali entiteti i

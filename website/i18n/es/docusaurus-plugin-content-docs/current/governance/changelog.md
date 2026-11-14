@@ -13,7 +13,7 @@ El formato se inspira en Keep a Changelog, y el proyecto se adhiere al Versionad
 ## [Sin publicar]
 - Política de espacio de nombres de extensiones (borrador) y secciones de conformidad (planificadas).
 
-## Lanzamiento de esquema — body-atlas 1.1.0 (sin publicar)
+## Lanzamiento de esquema — body-atlas 1.1.0 (2026-11-14)
 
 ### Agregado
 - `license` y `attribution` en el `asset` de una vista, ambas cadenas
@@ -21,8 +21,8 @@ El formato se inspira en Keep a Changelog, y el proyecto se adhiere al Versionad
   dibujos, aunque todo elemento multimedia de FDS ya podía. `license` es un
   identificador SPDX cuando corresponde y texto libre en otro caso, y describe
   la ilustración en `uri`, no el documento del atlas. La ausencia significa no
-  declarada, no dominio público: un consumidor NO DEBE interpretar la falta de
-  `license` como permiso. RFC-005 §4.2.
+  declarada, no dominio público, así que la falta de `license` no es un permiso
+  (RFC-005 §4.2).
 
 ### Cambiado
 - El lanzamiento **1.5.0** nombra body-atlas en 1.1.0. Todas las demás

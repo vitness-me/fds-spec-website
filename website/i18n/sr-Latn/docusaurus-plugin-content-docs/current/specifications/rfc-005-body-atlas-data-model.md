@@ -210,7 +210,6 @@ U kompletnom dokumentu ispod, dva prikaza potiču iz različitih izvora. Konzume
 }
 ```
 
-
 ### 4.3. Oblasti
 
 Oblast je region koji se može kliknuti. Nosi `id`, sopstveni `canonical` blok — oblasti se imenuju i lokalizuju tačno kao entiteti, jer su ono što korisnik vidi i dodiruje — i `bindings` koja je smeštaju u jedan ili više prikaza.
@@ -299,7 +298,6 @@ Pogledajte `/specification/schemas/atlas/v1.1.0/body-atlas.example.json`.
 :::danger MORA
 - **MORAJU** da emituju JSON koji se validira prema šemi atlasa tela za deklarisani `schemaVersion`.
 - **MORAJU** da obezbede stabilne `views[*].id` i `areas[*].id`.
-- **NE SMEJU** da navedu `license` koju nisu utvrdili. Nijedan validator ni konzument ne može da otkrije nagađanje, a nagađana licenca je gora od odsutne.
 :::
 
 :::tip TREBALO BI
@@ -312,8 +310,7 @@ Pogledajte `/specification/schemas/atlas/v1.1.0/body-atlas.example.json`.
 :::danger MORA
 - **MORAJU** da validiraju dolazne podatke atlasa.
 - **MORAJU** da razreše parove `viewId` i `selector` po vezivanju oblasti.
-- **NE SMEJU** da tretiraju odsustvo `license` kao dozvolu za korišćenje resursa.
-- **MORAJU** da prikažu `attribution` kao običan tekst, nikada kao markup.
+- **NE SMEJU** da tretiraju odsustvo `license` kao dozvolu da koriste, menjaju ili dalje distribuiraju resurs.
 :::
 
 :::tip TREBALO BI

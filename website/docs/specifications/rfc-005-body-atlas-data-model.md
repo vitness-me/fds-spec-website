@@ -298,7 +298,6 @@ See `/specification/schemas/atlas/v1.1.0/body-atlas.example.json`.
 :::danger MUST
 - **MUST** emit JSON that validates against the Body Atlas schema for the declared `schemaVersion`.
 - **MUST** provide stable `views[*].id` and `areas[*].id`.
-- **MUST NOT** state a `license` they have not established. No validator or consumer can detect a guess, and a guessed licence is worse than an absent one.
 :::
 
 :::tip SHOULD
@@ -311,8 +310,7 @@ See `/specification/schemas/atlas/v1.1.0/body-atlas.example.json`.
 :::danger MUST
 - **MUST** validate incoming atlas data.
 - **MUST** resolve `viewId` and `selector` pairs per area binding.
-- **MUST NOT** treat an absent `license` as permission to use the asset.
-- **MUST** render `attribution` as plain text, never as markup.
+- **MUST NOT** treat an absent `license` as permission to use, modify or redistribute the asset.
 :::
 
 :::tip SHOULD
