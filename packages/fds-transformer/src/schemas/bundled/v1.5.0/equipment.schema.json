@@ -1,0 +1,309 @@
+{
+  "$id": "https://spec.vitness.me/schemas/equipment/v1.1.0/equipment.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "FDS Equipment (v1.1.0)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "id",
+    "canonical",
+    "metadata"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "id": {
+      "type": "string"
+    },
+    "canonical": {
+      "type": "object",
+      "required": [
+        "name",
+        "slug"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "slug": {
+          "$ref": "#/$defs/slug"
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "abbreviation": {
+          "type": "string"
+        },
+        "aliases": {
+          "$ref": "#/$defs/aliases"
+        },
+        "localized": {
+          "$ref": "#/$defs/localizedNames"
+        }
+      }
+    },
+    "classification": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "loading": {
+      "$ref": "#/$defs/equipmentLoading"
+    },
+    "media": {
+      "$ref": "#/$defs/media"
+    },
+    "attributes": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "extensions": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "metadata": {
+      "$ref": "#/$defs/metadata"
+    }
+  },
+  "$defs": {
+    "aliases": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "equipmentLoading": {
+      "description": "Loading characteristics of an implement.",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "increment": {
+          "description": "Smallest usable load step (2.5 kg plate pair, 5 lb dumbbell jump, one pin on a stack). Authoritative for plate math.",
+          "type": "object",
+          "required": [
+            "value",
+            "unit"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "value": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "unit": {
+              "$ref": "#/$defs/metricUnit"
+            }
+          }
+        },
+        "stackBased": {
+          "description": "Load is selected from discrete stack positions rather than free weight.",
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    "localizedNames": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "lang",
+          "name"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "lang": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1
+          },
+          "aliases": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          }
+        }
+      }
+    },
+    "media": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "type",
+          "uri"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "image",
+              "video",
+              "doc",
+              "3d"
+            ]
+          },
+          "uri": {
+            "type": "string",
+            "format": "uri"
+          },
+          "caption": {
+            "type": "string"
+          },
+          "license": {
+            "type": "string"
+          },
+          "attribution": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "required": [
+        "createdAt",
+        "updatedAt",
+        "status"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "source": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/$defs/status"
+        },
+        "deprecated": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "since": {
+              "type": "string",
+              "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+            },
+            "replacedBy": {
+              "type": "string"
+            }
+          }
+        },
+        "externalRefs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "system",
+              "id"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "system": {
+                "type": "string"
+              },
+              "id": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "history": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "at": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "actor": {
+                "type": "string"
+              },
+              "change": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "metricUnit": {
+      "type": "string",
+      "enum": [
+        "count",
+        "kg",
+        "lb",
+        "s",
+        "min",
+        "m",
+        "km",
+        "mi",
+        "m_s",
+        "km_h",
+        "min_per_km",
+        "min_per_mi",
+        "W",
+        "bpm",
+        "kcal",
+        "cm",
+        "in",
+        "percent",
+        "rpm",
+        "spm",
+        "level",
+        "ms"
+      ]
+    },
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]{2,}$"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "review",
+        "active",
+        "inactive",
+        "deprecated"
+      ],
+      "default": "active"
+    }
+  }
+}

@@ -8,12 +8,12 @@ sidebar_position: 1
 
 FDS is defined in JSON Schema (Draft 2020-12). Every schema below is published at a frozen URL: the bytes at a version URL never change, and a change ships at a new one.
 
-<!-- fds:count schemas=11 entities=7 libraries=1 tooling=1 superseded=2 -->
-Eleven schemas are published. Seven are entities, one is a definition library, one configures a tool, and two are superseded versions that are still served.
+<!-- fds:count schemas=12 entities=7 libraries=1 tooling=1 superseded=3 -->
+Twelve schemas are published. Seven are entities, one is a definition library, one configures a tool, and three are superseded versions that are still served.
 
 ## Entity versions are not uniform
 
-A release names a *set* of entity versions rather than one version they all share. The current release is **1.4.0**, and it publishes:
+A release names a *set* of entity versions rather than one version they all share. The current release is **1.5.0**, and it publishes:
 
 | Entity | Version | Schema URL |
 |---|---|---|
@@ -21,11 +21,11 @@ A release names a *set* of entity versions rather than one version they all shar
 | [Equipment](/docs/schemas/equipment) | 1.1.0 | `/schemas/equipment/v1.1.0/equipment.schema.json` |
 | [Muscle](/docs/schemas/muscle) | 1.0.0 | `/schemas/muscle/v1.0.0/muscle.schema.json` |
 | [Muscle Category](/docs/schemas/muscle-category) | 1.0.0 | `/schemas/muscle/muscle-category/v1.0.0/muscle-category.schema.json` |
-| [Body Atlas](/docs/schemas/body-atlas) | 1.0.0 | `/schemas/atlas/v1.0.0/body-atlas.schema.json` |
+| [Body Atlas](/docs/schemas/body-atlas) | 1.1.0 | `/schemas/atlas/v1.1.0/body-atlas.schema.json` |
 | [Workout](/docs/schemas/workout) | 1.1.0 | `/schemas/workout/v1.1.0/workout.schema.json` |
 | [Program](/docs/schemas/program) | 1.0.0 | `/schemas/program/v1.0.0/program.schema.json` |
 
-There is no `muscle/v1.4.0/`, and there will not be unless muscle itself changes. Build schema URLs from the entity version, never from the release — see the [discovery endpoint](/docs/core-concepts/discovery) for how a provider advertises which entity version it serves.
+There is no `muscle/v1.5.0/`, and there will not be unless muscle itself changes. Build schema URLs from the entity version, never from the release — see the [discovery endpoint](/docs/core-concepts/discovery) for how a provider advertises which entity version it serves.
 
 ## The entities
 
@@ -49,10 +49,10 @@ Muscle grouping and categorization structure.
 
 **Schema:** `/schemas/muscle/muscle-category/v1.0.0/muscle-category.schema.json`
 
-### [Body Atlas Schema](/docs/schemas/body-atlas) — v1.0.0
-Body visualization structure with views and areas.
+### [Body Atlas Schema](/docs/schemas/body-atlas) — v1.1.0
+Body visualization structure with views and areas. 1.1.0 added an optional licence and attribution on each view's asset (RFC-005 §5).
 
-**Schema:** `/schemas/atlas/v1.0.0/body-atlas.schema.json`
+**Schema:** `/schemas/atlas/v1.1.0/body-atlas.schema.json`
 
 ### [Workout Schema](/docs/schemas/workout) — v1.1.0
 One prescribed session: blocks of items, an execution mode per block, and a prescription per set. 1.1.0 added per-set intensity zones and machine settings (RFC-007 §6).
@@ -83,6 +83,7 @@ Configuration for the FDS Transformer: how source fields map onto an FDS entity.
 ## Superseded, still served
 
 <!-- fds:pin workout/v1.0.0/workout.schema.json — listed on purpose: releases 1.2.0 and 1.3.0 declare workout at 1.0.0, so a client pinned to either must keep resolving this URL. The section says plainly not to build against it. -->
+<!-- fds:pin atlas/v1.0.0/body-atlas.schema.json — listed on purpose: releases 1.0.0 through 1.4.0 declare body-atlas at 1.0.0, so a client pinned to any of them must keep resolving this URL. The section says plainly not to build against it. -->
 <!-- fds:pin transformer/v1.0.0/mapping.schema.json — listed on purpose: it is the `$schema` URL every configuration written before 1.1.0 names, and an editor resolving it must keep getting a document. -->
 
 ### Transformer Mapping — v1.0.0
@@ -100,6 +101,16 @@ Superseded by workout 1.1.0. It stays published and stays frozen, because releas
 Do not build against it. New work should use workout 1.1.0; 1.0.0 documents remain valid under it unchanged, since 1.1.0 only added optional fields.
 
 Worked examples live alongside the current version, at `/schemas/workout/v1.1.0/`.
+
+### Body Atlas — v1.0.0
+
+**Schema:** `/schemas/atlas/v1.0.0/body-atlas.schema.json`
+
+Superseded by body-atlas 1.1.0. It stays published and stays frozen, because releases 1.0.0 through 1.4.0 declare body-atlas at 1.0.0 and a client pinned to any of them must keep resolving.
+
+Do not build against it. New work should use body-atlas 1.1.0; 1.0.0 documents remain valid under it unchanged, since 1.1.0 only added optional fields.
+
+The example lives alongside the current version, at `/schemas/atlas/v1.1.0/`.
 
 ## Validation
 

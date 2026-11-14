@@ -157,7 +157,8 @@ Notes:
 - `specification/schema-sources/` — **authoring**. Entity schemas `$ref` a shared `common` envelope here; hand‑edit these.
 - `specification/schemas/` — **generated and published**. Each file is flattened to be self‑contained, so validating one entity never requires fetching another. Never hand‑edit a `*.schema.json`; the examples and READMEs beside them are hand‑written.
   - `exercises/v1.1.0/`, `equipment/v1.1.0/` schema + examples
-  - `muscle/v1.0.0/`, `muscle/muscle-category/v1.0.0/`, `atlas/v1.0.0/` schema + examples
+  - `muscle/v1.0.0/`, `muscle/muscle-category/v1.0.0/` schema + examples
+  - `atlas/v1.1.0/` schema + example; `atlas/v1.0.0/` schema only, superseded but still served and frozen
   <!-- fds:count fixtures:prescription=73 -->
   - `prescription/v1.0.0/` definition library + 73 fixtures
   <!-- fds:count examples:workout=46 -->

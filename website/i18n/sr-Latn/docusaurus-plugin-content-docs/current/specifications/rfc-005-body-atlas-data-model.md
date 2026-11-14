@@ -8,8 +8,8 @@ keywords: [body atlas, visualization, anatomy, heatmap, data model, json schema,
 # RFC-005: Specifikacija modela podataka atlasa tela
 
 **Status**: Nacrt
-**Verzija**: 0.1.0
-**Datum**: 2025-09-09
+**Verzija**: 0.2.0
+**Datum**: 2026-11-14
 **Autori**: VITNESS tim
 **Kategorija**: Standards Track
 
@@ -60,7 +60,7 @@ Svi usaglašeni zapisi atlasa **MORAJU** da uključuju:
 
 ```json
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "id": "atlas.body.v1",
   "canonical": {
     "name": "FDS Body Atlas v1",
@@ -91,6 +91,7 @@ Svi usaglašeni zapisi atlasa **MORAJU** da uključuju:
 - `views[*].id` je stabilan identifikator koji se koristi u `areas[*].bindings[*].viewId`.
 - `views[*].kind` je jedno od `anterior`, `posterior`, `left-lateral`, `right-lateral`, `superior`, `inferior`.
 - `views[*].asset` TREBALO BI da bude SVG radi najbolje prenosivosti (drugi tipovi su dozvoljeni).
+- `views[*].asset` MOŽE da navede uslove ilustracije u `license` i `attribution` (§4.2).
 
 ### 3.3. Oblasti i vezivanja
 - `areas[*].id` je stabilan, globalni identifikator oblasti (preporučuje se tačkasta notacija, npr. `thigh.left.anterior`).
@@ -131,6 +132,85 @@ Prikazi su razlog što atlas postoji kao zaseban entitet: isti mišić se pojavl
 }
 ```
 
+#### Licenca i atribucija
+
+Od verzije šeme 1.1.0 resurs MOŽE da nosi dva opciona stringa, `license` i `attribution`. Oni navode uslove za ilustraciju na `uri`. Sva ostala mesta na kojima FDS pokazuje na sliku to već rade: medijske stavke nose ista dva polja. Bez njih atlas nije mogao da kaže pod kojim uslovima se njegovi sopstveni crteži smeju koristiti.
+
+`license` imenuje uslove pod kojima se resurs sme koristiti.
+
+- Proizvođač TREBALO BI da koristi SPDX identifikator ili SPDX izraz licence kada postoji odgovarajući, na primer `Apache-2.0`, `CC-BY-4.0` ili `Apache-2.0 OR MIT`. Kada ne postoji, proizvođač MOŽE da koristi slobodan tekst.
+- **Odsustvo znači da uslovi nisu navedeni, a ne javno dobro.** Konzument NE SME da tretira nedostajuću `license` kao dozvolu da koristi, menja ili dalje distribuira resurs. To je značenje koje RFC-008 §4.8 daje polju `authorship.license`.
+- `license` opisuje resurs, a ne dokument atlasa. Nazivi, id-jevi i vezivanja oblasti su drugo delo i mogu imati drugog vlasnika.
+- Svaki prikaz navodi sopstvene uslove, jer prikazi mogu poticati iz različitih izvora.
+
+`attribution` je tekst zasluga koji uslovi resursa traže da primalac prikaže. Proizvođač TREBALO BI da ga postavi kada licenca zahteva navođenje zasluga, kao što to rade Apache-2.0 i sve CC-BY licence. Ne zamenjuje obaveze obaveštenja same licence: Apache-2.0 §4(d), na primer, zahteva od onoga ko dalje distribuira da prenese sadržaj NOTICE datoteke dela. `attribution` pomaže primaocu da pronađe tu obavezu, ali je ne ispunjava.
+
+Nijedno od dva polja nema enum ni obrazac. SPDX lista raste, obrazac bi odbacio izraze i legitimne uslove u slobodnom tekstu, a kasnije pooštravanje polja je nekompatibilna izmena.
+
+```json fds:fragment entity=body-atlas
+{
+  "views": [
+    {
+      "id": "anterior",
+      "kind": "anterior",
+      "asset": {
+        "type": "svg",
+        "uri": "https://assets.vitness.me/body-atlas/v1.1.0/anterior.svg",
+        "license": "Apache-2.0",
+        "attribution": "Body Muscles, Copyright 2024 Ivan Vulović"
+      }
+    }
+  ]
+}
+```
+
+`v1.1.0` u tom URL-u je sopstveno izdanje ilustracije. Nema veze sa verzijom šeme.
+
+U kompletnom dokumentu ispod, dva prikaza potiču iz različitih izvora. Konzument sme dalje da distribuira prednji crtež pod CC-BY-4.0 ako prikaže tekst zasluga. NE SME da pretpostavi da sme dalje da distribuira zadnji crtež, čiji uslovi nisu navedeni.
+
+```json fds:document entity=body-atlas
+{
+  "schemaVersion": "1.1.0",
+  "id": "atlas.body.example",
+  "canonical": { "name": "Example Body Atlas", "slug": "example-body-atlas" },
+  "views": [
+    {
+      "id": "anterior",
+      "kind": "anterior",
+      "asset": {
+        "type": "svg",
+        "uri": "https://cdn.example.com/atlas/anterior.svg",
+        "license": "CC-BY-4.0",
+        "attribution": "Anterior illustration by Example Studio"
+      }
+    },
+    {
+      "id": "posterior",
+      "kind": "posterior",
+      "asset": { "type": "svg", "uri": "https://cdn.example.com/atlas/posterior.svg" }
+    }
+  ],
+  "areas": [
+    {
+      "id": "thigh.left.anterior",
+      "canonical": { "name": "Left Anterior Thigh", "slug": "thigh-left-anterior" },
+      "bindings": [ { "viewId": "anterior", "selector": "#area-thigh-left" } ]
+    },
+    {
+      "id": "back.lower.posterior",
+      "canonical": { "name": "Lower Back", "slug": "lower-back" },
+      "bindings": [ { "viewId": "posterior", "selector": "#area-lower-back" } ]
+    }
+  ],
+  "metadata": {
+    "createdAt": "2026-11-14T12:00:00Z",
+    "updatedAt": "2026-11-14T12:00:00Z",
+    "status": "active"
+  }
+}
+```
+
+
 ### 4.3. Oblasti
 
 Oblast je region koji se može kliknuti. Nosi `id`, sopstveni `canonical` blok — oblasti se imenuju i lokalizuju tačno kao entiteti, jer su ono što korisnik vidi i dodiruje — i `bindings` koja je smeštaju u jedan ili više prikaza.
@@ -161,6 +241,10 @@ Svako vezivanje uparuje `viewId` sa `selector`-om u resurs tog prikaza. Oblast m
 - Preimenovanje ili uklanjanje postojećih oblasti je glavna nadogradnja i NE SME da se dogodi u sporednim izdanjima.
 - Više verzija atlasa može postojati istovremeno; entiteti koji ga referenciraju TREBALO BI da navedu nameravani `atlasId`.
 
+<!-- fds:pin atlas/v1.0.0/body-atlas.schema.json — the 1.1.0 revision note names the superseded version deliberately, because releases 1.0.0 through 1.4.0 declare body-atlas at 1.0.0 and a client pinned to any of them must keep resolving it. New work uses 1.1.0. -->
+
+**1.1.0** je dodala opcione `license` i `attribution` na resurs prikaza (§4.2), kako bi atlas mogao da navede uslove svoje ilustracije onako kako to medijske stavke već rade. Oba su opciona dodavanja zatvorenom objektu. Svaki 1.0.0 dokument ostaje validan nepromenjen, ali 1.1.0 dokument koji koristi bilo koje od ta dva polja šema 1.0.0 odbacuje, i upravo to ga čini verzijom, a ne izmenom. `atlas/v1.0.0/body-atlas.schema.json` ostaje objavljena i zamrznuta. Izdanja od 1.0.0 do 1.4.0 deklarišu body-atlas na 1.0.0 i i dalje se razrešavaju, a izdanje 1.5.0 je prvo koje ga deklariše na 1.1.0.
+
 ## 6. Smernice za implementaciju
 
 ### 6.1. Referenciranje iz mišića
@@ -189,22 +273,24 @@ Konzumenti MOGU da kombinuju više toplotnih mapa po `areaId` unutar istog `atla
 ## 7. Razmatranja bezbednosti i privatnosti
 - Zapisi atlasa ne sadrže lične podatke (PII); hosting resursa tretirajte bezbedno.
 - Validirajte selektore i URI-je; izbegavajte ubrizgavanje koda kroz nepouzdan SVG sadržaj.
+- `attribution` je nepouzdan tekst koji se prikazuje pored ilustracije. Prikažite ga kao običan tekst i escape-ujte ga; nikada ga ne tumačite kao markup.
+- `license` je tvrdnja proizvođača, a ne proverena dozvola. FDS je ne proverava.
 
 ## 8. Referenca JSON šeme
-- **Atlas tela**: `/specification/schemas/atlas/v1.0.0/body-atlas.schema.json`
+- **Atlas tela**: `/specification/schemas/atlas/v1.1.0/body-atlas.schema.json`
 
 ## 8.1. Validacija
 
 Validirajte pomoću Ajv (Draft 2020‑12):
 ```
 npx --package=ajv-cli --package=ajv-formats ajv validate --spec=draft2020 -c ajv-formats \
-  -s specification/schemas/atlas/v1.0.0/body-atlas.schema.json \
-  -d specification/schemas/atlas/v1.0.0/body-atlas.example.json
+  -s specification/schemas/atlas/v1.1.0/body-atlas.schema.json \
+  -d specification/schemas/atlas/v1.1.0/body-atlas.example.json
 ```
 
 ## 9. Primer
 
-Pogledajte `/specification/schemas/atlas/v1.0.0/body-atlas.example.json`.
+Pogledajte `/specification/schemas/atlas/v1.1.0/body-atlas.example.json`.
 
 ## Usaglašenost
 
@@ -213,10 +299,12 @@ Pogledajte `/specification/schemas/atlas/v1.0.0/body-atlas.example.json`.
 :::danger MORA
 - **MORAJU** da emituju JSON koji se validira prema šemi atlasa tela za deklarisani `schemaVersion`.
 - **MORAJU** da obezbede stabilne `views[*].id` i `areas[*].id`.
+- **NE SMEJU** da navedu `license` koju nisu utvrdili. Nijedan validator ni konzument ne može da otkrije nagađanje, a nagađana licenca je gora od odsutne.
 :::
 
 :::tip TREBALO BI
 - **TREBALO BI** da preferiraju SVG resurse i stabilne selektore.
+- **TREBALO BI** da navedu `license` na svakom prikazu čiji su uslovi resursa poznati, i `attribution` gde ti uslovi zahtevaju navođenje zasluga.
 :::
 
 **Usaglašeni konzumenti:**
@@ -224,10 +312,13 @@ Pogledajte `/specification/schemas/atlas/v1.0.0/body-atlas.example.json`.
 :::danger MORA
 - **MORAJU** da validiraju dolazne podatke atlasa.
 - **MORAJU** da razreše parove `viewId` i `selector` po vezivanju oblasti.
+- **NE SMEJU** da tretiraju odsustvo `license` kao dozvolu za korišćenje resursa.
+- **MORAJU** da prikažu `attribution` kao običan tekst, nikada kao markup.
 :::
 
 :::tip TREBALO BI
 - **TREBALO BI** da ignorišu nepoznata opciona polja pod `attributes` i `extensions`.
+- **TREBALO BI** da sačuvaju `license` i `attribution` nepromenjene kroz svaku transformaciju koja prenosi prikaz dalje, i da prikažu ili proslede `attribution` gde god prikazuju ili dalje distribuiraju resurs.
 :::
 
 **Kompatibilnost:**
@@ -239,6 +330,8 @@ Pogledajte `/specification/schemas/atlas/v1.0.0/body-atlas.example.json`.
 
 ## 10. Reference
 - [RFC‑003: Specifikacija modela podataka mišića](./rfc-003-muscle-data-model.md)
+- [RFC‑008: Specifikacija modela podataka trenažnog programa](./rfc-008-program-data-model.md), §4.8 `authorship`
+- SPDX lista licenci — https://spdx.org/licenses/
 
 ---
 

@@ -8,13 +8,13 @@ usecase_audiences: [app-developer, researcher]
 usecase_sources:
   - specification/schemas/muscle/v1.0.0/muscle.example.json
   - specification/schemas/muscle/muscle-category/v1.0.0/muscle-category.example.json
-  - specification/schemas/atlas/v1.0.0/body-atlas.example.json
+  - specification/schemas/atlas/v1.1.0/body-atlas.example.json
 ---
 
 import {SpecExample, BeforeAfter, Panel, Audience, NextSteps, Next} from '@site/docs/use-cases/_shared/UseCase';
 import quadriceps from '@site/../specification/schemas/muscle/v1.0.0/muscle.example.json';
 import legs from '@site/../specification/schemas/muscle/muscle-category/v1.0.0/muscle-category.example.json';
-import atlas from '@site/../specification/schemas/atlas/v1.0.0/body-atlas.example.json';
+import atlas from '@site/../specification/schemas/atlas/v1.1.0/body-atlas.example.json';
 
 # Vincular músculos a un cuerpo sin ser dueño de la ilustración
 
@@ -58,7 +58,7 @@ El atlas resuelve esos ids de región a selectores dentro de vistas con nombre �
 incluye geometría alguna. El dibujo vive detrás del `asset.uri`; el atlas es el mapa
 que va de un id de región a un selector dentro de él.
 
-<SpecExample source="specification/schemas/atlas/v1.0.0/body-atlas.example.json" data={atlas}>
+<SpecExample source="specification/schemas/atlas/v1.1.0/body-atlas.example.json" data={atlas}>
   Cuatro áreas, cada una vinculando un `viewId` y un `selector` como `#area-thigh-left`.
   El selector apunta hacia *su propio* SVG — el estándar no se compromete con ninguno.
 </SpecExample>

@@ -104,7 +104,7 @@ const PAIRS = [
   },
   {
     rfc: 'specification/rfc/rfc-005-body-atlas-data-model.md',
-    source: 'specification/schema-sources/atlas/v1.0.0/body-atlas.schema.json',
+    source: 'specification/schema-sources/atlas/v1.1.0/body-atlas.schema.json',
   },
   {
     rfc: 'specification/rfc/rfc-006-prescription-primitives.md',

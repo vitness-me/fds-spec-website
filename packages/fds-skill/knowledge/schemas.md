@@ -299,7 +299,7 @@ interface FDSMuscleCategory {
 
 ---
 
-## Body Atlas Schema (v1.0.0)
+## Body Atlas Schema (v1.1.0)
 
 An atlas is a set of drawings of a body and a set of named areas on them. It is
 what makes a heatmap renderable: a muscle names `areaId`s, and the atlas is what
@@ -328,6 +328,8 @@ interface AtlasView {      // one drawing
   asset: {                 // Required
     type: 'svg' | 'image' | '3d';
     uri: string;           // URI format
+    license?: string;      // 1.1.0: SPDX id where one applies, else free text; absent means UNSTATED
+    attribution?: string;  // 1.1.0: credit text the asset's terms ask for
   };
 }
 

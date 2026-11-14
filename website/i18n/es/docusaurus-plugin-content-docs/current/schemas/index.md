@@ -8,12 +8,12 @@ sidebar_position: 1
 
 FDS se define en JSON Schema (Draft 2020-12). Cada esquema listado abajo se publica en una URL congelada: los bytes en una URL de versión nunca cambian, y un cambio se publica en una URL nueva.
 
-<!-- fds:count schemas=11 entities=7 libraries=1 tooling=1 superseded=2 -->
-Se publican 11 esquemas: 7 son entidades, 1 es una biblioteca de definiciones, 1 configura una herramienta y 2 son versiones sustituidas que se siguen sirviendo.
+<!-- fds:count schemas=12 entities=7 libraries=1 tooling=1 superseded=3 -->
+Se publican 12 esquemas: 7 son entidades, 1 es una biblioteca de definiciones, 1 configura una herramienta y 3 son versiones sustituidas que se siguen sirviendo.
 
 ## Las versiones de entidades no son uniformes
 
-Un lanzamiento nombra un *conjunto* de versiones de entidades, no una versión que todas compartan. El lanzamiento actual es **1.4.0**, y publica:
+Un lanzamiento nombra un *conjunto* de versiones de entidades, no una versión que todas compartan. El lanzamiento actual es **1.5.0**, y publica:
 
 | Entidad | Versión | URL del esquema |
 |---|---|---|
@@ -21,11 +21,11 @@ Un lanzamiento nombra un *conjunto* de versiones de entidades, no una versión q
 | [Equipamiento](/docs/schemas/equipment) | 1.1.0 | `/schemas/equipment/v1.1.0/equipment.schema.json` |
 | [Músculo](/docs/schemas/muscle) | 1.0.0 | `/schemas/muscle/v1.0.0/muscle.schema.json` |
 | [Categoría de músculos](/docs/schemas/muscle-category) | 1.0.0 | `/schemas/muscle/muscle-category/v1.0.0/muscle-category.schema.json` |
-| [Atlas corporal](/docs/schemas/body-atlas) | 1.0.0 | `/schemas/atlas/v1.0.0/body-atlas.schema.json` |
+| [Atlas corporal](/docs/schemas/body-atlas) | 1.1.0 | `/schemas/atlas/v1.1.0/body-atlas.schema.json` |
 | [Sesión de entrenamiento](/docs/schemas/workout) | 1.1.0 | `/schemas/workout/v1.1.0/workout.schema.json` |
 | [Programa](/docs/schemas/program) | 1.0.0 | `/schemas/program/v1.0.0/program.schema.json` |
 
-No existe `muscle/v1.4.0/`, y no existirá a menos que muscle mismo cambie. Construir las URLs de esquemas a partir de la versión de la entidad, nunca a partir del lanzamiento — véase el [endpoint de descubrimiento](/docs/core-concepts/discovery) para saber cómo un proveedor anuncia qué versión de entidad sirve.
+No existe `muscle/v1.5.0/`, y no existirá a menos que muscle mismo cambie. Construir las URLs de esquemas a partir de la versión de la entidad, nunca a partir del lanzamiento — véase el [endpoint de descubrimiento](/docs/core-concepts/discovery) para saber cómo un proveedor anuncia qué versión de entidad sirve.
 
 ## Las entidades
 
@@ -49,10 +49,10 @@ Estructura de agrupación y categorización de músculos.
 
 **Esquema:** `/schemas/muscle/muscle-category/v1.0.0/muscle-category.schema.json`
 
-### [Esquema de atlas corporal](/docs/schemas/body-atlas) — v1.0.0
-Estructura de visualización del cuerpo con vistas y áreas.
+### [Esquema de atlas corporal](/docs/schemas/body-atlas) — v1.1.0
+Estructura de visualización del cuerpo con vistas y áreas. La 1.1.0 agregó una licencia y una atribución opcionales en el recurso de cada vista (RFC-005 §5).
 
-**Esquema:** `/schemas/atlas/v1.0.0/body-atlas.schema.json`
+**Esquema:** `/schemas/atlas/v1.1.0/body-atlas.schema.json`
 
 ### [Esquema de sesión de entrenamiento](/docs/schemas/workout) — v1.1.0
 Una sesión prescrita: bloques de elementos, un modo de ejecución por bloque y una prescripción por serie. La 1.1.0 agregó zonas de intensidad por serie y ajustes de máquina (RFC-007 §6).
@@ -83,6 +83,7 @@ Configuración del FDS Transformer: cómo los campos de origen se mapean a una e
 ## Sustituidos, todavía servidos
 
 <!-- fds:pin workout/v1.0.0/workout.schema.json — listed on purpose: releases 1.2.0 and 1.3.0 declare workout at 1.0.0, so a client pinned to either must keep resolving this URL. The section says plainly not to build against it. -->
+<!-- fds:pin atlas/v1.0.0/body-atlas.schema.json — listed on purpose: releases 1.0.0 through 1.4.0 declare body-atlas at 1.0.0, so a client pinned to any of them must keep resolving this URL. The section says plainly not to build against it. -->
 <!-- fds:pin transformer/v1.0.0/mapping.schema.json — listed on purpose: it is the `$schema` URL every configuration written before 1.1.0 names, and an editor resolving it must keep getting a document. -->
 
 ### Mapeo del Transformer — v1.0.0
@@ -100,6 +101,16 @@ Sustituida por workout 1.1.0. Sigue publicada y sigue congelada, porque los lanz
 No construir contra ella. El trabajo nuevo debería usar workout 1.1.0; los documentos 1.0.0 siguen siendo válidos bajo ella sin cambios, ya que la 1.1.0 solo agregó campos opcionales.
 
 Los ejemplos resueltos viven junto a la versión actual, en `/schemas/workout/v1.1.0/`.
+
+### Atlas corporal — v1.0.0
+
+**Esquema:** `/schemas/atlas/v1.0.0/body-atlas.schema.json`
+
+Sustituido por body-atlas 1.1.0. Sigue publicado y sigue congelado, porque los lanzamientos 1.0.0 a 1.4.0 declaran body-atlas en 1.0.0 y un cliente fijado a cualquiera de ellos debe poder seguir resolviéndolo.
+
+No construir contra él. El trabajo nuevo debería usar body-atlas 1.1.0; los documentos 1.0.0 siguen siendo válidos bajo ella sin cambios, ya que la 1.1.0 solo agregó campos opcionales.
+
+El ejemplo vive junto a la versión actual, en `/schemas/atlas/v1.1.0/`.
 
 ## Validación
 

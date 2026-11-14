@@ -1,8 +1,8 @@
 # FDS Specification Expert Skill
 
 > **Version:** 2.0.0  
-> **Specification Version:** FDS release 1.4.0  
-> **Last Updated:** August 2026
+> **Specification Version:** FDS release 1.5.0  
+> **Last Updated:** November 2026
 
 ## What this document is
 
@@ -50,7 +50,7 @@ https://spec.vitness.me/schemas/exercises/v1.1.0/exercise.schema.json
 https://spec.vitness.me/schemas/equipment/v1.1.0/equipment.schema.json
 https://spec.vitness.me/schemas/muscle/v1.0.0/muscle.schema.json
 https://spec.vitness.me/schemas/muscle/muscle-category/v1.0.0/muscle-category.schema.json
-https://spec.vitness.me/schemas/atlas/v1.0.0/body-atlas.schema.json
+https://spec.vitness.me/schemas/atlas/v1.1.0/body-atlas.schema.json
 https://spec.vitness.me/schemas/prescription/v1.0.0/prescription.schema.json
 https://spec.vitness.me/schemas/workout/v1.1.0/workout.schema.json
 https://spec.vitness.me/schemas/program/v1.0.0/program.schema.json
@@ -69,8 +69,9 @@ Release 1.3.0 serves exercise and equipment at 1.1.0 and everything else at 1.0.
 | 1.2.0 | as 1.1.0, plus workout 1.0.0 |
 | 1.3.0 | as 1.2.0, plus program 1.0.0 |
 | 1.4.0 | as 1.3.0, but workout moves to 1.1.0 |
+| 1.5.0 | as 1.4.0, but body-atlas moves to 1.1.0 |
 
-A superseded entity version stays published. `workout/v1.0.0/` is still served and still frozen, because releases 1.2.0 and 1.3.0 declare workout at 1.0.0.
+A superseded entity version stays published. `workout/v1.0.0/` is still served and still frozen, because releases 1.2.0 and 1.3.0 declare workout at 1.0.0. `atlas/v1.0.0/` likewise, because releases 1.0.0 through 1.4.0 declare body-atlas at 1.0.0.
 
 **Every published URL is frozen.** Its bytes never change; a change ships at a new version URL.
 
@@ -298,11 +299,17 @@ An atlas has two required, non-empty arrays:
 
 | Field | What it holds |
 |---|---|
-| `views` | The drawings. Each has an `id`, a `kind`, and an `asset` of `{ type, uri }` |
+| `views` | The drawings. Each has an `id`, a `kind`, and an `asset` of `{ type, uri }`, plus optional `license` and `attribution` from 1.1.0 |
 | `areas` | The nameable regions. Each has an `id`, a `canonical` name and slug, and `bindings` |
 
 `views[].kind` is closed: `anterior`, `posterior`, `left-lateral`,
 `right-lateral`, `superior`, `inferior`. `asset.type` is `svg`, `image` or `3d`.
+
+`asset.license` states the terms of that view's artwork, not of the atlas
+document: an SPDX identifier where one applies, free text otherwise. A missing
+`license` means the terms are unstated, never that the drawing is free to use.
+Never fill one in by guessing. `asset.attribution` is the credit text the terms
+ask for; render it as plain text.
 
 An area is **not** per-view. One `areas[]` entry carries one `bindings[]` entry
 per view it is visible in — `{ viewId, selector }` — so "left quadriceps" is one

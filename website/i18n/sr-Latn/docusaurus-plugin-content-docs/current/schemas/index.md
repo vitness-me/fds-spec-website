@@ -8,12 +8,12 @@ sidebar_position: 1
 
 FDS je definisan u formatu JSON Schema (Draft 2020-12). Svaka šema ispod objavljena je na zamrznutom URL-u: bajtovi na URL-u verzije nikada se ne menjaju, a izmena se isporučuje na novom.
 
-<!-- fds:count schemas=11 entities=7 libraries=1 tooling=1 superseded=2 -->
-Objavljeno je 11 šema. Od toga je 7 entiteta, 1 je biblioteka definicija, 1 konfiguriše alat, a 2 su zamenjene verzije koje se i dalje služe.
+<!-- fds:count schemas=12 entities=7 libraries=1 tooling=1 superseded=3 -->
+Objavljeno je 12 šema. Od toga je 7 entiteta, 1 je biblioteka definicija, 1 konfiguriše alat, a 3 su zamenjene verzije koje se i dalje služe.
 
 ## Verzije entiteta nisu ujednačene
 
-Izdanje imenuje *skup* verzija entiteta, a ne jednu verziju koju svi dele. Aktuelno izdanje je **1.4.0** i ono objavljuje:
+Izdanje imenuje *skup* verzija entiteta, a ne jednu verziju koju svi dele. Aktuelno izdanje je **1.5.0** i ono objavljuje:
 
 | Entitet | Verzija | URL šeme |
 |---|---|---|
@@ -21,11 +21,11 @@ Izdanje imenuje *skup* verzija entiteta, a ne jednu verziju koju svi dele. Aktue
 | [Oprema](/docs/schemas/equipment) | 1.1.0 | `/schemas/equipment/v1.1.0/equipment.schema.json` |
 | [Mišić](/docs/schemas/muscle) | 1.0.0 | `/schemas/muscle/v1.0.0/muscle.schema.json` |
 | [Kategorija mišića](/docs/schemas/muscle-category) | 1.0.0 | `/schemas/muscle/muscle-category/v1.0.0/muscle-category.schema.json` |
-| [Atlas tela](/docs/schemas/body-atlas) | 1.0.0 | `/schemas/atlas/v1.0.0/body-atlas.schema.json` |
+| [Atlas tela](/docs/schemas/body-atlas) | 1.1.0 | `/schemas/atlas/v1.1.0/body-atlas.schema.json` |
 | [Trening](/docs/schemas/workout) | 1.1.0 | `/schemas/workout/v1.1.0/workout.schema.json` |
 | [Program](/docs/schemas/program) | 1.0.0 | `/schemas/program/v1.0.0/program.schema.json` |
 
-Ne postoji `muscle/v1.4.0/` i neće postojati osim ako se sam muscle ne promeni. URL-ove šema gradite iz verzije entiteta, nikada iz izdanja — pogledajte [krajnju tačku za otkrivanje](/docs/core-concepts/discovery) za to kako provajder oglašava koju verziju entiteta služi.
+Ne postoji `muscle/v1.5.0/` i neće postojati osim ako se sam muscle ne promeni. URL-ove šema gradite iz verzije entiteta, nikada iz izdanja — pogledajte [krajnju tačku za otkrivanje](/docs/core-concepts/discovery) za to kako provajder oglašava koju verziju entiteta služi.
 
 ## Entiteti
 
@@ -49,10 +49,10 @@ Struktura grupisanja i kategorizacije mišića.
 
 **Šema:** `/schemas/muscle/muscle-category/v1.0.0/muscle-category.schema.json`
 
-### [Šema atlasa tela](/docs/schemas/body-atlas) — v1.0.0
-Struktura vizualizacije tela sa prikazima i oblastima.
+### [Šema atlasa tela](/docs/schemas/body-atlas) — v1.1.0
+Struktura vizualizacije tela sa prikazima i oblastima. 1.1.0 je dodala opcionu licencu i atribuciju na resursu svakog prikaza (RFC-005 §5).
 
-**Šema:** `/schemas/atlas/v1.0.0/body-atlas.schema.json`
+**Šema:** `/schemas/atlas/v1.1.0/body-atlas.schema.json`
 
 ### [Šema treninga](/docs/schemas/workout) — v1.1.0
 Jedan propisan trening: blokovi stavki, režim izvršavanja po bloku i preskripcija po seriji. 1.1.0 je dodala zone intenziteta po seriji i podešavanja mašina (RFC-007 §6).
@@ -83,6 +83,7 @@ Konfiguracija za FDS Transformer: kako se izvorna polja mapiraju na FDS entitet.
 ## Zamenjene, i dalje dostupne
 
 <!-- fds:pin workout/v1.0.0/workout.schema.json — listed on purpose: releases 1.2.0 and 1.3.0 declare workout at 1.0.0, so a client pinned to either must keep resolving this URL. The section says plainly not to build against it. -->
+<!-- fds:pin atlas/v1.0.0/body-atlas.schema.json — listed on purpose: releases 1.0.0 through 1.4.0 declare body-atlas at 1.0.0, so a client pinned to any of them must keep resolving this URL. The section says plainly not to build against it. -->
 <!-- fds:pin transformer/v1.0.0/mapping.schema.json — listed on purpose: it is the `$schema` URL every configuration written before 1.1.0 names, and an editor resolving it must keep getting a document. -->
 
 ### Mapiranje transformatora — v1.0.0
@@ -100,6 +101,16 @@ Zamenjena treningom 1.1.0. Ostaje objavljena i ostaje zamrznuta, jer izdanja 1.2
 Ne gradite prema njoj. Nov rad treba da koristi workout 1.1.0; 1.0.0 dokumenti ostaju validni pod njom nepromenjeni, pošto je 1.1.0 samo dodala opciona polja.
 
 Razrađeni primeri žive uz aktuelnu verziju, na `/schemas/workout/v1.1.0/`.
+
+### Atlas tela — v1.0.0
+
+**Šema:** `/schemas/atlas/v1.0.0/body-atlas.schema.json`
+
+Zamenjena atlasom tela 1.1.0. Ostaje objavljena i ostaje zamrznuta, jer izdanja od 1.0.0 do 1.4.0 deklarišu body-atlas na 1.0.0, a klijent fiksiran na bilo koje od njih mora i dalje moći da razrešava.
+
+Ne gradite prema njoj. Nov rad treba da koristi body-atlas 1.1.0; 1.0.0 dokumenti ostaju validni pod njom nepromenjeni, pošto je 1.1.0 samo dodala opciona polja.
+
+Primer živi uz aktuelnu verziju, na `/schemas/atlas/v1.1.0/`.
 
 ## Validacija
 

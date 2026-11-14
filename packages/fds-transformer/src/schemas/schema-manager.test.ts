@@ -20,7 +20,7 @@ afterEach(() => {
 describe('SchemaManager', () => {
   describe('bundled version registry', () => {
     it('reports the versions it can serve offline', () => {
-      expect(SchemaManager.getBundledVersions()).toEqual(['1.0.0', '1.1.0', '1.2.0', '1.3.0', '1.4.0']);
+      expect(SchemaManager.getBundledVersions()).toEqual(['1.0.0', '1.1.0', '1.2.0', '1.3.0', '1.4.0', '1.5.0']);
     });
 
     it('answers hasBundledVersion for known and unknown versions', () => {
@@ -29,6 +29,7 @@ describe('SchemaManager', () => {
       expect(SchemaManager.hasBundledVersion('1.2.0')).toBe(true);
       expect(SchemaManager.hasBundledVersion('1.3.0')).toBe(true);
       expect(SchemaManager.hasBundledVersion('1.4.0')).toBe(true);
+      expect(SchemaManager.hasBundledVersion('1.5.0')).toBe(true);
       expect(SchemaManager.hasBundledVersion('9.9.9')).toBe(false);
     });
   });
@@ -100,7 +101,7 @@ describe('SchemaManager', () => {
   });
 
   describe('bundled schemas are self-contained', () => {
-    it.each(['1.0.0', '1.1.0', '1.2.0', '1.3.0', '1.4.0'])(
+    it.each(['1.0.0', '1.1.0', '1.2.0', '1.3.0', '1.4.0', '1.5.0'])(
       'compiles every bundled entity schema of %s without unresolved $refs',
       async (version) => {
         vi.stubGlobal('fetch', unreachableRemote());
@@ -253,6 +254,82 @@ describe('SchemaManager', () => {
       const result = await manager.validate(withSettings, 'workout', '1.3.0');
       expect(result.valid).toBe(false);
       expect(JSON.stringify(result.errors)).toMatch(/settings/);
+    });
+  });
+
+  /**
+   * Body-atlas 1.1.0 adds optional `license` and `attribution` to a view asset.
+   * Release 1.5.0 names it; 1.4.0 still names 1.0.0, whose asset is closed.
+   */
+  describe('body-atlas 1.1.0 is additive over 1.0.0', () => {
+    const withLicense = {
+      schemaVersion: '1.1.0',
+      id: 'atlas.body.test',
+      canonical: { name: 'Test Atlas', slug: 'test-atlas' },
+      views: [
+        {
+          id: 'anterior',
+          kind: 'anterior',
+          asset: {
+            type: 'svg',
+            uri: 'https://assets.vitness.me/body-atlas/v1.1.0/anterior.svg',
+            license: 'Apache-2.0',
+            attribution: 'Body Muscles, Copyright 2024 Ivan Vulović',
+          },
+        },
+      ],
+      areas: [
+        {
+          id: 'thigh.left.anterior',
+          canonical: { name: 'Left Anterior Thigh', slug: 'thigh-left-anterior' },
+          bindings: [{ viewId: 'anterior', selector: '#area-thigh-left' }],
+        },
+      ],
+      metadata: {
+        createdAt: '2026-11-14T00:00:00Z',
+        updatedAt: '2026-11-14T00:00:00Z',
+        status: 'active',
+      },
+    };
+
+    // Same atlas with the 1.1.0-only fields removed.
+    const withoutLicense = JSON.parse(JSON.stringify(withLicense));
+    withoutLicense.schemaVersion = '1.0.0';
+    delete withoutLicense.views[0].asset.license;
+    delete withoutLicense.views[0].asset.attribution;
+
+    it('accepts a 1.0.0-shaped atlas under 1.5.0', async () => {
+      vi.stubGlobal('fetch', unreachableRemote());
+      const manager = new SchemaManager();
+
+      await manager.loadVersion('1.5.0');
+
+      const result = await manager.validate(withoutLicense, 'body-atlas', '1.5.0');
+      expect(result.errors).toEqual([]);
+      expect(result.valid).toBe(true);
+    });
+
+    it('accepts license and attribution under 1.5.0', async () => {
+      vi.stubGlobal('fetch', unreachableRemote());
+      const manager = new SchemaManager();
+
+      await manager.loadVersion('1.5.0');
+
+      expect(manager.getLoadResult()?.source).toBe('bundled');
+      const result = await manager.validate(withLicense, 'body-atlas', '1.5.0');
+      expect(result.errors).toEqual([]);
+      expect(result.valid).toBe(true);
+    });
+
+    it('rejects license under 1.4.0, so the two bundles differ', async () => {
+      vi.stubGlobal('fetch', unreachableRemote());
+      const manager = new SchemaManager();
+
+      await manager.loadBundledOnly('1.4.0');
+
+      const result = await manager.validate(withLicense, 'body-atlas', '1.4.0');
+      expect(result.valid).toBe(false);
+      expect(JSON.stringify(result.errors)).toMatch(/license/);
     });
   });
 

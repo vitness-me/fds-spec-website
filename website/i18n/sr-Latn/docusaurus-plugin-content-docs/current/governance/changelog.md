@@ -13,6 +13,33 @@ Format je inspirisan pristupom Keep a Changelog, a projekat se pridržava semant
 ## [Neobjavljeno]
 - Politika imenskog prostora ekstenzija (nacrt) i odeljci o usaglašenosti (planirano).
 
+## Izdanje šeme — body-atlas 1.1.0 (neobjavljeno)
+
+### Dodato
+- `license` i `attribution` na `asset` prikaza, oba opciona stringa. Atlas nije
+  mogao da kaže pod kojim uslovima se njegovi sopstveni crteži smeju koristiti,
+  iako je svaka medijska stavka u FDS to već mogla. `license` je SPDX
+  identifikator kada postoji odgovarajući, a u suprotnom slobodan tekst, i
+  opisuje ilustraciju na `uri`, a ne dokument atlasa. Odsustvo znači da uslovi
+  nisu navedeni, a ne javno dobro: konzument NE SME da tumači nedostajuću
+  `license` kao dozvolu. RFC-005 §4.2.
+
+### Izmenjeno
+- Izdanje **1.5.0** imenuje body-atlas na 1.1.0. Svi ostali entiteti i
+  biblioteka preskripcija ostaju na verzijama koje imenuje 1.4.0.
+- Transformator uključuje izdanje 1.5.0 i podrazumevano ga koristi. Izdanja od
+  1.0.0 do 1.4.0 ostaju uključena.
+- Primer atlasa tela premešta se pored šeme 1.1.0 i navodi uslove za jedan od
+  svoja dva prikaza.
+
+### Kompatibilnost
+- Čisto aditivno. Svaki 1.0.0 atlas se validira prema 1.1.0 nepromenjen; 1.1.0
+  atlas koji koristi bilo koje od ta dva polja šema 1.0.0 odbacuje, i upravo to
+  ga čini verzijom, a ne izmenom.
+- **`atlas/v1.0.0/` ostaje objavljen i zamrznut.** Izdanja od 1.0.0 do 1.4.0
+  deklarišu body-atlas na 1.0.0, a klijent fiksiran na bilo koje od njih mora i
+  dalje moći da ga razrešava.
+
 ## Alati — šema mapiranja je zamrznuta (2026-08-11)
 
 Nijedna šema entiteta nije izmenjena, nijedno izdanje nije dodato, a trenutno
