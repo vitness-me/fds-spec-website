@@ -13,6 +13,34 @@ El formato se inspira en Keep a Changelog, y el proyecto se adhiere al Versionad
 ## [Sin publicar]
 - Política de espacio de nombres de extensiones (borrador) y secciones de conformidad (planificadas).
 
+## Lanzamiento de esquema — body-atlas 1.1.0 (2026-11-14)
+
+### Agregado
+- `license` y `attribution` en el `asset` de una vista, ambas cadenas
+  opcionales. Un atlas no podía decir en qué términos pueden usarse sus propios
+  dibujos, aunque todo elemento multimedia de FDS ya podía. `license` es un
+  identificador SPDX cuando corresponde y texto libre en otro caso, y describe
+  la ilustración en `uri`, no el documento del atlas. La ausencia significa no
+  declarada, no dominio público, así que la falta de `license` no es un permiso
+  (RFC-005 §4.2).
+
+### Cambiado
+- El lanzamiento **1.5.0** nombra body-atlas en 1.1.0. Todas las demás
+  entidades y la biblioteca de prescripción se quedan en las versiones que
+  nombra 1.4.0.
+- El transformador incluye el lanzamiento 1.5.0 y lo usa por defecto. Los
+  lanzamientos 1.0.0 a 1.4.0 siguen incluidos.
+- El ejemplo de body-atlas pasa junto al esquema 1.1.0 y declara los términos de
+  una de sus dos vistas.
+
+### Compatibilidad
+- Puramente aditivo. Todo atlas 1.0.0 valida contra 1.1.0 sin cambios; un atlas
+  1.1.0 que use cualquiera de los dos campos es rechazado por el esquema 1.0.0,
+  y eso es lo que lo convierte en una versión y no en una edición.
+- **`atlas/v1.0.0/` sigue publicado y congelado.** Los lanzamientos 1.0.0 a
+  1.4.0 declaran body-atlas en 1.0.0, y un cliente fijado a cualquiera de ellos
+  debe poder seguir resolviéndolo.
+
 ## Herramientas — el esquema de mapeo queda congelado (2026-08-11)
 
 Ningún esquema de entidad cambió, no se agregó ningún lanzamiento y el lanzamiento

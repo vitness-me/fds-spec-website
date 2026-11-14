@@ -8,8 +8,8 @@ keywords: [body atlas, visualization, anatomy, heatmap, data model, json schema,
 # RFC-005: Body Atlas Data Model Specification
 
 **Status**: Draft
-**Version**: 0.1.0
-**Date**: 2025-09-09
+**Version**: 0.2.0
+**Date**: 2026-11-14
 **Authors**: VITNESS Team
 **Category**: Standards Track
 
@@ -60,7 +60,7 @@ All compliant atlas records **MUST** include:
 
 ```json
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "id": "atlas.body.v1",
   "canonical": {
     "name": "FDS Body Atlas v1",
@@ -91,6 +91,7 @@ All compliant atlas records **MUST** include:
 - `views[*].id` is a stable identifier used by `areas[*].bindings[*].viewId`.
 - `views[*].kind` is one of `anterior`, `posterior`, `left-lateral`, `right-lateral`, `superior`, `inferior`.
 - `views[*].asset` SHOULD be an SVG for best portability (other types allowed).
+- `views[*].asset` MAY state the artwork's terms in `license` and `attribution` (§4.2).
 
 ### 3.3. Areas and Bindings
 - `areas[*].id` is a stable, global area identifier (dot‑notation recommended, e.g., `thigh.left.anterior`).
@@ -131,6 +132,84 @@ Views are the reason the atlas exists as a separate entity: the same muscle appe
 }
 ```
 
+#### Licence and attribution
+
+From schema version 1.1.0 an asset MAY carry two optional strings, `license` and `attribution`. They state the terms of the artwork at `uri`. Every other place FDS points at a picture already does this: media items carry the same two fields. Without them, an atlas could not say on what terms its own drawings may be used.
+
+`license` names the terms under which the asset may be used.
+
+- A producer SHOULD use an SPDX identifier or SPDX licence expression where one applies, such as `Apache-2.0`, `CC-BY-4.0` or `Apache-2.0 OR MIT`. Where none applies, a producer MAY use free text.
+- **Absence means unstated, not public domain.** A consumer MUST NOT treat a missing `license` as permission to use, modify or redistribute the asset. This is the meaning RFC-008 §4.8 gives `authorship.license`.
+- `license` describes the asset, not the atlas document. The area names, ids and bindings are a different work and can have a different owner.
+- Each view states its own terms, because views can come from different sources.
+
+`attribution` is the credit text the asset's terms ask a recipient to show. A producer SHOULD set it when the licence requires credit, as Apache-2.0 and every CC-BY licence do. It does not replace a licence's own notice duties: Apache-2.0 §4(d), for example, requires a redistributor to carry the contents of the work's NOTICE file. `attribution` helps a recipient find that duty but does not fulfil it.
+
+Neither field has an enum or a pattern. The SPDX list grows, a pattern would reject expressions and legitimate free-text terms, and tightening a field later is a breaking change.
+
+```json fds:fragment entity=body-atlas
+{
+  "views": [
+    {
+      "id": "anterior",
+      "kind": "anterior",
+      "asset": {
+        "type": "svg",
+        "uri": "https://assets.vitness.me/body-atlas/v1.1.0/anterior.svg",
+        "license": "Apache-2.0",
+        "attribution": "Body Muscles, Copyright 2024 Ivan Vulović"
+      }
+    }
+  ]
+}
+```
+
+The `v1.1.0` in that URL is the artwork's own release. It is unrelated to the schema version.
+
+In the complete document below, the two views come from different sources. A consumer may redistribute the anterior drawing under CC-BY-4.0 if it shows the credit text. It MUST NOT assume it may redistribute the posterior drawing, whose terms are unstated.
+
+```json fds:document entity=body-atlas
+{
+  "schemaVersion": "1.1.0",
+  "id": "atlas.body.example",
+  "canonical": { "name": "Example Body Atlas", "slug": "example-body-atlas" },
+  "views": [
+    {
+      "id": "anterior",
+      "kind": "anterior",
+      "asset": {
+        "type": "svg",
+        "uri": "https://cdn.example.com/atlas/anterior.svg",
+        "license": "CC-BY-4.0",
+        "attribution": "Anterior illustration by Example Studio"
+      }
+    },
+    {
+      "id": "posterior",
+      "kind": "posterior",
+      "asset": { "type": "svg", "uri": "https://cdn.example.com/atlas/posterior.svg" }
+    }
+  ],
+  "areas": [
+    {
+      "id": "thigh.left.anterior",
+      "canonical": { "name": "Left Anterior Thigh", "slug": "thigh-left-anterior" },
+      "bindings": [ { "viewId": "anterior", "selector": "#area-thigh-left" } ]
+    },
+    {
+      "id": "back.lower.posterior",
+      "canonical": { "name": "Lower Back", "slug": "lower-back" },
+      "bindings": [ { "viewId": "posterior", "selector": "#area-lower-back" } ]
+    }
+  ],
+  "metadata": {
+    "createdAt": "2026-11-14T12:00:00Z",
+    "updatedAt": "2026-11-14T12:00:00Z",
+    "status": "active"
+  }
+}
+```
+
 ### 4.3. Areas
 
 An area is a clickable region. It carries an `id`, its own `canonical` block — areas are named and localised exactly as entities are, because they are what a user sees and taps — and `bindings` that place it in one or more views.
@@ -161,6 +240,10 @@ Each binding pairs a `viewId` with a `selector` into that view's asset. An area 
 - Renaming or removing existing areas is a Major update and MUST NOT occur in Minor releases.
 - Multiple atlas versions may coexist; referencing entities SHOULD specify the intended `atlasId`.
 
+<!-- fds:pin atlas/v1.0.0/body-atlas.schema.json — the 1.1.0 revision note names the superseded version deliberately, because releases 1.0.0 through 1.4.0 declare body-atlas at 1.0.0 and a client pinned to any of them must keep resolving it. New work uses 1.1.0. -->
+
+**1.1.0** added optional `license` and `attribution` on a view's asset (§4.2), so an atlas can state the terms of its artwork the way media items already do. Both are optional additions to a closed object. Every 1.0.0 document remains valid unchanged, but a 1.1.0 document using either field is rejected by the 1.0.0 schema, which is what makes this a version rather than an edit. `atlas/v1.0.0/body-atlas.schema.json` stays published and frozen. Releases 1.0.0 through 1.4.0 declare body-atlas at 1.0.0 and continue to resolve, and release 1.5.0 is the first to declare it at 1.1.0.
+
 ## 6. Implementation Guidance
 
 ### 6.1. Referencing from Muscles
@@ -189,22 +272,24 @@ Consumers MAY combine multiple heatmaps by `areaId` within the same `atlasId` us
 ## 7. Security and Privacy Considerations
 - Atlas records contain no PII; treat asset hosting securely.
 - Validate selectors and URIs; avoid code injection via untrusted SVG content.
+- `attribution` is untrusted text displayed next to the artwork. Render it as plain text and escape it; never interpret it as markup.
+- A `license` is a claim by the producer, not a verified grant. FDS does not check it.
 
 ## 8. JSON Schema Reference
-- **Body Atlas**: `/specification/schemas/atlas/v1.0.0/body-atlas.schema.json`
+- **Body Atlas**: `/specification/schemas/atlas/v1.1.0/body-atlas.schema.json`
 
 ## 8.1. Validation
 
 Validate with Ajv (Draft 2020‑12):
 ```
 npx --package=ajv-cli --package=ajv-formats ajv validate --spec=draft2020 -c ajv-formats \
-  -s specification/schemas/atlas/v1.0.0/body-atlas.schema.json \
-  -d specification/schemas/atlas/v1.0.0/body-atlas.example.json
+  -s specification/schemas/atlas/v1.1.0/body-atlas.schema.json \
+  -d specification/schemas/atlas/v1.1.0/body-atlas.example.json
 ```
 
 ## 9. Example
 
-See `/specification/schemas/atlas/v1.0.0/body-atlas.example.json`.
+See `/specification/schemas/atlas/v1.1.0/body-atlas.example.json`.
 
 ## Conformance
 
@@ -217,6 +302,7 @@ See `/specification/schemas/atlas/v1.0.0/body-atlas.example.json`.
 
 :::tip SHOULD
 - **SHOULD** prefer SVG assets and stable selectors.
+- **SHOULD** state `license` on every view whose asset terms are known, and `attribution` where those terms require credit.
 :::
 
 **Conforming Consumers:**
@@ -224,10 +310,12 @@ See `/specification/schemas/atlas/v1.0.0/body-atlas.example.json`.
 :::danger MUST
 - **MUST** validate incoming atlas data.
 - **MUST** resolve `viewId` and `selector` pairs per area binding.
+- **MUST NOT** treat an absent `license` as permission to use, modify or redistribute the asset.
 :::
 
 :::tip SHOULD
 - **SHOULD** ignore unknown optional fields under `attributes` and `extensions`.
+- **SHOULD** preserve `license` and `attribution` unchanged through any transformation that carries a view forward, and show or pass on `attribution` wherever they display or redistribute the asset.
 :::
 
 **Compatibility:**
@@ -239,6 +327,8 @@ See `/specification/schemas/atlas/v1.0.0/body-atlas.example.json`.
 
 ## 10. References
 - [RFC‑003: Muscle Data Model Specification](./rfc-003-muscle-data-model.md)
+- [RFC‑008: Training Program Data Model Specification](./rfc-008-program-data-model.md), §4.8 `authorship`
+- SPDX License List — https://spdx.org/licenses/
 
 ---
 

@@ -3,12 +3,12 @@
 Every schema published by the Fitness Data Standard, at the version it is published under.
 
 <!-- fds:covers schemas -->
-<!-- fds:count schemas=11 entities=7 libraries=1 tooling=1 superseded=2 -->
-The list here is `specification/schemas/.integrity.json`, which is what the build writes and what `npm run check:published` fetches. Eleven schemas are published: seven entities, one definition library, one tooling schema, and two superseded versions that are still served.
+<!-- fds:count schemas=12 entities=7 libraries=1 tooling=1 superseded=3 -->
+The list here is `specification/schemas/.integrity.json`, which is what the build writes and what `npm run check:published` fetches. Twelve schemas are published: seven entities, one definition library, one tooling schema, and three superseded versions that are still served.
 
 ## A release is a set of entity versions
 
-`spec_version` names a release; it is **not** a version every entity shares. The current release is **1.4.0**, and it publishes:
+`spec_version` names a release; it is **not** a version every entity shares. The current release is **1.5.0**, and it publishes:
 
 <!-- fds:covers entities -->
 
@@ -18,7 +18,7 @@ The list here is `specification/schemas/.integrity.json`, which is what the buil
 | equipment | 1.1.0 |
 | muscle | 1.0.0 |
 | muscle-category | 1.0.0 |
-| body-atlas | 1.0.0 |
+| body-atlas | 1.1.0 |
 | workout | 1.1.0 |
 | program | 1.0.0 |
 
@@ -31,8 +31,9 @@ The list here is `specification/schemas/.integrity.json`, which is what the buil
 | 1.2.0 | workout |
 | 1.3.0 | program |
 | 1.4.0 | workout moves to 1.1.0 |
+| 1.5.0 | body-atlas moves to 1.1.0 |
 
-There is no `muscle/v1.4.0/`, and there will not be unless muscle itself changes. Build URLs from the entity version, not the release. See `specification/discovery.md`.
+There is no `muscle/v1.5.0/`, and there will not be unless muscle itself changes. Build URLs from the entity version, not the release. See `specification/discovery.md`.
 
 Both tables above are published, machine-readable, at **https://spec.vitness.me/releases.json** — the release manifest, generated from the schemas themselves. Read it rather than transcribing this page. It is not frozen: it gains a release every time one is published, which is exactly why it is worth fetching.
 
@@ -67,10 +68,11 @@ Both tables above are published, machine-readable, at **https://spec.vitness.me/
 - **Examples**:
   - https://spec.vitness.me/schemas/muscle/muscle-category/v1.0.0/muscle-category.example.json
 
-### Body Atlas Schema (v1.0.0)
-- **Schema**: https://spec.vitness.me/schemas/atlas/v1.0.0/body-atlas.schema.json
+### Body Atlas Schema (v1.1.0)
+- **Schema**: https://spec.vitness.me/schemas/atlas/v1.1.0/body-atlas.schema.json
+- 1.1.0 added an optional licence and attribution on each view's asset — RFC-005 §5
 - **Examples**:
-  - https://spec.vitness.me/schemas/atlas/v1.0.0/body-atlas.example.json
+  - https://spec.vitness.me/schemas/atlas/v1.1.0/body-atlas.example.json
 
 ### Workout Schema (v1.1.0)
 - **Schema**: https://spec.vitness.me/schemas/workout/v1.1.0/workout.schema.json
@@ -103,6 +105,7 @@ Both tables above are published, machine-readable, at **https://spec.vitness.me/
 ## Superseded, still served
 
 <!-- fds:pin workout/v1.0.0/workout.schema.json — listed on purpose: releases 1.2.0 and 1.3.0 declare workout at 1.0.0, so a client pinned to either must keep resolving this URL. It is frozen, and this section says it is not for new work. -->
+<!-- fds:pin atlas/v1.0.0/body-atlas.schema.json — listed on purpose: releases 1.0.0 through 1.4.0 declare body-atlas at 1.0.0, so a client pinned to any of them must keep resolving this URL. It is frozen, and this section says it is not for new work. -->
 <!-- fds:pin transformer/v1.0.0/mapping.schema.json — listed on purpose: it is the `$schema` URL every configuration written before 1.1.0 names, and an editor resolving it must keep getting a document. -->
 
 ### Transformer Mapping (v1.0.0)
@@ -119,6 +122,13 @@ Both tables above are published, machine-readable, at **https://spec.vitness.me/
   declare workout at 1.0.0, so a client pinned to either must keep resolving this URL
 - Not for new work. 1.1.0 only added optional fields, so every 1.0.0 document remains valid under it
 - Examples live with the current version, under `workout/v1.1.0/`
+
+### Body Atlas Schema (v1.0.0)
+- **Schema**: https://spec.vitness.me/schemas/atlas/v1.0.0/body-atlas.schema.json
+- Superseded by body-atlas 1.1.0, and still published and still frozen: releases 1.0.0 through 1.4.0
+  declare body-atlas at 1.0.0, so a client pinned to any of them must keep resolving this URL
+- Not for new work. 1.1.0 only added optional fields, so every 1.0.0 document remains valid under it
+- The example lives with the current version, under `atlas/v1.1.0/`
 
 ## Schema $id Fields
 

@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "id": "atlas.body.v1",
   "canonical": {
     "name": "FDS Body Atlas v1",
@@ -10,7 +10,16 @@
     ]
   },
   "views": [
-    { "id": "anterior", "kind": "anterior", "asset": { "type": "svg", "uri": "https://cdn.example.com/atlas/body-v1/anterior.svg" } },
+    {
+      "id": "anterior",
+      "kind": "anterior",
+      "asset": {
+        "type": "svg",
+        "uri": "https://cdn.example.com/atlas/body-v1/anterior.svg",
+        "license": "CC-BY-4.0",
+        "attribution": "Anterior illustration by Example Studio"
+      }
+    },
     { "id": "posterior", "kind": "posterior", "asset": { "type": "svg", "uri": "https://cdn.example.com/atlas/body-v1/posterior.svg" } }
   ],
   "areas": [

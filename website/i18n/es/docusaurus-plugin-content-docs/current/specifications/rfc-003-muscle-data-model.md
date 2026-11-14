@@ -310,7 +310,7 @@ graph LR
 
 El JSON Schema completo está disponible en:
 - **Músculo**: `/specification/schemas/muscle/v1.0.0/muscle.schema.json`
-- **Atlas corporal**: `/specification/schemas/atlas/v1.0.0/body-atlas.schema.json`
+- **Atlas corporal**: `/specification/schemas/atlas/v1.1.0/body-atlas.schema.json`
 
 ## 8.1. Validación
 

@@ -7,6 +7,32 @@ The format is inspired by Keep a Changelog, and the project adheres to Semantic 
 ## [Unreleased]
 - Extension namespace policy (draft) and conformance sections (planned).
 
+## Schema release — body-atlas 1.1.0 (2026-11-14)
+
+### Added
+- `license` and `attribution` on a view's `asset`, both optional strings. An
+  atlas could not say on what terms its own drawings may be used, though every
+  media item in FDS already could. `license` is an SPDX identifier where one
+  applies, free text otherwise, and describes the artwork at `uri`, not the
+  atlas document. Absence means unstated, not public domain, so a missing
+  `license` is not permission (RFC-005 §4.2).
+
+### Changed
+- Release **1.5.0** names body-atlas at 1.1.0. Every other entity and the
+  prescription library stay at the versions 1.4.0 names.
+- The transformer bundles release 1.5.0 and defaults to it. 1.0.0 through 1.4.0
+  remain bundled.
+- The body-atlas example moves beside the 1.1.0 schema and states the terms of
+  one of its two views.
+
+### Compatibility
+- Purely additive. Every 1.0.0 atlas validates against 1.1.0 unchanged; a 1.1.0
+  atlas using either field is rejected by the 1.0.0 schema, which is what makes
+  this a version rather than an edit.
+- **`atlas/v1.0.0/` stays published and frozen.** Releases 1.0.0 through 1.4.0
+  declare body-atlas at 1.0.0, and a client pinned to any of them must keep
+  resolving it.
+
 ## Tooling — the mapping schema is frozen (2026-08-11)
 
 No entity schema changed, no release was added, and the current release is where

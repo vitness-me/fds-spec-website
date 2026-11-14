@@ -8,13 +8,13 @@ usecase_audiences: [app-developer, researcher]
 usecase_sources:
   - specification/schemas/muscle/v1.0.0/muscle.example.json
   - specification/schemas/muscle/muscle-category/v1.0.0/muscle-category.example.json
-  - specification/schemas/atlas/v1.0.0/body-atlas.example.json
+  - specification/schemas/atlas/v1.1.0/body-atlas.example.json
 ---
 
 import {SpecExample, BeforeAfter, Panel, Audience, NextSteps, Next} from '@site/docs/use-cases/_shared/UseCase';
 import quadriceps from '@site/../specification/schemas/muscle/v1.0.0/muscle.example.json';
 import legs from '@site/../specification/schemas/muscle/muscle-category/v1.0.0/muscle-category.example.json';
-import atlas from '@site/../specification/schemas/atlas/v1.0.0/body-atlas.example.json';
+import atlas from '@site/../specification/schemas/atlas/v1.1.0/body-atlas.example.json';
 
 # Povežite mišiće sa telom bez posedovanja grafike
 
@@ -56,7 +56,7 @@ Atlas razrešava te ID-jeve regiona u selektore unutar imenovanih prikaza — a 
 isporučuje nikakvu geometriju. Crtež živi iza `asset.uri`; atlas je mapa od id-a
 regiona do selektora u njemu.
 
-<SpecExample source="specification/schemas/atlas/v1.0.0/body-atlas.example.json" data={atlas}>
+<SpecExample source="specification/schemas/atlas/v1.1.0/body-atlas.example.json" data={atlas}>
   Četiri oblasti, od kojih svaka vezuje `viewId` i `selector` kao što je
   `#area-thigh-left`. Selektor pokazuje u *vaš* SVG — standard se ne obavezuje ni na
   jedan.

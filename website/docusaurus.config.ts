@@ -205,9 +205,9 @@ const config: Config = {
           // Versioning configuration.
           //
           // The label names the current FDS *release*, which is a set of entity
-          // versions rather than a version every entity shares — release 1.4.0
-          // serves exercise, equipment and workout at 1.1.0 and the rest at
-          // 1.0.0. It comes from the release manifest, so it cannot disagree
+          // versions rather than a version every entity shares — release 1.5.0
+          // serves exercise, equipment, workout and body-atlas at 1.1.0 and the
+          // rest at 1.0.0. It comes from the release manifest, so it cannot disagree
           // with DEFAULT_SCHEMA_VERSION in the transformer, which is generated
           // from the same document.
           lastVersion: 'current',

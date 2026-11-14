@@ -16,7 +16,7 @@ This document defines an optional HTTP discovery endpoint that allows clients to
 ## Response Schema (informal)
 ```json fds:ignore a discovery document, defined by specification/discovery.md rather than by a published schema
 {
-  "spec_version": "1.4.0",
+  "spec_version": "1.5.0",
   "provider": "Acme Fitness Platform",
   "supported_entities": [
     "exercise",
@@ -32,7 +32,7 @@ This document defines an optional HTTP discovery endpoint that allows clients to
     "equipment": "1.1.0",
     "muscle": "1.0.0",
     "muscle-category": "1.0.0",
-    "body-atlas": "1.0.0",
+    "body-atlas": "1.1.0",
     "workout": "1.1.0",
     "program": "1.0.0"
   },
@@ -59,9 +59,9 @@ This document defines an optional HTTP discovery endpoint that allows clients to
 
 `spec_version` names a release. It is **not** a version that every entity shares, and a client that assumes it is will request URLs that were never published.
 
-Entities version independently. Release 1.4.0 publishes exercise, equipment and workout at 1.1.0 while muscle, muscle-category, body-atlas and program remain at 1.0.0. There is no `muscle/v1.4.0/` and there never will be unless muscle itself changes.
+Entities version independently. Release 1.5.0 publishes exercise, equipment, workout and body-atlas at 1.1.0 while muscle, muscle-category and program remain at 1.0.0. There is no `muscle/v1.5.0/` and there never will be unless muscle itself changes.
 
-A superseded entity version stays served. `workout/v1.0.0/` is still published and still frozen, because releases 1.2.0 and 1.3.0 declare workout at 1.0.0 and a client pinned to either must keep resolving.
+A superseded entity version stays served. `workout/v1.0.0/` is still published and still frozen, because releases 1.2.0 and 1.3.0 declare workout at 1.0.0 and a client pinned to either must keep resolving. `atlas/v1.0.0/` stays for the same reason: releases 1.0.0 through 1.4.0 declare body-atlas at 1.0.0.
 
 Providers SHOULD therefore emit `entity_versions`, mapping each supported entity to the entity version they serve. A client that has it can construct schema URLs directly. A client that does not has to resolve the release to its entity versions some other way, and guessing is the failure this field exists to prevent.
 
@@ -78,6 +78,7 @@ Unlike a schema, the manifest is not frozen. It gains a release every time FDS p
 | 1.2.0 | workout |
 | 1.3.0 | program |
 | 1.4.0 | workout moves to 1.1.0 — per-set intensity zones and machine settings |
+| 1.5.0 | body-atlas moves to 1.1.0 — licence and attribution on view assets |
 
 Gaining an entity is a new release even when nothing existing changed, because a release names the *set* it publishes.
 
