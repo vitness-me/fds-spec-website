@@ -25,8 +25,9 @@ export const uuid: TransformFunction = (): string => {
  *   is the mapped value; any other placeholder is a dotted path into the
  *   source record. Without a template the mapped value is the name.
  *
- * An empty name or an unfilled placeholder throws: it would give every such
- * record the same id.
+ * An empty name, an unfilled or unreadable placeholder, a template with no
+ * placeholder, or an object for a name throws: each would give many records
+ * one id.
  */
 export const uuidv5: TransformFunction = (value, options = {}, context): string => {
   const namespace = options.namespace;
@@ -39,7 +40,7 @@ export const uuidv5: TransformFunction = (value, options = {}, context): string 
   const name =
     typeof options.name === 'string'
       ? fillTemplate(options.name, value, context.source)
-      : String(value ?? '');
+      : nameText(value, 'the mapped value');
 
   if (name === '') {
     throw new Error('uuidv5 has no name: map a value or set options.name');
@@ -48,14 +49,36 @@ export const uuidv5: TransformFunction = (value, options = {}, context): string 
   return v5(name, namespace);
 };
 
+const PLACEHOLDER = /\{\{(\w+(?:\.\w+)*)\}\}/g;
+
 function fillTemplate(template: string, value: unknown, source: Record<string, unknown>): string {
-  return template.replace(/\{\{(\w+(?:\.\w+)*)\}\}/g, (_match, path: string) => {
+  if (!template.match(PLACEHOLDER)) {
+    throw new Error(`uuidv5 name ${template} has no placeholder, so every record would get the same id`);
+  }
+
+  const name = template.replace(PLACEHOLDER, (_match, path: string) => {
     const filled = path === 'value' ? value : getNestedValue(source, path);
     if (filled === undefined || filled === null || filled === '') {
       throw new Error(`uuidv5 name ${template} has no value for {{${path}}}`);
     }
-    return String(filled);
+    return nameText(filled, `{{${path}}}`);
   });
+
+  if (name.includes('{{') || name.includes('}}')) {
+    throw new Error(
+      `uuidv5 name ${template} has a placeholder that is not {{value}} or a dotted source path`
+    );
+  }
+  return name;
+}
+
+/** A name part as text; an object or array would read the same for every record */
+function nameText(part: unknown, what: string): string {
+  if (part === undefined || part === null) return '';
+  if (typeof part !== 'string' && typeof part !== 'number' && typeof part !== 'bigint') {
+    throw new Error(`uuidv5: ${what} is not a string or number`);
+  }
+  return String(part);
 }
 
 export default uuid;

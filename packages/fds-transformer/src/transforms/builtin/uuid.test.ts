@@ -116,6 +116,34 @@ describe('uuidv5', () => {
     ).toThrow(/v6Id/);
   });
 
+  it('refuses a placeholder it cannot read', () => {
+    // Left as literal text, it would give every record the same id.
+    for (const name of ['x/{{ id }}', 'x/{{v6-id}}', 'x/{{ids[0]}}', 'x/{{id}}/{{ id }}']) {
+      expect(() =>
+        uuidv5(null, { namespace: DNS_NAMESPACE, name }, contextFor({ id: 'a' }))
+      ).toThrow(/placeholder/);
+    }
+  });
+
+  it('refuses a name template with no placeholder', () => {
+    expect(() =>
+      uuidv5('a', { namespace: DNS_NAMESPACE, name: 'exercises' }, contextFor({}))
+    ).toThrow(/no placeholder/);
+  });
+
+  it('refuses an object or array as the name', () => {
+    // Both would stringify to the same text for every record.
+    expect(() =>
+      uuidv5(null, { namespace: DNS_NAMESPACE, name: 'x/{{ref}}' }, contextFor({ ref: { a: 1 } }))
+    ).toThrow(/not a string or number/);
+    expect(() => uuidv5({ a: 1 }, { namespace: DNS_NAMESPACE }, contextFor({}))).toThrow(
+      /not a string or number/
+    );
+    expect(() => uuidv5(['a'], { namespace: DNS_NAMESPACE }, contextFor({}))).toThrow(
+      /not a string or number/
+    );
+  });
+
   it('refuses an empty name', () => {
     expect(() => uuidv5(undefined, { namespace: DNS_NAMESPACE }, contextFor({}))).toThrow(
       /no name/

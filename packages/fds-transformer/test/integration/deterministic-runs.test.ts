@@ -172,7 +172,12 @@ describe('config plugins', () => {
 });
 
 describe('checkpoint keys', () => {
-  const enrichment = (): EnrichmentConfig => ({
+  const DESCRIPTION = { 'canonical.description': { tier: 'simple' as const, prompt: 'description' } };
+  const CONTRAINDICATIONS = {
+    'constraints.contraindications': { tier: 'medium' as const, prompt: 'constraints' },
+  };
+
+  const enrichment = (fields: EnrichmentConfig['fields'] = DESCRIPTION): EnrichmentConfig => ({
     enabled: true,
     provider: 'openrouter',
     apiKey: 'test-key-never-sent',
@@ -181,7 +186,7 @@ describe('checkpoint keys', () => {
       medium: { model: 'test/medium', temperature: 0, maxTokens: 100, batchSize: 1, priority: 'balanced' },
       complex: { model: 'test/complex', temperature: 0, maxTokens: 100, batchSize: 1, priority: 'accuracy' },
     },
-    fields: { 'canonical.description': { tier: 'simple', prompt: 'description' } },
+    fields,
     fallback: {
       retries: 0,
       degradeModel: false,
@@ -192,21 +197,33 @@ describe('checkpoint keys', () => {
   });
 
   /**
-   * One run, with every prompt recorded. A prompt naming an exercise in
-   * `failing` throws, so that exercise stays out of the checkpoint.
+   * One run, with every prompt recorded. A prompt for which `fails` answers
+   * true throws, so that record and tier stay out of the checkpoint.
    */
-  const enrichRun = async (input: Record<string, unknown>[], failing: string[] = []) => {
-    const transformer = new Transformer({ config: mappingConfig({ enrichment: enrichment() }) });
+  const enrichRun = async (
+    input: Record<string, unknown>[],
+    fails: (name: string, prompt: string) => boolean = () => false,
+    fields?: EnrichmentConfig['fields']
+  ) => {
+    const transformer = new Transformer({
+      config: mappingConfig({ enrichment: enrichment(fields) }),
+    });
     await transformer.init();
     const prompts: string[] = [];
     vi.spyOn(transformer.getEnrichmentEngine()!.getProvider()!, 'complete').mockImplementation(
       async (prompt: string) => {
         prompts.push(prompt);
         const exercise = input.find((source) => prompt.includes(`(slug: ${slugOf(source)})`))!;
-        if (failing.includes(String(exercise.name))) throw new Error('simulated outage');
+        if (fails(String(exercise.name), prompt)) throw new Error('simulated outage');
         return {
           content: JSON.stringify({
-            results: [{ slug: slugOf(exercise), description: `About ${exercise.name}.` }],
+            results: [
+              {
+                slug: slugOf(exercise),
+                description: `About ${exercise.name}.`,
+                contraindications: [`Avoid ${exercise.name} when injured.`],
+              },
+            ],
           }),
           tokensUsed: 1,
           model: 'test/simple',
@@ -219,13 +236,15 @@ describe('checkpoint keys', () => {
     });
     return { result, prompts };
   };
+  const failsFor = (name: string) => (exercise: string) => exercise === name;
+  const isMediumTier = (prompt: string) => prompt.includes('contraindications');
   const slugOf = (source: Record<string, unknown>) =>
     String(source.name).toLowerCase().replace(/\s+/g, '-');
   const descriptions = (result: Awaited<ReturnType<typeof enrichRun>>['result']) =>
     result.results.map((r) => (r.data as any)?.canonical?.description);
 
   it('are a stable id plus an input hash', async () => {
-    await enrichRun(sources(), ['deadlift']);
+    await enrichRun(sources(), failsFor('deadlift'));
 
     const checkpoint = JSON.parse(readFileSync(join(workDir, CHECKPOINT_FILENAME), 'utf8'));
     const [squat] = (
@@ -237,7 +256,7 @@ describe('checkpoint keys', () => {
   });
 
   it('let a resumed run reuse its checkpoint', async () => {
-    const first = await enrichRun(sources(), ['deadlift']);
+    const first = await enrichRun(sources(), failsFor('deadlift'));
     expect(first.prompts).toHaveLength(3);
 
     const resumed = await enrichRun(sources());
@@ -252,7 +271,7 @@ describe('checkpoint keys', () => {
   });
 
   it('miss when the record changed since the checkpoint', async () => {
-    await enrichRun(sources(), ['deadlift']);
+    await enrichRun(sources(), failsFor('deadlift'));
 
     const changed = sources();
     changed[0] = { ...changed[0], name: 'front squat' };
@@ -263,5 +282,31 @@ describe('checkpoint keys', () => {
       'deadlift',
     ]);
     expect(descriptions(resumed.result)[0]).toBe('About front squat.');
+  });
+
+  it('retry a later tier that failed after an earlier tier succeeded', async () => {
+    const first = await enrichRun(
+      sources(),
+      (_name, prompt) => isMediumTier(prompt),
+      { ...DESCRIPTION, ...CONTRAINDICATIONS }
+    );
+    expect(first.prompts.filter(isMediumTier)).toHaveLength(3);
+
+    const resumed = await enrichRun(sources(), undefined, { ...DESCRIPTION, ...CONTRAINDICATIONS });
+
+    expect(resumed.prompts).toHaveLength(3);
+    expect(resumed.prompts.every(isMediumTier)).toBe(true);
+    expect(
+      resumed.result.results.map((r) => (r.data as any)?.constraints?.contraindications?.[0])
+    ).toEqual([
+      'Avoid back squat when injured.',
+      'Avoid bench press when injured.',
+      'Avoid deadlift when injured.',
+    ]);
+    expect(descriptions(resumed.result)).toEqual([
+      'About back squat.',
+      'About bench press.',
+      'About deadlift.',
+    ]);
   });
 });

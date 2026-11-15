@@ -11,8 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **`uuidv5` derives ids from the input.** `options.namespace` is the namespace
   UUID and `options.name` a template over the source record
-  (`exercises_v6/Exercises/{{v6Id}}`). The same input always gives the same id;
-  an unfilled placeholder throws rather than giving every such record one id.
+  (`exercises_v6/Exercises/{{v6Id}}`). The same input always gives the same id.
+  An unfilled or unreadable placeholder, a template with no placeholder, or an
+  object for a name throws rather than giving many records one id.
 - **Config `plugins` are loaded.** They were declared and never read. A string
   or `{ name, options }` names the module; a relative path resolves against the
   config file; a module may export a factory that receives `options`. A plugin
@@ -21,8 +22,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - **Breaking: `timestamp` no longer reads the wall clock by default.** It
-  formats the source value, or `options.clock` (an ISO 8601 instant) when the
-  source is empty, and throws when there is neither. Set `"clock": "now"` to
+  formats the source value, or `options.clock` (an ISO 8601 instant with a
+  zone) when the source is empty, and throws when there is neither. Set `"clock": "now"` to
   keep the old behaviour. A source value that is not a date throws and names
   the value.
 - **A slug collision fails the run.** Two records that produce the same
@@ -31,7 +32,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Enrichment checkpoints resume.** Records were checkpointed under their
   `exerciseId`, a fresh random UUID on every run, so a resume never matched.
   The key is now the record's stable id plus a hash of the input the model is
-  given, and a record that changed since the checkpoint is enriched again.
+  given, and a record that changed since the checkpoint is enriched again. A
+  record skips only the tiers its checkpoint already holds, so a tier that
+  failed is retried. Checkpoints written by 0.2.0 do not match and are ignored.
 
 - **Release 1.5.0 is bundled and is the default.** It names body-atlas 1.1.0,
   which adds optional `license` and `attribution` on a view's asset. 1.0.0

@@ -264,7 +264,7 @@ Formatira trenutak kao ISO 8601 vremensku oznaku. Trenutak dolazi iz izvora ili 
 
 | Opcija | Tip | Podrazumevana vrednost | Opis |
 |--------|------|---------|-------------|
-| `clock` | string | (nema) | ISO 8601 trenutak koji se koristi kada je izvor prazan, ili `"now"` za sistemski sat |
+| `clock` | string | (nema) | ISO 8601 trenutak sa zonom (`Z` ili pomak) koji se koristi kada je izvor prazan, ili `"now"` za sistemski sat |
 | `format` | string | `iso8601` | `iso8601`, `unix`, `unixms` ili `date` |
 
 ```json fds:fragment entity=mapping

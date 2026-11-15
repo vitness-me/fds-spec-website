@@ -117,7 +117,7 @@ Create a `mapping.json` file to define how source fields map to FDS:
 | `toArray` | Ensure value is array |
 | `toMediaArray` | Convert URLs to FDS media format |
 | `registryLookup` | Find in registry with fuzzy matching |
-| `timestamp` | Format the source instant, or `options.clock` when the source is empty. Without a clock it throws; `"clock": "now"` opts into the wall clock |
+| `timestamp` | Format the source instant, or `options.clock` (an ISO 8601 instant with a zone) when the source is empty. Without a clock it throws; `"clock": "now"` opts into the wall clock |
 | `autoGenerate` | Auto-generate metadata fields |
 | `template` | Apply template strings |
 | `urlTransform` | Transform URLs |

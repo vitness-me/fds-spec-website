@@ -264,7 +264,7 @@ Format an instant as an ISO 8601 timestamp. The instant comes from the source or
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
-| `clock` | string | (none) | ISO 8601 instant used when the source is empty, or `"now"` for the wall clock |
+| `clock` | string | (none) | ISO 8601 instant with a zone (`Z` or an offset) used when the source is empty, or `"now"` for the wall clock |
 | `format` | string | `iso8601` | `iso8601`, `unix`, `unixms` or `date` |
 
 ```json fds:fragment entity=mapping

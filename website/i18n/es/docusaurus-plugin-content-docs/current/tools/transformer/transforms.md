@@ -264,7 +264,7 @@ Formatea un instante como marca de tiempo ISO 8601. El instante viene del origen
 
 | Opción | Tipo | Valor predeterminado | Descripción |
 |--------|------|---------|-------------|
-| `clock` | string | (ninguno) | Instante ISO 8601 que se usa cuando el origen está vacío, o `"now"` para el reloj del sistema |
+| `clock` | string | (ninguno) | Instante ISO 8601 con zona (`Z` o un desfase) que se usa cuando el origen está vacío, o `"now"` para el reloj del sistema |
 | `format` | string | `iso8601` | `iso8601`, `unix`, `unixms` o `date` |
 
 ```json fds:fragment entity=mapping

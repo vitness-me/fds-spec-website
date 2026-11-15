@@ -8,9 +8,9 @@ import type { TransformFunction, TransformContext } from '../../core/types.js';
  * Format an instant taken from the source, or from a configured clock.
  *
  * A run must be repeatable, so an empty source value never falls back to the
- * wall clock on its own. `options.clock` is an ISO 8601 instant stamped on
- * every record that has no source value, or `"now"` to opt into the wall
- * clock. Without either, the transform throws.
+ * wall clock on its own. `options.clock` is an ISO 8601 instant with a zone,
+ * stamped on every record that has no source value, or `"now"` to opt into
+ * the wall clock. Without either, the transform throws.
  */
 export const timestamp: TransformFunction = (
   value: unknown,
@@ -48,6 +48,12 @@ function instantOf(value: unknown, clock: unknown): Date {
   }
 
   if (clock === 'now') return new Date();
+  if (typeof clock !== 'string' || !/(?:Z|[+-]\d{2}:?\d{2})$/i.test(clock)) {
+    throw new Error(
+      `timestamp: options.clock ${JSON.stringify(clock)} needs a zone (Z or an offset), ` +
+        'or it reads as a different instant on each host'
+    );
+  }
   return parseInstant(clock, `options.clock ${JSON.stringify(clock)} is not an instant or "now"`);
 }
 

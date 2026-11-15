@@ -78,6 +78,13 @@ describe('timestamp', () => {
       expect(() => timestamp(null, { clock: 'soon' })).toThrow(/clock/);
     });
 
+    it('should reject a clock with no zone, which reads differently on each host', () => {
+      expect(() => timestamp(null, { clock: '2026-01-01 00:00' })).toThrow(/zone/);
+      expect(() => timestamp(null, { clock: '2026-01-01T00:00:00' })).toThrow(/zone/);
+      expect(() => timestamp(null, { clock: 0 })).toThrow(/zone/);
+      expect(timestamp(null, { clock: '2026-01-01T02:00:00+02:00' })).toBe('2026-01-01T00:00:00.000Z');
+    });
+
     it('should read the wall clock only when the clock is "now"', () => {
       const before = Date.now();
       const resultMs = Date.parse(timestamp(null, { clock: 'now' }) as string);
