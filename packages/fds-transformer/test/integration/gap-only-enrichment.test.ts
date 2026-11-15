@@ -23,6 +23,15 @@ import type {
   TierName,
   TieredFieldEnrichmentConfig,
 } from '../../src/core/types.js';
+import { requestedOnly } from '../support/requested-reply.js';
+
+// The engine reads its key only from OPENROUTER_API_KEY.
+beforeEach(() => {
+  vi.stubEnv('OPENROUTER_API_KEY', 'stub-key-not-used');
+});
+afterEach(() => {
+  vi.unstubAllEnvs();
+});
 
 type When = 'missing' | 'empty' | 'notFound' | 'always';
 type FieldState = 'mapped' | 'absent' | 'null' | 'emptyString' | 'emptyArray' | 'emptyObject';
@@ -147,7 +156,6 @@ function baseConfig(
     enrichment: {
       enabled: true,
       provider: 'openrouter',
-      apiKey: 'stub-key-not-used',
       tiers: TIERS_CONFIG,
       fields,
     },
@@ -160,9 +168,9 @@ async function stubbedTransformer(config: MappingConfig, tier: TierName, slugs: 
   await transformer.init();
   const asked: string[][] = [];
   vi.spyOn(transformer.getEnrichmentEngine()!.getProvider()!, 'complete').mockImplementation(
-    async (prompt: string) => {
+    async (prompt: string, options) => {
       asked.push([...prompt.matchAll(/slug: ([\w-]+)/g)].map((m) => m[1]));
-      return { content: modelReply(tier, slugs), tokensUsed: 1, model: 'stub' };
+      return { content: requestedOnly(modelReply(tier, slugs), options), tokensUsed: 1, model: 'stub' };
     }
   );
   return { transformer, asked };
@@ -270,7 +278,10 @@ describe('Enrichment fills gaps only', () => {
     // One stub answers every tier, in each tier's reply shape.
     const provider = transformer.getEnrichmentEngine()!.getProvider()!;
     vi.spyOn(provider, 'complete').mockImplementation(async (_prompt, options) => ({
-      content: modelReply(options?.systemPrompt === SYSTEM_PROMPTS.complex ? 'complex' : 'simple', ['squat']),
+      content: requestedOnly(
+        modelReply(options?.systemPrompt === SYSTEM_PROMPTS.complex ? 'complex' : 'simple', ['squat']),
+        options
+      ),
       tokensUsed: 1,
       model: 'stub',
     }));
@@ -286,7 +297,6 @@ describe('Enrichment fills gaps only', () => {
       const config: EnrichmentConfig = {
         enabled: true,
         provider: 'openrouter',
-        apiKey: 'stub-key-not-used',
         tiers: TIERS_CONFIG,
         fields: {
           'classification.exerciseType': { tier: 'simple', prompt: 'classification-simple' },
@@ -439,7 +449,7 @@ describe('Enrichment fills gaps only', () => {
   });
 
   it('scopes direct engine results to fieldsToEnrich on the single-model fallback', async () => {
-    const engine = new EnrichmentEngine({ enabled: true, provider: 'openrouter', apiKey: 'stub-key-not-used' });
+    const engine = new EnrichmentEngine({ enabled: true, provider: 'openrouter' });
     vi.spyOn(engine.getProvider()!, 'completeJSON').mockResolvedValue({
       description: 'ai:description',
       classification: { level: 'ai:level' },
@@ -458,7 +468,6 @@ describe('Enrichment fills gaps only', () => {
       const config: EnrichmentConfig = {
         enabled: true,
         provider: 'openrouter',
-        apiKey: 'stub-key-not-used',
         tiers: TIERS_CONFIG,
         fields: { 'canonical.description': { tier: 'simple', prompt: 'description' } },
         checkpoint: { enabled: true, saveInterval: 1 },
@@ -493,15 +502,14 @@ describe('Enrichment fills gaps only', () => {
     const engine = new EnrichmentEngine({
       enabled: true,
       provider: 'openrouter',
-      apiKey: 'stub-key-not-used',
       tiers: TIERS_CONFIG,
       fields: { 'classification.exerciseType': { tier: 'simple', prompt: 'classification-simple' } },
     });
-    vi.spyOn(engine.getProvider()!, 'complete').mockResolvedValue({
-      content: modelReply('simple', ['squat']),
+    vi.spyOn(engine.getProvider()!, 'complete').mockImplementation(async (_prompt, options) => ({
+      content: requestedOnly(modelReply('simple', ['squat']), options),
       tokensUsed: 1,
       model: 'stub',
-    });
+    }));
 
     const { results } = await engine.enrichBatch([{ id: 'squat', slug: 'squat', name: 'Squat' }]);
 
@@ -520,7 +528,7 @@ describe('Legacy single-model enrichment fills gaps only', () => {
         'classification.level': { from: 'level' },
       },
       validation: { enabled: false },
-      enrichment: { enabled: true, provider: 'openrouter', apiKey: 'stub-key-not-used' },
+      enrichment: { enabled: true, provider: 'openrouter' },
     };
     const transformer = new Transformer({ config });
     await transformer.init();

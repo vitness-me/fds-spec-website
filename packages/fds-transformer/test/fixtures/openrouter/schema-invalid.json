@@ -1,0 +1,20 @@
+{
+  "status": 200,
+  "body": {
+    "id": "gen-fixture-invalid",
+    "object": "chat.completion",
+    "created": 1763164800,
+    "model": "anthropic/claude-haiku-4.5",
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "native_finish_reason": "end_turn",
+        "message": {
+          "role": "assistant",
+          "content": "{\"results\":[{\"slug\":\"barbell-bench-press\",\"description\":\"Press a barbell from the chest.\",\"level\":\"intermediate\"},{\"slug\":\"dumbbell-bench-press\",\"description\":\"Press two dumbbells from the chest.\"}]}"
+        }
+      }
+    ],
+    "usage": { "prompt_tokens": 412, "completion_tokens": 61, "total_tokens": 473, "cost": 0.000717 }
+  }
+}

@@ -15,6 +15,15 @@ import { BatchProcessor } from '../../src/core/batch-processor.js';
 import { ConfigLoader } from '../../src/config/config-loader.js';
 import { CHECKPOINT_FILENAME } from '../../src/ai/checkpoint-manager.js';
 import type { EnrichmentConfig, MappingConfig } from '../../src/core/types.js';
+import { requestedOnly } from '../support/requested-reply.js';
+
+// The engine reads its key only from OPENROUTER_API_KEY.
+beforeEach(() => {
+  vi.stubEnv('OPENROUTER_API_KEY', 'stub-key-not-used');
+});
+afterEach(() => {
+  vi.unstubAllEnvs();
+});
 
 const NAMESPACE = 'e56e0365-0000-4000-8000-000000000001';
 const CLOCK = '2026-01-01T00:00:00.000Z';
@@ -52,7 +61,6 @@ const CONTRAINDICATIONS = {
 const enrichment = (fields: EnrichmentConfig['fields'] = DESCRIPTION): EnrichmentConfig => ({
   enabled: true,
   provider: 'openrouter',
-  apiKey: 'test-key-never-sent',
   tiers: {
     simple: { model: 'test/simple', temperature: 0, maxTokens: 100, batchSize: 1, priority: 'speed' },
     medium: { model: 'test/medium', temperature: 0, maxTokens: 100, batchSize: 1, priority: 'balanced' },
@@ -233,12 +241,12 @@ describe('checkpoint keys', () => {
     await transformer.init();
     const prompts: string[] = [];
     vi.spyOn(transformer.getEnrichmentEngine()!.getProvider()!, 'complete').mockImplementation(
-      async (prompt: string) => {
+      async (prompt: string, options) => {
         prompts.push(prompt);
         const exercise = input.find((source) => prompt.includes(`(slug: ${slugOf(source)})`))!;
         if (fails(String(exercise.name), prompt)) throw new Error('simulated outage');
         return {
-          content: JSON.stringify({
+          content: requestedOnly(JSON.stringify({
             results: [
               {
                 slug: slugOf(exercise),
@@ -246,7 +254,7 @@ describe('checkpoint keys', () => {
                 contraindications: [`Avoid ${exercise.name} when injured.`],
               },
             ],
-          }),
+          }), options),
           tokensUsed: 1,
           model: 'test/simple',
         };

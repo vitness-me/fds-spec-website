@@ -15,6 +15,7 @@ import { Transformer } from '../../src/core/transformer.js';
 import type { EnrichmentConfig, MappingConfig } from '../../src/core/types.js';
 import { SYSTEM_PROMPTS } from '../../src/ai/prompts/tier-prompts.js';
 import { buildProvenanceSidecar } from '../../src/core/provenance.js';
+import { requestedOnly } from '../support/requested-reply.js';
 import { readFileSync } from 'fs';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
@@ -67,7 +68,6 @@ function tieredConfig(fields: EnrichmentConfig['fields'], mappings: MappingConfi
     enrichment: {
       enabled: true,
       provider: 'openrouter',
-      apiKey: 'stub-key-not-used',
       tiers: TIERS,
       fields,
     },
@@ -80,9 +80,14 @@ async function stubbed(cfg: MappingConfig, reply: (prompt: string) => unknown) {
   await transformer.init();
   const prompts: string[] = [];
   vi.spyOn(transformer.getEnrichmentEngine()!.getProvider()!, 'complete').mockImplementation(
-    async (prompt: string) => {
+    async (prompt: string, options) => {
       prompts.push(prompt);
-      return { content: JSON.stringify(reply(prompt)), tokensUsed: 1, model: 'stub/served' };
+      // Answer as the structured-output endpoint would: only the requested keys
+      return {
+        content: requestedOnly(JSON.stringify(reply(prompt)), options),
+        tokensUsed: 1,
+        model: 'stub/served',
+      };
     }
   );
   return { transformer, prompts };
@@ -91,12 +96,15 @@ async function stubbed(cfg: MappingConfig, reply: (prompt: string) => unknown) {
 const slugOf = (prompt: string) => prompt.match(/slug: ([\w-]+)/)![1];
 
 beforeEach(() => {
+  // The engine reads its key only from OPENROUTER_API_KEY; the provider is stubbed.
+  vi.stubEnv('OPENROUTER_API_KEY', 'stub-key-not-used');
   vi.spyOn(globalThis, 'fetch').mockRejectedValue(new Error('offline'));
   vi.spyOn(console, 'warn').mockImplementation(() => {});
 });
 
 afterEach(() => {
   vi.restoreAllMocks();
+  vi.unstubAllEnvs();
 });
 
 describe('Provenance of mapped values', () => {
@@ -425,8 +433,7 @@ describe('Provenance of enriched values', () => {
           enabled: true,
           provider: 'openrouter',
           model: 'stub/single',
-          apiKey: 'stub-key-not-used',
-        },
+            },
       }),
     });
     await transformer.init();
@@ -456,7 +463,7 @@ describe('Provenance of enriched values', () => {
           'canonical.name': { from: 'name' },
           'canonical.aliases': { from: 'aliases', enrichment: { enabled: true, prompt: 'aliases' } },
         },
-        enrichment: { enabled: true, provider: 'openrouter', model: 'stub/single', apiKey: 'stub-key-not-used' },
+        enrichment: { enabled: true, provider: 'openrouter', model: 'stub/single' },
       }),
     });
     await transformer.init();
@@ -480,7 +487,7 @@ describe('Provenance of enriched values', () => {
             enrichment: { enabled: true, prompt: 'description' },
           },
         },
-        enrichment: { enabled: true, provider: 'openrouter', model: 'stub/single', apiKey: 'stub-key-not-used' },
+        enrichment: { enabled: true, provider: 'openrouter', model: 'stub/single' },
       }),
     });
     await transformer.init();

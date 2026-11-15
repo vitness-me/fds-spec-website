@@ -1,0 +1,10 @@
+{
+  "status": 403,
+  "body": {
+    "error": {
+      "code": 403,
+      "message": "The model refused to respond to this request.",
+      "metadata": { "error_type": "refusal", "provider_name": "Anthropic" }
+    }
+  }
+}
