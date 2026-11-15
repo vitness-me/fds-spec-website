@@ -15,7 +15,7 @@ import { CheckpointManager } from '../../src/ai/checkpoint-manager.js';
 import { mkdtempSync, rmSync } from 'fs';
 import { join } from 'path';
 import { tmpdir } from 'os';
-import { getTierPrompts } from '../../src/ai/prompts/tier-prompts.js';
+import { getTierPrompts, SYSTEM_PROMPTS } from '../../src/ai/prompts/tier-prompts.js';
 import type {
   EnrichmentConfig,
   FieldMapping,
@@ -260,6 +260,69 @@ describe('Enrichment fills gaps only', () => {
     expect(cases).toBe(
       PROMPTS.reduce((sum, p) => sum + ((1 << p.fields.length) - 1) * (1 << p.fields.length), 0)
     );
+  });
+
+  it('writes every configured field when several prompts write under one parent', async () => {
+    const fields = Object.fromEntries(
+      PROMPTS.flatMap((p) => p.fields.map((path) => [path, { tier: p.tier, prompt: p.id }]))
+    );
+    const { transformer } = await stubbedTransformer(baseConfig({}, fields), 'simple', ['squat']);
+    // One stub answers every tier, in each tier's reply shape.
+    const provider = transformer.getEnrichmentEngine()!.getProvider()!;
+    vi.spyOn(provider, 'complete').mockImplementation(async (_prompt, options) => ({
+      content: modelReply(options?.systemPrompt === SYSTEM_PROMPTS.complex ? 'complex' : 'simple', ['squat']),
+      tokensUsed: 1,
+      model: 'stub',
+    }));
+
+    const { results } = await transformer.transformAllBatch([{ id: 'squat', slug: 'squat', name: 'Squat' }]);
+
+    expect(aiWrittenPaths(results[0].data).sort()).toEqual(ALL_PATHS.slice().sort());
+  });
+
+  it('keeps every tier of a result resumed from a checkpoint', async () => {
+    const dir = mkdtempSync(join(tmpdir(), 'fds-gap-only-'));
+    try {
+      const config: EnrichmentConfig = {
+        enabled: true,
+        provider: 'openrouter',
+        apiKey: 'stub-key-not-used',
+        tiers: TIERS_CONFIG,
+        fields: {
+          'classification.exerciseType': { tier: 'simple', prompt: 'classification-simple' },
+          'classification.movement': { tier: 'complex', prompt: 'biomechanics' },
+        },
+        checkpoint: { enabled: true, saveInterval: 1 },
+      };
+      const checkpoint = new CheckpointManager(dir, config.checkpoint);
+      checkpoint.initialize({
+        inputFile: 'batch-enrichment',
+        totalExercises: 1,
+        config: { model: 'anthropic/claude-3.5-sonnet', ...config },
+      });
+      checkpoint.update({
+        exerciseId: 'squat',
+        success: true,
+        currentTier: 'complex',
+        results: {
+          simple: { classification: { exerciseType: 'ai:exerciseType' } },
+          complex: { classification: { movement: 'ai:movement' } },
+        },
+      });
+      checkpoint.forceSave();
+
+      const engine = new EnrichmentEngine(config);
+      const { results } = await engine.enrichBatch(
+        [{ id: 'squat', slug: 'squat', name: 'Squat' }],
+        { resume: true, outputDirectory: dir }
+      );
+
+      expect(results.get('squat')).toEqual({
+        classification: { exerciseType: 'ai:exerciseType', movement: 'ai:movement' },
+      });
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
   });
 
   it('enabling exerciseType leaves a mapped level untouched', async () => {
