@@ -34,7 +34,7 @@
       "frozen": true
     },
     "transformer/provenance/v1.0.0/provenance.schema.json": {
-      "sha256": "22514e8fc92efc00341735ec668cc36c9c177f79ce6661bff0d188b0fbe4f407",
+      "sha256": "2244aeec081cb6fc5611ffcd3c5749f56bc2b526ade6311593bee1b5daca9bec",
       "frozen": false
     },
     "transformer/v1.0.0/mapping.schema.json": {

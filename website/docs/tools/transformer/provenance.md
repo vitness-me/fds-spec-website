@@ -17,7 +17,7 @@ The sidecar holds one record per document written, in output order. Each record 
 | `origin` | Meaning | Also records |
 |---|---|---|
 | `source` | Read from the source record | `from`: the source path read; `transform`: the transforms applied, if any |
-| `default` | The mapping's `default`, standing in for an empty source. It is not data about the record | `transform`, if any |
+| `default` | A configured value standing in for missing data: the mapping's `default`, or an enrichment `fallback`. It is not data about the record | `transform`, if any |
 | `transform` | Generated with no source value, such as an id or a timestamp | `transform` |
 | `model` | Written by a model during enrichment | `model`, `prompt`, `promptVersion`, `tier`, `confidence` |
 

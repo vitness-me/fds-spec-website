@@ -14,6 +14,28 @@ import { tmpdir } from 'os';
 import { Transformer } from '../../src/core/transformer.js';
 import type { EnrichmentConfig, MappingConfig } from '../../src/core/types.js';
 import { SYSTEM_PROMPTS } from '../../src/ai/prompts/tier-prompts.js';
+import { buildProvenanceSidecar } from '../../src/core/provenance.js';
+import { readFileSync } from 'fs';
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
+import Ajv2020 from 'ajv/dist/2020.js';
+import addFormats from 'ajv-formats';
+
+const validateSidecar = (() => {
+  const ajv = new Ajv2020({ strict: true, allErrors: true });
+  addFormats(ajv);
+  return ajv.compile(
+    JSON.parse(
+      readFileSync(
+        join(
+          dirname(fileURLToPath(import.meta.url)),
+          '../../../../specification/schemas/transformer/provenance/v1.0.0/provenance.schema.json'
+        ),
+        'utf8'
+      )
+    )
+  );
+})();
 
 const PROMPT_VERSION = /^sha256:[0-9a-f]{16}$/;
 
@@ -160,6 +182,22 @@ describe('Provenance of mapped values', () => {
     expect(elsewhere.success).toBe(true);
   });
 
+  it('rejects defaults on array-index paths the same way', async () => {
+    const run = async (mappings: MappingConfig['mappings'], rejectDefaults: string[]) =>
+      new Transformer({
+        config: config({ mappings, validation: { enabled: false, rejectDefaults } }),
+      }).transform({});
+
+    const own = await run({ 'media[0].url': { from: null, default: 'https://x' } }, ['media[0].url']);
+    const inherited = await run(
+      { media: { from: null, default: [{ url: 'https://x' }] } },
+      ['media[0].url']
+    );
+    const beneath = await run({ 'media[0].url': { from: null, default: 'https://x' } }, ['media']);
+
+    expect([own.success, inherited.success, beneath.success]).toEqual([false, false, false]);
+  });
+
   it('keeps provenance true when mappings overlap', async () => {
     const overwritten = await new Transformer({
       config: config({
@@ -177,6 +215,17 @@ describe('Provenance of mapped values', () => {
       classification: { origin: 'source', from: 'classification' },
     });
     expect(overwritten.success).toBe(true);
+
+    const replacedArray = await new Transformer({
+      config: config({
+        mappings: {
+          'media[0].url': { from: null, default: 'https://x' },
+          media: { from: 'media' },
+        },
+      }),
+    }).transform({ media: [{ url: 'https://y' }] });
+
+    expect(replacedArray.provenance).toEqual({ media: { origin: 'source', from: 'media' } });
 
     const unwritable = await new Transformer({
       config: config({
@@ -268,6 +317,9 @@ describe('Provenance of enriched values', () => {
     expect(provenance['classification.level']).toEqual({ origin: 'source', from: 'level' });
     // Every prompt asks for a confidence.
     expect(prompts.every((p) => p.includes('"confidence"'))).toBe(true);
+    // A sidecar holding model entries is valid under the published schema.
+    const sidecar = buildProvenanceSidecar(results);
+    expect(validateSidecar(sidecar), JSON.stringify(validateSidecar.errors)).toBe(true);
   });
 
   it('records the tier and model that answered when a tier degrades', async () => {
@@ -395,6 +447,27 @@ describe('Provenance of enriched values', () => {
       confidence: 0.93,
     });
     expect(completeJSON.mock.calls[0][0]).toContain('"confidence"');
+  });
+
+  it('writes an array reply on the per-field fallback as an array', async () => {
+    const transformer = new Transformer({
+      config: config({
+        mappings: {
+          'canonical.name': { from: 'name' },
+          'canonical.aliases': { from: 'aliases', enrichment: { enabled: true, prompt: 'aliases' } },
+        },
+        enrichment: { enabled: true, provider: 'openrouter', model: 'stub/single', apiKey: 'stub-key-not-used' },
+      }),
+    });
+    await transformer.init();
+    vi.spyOn(transformer.getEnrichmentEngine()!.getProvider()!, 'completeJSON')
+      .mockRejectedValueOnce(new Error('comprehensive failed'))
+      .mockResolvedValueOnce(['Back squat', 'High-bar squat']);
+
+    const result = await transformer.transform({ name: 'Squat' });
+
+    expect((result.data as any).canonical.aliases).toEqual(['Back squat', 'High-bar squat']);
+    expect(result.provenance!['canonical.aliases']).toMatchObject({ origin: 'model', confidence: null });
   });
 
   it('reads confidence on the per-field fallback and does not write it as data', async () => {

@@ -12,6 +12,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Release 1.5.0 is bundled and is the default.** It names body-atlas 1.1.0,
   which adds optional `license` and `attribution` on a view's asset. 1.0.0
   through 1.4.0 stay bundled; pin one to keep validating against it.
+- **`transform` writes `provenance.sidecar.json` into the output directory**
+  beside the documents. A pipeline that reads every `*.json` there should skip
+  it.
 - **Breaking: `when` no longer lets enrichment replace a value.** `"always"`
   used to regenerate a field on every run; it now behaves as `"empty"`.
   `"empty"` now also counts `[]` and `{}` as empty.

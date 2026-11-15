@@ -65,7 +65,7 @@
     },
     "default": {
       "type": "object",
-      "description": "A configured default standing in for an empty source: not data about the record",
+      "description": "A configured value standing in for missing data, a mapping `default` or an enrichment `fallback`: not data about the record",
       "required": ["origin"],
       "additionalProperties": false,
       "properties": {
@@ -90,7 +90,7 @@
       "additionalProperties": false,
       "properties": {
         "origin": { "const": "model" },
-        "model": { "type": "string", "description": "The model that answered" },
+        "model": { "type": "string", "minLength": 1, "description": "The model that answered" },
         "prompt": { "type": "string", "minLength": 1, "description": "The prompt id" },
         "promptVersion": {
           "type": "string",

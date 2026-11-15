@@ -10,6 +10,7 @@ import type {
   TransformContext,
 } from './types.js';
 import { TransformRegistry } from '../transforms/transform-registry.js';
+import { getMappingPathValue, isBeneath } from './paths.js';
 
 export class MappingEngine {
   private transformRegistry: TransformRegistry;
@@ -54,7 +55,7 @@ export class MappingEngine {
         if (this.getNestedValue(target, targetPath) === value) {
           // An entry beneath this path described a value this one replaced
           for (const path of Object.keys(provenance)) {
-            if (path.startsWith(`${targetPath}.`)) delete provenance[path];
+            if (isBeneath(path, targetPath)) delete provenance[path];
           }
           provenance[targetPath] = origin;
         }
@@ -155,30 +156,7 @@ export class MappingEngine {
    * Get a nested value from an object using dot notation
    */
   private getNestedValue(obj: Record<string, unknown>, path: string): unknown {
-    const parts = path.split('.');
-    let current: unknown = obj;
-
-    for (const part of parts) {
-      if (current === null || current === undefined) {
-        return undefined;
-      }
-
-      // Handle array index notation: field[0]
-      const arrayMatch = part.match(/^(\w+)\[(\d+)\]$/);
-      if (arrayMatch) {
-        const [, fieldName, index] = arrayMatch;
-        current = (current as Record<string, unknown>)[fieldName];
-        if (Array.isArray(current)) {
-          current = current[parseInt(index, 10)];
-        } else {
-          return undefined;
-        }
-      } else {
-        current = (current as Record<string, unknown>)[part];
-      }
-    }
-
-    return current;
+    return getMappingPathValue(obj, path);
   }
 
   /**

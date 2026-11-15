@@ -1483,7 +1483,9 @@ export class EnrichmentEngine {
         const result = await this.enrichField(field, mappingObj, context);
 
         if (result.success && result.data) {
-          const { confidence, ...answer } = result.data;
+          // An object reply may carry its confidence; any other reply is the answer
+          const { confidence, ...rest } = isPlainObject(result.data) ? result.data : {};
+          const answer = isPlainObject(result.data) ? rest : result.data;
           const promptName = mappingObj.enrichment.prompt;
           const fieldProvenance = this.singleModelProvenance(
             promptName ?? 'comprehensive',

@@ -23,7 +23,6 @@ import { SchemaManager } from '../schemas/schema-manager.js';
 import { DEFAULT_SCHEMA_VERSION } from '../schemas/versions.js';
 import {
   EnrichmentEngine,
-  getPathValue,
   isEmptyValue,
   needsEnrichment,
   type ExerciseInput,
@@ -31,6 +30,7 @@ import {
   type BatchEnrichmentResult,
 } from '../ai/enrichment-engine.js';
 import { ConfigLoader } from '../config/config-loader.js';
+import { getMappingPathValue, isBeneath } from './paths.js';
 
 export interface TransformerOptions extends TransformOptions {
   config?: MappingConfig | string;
@@ -506,16 +506,16 @@ export class Transformer {
     path: string
   ): boolean {
     const paths = Object.keys(provenance);
-    if (paths.some((p) => p.startsWith(`${path}.`) && provenance[p].origin === 'default')) {
+    if (paths.some((p) => isBeneath(p, path) && provenance[p].origin === 'default')) {
       return true;
     }
     const nearest = paths
-      .filter((p) => p === path || path.startsWith(`${p}.`))
+      .filter((p) => p === path || isBeneath(path, p))
       .sort((a, b) => b.length - a.length)[0];
     return (
       nearest !== undefined &&
       provenance[nearest].origin === 'default' &&
-      getPathValue(mapped, path) !== undefined
+      getMappingPathValue(mapped, path) !== undefined
     );
   }
 
@@ -532,7 +532,7 @@ export class Transformer {
     if (!data) return;
     const filled = this.deepMerge(mapped, data);
     for (const [path, origin] of Object.entries(enrichmentProvenance ?? {})) {
-      if (filled.some((f) => path === f || path.startsWith(`${f}.`))) {
+      if (filled.some((f) => path === f || isBeneath(path, f))) {
         provenance[path] = origin;
       }
     }
