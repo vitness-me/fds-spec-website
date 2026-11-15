@@ -8,6 +8,8 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { OpenRouterProvider, OpenRouterAPIError } from '../../src/ai/providers/openrouter.js';
 import { EnrichmentEngine, type ExerciseInput } from '../../src/ai/enrichment-engine.js';
+import { getTierPrompts } from '../../src/ai/prompts/tier-prompts.js';
+import { replyKey } from '../../src/ai/response-schema.js';
 import { ConfigLoader } from '../../src/config/config-loader.js';
 import type { EnrichmentConfig, TierConfig } from '../../src/core/types.js';
 import { OpenRouterStub, fixture, completion } from '../support/openrouter-stub.js';
@@ -135,6 +137,11 @@ describe('OpenRouterProvider structured output', () => {
     expect(response.finishReason).toBe('length');
   });
 
+  it.each(['refusal', 'refusal-403', 'length'])('completeJSON never parses a %s reply', async (name) => {
+    stub.reply(fixture(name));
+    await expect(provider().completeJSON('prompt')).rejects.toThrow(/No usable JSON reply/);
+  });
+
   it('treats a 200 whose body holds only an error as an error', async () => {
     stub.reply(fixture('error-200'));
     const p = new OpenRouterProvider({ apiKey: 'k', baseUrl: stub.baseUrl, maxRetries: 1, retryDelay: 1 });
@@ -233,14 +240,31 @@ describe('EnrichmentEngine structured output', () => {
         promptId: 'description',
         model: 'test/simple-model',
         servedModel: 'anthropic/claude-haiku-4.5',
-        promptTokens: 412,
-        completionTokens: 58,
-        totalTokens: 470,
-        cost: 0.000702,
+        usage: { promptTokens: 412, completionTokens: 58, totalTokens: 470, cost: 0.000702 },
         outcome: 'ok',
       },
     ]);
   });
+});
+
+describe('request schema keys', () => {
+  // The schema asks for each field under replyKey(path); the reply is mapped
+  // back to paths by the engine. If the two ever disagree, every reply to that
+  // prompt fails its schema.
+  const engine = new EnrichmentEngine({ enabled: false });
+  const map = (promptId: string, fields: Record<string, unknown>) =>
+    (engine as unknown as { mapFieldsFromPrompt(p: string, f: Record<string, unknown>): Record<string, unknown> })
+      .mapFieldsFromPrompt(promptId, fields);
+
+  for (const tierName of ['simple', 'medium', 'complex'] as const) {
+    for (const [promptId, template] of Object.entries(getTierPrompts(tierName))) {
+      it.each(template.fields)(`${promptId}: %s round-trips through its reply key`, (path) => {
+        const mapped = map(promptId, { [replyKey(path)]: 'marker' });
+        const value = path.split('.').reduce<unknown>((o, k) => (o as Record<string, unknown>)?.[k], mapped);
+        expect(value).toBe('marker');
+      });
+    }
+  }
 });
 
 describe('EnrichmentEngine degrade', () => {

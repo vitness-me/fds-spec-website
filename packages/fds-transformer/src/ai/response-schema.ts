@@ -12,6 +12,7 @@
  */
 
 import Ajv2020 from 'ajv/dist/2020.js';
+import addFormats from 'ajv-formats';
 import type { AIResponse, AIResponseSchema } from '../core/types.js';
 
 /** Why a reply was not written. */
@@ -20,8 +21,6 @@ export type AbstentionReason = 'refusal' | 'length' | 'invalid';
 export type ReplyOutcome =
   | { ok: true; value: unknown }
   | { ok: false; reason: AbstentionReason; detail: string };
-
-const ajv = new Ajv2020({ allErrors: false });
 
 /** The key a prompt replies with for an FDS field path. */
 export function replyKey(fieldPath: string): string {
@@ -66,7 +65,7 @@ function closedObject(properties: Record<string, unknown>): Record<string, unkno
  * cut off at the token limit, and anything that is not JSON matching the
  * schema are abstentions: nothing from them may be written.
  */
-export function readReply(response: AIResponse, schema: Record<string, unknown>): ReplyOutcome {
+export function readReply(response: AIResponse, schema?: Record<string, unknown>): ReplyOutcome {
   if (response.refusal || response.finishReason === 'content_filter') {
     return { ok: false, reason: 'refusal', detail: response.refusal ?? 'content_filter' };
   }
@@ -82,10 +81,16 @@ export function readReply(response: AIResponse, schema: Record<string, unknown>)
     return { ok: false, reason: 'invalid', detail: 'the reply is not JSON' };
   }
 
-  const validate = ajv.compile(schema);
-  ajv.removeSchema(schema);
-  if (!validate(value)) {
-    return { ok: false, reason: 'invalid', detail: ajv.errorsText(validate.errors) };
+  if (schema) {
+    // A fresh instance per reply: request schemas differ per batch, and Ajv
+    // keeps every schema it compiled for the life of the instance. About 10 ms,
+    // next to a model call of seconds.
+    const ajv = new Ajv2020({ strict: false });
+    addFormats(ajv);
+    const validate = ajv.compile(schema);
+    if (!validate(value)) {
+      return { ok: false, reason: 'invalid', detail: ajv.errorsText(validate.errors) };
+    }
   }
   return { ok: true, value };
 }

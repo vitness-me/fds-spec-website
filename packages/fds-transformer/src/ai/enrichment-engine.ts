@@ -26,6 +26,7 @@ import type {
   AIProvider,
   AIResponse,
   AIResponseSchema,
+  AIUsage,
   TierName,
   TierConfig,
   TieredFieldEnrichmentConfig,
@@ -121,11 +122,7 @@ export interface CallReport {
   servedModel: string;
   /** The tier the call was degraded from, if it was. */
   degradedFrom?: TierName;
-  promptTokens: number;
-  completionTokens: number;
-  totalTokens: number;
-  /** Cost in credits, when the provider reports it. */
-  cost?: number;
+  usage: AIUsage;
   outcome: 'ok' | AbstentionReason;
 }
 
@@ -828,11 +825,8 @@ export class EnrichmentEngine {
           promptId,
           model: call.model,
           servedModel: response.model,
-          ...(call.degradedFrom ? { degradedFrom: call.degradedFrom } : {}),
-          promptTokens: response.usage?.promptTokens ?? 0,
-          completionTokens: response.usage?.completionTokens ?? 0,
-          totalTokens: response.usage?.totalTokens ?? response.tokensUsed ?? 0,
-          ...(response.usage?.cost !== undefined ? { cost: response.usage.cost } : {}),
+          degradedFrom: call.degradedFrom,
+          usage: response.usage ?? { promptTokens: 0, completionTokens: 0, totalTokens: response.tokensUsed },
           outcome: reply.ok ? 'ok' : reply.reason,
         });
 
@@ -903,9 +897,6 @@ export class EnrichmentEngine {
   }
 
   /**
-   * Call API with fallback on errors
-   */
-  /**
    * Call the tier's model, retrying and then degrading on errors. The model is
    * chosen per call, so a degrade never changes the shared provider.
    */
@@ -932,7 +923,7 @@ export class EnrichmentEngine {
         responseSchema,
       });
 
-      return { response, tier, model: tierConfig.model, ...(degradedFrom ? { degradedFrom } : {}) };
+      return { response, tier, model: tierConfig.model, degradedFrom };
     } catch (error) {
       // Check if we should retry
       if (attemptNumber < fallbackConfig.retries) {

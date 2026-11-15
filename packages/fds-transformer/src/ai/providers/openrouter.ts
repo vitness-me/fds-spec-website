@@ -6,6 +6,7 @@
 
 import type { AIProvider, AIProviderOptions, AIResponse } from '../../core/types.js';
 import type { RateLimiter } from '../rate-limiter.js';
+import { readReply } from '../response-schema.js';
 
 /**
  * OpenRouter provider configuration
@@ -123,6 +124,8 @@ export class OpenRouterProvider implements AIProvider {
 
   /**
    * Set the model for subsequent requests
+   * @deprecated Pass `model` per call instead. The provider is shared, so
+   * setting its model changes every later call.
    */
   setModel(model: string): void {
     this.model = model;
@@ -215,7 +218,7 @@ export class OpenRouterProvider implements AIProvider {
               promptTokens: data.usage.prompt_tokens ?? 0,
               completionTokens: data.usage.completion_tokens ?? 0,
               totalTokens: data.usage.total_tokens ?? 0,
-              ...(data.usage.cost !== undefined ? { cost: data.usage.cost } : {}),
+              cost: data.usage.cost,
             }
           : undefined;
 
@@ -229,8 +232,8 @@ export class OpenRouterProvider implements AIProvider {
           tokensUsed: usage?.totalTokens ?? 0,
           model: data.model || options.model || this.model,
           finishReason: choice?.finish_reason ?? null,
-          ...(choice?.message?.refusal ? { refusal: choice.message.refusal } : {}),
-          ...(usage ? { usage } : {}),
+          refusal: choice?.message?.refusal ?? undefined,
+          usage,
         };
       } catch (error) {
         lastError = error instanceof Error ? error : new Error(String(error));
@@ -328,7 +331,7 @@ export class OpenRouterProvider implements AIProvider {
    */
   async completeJSON<T>(
     prompt: string,
-    _schema?: object,
+    schema?: object,
     options: AIProviderOptions = {}
   ): Promise<T> {
     const systemPrompt = options.systemPrompt || 
@@ -339,23 +342,16 @@ export class OpenRouterProvider implements AIProvider {
       systemPrompt,
     });
 
-    // Extract JSON from response
-    const content = response.content.trim();
-    
-    // Try to find JSON in the response
-    let jsonStr = content;
-    
-    // Handle markdown code blocks
-    const codeBlockMatch = content.match(/```(?:json)?\s*([\s\S]*?)\s*```/);
-    if (codeBlockMatch) {
-      jsonStr = codeBlockMatch[1];
+    // A refusal or a reply cut off at the token limit is never parsed.
+    const reply = readReply(response, schema as Record<string, unknown> | undefined);
+    if (!reply.ok) {
+      throw new Error(
+        reply.reason === 'invalid'
+          ? `Failed to parse JSON response: ${response.content.trim().slice(0, 200)}`
+          : `No usable JSON reply (${reply.reason}): ${reply.detail}`
+      );
     }
-
-    try {
-      return JSON.parse(jsonStr) as T;
-    } catch (error) {
-      throw new Error(`Failed to parse JSON response: ${content.slice(0, 200)}`);
-    }
+    return reply.value as T;
   }
 
   /**
