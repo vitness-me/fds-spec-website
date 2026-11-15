@@ -203,11 +203,10 @@ describe('checkpoint keys', () => {
   const enrichRun = async (
     input: Record<string, unknown>[],
     fails: (name: string, prompt: string) => boolean = () => false,
-    fields?: EnrichmentConfig['fields']
+    fields?: EnrichmentConfig['fields'],
+    config: MappingConfig = mappingConfig({ enrichment: enrichment(fields) })
   ) => {
-    const transformer = new Transformer({
-      config: mappingConfig({ enrichment: enrichment(fields) }),
-    });
+    const transformer = new Transformer({ config });
     await transformer.init();
     const prompts: string[] = [];
     vi.spyOn(transformer.getEnrichmentEngine()!.getProvider()!, 'complete').mockImplementation(
@@ -304,6 +303,19 @@ describe('checkpoint keys', () => {
       'Avoid deadlift when injured.',
     ]);
     expect(descriptions(resumed.result)).toEqual([
+      'About back squat.',
+      'About bench press.',
+      'About deadlift.',
+    ]);
+  });
+
+  it('merge enrichment onto a record that maps no exerciseId', async () => {
+    const config = mappingConfig({ enrichment: enrichment() });
+    delete config.mappings.exerciseId;
+
+    const { result } = await enrichRun(sources(), undefined, undefined, config);
+
+    expect(descriptions(result)).toEqual([
       'About back squat.',
       'About bench press.',
       'About deadlift.',
