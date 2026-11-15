@@ -33,7 +33,7 @@
         },
         "fields": {
           "type": "object",
-          "description": "Field path, as the mapping configuration names it, to where its value came from",
+          "description": "Field path, as the mapping configuration names it, to where its value came from. An entry covers the values beneath its path, except where a deeper path has an entry of its own",
           "additionalProperties": { "$ref": "#/$defs/fieldProvenance" }
         }
       }

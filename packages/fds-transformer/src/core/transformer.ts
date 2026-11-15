@@ -23,6 +23,7 @@ import { SchemaManager } from '../schemas/schema-manager.js';
 import { DEFAULT_SCHEMA_VERSION } from '../schemas/versions.js';
 import {
   EnrichmentEngine,
+  getPathValue,
   isEmptyValue,
   needsEnrichment,
   type ExerciseInput,
@@ -478,7 +479,7 @@ export class Transformer {
     }
 
     const rejected: ValidationError[] = (this.config.validation?.rejectDefaults ?? [])
-      .filter((path) => provenance[path]?.origin === 'default')
+      .filter((path) => this.holdsDefault(mapped, provenance, path))
       .map((path) => ({
         field: path,
         message: `${path} holds the mapping default, which validation.rejectDefaults does not allow`,
@@ -493,6 +494,29 @@ export class Transformer {
       enriched,
       __validation: validation,
     };
+  }
+
+  /**
+   * Whether a mapping default supplies the value at `path`: its own entry, the
+   * nearest entry above it when it has none, or any entry beneath it
+   */
+  private holdsDefault(
+    mapped: Record<string, unknown>,
+    provenance: RecordProvenance,
+    path: string
+  ): boolean {
+    const paths = Object.keys(provenance);
+    if (paths.some((p) => p.startsWith(`${path}.`) && provenance[p].origin === 'default')) {
+      return true;
+    }
+    const nearest = paths
+      .filter((p) => p === path || path.startsWith(`${p}.`))
+      .sort((a, b) => b.length - a.length)[0];
+    return (
+      nearest !== undefined &&
+      provenance[nearest].origin === 'default' &&
+      getPathValue(mapped, path) !== undefined
+    );
   }
 
   /**

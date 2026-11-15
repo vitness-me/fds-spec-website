@@ -26,11 +26,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `provenance.sidecar.json` beside the output, with keys sorted so the same
   input gives the same bytes, validated by the new published schema
   `transformer/provenance/v1.0.0`. Provenance survives checkpoint resume.
-- **Tier prompts ask for a confidence per field**, from 0 to 1. A value outside
-  that range, or none, is recorded as `null`.
+- **Enrichment prompts ask for a confidence per field**, from 0 to 1, on the
+  tiered and the single-model path. A value outside that range, or none, is
+  recorded as `null`.
 - **`validation.rejectDefaults`** (mapping schema 1.2.0) names field paths that
-  may not hold a mapping default; a record whose value there came from
-  `default` fails, whatever `enabled` and `strict` say.
+  may not hold a mapping default; a record fails when a default supplies the
+  value there (at the path, from a default object above it, or beneath it),
+  whatever `enabled` and `strict` say.
 
 ### Fixed
 

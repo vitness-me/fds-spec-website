@@ -219,7 +219,7 @@
           "path": "transformer/provenance/v1.0.0/provenance.schema.json",
           "$id": "https://spec.vitness.me/schemas/transformer/provenance/v1.0.0/provenance.schema.json",
           "frozen": false,
-          "sha256": "894165b9ce02626f22d3478866f86707b4849ffe68ce04a79d48fe656f12b994"
+          "sha256": "22514e8fc92efc00341735ec668cc36c9c177f79ce6661bff0d188b0fbe4f407"
         }
       }
     },

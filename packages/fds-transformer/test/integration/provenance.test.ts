@@ -134,6 +134,64 @@ describe('Provenance of mapped values', () => {
     expect(sourced.success).toBe(true);
   });
 
+  it('rejects a default a named path inherits from, or holds beneath it', async () => {
+    const run = async (mappings: MappingConfig['mappings'], rejectDefaults: string[]) =>
+      new Transformer({
+        config: config({ mappings, validation: { enabled: false, rejectDefaults } }),
+      }).transform({});
+
+    const inherited = await run(
+      { classification: { from: null, default: { level: 'beginner' } } },
+      ['classification.level']
+    );
+    const beneath = await run(
+      { 'classification.level': { from: null, default: 'beginner' } },
+      ['classification']
+    );
+    const elsewhere = await run(
+      { classification: { from: null, default: { force: 'push' } } },
+      ['classification.level']
+    );
+
+    expect(inherited.success).toBe(false);
+    expect(inherited.errors?.map((e) => e.field)).toEqual(['classification.level']);
+    expect(beneath.success).toBe(false);
+    // The default object holds no level, so no default stands in for one.
+    expect(elsewhere.success).toBe(true);
+  });
+
+  it('keeps provenance true when mappings overlap', async () => {
+    const overwritten = await new Transformer({
+      config: config({
+        mappings: {
+          'classification.level': { from: null, default: 'beginner' },
+          classification: { from: 'classification' },
+        },
+        validation: { enabled: false, rejectDefaults: ['classification.level'] },
+      }),
+    }).transform({ classification: { level: 'advanced' } });
+
+    // The later mapping replaced the default; nothing records it any more.
+    expect(overwritten.data).toMatchObject({ classification: { level: 'advanced' } });
+    expect(overwritten.provenance).toEqual({
+      classification: { origin: 'source', from: 'classification' },
+    });
+    expect(overwritten.success).toBe(true);
+
+    const unwritable = await new Transformer({
+      config: config({
+        mappings: {
+          classification: { from: null, default: null },
+          'classification.level': { from: 'level' },
+        },
+      }),
+    }).transform({ level: 'advanced' });
+
+    // A null parent leaves nowhere to write the level, so it has no origin.
+    expect((unwritable.data as any).classification).toBeNull();
+    expect(unwritable.provenance).toEqual({ classification: { origin: 'default' } });
+  });
+
   it('rejects defaults in the batch path too', async () => {
     const transformer = new Transformer({
       config: config({
@@ -304,7 +362,7 @@ describe('Provenance of enriched values', () => {
     }
   });
 
-  it('records the single-model path as model output with no reported confidence', async () => {
+  it('records the single-model path with the confidence the model reports', async () => {
     const transformer = new Transformer({
       config: config({
         mappings: {
@@ -320,9 +378,12 @@ describe('Provenance of enriched values', () => {
       }),
     });
     await transformer.init();
-    vi.spyOn(transformer.getEnrichmentEngine()!.getProvider()!, 'completeJSON').mockResolvedValue({
-      description: 'A squat.',
-    });
+    const completeJSON = vi
+      .spyOn(transformer.getEnrichmentEngine()!.getProvider()!, 'completeJSON')
+      .mockResolvedValue({
+        description: 'A squat.',
+        confidence: { 'canonical.description': 0.93 },
+      });
 
     const result = await transformer.transform({ name: 'Squat' });
 
@@ -331,7 +392,39 @@ describe('Provenance of enriched values', () => {
       model: 'stub/single',
       prompt: 'comprehensive',
       promptVersion: expect.stringMatching(PROMPT_VERSION),
-      confidence: null,
+      confidence: 0.93,
     });
+    expect(completeJSON.mock.calls[0][0]).toContain('"confidence"');
+  });
+
+  it('reads confidence on the per-field fallback and does not write it as data', async () => {
+    const transformer = new Transformer({
+      config: config({
+        mappings: {
+          'canonical.name': { from: 'name' },
+          'canonical.description': {
+            from: 'description',
+            enrichment: { enabled: true, prompt: 'description' },
+          },
+        },
+        enrichment: { enabled: true, provider: 'openrouter', model: 'stub/single', apiKey: 'stub-key-not-used' },
+      }),
+    });
+    await transformer.init();
+    const completeJSON = vi
+      .spyOn(transformer.getEnrichmentEngine()!.getProvider()!, 'completeJSON')
+      // The comprehensive call fails, so each field is asked on its own.
+      .mockRejectedValueOnce(new Error('comprehensive failed'))
+      .mockResolvedValueOnce({ text: 'A squat.', confidence: 0.6 });
+
+    const result = await transformer.transform({ name: 'Squat' });
+
+    expect((result.data as any).canonical.description).toEqual({ text: 'A squat.' });
+    expect(result.provenance!['canonical.description']).toMatchObject({
+      origin: 'model',
+      prompt: 'description',
+      confidence: 0.6,
+    });
+    expect(completeJSON.mock.calls[1][0]).toContain('"confidence"');
   });
 });

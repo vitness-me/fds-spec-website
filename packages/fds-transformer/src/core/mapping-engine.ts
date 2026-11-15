@@ -50,7 +50,14 @@ export class MappingEngine {
 
       if (value !== undefined && origin) {
         this.setNestedValue(target, targetPath, value);
-        provenance[targetPath] = origin;
+        // A null or scalar parent leaves nowhere to write: no value, no origin
+        if (this.getNestedValue(target, targetPath) === value) {
+          // An entry beneath this path described a value this one replaced
+          for (const path of Object.keys(provenance)) {
+            if (path.startsWith(`${targetPath}.`)) delete provenance[path];
+          }
+          provenance[targetPath] = origin;
+        }
       }
     }
 

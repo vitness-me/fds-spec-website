@@ -145,6 +145,18 @@ interface ProcessingBatch {
  */
 const PROMPT_VERSION_CONTEXT = { name: '{{name}}' };
 
+/** Appended to the single-model comprehensive prompt */
+const COMPREHENSIVE_CONFIDENCE_INSTRUCTION = `Also include "confidence": an object giving your confidence from 0 to 1 in each value you give, keyed by its FDS field path, for example "confidence": { "canonical.description": 0.9 }.`;
+
+/** Appended to a single-model per-field prompt */
+const FIELD_CONFIDENCE_INSTRUCTION = `Also include "confidence": your confidence from 0 to 1 in this answer.`;
+
+const COMPREHENSIVE_PROMPT_VERSION = promptVersion(
+  EXERCISE_SYSTEM_PROMPT,
+  getExerciseEnrichmentPrompt(PROMPT_VERSION_CONTEXT),
+  COMPREHENSIVE_CONFIDENCE_INSTRUCTION
+);
+
 /**
  * Default tier configurations
  */
@@ -307,6 +319,13 @@ function replyKey(fieldPath: string): string {
   return fieldPath.slice(fieldPath.lastIndexOf('.') + 1);
 }
 
+/** Every path to a value that is not a plain object */
+function leafPaths(obj: Record<string, unknown>, prefix = ''): string[] {
+  return Object.entries(obj).flatMap(([key, value]) =>
+    isPlainObject(value) ? leafPaths(value, `${prefix}${key}.`) : [`${prefix}${key}`]
+  );
+}
+
 function asObject(value: unknown): Record<string, unknown> {
   return isPlainObject(value) ? value : {};
 }
@@ -464,13 +483,16 @@ export class EnrichmentEngine {
       // Fall back to comprehensive enrichment for each exercise
       for (const exercise of exercises) {
         try {
-          const result = await this.enrichComprehensive({
-            source: exercise as Record<string, unknown>,
-            target: {},
-            field: '',
-            registries: { muscles: [], equipment: [], muscleCategories: [] },
-            config: {} as TransformContext['config'],
-          });
+          const result = await this.enrichComprehensive(
+            {
+              source: exercise as Record<string, unknown>,
+              target: {},
+              field: '',
+              registries: { muscles: [], equipment: [], muscleCategories: [] },
+              config: {} as TransformContext['config'],
+            },
+            exercise.fieldsToEnrich
+          );
           if (result.success && result.data) {
             results.set(exercise.id, result.data);
             provenance.set(exercise.id, result.provenance ?? {});
@@ -1302,20 +1324,9 @@ export class EnrichmentEngine {
 
     // Use comprehensive single-call enrichment
     try {
-      const result = await this.enrichComprehensive(context);
+      const result = await this.enrichComprehensive(context, fieldsNeedingEnrichment);
       if (result.success && result.data) {
-        const data = pickPaths(result.data, fieldsNeedingEnrichment);
-        const version = promptVersion(
-          EXERCISE_SYSTEM_PROMPT,
-          getExerciseEnrichmentPrompt(PROMPT_VERSION_CONTEXT)
-        );
-        const provenance: Record<string, FieldProvenance> = {};
-        for (const path of fieldsNeedingEnrichment) {
-          if (getPathValue(data, path) !== undefined) {
-            provenance[path] = this.singleModelProvenance('comprehensive', version);
-          }
-        }
-        return { ...result, data, provenance };
+        return result;
       }
     } catch (error) {
       console.warn('Comprehensive enrichment failed, falling back to per-field:', error);
@@ -1328,7 +1339,13 @@ export class EnrichmentEngine {
   /**
    * Comprehensive enrichment - single API call for all fields
    */
-  private async enrichComprehensive(context: TransformContext): Promise<EnrichmentResult> {
+  /**
+   * @param paths - the field paths to keep; every path the reply fills when absent
+   */
+  private async enrichComprehensive(
+    context: TransformContext,
+    paths?: string[]
+  ): Promise<EnrichmentResult> {
     if (!this.provider) {
       return { success: false, error: 'No AI provider available' };
     }
@@ -1340,7 +1357,7 @@ export class EnrichmentEngine {
       bodyPart: context.source.bodyPart as string | undefined,
     };
 
-    const prompt = getExerciseEnrichmentPrompt(exerciseContext);
+    const prompt = `${getExerciseEnrichmentPrompt(exerciseContext)}\n\n${COMPREHENSIVE_CONFIDENCE_INSTRUCTION}`;
 
     try {
       const result = await this.provider.completeJSON<Record<string, unknown>>(prompt, undefined, {
@@ -1411,9 +1428,23 @@ export class EnrichmentEngine {
         }
       }
 
+      const data = paths ? pickPaths(enrichedData, paths) : enrichedData;
+      const confidence = asObject(result.confidence);
+      const provenance: Record<string, FieldProvenance> = {};
+      for (const path of paths ?? leafPaths(data)) {
+        if (getPathValue(data, path) !== undefined) {
+          provenance[path] = this.singleModelProvenance(
+            'comprehensive',
+            COMPREHENSIVE_PROMPT_VERSION,
+            readConfidence(confidence[path] ?? confidence[replyKey(path)])
+          );
+        }
+      }
+
       return {
         success: true,
-        data: enrichedData,
+        data,
+        provenance,
         tokensUsed: 0,
       };
     } catch (error) {
@@ -1452,24 +1483,27 @@ export class EnrichmentEngine {
         const result = await this.enrichField(field, mappingObj, context);
 
         if (result.success && result.data) {
+          const { confidence, ...answer } = result.data;
           const promptName = mappingObj.enrichment.prompt;
           const fieldProvenance = this.singleModelProvenance(
             promptName ?? 'comprehensive',
             promptVersion(
               this.getSystemPrompt(),
-              this.buildPrompt(field, promptName, PROMPT_VERSION_CONTEXT)
-            )
+              this.buildPrompt(field, promptName, PROMPT_VERSION_CONTEXT),
+              FIELD_CONFIDENCE_INSTRUCTION
+            ),
+            readConfidence(confidence)
           );
           if (mappingObj.enrichment.fields) {
             for (const subField of mappingObj.enrichment.fields) {
               const fullPath = field.includes('.') ? field : `${field}.${subField}`;
-              if (result.data[subField] !== undefined) {
-                this.setNestedValue(enrichedData, fullPath, result.data[subField]);
+              if (answer[subField] !== undefined) {
+                this.setNestedValue(enrichedData, fullPath, answer[subField]);
                 provenance[fullPath] = fieldProvenance;
               }
             }
           } else {
-            this.setNestedValue(enrichedData, field, result.data);
+            this.setNestedValue(enrichedData, field, answer);
             provenance[field] = fieldProvenance;
           }
           totalTokens += result.tokensUsed || 0;
@@ -1517,7 +1551,7 @@ export class EnrichmentEngine {
     }
 
     // Get the prompt template
-    const prompt = this.buildPrompt(field, enrichmentConfig.prompt, promptContext);
+    const prompt = `${this.buildPrompt(field, enrichmentConfig.prompt, promptContext)}\n\n${FIELD_CONFIDENCE_INSTRUCTION}`;
 
     try {
       const result = await this.provider.completeJSON(prompt, undefined, {
@@ -1564,16 +1598,19 @@ export class EnrichmentEngine {
   }
 
   /**
-   * Provenance for a value the single-model path wrote. That path asks for no
-   * confidence, so none is reported.
+   * Provenance for a value the single-model path wrote
    */
-  private singleModelProvenance(prompt: string, version: string): ModelProvenance {
+  private singleModelProvenance(
+    prompt: string,
+    version: string,
+    confidence: number | null
+  ): ModelProvenance {
     return {
       origin: 'model',
       model: this.config.model ?? '',
       prompt,
       promptVersion: version,
-      confidence: null,
+      confidence,
     };
   }
 
