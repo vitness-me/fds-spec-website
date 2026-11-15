@@ -25,7 +25,7 @@ import type {
 } from '../../src/core/types.js';
 
 type When = 'missing' | 'empty' | 'notFound' | 'always';
-type FieldState = 'mapped' | 'absent' | 'null' | 'emptyString' | 'emptyArray';
+type FieldState = 'mapped' | 'absent' | 'null' | 'emptyString' | 'emptyArray' | 'emptyObject';
 
 const TIERS: TierName[] = ['simple', 'medium', 'complex'];
 const PROMPTS = TIERS.flatMap((tier) =>
@@ -34,11 +34,22 @@ const PROMPTS = TIERS.flatMap((tier) =>
 /** Every path any tier prompt can write. */
 const ALL_PATHS = [...new Set(PROMPTS.flatMap((p) => p.fields))];
 const WHENS: When[] = ['missing', 'empty', 'notFound', 'always'];
-const GAP_STATES: FieldState[] = ['absent', 'null', 'emptyString', 'emptyArray'];
+const GAP_STATES: FieldState[] = ['absent', 'null', 'emptyString', 'emptyArray', 'emptyObject'];
 
 const sourceKey = (path: string) => path.replace(/\./g, '__');
 const responseKey = (path: string) => path.split('.').pop()!;
-const mappedValue = (path: string) => `mapped:${path}`;
+/** A mapped value: a string, a populated array or a populated object, by path. */
+const mappedValue = (path: string): unknown => {
+  const text = `mapped:${path}`;
+  switch (ALL_PATHS.indexOf(path) % 3) {
+    case 0:
+      return text;
+    case 1:
+      return [text];
+    default:
+      return { value: text };
+  }
+};
 
 /** Deterministic PRNG (mulberry32), so a failure reproduces. */
 function prng(seed: number) {
@@ -61,6 +72,8 @@ function sourceValue(state: FieldState, path: string): unknown {
       return '';
     case 'emptyArray':
       return [];
+    case 'emptyObject':
+      return {};
     case 'absent':
       return undefined;
   }
@@ -225,7 +238,7 @@ describe('Enrichment fills gaps only', () => {
             const state = states[i][path];
             const actual = getPath(doc, path);
             if (state === 'mapped') {
-              expect(actual, `${label}: mapped ${path} replaced`).toBe(mappedValue(path));
+              expect(actual, `${label}: mapped ${path} replaced`).toEqual(mappedValue(path));
             } else if (configured.includes(path) && isGapFor(when[path], state)) {
               expectedWritten.push(path);
             } else {
@@ -349,6 +362,57 @@ describe('Enrichment fills gaps only', () => {
 
       expect((results[0].data as any).canonical.description).toBe('From the source.');
       expect((results[1].data as any).canonical.description).toBeNull();
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+
+  it('scopes direct engine results to fieldsToEnrich on the single-model fallback', async () => {
+    const engine = new EnrichmentEngine({ enabled: true, provider: 'openrouter', apiKey: 'stub-key-not-used' });
+    vi.spyOn(engine.getProvider()!, 'completeJSON').mockResolvedValue({
+      description: 'ai:description',
+      classification: { level: 'ai:level' },
+    });
+
+    const { results } = await engine.enrichBatch([
+      { id: 'squat', slug: 'squat', name: 'Squat', fieldsToEnrich: ['canonical.description'] },
+    ]);
+
+    expect(results.get('squat')).toEqual({ canonical: { description: 'ai:description' } });
+  });
+
+  it('scopes direct engine results resumed from a checkpoint to fieldsToEnrich', async () => {
+    const dir = mkdtempSync(join(tmpdir(), 'fds-gap-only-'));
+    try {
+      const config: EnrichmentConfig = {
+        enabled: true,
+        provider: 'openrouter',
+        apiKey: 'stub-key-not-used',
+        tiers: TIERS_CONFIG,
+        fields: { 'canonical.description': { tier: 'simple', prompt: 'description' } },
+        checkpoint: { enabled: true, saveInterval: 1 },
+      };
+      const checkpoint = new CheckpointManager(dir, config.checkpoint);
+      checkpoint.initialize({
+        inputFile: 'batch-enrichment',
+        totalExercises: 1,
+        config: { model: 'anthropic/claude-3.5-sonnet', ...config },
+      });
+      checkpoint.update({
+        exerciseId: 'squat',
+        success: true,
+        currentTier: 'simple',
+        results: { simple: { canonical: { description: 'ai:stale' }, classification: { level: 'ai:level' } } },
+      });
+      checkpoint.forceSave();
+
+      const engine = new EnrichmentEngine(config);
+      const { results } = await engine.enrichBatch(
+        [{ id: 'squat', slug: 'squat', name: 'Squat', fieldsToEnrich: [] }],
+        { resume: true, outputDirectory: dir }
+      );
+
+      expect(results.get('squat')).toEqual({});
     } finally {
       rmSync(dir, { recursive: true, force: true });
     }

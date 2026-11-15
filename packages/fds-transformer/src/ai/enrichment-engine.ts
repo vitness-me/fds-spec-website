@@ -343,6 +343,9 @@ export class EnrichmentEngine {
    * 4. Handles errors with fallback chain
    * 5. Saves progress to checkpoint for resumability
    *
+   * An exercise's result holds only its `fieldsToEnrich`, whichever source
+   * produced it: a tier, the single-model fallback or a resumed checkpoint.
+   *
    * @param exercises - Array of exercises to enrich
    * @param options - Enrichment options
    * @returns Batch enrichment result
@@ -350,6 +353,20 @@ export class EnrichmentEngine {
   async enrichBatch(
     exercises: ExerciseInput[],
     options: BatchEnrichmentOptions = {}
+  ): Promise<BatchEnrichmentResult> {
+    const result = await this.runBatch(exercises, options);
+    for (const exercise of exercises) {
+      const data = result.results.get(exercise.id);
+      if (data && exercise.fieldsToEnrich) {
+        result.results.set(exercise.id, pickPaths(data, exercise.fieldsToEnrich));
+      }
+    }
+    return result;
+  }
+
+  private async runBatch(
+    exercises: ExerciseInput[],
+    options: BatchEnrichmentOptions
   ): Promise<BatchEnrichmentResult> {
     const startTime = Date.now();
     const results = new Map<string, Record<string, unknown>>();

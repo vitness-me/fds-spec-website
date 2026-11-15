@@ -22,7 +22,6 @@ import {
   EnrichmentEngine,
   isEmptyValue,
   needsEnrichment,
-  pickPaths,
   type ExerciseInput,
   type BatchEnrichmentOptions,
   type BatchEnrichmentResult,
@@ -313,8 +312,6 @@ export class Transformer {
 
     // Phase 2: Batch enrichment (if tiered enrichment is configured)
     let enrichmentResults: BatchEnrichmentResult | null = null;
-    // Configured field paths that are gaps in each record, by index
-    const gapPaths = new Map<number, string[]>();
 
     if (
       !options.skipEnrichment &&
@@ -330,10 +327,6 @@ export class Transformer {
 
       // Prepare exercise inputs for batch enrichment
       const exerciseInputs: ExerciseInput[] = mappedExercises.map(({ mapped, index }) => {
-        const fieldsToEnrich = enrichedFields
-          .filter(({ path, when }) => needsEnrichment(mapped, path, when))
-          .map(({ path }) => path);
-        gapPaths.set(index, fieldsToEnrich);
         const canonical = mapped.canonical as Record<string, unknown> | undefined;
         const targets = mapped.targets as Record<string, unknown> | undefined;
         const equipment = mapped.equipment as Record<string, unknown> | undefined;
@@ -346,7 +339,9 @@ export class Transformer {
           primaryTargets: (targets?.primary as Array<{ id: string; name: string }>) || undefined,
           requiredEquipment:
             (equipment?.required as Array<{ id: string; name: string }>) || undefined,
-          fieldsToEnrich,
+          fieldsToEnrich: enrichedFields
+            .filter(({ path, when }) => needsEnrichment(mapped, path, when))
+            .map(({ path }) => path),
         };
       });
 
@@ -395,8 +390,7 @@ export class Transformer {
 
         const enrichmentData = enrichmentResults.results.get(exerciseId);
         if (enrichmentData) {
-          // A value resumed from a checkpoint may predate the current mapping
-          this.deepMerge(mapped, pickPaths(enrichmentData, gapPaths.get(index) ?? []));
+          this.deepMerge(mapped, enrichmentData);
           enriched = Object.keys(enrichmentData);
           enrichedCount++;
         }
