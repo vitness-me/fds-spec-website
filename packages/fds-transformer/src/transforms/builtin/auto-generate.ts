@@ -36,11 +36,7 @@ export const timestamp: TransformFunction = (
 
 function instantOf(value: unknown, clock: unknown): Date {
   if (value !== undefined && value !== null && value !== '') {
-    const date = new Date(String(value));
-    if (Number.isNaN(date.getTime())) {
-      throw new Error(`timestamp: ${JSON.stringify(value)} is not a date`);
-    }
-    return date;
+    return parseInstant(value, `${JSON.stringify(value)} is not a date`);
   }
 
   if (clock === undefined) {
@@ -51,9 +47,14 @@ function instantOf(value: unknown, clock: unknown): Date {
     );
   }
 
-  const date = clock === 'now' ? new Date() : new Date(String(clock));
+  if (clock === 'now') return new Date();
+  return parseInstant(clock, `options.clock ${JSON.stringify(clock)} is not an instant or "now"`);
+}
+
+function parseInstant(raw: unknown, problem: string): Date {
+  const date = new Date(String(raw));
   if (Number.isNaN(date.getTime())) {
-    throw new Error(`timestamp: options.clock ${JSON.stringify(clock)} is not an instant or "now"`);
+    throw new Error(`timestamp: ${problem}`);
   }
   return date;
 }

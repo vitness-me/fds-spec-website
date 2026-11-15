@@ -68,6 +68,9 @@ export class BatchProcessor {
         }
       }
 
+      // Stop at the first chunk that repeats a slug, before more records are enriched
+      assertUniqueSlugs(results.map((result) => result.data));
+
       // Report progress
       this.options.onProgress({
         processed: Math.min(i + this.options.chunkSize, items.length),
@@ -79,8 +82,6 @@ export class BatchProcessor {
         ),
       });
     }
-
-    assertUniqueSlugs(results.map((result) => result.data));
 
     return {
       results,

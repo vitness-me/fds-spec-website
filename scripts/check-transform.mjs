@@ -885,12 +885,11 @@ async function captureTranscript(args) {
   return normalizeTranscript(await readFile(capturePath, 'utf8'));
 }
 
-/** The output's sha256, reported once both runs and the committed copy agree. */
-let identicalSha256 = null;
+/** The first run's output. Reported by sha256 once both runs and the committed copy agree. */
+let bytes = null;
 
 try {
   let documents = null;
-  let bytes = null;
 
   try {
     ({ documents, bytes } = await transformInto(join(workspace, 'from-root'), ROOT));
@@ -933,13 +932,13 @@ try {
     // check, so a resolution failure shows up as different bytes too.
     try {
       const rerun = await transformInto(join(workspace, 'from-elsewhere'), workspace);
-      const rerunProblems = compareBytes({
-        what: `two runs of the same input (from the repository root and from ${workspace})`,
-        left: bytes,
-        right: rerun.bytes,
-      });
-      problems.push(...rerunProblems);
-      if (!rerunProblems.length) identicalSha256 = sha256(bytes);
+      problems.push(
+        ...compareBytes({
+          what: `two runs of the same input (from the repository root and from ${workspace})`,
+          left: bytes,
+          right: rerun.bytes,
+        })
+      );
     } catch (error) {
       problems.push(
         `the transform completed from the repository root but not from ${workspace}: ` +
@@ -1052,5 +1051,5 @@ console.log(
   `  ok    ${configs.length} mapping configuration(s) name published versions and ` +
     `write constants their schema accepts; ${source.length} source record(s) ` +
     'transformed and validated against their published schema; a rerun wrote ' +
-    `the same bytes as the first run and the committed copy (sha256 ${identicalSha256}).`
+    `the same bytes as the first run and the committed copy (sha256 ${sha256(bytes)}).`
 );

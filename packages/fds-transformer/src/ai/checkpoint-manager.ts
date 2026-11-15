@@ -42,8 +42,7 @@ export const DEFAULT_CHECKPOINT_CONFIG: CheckpointConfig = {
  * the same record with the same input; a changed record is enriched again.
  */
 export function checkpointKey(stableId: string, input: unknown): string {
-  const hash = createHash('sha256').update(stableStringify(input)).digest('hex').substring(0, 16);
-  return `${stableId}@${hash}`;
+  return `${stableId}@${shortHash(input)}`;
 }
 
 /**
@@ -392,8 +391,7 @@ export class CheckpointManager {
    * Hash configuration for change detection
    */
   private hashConfig(config: unknown): string {
-    const json = stableStringify(config);
-    return createHash('sha256').update(json).digest('hex').substring(0, 16);
+    return shortHash(config);
   }
 
   /**
@@ -405,6 +403,11 @@ export class CheckpointManager {
       mkdirSync(dir, { recursive: true });
     }
   }
+}
+
+/** First 16 hex digits of the sha256 of a value's key-sorted JSON */
+function shortHash(value: unknown): string {
+  return createHash('sha256').update(stableStringify(value)).digest('hex').substring(0, 16);
 }
 
 function stableStringify(value: unknown): string {

@@ -4,6 +4,7 @@
 
 import { v4 as uuidv4, v5, validate } from 'uuid';
 import type { TransformFunction } from '../../core/types.js';
+import { getNestedValue } from './template.js';
 
 /**
  * Generate a new UUIDv4
@@ -49,13 +50,7 @@ export const uuidv5: TransformFunction = (value, options = {}, context): string 
 
 function fillTemplate(template: string, value: unknown, source: Record<string, unknown>): string {
   return template.replace(/\{\{(\w+(?:\.\w+)*)\}\}/g, (_match, path: string) => {
-    const filled =
-      path === 'value'
-        ? value
-        : path.split('.').reduce<unknown>(
-            (node, key) => (node == null ? undefined : (node as Record<string, unknown>)[key]),
-            source
-          );
+    const filled = path === 'value' ? value : getNestedValue(source, path);
     if (filled === undefined || filled === null || filled === '') {
       throw new Error(`uuidv5 name ${template} has no value for {{${path}}}`);
     }
