@@ -8,8 +8,8 @@ sidebar_position: 1
 
 FDS je definisan u formatu JSON Schema (Draft 2020-12). Svaka šema ispod objavljena je na zamrznutom URL-u: bajtovi na URL-u verzije nikada se ne menjaju, a izmena se isporučuje na novom.
 
-<!-- fds:count schemas=12 entities=7 libraries=1 tooling=1 superseded=3 -->
-Objavljeno je 12 šema. Od toga je 7 entiteta, 1 je biblioteka definicija, 1 konfiguriše alat, a 3 su zamenjene verzije koje se i dalje služe.
+<!-- fds:count schemas=14 entities=7 libraries=1 tooling=2 superseded=4 -->
+Objavljeno je 14 šema. Od toga je 7 entiteta, 1 je biblioteka definicija, 2 pripadaju alatu, a 4 su zamenjene verzije koje se i dalje služe.
 
 ## Verzije entiteta nisu ujednačene
 
@@ -75,16 +75,30 @@ Ova šema **nije entitet** i provajder je ne izvozi. Koren njene šeme po konstr
 
 ## Šeme alata
 
-### Mapiranje transformatora — v1.1.0
+### Mapiranje transformatora — v1.2.0
 Konfiguracija za FDS Transformer: kako se izvorna polja mapiraju na FDS entitet. Opisuje ulaz alata, a ne entitet, pa je dokumentovana uz alat. Ne pripada nijednom izdanju — izdanje imenuje entitete i biblioteke koje oni kombinuju, a ovo konfiguriše alat.
 
-**Šema:** `/schemas/transformer/v1.1.0/mapping.schema.json` — pogledajte [konfiguraciju transformatora](/docs/tools/transformer/configuration).
+**Šema:** `/schemas/transformer/v1.2.0/mapping.schema.json` — pogledajte [konfiguraciju transformatora](/docs/tools/transformer/configuration).
+
+Verzija 1.2.0 dodala je `validation.rejectDefaults`, koji odbacuje zapis čije imenovano polje sadrži podrazumevanu vrednost iz mapiranja.
+
+### Poreklo podataka transformatora — v1.0.0
+Opisuje `provenance.sidecar.json`, datoteku koju FDS Transformer upisuje pored svog izlaza: za svaki dokument, odakle potiče svako upisano polje (izvorna putanja, podrazumevana vrednost iz mapiranja, transformacija ili model, sa verzijom prompta i pouzdanošću). To je izlaz alata, a ne izvezeni podaci, i kao ni šema mapiranja ne pripada nijednom izdanju.
+
+**Šema:** `/schemas/transformer/provenance/v1.0.0/provenance.schema.json`
 
 ## Zamenjene, i dalje dostupne
 
 <!-- fds:pin workout/v1.0.0/workout.schema.json — listed on purpose: releases 1.2.0 and 1.3.0 declare workout at 1.0.0, so a client pinned to either must keep resolving this URL. The section says plainly not to build against it. -->
 <!-- fds:pin atlas/v1.0.0/body-atlas.schema.json — listed on purpose: releases 1.0.0 through 1.4.0 declare body-atlas at 1.0.0, so a client pinned to any of them must keep resolving this URL. The section says plainly not to build against it. -->
 <!-- fds:pin transformer/v1.0.0/mapping.schema.json — listed on purpose: it is the `$schema` URL every configuration written before 1.1.0 names, and an editor resolving it must keep getting a document. -->
+<!-- fds:pin transformer/v1.1.0/mapping.schema.json — listed on purpose: it is the `$schema` URL every configuration written before 1.2.0 names, and an editor resolving it must keep getting a document. -->
+
+### Mapiranje transformatora — v1.1.0
+
+**Šema:** `/schemas/transformer/v1.1.0/mapping.schema.json`
+
+Zamenjena mapiranjem 1.2.0, koje je dodalo `validation.rejectDefaults`. Svaka 1.1.0 konfiguracija i dalje je validna pod 1.2.0 — dodatak je opcion. I dalje se služi jer je upravo ona ono što konfiguracija napisana prema njoj imenuje u sopstvenom `$schema`.
 
 ### Mapiranje transformatora — v1.0.0
 

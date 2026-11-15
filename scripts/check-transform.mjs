@@ -62,6 +62,11 @@
  *     figures are excused the way UUIDs are above. If it fails because the
  *     CLI's output legitimately changed, re-record with `--record-transcript`
  *     and commit the result.
+ *   - every written value carries its origin: the run writes a provenance
+ *     sidecar that validates against the published provenance schema, holds
+ *     one record per document with that document's id and slug, and names an
+ *     origin for every mapped field the document holds. The same transform run
+ *     from another working directory writes the same provenance
  *   - no registry lookup silently resolved to nothing — a lookup that was asked
  *     for and matched nothing returns an empty array, which validates, writes,
  *     and is indistinguishable from a field nobody asked to fill
@@ -358,6 +363,57 @@ function diffPaths(actual, expected, path = '') {
 
   const keys = [...new Set([...Object.keys(actual), ...Object.keys(expected)])];
   return keys.flatMap((key) => diffPaths(actual[key], expected[key], path ? `${path}.${key}` : key));
+}
+
+// ── the provenance sidecar ───────────────────────────────────────────────────
+
+const SIDECAR_NAME = 'provenance.sidecar.json';
+
+/**
+ * The run's provenance sidecar against its documents and the published schema.
+ *
+ * `validate` is the compiled published schema. `mappedPaths` are the mapping
+ * configuration's target paths: each one a document holds a value at must have
+ * a provenance entry, because a value with no recorded origin is exactly what
+ * the sidecar exists to rule out.
+ */
+export function inspectSidecar({ sidecar, documents, mappedPaths, validate }) {
+  if (!sidecar) {
+    return [`the transform wrote no ${SIDECAR_NAME} beside its output.`];
+  }
+  if (!validate(sidecar)) {
+    return [
+      `${SIDECAR_NAME} does not validate against the published provenance schema: ` +
+        JSON.stringify(validate.errors),
+    ];
+  }
+  if (sidecar.records.length !== documents.length) {
+    return [
+      `${SIDECAR_NAME} holds ${sidecar.records.length} record(s) for ` +
+        `${documents.length} document(s); it needs one per document written.`,
+    ];
+  }
+  return documents.flatMap((document, index) => {
+    const record = sidecar.records[index];
+    const where = `${SIDECAR_NAME} record ${index}`;
+    const problems = [];
+    if (record.id !== (document.exerciseId ?? document.id ?? null) ||
+        record.slug !== (document.canonical?.slug ?? null)) {
+      problems.push(`${where} names ${record.id} / ${record.slug}, not the document written at that position.`);
+    }
+    for (const path of mappedPaths) {
+      if (valueAt(document, path) !== undefined && !record.fields[path]) {
+        problems.push(`${where} has no origin for ${path}, which the document holds.`);
+      }
+    }
+    return problems;
+  });
+}
+
+/** The provenance of two runs of one transform, ids aside: they may be generated. */
+export function sameProvenance(a, b) {
+  const shape = (sidecar) => JSON.stringify(sidecar?.records.map(({ slug, fields }) => ({ slug, fields })));
+  return shape(a) === shape(b);
 }
 
 /**
@@ -732,6 +788,60 @@ function selfTest(context) {
     }
   }
 
+  {
+    const documents = [{ exerciseId: 'x', canonical: { name: 'X', slug: 'x' } }];
+    const mappedPaths = ['canonical.name', 'canonical.slug'];
+    const record = {
+      id: 'x',
+      slug: 'x',
+      fields: {
+        'canonical.name': { origin: 'source', from: 'name' },
+        'canonical.slug': { origin: 'source', from: 'name', transform: ['slugify'] },
+      },
+    };
+    const sidecar = { $schema: context.provenanceUrl, records: [record] };
+    const validate = context.provenanceValidator;
+
+    expect(
+      'a run that wrote no provenance sidecar',
+      inspectSidecar({ sidecar: null, documents, mappedPaths, validate }),
+      'wrote no provenance.sidecar.json'
+    );
+    expect(
+      'a sidecar the published schema rejects',
+      inspectSidecar({
+        sidecar: { ...sidecar, records: [{ ...record, fields: { x: { origin: 'guess' } } }] },
+        documents,
+        mappedPaths,
+        validate,
+      }),
+      'does not validate against the published provenance schema'
+    );
+    expect(
+      'a sidecar missing a record',
+      inspectSidecar({ sidecar: { ...sidecar, records: [] }, documents, mappedPaths, validate }),
+      'holds 0 record(s) for 1 document(s)'
+    );
+    expect(
+      'a mapped value with no recorded origin',
+      inspectSidecar({
+        sidecar: { ...sidecar, records: [{ ...record, fields: { 'canonical.name': record.fields['canonical.name'] } }] },
+        documents,
+        mappedPaths,
+        validate,
+      }),
+      'has no origin for canonical.slug'
+    );
+    cases += 1;
+    if (inspectSidecar({ sidecar, documents, mappedPaths, validate }).length) {
+      failures.push('self-test: a sound sidecar was reported as a problem');
+    }
+    cases += 1;
+    if (sameProvenance(sidecar, { ...sidecar, records: [{ ...record, slug: 'y' }] })) {
+      failures.push('self-test: provenance that differs between runs was reported as the same');
+    }
+  }
+
   return { failures, cases };
 }
 
@@ -790,10 +900,29 @@ const compile = (key, schema) => {
   return compiled.get(key);
 };
 
+// The provenance sidecar's schema, at the version the manifest calls current.
+const provenanceRecord = manifest.schemas?.provenance?.versions?.[manifest.schemas?.provenance?.current];
+if (!provenanceRecord?.path) {
+  console.error('specification/releases.json lists no current provenance schema.');
+  process.exit(1);
+}
+const provenanceSchema = JSON.parse(
+  await readFile(join(ROOT, PUBLISHED_DIRS.schemas, provenanceRecord.path), 'utf8')
+);
+const provenanceValidator = compile('provenance', provenanceSchema);
+const provenanceUrl = provenanceRecord.$id;
+
 const problems = [];
 
 if (process.argv.includes('--self-test')) {
-  const { failures, cases } = selfTest({ manifest, versionsOf, schemaOf, compile });
+  const { failures, cases } = selfTest({
+    manifest,
+    versionsOf,
+    schemaOf,
+    compile,
+    provenanceValidator,
+    provenanceUrl,
+  });
   if (report(failures)) process.exit(1);
   console.log(`  ok    self-test: ${cases} rule(s) reported the input built to break them`);
 }
@@ -837,6 +966,10 @@ async function transformInto(outDir, cwd) {
     { cwd }
   );
   return JSON.parse(await readFile(join(outDir, outputName), 'utf8'));
+}
+
+async function sidecarIn(outDir) {
+  return readFile(join(outDir, SIDECAR_NAME), 'utf8').then(JSON.parse, () => null);
 }
 
 const workspace = await mkdtemp(join(tmpdir(), 'fds-roundtrip-'));
@@ -900,6 +1033,16 @@ try {
     );
     problems.push(...compareToExpected({ documents, expected }));
 
+    const sidecar = await sidecarIn(join(workspace, 'from-root'));
+    problems.push(
+      ...inspectSidecar({
+        sidecar,
+        documents,
+        mappedPaths: Object.keys(fixtureConfig.mappings),
+        validate: provenanceValidator,
+      })
+    );
+
     problems.push(
       ...inspectDocuments({
         documents,
@@ -924,6 +1067,13 @@ try {
           `the transform produced ${documents.length} document(s) from the ` +
             `repository root and ${elsewhere.length} from ${workspace}.\n` +
             '    Its behaviour depends on the working directory.'
+        );
+      }
+      const sidecarElsewhere = await sidecarIn(join(workspace, 'from-elsewhere'));
+      if (!sameProvenance(await sidecarIn(join(workspace, 'from-root')), sidecarElsewhere)) {
+        problems.push(
+          `the same transform recorded different provenance from the repository root ` +
+            `and from ${workspace}.\n    Its provenance is not deterministic.`
         );
       }
     } catch (error) {

@@ -11,6 +11,13 @@
 export { Transformer } from './core/transformer.js';
 export { MappingEngine } from './core/mapping-engine.js';
 export { BatchProcessor } from './core/batch-processor.js';
+export {
+  PROVENANCE_SCHEMA_URL,
+  PROVENANCE_SIDECAR_FILENAME,
+  buildProvenanceSidecar,
+  serializeProvenanceSidecar,
+} from './core/provenance.js';
+export type { ProvenanceSidecar } from './core/provenance.js';
 
 // Registry exports
 export { RegistryManager } from './registries/registry-manager.js';
@@ -65,6 +72,14 @@ export type {
   FDSMuscleCategory,
   ValidationResult,
   ValidationError,
+
+  // Provenance types
+  FieldProvenance,
+  RecordProvenance,
+  SourceProvenance,
+  DefaultProvenance,
+  TransformProvenance,
+  ModelProvenance,
 
   // Plugin types
   TransformPlugin,

@@ -16,6 +16,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   used to regenerate a field on every run; it now behaves as `"empty"`.
   `"empty"` now also counts `[]` and `{}` as empty.
 
+### Added
+
+- **Every written value carries its origin.** Each `TransformResult` has a
+  `provenance` map, field path to origin: `source` (with the source path and
+  transforms), `default`, `transform` (generated with no input), or `model`
+  (the model that answered, the prompt, a `promptVersion` hash of its fixed
+  text, the tier and the model's `confidence`). The CLI writes it as
+  `provenance.sidecar.json` beside the output, with keys sorted so the same
+  input gives the same bytes, validated by the new published schema
+  `transformer/provenance/v1.0.0`. Provenance survives checkpoint resume.
+- **Tier prompts ask for a confidence per field**, from 0 to 1. A value outside
+  that range, or none, is recorded as `null`.
+- **`validation.rejectDefaults`** (mapping schema 1.2.0) names field paths that
+  may not hold a mapping default; a record whose value there came from
+  `default` fails, whatever `enabled` and `strict` say.
+
 ### Fixed
 
 - **Enrichment fills gaps and never overwrites mapped values.** A model's value

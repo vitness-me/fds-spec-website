@@ -5,6 +5,8 @@
 import type {
   FieldMapping,
   FieldMappingObject,
+  FieldProvenance,
+  RecordProvenance,
   TransformContext,
 } from './types.js';
 import { TransformRegistry } from '../transforms/transform-registry.js';
@@ -24,22 +26,35 @@ export class MappingEngine {
     mappings: Record<string, FieldMapping>,
     context: TransformContext
   ): Promise<Record<string, unknown>> {
+    return (await this.applyWithProvenance(source, mappings, context)).target;
+  }
+
+  /**
+   * Apply all mappings, and report where each written path's value came from
+   */
+  async applyWithProvenance(
+    source: Record<string, unknown>,
+    mappings: Record<string, FieldMapping>,
+    context: TransformContext
+  ): Promise<{ target: Record<string, unknown>; provenance: RecordProvenance }> {
     const target: Record<string, unknown> = {};
+    const provenance: RecordProvenance = {};
 
     for (const [targetPath, mapping] of Object.entries(mappings)) {
       const normalizedMapping = this.normalizeMapping(mapping);
-      const value = await this.applyMapping(
+      const { value, origin } = await this.applyMapping(
         source,
         normalizedMapping,
         { ...context, field: targetPath, target }
       );
 
-      if (value !== undefined) {
+      if (value !== undefined && origin) {
         this.setNestedValue(target, targetPath, value);
+        provenance[targetPath] = origin;
       }
     }
 
-    return target;
+    return { target, provenance };
   }
 
   /**
@@ -59,7 +74,7 @@ export class MappingEngine {
     source: Record<string, unknown>,
     mapping: FieldMappingObject,
     context: TransformContext
-  ): Promise<unknown> {
+  ): Promise<{ value: unknown; origin?: FieldProvenance }> {
     // Check condition if present
     if (mapping.condition) {
       const conditionMet = this.evaluateCondition(
@@ -68,38 +83,51 @@ export class MappingEngine {
         context.config?.allowUnsafeEval === true
       );
       if (!conditionMet) {
-        return undefined;
+        return { value: undefined };
       }
     }
 
     // Get source value(s)
     let value: unknown;
+    let from: string | undefined;
     if (mapping.from === null || mapping.from === undefined) {
       value = undefined;
     } else if (Array.isArray(mapping.from)) {
       // Multiple source fields - try each until one has a value
       for (const path of mapping.from) {
         value = this.getNestedValue(source, path);
+        from = path;
         if (value !== undefined && value !== null && value !== '') {
           break;
         }
       }
     } else {
       value = this.getNestedValue(source, mapping.from);
+      from = mapping.from;
     }
 
+    const transforms = mapping.transform
+      ? Array.isArray(mapping.transform)
+        ? mapping.transform
+        : [mapping.transform]
+      : [];
+    const sourceEmpty = value === undefined || value === null || value === '';
+    const withTransforms = transforms.length > 0 ? { transform: transforms } : {};
+    let origin: FieldProvenance;
+
     // Apply default if value is missing
-    if ((value === undefined || value === null || value === '') && mapping.default !== undefined) {
+    if (sourceEmpty && mapping.default !== undefined) {
       value = mapping.default;
+      origin = { origin: 'default', ...withTransforms };
+    } else if (sourceEmpty && transforms.length > 0) {
+      origin = { origin: 'transform', transform: transforms };
+    } else {
+      origin = { origin: 'source', from: from as string, ...withTransforms };
     }
 
     // Apply transform(s)
     // Note: Transforms like 'uuid', 'timestamp' can generate values even without input
-    if (mapping.transform) {
-      const transforms = Array.isArray(mapping.transform)
-        ? mapping.transform
-        : [mapping.transform];
-
+    if (transforms.length > 0) {
       for (const transformName of transforms) {
         value = await this.transformRegistry.apply(
           transformName,
@@ -115,7 +143,7 @@ export class MappingEngine {
       throw new Error(`Required field ${context.field} could not be populated`);
     }
 
-    return value;
+    return { value, origin };
   }
 
   /**

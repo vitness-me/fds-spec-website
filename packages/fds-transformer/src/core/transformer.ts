@@ -13,6 +13,9 @@ import type {
   TransformContext,
   ProgressCallback,
   CostEstimate,
+  FieldProvenance,
+  RecordProvenance,
+  ValidationError,
 } from './types.js';
 import { MappingEngine } from './mapping-engine.js';
 import { RegistryManager } from '../registries/registry-manager.js';
@@ -20,6 +23,7 @@ import { SchemaManager } from '../schemas/schema-manager.js';
 import { DEFAULT_SCHEMA_VERSION } from '../schemas/versions.js';
 import {
   EnrichmentEngine,
+  getPathValue,
   isEmptyValue,
   needsEnrichment,
   type ExerciseInput,
@@ -165,7 +169,7 @@ export class Transformer {
 
     try {
       // Apply mappings
-      const mapped = await this.mappingEngine.apply(
+      const { target: mapped, provenance } = await this.mappingEngine.applyWithProvenance(
         source,
         this.config.mappings,
         context
@@ -179,26 +183,11 @@ export class Transformer {
           this.config.mappings,
           context
         );
-        this.deepMerge(mapped, enrichmentResult.data || {});
+        this.mergeEnrichment(mapped, provenance, enrichmentResult.data, enrichmentResult.provenance);
         enriched = Object.keys(enrichmentResult.data || {});
       }
 
-      // Validate output
-      let validation = { valid: true, errors: [] as any[] };
-      if (this.config.validation?.enabled !== false) {
-        validation = await this.schemaManager.validate(
-          mapped,
-          this.config.targetSchema?.entity || 'exercise'
-        );
-      }
-
-      return {
-        success: validation.valid || !this.config.validation?.strict,
-        data: mapped as any,
-        errors: validation.errors,
-        enriched,
-        __validation: validation,
-      };
+      return await this.finishResult(mapped, provenance, enriched);
     } catch (error) {
       return {
         success: false,
@@ -269,6 +258,7 @@ export class Transformer {
       index: number;
       source: Record<string, unknown>;
       mapped: Record<string, unknown>;
+      provenance: RecordProvenance;
       context: TransformContext;
     }> = [];
 
@@ -287,12 +277,12 @@ export class Transformer {
       };
 
       try {
-        const mapped = await this.mappingEngine.apply(
+        const { target: mapped, provenance } = await this.mappingEngine.applyWithProvenance(
           source,
           this.config.mappings,
           context
         );
-        mappedExercises.push({ index: i, source, mapped, context });
+        mappedExercises.push({ index: i, source, mapped, provenance, context });
       } catch (error) {
         errors.push({
           index: i,
@@ -374,7 +364,7 @@ export class Transformer {
     }
 
     // Phase 3: Merge enrichment results and validate
-    for (const { index, mapped, source } of mappedExercises) {
+    for (const { index, mapped, provenance, source } of mappedExercises) {
       // Skip if already errored in mapping phase
       if (results[index]) {
         continue;
@@ -390,7 +380,12 @@ export class Transformer {
 
         const enrichmentData = enrichmentResults.results.get(exerciseId);
         if (enrichmentData) {
-          this.deepMerge(mapped, enrichmentData);
+          this.mergeEnrichment(
+            mapped,
+            provenance,
+            enrichmentData,
+            enrichmentResults.provenance.get(exerciseId)
+          );
           enriched = Object.keys(enrichmentData);
           enrichedCount++;
         }
@@ -431,7 +426,7 @@ export class Transformer {
             context
           );
           if (enrichmentResult.data) {
-            this.deepMerge(mapped, enrichmentResult.data);
+            this.mergeEnrichment(mapped, provenance, enrichmentResult.data, enrichmentResult.provenance);
             enriched = Object.keys(enrichmentResult.data);
             enrichedCount++;
           }
@@ -443,22 +438,7 @@ export class Transformer {
         }
       }
 
-      // Validate output
-      let validation = { valid: true, errors: [] as any[] };
-      if (this.config.validation?.enabled !== false) {
-        validation = await this.schemaManager.validate(
-          mapped,
-          this.config.targetSchema?.entity || 'exercise'
-        );
-      }
-
-      results[index] = {
-        success: validation.valid || !this.config.validation?.strict,
-        data: mapped as any,
-        errors: validation.errors,
-        enriched,
-        __validation: validation,
-      };
+      results[index] = await this.finishResult(mapped, provenance, enriched);
     }
 
     // Calculate stats
@@ -478,6 +458,67 @@ export class Transformer {
       },
       errors,
     };
+  }
+
+  /**
+   * Validate a transformed record and assemble its result. A record whose
+   * `validation.rejectDefaults` path holds a mapping default fails, whatever
+   * `validation.enabled` and `strict` say.
+   */
+  private async finishResult(
+    mapped: Record<string, unknown>,
+    provenance: RecordProvenance,
+    enriched: string[]
+  ): Promise<TransformResult> {
+    let validation = { valid: true, errors: [] as ValidationError[] };
+    if (this.config.validation?.enabled !== false) {
+      validation = await this.schemaManager.validate(
+        mapped,
+        this.config.targetSchema?.entity || 'exercise'
+      );
+    }
+
+    const rejected: ValidationError[] = (this.config.validation?.rejectDefaults ?? [])
+      .filter((path) => provenance[path]?.origin === 'default')
+      .map((path) => ({
+        field: path,
+        message: `${path} holds the mapping default, which validation.rejectDefaults does not allow`,
+        constraint: 'rejectDefaults',
+      }));
+
+    return {
+      success: (validation.valid || !this.config.validation?.strict) && rejected.length === 0,
+      data: mapped as any,
+      provenance,
+      errors: [...validation.errors, ...rejected],
+      enriched,
+      __validation: validation,
+    };
+  }
+
+  /**
+   * Merge enrichment into the mapped record, and record the model as the
+   * origin of each path where its value landed
+   */
+  private mergeEnrichment(
+    mapped: Record<string, unknown>,
+    provenance: RecordProvenance,
+    data: Record<string, unknown> | undefined,
+    enrichmentProvenance: Record<string, FieldProvenance> | undefined
+  ): void {
+    if (!data) return;
+    // A path was a gap if it held nothing before the merge; the value landed
+    // if the path now holds it
+    const gaps = Object.keys(enrichmentProvenance ?? {}).filter((path) =>
+      isEmptyValue(getPathValue(mapped, path))
+    );
+    this.deepMerge(mapped, data);
+    for (const path of gaps) {
+      const value = getPathValue(data, path);
+      if (value !== undefined && getPathValue(mapped, path) === value) {
+        provenance[path] = enrichmentProvenance![path];
+      }
+    }
   }
 
   /**

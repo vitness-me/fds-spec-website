@@ -33,6 +33,10 @@
       "sha256": "2d25db0ee62ae033dac3aa8f0f4b22cf6495cba0e6c72a22240ee88c0429b2aa",
       "frozen": true
     },
+    "transformer/provenance/v1.0.0/provenance.schema.json": {
+      "sha256": "894165b9ce02626f22d3478866f86707b4849ffe68ce04a79d48fe656f12b994",
+      "frozen": false
+    },
     "transformer/v1.0.0/mapping.schema.json": {
       "sha256": "e5d4b010841bd92ff33171ac9267498cb61040b69f0a667888f9c2cc4660edca",
       "frozen": true
@@ -40,6 +44,10 @@
     "transformer/v1.1.0/mapping.schema.json": {
       "sha256": "0cb92b2beb0404aa6eebab7b3e1d198a5b306606b8a04bea070aa19b18a1cc2c",
       "frozen": true
+    },
+    "transformer/v1.2.0/mapping.schema.json": {
+      "sha256": "dfae44fe1ed49050e6617e393bbde5cd6fff32976074a35c44ecfc9267bd1757",
+      "frozen": false
     },
     "workout/v1.0.0/workout.schema.json": {
       "sha256": "acb29a2ffe402c1c510e1556d9205b9ee605e63b5a6c2d0944bb0e53ab2f5e09",

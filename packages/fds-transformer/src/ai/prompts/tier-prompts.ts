@@ -614,6 +614,11 @@ export function getTierPrompts(tier: TierName): Record<string, PromptTemplate> {
  * @param exercises - Array of exercises (1 for complex tier, multiple for others)
  * @returns Built prompt ready for API call, or undefined if template not found
  */
+/**
+ * Appended to every tier prompt: the model reports how sure it is of each field.
+ */
+export const CONFIDENCE_INSTRUCTION = `For each exercise you answer, also include "confidence": an object giving your confidence from 0 to 1 in each field you answered, keyed by the field's name, for example "confidence": { "description": 0.9 }.`;
+
 export function buildTierPrompt(
   tier: TierName,
   promptId: string,
@@ -662,7 +667,7 @@ export function buildTierPrompt(
 
   return {
     system,
-    user,
+    user: `${user}\n\n${CONFIDENCE_INSTRUCTION}`,
     fields: template.fields,
     tier,
   };

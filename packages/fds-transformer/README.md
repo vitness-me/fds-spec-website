@@ -73,7 +73,7 @@ Create a `mapping.json` file to define how source fields map to FDS:
 
 ```json
 {
-  "$schema": "https://spec.vitness.me/schemas/transformer/v1.1.0/mapping.schema.json",
+  "$schema": "https://spec.vitness.me/schemas/transformer/v1.2.0/mapping.schema.json",
   "version": "1.0.0",
   "targetSchema": {
     "version": "1.0.0",
@@ -245,6 +245,50 @@ For simpler use cases, you can still use field-level enrichment:
 - `context`: Source fields to include as AI context
 - `fields`: Specific sub-fields to enrich
 - `fallback`: Value to use if enrichment fails
+
+## Provenance
+
+Every value the transformer writes carries its origin. Next to its output, the CLI writes `provenance.sidecar.json`, validated by [`transformer/provenance/v1.0.0`](https://spec.vitness.me/schemas/transformer/provenance/v1.0.0/provenance.schema.json). It holds one record per document written, and in each record one entry per field path:
+
+```json
+{
+  "$schema": "https://spec.vitness.me/schemas/transformer/provenance/v1.0.0/provenance.schema.json",
+  "records": [
+    {
+      "fields": {
+        "canonical.description": {
+          "confidence": 0.86,
+          "model": "anthropic/claude-haiku-4.5",
+          "origin": "model",
+          "prompt": "description",
+          "promptVersion": "sha256:4b1d0c3e9f2a7d65",
+          "tier": "simple"
+        },
+        "canonical.name": { "from": "name", "origin": "source", "transform": ["titleCase"] },
+        "exerciseId": { "origin": "transform", "transform": ["uuid"] },
+        "metadata.status": { "origin": "default" }
+      },
+      "id": "0f8e3c52-7a4b-4d1e-9c0a-3b5f6e7d8a91",
+      "slug": "barbell-squat"
+    }
+  ]
+}
+```
+
+- `source`: read from the source at `from`, through `transform` if any.
+- `default`: the mapping's `default` stood in for an empty source.
+- `transform`: generated with no source value (an id, a timestamp).
+- `model`: written by enrichment. Records the model that answered, the prompt, a `promptVersion` that changes when the prompt's fixed text does, the tier, and the model's own `confidence` from 0 to 1 (`null` when it reported none).
+
+Keys are sorted and nothing depends on when the run happened, so the same input gives the same bytes. In code, each `TransformResult` carries the same map as `provenance`, and `buildProvenanceSidecar` / `serializeProvenanceSidecar` produce the file.
+
+`validation.rejectDefaults` lists field paths that may not hold a mapping default. A record whose value at one of them came from `default` fails, with an error naming the path, whatever `validation.enabled` and `strict` say:
+
+```json
+{
+  "validation": { "strict": true, "rejectDefaults": ["classification.level", "classification.force"] }
+}
+```
 
 ## Environment Variables
 

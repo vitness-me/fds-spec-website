@@ -8,8 +8,8 @@ sidebar_position: 1
 
 FDS is defined in JSON Schema (Draft 2020-12). Every schema below is published at a frozen URL: the bytes at a version URL never change, and a change ships at a new one.
 
-<!-- fds:count schemas=12 entities=7 libraries=1 tooling=1 superseded=3 -->
-Twelve schemas are published. Seven are entities, one is a definition library, one configures a tool, and three are superseded versions that are still served.
+<!-- fds:count schemas=14 entities=7 libraries=1 tooling=2 superseded=4 -->
+Fourteen schemas are published. Seven are entities, one is a definition library, two belong to a tool, and four are superseded versions that are still served.
 
 ## Entity versions are not uniform
 
@@ -75,16 +75,30 @@ This one is **not an entity**, and a provider does not export it. Its root valid
 
 ## Tooling schemas
 
-### Transformer Mapping — v1.1.0
+### Transformer Mapping — v1.2.0
 Configuration for the FDS Transformer: how source fields map onto an FDS entity. It describes a tool's input rather than an entity, so it is documented with the tool. It belongs to no release — a release names entities and the libraries they compose, and this configures a tool.
 
-**Schema:** `/schemas/transformer/v1.1.0/mapping.schema.json` — see [Transformer configuration](/docs/tools/transformer/configuration).
+**Schema:** `/schemas/transformer/v1.2.0/mapping.schema.json` — see [Transformer configuration](/docs/tools/transformer/configuration).
+
+1.2.0 added `validation.rejectDefaults`, which fails a record whose named field holds a mapping default.
+
+### Transformer Provenance Sidecar — v1.0.0
+Describes `provenance.sidecar.json`, the file the FDS Transformer writes beside its output: for each document, where every written field came from (the source path, a mapping default, a transform, or a model with its prompt version and confidence). It is a tool's output, not exported data, and like the mapping schema it belongs to no release.
+
+**Schema:** `/schemas/transformer/provenance/v1.0.0/provenance.schema.json`
 
 ## Superseded, still served
 
 <!-- fds:pin workout/v1.0.0/workout.schema.json — listed on purpose: releases 1.2.0 and 1.3.0 declare workout at 1.0.0, so a client pinned to either must keep resolving this URL. The section says plainly not to build against it. -->
 <!-- fds:pin atlas/v1.0.0/body-atlas.schema.json — listed on purpose: releases 1.0.0 through 1.4.0 declare body-atlas at 1.0.0, so a client pinned to any of them must keep resolving this URL. The section says plainly not to build against it. -->
 <!-- fds:pin transformer/v1.0.0/mapping.schema.json — listed on purpose: it is the `$schema` URL every configuration written before 1.1.0 names, and an editor resolving it must keep getting a document. -->
+<!-- fds:pin transformer/v1.1.0/mapping.schema.json — listed on purpose: it is the `$schema` URL every configuration written before 1.2.0 names, and an editor resolving it must keep getting a document. -->
+
+### Transformer Mapping — v1.1.0
+
+**Schema:** `/schemas/transformer/v1.1.0/mapping.schema.json`
+
+Superseded by mapping 1.2.0, which added `validation.rejectDefaults`. Every 1.1.0 configuration is still valid under 1.2.0 — the addition is optional. It stays served because it is what a configuration written against it names in its own `$schema`.
 
 ### Transformer Mapping — v1.0.0
 

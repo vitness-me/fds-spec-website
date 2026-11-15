@@ -103,9 +103,15 @@ const CURRENT_RELEASE = '1.5.0';
  * counterpart and share no `common` definitions, so there is nothing to flatten.
  * They are still served from spec.vitness.me, so they are still hashed and
  * freezable — only exempt from being *rendered*, not from being *tracked*.
- * v1.0.0 is superseded by v1.1.0 and stays served: it is the `$schema` URL every
- * configuration written against it names, and no FDS release governs when a
- * tooling schema may disappear, so nothing else would ever license removing it.
+ * v1.0.0 and v1.1.0 are superseded by v1.2.0 and stay served: each is the
+ * `$schema` URL every configuration written against it names, and no FDS release
+ * governs when a tooling schema may disappear, so nothing else would ever
+ * license removing them.
+ *
+ * `transformer/provenance/vX/provenance.schema.json` describes the provenance
+ * sidecar the transformer writes beside its output. It is tooling for the same
+ * reasons, in its own directory because it versions independently of the
+ * mapping configuration.
  *
  * `workout/v1.0.0/workout.schema.json` is a *superseded* version. Its authoring
  * source is gone — 1.1.0 replaced it — but the published bytes stay, because a
@@ -130,6 +136,8 @@ const CURRENT_RELEASE = '1.5.0';
 const UNGENERATED = [
   { name: 'mapping', kind: 'tooling', path: 'transformer/v1.0.0/mapping.schema.json' },
   { name: 'mapping', kind: 'tooling', path: 'transformer/v1.1.0/mapping.schema.json' },
+  { name: 'mapping', kind: 'tooling', path: 'transformer/v1.2.0/mapping.schema.json' },
+  { name: 'provenance', kind: 'tooling', path: 'transformer/provenance/v1.0.0/provenance.schema.json' },
   { name: 'workout', kind: 'entity', path: 'workout/v1.0.0/workout.schema.json' },
   { name: 'body-atlas', kind: 'entity', path: 'atlas/v1.0.0/body-atlas.schema.json' },
 ];
@@ -599,8 +607,8 @@ const MANIFEST_COMMENT =
   'and still frozen, because an older release names it; "withdrawn" was named by ' +
   'a release and is no longer served, so it has no bytes to hash. kind separates ' +
   'an entity a provider can export from a definition library whose root ' +
-  'validates nothing (prescription) and from tooling configuration that is not ' +
-  'part of any release (the transformer mapping schema).';
+  'validates nothing (prescription) and from tooling that is not part of any ' +
+  'release (the transformer mapping configuration and the provenance sidecar it writes).';
 
 /**
  * The manifest, and the problems found building it.

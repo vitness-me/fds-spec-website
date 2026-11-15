@@ -11,7 +11,7 @@
 import { createHash } from 'crypto';
 import { existsSync, mkdirSync, readFileSync, renameSync, unlinkSync, writeFileSync } from 'fs';
 import { dirname, join } from 'path';
-import type { CheckpointConfig, CheckpointData, TierName } from '../core/types.js';
+import type { CheckpointConfig, CheckpointData, ModelProvenance, TierName } from '../core/types.js';
 
 /**
  * Checkpoint file name
@@ -60,6 +60,8 @@ export interface CheckpointUpdateOptions {
   currentTier: TierName;
   /** Partial results for this exercise (tier -> field -> value) */
   results?: Record<string, Record<string, unknown>>;
+  /** Origin of each enriched field path in `results` */
+  provenance?: Record<string, ModelProvenance>;
 }
 
 /**
@@ -203,7 +205,7 @@ export class CheckpointManager {
       throw new Error('Checkpoint not initialized. Call initialize() or load() first.');
     }
 
-    const { exerciseId, success, currentTier, results } = options;
+    const { exerciseId, success, currentTier, results, provenance } = options;
 
     // Update tier
     this.data.currentTier = currentTier;
@@ -238,6 +240,11 @@ export class CheckpointManager {
         }
         Object.assign(this.data.results[exerciseId][tier], fields);
       }
+    }
+
+    if (provenance) {
+      this.data.provenance ??= {};
+      this.data.provenance[exerciseId] = { ...this.data.provenance[exerciseId], ...provenance };
     }
 
     this.updatesSinceLastSave++;
@@ -321,6 +328,13 @@ export class CheckpointManager {
    */
   getAllResults(): Record<string, Record<string, Record<string, unknown>>> {
     return this.data?.results ?? {};
+  }
+
+  /**
+   * Get the origin of each enriched field, per exercise
+   */
+  getAllProvenance(): Record<string, Record<string, ModelProvenance>> {
+    return this.data?.provenance ?? {};
   }
 
   /**

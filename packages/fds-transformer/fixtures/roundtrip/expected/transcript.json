@@ -19,11 +19,13 @@
     "│",
     "◇  Transformation complete",
     "│",
-    "●  Processed 3 items in 736ms",
+    "●  Processed 3 items in 580ms",
     "│",
     "●    Successful: 3",
     "│",
     "◇  Wrote 3 exercises to out/exercises.json",
+    "│",
+    "●  Wrote provenance for each field to out/provenance.sidecar.json",
     "│",
     "└  Done!"
   ]

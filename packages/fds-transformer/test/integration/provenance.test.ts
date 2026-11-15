@@ -13,6 +13,7 @@ import { join } from 'path';
 import { tmpdir } from 'os';
 import { Transformer } from '../../src/core/transformer.js';
 import type { EnrichmentConfig, MappingConfig } from '../../src/core/types.js';
+import { SYSTEM_PROMPTS } from '../../src/ai/prompts/tier-prompts.js';
 
 const PROMPT_VERSION = /^sha256:[0-9a-f]{16}$/;
 
@@ -209,6 +210,33 @@ describe('Provenance of enriched values', () => {
     expect(provenance['classification.level']).toEqual({ origin: 'source', from: 'level' });
     // Every prompt asks for a confidence.
     expect(prompts.every((p) => p.includes('"confidence"'))).toBe(true);
+  });
+
+  it('records the tier and model that answered when a tier degrades', async () => {
+    const transformer = new Transformer({
+      config: tieredConfig({ 'classification.movement': { tier: 'complex', prompt: 'biomechanics' } }),
+    });
+    await transformer.init();
+    vi.spyOn(transformer.getEnrichmentEngine()!.getProvider()!, 'complete').mockImplementation(
+      async (_prompt, options) => {
+        if (options?.systemPrompt === SYSTEM_PROMPTS.complex) throw new Error('complex tier down');
+        return {
+          content: JSON.stringify({ movement: 'squat', confidence: { movement: 0.7 } }),
+          tokensUsed: 1,
+          model: 'stub/medium-served',
+        };
+      }
+    );
+
+    const { results } = await transformer.transformAllBatch([{ id: 'sq', slug: 'sq', name: 'Squat' }]);
+
+    expect(results[0].provenance!['classification.movement']).toMatchObject({
+      origin: 'model',
+      model: 'stub/medium-served',
+      prompt: 'biomechanics',
+      tier: 'medium',
+      confidence: 0.7,
+    });
   });
 
   it('gives the same prompt the same version on every record and every run', async () => {

@@ -3,8 +3,8 @@
 Every schema published by the Fitness Data Standard, at the version it is published under.
 
 <!-- fds:covers schemas -->
-<!-- fds:count schemas=12 entities=7 libraries=1 tooling=1 superseded=3 -->
-The list here is `specification/schemas/.integrity.json`, which is what the build writes and what `npm run check:published` fetches. Twelve schemas are published: seven entities, one definition library, one tooling schema, and three superseded versions that are still served.
+<!-- fds:count schemas=14 entities=7 libraries=1 tooling=2 superseded=4 -->
+The list here is `specification/schemas/.integrity.json`, which is what the build writes and what `npm run check:published` fetches. Fourteen schemas are published: seven entities, one definition library, two tooling schemas, and four superseded versions that are still served.
 
 ## A release is a set of entity versions
 
@@ -94,19 +94,36 @@ Both tables above are published, machine-readable, at **https://spec.vitness.me/
   Reference a definition instead: `…/prescription.schema.json#/$defs/loadTarget`
 - **Fixtures**: `<definition>.<variant>.example.json` alongside the library, plus `.invalid.json` negative cases
 
-### Transformer Mapping (v1.1.0)
-- **Schema**: https://spec.vitness.me/schemas/transformer/v1.1.0/mapping.schema.json
+### Transformer Mapping (v1.2.0)
+- **Schema**: https://spec.vitness.me/schemas/transformer/v1.2.0/mapping.schema.json
 - Configures the FDS Transformer rather than describing an entity — it validates a `mapping.json`,
   not exported data. Documented with the tool, in `website/docs/tools/transformer/configuration.md`
 - Belongs to no release, and is versioned on its own: a release names entities and the libraries
   they compose. It closes `additionalProperties` everywhere, which is a promise that it lists every
   key the transformer reads
+- 1.2.0 added `validation.rejectDefaults`: field paths where a mapping default fails the record
+
+### Transformer Provenance Sidecar (v1.0.0)
+- **Schema**: https://spec.vitness.me/schemas/transformer/provenance/v1.0.0/provenance.schema.json
+- Describes `provenance.sidecar.json`, which the FDS Transformer writes beside its output: for each
+  document, where every written field came from (the source path, a mapping default, a transform,
+  or a model with its prompt version and confidence). Output of the tool, not exported data
+- Tooling, like the mapping schema: it belongs to no release and is versioned on its own, in its
+  own directory
 
 ## Superseded, still served
 
 <!-- fds:pin workout/v1.0.0/workout.schema.json — listed on purpose: releases 1.2.0 and 1.3.0 declare workout at 1.0.0, so a client pinned to either must keep resolving this URL. It is frozen, and this section says it is not for new work. -->
 <!-- fds:pin atlas/v1.0.0/body-atlas.schema.json — listed on purpose: releases 1.0.0 through 1.4.0 declare body-atlas at 1.0.0, so a client pinned to any of them must keep resolving this URL. It is frozen, and this section says it is not for new work. -->
 <!-- fds:pin transformer/v1.0.0/mapping.schema.json — listed on purpose: it is the `$schema` URL every configuration written before 1.1.0 names, and an editor resolving it must keep getting a document. -->
+<!-- fds:pin transformer/v1.1.0/mapping.schema.json — listed on purpose: it is the `$schema` URL every configuration written before 1.2.0 names, and an editor resolving it must keep getting a document. -->
+
+### Transformer Mapping (v1.1.0)
+- **Schema**: https://spec.vitness.me/schemas/transformer/v1.1.0/mapping.schema.json
+- Superseded by mapping 1.2.0, which added `validation.rejectDefaults`. The addition is optional,
+  so every 1.1.0 configuration is valid under 1.2.0
+- Still served: it is what a configuration written against it names in its own `$schema`
+- Not for new work. Point `$schema` at 1.2.0
 
 ### Transformer Mapping (v1.0.0)
 - **Schema**: https://spec.vitness.me/schemas/transformer/v1.0.0/mapping.schema.json
@@ -114,7 +131,7 @@ Both tables above are published, machine-readable, at **https://spec.vitness.me/
   had grown past it. The additions are optional, so every 1.0.0 configuration is valid under 1.1.0
 - Still served: it is what a configuration written against it names in its own `$schema`, and no
   FDS release governs a tooling schema, so nothing else would say when it may go
-- Not for new work. Point `$schema` at 1.1.0
+- Not for new work. Point `$schema` at 1.2.0
 
 ### Workout Schema (v1.0.0)
 - **Schema**: https://spec.vitness.me/schemas/workout/v1.0.0/workout.schema.json
