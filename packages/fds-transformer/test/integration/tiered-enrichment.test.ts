@@ -28,6 +28,14 @@ import {
   sampleExercises,
 } from '../fixtures/registries.js';
 
+// The engine reads its key only from OPENROUTER_API_KEY.
+beforeEach(() => {
+  vi.stubEnv('OPENROUTER_API_KEY', 'test-key');
+});
+afterEach(() => {
+  vi.unstubAllEnvs();
+});
+
 // ============================================================================
 // Test Fixtures
 // ============================================================================
@@ -38,7 +46,6 @@ import {
 const createTieredEnrichmentConfig = (): EnrichmentConfig => ({
   enabled: true,
   provider: 'openrouter',
-  apiKey: 'test-api-key',
   tiers: {
     simple: {
       model: 'anthropic/claude-haiku-4.5',
@@ -467,7 +474,6 @@ describe('Integration: Tiered Enrichment System', () => {
       const modifiedConfig = {
         enabled: true,
         provider: 'openrouter',
-        apiKey: 'different-api-key', // Changed
         model: 'different-model', // Added new field
         tiers: {
           simple: {
