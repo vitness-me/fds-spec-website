@@ -264,6 +264,26 @@ export function pickPaths(
   return picked;
 }
 
+/**
+ * Merge one prompt's or tier's result into an exercise's result. Prompts
+ * write under shared parents (`canonical.description`, `canonical.aliases`),
+ * so objects merge key by key rather than replacing one another.
+ */
+function mergeResult(target: Record<string, unknown>, source: Record<string, unknown>): void {
+  for (const [key, value] of Object.entries(source)) {
+    const existing = target[key];
+    if (isPlainObject(existing) && isPlainObject(value)) {
+      mergeResult(existing, value);
+    } else {
+      target[key] = value;
+    }
+  }
+}
+
+function isPlainObject(value: unknown): value is Record<string, unknown> {
+  return value !== null && typeof value === 'object' && !Array.isArray(value);
+}
+
 function getPathValue(obj: Record<string, unknown>, path: string): unknown {
   let current: unknown = obj;
   for (const part of path.split('.')) {
@@ -454,7 +474,7 @@ export class EnrichmentEngine {
             for (const [exerciseId, tierResults] of Object.entries(checkpointResults)) {
               const merged: Record<string, unknown> = {};
               for (const fields of Object.values(tierResults)) {
-                Object.assign(merged, fields);
+                mergeResult(merged, structuredClone(fields));
               }
               results.set(exerciseId, merged);
             }
@@ -544,8 +564,9 @@ export class EnrichmentEngine {
             console.log(`[DEBUG enrichBatch] batchResult.results.size: ${batchResult.results.size}, apiCalls: ${batchResult.apiCalls}`);
           }
           for (const [exerciseId, fields] of batchResult.results) {
-            const existing = results.get(exerciseId) || {};
-            results.set(exerciseId, { ...existing, ...fields });
+            const existing = results.get(exerciseId) ?? {};
+            mergeResult(existing, structuredClone(fields));
+            results.set(exerciseId, existing);
             if (debug) {
               console.log(`[DEBUG enrichBatch] Merged result for ${exerciseId}`);
             }
@@ -880,8 +901,9 @@ export class EnrichmentEngine {
         }
 
         for (const [exerciseId, fieldValues] of parsedResults) {
-          const existing = results.get(exerciseId) || {};
-          results.set(exerciseId, { ...existing, ...fieldValues });
+          const existing = results.get(exerciseId) ?? {};
+          mergeResult(existing, fieldValues);
+          results.set(exerciseId, existing);
           if (debug) {
             console.log(`[DEBUG processTierBatch] Set result for ${exerciseId}: ${JSON.stringify(fieldValues).slice(0, 200)}`);
           }

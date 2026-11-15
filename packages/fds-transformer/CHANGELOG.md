@@ -25,6 +25,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   and secondary muscles. Now a value lands only in a configured field path and
   only where the mapped value is a gap. The tiered path honours each field's
   mapping `when` and sends only records with a gap.
+- **Fields enriched by different prompts no longer erase each other.** Results
+  were combined one top-level key at a time, so `canonical.aliases` erased
+  `canonical.description`, and a later tier's `classification` erased an
+  earlier one's, in a run and on resume. They now merge field by field.
 
 ## [0.2.0] - 2026-08-11
 
