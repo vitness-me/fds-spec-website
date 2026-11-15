@@ -2,7 +2,7 @@
  * Config Loader - loads and validates mapping configurations
  */
 
-import type { MappingConfig, RegistriesConfig } from '../core/types.js';
+import type { MappingConfig, PluginConfig, RegistriesConfig } from '../core/types.js';
 import { dirname, resolve, isAbsolute } from 'path';
 import { DEFAULT_SCHEMA_VERSION } from '../schemas/versions.js';
 
@@ -22,6 +22,12 @@ export class ConfigLoader {
       config.registries = this.resolveRegistryPaths(config.registries, configDir);
     }
     
+    // Resolve relative plugin paths; package names are left to module resolution
+    if (config.plugins) {
+      const configDir = dirname(configPath);
+      config.plugins = config.plugins.map((plugin) => this.resolvePluginPath(plugin, configDir));
+    }
+
     // Resolve relative path in output directory
     if (config.output?.directory && !isAbsolute(config.output.directory)) {
       const configDir = dirname(configPath);
@@ -29,6 +35,13 @@ export class ConfigLoader {
     }
     
     return config;
+  }
+
+  private static resolvePluginPath(plugin: PluginConfig, basePath: string): PluginConfig {
+    const name = typeof plugin === 'string' ? plugin : plugin.name;
+    if (!name.startsWith('./') && !name.startsWith('../')) return plugin;
+    const resolved = resolve(basePath, name);
+    return typeof plugin === 'string' ? resolved : { ...plugin, name: resolved };
   }
 
   /**

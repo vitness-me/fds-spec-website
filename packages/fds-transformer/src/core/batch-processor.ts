@@ -4,6 +4,7 @@
 
 import type { TransformResult } from './types.js';
 import { Transformer } from './transformer.js';
+import { assertUniqueIdentities } from './identity-collisions.js';
 
 export interface BatchOptions {
   concurrency?: number;
@@ -66,6 +67,9 @@ export class BatchProcessor {
           failed++;
         }
       }
+
+      // Stop at the first chunk that repeats a slug or id, before more records are enriched
+      assertUniqueIdentities(results.map((result) => result.data));
 
       // Report progress
       this.options.onProgress({

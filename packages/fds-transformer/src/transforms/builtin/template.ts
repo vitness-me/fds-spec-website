@@ -96,7 +96,7 @@ function replaceTemplatePlaceholders(
 /**
  * Get nested value from object
  */
-function getNestedValue(obj: Record<string, unknown>, path: string): unknown {
+export function getNestedValue(obj: Record<string, unknown>, path: string): unknown {
   const parts = path.split('.');
   let current: unknown = obj;
 
