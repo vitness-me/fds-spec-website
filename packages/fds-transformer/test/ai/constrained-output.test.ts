@@ -103,6 +103,43 @@ describe('buildRequest', () => {
     }
   );
 
+  it('narrows a reference field to the registry slugs its config names', () => {
+    const request = buildRequest('equipment', [{ path: 'equipment.optional', enum: ['dumbbell'] }], ['push-up'], target);
+    expect(itemOf(request, 'request').properties.optional).toEqual(
+      nullable({ type: 'array', items: { type: 'string', enum: ['dumbbell'] } })
+    );
+  });
+
+  it('refuses a config enum that names a slug the registry does not hold', () => {
+    expect(() =>
+      buildRequest('equipment', [{ path: 'equipment.optional', enum: ['bench'] }], ['push-up'], target)
+    ).toThrow(/bench/);
+  });
+
+  it('refuses a config enum with values the schema enum does not allow', () => {
+    expect(() =>
+      buildRequest('biomechanics', [{ path: 'classification.movement', enum: ['push'] }], null, target)
+    ).toThrow(/push/);
+  });
+
+  it('lets an empty registry only decline, with a valid schema', () => {
+    const request = buildRequest('equipment', [{ path: 'equipment.optional' }], ['push-up'], {
+      schema: exerciseSchema,
+      registries: { ...registries, equipment: [] },
+    });
+    expect(itemOf(request, 'request').properties.optional).toEqual({ type: 'null' });
+    expect(JSON.stringify(request.responseSchema.schema)).not.toContain('"enum":[]');
+  });
+
+  it('sends strict only when every object requires all its properties', () => {
+    // relations items leave confidence and notes optional; strict endpoints
+    // that require every property would reject the request.
+    const relations = buildRequest('relations', [{ path: 'relations' }], ['push-up'], target);
+    expect(relations.responseSchema.strict).toBe(false);
+    const movement = buildRequest('biomechanics', [{ path: 'classification.movement' }], null, target);
+    expect(movement.responseSchema.strict).toBe(true);
+  });
+
   it('refuses a field the target schema does not have', () => {
     expect(() => buildRequest('description', [{ path: 'canonical.nickname' }], ['push-up'], target)).toThrow(
       /canonical\.nickname/

@@ -101,7 +101,7 @@ export function buildRequest(
       continue;
     }
     const { schema, registry } = fieldSchema(field, target);
-    validation[key] = { anyOf: [schema, { type: 'null' }] };
+    validation[key] = schema.type === 'null' ? schema : { anyOf: [schema, { type: 'null' }] };
     if (registry) refs[key] = registry;
   }
 
@@ -116,11 +116,14 @@ export function buildRequest(
         });
 
   const validationSchema = envelope(validation);
+  const sent = target ? (withoutValidationOnly(validationSchema) as Record<string, unknown>) : validationSchema;
   return {
     responseSchema: {
       name: promptId.replace(/[^a-zA-Z0-9_-]/g, '_'),
-      schema: target ? (withoutValidationOnly(validationSchema) as Record<string, unknown>) : validationSchema,
-      strict: target !== undefined,
+      schema: sent,
+      // Strict endpoints may require every property of every object; a schema
+      // with optional properties is sent as a hint and still checked locally.
+      strict: target !== undefined && allRequired(sent),
     },
     validationSchema,
     refs,
@@ -152,7 +155,17 @@ function fieldSchema(
   const items = node.items as Record<string, unknown> | undefined;
   const registry = registryOf(node) ?? (items && registryOf(items));
   if (registry) {
-    const choice = { type: 'string', enum: target.registries[registry].map((entry) => entry.canonical.slug) };
+    const held = target.registries[registry].map((entry) => entry.canonical.slug);
+    const unknown = (field.enum ?? []).filter((slug) => !held.includes(slug));
+    if (unknown.length > 0) {
+      throw new Error(`Enrichment field "${field.path}" lists slugs the ${registry} registry does not hold: ${unknown.join(', ')}`);
+    }
+    const offered = field.enum ?? held;
+    if (offered.length === 0) {
+      // Nothing to choose from: the model can only decline.
+      return { schema: { type: 'null' }, registry };
+    }
+    const choice = { type: 'string', enum: offered };
     return { schema: items ? { type: 'array', items: choice } : choice, registry };
   }
 
@@ -197,6 +210,22 @@ function narrow(schema: Record<string, unknown>, values: string[], path: string)
   }
   const narrowed = { ...base, enum: values };
   return scalar ? narrowed : { ...schema, items: narrowed };
+}
+
+/** Whether every object in `node` lists all of its properties as required. */
+function allRequired(node: unknown): boolean {
+  if (Array.isArray(node)) return node.every(allRequired);
+  if (!node || typeof node !== 'object') return true;
+  const record = node as Record<string, unknown>;
+  const properties = record.properties as Record<string, unknown> | undefined;
+  if (properties) {
+    const required = (record.required as string[] | undefined) ?? [];
+    if (!Object.keys(properties).every((name) => required.includes(name))) return false;
+    if (!Object.values(properties).every(allRequired)) return false;
+  }
+  return Object.entries(record)
+    .filter(([key]) => key !== 'properties')
+    .every(([, value]) => allRequired(value));
 }
 
 function withoutValidationOnly(node: unknown): unknown {
