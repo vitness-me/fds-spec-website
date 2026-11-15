@@ -52,24 +52,23 @@ export const uuidv5: TransformFunction = (value, options = {}, context): string 
 const PLACEHOLDER = /\{\{(\w+(?:\.\w+)*)\}\}/g;
 
 function fillTemplate(template: string, value: unknown, source: Record<string, unknown>): string {
+  const outside = template.replace(PLACEHOLDER, '');
+  if (outside.includes('{{') || outside.includes('}}')) {
+    throw new Error(
+      `uuidv5 name ${template} has a placeholder that is not {{value}} or a dotted source path`
+    );
+  }
   if (!template.match(PLACEHOLDER)) {
     throw new Error(`uuidv5 name ${template} has no placeholder, so every record would get the same id`);
   }
 
-  const name = template.replace(PLACEHOLDER, (_match, path: string) => {
+  return template.replace(PLACEHOLDER, (_match, path: string) => {
     const filled = path === 'value' ? value : getNestedValue(source, path);
     if (filled === undefined || filled === null || filled === '') {
       throw new Error(`uuidv5 name ${template} has no value for {{${path}}}`);
     }
     return nameText(filled, `{{${path}}}`);
   });
-
-  if (name.includes('{{') || name.includes('}}')) {
-    throw new Error(
-      `uuidv5 name ${template} has a placeholder that is not {{value}} or a dotted source path`
-    );
-  }
-  return name;
 }
 
 /** A name part as text; an object or array would read the same for every record */

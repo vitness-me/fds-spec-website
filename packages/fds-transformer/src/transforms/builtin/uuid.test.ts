@@ -121,8 +121,13 @@ describe('uuidv5', () => {
     for (const name of ['x/{{ id }}', 'x/{{v6-id}}', 'x/{{ids[0]}}', 'x/{{id}}/{{ id }}']) {
       expect(() =>
         uuidv5(null, { namespace: DNS_NAMESPACE, name }, contextFor({ id: 'a' }))
-      ).toThrow(/placeholder/);
+      ).toThrow(/placeholder that is not/);
     }
+  });
+
+  it('accepts a source value that itself contains braces', () => {
+    const id = uuidv5(null, { namespace: DNS_NAMESPACE, name: 'x/{{id}}' }, contextFor({ id: 'a{{b' }));
+    expect(id).toBe(uuidv5('x/a{{b', { namespace: DNS_NAMESPACE }, contextFor({})));
   });
 
   it('refuses a name template with no placeholder', () => {
