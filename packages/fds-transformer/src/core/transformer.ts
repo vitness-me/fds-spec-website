@@ -20,6 +20,8 @@ import { SchemaManager } from '../schemas/schema-manager.js';
 import { DEFAULT_SCHEMA_VERSION } from '../schemas/versions.js';
 import { EnrichmentEngine, type ExerciseInput, type BatchEnrichmentOptions, type BatchEnrichmentResult } from '../ai/enrichment-engine.js';
 import { ConfigLoader } from '../config/config-loader.js';
+import { checkpointKey } from '../ai/checkpoint-manager.js';
+import { assertUniqueSlugs } from './slug-collisions.js';
 
 export interface TransformerOptions extends TransformOptions {
   config?: MappingConfig | string;
@@ -118,6 +120,10 @@ export class Transformer {
     // Load config if string path provided
     if (typeof this.config === 'string') {
       this.config = await ConfigLoader.load(this.config);
+    }
+
+    for (const plugin of this.config.plugins ?? []) {
+      await this.mappingEngine.loadPlugin(plugin);
     }
 
     // Initialize enrichment engine with config settings
@@ -228,6 +234,7 @@ export class Transformer {
     for await (const result of this.transformStream(sources)) {
       results.push(result);
     }
+    assertUniqueSlugs(results.map((result) => result.data));
     return results;
   }
 
@@ -303,8 +310,15 @@ export class Transformer {
       }
     }
 
+    const mappedBySourceIndex: Record<string, unknown>[] = [];
+    for (const { index, mapped } of mappedExercises) mappedBySourceIndex[index] = mapped;
+    assertUniqueSlugs(mappedBySourceIndex);
+
     // Phase 2: Batch enrichment (if tiered enrichment is configured)
     let enrichmentResults: BatchEnrichmentResult | null = null;
+    // Enrichment is keyed by stable id plus input hash, so a resumed run
+    // reuses a checkpointed result only for an unchanged record
+    const enrichmentKeys = new Map<number, string>();
 
     if (
       !options.skipEnrichment &&
@@ -318,8 +332,7 @@ export class Transformer {
         const targets = mapped.targets as Record<string, unknown> | undefined;
         const equipment = mapped.equipment as Record<string, unknown> | undefined;
 
-        return {
-          id: (mapped.exerciseId as string) || `exercise-${index}`,
+        const input = {
           slug: (canonical?.slug as string) || `exercise-${index}`,
           name: (canonical?.name as string) || `Exercise ${index}`,
           description: canonical?.description as string | undefined,
@@ -327,6 +340,9 @@ export class Transformer {
           requiredEquipment:
             (equipment?.required as Array<{ id: string; name: string }>) || undefined,
         };
+        const key = checkpointKey(this.stableIdOf(mapped, index), input);
+        enrichmentKeys.set(index, key);
+        return { id: key, ...input };
       });
 
       // Get schema $defs for validation context
@@ -367,12 +383,10 @@ export class Transformer {
       // Merge enrichment results if available
       let enriched: string[] = [];
       if (enrichmentResults) {
-        const exerciseId =
-          (mapped.exerciseId as string) ||
-          ((mapped.canonical as Record<string, unknown> | undefined)?.slug as string) ||
-          `exercise-${index}`;
+        const exerciseId = this.stableIdOf(mapped, index);
+        const key = enrichmentKeys.get(index)!;
 
-        const enrichmentData = enrichmentResults.results.get(exerciseId);
+        const enrichmentData = enrichmentResults.results.get(key);
         if (enrichmentData) {
           this.deepMerge(mapped, enrichmentData);
           enriched = Object.keys(enrichmentData);
@@ -380,8 +394,8 @@ export class Transformer {
         }
 
         // Check if this exercise failed enrichment
-        if (enrichmentResults.failedIds.includes(exerciseId)) {
-          const error = enrichmentResults.errors.find((e) => e.exerciseId === exerciseId);
+        if (enrichmentResults.failedIds.includes(key)) {
+          const error = enrichmentResults.errors.find((e) => e.exerciseId === key);
           errors.push({
             index,
             exerciseId,
@@ -462,6 +476,17 @@ export class Transformer {
       },
       errors,
     };
+  }
+
+  /**
+   * The id a record keeps across runs: its exerciseId, else its slug
+   */
+  private stableIdOf(mapped: Record<string, unknown>, index: number): string {
+    return (
+      (mapped.exerciseId as string) ||
+      ((mapped.canonical as Record<string, unknown> | undefined)?.slug as string) ||
+      `exercise-${index}`
+    );
   }
 
   /**

@@ -7,60 +7,41 @@ import { timestamp, autoGenerate } from './auto-generate.js';
 import type { TransformContext } from '../../core/types.js';
 
 describe('timestamp', () => {
+  const CLOCK = '2026-01-15T10:30:00.000Z';
+
   describe('format options', () => {
-    it('should generate ISO 8601 timestamp by default', () => {
-      const result = timestamp(null, {});
-      expect(result).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$/);
+    it('should format as ISO 8601 by default', () => {
+      expect(timestamp(null, { clock: CLOCK })).toBe(CLOCK);
     });
 
-    it('should generate ISO 8601 timestamp with iso8601 format', () => {
-      const result = timestamp(null, { format: 'iso8601' });
-      expect(result).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$/);
+    it('should format with iso8601 format', () => {
+      expect(timestamp(null, { clock: CLOCK, format: 'iso8601' })).toBe(CLOCK);
     });
 
-    it('should generate ISO 8601 timestamp with iso format', () => {
-      const result = timestamp(null, { format: 'iso' });
-      expect(result).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$/);
+    it('should format with iso format', () => {
+      expect(timestamp(null, { clock: CLOCK, format: 'iso' })).toBe(CLOCK);
     });
 
-    it('should generate Unix timestamp with unix format', () => {
-      const result = timestamp(null, { format: 'unix' });
-      expect(result).toMatch(/^\d+$/);
-      expect(parseInt(result, 10)).toBeGreaterThan(1600000000); // After 2020
+    it('should format as Unix seconds with unix format', () => {
+      expect(timestamp(null, { clock: CLOCK, format: 'unix' })).toBe(
+        String(Math.floor(Date.parse(CLOCK) / 1000))
+      );
     });
 
-    it('should generate Unix timestamp in milliseconds with unixms format', () => {
-      const result = timestamp(null, { format: 'unixms' });
-      expect(result).toMatch(/^\d+$/);
-      expect(parseInt(result, 10)).toBeGreaterThan(1600000000000); // After 2020 in ms
+    it('should format as Unix milliseconds with unixms format', () => {
+      expect(timestamp(null, { clock: CLOCK, format: 'unixms' })).toBe(String(Date.parse(CLOCK)));
     });
 
-    it('should generate date-only string with date format', () => {
-      const result = timestamp(null, { format: 'date' });
-      expect(result).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+    it('should format a date-only string with date format', () => {
+      expect(timestamp(null, { clock: CLOCK, format: 'date' })).toBe('2026-01-15');
     });
 
     it('should default to ISO 8601 for unknown format', () => {
-      const result = timestamp(null, { format: 'unknown' });
-      expect(result).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$/);
+      expect(timestamp(null, { clock: CLOCK, format: 'unknown' })).toBe(CLOCK);
     });
   });
 
   describe('input value handling', () => {
-    it('should use current date when value is null', () => {
-      const before = Date.now();
-      const result = timestamp(null, {});
-      const after = Date.now();
-      const resultMs = new Date(result).getTime();
-      expect(resultMs).toBeGreaterThanOrEqual(before);
-      expect(resultMs).toBeLessThanOrEqual(after);
-    });
-
-    it('should use current date when value is undefined', () => {
-      const result = timestamp(undefined, {});
-      expect(result).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$/);
-    });
-
     it('should parse and format provided date string', () => {
       const result = timestamp('2024-01-15T10:30:00.000Z', { format: 'date' });
       expect(result).toBe('2024-01-15');
@@ -69,6 +50,39 @@ describe('timestamp', () => {
     it('should parse ISO date and output different format', () => {
       const result = timestamp('2024-01-15T10:30:00.000Z', { format: 'unix' });
       expect(result).toBe(String(Math.floor(new Date('2024-01-15T10:30:00.000Z').getTime() / 1000)));
+    });
+
+    it('should prefer the source value over the configured clock', () => {
+      expect(timestamp('2020-05-17T21:03:21+00:00', { clock: CLOCK })).toBe(
+        '2020-05-17T21:03:21.000Z'
+      );
+    });
+
+    it('should reject a source value that is not a date', () => {
+      expect(() => timestamp('yesterday', {})).toThrow(/not a date/);
+    });
+  });
+
+  describe('clock', () => {
+    it('should never fall back to the wall clock when nothing is configured', () => {
+      expect(() => timestamp(null, {})).toThrow(/no clock/);
+      expect(() => timestamp(undefined, {})).toThrow(/no clock/);
+      expect(() => timestamp('', {})).toThrow(/no clock/);
+    });
+
+    it('should give the same instant on every call with a fixed clock', () => {
+      expect(timestamp(null, { clock: CLOCK })).toBe(timestamp(null, { clock: CLOCK }));
+    });
+
+    it('should reject a clock that is not an instant', () => {
+      expect(() => timestamp(null, { clock: 'soon' })).toThrow(/clock/);
+    });
+
+    it('should read the wall clock only when the clock is "now"', () => {
+      const before = Date.now();
+      const resultMs = Date.parse(timestamp(null, { clock: 'now' }) as string);
+      expect(resultMs).toBeGreaterThanOrEqual(before);
+      expect(resultMs).toBeLessThanOrEqual(Date.now());
     });
   });
 });

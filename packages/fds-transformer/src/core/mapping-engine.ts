@@ -5,6 +5,7 @@
 import type {
   FieldMapping,
   FieldMappingObject,
+  PluginConfig,
   TransformContext,
 } from './types.js';
 import { TransformRegistry } from '../transforms/transform-registry.js';
@@ -14,6 +15,13 @@ export class MappingEngine {
 
   constructor() {
     this.transformRegistry = new TransformRegistry();
+  }
+
+  /**
+   * Load a config plugin so its transforms can be named in mappings
+   */
+  async loadPlugin(plugin: PluginConfig): Promise<void> {
+    await this.transformRegistry.loadPlugin(plugin);
   }
 
   /**

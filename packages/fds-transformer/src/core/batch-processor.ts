@@ -4,6 +4,7 @@
 
 import type { TransformResult } from './types.js';
 import { Transformer } from './transformer.js';
+import { assertUniqueSlugs } from './slug-collisions.js';
 
 export interface BatchOptions {
   concurrency?: number;
@@ -78,6 +79,8 @@ export class BatchProcessor {
         ),
       });
     }
+
+    assertUniqueSlugs(results.map((result) => result.data));
 
     return {
       results,

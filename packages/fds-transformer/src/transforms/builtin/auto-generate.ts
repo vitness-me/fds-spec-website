@@ -5,14 +5,19 @@
 import type { TransformFunction, TransformContext } from '../../core/types.js';
 
 /**
- * Generate a timestamp
+ * Format an instant taken from the source, or from a configured clock.
+ *
+ * A run must be repeatable, so an empty source value never falls back to the
+ * wall clock on its own. `options.clock` is an ISO 8601 instant stamped on
+ * every record that has no source value, or `"now"` to opt into the wall
+ * clock. Without either, the transform throws.
  */
 export const timestamp: TransformFunction = (
   value: unknown,
   options: Record<string, unknown> = {}
 ): string => {
   const format = String(options.format || 'iso8601');
-  const date = value ? new Date(String(value)) : new Date();
+  const date = instantOf(value, options.clock);
 
   switch (format) {
     case 'iso8601':
@@ -28,6 +33,30 @@ export const timestamp: TransformFunction = (
       return date.toISOString();
   }
 };
+
+function instantOf(value: unknown, clock: unknown): Date {
+  if (value !== undefined && value !== null && value !== '') {
+    const date = new Date(String(value));
+    if (Number.isNaN(date.getTime())) {
+      throw new Error(`timestamp: ${JSON.stringify(value)} is not a date`);
+    }
+    return date;
+  }
+
+  if (clock === undefined) {
+    throw new Error(
+      'timestamp: the source has no value and no clock is configured. ' +
+        'Map the field from the source, or set options.clock to an ISO 8601 instant ' +
+        '("now" stamps the wall clock).'
+    );
+  }
+
+  const date = clock === 'now' ? new Date() : new Date(String(clock));
+  if (Number.isNaN(date.getTime())) {
+    throw new Error(`timestamp: options.clock ${JSON.stringify(clock)} is not an instant or "now"`);
+  }
+  return date;
+}
 
 /**
  * Auto-generate metadata fields
