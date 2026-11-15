@@ -153,7 +153,7 @@
           "status": "current",
           "path": "transformer/v1.2.0/mapping.schema.json",
           "$id": "https://spec.vitness.me/schemas/transformer/v1.2.0/mapping.schema.json",
-          "frozen": false,
+          "frozen": true,
           "sha256": "dfae44fe1ed49050e6617e393bbde5cd6fff32976074a35c44ecfc9267bd1757"
         }
       }
@@ -218,7 +218,7 @@
           "status": "current",
           "path": "transformer/provenance/v1.0.0/provenance.schema.json",
           "$id": "https://spec.vitness.me/schemas/transformer/provenance/v1.0.0/provenance.schema.json",
-          "frozen": false,
+          "frozen": true,
           "sha256": "2244aeec081cb6fc5611ffcd3c5749f56bc2b526ade6311593bee1b5daca9bec"
         }
       }
