@@ -315,11 +315,19 @@ describe('Enrichment fills gaps only', () => {
       { 'canonical.description': { tier: 'simple', prompt: 'description' } }
     );
     const stub = await stubbedTransformer(config, 'simple', ['a']);
-    const { stats } = await stub.transformer.transformAllBatch([
+    const completeJSON = vi.spyOn(
+      stub.transformer.getEnrichmentEngine()!.getProvider()!,
+      'completeJSON'
+    );
+    const { stats, errors, results } = await stub.transformer.transformAllBatch([
       { id: 'a', slug: 'a', name: 'A', description: 'Written.' },
     ]);
     expect(stub.asked).toEqual([]);
+    expect(completeJSON).not.toHaveBeenCalled();
     expect(stats.apiCalls).toBe(0);
+    expect(stats.failed).toBe(0);
+    expect(errors).toEqual([]);
+    expect((results[0].data as any).canonical.description).toBe('Written.');
   });
 
   it('applies an AI value resumed from a checkpoint only to a current gap', async () => {
