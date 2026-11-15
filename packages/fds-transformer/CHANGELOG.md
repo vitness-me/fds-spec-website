@@ -27,9 +27,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   and `enrichBatch` lists it in `abstentions` with the reason. Previously a
   reply that did not parse was dropped with a warning, and one that parsed
   was written whatever it held.
-- **The OpenRouter key is read only from `OPENROUTER_API_KEY`.** `--api-key`
-  and `enrichment.apiKey` are ignored with a warning; a key on the command
-  line ends up in shell history.
+- **Breaking: the OpenRouter key is read only from `OPENROUTER_API_KEY`.**
+  `--api-key`, `enrichment.apiKey` and `enrichment.options.apiKey` are ignored
+  with a warning, so a caller that passes the key in configuration now runs
+  without enrichment until the variable is set. A key on the command line ends
+  up in shell history.
 - **Degrading a tier no longer changes the model of later calls.** The model
   is chosen per call instead of being set on the shared provider.
 

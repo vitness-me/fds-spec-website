@@ -142,6 +142,12 @@ describe('OpenRouterProvider structured output', () => {
     await expect(provider().completeJSON('prompt')).rejects.toThrow(/No usable JSON reply/);
   });
 
+  it('keeps a 403 that is not a policy block an error', async () => {
+    stub.reply({ status: 403, body: { error: { code: 403, message: 'Key disabled.' } } });
+    const p = new OpenRouterProvider({ apiKey: 'k', baseUrl: stub.baseUrl, maxRetries: 1, retryDelay: 1 });
+    await expect(p.complete('prompt')).rejects.toBeInstanceOf(OpenRouterAPIError);
+  });
+
   it('treats a 200 whose body holds only an error as an error', async () => {
     stub.reply(fixture('error-200'));
     const p = new OpenRouterProvider({ apiKey: 'k', baseUrl: stub.baseUrl, maxRetries: 1, retryDelay: 1 });
@@ -228,6 +234,28 @@ describe('EnrichmentEngine structured output', () => {
     expect(result.results.size).toBe(0);
     expect(result.abstentions.map((a) => a.reason)).toEqual(['refusal', 'refusal']);
     expect(stub.requests).toHaveLength(1);
+  });
+
+  it('writes nothing for a field the model declines with null', async () => {
+    stub.reply(
+      completion({
+        results: [
+          { slug: 'barbell-bench-press', exerciseType: 'strength', unilateral: null },
+          { slug: 'push-up', exerciseType: null, unilateral: false },
+        ],
+      })
+    );
+    const engine = new EnrichmentEngine(
+      engineConfig(stub, {
+        'classification.exerciseType': { tier: 'simple', prompt: 'classification-simple' },
+        'classification.unilateral': { tier: 'simple', prompt: 'classification-simple' },
+      })
+    );
+
+    const result = await engine.enrichBatch(exercises);
+
+    expect(result.results.get('ex-1')).toEqual({ classification: { exerciseType: 'strength' } });
+    expect(result.results.get('ex-2')).toEqual({ classification: { unilateral: false } });
   });
 
   it('records a batch reply that leaves out an exercise as an abstention', async () => {

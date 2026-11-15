@@ -337,7 +337,7 @@ export class OpenRouterProvider implements AIProvider {
    */
   async completeJSON<T>(
     prompt: string,
-    schema?: object,
+    _schema?: object,
     options: AIProviderOptions = {}
   ): Promise<T> {
     const systemPrompt = options.systemPrompt || 
@@ -349,7 +349,7 @@ export class OpenRouterProvider implements AIProvider {
     });
 
     // A refusal or a reply cut off at the token limit is never parsed.
-    const reply = readReply(response, schema as Record<string, unknown> | undefined);
+    const reply = readReply(response);
     if (!reply.ok) {
       if (reply.reason !== 'invalid') {
         throw new AbstentionError(reply.reason, reply.detail);

@@ -963,6 +963,9 @@ export class EnrichmentEngine {
   ): Map<string, Record<string, unknown>> {
     const results = new Map<string, Record<string, unknown>>();
     const parsed = reply as Record<string, unknown>;
+    // null is how the model declines a field: nothing is written for it.
+    const answered = (fields: Record<string, unknown>) =>
+      Object.fromEntries(Object.entries(fields).filter(([, value]) => value !== null));
 
     // Batched prompts reply with one item per exercise, named by slug
     if (Array.isArray(parsed.results)) {
@@ -970,14 +973,14 @@ export class EnrichmentEngine {
         const exercise = exercises.find((e) => e.slug === result.slug);
         if (exercise) {
           const { slug: _slug, ...fields } = result;
-          results.set(exercise.id, this.mapFieldsFromPrompt(promptId, fields));
+          results.set(exercise.id, this.mapFieldsFromPrompt(promptId, answered(fields)));
         }
       }
     } else {
       // Single exercise response (complex tier)
       const exercise = exercises[0];
       if (exercise) {
-        results.set(exercise.id, this.mapFieldsFromPrompt(promptId, parsed));
+        results.set(exercise.id, this.mapFieldsFromPrompt(promptId, answered(parsed)));
       }
     }
 
