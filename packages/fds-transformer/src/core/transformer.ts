@@ -329,14 +329,11 @@ export class Transformer {
         };
       });
 
-      // Get schema $defs for validation context
+      // The target schema and registries constrain what the model may answer
       const schema = this.schemaManager.getSchema(
         this.config.targetSchema?.entity || 'exercise',
         this.config.targetSchema?.version || DEFAULT_SCHEMA_VERSION
       );
-      const schemaDefs = (schema as Record<string, unknown> | null)?.$defs as
-        | Record<string, unknown>
-        | undefined;
 
       // Prepare enrichment options
       const enrichmentOptions: BatchEnrichmentOptions = {
@@ -344,7 +341,12 @@ export class Transformer {
         tierFilter: options.tierFilter,
         onProgress: options.onProgress,
         outputDirectory: options.outputDirectory,
-        schemaDefs,
+        targetSchema: (schema as Record<string, unknown> | null) ?? undefined,
+        registries: {
+          muscles: this.registryManager.getMuscles(),
+          equipment: this.registryManager.getEquipment(),
+          muscleCategories: this.registryManager.getMuscleCategories(),
+        },
       };
 
       // Run batch enrichment

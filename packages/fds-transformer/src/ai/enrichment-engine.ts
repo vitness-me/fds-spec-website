@@ -38,7 +38,15 @@ import type {
 import { OpenRouterProvider } from './providers/openrouter.js';
 import { RateLimiter, DEFAULT_RATE_LIMIT_CONFIG } from './rate-limiter.js';
 import { CheckpointManager } from './checkpoint-manager.js';
-import { AbstentionError, buildResponseSchema, readReply, type AbstentionReason } from './response-schema.js';
+import {
+  AbstentionError,
+  buildRequest,
+  readReply,
+  resolveRefs,
+  type AbstentionReason,
+  type Registries,
+  type RequestTarget,
+} from './response-schema.js';
 import {
   EXERCISE_SYSTEM_PROMPT,
   getExerciseEnrichmentPrompt,
@@ -138,8 +146,13 @@ export interface BatchEnrichmentOptions {
   onProgress?: ProgressCallback;
   /** Output directory for checkpoints */
   outputDirectory?: string;
-  /** Schema $defs for validation context */
-  schemaDefs?: Record<string, unknown>;
+  /**
+   * The target entity schema. With it, each field is asked for with the value
+   * schema the target schema gives it, and replies are validated against it.
+   */
+  targetSchema?: Record<string, unknown>;
+  /** The loaded registries that muscle and equipment references are chosen from. */
+  registries?: Registries;
 }
 
 /**
@@ -493,7 +506,13 @@ export class EnrichmentEngine {
             batch,
             tierFields,
             options.onProgress,
-            checkpointManager
+            checkpointManager,
+            options.targetSchema
+              ? {
+                  schema: options.targetSchema,
+                  registries: options.registries ?? { muscles: [], equipment: [], muscleCategories: [] },
+                }
+              : undefined
           );
 
           // Merge batch results
@@ -710,7 +729,8 @@ export class EnrichmentEngine {
     batch: ProcessingBatch,
     fields: Map<string, TieredFieldEnrichmentConfig>,
     onProgress?: ProgressCallback,
-    _checkpointManager?: CheckpointManager | null
+    _checkpointManager?: CheckpointManager | null,
+    target?: RequestTarget
   ): Promise<BatchEnrichmentResult> {
     const startTime = Date.now();
     const results = new Map<string, Record<string, unknown>>();
@@ -768,14 +788,15 @@ export class EnrichmentEngine {
       }
 
       // Ask only for the configured fields this prompt can answer.
-      const requestedPaths = [...fields]
+      const requested = [...fields]
         .filter(([path, fieldConfig]) => fieldConfig.prompt === promptId && builtPrompt.fields.includes(path))
-        .map(([path]) => path);
-      if (requestedPaths.length === 0) {
+        .map(([path, fieldConfig]) => ({ path, enum: fieldConfig.enum }));
+      if (requested.length === 0) {
         continue;
       }
       const slugs = tier === 'complex' ? null : batch.exercises.map((e) => e.slug);
-      const responseSchema = buildResponseSchema(promptId, requestedPaths, slugs);
+      const request = buildRequest(promptId, requested, slugs, target);
+      const { responseSchema } = request;
 
       // Report progress
       if (onProgress) {
@@ -816,7 +837,7 @@ export class EnrichmentEngine {
         apiCalls++;
         tokensUsed += response.tokensUsed || 0;
 
-        const reply = readReply(response, responseSchema.schema, slugs ?? undefined);
+        const reply = readReply(response, request.validationSchema, slugs ?? undefined);
         calls.push({
           tier: call.tier,
           promptId,
@@ -850,7 +871,9 @@ export class EnrichmentEngine {
         }
 
         // Parse and distribute results
-        const parsedResults = this.parseResponse(reply.value, batch.exercises, promptId);
+        const parsedResults = this.parseResponse(reply.value, batch.exercises, promptId, (fields) =>
+          target ? resolveRefs(fields, request.refs, target.registries) : fields
+        );
 
         if (debug) {
           console.log(`[DEBUG processTierBatch] Parsed results count: ${parsedResults.size}`);
@@ -959,13 +982,14 @@ export class EnrichmentEngine {
   private parseResponse(
     reply: unknown,
     exercises: ExerciseInput[],
-    promptId: string
+    promptId: string,
+    resolve: (fields: Record<string, unknown>) => Record<string, unknown>
   ): Map<string, Record<string, unknown>> {
     const results = new Map<string, Record<string, unknown>>();
     const parsed = reply as Record<string, unknown>;
     // null is how the model declines a field: nothing is written for it.
     const answered = (fields: Record<string, unknown>) =>
-      Object.fromEntries(Object.entries(fields).filter(([, value]) => value !== null));
+      resolve(Object.fromEntries(Object.entries(fields).filter(([, value]) => value !== null)));
 
     // Batched prompts reply with one item per exercise, named by slug
     if (Array.isArray(parsed.results)) {

@@ -344,17 +344,15 @@ Respond with JSON:
   "results": [
     { 
       "slug": "exercise-slug",
-      "optional": [
-        { "id": "equipment-id", "name": "Equipment Name" }
-      ]
+      "optional": ["equipment-slug"]
     },
     ...
   ]
 }
 
-Use standardized equipment names like: dumbbell, barbell, kettlebell, resistance-band, cable-machine, bench, stability-ball, foam-roller, etc.`,
+Choose equipment only from the slugs the response schema allows, and leave the list empty when none apply.`,
     outputSchema:
-      '{ "results": [{ "slug": string, "optional": [{ "id": string, "name": string }] }] }',
+      '{ "results": [{ "slug": string, "optional": string[] }] }',
   },
 };
 
@@ -513,15 +511,13 @@ Respond with JSON:
   "force": "push|pull|static|mixed",
   "kineticChain": "open|closed|mixed",
   "tags": ["tag1", "tag2"],
-  "secondary": [
-    { "id": "muscle-id", "name": "Muscle Name" }
-  ]
+  "secondary": ["muscle-slug"]
 }
 
 For tags, include relevant descriptors like: "upper-body", "lower-body", "core", "stability", "power", "strength", "endurance", "mobility", etc.
-For secondary targets, list muscles that assist but are not the primary focus. Use anatomical muscle names.`,
+For secondary targets, list muscles that assist but are not the primary focus, choosing only from the muscle slugs the response schema allows.`,
     outputSchema:
-      '{ "movement": string, "mechanics": string, "force": string, "kineticChain": string, "tags": string[], "secondary": [{ "id": string, "name": string }] }',
+      '{ "movement": string, "mechanics": string, "force": string, "kineticChain": string, "tags": string[], "secondary": string[] }',
   },
 };
 

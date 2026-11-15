@@ -13,6 +13,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   sends a JSON schema as `response_format`, routed only to endpoints that
   support it. The schema asks for the configured fields alone and, in a batch,
   only for the exercises in that batch.
+- **Model output is constrained to the target schema and the registries.**
+  Each requested field takes the value schema the target exercise schema
+  gives its path, with `$defs` inlined and narrowed by the field's configured
+  `enum`; the request is sent strict. Secondary muscles and optional
+  equipment are chosen from the loaded registries by slug and written as the
+  registry's entries, never as the model's text. A value the schema or the
+  registry does not allow is an abstention.
 - **Every call is reported.** `enrichBatch` returns `calls`, with the model
   requested and the model that served, any degrade, token usage, cost when
   OpenRouter reports it, and the outcome.
