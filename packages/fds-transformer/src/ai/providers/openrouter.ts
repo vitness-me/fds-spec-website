@@ -56,6 +56,27 @@ export class OpenRouterAPIError extends Error {
   }
 }
 
+/**
+ * The parts of a Chat Completions reply this provider reads.
+ * https://openrouter.ai/docs/api-reference/overview
+ */
+interface ChatCompletion {
+  model?: string;
+  choices?: Array<{
+    finish_reason?: string | null;
+    message?: { content?: string | null; refusal?: string | null };
+    error?: OpenRouterErrorBody;
+  }>;
+  usage?: { prompt_tokens?: number; completion_tokens?: number; total_tokens?: number; cost?: number };
+  error?: OpenRouterErrorBody;
+}
+
+interface OpenRouterErrorBody {
+  code?: number;
+  message?: string;
+  metadata?: { error_type?: string };
+}
+
 export class OpenRouterProvider implements AIProvider {
   name = 'openrouter';
 
@@ -133,13 +154,25 @@ export class OpenRouterProvider implements AIProvider {
             'HTTP-Referer': 'https://spec.vitness.me',
             'X-Title': 'FDS Transformer',
           },
-          body: JSON.stringify({
-            model: this.model,
-            messages,
-            temperature: options.temperature ?? this.defaultTemperature,
-            max_tokens: options.maxTokens ?? this.defaultMaxTokens,
-          }),
+          body: JSON.stringify(this.requestBody(messages, options)),
         });
+
+        // A refusal the provider reports as an error is still the model's
+        // answer. Retrying the same prompt would not change it.
+        if (response.status === 403) {
+          const errorBody = await response.text();
+          const refusal = this.parsePolicyBlock(errorBody);
+          if (refusal !== null) {
+            return {
+              content: '',
+              tokensUsed: 0,
+              model: options.model ?? this.model,
+              finishReason: 'content_filter',
+              refusal,
+            };
+          }
+          throw new OpenRouterAPIError(`OpenRouter API error: 403 ${errorBody}`, 403);
+        }
 
         // Handle 429 rate limit response
         if (response.status === 429) {
@@ -164,13 +197,27 @@ export class OpenRouterProvider implements AIProvider {
           );
         }
 
-        const data = await response.json() as {
-          choices?: Array<{ message?: { content?: string } }>;
-          usage?: { total_tokens?: number };
-          model?: string;
-        };
-        const content = data.choices?.[0]?.message?.content || '';
-        const tokensUsed = data.usage?.total_tokens || 0;
+        const data = await response.json() as ChatCompletion;
+
+        // OpenRouter can answer 200 with an error in the body, either alone or
+        // on the choice.
+        const bodyError = data.error ?? data.choices?.[0]?.error;
+        if (bodyError) {
+          throw new OpenRouterAPIError(
+            `OpenRouter API error: ${bodyError.code ?? ''} ${bodyError.message ?? ''}`.trim(),
+            bodyError.code ?? response.status
+          );
+        }
+
+        const choice = data.choices?.[0];
+        const usage = data.usage
+          ? {
+              promptTokens: data.usage.prompt_tokens ?? 0,
+              completionTokens: data.usage.completion_tokens ?? 0,
+              totalTokens: data.usage.total_tokens ?? 0,
+              ...(data.usage.cost !== undefined ? { cost: data.usage.cost } : {}),
+            }
+          : undefined;
 
         // Record successful request
         if (this.rateLimiter) {
@@ -178,9 +225,12 @@ export class OpenRouterProvider implements AIProvider {
         }
 
         return {
-          content,
-          tokensUsed,
-          model: data.model || this.model,
+          content: choice?.message?.content || '',
+          tokensUsed: usage?.totalTokens ?? 0,
+          model: data.model || options.model || this.model,
+          finishReason: choice?.finish_reason ?? null,
+          ...(choice?.message?.refusal ? { refusal: choice.message.refusal } : {}),
+          ...(usage ? { usage } : {}),
         };
       } catch (error) {
         lastError = error instanceof Error ? error : new Error(String(error));
@@ -212,6 +262,43 @@ export class OpenRouterProvider implements AIProvider {
     }
 
     throw lastError || new Error('Failed to complete request after retries');
+  }
+
+  private requestBody(
+    messages: Array<{ role: string; content: string }>,
+    options: AIProviderOptions
+  ): Record<string, unknown> {
+    const body: Record<string, unknown> = {
+      model: options.model ?? this.model,
+      messages,
+      temperature: options.temperature ?? this.defaultTemperature,
+      max_tokens: options.maxTokens ?? this.defaultMaxTokens,
+    };
+    if (options.responseSchema) {
+      const { name, schema, strict } = options.responseSchema;
+      body.response_format = { type: 'json_schema', json_schema: { name, strict, schema } };
+      // Route only to endpoints that honour response_format, rather than to
+      // ones that would ignore it.
+      body.provider = { require_parameters: true };
+    }
+    return body;
+  }
+
+  /**
+   * The refusal message of a 403 that reports a model refusal or a content
+   * policy block, or null for any other 403.
+   */
+  private parsePolicyBlock(body: string): string | null {
+    try {
+      const error = (JSON.parse(body) as ChatCompletion).error;
+      const type = error?.metadata?.error_type;
+      if (type === 'refusal' || type === 'content_policy_violation') {
+        return error?.message || type;
+      }
+    } catch {
+      // not JSON: not a policy block we can recognise
+    }
+    return null;
   }
 
   /**

@@ -70,6 +70,10 @@ export interface EnrichmentConfig {
   enabled?: boolean;
   provider?: 'openrouter' | 'openai' | 'anthropic' | 'ollama';
   model?: string;
+  /**
+   * Ignored, with a warning: the key is read only from `OPENROUTER_API_KEY`.
+   * Kept because the published mapping schema still names it.
+   */
   apiKey?: string;
   baseUrl?: string;
   options?: EnrichmentOptions;
@@ -298,12 +302,38 @@ export interface AIProviderOptions {
   temperature?: number;
   maxTokens?: number;
   systemPrompt?: string;
+  /** Model for this call only. The provider's own model is left as it is. */
+  model?: string;
+  /** JSON schema the reply must match, requested as structured output. */
+  responseSchema?: AIResponseSchema;
+}
+
+export interface AIResponseSchema {
+  name: string;
+  schema: Record<string, unknown>;
+  /** Ask the endpoint to enforce the schema exactly. */
+  strict: boolean;
+}
+
+export interface AIUsage {
+  promptTokens: number;
+  completionTokens: number;
+  totalTokens: number;
+  /** Cost in credits, when the provider reports it. */
+  cost?: number;
 }
 
 export interface AIResponse {
+  /** The reply text; empty when the model refused. */
   content: string;
   tokensUsed: number;
+  /** The model that served the call. */
   model: string;
+  /** Why generation stopped: `stop`, `length`, `content_filter`, ... */
+  finishReason?: string | null;
+  /** The model's refusal, when it declined. */
+  refusal?: string;
+  usage?: AIUsage;
 }
 
 // ============================================================================

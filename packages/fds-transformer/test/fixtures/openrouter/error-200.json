@@ -1,0 +1,6 @@
+{
+  "status": 200,
+  "body": {
+    "error": { "code": 502, "message": "Provider returned an invalid response", "metadata": { "error_type": "provider_unavailable" } }
+  }
+}

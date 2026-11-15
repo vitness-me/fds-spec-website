@@ -24,6 +24,8 @@ import type {
   FieldMappingObject,
   TransformContext,
   AIProvider,
+  AIResponse,
+  AIResponseSchema,
   TierName,
   TierConfig,
   TieredFieldEnrichmentConfig,
@@ -35,6 +37,7 @@ import type {
 import { OpenRouterProvider } from './providers/openrouter.js';
 import { RateLimiter, DEFAULT_RATE_LIMIT_CONFIG } from './rate-limiter.js';
 import { CheckpointManager } from './checkpoint-manager.js';
+import { buildResponseSchema, readReply, type AbstentionReason } from './response-schema.js';
 import {
   EXERCISE_SYSTEM_PROMPT,
   getExerciseEnrichmentPrompt,
@@ -87,6 +90,43 @@ export interface BatchEnrichmentResult {
   durationMs: number;
   /** Errors encountered */
   errors: Array<{ exerciseId: string; error: string; tier?: TierName }>;
+  /** Values the model was asked for and did not validly give. Nothing was written for them. */
+  abstentions: Abstention[];
+  /** One entry per model call that returned. */
+  calls: CallReport[];
+}
+
+/**
+ * A prompt call that wrote nothing for an exercise: the model refused, ran out
+ * of tokens, or replied with something that does not match the request schema.
+ */
+export interface Abstention {
+  exerciseId: string;
+  /** The tier whose model answered. */
+  tier: TierName;
+  promptId: string;
+  model: string;
+  reason: AbstentionReason;
+  detail: string;
+}
+
+/** The model, usage and outcome of one call. */
+export interface CallReport {
+  /** The tier whose model answered. */
+  tier: TierName;
+  promptId: string;
+  /** The model requested. */
+  model: string;
+  /** The model OpenRouter says served the call. */
+  servedModel: string;
+  /** The tier the call was degraded from, if it was. */
+  degradedFrom?: TierName;
+  promptTokens: number;
+  completionTokens: number;
+  totalTokens: number;
+  /** Cost in credits, when the provider reports it. */
+  cost?: number;
+  outcome: 'ok' | AbstentionReason;
 }
 
 /**
@@ -225,7 +265,12 @@ export class EnrichmentEngine {
    * Initialize the AI provider
    */
   private initializeProvider(): void {
-    const apiKey = this.config.apiKey || process.env.OPENROUTER_API_KEY;
+    if (this.config.apiKey) {
+      console.warn(
+        'enrichment.apiKey is ignored: the OpenRouter key is read only from the OPENROUTER_API_KEY environment variable.'
+      );
+    }
+    const apiKey = process.env.OPENROUTER_API_KEY;
 
     if (!apiKey) {
       console.warn('No API key provided for AI enrichment. Enrichment will be skipped.');
@@ -279,6 +324,8 @@ export class EnrichmentEngine {
     const results = new Map<string, Record<string, unknown>>();
     const failedIds: string[] = [];
     const errors: Array<{ exerciseId: string; error: string; tier?: TierName }> = [];
+    const abstentions: Abstention[] = [];
+    const calls: CallReport[] = [];
     let apiCalls = 0;
     let tokensUsed = 0;
 
@@ -299,6 +346,8 @@ export class EnrichmentEngine {
         tokensUsed,
         durationMs: Date.now() - startTime,
         errors,
+        abstentions,
+        calls,
       };
     }
 
@@ -339,6 +388,8 @@ export class EnrichmentEngine {
         tokensUsed,
         durationMs: Date.now() - startTime,
         errors,
+        abstentions,
+        calls,
       };
     }
 
@@ -396,6 +447,8 @@ export class EnrichmentEngine {
         tokensUsed,
         durationMs: Date.now() - startTime,
         errors,
+        abstentions,
+        calls,
       };
     }
 
@@ -479,6 +532,8 @@ export class EnrichmentEngine {
           apiCalls += batchResult.apiCalls;
           tokensUsed += batchResult.tokensUsed;
           errors.push(...batchResult.errors);
+          abstentions.push(...batchResult.abstentions);
+          calls.push(...batchResult.calls);
           if (debug) {
             console.log(`[DEBUG enrichBatch] Updated totals - apiCalls: ${apiCalls}, tokensUsed: ${tokensUsed}`);
           }
@@ -512,6 +567,8 @@ export class EnrichmentEngine {
       tokensUsed,
       durationMs: Date.now() - startTime,
       errors,
+      abstentions,
+      calls,
     };
   }
 
@@ -662,6 +719,8 @@ export class EnrichmentEngine {
     const results = new Map<string, Record<string, unknown>>();
     const failedIds: string[] = [];
     const errors: Array<{ exerciseId: string; error: string; tier?: TierName }> = [];
+    const abstentions: Abstention[] = [];
+    const calls: CallReport[] = [];
     let apiCalls = 0;
     let tokensUsed = 0;
 
@@ -673,6 +732,8 @@ export class EnrichmentEngine {
         tokensUsed: 0,
         durationMs: 0,
         errors: [{ exerciseId: 'batch', error: 'No AI provider available', tier }],
+        abstentions: [],
+        calls: [],
       };
     }
 
@@ -709,6 +770,19 @@ export class EnrichmentEngine {
         console.log(`[DEBUG processTierBatch] Built prompt for promptId: ${promptId}`);
       }
 
+      // Ask only for the configured fields this prompt can answer.
+      const requestedPaths = [...fields]
+        .filter(([path, fieldConfig]) => fieldConfig.prompt === promptId && builtPrompt.fields.includes(path))
+        .map(([path]) => path);
+      if (requestedPaths.length === 0) {
+        continue;
+      }
+      const responseSchema = buildResponseSchema(
+        promptId,
+        requestedPaths,
+        tier === 'complex' ? null : batch.exercises.map((e) => e.slug)
+      );
+
       // Report progress
       if (onProgress) {
         const exercise = batch.exercises[0];
@@ -738,27 +812,54 @@ export class EnrichmentEngine {
       }
 
       try {
-        // Switch model for this tier
-        if (this.provider instanceof OpenRouterProvider) {
-          (this.provider as OpenRouterProvider).setModel(tierConfig.model);
-        }
-
         if (debug) {
           console.log(`[DEBUG processTierBatch] Calling API for promptId: ${promptId}, model: ${tierConfig.model}`);
         }
 
         // Make API call with retry/fallback handling
-        const response = await this.callWithFallback(tier, builtPrompt, tierConfig);
+        const call = await this.callWithFallback(tier, builtPrompt, tierConfig, responseSchema);
+        const { response } = call;
         apiCalls++;
         tokensUsed += response.tokensUsed || 0;
+
+        const reply = readReply(response, responseSchema.schema);
+        calls.push({
+          tier: call.tier,
+          promptId,
+          model: call.model,
+          servedModel: response.model,
+          ...(call.degradedFrom ? { degradedFrom: call.degradedFrom } : {}),
+          promptTokens: response.usage?.promptTokens ?? 0,
+          completionTokens: response.usage?.completionTokens ?? 0,
+          totalTokens: response.usage?.totalTokens ?? response.tokensUsed ?? 0,
+          ...(response.usage?.cost !== undefined ? { cost: response.usage.cost } : {}),
+          outcome: reply.ok ? 'ok' : reply.reason,
+        });
 
         if (debug) {
           console.log(`[DEBUG processTierBatch] API response received, tokens: ${response.tokensUsed}`);
           console.log(`[DEBUG processTierBatch] Response content (first 300 chars): ${response.content.slice(0, 300)}`);
         }
 
+        if (!reply.ok) {
+          console.warn(
+            `Enrichment abstained (${reply.reason}) on prompt ${promptId} for ${batch.exercises.length} exercise(s), model ${call.model}: ${reply.detail}`
+          );
+          for (const exercise of batch.exercises) {
+            abstentions.push({
+              exerciseId: exercise.id,
+              tier: call.tier,
+              promptId,
+              model: call.model,
+              reason: reply.reason,
+              detail: reply.detail,
+            });
+          }
+          continue;
+        }
+
         // Parse and distribute results
-        const parsedResults = this.parseResponse(response.content, batch.exercises, promptId);
+        const parsedResults = this.parseResponse(reply.value, batch.exercises, promptId);
 
         if (debug) {
           console.log(`[DEBUG processTierBatch] Parsed results count: ${parsedResults.size}`);
@@ -796,18 +897,26 @@ export class EnrichmentEngine {
       tokensUsed,
       durationMs: Date.now() - startTime,
       errors,
+      abstentions,
+      calls,
     };
   }
 
   /**
    * Call API with fallback on errors
    */
+  /**
+   * Call the tier's model, retrying and then degrading on errors. The model is
+   * chosen per call, so a degrade never changes the shared provider.
+   */
   private async callWithFallback(
     tier: TierName,
     prompt: { system: string; user: string },
     tierConfig: TierConfig,
-    attemptNumber: number = 0
-  ): Promise<{ content: string; tokensUsed?: number }> {
+    responseSchema: AIResponseSchema,
+    attemptNumber: number = 0,
+    degradedFrom?: TierName
+  ): Promise<{ response: AIResponse; tier: TierName; model: string; degradedFrom?: TierName }> {
     const fallbackConfig = this.getFallbackConfig();
 
     if (!this.provider) {
@@ -819,33 +928,35 @@ export class EnrichmentEngine {
         systemPrompt: prompt.system,
         temperature: tierConfig.temperature,
         maxTokens: tierConfig.maxTokens,
+        model: tierConfig.model,
+        responseSchema,
       });
 
-      return { content: response.content, tokensUsed: response.tokensUsed };
+      return { response, tier, model: tierConfig.model, ...(degradedFrom ? { degradedFrom } : {}) };
     } catch (error) {
       // Check if we should retry
       if (attemptNumber < fallbackConfig.retries) {
-        return this.callWithFallback(tier, prompt, tierConfig, attemptNumber + 1);
+        return this.callWithFallback(tier, prompt, tierConfig, responseSchema, attemptNumber + 1, degradedFrom);
       }
 
       // Check if we should degrade to a lower tier
       if (fallbackConfig.degradeModel) {
         const degradeTier = fallbackConfig.degradeChain[tier];
         if (degradeTier) {
-          const degradeConfig = this.getTierConfig(degradeTier);
-
-          // Switch model
-          if (this.provider instanceof OpenRouterProvider) {
-            (this.provider as OpenRouterProvider).setModel(degradeConfig.model);
-          }
-
           // Use degraded tier's system prompt
           const degradedPrompt = {
             system: SYSTEM_PROMPTS[degradeTier],
             user: prompt.user,
           };
 
-          return this.callWithFallback(degradeTier, degradedPrompt, degradeConfig, 0);
+          return this.callWithFallback(
+            degradeTier,
+            degradedPrompt,
+            this.getTierConfig(degradeTier),
+            responseSchema,
+            0,
+            degradedFrom ?? tier
+          );
         }
       }
 
@@ -855,87 +966,35 @@ export class EnrichmentEngine {
   }
 
   /**
-   * Parse API response and map to exercises
+   * Map a reply that matched its request schema to the exercises it names
    */
   private parseResponse(
-    content: string,
+    reply: unknown,
     exercises: ExerciseInput[],
     promptId: string
   ): Map<string, Record<string, unknown>> {
     const results = new Map<string, Record<string, unknown>>();
+    const parsed = reply as Record<string, unknown>;
 
-    // Debug logging
-    const debug = process.env.DEBUG_ENRICHMENT === 'true';
-    if (debug) {
-      console.log(`\n[DEBUG parseResponse] promptId: ${promptId}`);
-      console.log(`[DEBUG parseResponse] exercises: ${exercises.map(e => e.slug).join(', ')}`);
-      console.log(`[DEBUG parseResponse] raw content (first 500 chars):\n${content.slice(0, 500)}`);
-    }
-
-    try {
-      // Extract JSON from response
-      let jsonStr = content.trim();
-      const codeBlockMatch = content.match(/```(?:json)?\s*([\s\S]*?)\s*```/);
-      if (codeBlockMatch) {
-        jsonStr = codeBlockMatch[1];
-        if (debug) {
-          console.log(`[DEBUG parseResponse] extracted from code block`);
-        }
-      }
-
-      if (debug) {
-        console.log(`[DEBUG parseResponse] jsonStr to parse (first 500 chars):\n${jsonStr.slice(0, 500)}`);
-      }
-
-      const parsed = JSON.parse(jsonStr);
-
-      if (debug) {
-        console.log(`[DEBUG parseResponse] parsed successfully, keys: ${Object.keys(parsed).join(', ')}`);
-        if (parsed.results) {
-          console.log(`[DEBUG parseResponse] results array length: ${parsed.results.length}`);
-          console.log(`[DEBUG parseResponse] results slugs: ${parsed.results.map((r: Record<string, unknown>) => r.slug).join(', ')}`);
-        }
-      }
-
-      // Handle batch response format
-      if (parsed.results && Array.isArray(parsed.results)) {
-        for (const result of parsed.results) {
-          const slug = result.slug;
-          const exercise = exercises.find((e) => e.slug === slug);
-          if (debug) {
-            console.log(`[DEBUG parseResponse] looking for slug "${slug}" -> found: ${!!exercise}`);
-          }
-          if (exercise) {
-            // Remove slug from result and map fields
-            const { slug: _slug, ...fields } = result;
-            const mapped = this.mapFieldsFromPrompt(promptId, fields);
-            if (debug) {
-              console.log(`[DEBUG parseResponse] mapped fields for ${exercise.id}:`, JSON.stringify(mapped, null, 2));
-            }
-            results.set(exercise.id, mapped);
-          }
-        }
-      } else {
-        // Single exercise response (complex tier)
-        const exercise = exercises[0];
+    // Batched prompts reply with one item per exercise, named by slug
+    if (Array.isArray(parsed.results)) {
+      for (const result of parsed.results as Array<Record<string, unknown>>) {
+        const exercise = exercises.find((e) => e.slug === result.slug);
         if (exercise) {
-          const mapped = this.mapFieldsFromPrompt(promptId, parsed);
-          if (debug) {
-            console.log(`[DEBUG parseResponse] single exercise mapped:`, JSON.stringify(mapped, null, 2));
-          }
-          results.set(exercise.id, mapped);
+          const { slug: _slug, ...fields } = result;
+          results.set(exercise.id, this.mapFieldsFromPrompt(promptId, fields));
         }
       }
-    } catch (err) {
-      // If parsing fails, return empty results
-      console.warn('Failed to parse API response:', content.slice(0, 200));
-      if (debug) {
-        console.error(`[DEBUG parseResponse] parse error:`, err);
+    } else {
+      // Single exercise response (complex tier)
+      const exercise = exercises[0];
+      if (exercise) {
+        results.set(exercise.id, this.mapFieldsFromPrompt(promptId, parsed));
       }
     }
 
-    if (debug) {
-      console.log(`[DEBUG parseResponse] final results count: ${results.size}`);
+    if (process.env.DEBUG_ENRICHMENT === 'true') {
+      console.log(`[DEBUG parseResponse] ${promptId}: ${results.size} result(s)`);
     }
 
     return results;

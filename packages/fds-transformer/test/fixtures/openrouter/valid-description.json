@@ -1,0 +1,20 @@
+{
+  "status": 200,
+  "body": {
+    "id": "gen-fixture-valid",
+    "object": "chat.completion",
+    "created": 1763164800,
+    "model": "anthropic/claude-haiku-4.5",
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "native_finish_reason": "end_turn",
+        "message": {
+          "role": "assistant",
+          "content": "{\"results\":[{\"slug\":\"barbell-bench-press\",\"description\":\"Lie on a flat bench and press a barbell from the chest to straight arms.\"},{\"slug\":\"push-up\",\"description\":\"From a plank, lower the chest to the floor and press back up.\"}]}"
+        }
+      }
+    ],
+    "usage": { "prompt_tokens": 412, "completion_tokens": 58, "total_tokens": 470, "cost": 0.000702 }
+  }
+}

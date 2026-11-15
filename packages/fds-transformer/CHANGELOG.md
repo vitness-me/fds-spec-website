@@ -7,11 +7,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **Tiered enrichment asks OpenRouter for structured output.** Each prompt call
+  sends a JSON schema as `response_format`, routed only to endpoints that
+  support it. The schema asks for the configured fields alone and, in a batch,
+  only for the exercises in that batch.
+- **Every call is reported.** `enrichBatch` returns `calls`, with the model
+  requested and the model that served, any degrade, token usage, cost when
+  OpenRouter reports it, and the outcome.
+
 ### Changed
 
 - **Release 1.5.0 is bundled and is the default.** It names body-atlas 1.1.0,
   which adds optional `license` and `attribution` on a view's asset. 1.0.0
   through 1.4.0 stay bundled; pin one to keep validating against it.
+- **A refusal, a reply cut off at the token limit, or a reply that fails its
+  schema is an abstention.** Nothing from it is written, it is not retried,
+  and `enrichBatch` lists it in `abstentions` with the reason. Previously a
+  reply that did not parse was dropped with a warning, and one that parsed
+  was written whatever it held.
+- **The OpenRouter key is read only from `OPENROUTER_API_KEY`.** `--api-key`
+  and `enrichment.apiKey` are ignored with a warning; a key on the command
+  line ends up in shell history.
+- **Degrading a tier no longer changes the model of later calls.** The model
+  is chosen per call instead of being set on the shared provider.
 
 ## [0.2.0] - 2026-08-11
 
