@@ -1,7 +1,7 @@
 {
   "$schema": "../../schemas/mapping.schema.json",
   "version": "1.0.0",
-  "description": "Round-trip fixture. Every required field is mapped from source, so a valid document falls out of the mapping alone — no enrichment, no network, no model. That is what makes it runnable as a gate.",
+  "description": "Round-trip fixture. Every required field is mapped from source, so a valid document falls out of the mapping alone — no enrichment, no network, no model. That is what makes it runnable as a gate. Ids are UUIDv5 of the source id and timestamps come from the source or a fixed clock, so a rerun is byte-identical.",
 
   "targetSchema": {
     "version": "1.1.0",
@@ -20,7 +20,11 @@
   },
 
   "mappings": {
-    "exerciseId": { "from": null, "transform": "uuid" },
+    "exerciseId": {
+      "from": null,
+      "transform": "uuidv5",
+      "options": { "namespace": "3a9a7a4e-5b1c-4f55-9a3e-6f2d1c0b8e71", "name": "roundtrip/{{id}}" }
+    },
     "schemaVersion": { "from": null, "default": "1.1.0" },
 
     "canonical.name": { "from": "name", "transform": "titleCase" },
@@ -54,8 +58,8 @@
     },
 
     "metadata.status": { "from": null, "default": "active" },
-    "metadata.createdAt": { "from": null, "transform": "timestamp" },
-    "metadata.updatedAt": { "from": null, "transform": "timestamp" },
+    "metadata.createdAt": { "from": "createdAt", "transform": "timestamp", "options": { "clock": "2026-01-01T00:00:00.000Z" } },
+    "metadata.updatedAt": { "from": "updatedAt", "transform": "timestamp", "options": { "clock": "2026-01-01T00:00:00.000Z" } },
     "metadata.source": { "from": null, "default": "roundtrip.fixture" },
     "metadata.externalRefs": {
       "from": "id",

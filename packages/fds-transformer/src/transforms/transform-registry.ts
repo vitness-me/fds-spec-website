@@ -2,12 +2,14 @@
  * Transform Registry - manages transform functions and plugins
  */
 
-import type { TransformFunction, TransformContext, TransformPlugin } from '../core/types.js';
+import { isAbsolute } from 'path';
+import { pathToFileURL } from 'url';
+import type { PluginConfig, TransformFunction, TransformContext, TransformPlugin } from '../core/types.js';
 
 // Import built-in transforms
 import { slugify } from './builtin/slugify.js';
 import { titleCase } from './builtin/title-case.js';
-import { uuid } from './builtin/uuid.js';
+import { uuid, uuidv5 } from './builtin/uuid.js';
 import { toArray, toMediaArray } from './builtin/to-array.js';
 import { timestamp, autoGenerate } from './builtin/auto-generate.js';
 import { registryLookup } from './builtin/registry-lookup.js';
@@ -35,6 +37,7 @@ export class TransformRegistry {
 
     // ID transforms
     this.register('uuid', uuid);
+    this.register('uuidv5', uuidv5);
 
     // Array transforms
     this.register('toArray', toArray);
@@ -110,12 +113,24 @@ export class TransformRegistry {
   }
 
   /**
-   * Load a plugin from a module path
+   * Load a plugin named in a config's `plugins`.
+   *
+   * The module's default export (or the module itself) is the plugin, or a
+   * function that takes the configured `options` and returns it. A plugin is
+   * code: loading a config runs the plugins it names.
    */
-  async loadPlugin(modulePath: string): Promise<void> {
+  async loadPlugin(spec: PluginConfig): Promise<void> {
+    const { name: modulePath, options = {} } = typeof spec === 'string' ? { name: spec } : spec;
+    if (modulePath.startsWith('./') || modulePath.startsWith('../')) {
+      throw new Error(
+        `Plugin path ${modulePath} is relative, and only a config read from a file can resolve it. ` +
+          'Use an absolute path or a package name.'
+      );
+    }
     try {
-      const module = await import(modulePath);
-      const plugin = module.default || module;
+      const module = await import(isAbsolute(modulePath) ? pathToFileURL(modulePath).href : modulePath);
+      const exported = module.default || module;
+      const plugin = typeof exported === 'function' ? await exported(options) : exported;
 
       if (this.isValidPlugin(plugin)) {
         this.registerPlugin(plugin);
