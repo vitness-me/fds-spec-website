@@ -508,6 +508,10 @@ export class Transformer {
       throw new Error(`maxRecords must be a positive whole number, got ${maxRecords}`);
     }
 
+    if (ids?.length === 0) {
+      throw new Error('ids lists no record: give at least one id, or leave ids out');
+    }
+
     let indexes = Array.from({ length: count }, (_, index) => index);
     if (ids) {
       const idsOf = new Map(

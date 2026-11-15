@@ -239,11 +239,11 @@ fds-transformer transform --config ./mapping.json --input ./data.json
 }
 ```
 
-- **Auth.** The CLI's own sign-in is the only auth: run `claude` once and log in, or set `CLAUDE_CODE_OAUTH_TOKEN` from `claude setup-token`. No key is read, written or logged. `ANTHROPIC_*`, other `CLAUDE_CODE_*`, `AWS_*`, `GOOGLE_*`, `VERTEX_*` and `OPENROUTER_*` variables are removed from the CLI's environment, so it can never fall back to API billing, a proxy or a cloud provider.
+- **Auth.** The CLI's own sign-in is the only auth: run `claude` once and log in with a Claude subscription, or set `CLAUDE_CODE_OAUTH_TOKEN` from `claude setup-token`. No key is read, written or logged. `ANTHROPIC_*`, other `CLAUDE_CODE_*`, `AWS_*`, `GOOGLE_*`, `VERTEX_*` and `OPENROUTER_*` variables are removed from the CLI's environment and user, project and local settings are not loaded, so an API key, a different API endpoint or a cloud provider set there is never used. The provider cannot tell what kind of account the CLI itself is signed in with: a CLI logged in with an Anthropic Console account, or given an `apiKeyHelper` by managed policy settings, bills that account.
 - **Isolation.** The CLI runs in print mode with no tools, no MCP servers, no settings, CLAUDE.md or skills, and no saved session, from the system temp directory.
 - **Models.** Every enrichment call, in every tier, is written by `writerModel` (default `claude-opus-5-5`); the tiers' own `model`s are not used. `checkerModel` (default `claude-sonnet-5-5`) is exposed on the provider for a caller's check pass. `temperature` and `maxTokens` have no CLI flag and are not applied.
-- **Failures.** A CLI that cannot answer (not signed in, an API error, a timeout after `timeoutMs`, default 10 minutes) fails the call, like an OpenRouter API error: nothing is written. `command` names the executable if `claude` is not on `PATH`.
-- **Smoke test.** `node scripts/smoke-claude-code.mjs [writer-model]`, after `npm run build`, enriches two exercises through the real CLI and prints what was written and its provenance. It is never run in CI.
+- **Failures.** A CLI that cannot answer (not signed in, an API error, a timeout after `timeoutMs`, default 10 minutes) fails the call, like an OpenRouter API error: nothing is written. A degrade retries with the same writer model. `command` names the executable if `claude` is not on `PATH`.
+- **Smoke test.** `node scripts/smoke-claude-code.mjs [writer-model]`, after `npm run build`, enriches two exercises through the real CLI and prints what was written and its provenance. It is never run in CI, where a stub stands in for the CLI, so it is also the check that the flags the provider passes still exist in the installed CLI.
 
 ### Enriching chosen records
 

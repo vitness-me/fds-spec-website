@@ -84,6 +84,12 @@ describe('transformAllBatch record selection', () => {
     ).rejects.toThrow(/not in the input: no-such-exercise/);
   });
 
+  it('refuses an empty id list rather than running nothing', async () => {
+    await expect(
+      new Transformer({ config: config() }).transformAllBatch(sources(), { ids: [] })
+    ).rejects.toThrow(/ids lists no record/);
+  });
+
   it.each([0, -1, 1.5])('refuses maxRecords %s', async (maxRecords) => {
     await expect(
       new Transformer({ config: config() }).transformAllBatch(sources(), { maxRecords })

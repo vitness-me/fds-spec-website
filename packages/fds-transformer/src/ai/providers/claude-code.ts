@@ -5,7 +5,7 @@
  * The CLI runs with no tools, no MCP servers, no settings, CLAUDE.md or
  * skills, no saved session, and outside any project, so the session does
  * nothing but answer the prompt. A request schema is passed as
- * `--json-schema`. Variables that would route the CLI to API billing, a proxy,
+ * `--json-schema`. Variables that would route the CLI to an API key, another API endpoint,
  * a cloud provider or a parent session are removed from its environment; the
  * provider itself reads no credential.
  */
@@ -18,9 +18,11 @@ import { JSON_SYSTEM_PROMPT, jsonReply } from '../response-schema.js';
 export const DEFAULT_WRITER_MODEL = 'claude-opus-5-5';
 export const DEFAULT_CHECKER_MODEL = 'claude-sonnet-5-5';
 const DEFAULT_TIMEOUT_MS = 600_000;
+/** How long a timed-out CLI has to exit after SIGTERM before it is killed */
+const KILL_GRACE_MS = 5_000;
 
 /**
- * Variables that route the CLI to an API key, a proxy, a cloud provider or a
+ * Variables that route the CLI to an API key, another API endpoint, a cloud provider or a
  * parent Claude Code session. CLAUDE_CODE_OAUTH_TOKEN, the sign-in
  * `claude setup-token` makes, is a subscription sign-in and is kept, as is
  * CLAUDE_CONFIG_DIR.
@@ -131,6 +133,7 @@ export class ClaudeCodeProvider implements AIProvider {
       let stderr = '';
       const timer = setTimeout(() => {
         child.kill('SIGTERM');
+        setTimeout(() => child.exitCode === null && child.signalCode === null && child.kill('SIGKILL'), KILL_GRACE_MS).unref();
         reject(new ClaudeCodeError(`${this.command} timed out after ${this.timeoutMs} ms`));
       }, this.timeoutMs);
       // Decoded per stream, so a character split across chunks stays whole

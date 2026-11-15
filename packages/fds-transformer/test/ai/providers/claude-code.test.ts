@@ -14,6 +14,7 @@ import {
 } from '../../../src/ai/providers/claude-code.js';
 import { EnrichmentEngine } from '../../../src/ai/enrichment-engine.js';
 import { readReply } from '../../../src/ai/response-schema.js';
+import { exerciseTarget } from '../../support/exercise-target.js';
 import {
   ClaudeStub,
   cliResult,
@@ -202,6 +203,25 @@ describe('ClaudeCodeProvider', () => {
 });
 
 describe('EnrichmentEngine with provider claude-code', () => {
+  it('records structured-output retries exhausted as an invalid abstention, not a failure', async () => {
+    vi.spyOn(console, 'warn').mockImplementation(() => {});
+    stub.reply(structuredRetriesExhausted());
+    const tier = { model: 'unused', temperature: 0, maxTokens: 10, batchSize: 25, priority: 'balanced' as const };
+    const engine = new EnrichmentEngine({
+      provider: 'claude-code',
+      claudeCode: { command: stub.command },
+      tiers: { simple: tier, medium: tier, complex: { ...tier, batchSize: 1 } },
+      fields: { 'canonical.description': { tier: 'simple', prompt: 'description' } },
+      checkpoint: { enabled: false, saveInterval: 1 },
+    });
+
+    const result = await engine.enrichBatch([{ id: 'ex-1', slug: 'push-up', name: 'Push Up' }], { target: exerciseTarget });
+
+    expect(result.results.size).toBe(0);
+    expect(result.failedIds).toEqual([]);
+    expect(result.abstentions.map((a) => a.reason)).toEqual(['invalid']);
+  });
+
   it('needs no API key, and builds the provider from enrichment.claudeCode', () => {
     vi.stubEnv('OPENROUTER_API_KEY', '');
     const engine = new EnrichmentEngine({

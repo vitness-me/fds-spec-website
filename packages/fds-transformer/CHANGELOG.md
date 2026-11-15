@@ -15,8 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   provenance. A refusal, a `max_tokens` stop or a reply that never matched its
   schema is an abstention; a CLI that cannot answer fails the call. The CLI
   runs with no tools, MCP servers, settings or saved session. No key is read:
-  API-key, proxy and cloud-provider variables are removed from its
-  environment, so it cannot fall back to API billing. `enrichment.claudeCode`
+  API-key, API-endpoint and cloud-provider variables are removed from its
+  environment, so the CLI answers on its own sign-in. `enrichment.claudeCode`
   sets `writerModel` (default `claude-opus-5-5`), which writes every tier,
   `checkerModel` (default `claude-sonnet-5-5`) for a caller's check pass,
   `command` and `timeoutMs`. `scripts/smoke-claude-code.mjs` is a manual
