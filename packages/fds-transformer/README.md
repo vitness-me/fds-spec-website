@@ -126,9 +126,9 @@ Create a `mapping.json` file to define how source fields map to FDS:
 
 The same input and config give byte-identical output. Use `uuidv5` for ids and
 take timestamps from the source or a fixed `clock`. Two records that produce the
-same `canonical.slug` fail the run before anything is written. Enrichment
-checkpoints are keyed by each record's stable id plus a hash of what the model
-is given, so `--resume` reuses a result only for a record that has not changed.
+same `canonical.slug` or id fail the run before anything is written. Enrichment
+checkpoints are keyed by each record's slug plus a hash of what the model is
+given, so `--resume` reuses a result only for a record that has not changed.
 
 ## AI Enrichment
 
@@ -294,6 +294,9 @@ Use in config:
   }
 }
 ```
+
+A relative path resolves against the mapping file. A plugin is code: loading a
+mapping file runs the plugins it names, so use mapping files you trust.
 
 ## Example: Full Enrichment Workflow
 

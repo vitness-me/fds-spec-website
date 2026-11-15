@@ -17,7 +17,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Config `plugins` are loaded.** They were declared and never read. A string
   or `{ name, options }` names the module; a relative path resolves against the
   config file; a module may export a factory that receives `options`. A plugin
-  that fails to load fails the run.
+  that fails to load fails the run. A plugin is code, so loading a mapping file
+  now runs the plugins it names: use mapping files you trust.
 
 ### Changed
 
@@ -26,13 +27,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   zone) when the source is empty, and throws when there is neither. Set `"clock": "now"` to
   keep the old behaviour. A source value that is not a date throws and names
   the value.
-- **A slug collision fails the run.** Two records that produce the same
+- **A slug or id collision fails the run.** Two records that produce the same
   `canonical.slug` used to overwrite each other's `<slug>.json` and swap
-  enrichment results; now the run stops and names the records.
+  enrichment results, and with `uuidv5` two records whose names match share an
+  id. Now the run stops and names the records.
 - **Enrichment checkpoints resume.** Records were checkpointed under their
   `exerciseId`, a fresh random UUID on every run, so a resume never matched.
-  The key is now the record's stable id plus a hash of the input the model is
-  given, and a record that changed since the checkpoint is enriched again. A
+  The key is now the record's slug, unique within a run, plus a hash of the
+  input the model is given, so a resume matches even when `exerciseId` is a
+  random `uuid`, and a record that changed since the checkpoint is enriched again. A
   record skips only the tiers its checkpoint already holds, so a tier that
   failed is retried. Checkpoints written by 0.2.0 do not match and are ignored.
 

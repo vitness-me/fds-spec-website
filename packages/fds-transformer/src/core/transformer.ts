@@ -21,7 +21,7 @@ import { DEFAULT_SCHEMA_VERSION } from '../schemas/versions.js';
 import { EnrichmentEngine, type ExerciseInput, type BatchEnrichmentOptions, type BatchEnrichmentResult } from '../ai/enrichment-engine.js';
 import { ConfigLoader } from '../config/config-loader.js';
 import { checkpointKey } from '../ai/checkpoint-manager.js';
-import { assertUniqueSlugs } from './slug-collisions.js';
+import { assertUniqueIdentities } from './identity-collisions.js';
 
 export interface TransformerOptions extends TransformOptions {
   config?: MappingConfig | string;
@@ -234,7 +234,7 @@ export class Transformer {
     for await (const result of this.transformStream(sources)) {
       results.push(result);
     }
-    assertUniqueSlugs(results.map((result) => result.data));
+    assertUniqueIdentities(results.map((result) => result.data));
     return results;
   }
 
@@ -312,11 +312,11 @@ export class Transformer {
 
     const mappedBySourceIndex: Record<string, unknown>[] = [];
     for (const { index, mapped } of mappedExercises) mappedBySourceIndex[index] = mapped;
-    assertUniqueSlugs(mappedBySourceIndex);
+    assertUniqueIdentities(mappedBySourceIndex);
 
     // Phase 2: Batch enrichment (if tiered enrichment is configured)
     let enrichmentResults: BatchEnrichmentResult | null = null;
-    // Enrichment is keyed by stable id plus input hash, so a resumed run
+    // Enrichment is keyed by slug plus input hash, so a resumed run
     // reuses a checkpointed result only for an unchanged record
     const enrichmentKeys = new Map<number, string>();
 
@@ -340,7 +340,8 @@ export class Transformer {
           requiredEquipment:
             (equipment?.required as Array<{ id: string; name: string }>) || undefined,
         };
-        const key = checkpointKey(this.stableIdOf(mapped, index), input);
+        // The slug, unique in a run, keeps the key stable even when exerciseId is a random uuid
+        const key = checkpointKey(input.slug, input);
         enrichmentKeys.set(index, key);
         return { id: key, ...input };
       });

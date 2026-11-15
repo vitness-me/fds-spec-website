@@ -116,10 +116,17 @@ export class TransformRegistry {
    * Load a plugin named in a config's `plugins`.
    *
    * The module's default export (or the module itself) is the plugin, or a
-   * function that takes the configured `options` and returns it.
+   * function that takes the configured `options` and returns it. A plugin is
+   * code: loading a config runs the plugins it names.
    */
   async loadPlugin(spec: PluginConfig): Promise<void> {
     const { name: modulePath, options = {} } = typeof spec === 'string' ? { name: spec } : spec;
+    if (modulePath.startsWith('./') || modulePath.startsWith('../')) {
+      throw new Error(
+        `Plugin path ${modulePath} is relative, and only a config read from a file can resolve it. ` +
+          'Use an absolute path or a package name.'
+      );
+    }
     try {
       const module = await import(isAbsolute(modulePath) ? pathToFileURL(modulePath).href : modulePath);
       const exported = module.default || module;

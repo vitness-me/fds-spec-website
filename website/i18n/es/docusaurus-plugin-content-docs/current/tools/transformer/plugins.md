@@ -273,7 +273,7 @@ Agregar los plugins al archivo `mapping.json`:
 }
 ```
 
-Una ruta relativa se resuelve respecto al archivo de mapeo. Un plugin que no se puede cargar hace fallar la ejecución.
+Una ruta relativa se resuelve respecto al archivo de mapeo. Un plugin que no se puede cargar hace fallar la ejecución. Un plugin es código: cargar un archivo de mapeo ejecuta los plugins que nombra, así que usa solo archivos de mapeo de confianza.
 
 ### Con opciones
 

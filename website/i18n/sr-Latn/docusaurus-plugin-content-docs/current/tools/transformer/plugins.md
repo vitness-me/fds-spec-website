@@ -273,7 +273,7 @@ Dodajte dodatke u svoj `mapping.json`:
 }
 ```
 
-Relativna putanja se razrešava u odnosu na datoteku mapiranja. Dodatak koji ne može da se učita obara pokretanje.
+Relativna putanja se razrešava u odnosu na datoteku mapiranja. Dodatak koji ne može da se učita obara pokretanje. Dodatak je kod: učitavanje datoteke mapiranja pokreće dodatke koje ona navodi, pa koristite samo datoteke mapiranja kojima verujete.
 
 ### Sa opcijama
 

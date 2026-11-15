@@ -44,6 +44,30 @@ const mappingConfig = (overrides: Partial<MappingConfig> = {}): MappingConfig =>
   ...overrides,
 });
 
+const DESCRIPTION = { 'canonical.description': { tier: 'simple' as const, prompt: 'description' } };
+const CONTRAINDICATIONS = {
+  'constraints.contraindications': { tier: 'medium' as const, prompt: 'constraints' },
+};
+
+const enrichment = (fields: EnrichmentConfig['fields'] = DESCRIPTION): EnrichmentConfig => ({
+  enabled: true,
+  provider: 'openrouter',
+  apiKey: 'test-key-never-sent',
+  tiers: {
+    simple: { model: 'test/simple', temperature: 0, maxTokens: 100, batchSize: 1, priority: 'speed' },
+    medium: { model: 'test/medium', temperature: 0, maxTokens: 100, batchSize: 1, priority: 'balanced' },
+    complex: { model: 'test/complex', temperature: 0, maxTokens: 100, batchSize: 1, priority: 'accuracy' },
+  },
+  fields,
+  fallback: {
+    retries: 0,
+    degradeModel: false,
+    useDefaults: false,
+    degradeChain: { complex: null, medium: null, simple: null },
+  },
+  checkpoint: { enabled: true, saveInterval: 1 },
+});
+
 let workDir: string;
 
 beforeEach(() => {
@@ -84,7 +108,7 @@ describe('slug collisions', () => {
     { v6Id: 'v6-2', name: 'bench press' },
     { v6Id: 'v6-3', name: 'Back Squat' },
   ];
-  const message = /"back-squat".*#1, #3/;
+  const message = /canonical.slug "back-squat" from source records #1, #3/;
 
   it('fail transformAll', async () => {
     await expect(
@@ -93,14 +117,30 @@ describe('slug collisions', () => {
   });
 
   it('fail transformAllBatch before any enrichment', async () => {
+    const transformer = new Transformer({ config: mappingConfig({ enrichment: enrichment() }) });
+    await transformer.init();
+    const complete = vi.spyOn(transformer.getEnrichmentEngine()!.getProvider()!, 'complete');
+
     await expect(
-      new Transformer({ config: mappingConfig() }).transformAllBatch(colliding())
+      transformer.transformAllBatch(colliding(), { outputDirectory: workDir })
     ).rejects.toThrow(message);
+    expect(complete).not.toHaveBeenCalled();
   });
 
   it('fail the batch processor the CLI runs', async () => {
     const transformer = new Transformer({ config: mappingConfig() });
     await expect(new BatchProcessor(transformer).process(colliding())).rejects.toThrow(message);
+  });
+
+  it('fail the run for a repeated exerciseId too', async () => {
+    // uuidv5 gives two records one id when their names match
+    const repeated = [
+      { v6Id: 'v6-1', name: 'back squat' },
+      { v6Id: 'v6-1', name: 'front squat' },
+    ];
+    await expect(
+      new Transformer({ config: mappingConfig() }).transformAll(repeated)
+    ).rejects.toThrow(/exerciseId "[0-9a-f-]{36}" from source records #1, #2/);
   });
 
   it('leave distinct slugs alone', async () => {
@@ -163,6 +203,13 @@ describe('config plugins', () => {
     ]);
   });
 
+  it('refuse a relative path in a config that was not read from a file', async () => {
+    // Nothing to resolve it against, and import() would read it beside the transformer itself
+    await expect(
+      new Transformer({ config: mappingConfig({ plugins: ['./local.mjs'] }) }).init()
+    ).rejects.toThrow(/relative/);
+  });
+
   it('fail the run when one cannot be loaded', async () => {
     const path = writePlugin('broken.mjs', `export default { name: 'broken' };`);
     await expect(
@@ -172,30 +219,6 @@ describe('config plugins', () => {
 });
 
 describe('checkpoint keys', () => {
-  const DESCRIPTION = { 'canonical.description': { tier: 'simple' as const, prompt: 'description' } };
-  const CONTRAINDICATIONS = {
-    'constraints.contraindications': { tier: 'medium' as const, prompt: 'constraints' },
-  };
-
-  const enrichment = (fields: EnrichmentConfig['fields'] = DESCRIPTION): EnrichmentConfig => ({
-    enabled: true,
-    provider: 'openrouter',
-    apiKey: 'test-key-never-sent',
-    tiers: {
-      simple: { model: 'test/simple', temperature: 0, maxTokens: 100, batchSize: 1, priority: 'speed' },
-      medium: { model: 'test/medium', temperature: 0, maxTokens: 100, batchSize: 1, priority: 'balanced' },
-      complex: { model: 'test/complex', temperature: 0, maxTokens: 100, batchSize: 1, priority: 'accuracy' },
-    },
-    fields,
-    fallback: {
-      retries: 0,
-      degradeModel: false,
-      useDefaults: false,
-      degradeChain: { complex: null, medium: null, simple: null },
-    },
-    checkpoint: { enabled: true, saveInterval: 1 },
-  });
-
   /**
    * One run, with every prompt recorded. A prompt for which `fails` answers
    * true throws, so that record and tier stay out of the checkpoint.
@@ -246,12 +269,23 @@ describe('checkpoint keys', () => {
     await enrichRun(sources(), failsFor('deadlift'));
 
     const checkpoint = JSON.parse(readFileSync(join(workDir, CHECKPOINT_FILENAME), 'utf8'));
-    const [squat] = (
-      await new Transformer({ config: mappingConfig() }).transformAll(sources())
-    ).map((r) => (r.data as any).exerciseId);
 
     expect(checkpoint.completedIds).toHaveLength(2);
-    expect(checkpoint.completedIds[0]).toMatch(new RegExp(`^${squat}@[0-9a-f]{16}$`));
+    expect(checkpoint.completedIds[0]).toMatch(/^back-squat@[0-9a-f]{16}$/);
+  });
+
+  it('let a resume match when exerciseId is a random uuid', async () => {
+    const config = () => {
+      const c = mappingConfig({ enrichment: enrichment() });
+      c.mappings.exerciseId = { from: null, transform: 'uuid' };
+      return c;
+    };
+    await enrichRun(sources(), failsFor('deadlift'), undefined, config());
+
+    const resumed = await enrichRun(sources(), undefined, undefined, config());
+
+    expect(resumed.prompts).toHaveLength(1);
+    expect(resumed.prompts[0]).toContain('(slug: deadlift)');
   });
 
   it('let a resumed run reuse its checkpoint', async () => {

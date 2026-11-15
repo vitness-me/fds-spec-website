@@ -273,7 +273,7 @@ Add plugins to your `mapping.json`:
 }
 ```
 
-A relative path resolves against the mapping file. A plugin that cannot be loaded fails the run.
+A relative path resolves against the mapping file. A plugin that cannot be loaded fails the run. A plugin is code: loading a mapping file runs the plugins it names, so use mapping files you trust.
 
 ### With Options
 
