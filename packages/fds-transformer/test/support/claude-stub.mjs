@@ -6,7 +6,7 @@
  *
  * Call n records its arguments, stdin, working directory and environment
  * variable *names* to `<dir>/call-<n>.json`, then answers with
- * `<dir>/reply-<n>.json`: `{ stdout, stderr?, exitCode?, delayMs?, splitAtByte? }`. With no
+ * `<dir>/reply-<n>.json`: `{ stdout, stderr?, exitCode?, delayMs?, splitAtByte?, ignoreSigterm? }`. With no
  * reply queued it fails the way the CLI does. It never reads a value from its
  * environment and never touches the network.
  */
@@ -23,7 +23,7 @@ process.stdin.on('end', () => {
   const n = readdirSync(dir).filter((name) => name.startsWith('call-')).length;
   writeFileSync(
     join(dir, `call-${n}.json`),
-    JSON.stringify({ args, stdin, cwd: process.cwd(), env: Object.keys(process.env).sort() })
+    JSON.stringify({ args, stdin, cwd: process.cwd(), env: Object.keys(process.env).sort(), pid: process.pid })
   );
 
   const replyPath = join(dir, `reply-${n}.json`);
@@ -33,6 +33,9 @@ process.stdin.on('end', () => {
         stdout: JSON.stringify({ type: 'result', subtype: 'success', is_error: true, result: 'stub: no reply queued' }),
         exitCode: 1,
       };
+
+  // A CLI that ignores SIGTERM, to show a timed-out call is still stopped
+  if (reply.ignoreSigterm) process.on('SIGTERM', () => {});
 
   setTimeout(() => {
     // splitAtByte sends stdout as two writes, cut at that byte

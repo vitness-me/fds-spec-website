@@ -18,6 +18,8 @@ export interface ClaudeReply {
   delayMs?: number;
   /** Send stdout as two writes, cut at this byte */
   splitAtByte?: number;
+  /** Ignore SIGTERM, as a hung CLI might */
+  ignoreSigterm?: boolean;
 }
 
 export interface ClaudeCall {
@@ -26,6 +28,7 @@ export interface ClaudeCall {
   cwd: string;
   /** Environment variable names the CLI was started with; never values */
   env: string[];
+  pid: number;
 }
 
 const STUB = join(dirname(fileURLToPath(import.meta.url)), 'claude-stub.mjs');

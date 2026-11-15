@@ -183,6 +183,21 @@ describe('ClaudeCodeProvider', () => {
     expect(error.message).toMatch(/exited with 1: Not logged in/);
   });
 
+  it('keeps a credential the CLI prints out of the error', async () => {
+    stub.reply(
+      { stdout: '', stderr: 'proxy https://user:hunter2@proxy.local failed; key sk-ant-api03-abcDEF_123', exitCode: 1 },
+      apiError('API Error: 401 Authorization: Bearer abc.def.ghi rejected')
+    );
+    const first = await provider().complete('prompt').catch((e: Error) => e.message);
+    const second = await provider().complete('prompt').catch((e: Error) => e.message);
+    expect(first).toContain('https://[redacted]@proxy.local');
+    expect(first).toContain('sk-ant-[redacted]');
+    expect(second).toContain('Bearer [redacted]');
+    for (const message of [first, second]) {
+      expect(message).not.toMatch(/hunter2|abcDEF_123|abc\.def\.ghi/);
+    }
+  });
+
   it('throws when the command cannot be started', async () => {
     const p = new ClaudeCodeProvider({ command: `${stub.command}-missing` });
     await expect(p.complete('prompt')).rejects.toThrow(/Could not start/);
@@ -192,6 +207,23 @@ describe('ClaudeCodeProvider', () => {
     stub.reply({ ...structured({ a: 'x' }), delayMs: 5_000 });
     await expect(provider({ timeoutMs: 200 }).complete('prompt')).rejects.toThrow(/timed out after 200 ms/);
   });
+
+  it('kills a timed-out CLI that ignores SIGTERM', async () => {
+    stub.reply({ ...structured({ a: 'x' }), delayMs: 30_000, ignoreSigterm: true });
+    await expect(provider({ timeoutMs: 200 }).complete('prompt')).rejects.toThrow(/timed out/);
+    const { pid } = stub.calls[0];
+    const alive = () => {
+      try {
+        process.kill(pid, 0);
+        return true;
+      } catch {
+        return false;
+      }
+    };
+    expect(alive()).toBe(true);
+    await new Promise((resolve) => setTimeout(resolve, 6_000));
+    expect(alive()).toBe(false);
+  }, 10_000);
 
   it('completeJSON parses the reply, and never a refusal or a cut-off one', async () => {
     stub.reply(cliResult({ result: '```json\n{"a":"x"}\n```' }), refusal(), maxTokens());

@@ -37,6 +37,20 @@ function subscriptionEnv(): NodeJS.ProcessEnv {
   );
 }
 
+/**
+ * CLI text fit for an error message: at most 300 characters, with anything
+ * shaped like an Anthropic key or token, a bearer token or the credentials in
+ * a URL replaced, since the message is returned and may be logged.
+ */
+function redacted(text: string): string {
+  return text
+    .replace(/sk-ant-[A-Za-z0-9_-]+/g, 'sk-ant-[redacted]')
+    .replace(/(Bearer\s+)\S+/gi, '$1[redacted]')
+    .replace(/(\w+:\/\/)[^\s/@]+@/g, '$1[redacted]@')
+    .trim()
+    .slice(0, 300);
+}
+
 /** Error thrown when the CLI cannot answer: not started, not signed in, an API error, a timeout */
 export class ClaudeCodeError extends Error {
   constructor(message: string) {
@@ -95,7 +109,7 @@ export class ClaudeCodeProvider implements AIProvider {
     try {
       output = JSON.parse(stdout) as CliResult;
     } catch {
-      throw new ClaudeCodeError(`${this.command} exited with ${code}: ${stderr.trim().slice(0, 300)}`);
+      throw new ClaudeCodeError(`${this.command} exited with ${code}: ${redacted(stderr)}`);
     }
 
     const usage = usageOf(output);
@@ -111,7 +125,7 @@ export class ClaudeCodeProvider implements AIProvider {
       return { ...reply, content: '', finishReason: 'stop' };
     }
     if (output.is_error || code !== 0) {
-      throw new ClaudeCodeError(output.result || `${this.command} exited with ${code}`);
+      throw new ClaudeCodeError(redacted(output.result ?? '') || `${this.command} exited with ${code}`);
     }
     const content =
       output.structured_output !== undefined ? JSON.stringify(output.structured_output) : output.result ?? '';
