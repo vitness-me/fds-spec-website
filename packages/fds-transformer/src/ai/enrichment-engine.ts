@@ -67,6 +67,11 @@ export interface ExerciseInput {
   primaryTargets?: Array<{ id: string; name: string }>;
   /** Required equipment */
   requiredEquipment?: Array<{ id: string; name: string }>;
+  /**
+   * Configured field paths that are gaps in this exercise's mapped record.
+   * Only these may be written. When absent, every configured field may be.
+   */
+  fieldsToEnrich?: string[];
   /** Any additional context */
   [key: string]: unknown;
 }
@@ -195,6 +200,55 @@ function formatDuration(ms: number): string {
   const hours = Math.floor(minutes / 60);
   const remainingMinutes = minutes % 60;
   return `${hours}h ${remainingMinutes}m`;
+}
+
+export type EnrichmentWhen = NonNullable<NonNullable<FieldMappingObject['enrichment']>['when']>;
+
+/**
+ * Whether a value holds nothing: absent, null, an empty string, an empty
+ * array or an empty object. Enrichment may write only into such a value.
+ */
+export function isEmptyValue(value: unknown): boolean {
+  if (value === undefined || value === null || value === '') return true;
+  if (Array.isArray(value)) return value.length === 0;
+  if (typeof value === 'object') return Object.keys(value).length === 0;
+  return false;
+}
+
+/**
+ * Whether `path` in `doc` is a gap that enrichment should fill under `when`.
+ *
+ * - `missing` (the default): the path is absent.
+ * - `notFound`: the path is absent or null.
+ * - `empty`: the path holds nothing (see {@link isEmptyValue}).
+ * - `always`: the same as `empty`, because a value is never replaced.
+ */
+export function needsEnrichment(
+  doc: Record<string, unknown>,
+  path: string,
+  when: EnrichmentWhen = 'missing'
+): boolean {
+  const value = getPathValue(doc, path);
+  switch (when) {
+    case 'always':
+    case 'empty':
+      return isEmptyValue(value);
+    case 'missing':
+      return value === undefined;
+    case 'notFound':
+      return value === undefined || value === null;
+    default:
+      return false;
+  }
+}
+
+function getPathValue(obj: Record<string, unknown>, path: string): unknown {
+  let current: unknown = obj;
+  for (const part of path.split('.')) {
+    if (current === null || current === undefined) return undefined;
+    current = (current as Record<string, unknown>)[part];
+  }
+  return current;
 }
 
 
@@ -676,28 +730,38 @@ export class EnrichmentEngine {
       };
     }
 
-    // Get unique prompt IDs for this tier's fields
-    const promptIds = new Set<string>();
-    for (const fieldConfig of fields.values()) {
-      promptIds.add(fieldConfig.prompt);
+    // Configured field paths per prompt for this tier's fields
+    const pathsByPrompt = new Map<string, string[]>();
+    for (const [fieldPath, fieldConfig] of fields) {
+      pathsByPrompt.set(fieldConfig.prompt, [
+        ...(pathsByPrompt.get(fieldConfig.prompt) ?? []),
+        fieldPath,
+      ]);
     }
-
-    // Convert exercises to tier prompt context format
-    const exerciseContexts: TierExerciseContext[] = batch.exercises.map((e) => ({
-      name: e.name,
-      slug: e.slug,
-      description: e.description,
-      primaryTargets: e.primaryTargets,
-      requiredEquipment: e.requiredEquipment,
-      exerciseType: e.exerciseType as string | undefined,
-    }));
 
     // Process each prompt for this tier
     const debug = process.env.DEBUG_ENRICHMENT === 'true';
     if (debug) {
-      console.log(`[DEBUG processTierBatch] tier: ${tier}, promptIds: ${[...promptIds].join(', ')}`);
+      console.log(`[DEBUG processTierBatch] tier: ${tier}, promptIds: ${[...pathsByPrompt.keys()].join(', ')}`);
     }
-    for (const promptId of promptIds) {
+    for (const [promptId, promptPaths] of pathsByPrompt) {
+      // Ask only for exercises with a gap in one of this prompt's fields
+      const exercises = batch.exercises.filter(
+        (e) => !e.fieldsToEnrich || promptPaths.some((p) => e.fieldsToEnrich!.includes(p))
+      );
+      if (exercises.length === 0) {
+        continue;
+      }
+
+      const exerciseContexts: TierExerciseContext[] = exercises.map((e) => ({
+        name: e.name,
+        slug: e.slug,
+        description: e.description,
+        primaryTargets: e.primaryTargets,
+        requiredEquipment: e.requiredEquipment,
+        exerciseType: e.exerciseType as string | undefined,
+      }));
+
       const builtPrompt = buildTierPrompt(tier, promptId, exerciseContexts);
       if (!builtPrompt) {
         if (debug) {
@@ -711,7 +775,7 @@ export class EnrichmentEngine {
 
       // Report progress
       if (onProgress) {
-        const exercise = batch.exercises[0];
+        const exercise = exercises[0];
         onProgress({
           exercise: {
             current: batch.batchNumber,
@@ -758,7 +822,12 @@ export class EnrichmentEngine {
         }
 
         // Parse and distribute results
-        const parsedResults = this.parseResponse(response.content, batch.exercises, promptId);
+        const parsedResults = this.parseResponse(
+          response.content,
+          exercises,
+          promptId,
+          promptPaths
+        );
 
         if (debug) {
           console.log(`[DEBUG processTierBatch] Parsed results count: ${parsedResults.size}`);
@@ -775,8 +844,8 @@ export class EnrichmentEngine {
         if (debug) {
           console.error(`[DEBUG processTierBatch] ERROR for promptId ${promptId}:`, error);
         }
-        // Mark batch as failed for this prompt
-        for (const exercise of batch.exercises) {
+        // Mark the exercises asked by this prompt as failed
+        for (const exercise of exercises) {
           if (!failedIds.includes(exercise.id)) {
             failedIds.push(exercise.id);
           }
@@ -860,8 +929,15 @@ export class EnrichmentEngine {
   private parseResponse(
     content: string,
     exercises: ExerciseInput[],
-    promptId: string
+    promptId: string,
+    promptPaths: string[]
   ): Map<string, Record<string, unknown>> {
+    // Only configured paths that are gaps in the exercise may be written
+    const writablePaths = (exercise: ExerciseInput) =>
+      exercise.fieldsToEnrich
+        ? promptPaths.filter((p) => exercise.fieldsToEnrich!.includes(p))
+        : promptPaths;
+
     const results = new Map<string, Record<string, unknown>>();
 
     // Debug logging
@@ -908,7 +984,10 @@ export class EnrichmentEngine {
           if (exercise) {
             // Remove slug from result and map fields
             const { slug: _slug, ...fields } = result;
-            const mapped = this.mapFieldsFromPrompt(promptId, fields);
+            const mapped = this.pickPaths(
+              this.mapFieldsFromPrompt(promptId, fields),
+              writablePaths(exercise)
+            );
             if (debug) {
               console.log(`[DEBUG parseResponse] mapped fields for ${exercise.id}:`, JSON.stringify(mapped, null, 2));
             }
@@ -919,7 +998,10 @@ export class EnrichmentEngine {
         // Single exercise response (complex tier)
         const exercise = exercises[0];
         if (exercise) {
-          const mapped = this.mapFieldsFromPrompt(promptId, parsed);
+          const mapped = this.pickPaths(
+            this.mapFieldsFromPrompt(promptId, parsed),
+            writablePaths(exercise)
+          );
           if (debug) {
             console.log(`[DEBUG parseResponse] single exercise mapped:`, JSON.stringify(mapped, null, 2));
           }
@@ -1078,7 +1160,7 @@ export class EnrichmentEngine {
     try {
       const result = await this.enrichComprehensive(context);
       if (result.success && result.data) {
-        return result;
+        return { ...result, data: this.pickPaths(result.data, fieldsNeedingEnrichment) };
       }
     } catch (error) {
       console.warn('Comprehensive enrichment failed, falling back to per-field:', error);
@@ -1249,21 +1331,7 @@ export class EnrichmentEngine {
     field: string,
     config: NonNullable<FieldMappingObject['enrichment']>
   ): boolean {
-    const when = config.when || 'missing';
-    const currentValue = this.getNestedValue(mapped, field);
-
-    switch (when) {
-      case 'always':
-        return true;
-      case 'missing':
-        return currentValue === undefined;
-      case 'empty':
-        return currentValue === undefined || currentValue === null || currentValue === '';
-      case 'notFound':
-        return currentValue === undefined || currentValue === null;
-      default:
-        return false;
-    }
+    return needsEnrichment(mapped, field, config.when);
   }
 
   /**
@@ -1390,17 +1458,22 @@ export class EnrichmentEngine {
    * Get nested value from object
    */
   private getNestedValue(obj: Record<string, unknown>, path: string): unknown {
-    const parts = path.split('.');
-    let current: unknown = obj;
+    return getPathValue(obj, path);
+  }
 
-    for (const part of parts) {
-      if (current === null || current === undefined) {
-        return undefined;
+  /**
+   * Keep only the values at `paths`, so a result never carries a field the
+   * configuration did not name for it.
+   */
+  private pickPaths(obj: Record<string, unknown>, paths: string[]): Record<string, unknown> {
+    const picked: Record<string, unknown> = {};
+    for (const path of paths) {
+      const value = getPathValue(obj, path);
+      if (value !== undefined) {
+        this.setNestedValue(picked, path, value);
       }
-      current = (current as Record<string, unknown>)[part];
     }
-
-    return current;
+    return picked;
   }
 
   /**

@@ -125,6 +125,8 @@ Create a `mapping.json` file to define how source fields map to FDS:
 
 The transformer supports **tiered AI enrichment** - a multi-tier system that uses different AI models based on field complexity:
 
+Enrichment fills gaps only. A model's value lands only in a field path listed under `enrichment.fields` (or, on the single-model path, a mapping with `enrichment.enabled`), and only where the mapped value is a gap under that field's `when`. A value the mapping wrote is never replaced. In the tiered path, `when` is read from the field's mapping (`mappings.<path>.enrichment.when`) and defaults to `"missing"`; a record with no gap in a prompt's fields is not sent to the model.
+
 ### Tiered Enrichment Configuration
 
 ```json
@@ -238,7 +240,7 @@ For simpler use cases, you can still use field-level enrichment:
 
 ### Enrichment Options
 
-- `when`: `"always"` | `"missing"` | `"empty"` | `"notFound"`
+- `when`: when a field counts as a gap to fill. `"missing"` (default): the path is absent. `"notFound"`: absent or `null`. `"empty"`: absent, `null`, `""`, `[]` or `{}`. `"always"`: the same as `"empty"`, because a mapped value is never replaced.
 - `prompt`: Built-in prompt name or custom prompt
 - `context`: Source fields to include as AI context
 - `fields`: Specific sub-fields to enrich

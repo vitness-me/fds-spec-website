@@ -18,7 +18,14 @@ import { MappingEngine } from './mapping-engine.js';
 import { RegistryManager } from '../registries/registry-manager.js';
 import { SchemaManager } from '../schemas/schema-manager.js';
 import { DEFAULT_SCHEMA_VERSION } from '../schemas/versions.js';
-import { EnrichmentEngine, type ExerciseInput, type BatchEnrichmentOptions, type BatchEnrichmentResult } from '../ai/enrichment-engine.js';
+import {
+  EnrichmentEngine,
+  isEmptyValue,
+  needsEnrichment,
+  type ExerciseInput,
+  type BatchEnrichmentOptions,
+  type BatchEnrichmentResult,
+} from '../ai/enrichment-engine.js';
 import { ConfigLoader } from '../config/config-loader.js';
 
 export interface TransformerOptions extends TransformOptions {
@@ -312,6 +319,8 @@ export class Transformer {
       this.config.enrichment?.enabled !== false &&
       this.enrichmentEngine.isTieredEnabled()
     ) {
+      const enrichedPaths = Object.keys(this.config.enrichment?.fields ?? {});
+
       // Prepare exercise inputs for batch enrichment
       const exerciseInputs: ExerciseInput[] = mappedExercises.map(({ mapped, index }) => {
         const canonical = mapped.canonical as Record<string, unknown> | undefined;
@@ -326,6 +335,9 @@ export class Transformer {
           primaryTargets: (targets?.primary as Array<{ id: string; name: string }>) || undefined,
           requiredEquipment:
             (equipment?.required as Array<{ id: string; name: string }>) || undefined,
+          fieldsToEnrich: enrichedPaths.filter((path) =>
+            needsEnrichment(mapped, path, this.enrichmentWhen(path))
+          ),
         };
       });
 
@@ -465,7 +477,17 @@ export class Transformer {
   }
 
   /**
-   * Deep merge source object into target
+   * The `when` a field's mapping sets for its enrichment, if any
+   */
+  private enrichmentWhen(path: string) {
+    const mapping = this.config.mappings?.[path];
+    return typeof mapping === 'object' ? mapping.enrichment?.when : undefined;
+  }
+
+  /**
+   * Deep merge enrichment into the mapped target, filling gaps only: a value
+   * lands only where the target holds nothing, so a mapped value is never
+   * replaced.
    */
   private deepMerge(
     target: Record<string, unknown>,
@@ -475,7 +497,11 @@ export class Transformer {
       const sourceValue = source[key];
       const targetValue = target[key];
 
-      if (
+      if (isEmptyValue(targetValue)) {
+        if (sourceValue !== undefined) {
+          target[key] = sourceValue;
+        }
+      } else if (
         sourceValue !== null &&
         typeof sourceValue === 'object' &&
         !Array.isArray(sourceValue) &&
@@ -488,9 +514,6 @@ export class Transformer {
           targetValue as Record<string, unknown>,
           sourceValue as Record<string, unknown>
         );
-      } else if (sourceValue !== undefined) {
-        // Overwrite with source value (including arrays)
-        target[key] = sourceValue;
       }
     }
   }

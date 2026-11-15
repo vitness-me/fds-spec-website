@@ -8,9 +8,13 @@
  * which of those values may land.
  */
 
-import { describe, it, expect, vi, afterEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { Transformer } from '../../src/core/transformer.js';
 import { EnrichmentEngine } from '../../src/ai/enrichment-engine.js';
+import { CheckpointManager } from '../../src/ai/checkpoint-manager.js';
+import { mkdtempSync, rmSync } from 'fs';
+import { join } from 'path';
+import { tmpdir } from 'os';
 import { getTierPrompts } from '../../src/ai/prompts/tier-prompts.js';
 import type {
   EnrichmentConfig,
@@ -158,12 +162,18 @@ async function stubbedTransformer(config: MappingConfig, tier: () => TierName) {
   };
 }
 
+// Offline: schemas come from the bundle, and no request leaves the test.
+beforeEach(() => {
+  vi.spyOn(globalThis, 'fetch').mockRejectedValue(new Error('offline'));
+  vi.spyOn(console, 'warn').mockImplementation(() => {});
+});
+
 afterEach(() => {
   vi.restoreAllMocks();
 });
 
 describe('Enrichment fills gaps only', () => {
-  it('never replaces a mapped value, and writes only configured gaps, for every prompt', async () => {
+  it('never replaces a mapped value, and writes only configured gaps, for every prompt', { timeout: 30_000 }, async () => {
     const random = prng(20261115);
     let cases = 0;
 
@@ -307,6 +317,43 @@ describe('Enrichment fills gaps only', () => {
     ]);
     expect(stub.asked).toEqual([]);
     expect(stats.apiCalls).toBe(0);
+  });
+
+  it('keeps a mapped value over an AI value resumed from a checkpoint', async () => {
+    const dir = mkdtempSync(join(tmpdir(), 'fds-gap-only-'));
+    try {
+      const config = baseConfig(
+        { 'canonical.description': { from: 'description' } },
+        { 'canonical.description': { tier: 'simple', prompt: 'description' } }
+      );
+      config.enrichment!.checkpoint = { enabled: true, saveInterval: 1 };
+
+      // An earlier run enriched the record while its description was a gap.
+      const checkpoint = new CheckpointManager(dir, config.enrichment!.checkpoint);
+      checkpoint.initialize({
+        inputFile: 'batch-enrichment',
+        totalExercises: 1,
+        config: { enabled: true, provider: 'openrouter', model: 'anthropic/claude-3.5-sonnet', ...config.enrichment },
+      });
+      checkpoint.update({
+        exerciseId: 'squat',
+        success: true,
+        currentTier: 'simple',
+        results: { simple: { canonical: { description: 'ai:stale' } } },
+      });
+      checkpoint.forceSave();
+
+      // The source now has one.
+      const stub = await stubbedTransformer(config, () => 'simple');
+      const { results } = await stub.transformer.transformAllBatch(
+        [{ id: 'squat', slug: 'squat', name: 'Squat', description: 'From the source.' }],
+        { resume: true, outputDirectory: dir }
+      );
+
+      expect((results[0].data as any).canonical.description).toBe('From the source.');
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
   });
 
   it('scopes engine results to configured field paths, not to the prompt', async () => {

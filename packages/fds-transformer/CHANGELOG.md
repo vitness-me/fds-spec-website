@@ -13,6 +13,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   which adds optional `license` and `attribution` on a view's asset. 1.0.0
   through 1.4.0 stay bundled; pin one to keep validating against it.
 
+### Fixed
+
+- **Enrichment fills gaps and never overwrites mapped values.** A model's value
+  used to overwrite whatever the mapping wrote, arrays included, and the tiered
+  path wrote every key a prompt returned: enabling `exerciseType` also replaced
+  `level`, and enabling `kineticChain` replaced force, mechanics, movement, tags
+  and secondary muscles. Now a value lands only in a configured field path and
+  only where the mapped value is a gap. The tiered path honours each field's
+  mapping `when` and sends only records with a gap. `when: "empty"` now also
+  counts `[]` and `{}` as empty, and `when: "always"` no longer replaces a
+  value.
+
 ## [0.2.0] - 2026-08-11
 
 Everything below shipped between 0.1.0 and this release. Two entries deserve
