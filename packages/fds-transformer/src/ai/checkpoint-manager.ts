@@ -11,7 +11,7 @@
 import { createHash } from 'crypto';
 import { existsSync, mkdirSync, readFileSync, renameSync, unlinkSync, writeFileSync } from 'fs';
 import { dirname, join } from 'path';
-import type { CheckpointConfig, CheckpointData, ModelProvenance, TierName } from '../core/types.js';
+import type { CheckpointConfig, CheckpointData, FieldProvenance, TierName } from '../core/types.js';
 
 /**
  * Checkpoint file name
@@ -61,7 +61,7 @@ export interface CheckpointUpdateOptions {
   /** Partial results for this exercise (tier -> field -> value) */
   results?: Record<string, Record<string, unknown>>;
   /** Origin of each enriched field path in `results` */
-  provenance?: Record<string, ModelProvenance>;
+  provenance?: Record<string, FieldProvenance>;
 }
 
 /**
@@ -333,7 +333,7 @@ export class CheckpointManager {
   /**
    * Get the origin of each enriched field, per exercise
    */
-  getAllProvenance(): Record<string, Record<string, ModelProvenance>> {
+  getAllProvenance(): Record<string, Record<string, FieldProvenance>> {
     return this.data?.provenance ?? {};
   }
 

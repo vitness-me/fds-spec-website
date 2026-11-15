@@ -627,7 +627,7 @@ export class EnrichmentEngine {
                 success: true,
                 currentTier: tier,
                 results: { [tier]: fields },
-                provenance: fieldProvenance as Record<string, ModelProvenance>,
+                provenance: fieldProvenance,
               });
             }
           }

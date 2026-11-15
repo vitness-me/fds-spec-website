@@ -22,12 +22,13 @@ const SCHEMA_PATH = join(
   '../../../../specification/schemas/transformer/provenance/v1.0.0/provenance.schema.json'
 );
 
-function publishedValidator() {
+const published = (() => {
   const schema = JSON.parse(readFileSync(SCHEMA_PATH, 'utf8'));
   const ajv = new Ajv2020({ strict: true, allErrors: true });
   addFormats(ajv);
   return { schema, validate: ajv.compile(schema) };
-}
+})();
+const publishedValidator = () => published;
 
 const CONFIG: MappingConfig = {
   version: '1.0.0',

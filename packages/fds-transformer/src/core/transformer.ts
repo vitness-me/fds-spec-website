@@ -23,7 +23,6 @@ import { SchemaManager } from '../schemas/schema-manager.js';
 import { DEFAULT_SCHEMA_VERSION } from '../schemas/versions.js';
 import {
   EnrichmentEngine,
-  getPathValue,
   isEmptyValue,
   needsEnrichment,
   type ExerciseInput,
@@ -507,16 +506,10 @@ export class Transformer {
     enrichmentProvenance: Record<string, FieldProvenance> | undefined
   ): void {
     if (!data) return;
-    // A path was a gap if it held nothing before the merge; the value landed
-    // if the path now holds it
-    const gaps = Object.keys(enrichmentProvenance ?? {}).filter((path) =>
-      isEmptyValue(getPathValue(mapped, path))
-    );
-    this.deepMerge(mapped, data);
-    for (const path of gaps) {
-      const value = getPathValue(data, path);
-      if (value !== undefined && getPathValue(mapped, path) === value) {
-        provenance[path] = enrichmentProvenance![path];
+    const filled = this.deepMerge(mapped, data);
+    for (const [path, origin] of Object.entries(enrichmentProvenance ?? {})) {
+      if (filled.some((f) => path === f || path.startsWith(`${f}.`))) {
+        provenance[path] = origin;
       }
     }
   }
@@ -524,19 +517,23 @@ export class Transformer {
   /**
    * Deep merge enrichment into the mapped target, filling gaps only: a value
    * lands only where the target holds nothing, so a mapped value is never
-   * replaced.
+   * replaced. Returns the paths it filled.
    */
   private deepMerge(
     target: Record<string, unknown>,
-    source: Record<string, unknown>
-  ): void {
+    source: Record<string, unknown>,
+    prefix = ''
+  ): string[] {
+    const filled: string[] = [];
     for (const key of Object.keys(source)) {
       const sourceValue = source[key];
       const targetValue = target[key];
+      const path = `${prefix}${key}`;
 
       if (isEmptyValue(targetValue)) {
         if (sourceValue !== undefined) {
           target[key] = sourceValue;
+          filled.push(path);
         }
       } else if (
         sourceValue !== null &&
@@ -546,11 +543,15 @@ export class Transformer {
         !Array.isArray(targetValue)
       ) {
         // Recursively merge objects
-        this.deepMerge(
-          targetValue as Record<string, unknown>,
-          sourceValue as Record<string, unknown>
+        filled.push(
+          ...this.deepMerge(
+            targetValue as Record<string, unknown>,
+            sourceValue as Record<string, unknown>,
+            `${path}.`
+          )
         );
       }
     }
+    return filled;
   }
 }

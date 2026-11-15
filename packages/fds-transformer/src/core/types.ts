@@ -185,7 +185,7 @@ export interface CheckpointData {
   /** Partial results: exerciseId -> tier -> field -> value */
   results: Record<string, Record<string, Record<string, unknown>>>;
   /** Origin of each enriched field: exerciseId -> field path -> provenance */
-  provenance?: Record<string, Record<string, ModelProvenance>>;
+  provenance?: Record<string, Record<string, FieldProvenance>>;
 }
 
 /** Cost estimate for a single tier */

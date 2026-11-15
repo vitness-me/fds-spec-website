@@ -626,7 +626,7 @@ async function writeOutput(
     const sidecarPath = `${dir}/${PROVENANCE_SIDECAR_FILENAME}`;
     await fs.writeFile(
       sidecarPath,
-      serializeProvenanceSidecar(buildProvenanceSidecar(results), prettyPrint)
+      serializeProvenanceSidecar(buildProvenanceSidecar(successfulResults), prettyPrint)
     );
     log('info', `Wrote provenance for each field to ${sidecarPath}`);
   } else {

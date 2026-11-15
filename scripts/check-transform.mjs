@@ -870,7 +870,7 @@ if (!(await access(join(ROOT, CLI_PATH)).then(() => true, () => false))) {
   process.exit(1);
 }
 
-const { manifest, versionsOf } = await loadManifest();
+const { manifest, versionsOf, currentOf } = await loadManifest();
 
 // Every published entity schema, read once. Keyed entity@version because a
 // release names a set of entity versions and two entities in the same release
@@ -901,16 +901,13 @@ const compile = (key, schema) => {
 };
 
 // The provenance sidecar's schema, at the version the manifest calls current.
-const provenanceRecord = manifest.schemas?.provenance?.versions?.[manifest.schemas?.provenance?.current];
-if (!provenanceRecord?.path) {
+const provenanceSchema = schemaOf('provenance', currentOf.get('provenance'));
+if (!provenanceSchema) {
   console.error('specification/releases.json lists no current provenance schema.');
   process.exit(1);
 }
-const provenanceSchema = JSON.parse(
-  await readFile(join(ROOT, PUBLISHED_DIRS.schemas, provenanceRecord.path), 'utf8')
-);
 const provenanceValidator = compile('provenance', provenanceSchema);
-const provenanceUrl = provenanceRecord.$id;
+const provenanceUrl = provenanceSchema.$id;
 
 const problems = [];
 
@@ -1070,7 +1067,7 @@ try {
         );
       }
       const sidecarElsewhere = await sidecarIn(join(workspace, 'from-elsewhere'));
-      if (!sameProvenance(await sidecarIn(join(workspace, 'from-root')), sidecarElsewhere)) {
+      if (!sameProvenance(sidecar, sidecarElsewhere)) {
         problems.push(
           `the same transform recorded different provenance from the repository root ` +
             `and from ${workspace}.\n    Its provenance is not deterministic.`

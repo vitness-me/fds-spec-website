@@ -127,15 +127,13 @@ export class MappingEngine {
 
     // Apply transform(s)
     // Note: Transforms like 'uuid', 'timestamp' can generate values even without input
-    if (transforms.length > 0) {
-      for (const transformName of transforms) {
-        value = await this.transformRegistry.apply(
-          transformName,
-          value,
-          mapping.options || {},
-          context
-        );
-      }
+    for (const transformName of transforms) {
+      value = await this.transformRegistry.apply(
+        transformName,
+        value,
+        mapping.options || {},
+        context
+      );
     }
 
     // Handle required fields
