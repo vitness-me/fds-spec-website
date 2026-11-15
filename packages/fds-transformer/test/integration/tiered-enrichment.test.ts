@@ -8,6 +8,7 @@
  * - End-to-end transformation with enrichment
  */
 
+import { exerciseTarget } from '../support/exercise-target.js';
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { existsSync, mkdirSync, rmSync, readFileSync, writeFileSync } from 'fs';
 import { join } from 'path';
@@ -267,7 +268,7 @@ describe('Integration: Tiered Enrichment System', () => {
         });
       }
 
-      const result = await engine.enrichBatch(exercises, {
+      const result = await engine.enrichBatch(exercises, { target: exerciseTarget,
         outputDirectory: testDir,
       });
 
@@ -302,7 +303,7 @@ describe('Integration: Tiered Enrichment System', () => {
       }
 
       // Process only simple tier
-      await engine.enrichBatch(exercises, {
+      await engine.enrichBatch(exercises, { target: exerciseTarget,
         tierFilter: 'simple',
         outputDirectory: testDir,
       });
@@ -387,7 +388,7 @@ describe('Integration: Tiered Enrichment System', () => {
       }
 
       // Run enrichment (will partially fail)
-      await engine.enrichBatch(exercises, {
+      await engine.enrichBatch(exercises, { target: exerciseTarget,
         outputDirectory: testDir,
       });
 
@@ -421,7 +422,7 @@ describe('Integration: Tiered Enrichment System', () => {
       }
 
       // Run first batch - should partially succeed and save checkpoint
-      const firstResult = await firstEngine.enrichBatch(exercises, {
+      const firstResult = await firstEngine.enrichBatch(exercises, { target: exerciseTarget,
         outputDirectory: testDir,
         tierFilter: 'simple', // Only run simple tier for speed
       });
@@ -447,7 +448,7 @@ describe('Integration: Tiered Enrichment System', () => {
           });
         }
 
-        const resumeResult = await secondEngine.enrichBatch(exercises, {
+        const resumeResult = await secondEngine.enrichBatch(exercises, { target: exerciseTarget,
           resume: true,
           outputDirectory: testDir,
           tierFilter: 'simple',
@@ -517,7 +518,7 @@ describe('Integration: Tiered Enrichment System', () => {
         });
       }
 
-      await engine.enrichBatch(exercises, {
+      await engine.enrichBatch(exercises, { target: exerciseTarget,
         outputDirectory: testDir,
       });
 
@@ -564,7 +565,7 @@ describe('Integration: Tiered Enrichment System', () => {
         });
       }
 
-      await engine.enrichBatch(exercises, {
+      await engine.enrichBatch(exercises, { target: exerciseTarget,
         tierFilter: 'simple',
         outputDirectory: testDir,
       });
@@ -590,7 +591,7 @@ describe('Integration: Tiered Enrichment System', () => {
         vi.spyOn(mockProvider, 'complete').mockRejectedValue(new Error('API failure'));
       }
 
-      const result = await engine.enrichBatch(exercises, {
+      const result = await engine.enrichBatch(exercises, { target: exerciseTarget,
         tierFilter: 'simple',
         outputDirectory: testDir,
       });

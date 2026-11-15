@@ -20,6 +20,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   equipment are chosen from the loaded registries by slug and written as the
   registry's entries, never as the model's text. A value the schema or the
   registry does not allow is an abstention.
+- **Breaking: tiered `enrichBatch` needs `options.target`** (the target
+  schema and the loaded registries), which replaces the never-read
+  `schemaDefs`. Without it, or with a field the target schema cannot satisfy,
+  the run stops before any model call. The transformer passes it.
 - **Every call is reported.** `enrichBatch` returns `calls`, with the model
   requested and the model that served, any degrade, token usage, cost when
   OpenRouter reports it, and the outcome.

@@ -46,6 +46,7 @@ import {
   type AbstentionReason,
   type Registries,
   type RegistryName,
+  type RequestedField,
   type RequestTarget,
 } from './response-schema.js';
 import {
@@ -56,6 +57,7 @@ import {
 } from './prompts/exercise-prompts.js';
 import {
   buildTierPrompt,
+  getPromptTemplate,
   SYSTEM_PROMPTS,
   type ExerciseContext as TierExerciseContext,
 } from './prompts/tier-prompts.js';
@@ -250,6 +252,17 @@ function formatDuration(ms: number): string {
 
 
 
+/** The configured fields a prompt is asked for: those naming it that it can answer. */
+function requestedFields(
+  fields: Map<string, TieredFieldEnrichmentConfig>,
+  promptId: string,
+  promptFields: string[]
+): RequestedField[] {
+  return [...fields]
+    .filter(([path, fieldConfig]) => fieldConfig.prompt === promptId && promptFields.includes(path))
+    .map(([path, fieldConfig]) => ({ path, enum: fieldConfig.enum }));
+}
+
 // ============================================================================
 // EnrichmentEngine Class
 // ============================================================================
@@ -404,6 +417,23 @@ export class EnrichmentEngine {
       };
     }
 
+    // Constrained output needs its constraints. Every request is built once
+    // here, so a config the target schema cannot satisfy fails before any call.
+    const target = options.target;
+    if (!target) {
+      throw new Error(
+        'Tiered enrichment needs the target schema and the loaded registries (options.target): ' +
+          'without them a value cannot be constrained or a muscle or equipment reference resolved.'
+      );
+    }
+    for (const [tier, tierFields] of this.groupFieldsByTier()) {
+      for (const promptId of new Set([...tierFields.values()].map((f) => f.prompt))) {
+        const template = getPromptTemplate(tier, promptId);
+        const requested = template ? requestedFields(tierFields, promptId, template.fields) : [];
+        if (requested.length > 0) buildRequest(promptId, requested, null, target);
+      }
+    }
+
     // Initialize checkpoint manager if configured
     let checkpointManager: CheckpointManager | null = null;
     const checkpointConfig = this.config.checkpoint;
@@ -508,7 +538,7 @@ export class EnrichmentEngine {
             tierFields,
             options.onProgress,
             checkpointManager,
-            options.target
+            target
           );
 
           // Merge batch results
@@ -724,9 +754,9 @@ export class EnrichmentEngine {
     tierConfig: TierConfig,
     batch: ProcessingBatch,
     fields: Map<string, TieredFieldEnrichmentConfig>,
-    onProgress?: ProgressCallback,
-    _checkpointManager?: CheckpointManager | null,
-    target?: RequestTarget
+    onProgress: ProgressCallback | undefined,
+    _checkpointManager: CheckpointManager | null | undefined,
+    target: RequestTarget
   ): Promise<BatchEnrichmentResult> {
     const startTime = Date.now();
     const results = new Map<string, Record<string, unknown>>();
@@ -784,9 +814,7 @@ export class EnrichmentEngine {
       }
 
       // Ask only for the configured fields this prompt can answer.
-      const requested = [...fields]
-        .filter(([path, fieldConfig]) => fieldConfig.prompt === promptId && builtPrompt.fields.includes(path))
-        .map(([path, fieldConfig]) => ({ path, enum: fieldConfig.enum }));
+      const requested = requestedFields(fields, promptId, builtPrompt.fields);
       if (requested.length === 0) {
         continue;
       }
@@ -866,7 +894,7 @@ export class EnrichmentEngine {
         }
 
         // Parse and distribute results
-        const parsedResults = this.parseResponse(reply.value, batch.exercises, promptId, request.refs, target?.registries);
+        const parsedResults = this.parseResponse(reply.value, batch.exercises, promptId, request.refs, target.registries);
 
         if (debug) {
           console.log(`[DEBUG processTierBatch] Parsed results count: ${parsedResults.size}`);
@@ -977,7 +1005,7 @@ export class EnrichmentEngine {
     exercises: ExerciseInput[],
     promptId: string,
     refs: Record<string, RegistryName>,
-    registries: Registries | undefined
+    registries: Registries
   ): Map<string, Record<string, unknown>> {
     const results = new Map<string, Record<string, unknown>>();
     const parsed = reply as Record<string, unknown>;

@@ -330,7 +330,7 @@ describe('SIMPLE_TIER_PROMPTS', () => {
       // Named examples ("bench", "safety rack") were written back as equipment
       // refs no registry held.
       expect(SIMPLE_TIER_PROMPTS.equipment.template).toContain('slugs the response schema allows');
-      expect(SIMPLE_TIER_PROMPTS.equipment.template).not.toContain('bench');
+      expect(SIMPLE_TIER_PROMPTS.equipment.template).not.toMatch(/\bbench\b/);
     });
   });
 });

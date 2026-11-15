@@ -140,6 +140,26 @@ describe('buildRequest', () => {
     expect(movement.responseSchema.strict).toBe(true);
   });
 
+  it('keeps the array limits of a reference field and refuses duplicates', () => {
+    const request = buildRequest('all', [{ path: 'targets.primary' }], null, target);
+    const primary = (request.validationSchema as any).properties.primary.anyOf[0];
+    expect(primary.minItems).toBe(1);
+    expect(primary.uniqueItems).toBe(true);
+  });
+
+  it('refuses a parent path that would inline a registry reference', () => {
+    expect(() => buildRequest('all', [{ path: 'targets' }], null, target)).toThrow(/targets.*muscleRef|muscleRef.*targets/);
+  });
+
+  it('sends non-strict when an object does not close additionalProperties', () => {
+    const open = {
+      ...exerciseSchema,
+      properties: { ...(exerciseSchema.properties as object), extra: { type: 'object', properties: { a: { type: 'string' } }, required: ['a'] } },
+    };
+    const request = buildRequest('x', [{ path: 'extra' }], null, { schema: open, registries });
+    expect(request.responseSchema.strict).toBe(false);
+  });
+
   it('refuses a field the target schema does not have', () => {
     expect(() => buildRequest('description', [{ path: 'canonical.nickname' }], ['push-up'], target)).toThrow(
       /canonical\.nickname/
@@ -233,6 +253,33 @@ describe('EnrichmentEngine with a target schema and registries', () => {
     expect(result.abstentions.map((a) => a.reason)).toEqual(['invalid']);
   });
 
+  it('abstains on a duplicate reference', async () => {
+    stub.reply(completion({ secondary: ['deltoids', 'deltoids'] }));
+    const engine = new EnrichmentEngine(config({ 'targets.secondary': { tier: 'complex', prompt: 'biomechanics' } }));
+
+    const result = await engine.enrichBatch([exercise], { target });
+
+    expect(result.results.size).toBe(0);
+    expect(result.abstentions.map((a) => a.reason)).toEqual(['invalid']);
+  });
+
+  it('refuses tiered enrichment without a target, before any call', async () => {
+    const engine = new EnrichmentEngine(config({ 'targets.secondary': { tier: 'complex', prompt: 'biomechanics' } }));
+    await expect(engine.enrichBatch([exercise])).rejects.toThrow(/target schema/);
+    expect(stub.requests).toHaveLength(0);
+  });
+
+  it('refuses a config the target schema cannot satisfy, before any call', async () => {
+    const engine = new EnrichmentEngine(
+      config({
+        'canonical.description': { tier: 'simple', prompt: 'description' },
+        'equipment.optional': { tier: 'simple', prompt: 'equipment', enum: ['bench'] },
+      })
+    );
+    await expect(engine.enrichBatch([exercise], { target })).rejects.toThrow(/bench/);
+    expect(stub.requests).toHaveLength(0);
+  });
+
   it('abstains on a value outside the schema enum', async () => {
     stub.reply(completion({ movement: 'push' }));
     const engine = new EnrichmentEngine(config({ 'classification.movement': { tier: 'complex', prompt: 'biomechanics' } }));
@@ -274,6 +321,7 @@ describe("VP's poc-output-final case", () => {
       checkpoint: { enabled: false, saveInterval: 1 },
     };
     const sources = JSON.parse(readFileSync(join(here, '../../poc-test/exercises-poc.json'), 'utf-8'));
+    // More replies than the run makes; an unanswered request would surface as an error.
     for (let i = 0; i < 40; i++) stub.reply(reply);
 
     const transformer = new Transformer({ config });

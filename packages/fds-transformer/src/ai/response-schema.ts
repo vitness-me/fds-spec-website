@@ -121,9 +121,10 @@ export function buildRequest(
     responseSchema: {
       name: promptId.replace(/[^a-zA-Z0-9_-]/g, '_'),
       schema: sent,
-      // Strict endpoints may require every property of every object; a schema
-      // with optional properties is sent as a hint and still checked locally.
-      strict: target !== undefined && allRequired(sent),
+      // Strict endpoints require every object closed with all its properties
+      // required, and reject some keywords; any other schema is sent as a hint
+      // and still checked locally.
+      strict: target !== undefined && strictCompatible(sent),
     },
     validationSchema,
     refs,
@@ -166,10 +167,13 @@ function fieldSchema(
       return { schema: { type: 'null' }, registry };
     }
     const choice = { type: 'string', enum: offered };
-    return { schema: items ? { type: 'array', items: choice } : choice, registry };
+    if (!items) return { schema: choice, registry };
+    // Keep the field's own array limits; a reference listed twice is never wanted.
+    const limits = Object.fromEntries(Object.entries(node).filter(([key]) => key !== 'items'));
+    return { schema: { ...limits, type: 'array', items: choice, uniqueItems: true }, registry };
   }
 
-  const schema = inline(node, defs) as Record<string, unknown>;
+  const schema = inline(node, defs, field.path) as Record<string, unknown>;
   return { schema: field.enum ? narrow(schema, field.enum, field.path) : schema };
 }
 
@@ -184,15 +188,21 @@ function registryOf(node: Record<string, unknown>): RegistryName | undefined {
 }
 
 /** A copy of `node` with every local `$ref` replaced by its definition. */
-function inline(node: unknown, defs: Record<string, unknown>): unknown {
-  if (Array.isArray(node)) return node.map((item) => inline(item, defs));
+function inline(node: unknown, defs: Record<string, unknown>, path: string): unknown {
+  if (Array.isArray(node)) return node.map((item) => inline(item, defs, path));
   if (!node || typeof node !== 'object') return node;
   const record = node as Record<string, unknown>;
   const name = defName(record);
-  if (name) {
-    return inline(defs[name], defs);
+  if (name && REGISTRY_REFS[name]) {
+    // Inlined, a reference would become an object the model fills in itself.
+    throw new Error(
+      `Enrichment field "${path}" contains a registry reference (${name}); ask for the reference field itself`
+    );
   }
-  return Object.fromEntries(Object.entries(record).map(([key, value]) => [key, inline(value, defs)]));
+  if (name) {
+    return inline(defs[name], defs, path);
+  }
+  return Object.fromEntries(Object.entries(record).map(([key, value]) => [key, inline(value, defs, path)]));
 }
 
 /** Narrow a string, or list of strings, to the config's enum. */
@@ -212,20 +222,30 @@ function narrow(schema: Record<string, unknown>, values: string[], path: string)
   return scalar ? narrowed : { ...schema, items: narrowed };
 }
 
-/** Whether every object in `node` lists all of its properties as required. */
-function allRequired(node: unknown): boolean {
-  if (Array.isArray(node)) return node.every(allRequired);
+/** Keywords strict structured-output endpoints do not accept. */
+const STRICT_UNSUPPORTED = new Set([
+  'oneOf', 'allOf', 'not', 'if', 'then', 'else', 'patternProperties', 'dependentRequired', 'dependentSchemas',
+]);
+
+/**
+ * Whether `node` can be sent strict: every object is closed and requires all
+ * of its properties, and no keyword strict endpoints reject is used.
+ */
+function strictCompatible(node: unknown): boolean {
+  if (Array.isArray(node)) return node.every(strictCompatible);
   if (!node || typeof node !== 'object') return true;
   const record = node as Record<string, unknown>;
+  if (Object.keys(record).some((key) => STRICT_UNSUPPORTED.has(key))) return false;
   const properties = record.properties as Record<string, unknown> | undefined;
   if (properties) {
     const required = (record.required as string[] | undefined) ?? [];
+    if (record.additionalProperties !== false) return false;
     if (!Object.keys(properties).every((name) => required.includes(name))) return false;
-    if (!Object.values(properties).every(allRequired)) return false;
+    if (!Object.values(properties).every(strictCompatible)) return false;
   }
   return Object.entries(record)
     .filter(([key]) => key !== 'properties')
-    .every(([, value]) => allRequired(value));
+    .every(([, value]) => strictCompatible(value));
 }
 
 function withoutValidationOnly(node: unknown): unknown {
@@ -253,9 +273,8 @@ function withoutValidationOnly(node: unknown): unknown {
 export function resolveRefs(
   fields: Record<string, unknown>,
   refs: Record<string, RegistryName>,
-  registries: Registries | undefined
+  registries: Registries
 ): Record<string, unknown> {
-  if (!registries) return fields;
   const resolved = { ...fields };
   for (const [key, registry] of Object.entries(refs)) {
     const value = resolved[key];

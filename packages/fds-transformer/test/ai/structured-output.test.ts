@@ -5,6 +5,7 @@
  * served from 127.0.0.1. Nothing here calls OpenRouter or a model.
  */
 
+import { exerciseTarget } from '../support/exercise-target.js';
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { OpenRouterProvider, OpenRouterAPIError } from '../../src/ai/providers/openrouter.js';
 import { EnrichmentEngine, type ExerciseInput } from '../../src/ai/enrichment-engine.js';
@@ -160,7 +161,7 @@ describe('EnrichmentEngine structured output', () => {
     stub.reply(fixture('valid-description'));
     const engine = new EnrichmentEngine(engineConfig(stub, descriptionOnly));
 
-    const result = await engine.enrichBatch(exercises);
+    const result = await engine.enrichBatch(exercises, { target: exerciseTarget });
 
     const format = stub.requests[0].response_format;
     expect(format.type).toBe('json_schema');
@@ -179,7 +180,7 @@ describe('EnrichmentEngine structured output', () => {
     stub.reply(fixture('refusal'));
     const engine = new EnrichmentEngine(engineConfig(stub, descriptionOnly));
 
-    const result = await engine.enrichBatch(exercises);
+    const result = await engine.enrichBatch(exercises, { target: exerciseTarget });
 
     expect(result.results.size).toBe(0);
     expect(result.failedIds).toEqual([]);
@@ -196,7 +197,7 @@ describe('EnrichmentEngine structured output', () => {
     stub.reply(fixture('refusal-403'));
     const engine = new EnrichmentEngine(engineConfig(stub, descriptionOnly));
 
-    const result = await engine.enrichBatch(exercises);
+    const result = await engine.enrichBatch(exercises, { target: exerciseTarget });
 
     expect(result.results.size).toBe(0);
     expect(result.abstentions.map((a) => a.reason)).toEqual(['refusal', 'refusal']);
@@ -208,14 +209,14 @@ describe('EnrichmentEngine structured output', () => {
     const reply = completion(validReply);
     (reply.body as any).choices[0].message.refusal = 'I will not.';
     stub.reply(reply);
-    const result = await new EnrichmentEngine(engineConfig(stub, descriptionOnly)).enrichBatch(exercises);
+    const result = await new EnrichmentEngine(engineConfig(stub, descriptionOnly)).enrichBatch(exercises, { target: exerciseTarget });
     expect(result.results.size).toBe(0);
     expect(result.abstentions.map((a) => a.reason)).toEqual(['refusal', 'refusal']);
   });
 
   it('treats finish_reason content_filter alone as a refusal, even with schema-valid content', async () => {
     stub.reply(completion(validReply, { finishReason: 'content_filter' }));
-    const result = await new EnrichmentEngine(engineConfig(stub, descriptionOnly)).enrichBatch(exercises);
+    const result = await new EnrichmentEngine(engineConfig(stub, descriptionOnly)).enrichBatch(exercises, { target: exerciseTarget });
     expect(result.results.size).toBe(0);
     expect(result.abstentions.map((a) => a.reason)).toEqual(['refusal', 'refusal']);
   });
@@ -230,7 +231,7 @@ describe('EnrichmentEngine structured output', () => {
     stub.reply({ status: 200, body }, completion(validReply), completion(validReply));
     const config = engineConfig(stub, descriptionOnly);
     config.options = { maxRetries: 3, retryDelay: 1 };
-    const result = await new EnrichmentEngine(config).enrichBatch(exercises);
+    const result = await new EnrichmentEngine(config).enrichBatch(exercises, { target: exerciseTarget });
     expect(result.results.size).toBe(0);
     expect(result.abstentions.map((a) => a.reason)).toEqual(['refusal', 'refusal']);
     expect(stub.requests).toHaveLength(1);
@@ -252,7 +253,7 @@ describe('EnrichmentEngine structured output', () => {
       })
     );
 
-    const result = await engine.enrichBatch(exercises);
+    const result = await engine.enrichBatch(exercises, { target: exerciseTarget });
 
     expect(result.results.get('ex-1')).toEqual({ classification: { exerciseType: 'strength' } });
     expect(result.results.get('ex-2')).toEqual({ classification: { unilateral: false } });
@@ -260,7 +261,7 @@ describe('EnrichmentEngine structured output', () => {
 
   it('records a batch reply that leaves out an exercise as an abstention', async () => {
     stub.reply(completion({ results: [{ slug: 'barbell-bench-press', description: 'A press.' }] }));
-    const result = await new EnrichmentEngine(engineConfig(stub, descriptionOnly)).enrichBatch(exercises);
+    const result = await new EnrichmentEngine(engineConfig(stub, descriptionOnly)).enrichBatch(exercises, { target: exerciseTarget });
     expect(result.results.size).toBe(0);
     expect(result.abstentions.map((a) => a.reason)).toEqual(['invalid', 'invalid']);
   });
@@ -274,7 +275,7 @@ describe('EnrichmentEngine structured output', () => {
         ],
       })
     );
-    const result = await new EnrichmentEngine(engineConfig(stub, descriptionOnly)).enrichBatch(exercises);
+    const result = await new EnrichmentEngine(engineConfig(stub, descriptionOnly)).enrichBatch(exercises, { target: exerciseTarget });
     expect(result.results.size).toBe(0);
     expect(result.abstentions.map((a) => a.reason)).toEqual(['invalid', 'invalid']);
   });
@@ -283,7 +284,7 @@ describe('EnrichmentEngine structured output', () => {
     stub.reply(fixture('length'));
     const engine = new EnrichmentEngine(engineConfig(stub, descriptionOnly));
 
-    const result = await engine.enrichBatch(exercises);
+    const result = await engine.enrichBatch(exercises, { target: exerciseTarget });
 
     expect(result.results.size).toBe(0);
     expect(result.abstentions.map((a) => a.reason)).toEqual(['length', 'length']);
@@ -293,7 +294,7 @@ describe('EnrichmentEngine structured output', () => {
     stub.reply(fixture('schema-invalid'));
     const engine = new EnrichmentEngine(engineConfig(stub, descriptionOnly));
 
-    const result = await engine.enrichBatch(exercises);
+    const result = await engine.enrichBatch(exercises, { target: exerciseTarget });
 
     // The first item alone looks usable; it is still not written.
     expect(result.results.size).toBe(0);
@@ -305,7 +306,7 @@ describe('EnrichmentEngine structured output', () => {
     stub.reply(completion('Sure! Here is the description you asked for.'));
     const engine = new EnrichmentEngine(engineConfig(stub, descriptionOnly));
 
-    const result = await engine.enrichBatch(exercises);
+    const result = await engine.enrichBatch(exercises, { target: exerciseTarget });
 
     expect(result.results.size).toBe(0);
     expect(result.abstentions.map((a) => a.reason)).toEqual(['invalid', 'invalid']);
@@ -315,7 +316,7 @@ describe('EnrichmentEngine structured output', () => {
     stub.reply(fixture('valid-description'));
     const engine = new EnrichmentEngine(engineConfig(stub, descriptionOnly));
 
-    const result = await engine.enrichBatch(exercises);
+    const result = await engine.enrichBatch(exercises, { target: exerciseTarget });
 
     expect(result.calls).toEqual([
       {
@@ -382,7 +383,7 @@ describe('EnrichmentEngine degrade', () => {
     );
     const engine = new EnrichmentEngine(engineConfig(stub, movementOnly));
 
-    const result = await engine.enrichBatch([exercises[0]]);
+    const result = await engine.enrichBatch([exercises[0]], { target: exerciseTarget });
 
     expect(stub.requests.map((r) => r.model)).toEqual(['test/complex-model', 'test/medium-model']);
     expect(result.results.get('ex-1')).toEqual({ classification: { movement: 'push-horizontal' } });
@@ -399,7 +400,7 @@ describe('EnrichmentEngine degrade', () => {
     );
     const engine = new EnrichmentEngine(engineConfig(stub, movementOnly));
 
-    await engine.enrichBatch(exercises);
+    await engine.enrichBatch(exercises, { target: exerciseTarget });
     await engine.enrich({}, { 'canonical.description': { enrichment: { enabled: true } } }, {
       source: { name: 'Push Up' },
       target: {},
@@ -422,7 +423,7 @@ describe('API key', () => {
     stub.reply(fixture('valid-description'));
     const engine = new EnrichmentEngine(engineConfig(stub, descriptionOnly));
 
-    await engine.enrichBatch(exercises);
+    await engine.enrichBatch(exercises, { target: exerciseTarget });
 
     expect(stub.headers[0].authorization).toBe('Bearer env-key-for-stub');
   });
@@ -432,7 +433,7 @@ describe('API key', () => {
     const warn = vi.mocked(console.warn);
     const engine = new EnrichmentEngine({ ...engineConfig(stub, descriptionOnly), apiKey: 'key-in-config' });
 
-    const result = await engine.enrichBatch(exercises);
+    const result = await engine.enrichBatch(exercises, { target: exerciseTarget });
 
     expect(engine.getProvider()).toBeNull();
     expect(stub.requests).toHaveLength(0);
@@ -446,7 +447,7 @@ describe('API key', () => {
     stub.reply(fixture('valid-description'));
     const config = engineConfig(stub, descriptionOnly);
     config.options = { ...config.options, apiKey: 'key-in-options' } as typeof config.options;
-    await new EnrichmentEngine(config).enrichBatch(exercises);
+    await new EnrichmentEngine(config).enrichBatch(exercises, { target: exerciseTarget });
     expect(stub.headers[0].authorization).toBe('Bearer env-key-for-stub');
   });
 
