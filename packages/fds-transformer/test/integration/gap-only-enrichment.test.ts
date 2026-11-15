@@ -1,0 +1,360 @@
+/**
+ * Enrichment fills gaps and never overwrites mapped values.
+ *
+ * An AI value may land only in a field the configuration names, and only where
+ * the mapped value is a gap under that field's `when`. These tests drive the
+ * real transformer with a stub provider that answers every key it knows, for
+ * every exercise, whatever it was asked: the code under test is what decides
+ * which of those values may land.
+ */
+
+import { describe, it, expect, vi, afterEach } from 'vitest';
+import { Transformer } from '../../src/core/transformer.js';
+import { EnrichmentEngine } from '../../src/ai/enrichment-engine.js';
+import { getTierPrompts } from '../../src/ai/prompts/tier-prompts.js';
+import type {
+  EnrichmentConfig,
+  FieldMapping,
+  MappingConfig,
+  TierName,
+  TieredFieldEnrichmentConfig,
+} from '../../src/core/types.js';
+
+type When = 'missing' | 'empty' | 'notFound' | 'always';
+type FieldState = 'mapped' | 'absent' | 'null' | 'emptyString' | 'emptyArray';
+
+const TIERS: TierName[] = ['simple', 'medium', 'complex'];
+const PROMPTS = TIERS.flatMap((tier) =>
+  Object.values(getTierPrompts(tier)).map((t) => ({ tier, id: t.id, fields: t.fields }))
+);
+/** Every path any tier prompt can write. */
+const ALL_PATHS = [...new Set(PROMPTS.flatMap((p) => p.fields))];
+const WHENS: When[] = ['missing', 'empty', 'notFound', 'always'];
+const GAP_STATES: FieldState[] = ['absent', 'null', 'emptyString', 'emptyArray'];
+
+const sourceKey = (path: string) => path.replace(/\./g, '__');
+const responseKey = (path: string) => path.split('.').pop()!;
+const mappedValue = (path: string) => `mapped:${path}`;
+
+/** Deterministic PRNG (mulberry32), so a failure reproduces. */
+function prng(seed: number) {
+  let a = seed;
+  return () => {
+    a = (a + 0x6d2b79f5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+function sourceValue(state: FieldState, path: string): unknown {
+  switch (state) {
+    case 'mapped':
+      return mappedValue(path);
+    case 'null':
+      return null;
+    case 'emptyString':
+      return '';
+    case 'emptyArray':
+      return [];
+    case 'absent':
+      return undefined;
+  }
+}
+
+/** Whether `when` treats a field in this state as a gap to fill. */
+function isGapFor(when: When, state: FieldState): boolean {
+  if (state === 'mapped') return false;
+  switch (when) {
+    case 'missing':
+      return state === 'absent';
+    case 'notFound':
+      return state === 'absent' || state === 'null';
+    case 'empty':
+    case 'always':
+      return true;
+  }
+}
+
+function getPath(obj: unknown, path: string): unknown {
+  let current = obj;
+  for (const part of path.split('.')) {
+    if (current === null || current === undefined) return undefined;
+    current = (current as Record<string, unknown>)[part];
+  }
+  return current;
+}
+
+/** Every path in `doc` that holds a value the stub model wrote. */
+function aiWrittenPaths(doc: unknown, prefix = ''): string[] {
+  if (typeof doc === 'string') return doc.startsWith('ai:') ? [prefix] : [];
+  if (doc === null || typeof doc !== 'object') return [];
+  if (Array.isArray(doc)) {
+    return doc.some((v) => aiWrittenPaths(v).length > 0) ? [prefix] : [];
+  }
+  return Object.entries(doc).flatMap(([k, v]) =>
+    aiWrittenPaths(v, prefix ? `${prefix}.${k}` : k)
+  );
+}
+
+/** The model answers every key of every prompt, for every slug given. */
+function modelReply(tier: TierName, slugs: string[]): string {
+  const fields: Record<string, unknown> = {};
+  for (const path of ALL_PATHS) {
+    fields[responseKey(path)] = `ai:${responseKey(path)}`;
+  }
+  if (tier === 'complex') return JSON.stringify(fields);
+  return JSON.stringify({ results: slugs.map((slug) => ({ slug, ...fields })) });
+}
+
+const TIERS_CONFIG: EnrichmentConfig['tiers'] = {
+  simple: { model: 'stub/simple', temperature: 0, maxTokens: 100, batchSize: 7, priority: 'speed' },
+  medium: { model: 'stub/medium', temperature: 0, maxTokens: 100, batchSize: 5, priority: 'balanced' },
+  complex: { model: 'stub/complex', temperature: 0, maxTokens: 100, batchSize: 1, priority: 'accuracy' },
+};
+
+function baseConfig(
+  mappings: Record<string, FieldMapping>,
+  fields: Record<string, TieredFieldEnrichmentConfig>
+): MappingConfig {
+  return {
+    version: '1.0.0',
+    targetSchema: { version: '1.4.0', entity: 'exercise' },
+    mappings: {
+      exerciseId: { from: 'id' },
+      'canonical.name': { from: 'name' },
+      'canonical.slug': { from: 'slug' },
+      ...mappings,
+    },
+    validation: { enabled: false },
+    enrichment: {
+      enabled: true,
+      provider: 'openrouter',
+      apiKey: 'stub-key-not-used',
+      tiers: TIERS_CONFIG,
+      fields,
+    },
+  };
+}
+
+/** A transformer whose provider is the stub model; returns the calls it saw. */
+async function stubbedTransformer(config: MappingConfig, tier: () => TierName) {
+  const transformer = new Transformer({ config });
+  await transformer.init();
+  const provider = transformer.getEnrichmentEngine()!.getProvider()!;
+  const asked: string[][] = [];
+  let allSlugs: string[] = [];
+  vi.spyOn(provider, 'complete').mockImplementation(async (prompt: string) => {
+    const slugs = [...prompt.matchAll(/slug: ([\w-]+)/g)].map((m) => m[1]);
+    asked.push(slugs);
+    return { content: modelReply(tier(), allSlugs), tokensUsed: 1, model: 'stub' };
+  });
+  return {
+    transformer,
+    asked,
+    setSlugs: (slugs: string[]) => {
+      allSlugs = slugs;
+    },
+  };
+}
+
+afterEach(() => {
+  vi.restoreAllMocks();
+});
+
+describe('Enrichment fills gaps only', () => {
+  it('never replaces a mapped value, and writes only configured gaps, for every prompt', async () => {
+    const random = prng(20261115);
+    let cases = 0;
+
+    for (const prompt of PROMPTS) {
+      const n = prompt.fields.length;
+
+      // Every non-empty subset of the prompt's fields, as the configured set.
+      for (let configMask = 1; configMask < 1 << n; configMask++) {
+        const configured = prompt.fields.filter((_, i) => configMask & (1 << i));
+        const when: Record<string, When> = {};
+        const mappings: Record<string, FieldMapping> = {};
+        for (const path of ALL_PATHS) {
+          when[path] = WHENS[Math.floor(random() * WHENS.length)];
+          mappings[path] = { from: sourceKey(path), enrichment: { when: when[path] } };
+        }
+        const fields = Object.fromEntries(
+          configured.map((path) => [path, { tier: prompt.tier, prompt: prompt.id }])
+        );
+
+        // Every combination of mapped vs gap across the prompt's fields; gap
+        // kinds and every other path's state are drawn at random.
+        const states: Array<Record<string, FieldState>> = [];
+        const sources: Record<string, unknown>[] = [];
+        for (let stateMask = 0; stateMask < 1 << n; stateMask++) {
+          const state: Record<string, FieldState> = {};
+          for (const path of ALL_PATHS) {
+            const i = prompt.fields.indexOf(path);
+            const mapped = i >= 0 ? (stateMask & (1 << i)) !== 0 : random() < 0.5;
+            state[path] = mapped
+              ? 'mapped'
+              : GAP_STATES[Math.floor(random() * GAP_STATES.length)];
+          }
+          const slug = `ex-${stateMask}`;
+          const source: Record<string, unknown> = { id: slug, slug, name: `Exercise ${stateMask}` };
+          for (const path of ALL_PATHS) {
+            const value = sourceValue(state[path], path);
+            if (value !== undefined) source[sourceKey(path)] = value;
+          }
+          states.push(state);
+          sources.push(source);
+        }
+
+        const { transformer, setSlugs } = await stubbedTransformer(
+          baseConfig(mappings, fields),
+          () => prompt.tier
+        );
+        setSlugs(sources.map((s) => s.slug as string));
+        const { results } = await transformer.transformAllBatch(sources);
+
+        results.forEach((result, i) => {
+          const doc = result.data as unknown as Record<string, unknown>;
+          const label = `${prompt.id} configured=[${configured}] ${sources[i].slug}`;
+          const expectedWritten: string[] = [];
+
+          for (const path of ALL_PATHS) {
+            const state = states[i][path];
+            const actual = getPath(doc, path);
+            if (state === 'mapped') {
+              expect(actual, `${label}: mapped ${path} replaced`).toBe(mappedValue(path));
+            } else if (configured.includes(path) && isGapFor(when[path], state)) {
+              expectedWritten.push(path);
+            } else {
+              expect(actual, `${label}: ${path} (${state}, when ${when[path]}) touched`).toEqual(
+                sourceValue(state, path)
+              );
+            }
+          }
+
+          expect(aiWrittenPaths(doc).sort(), `${label}: AI wrote outside configured gaps`).toEqual(
+            expectedWritten.sort()
+          );
+          cases++;
+        });
+      }
+    }
+
+    // 8 prompts, every configured subset × every mapped/gap combination.
+    expect(cases).toBe(
+      PROMPTS.reduce((sum, p) => sum + ((1 << p.fields.length) - 1) * (1 << p.fields.length), 0)
+    );
+  });
+
+  it('enabling exerciseType leaves a mapped level untouched', async () => {
+    const config = baseConfig(
+      { 'classification.level': { from: 'level' } },
+      { 'classification.exerciseType': { tier: 'simple', prompt: 'classification-simple' } }
+    );
+    const { transformer, setSlugs } = await stubbedTransformer(config, () => 'simple');
+    setSlugs(['bench', 'curl']);
+
+    const { results } = await transformer.transformAllBatch([
+      { id: 'bench', slug: 'bench', name: 'Bench', level: 'beginner' },
+      { id: 'curl', slug: 'curl', name: 'Curl' },
+    ]);
+
+    expect((results[0].data as any).classification).toEqual({
+      level: 'beginner',
+      exerciseType: 'ai:exerciseType',
+    });
+    // Not configured, so not written even where the mapping left it empty.
+    expect((results[1].data as any).classification).toEqual({ exerciseType: 'ai:exerciseType' });
+  });
+
+  it('honours `when` in the tiered path and asks only for records with a gap', async () => {
+    const run = async (when: When) => {
+      const config = baseConfig(
+        { 'canonical.description': { from: 'description', enrichment: { when } } },
+        { 'canonical.description': { tier: 'simple', prompt: 'description' } }
+      );
+      const stub = await stubbedTransformer(config, () => 'simple');
+      stub.setSlugs(['blank', 'written', 'none']);
+      const { results } = await stub.transformer.transformAllBatch([
+        { id: 'blank', slug: 'blank', name: 'Blank', description: '' },
+        { id: 'written', slug: 'written', name: 'Written', description: 'From the source.' },
+        { id: 'none', slug: 'none', name: 'None' },
+      ]);
+      return {
+        asked: stub.asked,
+        descriptions: results.map((r) => (r.data as any).canonical.description),
+      };
+    };
+
+    const missing = await run('missing');
+    expect(missing.asked).toEqual([['none']]);
+    expect(missing.descriptions).toEqual(['', 'From the source.', 'ai:description']);
+
+    const empty = await run('empty');
+    expect(empty.asked).toEqual([['blank', 'none']]);
+    expect(empty.descriptions).toEqual(['ai:description', 'From the source.', 'ai:description']);
+  });
+
+  it('makes no call when no record has a gap', async () => {
+    const config = baseConfig(
+      { 'canonical.description': { from: 'description' } },
+      { 'canonical.description': { tier: 'simple', prompt: 'description' } }
+    );
+    const stub = await stubbedTransformer(config, () => 'simple');
+    stub.setSlugs(['a']);
+    const { stats } = await stub.transformer.transformAllBatch([
+      { id: 'a', slug: 'a', name: 'A', description: 'Written.' },
+    ]);
+    expect(stub.asked).toEqual([]);
+    expect(stats.apiCalls).toBe(0);
+  });
+
+  it('scopes engine results to configured field paths, not to the prompt', async () => {
+    const engine = new EnrichmentEngine({
+      enabled: true,
+      provider: 'openrouter',
+      apiKey: 'stub-key-not-used',
+      tiers: TIERS_CONFIG,
+      fields: { 'classification.exerciseType': { tier: 'simple', prompt: 'classification-simple' } },
+    });
+    vi.spyOn(engine.getProvider()!, 'complete').mockResolvedValue({
+      content: modelReply('simple', ['squat']),
+      tokensUsed: 1,
+      model: 'stub',
+    });
+
+    const { results } = await engine.enrichBatch([{ id: 'squat', slug: 'squat', name: 'Squat' }]);
+
+    expect(results.get('squat')).toEqual({ classification: { exerciseType: 'ai:exerciseType' } });
+  });
+});
+
+describe('Legacy single-model enrichment fills gaps only', () => {
+  it('writes only the configured field and keeps mapped values', async () => {
+    const config: MappingConfig = {
+      version: '1.0.0',
+      targetSchema: { version: '1.4.0', entity: 'exercise' },
+      mappings: {
+        'canonical.name': { from: 'name' },
+        'canonical.description': { from: 'description', enrichment: { enabled: true, when: 'missing' } },
+        'classification.level': { from: 'level' },
+      },
+      validation: { enabled: false },
+      enrichment: { enabled: true, provider: 'openrouter', apiKey: 'stub-key-not-used' },
+    };
+    const transformer = new Transformer({ config });
+    await transformer.init();
+    vi.spyOn(transformer.getEnrichmentEngine()!.getProvider()!, 'completeJSON').mockResolvedValue({
+      description: 'ai:description',
+      aliases: ['ai:alias'],
+      classification: { level: 'ai:level', exerciseType: 'ai:exerciseType' },
+    });
+
+    const result = await transformer.transform({ name: 'Squat', level: 'beginner' });
+
+    expect(result.data).toEqual({
+      canonical: { name: 'Squat', description: 'ai:description' },
+      classification: { level: 'beginner' },
+    });
+  });
+});
