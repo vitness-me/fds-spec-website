@@ -13,13 +13,26 @@ import type {
   TransformContext,
   ProgressCallback,
   CostEstimate,
+  FieldProvenance,
+  RecordProvenance,
+  ValidationError,
 } from './types.js';
 import { MappingEngine } from './mapping-engine.js';
 import { RegistryManager } from '../registries/registry-manager.js';
 import { SchemaManager } from '../schemas/schema-manager.js';
 import { DEFAULT_SCHEMA_VERSION } from '../schemas/versions.js';
-import { EnrichmentEngine, type ExerciseInput, type BatchEnrichmentOptions, type BatchEnrichmentResult } from '../ai/enrichment-engine.js';
+import {
+  EnrichmentEngine,
+  isEmptyValue,
+  needsEnrichment,
+  type ExerciseInput,
+  type BatchEnrichmentOptions,
+  type BatchEnrichmentResult,
+} from '../ai/enrichment-engine.js';
 import { ConfigLoader } from '../config/config-loader.js';
+import { checkpointKey } from '../ai/checkpoint-manager.js';
+import { assertUniqueIdentities } from './identity-collisions.js';
+import { getMappingPathValue, isBeneath } from './paths.js';
 
 export interface TransformerOptions extends TransformOptions {
   config?: MappingConfig | string;
@@ -120,6 +133,10 @@ export class Transformer {
       this.config = await ConfigLoader.load(this.config);
     }
 
+    for (const plugin of this.config.plugins ?? []) {
+      await this.mappingEngine.loadPlugin(plugin);
+    }
+
     // Initialize enrichment engine with config settings
     if (this.config.enrichment?.enabled !== false) {
       this.enrichmentEngine = new EnrichmentEngine(this.config.enrichment);
@@ -158,7 +175,7 @@ export class Transformer {
 
     try {
       // Apply mappings
-      const mapped = await this.mappingEngine.apply(
+      const { target: mapped, provenance } = await this.mappingEngine.applyWithProvenance(
         source,
         this.config.mappings,
         context
@@ -172,26 +189,11 @@ export class Transformer {
           this.config.mappings,
           context
         );
-        this.deepMerge(mapped, enrichmentResult.data || {});
+        this.mergeEnrichment(mapped, provenance, enrichmentResult.data, enrichmentResult.provenance);
         enriched = Object.keys(enrichmentResult.data || {});
       }
 
-      // Validate output
-      let validation = { valid: true, errors: [] as any[] };
-      if (this.config.validation?.enabled !== false) {
-        validation = await this.schemaManager.validate(
-          mapped,
-          this.config.targetSchema?.entity || 'exercise'
-        );
-      }
-
-      return {
-        success: validation.valid || !this.config.validation?.strict,
-        data: mapped as any,
-        errors: validation.errors,
-        enriched,
-        __validation: validation,
-      };
+      return await this.finishResult(mapped, provenance, enriched);
     } catch (error) {
       return {
         success: false,
@@ -228,6 +230,7 @@ export class Transformer {
     for await (const result of this.transformStream(sources)) {
       results.push(result);
     }
+    assertUniqueIdentities(results.map((result) => result.data));
     return results;
   }
 
@@ -262,6 +265,7 @@ export class Transformer {
       index: number;
       source: Record<string, unknown>;
       mapped: Record<string, unknown>;
+      provenance: RecordProvenance;
       context: TransformContext;
     }> = [];
 
@@ -280,12 +284,12 @@ export class Transformer {
       };
 
       try {
-        const mapped = await this.mappingEngine.apply(
+        const { target: mapped, provenance } = await this.mappingEngine.applyWithProvenance(
           source,
           this.config.mappings,
           context
         );
-        mappedExercises.push({ index: i, source, mapped, context });
+        mappedExercises.push({ index: i, source, mapped, provenance, context });
       } catch (error) {
         errors.push({
           index: i,
@@ -303,8 +307,15 @@ export class Transformer {
       }
     }
 
+    const mappedBySourceIndex: Record<string, unknown>[] = [];
+    for (const { index, mapped } of mappedExercises) mappedBySourceIndex[index] = mapped;
+    assertUniqueIdentities(mappedBySourceIndex);
+
     // Phase 2: Batch enrichment (if tiered enrichment is configured)
     let enrichmentResults: BatchEnrichmentResult | null = null;
+    // Enrichment is keyed by slug plus input hash, so a resumed run
+    // reuses a checkpointed result only for an unchanged record
+    const enrichmentKeys = new Map<number, string>();
 
     if (
       !options.skipEnrichment &&
@@ -312,21 +323,33 @@ export class Transformer {
       this.config.enrichment?.enabled !== false &&
       this.enrichmentEngine.isTieredEnabled()
     ) {
+      // Each configured field with the `when` its mapping sets for enrichment
+      const enrichedFields = Object.keys(this.config.enrichment?.fields ?? {}).map((path) => {
+        const mapping = this.config.mappings?.[path];
+        return { path, when: typeof mapping === 'object' ? mapping.enrichment?.when : undefined };
+      });
+
       // Prepare exercise inputs for batch enrichment
       const exerciseInputs: ExerciseInput[] = mappedExercises.map(({ mapped, index }) => {
         const canonical = mapped.canonical as Record<string, unknown> | undefined;
         const targets = mapped.targets as Record<string, unknown> | undefined;
         const equipment = mapped.equipment as Record<string, unknown> | undefined;
 
-        return {
-          id: (mapped.exerciseId as string) || `exercise-${index}`,
+        const input = {
           slug: (canonical?.slug as string) || `exercise-${index}`,
           name: (canonical?.name as string) || `Exercise ${index}`,
           description: canonical?.description as string | undefined,
           primaryTargets: (targets?.primary as Array<{ id: string; name: string }>) || undefined,
           requiredEquipment:
             (equipment?.required as Array<{ id: string; name: string }>) || undefined,
+          fieldsToEnrich: enrichedFields
+            .filter(({ path, when }) => needsEnrichment(mapped, path, when))
+            .map(({ path }) => path),
         };
+        // The slug, unique in a run, keeps the key stable even when exerciseId is a random uuid
+        const key = checkpointKey(input.slug, input);
+        enrichmentKeys.set(index, key);
+        return { id: key, ...input };
       });
 
       // The target schema and registries constrain what the model may answer
@@ -364,7 +387,7 @@ export class Transformer {
     }
 
     // Phase 3: Merge enrichment results and validate
-    for (const { index, mapped, source } of mappedExercises) {
+    for (const { index, mapped, provenance, source } of mappedExercises) {
       // Skip if already errored in mapping phase
       if (results[index]) {
         continue;
@@ -373,21 +396,24 @@ export class Transformer {
       // Merge enrichment results if available
       let enriched: string[] = [];
       if (enrichmentResults) {
-        const exerciseId =
-          (mapped.exerciseId as string) ||
-          ((mapped.canonical as Record<string, unknown> | undefined)?.slug as string) ||
-          `exercise-${index}`;
+        const exerciseId = this.stableIdOf(mapped, index);
+        const key = enrichmentKeys.get(index)!;
 
-        const enrichmentData = enrichmentResults.results.get(exerciseId);
+        const enrichmentData = enrichmentResults.results.get(key);
         if (enrichmentData) {
-          this.deepMerge(mapped, enrichmentData);
+          this.mergeEnrichment(
+            mapped,
+            provenance,
+            enrichmentData,
+            enrichmentResults.provenance.get(key)
+          );
           enriched = Object.keys(enrichmentData);
           enrichedCount++;
         }
 
         // Check if this exercise failed enrichment
-        if (enrichmentResults.failedIds.includes(exerciseId)) {
-          const error = enrichmentResults.errors.find((e) => e.exerciseId === exerciseId);
+        if (enrichmentResults.failedIds.includes(key)) {
+          const error = enrichmentResults.errors.find((e) => e.exerciseId === key);
           errors.push({
             index,
             exerciseId,
@@ -421,7 +447,7 @@ export class Transformer {
             context
           );
           if (enrichmentResult.data) {
-            this.deepMerge(mapped, enrichmentResult.data);
+            this.mergeEnrichment(mapped, provenance, enrichmentResult.data, enrichmentResult.provenance);
             enriched = Object.keys(enrichmentResult.data);
             enrichedCount++;
           }
@@ -433,22 +459,7 @@ export class Transformer {
         }
       }
 
-      // Validate output
-      let validation = { valid: true, errors: [] as any[] };
-      if (this.config.validation?.enabled !== false) {
-        validation = await this.schemaManager.validate(
-          mapped,
-          this.config.targetSchema?.entity || 'exercise'
-        );
-      }
-
-      results[index] = {
-        success: validation.valid || !this.config.validation?.strict,
-        data: mapped as any,
-        errors: validation.errors,
-        enriched,
-        __validation: validation,
-      };
+      results[index] = await this.finishResult(mapped, provenance, enriched);
     }
 
     // Calculate stats
@@ -471,33 +482,132 @@ export class Transformer {
   }
 
   /**
-   * Deep merge source object into target
+   * Validate a transformed record and assemble its result. A record whose
+   * `validation.rejectDefaults` path holds a mapping default fails, whatever
+   * `validation.enabled` and `strict` say.
+   */
+  private async finishResult(
+    mapped: Record<string, unknown>,
+    provenance: RecordProvenance,
+    enriched: string[]
+  ): Promise<TransformResult> {
+    let validation = { valid: true, errors: [] as ValidationError[] };
+    if (this.config.validation?.enabled !== false) {
+      validation = await this.schemaManager.validate(
+        mapped,
+        this.config.targetSchema?.entity || 'exercise'
+      );
+    }
+
+    const rejected: ValidationError[] = (this.config.validation?.rejectDefaults ?? [])
+      .filter((path) => this.holdsDefault(mapped, provenance, path))
+      .map((path) => ({
+        field: path,
+        message: `${path} holds the mapping default, which validation.rejectDefaults does not allow`,
+        constraint: 'rejectDefaults',
+      }));
+
+    return {
+      success: (validation.valid || !this.config.validation?.strict) && rejected.length === 0,
+      data: mapped as any,
+      provenance,
+      errors: [...validation.errors, ...rejected],
+      enriched,
+      __validation: validation,
+    };
+  }
+
+  /**
+   * Whether a mapping default supplies the value at `path`: its own entry, the
+   * nearest entry above it when it has none, or any entry beneath it
+   */
+  private holdsDefault(
+    mapped: Record<string, unknown>,
+    provenance: RecordProvenance,
+    path: string
+  ): boolean {
+    const paths = Object.keys(provenance);
+    if (paths.some((p) => isBeneath(p, path) && provenance[p].origin === 'default')) {
+      return true;
+    }
+    const nearest = paths
+      .filter((p) => p === path || isBeneath(path, p))
+      .sort((a, b) => b.length - a.length)[0];
+    return (
+      nearest !== undefined &&
+      provenance[nearest].origin === 'default' &&
+      getMappingPathValue(mapped, path) !== undefined
+    );
+  }
+
+  /**
+   * The id a record keeps across runs: its exerciseId, else its slug
+   */
+  private stableIdOf(mapped: Record<string, unknown>, index: number): string {
+    return (
+      (mapped.exerciseId as string) ||
+      ((mapped.canonical as Record<string, unknown> | undefined)?.slug as string) ||
+      `exercise-${index}`
+    );
+  }
+
+  /**
+   * Merge enrichment into the mapped record, and record the model as the
+   * origin of each path where its value landed
+   */
+  private mergeEnrichment(
+    mapped: Record<string, unknown>,
+    provenance: RecordProvenance,
+    data: Record<string, unknown> | undefined,
+    enrichmentProvenance: Record<string, FieldProvenance> | undefined
+  ): void {
+    if (!data) return;
+    const filled = this.deepMerge(mapped, data);
+    for (const [path, origin] of Object.entries(enrichmentProvenance ?? {})) {
+      if (filled.some((f) => path === f || isBeneath(path, f))) {
+        provenance[path] = origin;
+      }
+    }
+  }
+
+  /**
+   * Deep merge enrichment into the mapped target, filling gaps only: a value
+   * lands only where the target holds nothing, so a mapped value is never
+   * replaced. Returns the paths it filled.
    */
   private deepMerge(
     target: Record<string, unknown>,
-    source: Record<string, unknown>
-  ): void {
+    source: Record<string, unknown>,
+    prefix = ''
+  ): string[] {
+    const filled: string[] = [];
     for (const key of Object.keys(source)) {
       const sourceValue = source[key];
       const targetValue = target[key];
+      const path = `${prefix}${key}`;
 
-      if (
+      if (isEmptyValue(targetValue)) {
+        if (sourceValue !== undefined) {
+          target[key] = sourceValue;
+          filled.push(path);
+        }
+      } else if (
         sourceValue !== null &&
         typeof sourceValue === 'object' &&
         !Array.isArray(sourceValue) &&
-        targetValue !== null &&
         typeof targetValue === 'object' &&
         !Array.isArray(targetValue)
       ) {
         // Recursively merge objects
-        this.deepMerge(
-          targetValue as Record<string, unknown>,
-          sourceValue as Record<string, unknown>
+        filled.push(
+          ...this.deepMerge(
+            targetValue as Record<string, unknown>,
+            sourceValue as Record<string, unknown>,
+            `${path}.`
+          )
         );
-      } else if (sourceValue !== undefined) {
-        // Overwrite with source value (including arrays)
-        target[key] = sourceValue;
       }
     }
+    return filled;
   }
 }

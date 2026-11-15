@@ -114,6 +114,7 @@ const sidebars: SidebarsConfig = {
             'tools/transformer/cli-reference',
             'tools/transformer/configuration',
             'tools/transformer/ai-enrichment',
+            'tools/transformer/provenance',
             'tools/transformer/transforms',
             'tools/transformer/plugins',
             'tools/transformer/examples',

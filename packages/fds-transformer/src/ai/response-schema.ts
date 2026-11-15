@@ -105,18 +105,35 @@ export function buildRequest(
     if (registry) refs[key] = registry;
   }
 
-  const envelope = (fieldSchemas: Record<string, unknown>) =>
-    slugs === null
-      ? closedObject(fieldSchemas)
+  // The model's confidence rides beside the fields, keyed like them. Checked
+  // locally it is optional and open, so a missing or odd confidence never
+  // turns an answer into an abstention. Sent, it is required, closed and
+  // nullable, so the request can still be strict; null means none given.
+  const keys = Object.keys(validation);
+  const confidence = { type: ['object', 'null'], properties: Object.fromEntries(keys.map((k) => [k, { type: ['number', 'null'] }])) };
+  const sentConfidence = { ...confidence, required: keys, additionalProperties: false };
+
+  const envelope = (fieldSchemas: Record<string, unknown>, confidenceSchema: Record<string, unknown>, required: boolean) => {
+    const item = (properties: Record<string, unknown>) => {
+      const closed = closedObject(required ? { ...properties, confidence: confidenceSchema } : properties);
+      return required
+        ? closed
+        : { ...closed, properties: { ...(closed.properties as Record<string, unknown>), confidence: confidenceSchema } };
+    };
+    return slugs === null
+      ? item(fieldSchemas)
       : closedObject({
           results: {
             type: 'array',
-            items: closedObject({ slug: { type: 'string', enum: slugs }, ...fieldSchemas }),
+            items: item({ slug: { type: 'string', enum: slugs }, ...fieldSchemas }),
           },
         });
+  };
 
-  const validationSchema = envelope(validation);
-  const sent = target ? (withoutValidationOnly(validationSchema) as Record<string, unknown>) : validationSchema;
+  const validationSchema = envelope(validation, confidence, false);
+  const sent = target
+    ? (withoutValidationOnly(envelope(validation, sentConfidence, true)) as Record<string, unknown>)
+    : validationSchema;
   return {
     responseSchema: {
       name: promptId.replace(/[^a-zA-Z0-9_-]/g, '_'),

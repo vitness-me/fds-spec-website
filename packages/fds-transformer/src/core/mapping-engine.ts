@@ -5,15 +5,26 @@
 import type {
   FieldMapping,
   FieldMappingObject,
+  FieldProvenance,
+  PluginConfig,
+  RecordProvenance,
   TransformContext,
 } from './types.js';
 import { TransformRegistry } from '../transforms/transform-registry.js';
+import { getMappingPathValue, isBeneath } from './paths.js';
 
 export class MappingEngine {
   private transformRegistry: TransformRegistry;
 
   constructor() {
     this.transformRegistry = new TransformRegistry();
+  }
+
+  /**
+   * Load a config plugin so its transforms can be named in mappings
+   */
+  async loadPlugin(plugin: PluginConfig): Promise<void> {
+    await this.transformRegistry.loadPlugin(plugin);
   }
 
   /**
@@ -24,22 +35,42 @@ export class MappingEngine {
     mappings: Record<string, FieldMapping>,
     context: TransformContext
   ): Promise<Record<string, unknown>> {
+    return (await this.applyWithProvenance(source, mappings, context)).target;
+  }
+
+  /**
+   * Apply all mappings, and report where each written path's value came from
+   */
+  async applyWithProvenance(
+    source: Record<string, unknown>,
+    mappings: Record<string, FieldMapping>,
+    context: TransformContext
+  ): Promise<{ target: Record<string, unknown>; provenance: RecordProvenance }> {
     const target: Record<string, unknown> = {};
+    const provenance: RecordProvenance = {};
 
     for (const [targetPath, mapping] of Object.entries(mappings)) {
       const normalizedMapping = this.normalizeMapping(mapping);
-      const value = await this.applyMapping(
+      const { value, origin } = await this.applyMapping(
         source,
         normalizedMapping,
         { ...context, field: targetPath, target }
       );
 
-      if (value !== undefined) {
+      if (value !== undefined && origin) {
         this.setNestedValue(target, targetPath, value);
+        // A null or scalar parent leaves nowhere to write: no value, no origin
+        if (this.getNestedValue(target, targetPath) === value) {
+          // An entry beneath this path described a value this one replaced
+          for (const path of Object.keys(provenance)) {
+            if (isBeneath(path, targetPath)) delete provenance[path];
+          }
+          provenance[targetPath] = origin;
+        }
       }
     }
 
-    return target;
+    return { target, provenance };
   }
 
   /**
@@ -59,7 +90,7 @@ export class MappingEngine {
     source: Record<string, unknown>,
     mapping: FieldMappingObject,
     context: TransformContext
-  ): Promise<unknown> {
+  ): Promise<{ value: unknown; origin?: FieldProvenance }> {
     // Check condition if present
     if (mapping.condition) {
       const conditionMet = this.evaluateCondition(
@@ -68,46 +99,57 @@ export class MappingEngine {
         context.config?.allowUnsafeEval === true
       );
       if (!conditionMet) {
-        return undefined;
+        return { value: undefined };
       }
     }
 
     // Get source value(s)
     let value: unknown;
+    let from: string | undefined;
     if (mapping.from === null || mapping.from === undefined) {
       value = undefined;
     } else if (Array.isArray(mapping.from)) {
       // Multiple source fields - try each until one has a value
       for (const path of mapping.from) {
         value = this.getNestedValue(source, path);
+        from = path;
         if (value !== undefined && value !== null && value !== '') {
           break;
         }
       }
     } else {
       value = this.getNestedValue(source, mapping.from);
+      from = mapping.from;
     }
 
+    const transforms = mapping.transform
+      ? Array.isArray(mapping.transform)
+        ? mapping.transform
+        : [mapping.transform]
+      : [];
+    const sourceEmpty = value === undefined || value === null || value === '';
+    const withTransforms = transforms.length > 0 ? { transform: transforms } : {};
+    let origin: FieldProvenance;
+
     // Apply default if value is missing
-    if ((value === undefined || value === null || value === '') && mapping.default !== undefined) {
+    if (sourceEmpty && mapping.default !== undefined) {
       value = mapping.default;
+      origin = { origin: 'default', ...withTransforms };
+    } else if (sourceEmpty && transforms.length > 0) {
+      origin = { origin: 'transform', transform: transforms };
+    } else {
+      origin = { origin: 'source', from: from as string, ...withTransforms };
     }
 
     // Apply transform(s)
     // Note: Transforms like 'uuid', 'timestamp' can generate values even without input
-    if (mapping.transform) {
-      const transforms = Array.isArray(mapping.transform)
-        ? mapping.transform
-        : [mapping.transform];
-
-      for (const transformName of transforms) {
-        value = await this.transformRegistry.apply(
-          transformName,
-          value,
-          mapping.options || {},
-          context
-        );
-      }
+    for (const transformName of transforms) {
+      value = await this.transformRegistry.apply(
+        transformName,
+        value,
+        mapping.options || {},
+        context
+      );
     }
 
     // Handle required fields
@@ -115,37 +157,14 @@ export class MappingEngine {
       throw new Error(`Required field ${context.field} could not be populated`);
     }
 
-    return value;
+    return { value, origin };
   }
 
   /**
    * Get a nested value from an object using dot notation
    */
   private getNestedValue(obj: Record<string, unknown>, path: string): unknown {
-    const parts = path.split('.');
-    let current: unknown = obj;
-
-    for (const part of parts) {
-      if (current === null || current === undefined) {
-        return undefined;
-      }
-
-      // Handle array index notation: field[0]
-      const arrayMatch = part.match(/^(\w+)\[(\d+)\]$/);
-      if (arrayMatch) {
-        const [, fieldName, index] = arrayMatch;
-        current = (current as Record<string, unknown>)[fieldName];
-        if (Array.isArray(current)) {
-          current = current[parseInt(index, 10)];
-        } else {
-          return undefined;
-        }
-      } else {
-        current = (current as Record<string, unknown>)[part];
-      }
-    }
-
-    return current;
+    return getMappingPathValue(obj, path);
   }
 
   /**

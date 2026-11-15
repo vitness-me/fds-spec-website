@@ -73,7 +73,7 @@ Create a `mapping.json` file to define how source fields map to FDS:
 
 ```json
 {
-  "$schema": "https://spec.vitness.me/schemas/transformer/v1.1.0/mapping.schema.json",
+  "$schema": "https://spec.vitness.me/schemas/transformer/v1.2.0/mapping.schema.json",
   "version": "1.0.0",
   "targetSchema": {
     "version": "1.0.0",
@@ -112,18 +112,29 @@ Create a `mapping.json` file to define how source fields map to FDS:
 |-----------|-------------|
 | `slugify` | Convert to URL-safe slug |
 | `titleCase` | Convert to Title Case |
-| `uuid` | Generate UUIDv4 |
+| `uuid` | Generate a random UUIDv4 (a rerun gives new ids) |
+| `uuidv5` | Derive a UUIDv5 from `options.namespace` and an `options.name` template such as `exercises_v6/Exercises/{{v6Id}}`; the same input always gives the same id |
 | `toArray` | Ensure value is array |
 | `toMediaArray` | Convert URLs to FDS media format |
 | `registryLookup` | Find in registry with fuzzy matching |
-| `timestamp` | Generate ISO timestamp |
+| `timestamp` | Format the source instant, or `options.clock` (an ISO 8601 instant with a zone) when the source is empty. Without a clock it throws; `"clock": "now"` opts into the wall clock |
 | `autoGenerate` | Auto-generate metadata fields |
 | `template` | Apply template strings |
 | `urlTransform` | Transform URLs |
 
+### Repeatable runs
+
+The same input and config give byte-identical output. Use `uuidv5` for ids and
+take timestamps from the source or a fixed `clock`. Two records that produce the
+same `canonical.slug` or id fail the run before anything is written. Enrichment
+checkpoints are keyed by each record's slug plus a hash of what the model is
+given, so `--resume` reuses a result only for a record that has not changed.
+
 ## AI Enrichment
 
 The transformer supports **tiered AI enrichment** - a multi-tier system that uses different AI models based on field complexity:
+
+Enrichment fills gaps only. A model's value lands only in a field path listed under `enrichment.fields` (or, on the single-model path, a mapping with `enrichment.enabled`), and only where the mapped value is a gap under that field's `when`. A value the mapping wrote is never replaced. In the tiered path, `when` is read from the field's mapping (`mappings.<path>.enrichment.when`) and defaults to `"missing"`; a record with no gap in a prompt's fields is not sent to the model.
 
 ### Tiered Enrichment Configuration
 
@@ -238,11 +249,55 @@ For simpler use cases, you can still use field-level enrichment:
 
 ### Enrichment Options
 
-- `when`: `"always"` | `"missing"` | `"empty"` | `"notFound"`
+- `when`: when a field counts as a gap to fill. `"missing"` (default): the path is absent. `"notFound"`: absent or `null`. `"empty"`: absent, `null`, `""`, `[]` or `{}`. `"always"`: the same as `"empty"`, because a mapped value is never replaced.
 - `prompt`: Built-in prompt name or custom prompt
 - `context`: Source fields to include as AI context
 - `fields`: Specific sub-fields to enrich
 - `fallback`: Value to use if enrichment fails
+
+## Provenance
+
+Every value the transformer writes carries its origin. Next to its output, the CLI writes `provenance.sidecar.json`, validated by [`transformer/provenance/v1.0.0`](https://spec.vitness.me/schemas/transformer/provenance/v1.0.0/provenance.schema.json). It holds one record per document written, and in each record one entry per field path:
+
+```json
+{
+  "$schema": "https://spec.vitness.me/schemas/transformer/provenance/v1.0.0/provenance.schema.json",
+  "records": [
+    {
+      "fields": {
+        "canonical.description": {
+          "confidence": 0.86,
+          "model": "anthropic/claude-haiku-4.5",
+          "origin": "model",
+          "prompt": "description",
+          "promptVersion": "sha256:4b1d0c3e9f2a7d65",
+          "tier": "simple"
+        },
+        "canonical.name": { "from": "name", "origin": "source", "transform": ["titleCase"] },
+        "exerciseId": { "origin": "transform", "transform": ["uuid"] },
+        "metadata.status": { "origin": "default" }
+      },
+      "id": "0f8e3c52-7a4b-4d1e-9c0a-3b5f6e7d8a91",
+      "slug": "barbell-squat"
+    }
+  ]
+}
+```
+
+- `source`: read from the source at `from`, through `transform` if any.
+- `default`: the mapping's `default` stood in for an empty source.
+- `transform`: generated with no source value (an id, a timestamp).
+- `model`: written by enrichment. Records the model that answered, the prompt, a `promptVersion` that changes when the prompt's fixed text does, the tier, and the model's own `confidence` from 0 to 1 (`null` when it reported none).
+
+Keys are sorted and nothing depends on when the run happened, so the same input gives the same bytes. In code, each `TransformResult` carries the same map as `provenance`, and `buildProvenanceSidecar` / `serializeProvenanceSidecar` produce the file.
+
+`validation.rejectDefaults` lists field paths that may not hold a mapping default. A record whose value at one of them came from `default` fails, with an error naming the path, whatever `validation.enabled` and `strict` say:
+
+```json
+{
+  "validation": { "strict": true, "rejectDefaults": ["classification.level", "classification.force"] }
+}
+```
 
 ## Environment Variables
 
@@ -285,6 +340,9 @@ Use in config:
   }
 }
 ```
+
+A relative path resolves against the mapping file. A plugin is code: loading a
+mapping file runs the plugins it names, so use mapping files you trust.
 
 ## Example: Full Enrichment Workflow
 

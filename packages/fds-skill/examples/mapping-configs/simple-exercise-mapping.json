@@ -1,5 +1,5 @@
 {
-  "$schema": "https://spec.vitness.me/schemas/transformer/v1.1.0/mapping.schema.json",
+  "$schema": "https://spec.vitness.me/schemas/transformer/v1.2.0/mapping.schema.json",
   "version": "1.0.0",
   "targetSchema": {
     "version": "1.1.0",
@@ -105,13 +105,15 @@
     "metadata.createdAt": {
       "transform": "timestamp",
       "options": {
-        "format": "iso8601"
+        "format": "iso8601",
+        "clock": "now"
       }
     },
     "metadata.updatedAt": {
       "transform": "timestamp",
       "options": {
-        "format": "iso8601"
+        "format": "iso8601",
+        "clock": "now"
       }
     },
     "metadata.status": {

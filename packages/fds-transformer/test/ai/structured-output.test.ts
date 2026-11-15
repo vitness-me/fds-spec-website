@@ -167,7 +167,13 @@ describe('EnrichmentEngine structured output', () => {
     expect(format.type).toBe('json_schema');
     const item = format.json_schema.schema.properties.results.items;
     expect(item.properties.slug.enum).toEqual(['barbell-bench-press', 'push-up']);
-    expect(Object.keys(item.properties).sort()).toEqual(['description', 'slug']);
+    // Each answered field, plus the confidence the model may give for it. Sent,
+    // confidence is required but nullable so the request can be strict; the
+    // reply below has none and is still written, because it is optional when
+    // the reply is checked.
+    expect(Object.keys(item.properties).sort()).toEqual(['confidence', 'description', 'slug']);
+    expect(item.required.sort()).toEqual(['confidence', 'description', 'slug']);
+    expect(Object.keys(item.properties.confidence.properties)).toEqual(['description']);
     expect(item.additionalProperties).toBe(false);
 
     expect(result.results.get('ex-1')).toEqual({

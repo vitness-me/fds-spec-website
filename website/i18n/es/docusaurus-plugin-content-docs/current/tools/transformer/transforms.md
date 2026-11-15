@@ -86,6 +86,39 @@ Genera una cadena UUIDv4. FDS requiere UUID simples para todos los identificador
 
 **Salida de ejemplo:** `"550e8400-e29b-41d4-a716-446655440000"`
 
+Cada nueva ejecución asigna un id nuevo a cada registro. Usa `uuidv5` cuando los ids deban mantenerse entre ejecuciones.
+
+---
+
+### `uuidv5`
+
+Deriva un UUIDv5 a partir de un espacio de nombres y un nombre. La misma entrada siempre da el mismo id.
+
+**Entrada:** Cualquiera (se usa como `{{value}}`)  
+**Salida:** Cadena
+
+**Opciones:**
+
+| Opción | Tipo | Valor predeterminado | Descripción |
+|--------|------|---------|-------------|
+| `namespace` | string | (obligatorio) | UUID del espacio de nombres |
+| `name` | string | `{{value}}` | Plantilla del nombre; `{{value}}` es el valor mapeado y cualquier otro marcador es una ruta con puntos dentro del registro de origen |
+
+```json fds:fragment entity=mapping
+{
+  "exerciseId": {
+    "from": null,
+    "transform": "uuidv5",
+    "options": {
+      "namespace": "3a9a7a4e-5b1c-4f55-9a3e-6f2d1c0b8e71",
+      "name": "exercises_v6/Exercises/{{v6Id}}"
+    }
+  }
+}
+```
+
+Un marcador que el origen no rellena lanza un error, porque daría el mismo id a todos esos registros.
+
 ---
 
 ### `toArray`
@@ -222,21 +255,31 @@ Busca un valor en un registro, con coincidencia aproximada opcional.
 
 ### `timestamp`
 
-Genera una marca de tiempo ISO 8601.
+Formatea un instante como marca de tiempo ISO 8601. El instante viene del origen o de un reloj configurado, nunca del reloj del sistema por defecto, así que una nueva ejecución da la misma salida.
 
-**Entrada:** Cualquiera (se ignora)  
+**Entrada:** Una cadena de fecha, o vacío  
 **Salida:** Cadena
+
+**Opciones:**
+
+| Opción | Tipo | Valor predeterminado | Descripción |
+|--------|------|---------|-------------|
+| `clock` | string | (ninguno) | Instante ISO 8601 con zona (`Z` o un desfase) que se usa cuando el origen está vacío, o `"now"` para el reloj del sistema |
+| `format` | string | `iso8601` | `iso8601`, `unix`, `unixms` o `date` |
 
 ```json fds:fragment entity=mapping
 {
   "metadata.createdAt": {
-    "from": null,
-    "transform": "timestamp"
+    "from": "createdAt",
+    "transform": "timestamp",
+    "options": { "clock": "2026-01-01T00:00:00.000Z" }
   }
 }
 ```
 
 **Salida de ejemplo:** `"2025-01-27T15:30:00.000Z"`
+
+Con el origen vacío y sin `clock`, la transformación lanza un error.
 
 ---
 

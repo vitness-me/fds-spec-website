@@ -18,7 +18,12 @@ import { ConfigLoader } from '../config/config-loader.js';
 import { SchemaManager } from '../schemas/schema-manager.js';
 import { DEFAULT_SCHEMA_VERSION } from '../schemas/versions.js';
 import { CheckpointManager, CHECKPOINT_FILENAME } from '../ai/checkpoint-manager.js';
-import type { CostEstimate, EnrichmentProgress, TierName } from '../core/types.js';
+import {
+  PROVENANCE_SIDECAR_FILENAME,
+  buildProvenanceSidecar,
+  serializeProvenanceSidecar,
+} from '../core/provenance.js';
+import type { CostEstimate, EnrichmentProgress, RecordProvenance, TierName } from '../core/types.js';
 
 const program = new Command();
 
@@ -565,7 +570,7 @@ program
  */
 async function writeOutput(
   fs: typeof import('fs/promises'),
-  results: Array<{ success?: boolean; data?: unknown }>,
+  results: Array<{ success?: boolean; data?: unknown; provenance?: RecordProvenance }>,
   config: import('../core/types.js').MappingConfig,
   outputDir: string,
   options: { output?: string }
@@ -621,6 +626,14 @@ async function writeOutput(
 
       spinner.stop(`Wrote ${formatNumber(successfulResults.length)} files to ${dir}`);
     }
+
+    // Where every written value came from, beside the documents
+    const sidecarPath = `${dir}/${PROVENANCE_SIDECAR_FILENAME}`;
+    await fs.writeFile(
+      sidecarPath,
+      serializeProvenanceSidecar(buildProvenanceSidecar(successfulResults), prettyPrint)
+    );
+    log('info', `Wrote provenance for each field to ${sidecarPath}`);
   } else {
     // No output directory - print summary to stdout
     log(

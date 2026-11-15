@@ -9,26 +9,69 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **`uuidv5` derives ids from the input.** `options.namespace` is the namespace
+  UUID and `options.name` a template over the source record
+  (`exercises_v6/Exercises/{{v6Id}}`). The same input always gives the same id.
+  An unfilled or unreadable placeholder, a template with no placeholder, or an
+  object for a name throws rather than giving many records one id.
+- **Config `plugins` are loaded.** They were declared and never read. A string
+  or `{ name, options }` names the module; a relative path resolves against the
+  config file; a module may export a factory that receives `options`. A plugin
+  that fails to load fails the run. A plugin is code, so loading a mapping file
+  now runs the plugins it names: use mapping files you trust.
 - **Tiered enrichment asks OpenRouter for structured output.** Each prompt call
   sends a JSON schema as `response_format`, routed only to endpoints that
-  support it. The schema asks for the configured fields alone and, in a batch,
-  only for the exercises in that batch.
+  support it. The schema asks only for the configured fields that are gaps, and
+  in a batch only for the exercises that have them, each exactly once.
 - **Model output is constrained to the target schema and the registries.**
   Each requested field takes the value schema the target exercise schema
   gives its path, with `$defs` inlined and narrowed by the field's configured
-  `enum`; the request is sent strict. Secondary muscles and optional
-  equipment are chosen from the loaded registries by slug and written as the
-  registry's entries, never as the model's text. A value the schema or the
-  registry does not allow is an abstention.
+  `enum`; the request is sent strict where strict endpoints accept it.
+  Secondary muscles and optional equipment are chosen from the loaded
+  registries by slug and written as the registry's entries, never as the
+  model's text. A value the schema or the registry does not allow is an
+  abstention.
+- **Every call is reported.** `enrichBatch` returns `calls`, with the model
+  requested and the model that served, any degrade, token usage, cost when
+  OpenRouter reports it, and the outcome.
+- **Every written value carries its origin.** Each `TransformResult` has a
+  `provenance` map, field path to origin: `source` (with the source path and
+  transforms), `default`, `transform` (generated with no input), or `model`
+  (the model that answered, the prompt, a `promptVersion` hash of its fixed
+  text, the tier and the model's `confidence`). The CLI writes it as
+  `provenance.sidecar.json` beside the output, with keys sorted so the same
+  input gives the same bytes, validated by the new published schema
+  `transformer/provenance/v1.0.0`. Provenance survives checkpoint resume.
+- **Enrichment prompts ask for a confidence per field**, from 0 to 1, on the
+  tiered and the single-model path. A value outside that range, or none, is
+  recorded as `null`.
+- **`validation.rejectDefaults`** (mapping schema 1.2.0) names field paths that
+  may not hold a mapping default; a record fails when a default supplies the
+  value there (at the path, from a default object above it, or beneath it),
+  whatever `enabled` and `strict` say.
+
+### Changed
+
 - **Breaking: tiered `enrichBatch` needs `options.target`** (the target
   schema and the loaded registries), which replaces the never-read
   `schemaDefs`. Without it, or with a field the target schema cannot satisfy,
   the run stops before any model call. The transformer passes it.
-- **Every call is reported.** `enrichBatch` returns `calls`, with the model
-  requested and the model that served, any degrade, token usage, cost when
-  OpenRouter reports it, and the outcome.
-
-### Changed
+- **Breaking: `timestamp` no longer reads the wall clock by default.** It
+  formats the source value, or `options.clock` (an ISO 8601 instant with a
+  zone) when the source is empty, and throws when there is neither. Set `"clock": "now"` to
+  keep the old behaviour. A source value that is not a date throws and names
+  the value.
+- **A slug or id collision fails the run.** Two records that produce the same
+  `canonical.slug` used to overwrite each other's `<slug>.json` and swap
+  enrichment results, and with `uuidv5` two records whose names match share an
+  id. Now the run stops and names the records.
+- **Enrichment checkpoints resume.** Records were checkpointed under their
+  `exerciseId`, a fresh random UUID on every run, so a resume never matched.
+  The key is now the record's slug, unique within a run, plus a hash of the
+  input the model is given, so a resume matches even when `exerciseId` is a
+  random `uuid`, and a record that changed since the checkpoint is enriched again. A
+  record skips only the tiers its checkpoint already holds, so a tier that
+  failed is retried. Checkpoints written by 0.2.0 do not match and are ignored.
 
 - **Release 1.5.0 is bundled and is the default.** It names body-atlas 1.1.0,
   which adds optional `license` and `attribution` on a view's asset. 1.0.0
@@ -45,6 +88,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   up in shell history.
 - **Degrading a tier no longer changes the model of later calls.** The model
   is chosen per call instead of being set on the shared provider.
+- **`transform` writes `provenance.sidecar.json` into the output directory**
+  beside the documents. A pipeline that reads every `*.json` there should skip
+  it.
+- **Breaking: `when` no longer lets enrichment replace a value.** `"always"`
+  used to regenerate a field on every run; it now behaves as `"empty"`.
+  `"empty"` now also counts `[]` and `{}` as empty.
+
+### Fixed
+
+- **Enrichment fills gaps and never overwrites mapped values.** A model's value
+  used to overwrite whatever the mapping wrote, arrays included, and the tiered
+  path wrote every key a prompt returned: enabling `exerciseType` also replaced
+  `level`, and enabling `kineticChain` replaced force, mechanics, movement, tags
+  and secondary muscles. Now a value lands only in a configured field path and
+  only where the mapped value is a gap. The tiered path honours each field's
+  mapping `when` and sends only records with a gap.
+- **Fields enriched by different prompts no longer erase each other.** Results
+  were combined one top-level key at a time, so `canonical.aliases` erased
+  `canonical.description`, and a later tier's `classification` erased an
+  earlier one's, in a run and on resume. They now merge field by field.
 
 ## [0.2.0] - 2026-08-11
 

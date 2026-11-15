@@ -68,9 +68,10 @@ const DOC_PAIRS = [
  * Published schemas with no reader-facing page, and why.
  *
  * The transformer mapping schema configures a tool rather than describing an
- * entity; it belongs in the transformer documentation, which it has.
+ * entity, and the provenance schema describes a file that tool writes; both
+ * belong in the transformer documentation, which has them.
  */
-const NO_PAGE_NEEDED = new Set(['mapping']);
+const NO_PAGE_NEEDED = new Set(['mapping', 'provenance']);
 
 /**
  * Pages that may differ from their source.
