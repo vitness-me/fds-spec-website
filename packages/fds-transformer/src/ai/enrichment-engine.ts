@@ -495,23 +495,6 @@ export class EnrichmentEngine {
       }
     }
 
-    // Get completed IDs from checkpoint
-    const completedIds = new Set(checkpointManager?.getCompletedIds() ?? []);
-
-    // Filter exercises to process
-    const exercisesToProcess = exercises.filter((e) => !completedIds.has(e.id));
-
-    if (exercisesToProcess.length === 0) {
-      return {
-        results,
-        failedIds,
-        apiCalls,
-        tokensUsed,
-        durationMs: Date.now() - startTime,
-        errors,
-      };
-    }
-
     // Group fields by tier
     const fieldsByTier = this.groupFieldsByTier();
 
@@ -534,6 +517,14 @@ export class EnrichmentEngine {
         if (debug) {
           console.log(`[DEBUG enrichBatch] SKIPPING tier ${tier} - no fields`);
         }
+        continue;
+      }
+
+      // A record skips only the tiers its checkpoint already holds
+      const exercisesToProcess = exercises.filter(
+        (e) => !checkpointManager?.getResults(e.id)?.[tier]
+      );
+      if (exercisesToProcess.length === 0) {
         continue;
       }
 

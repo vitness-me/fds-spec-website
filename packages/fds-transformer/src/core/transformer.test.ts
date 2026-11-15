@@ -442,8 +442,8 @@ describe('Transformer', () => {
           options: { type: 'gif' }
         },
         'metadata.status': { from: null, default: 'draft' },
-        'metadata.createdAt': { from: null, transform: 'timestamp' },
-        'metadata.updatedAt': { from: null, transform: 'timestamp' },
+        'metadata.createdAt': { from: null, transform: 'timestamp', options: { clock: '2026-01-01T00:00:00.000Z' } },
+        'metadata.updatedAt': { from: null, transform: 'timestamp', options: { clock: '2026-01-01T00:00:00.000Z' } },
         'metadata.externalRefs': {
           from: 'id',
           transform: 'template',

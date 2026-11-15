@@ -112,14 +112,23 @@ Create a `mapping.json` file to define how source fields map to FDS:
 |-----------|-------------|
 | `slugify` | Convert to URL-safe slug |
 | `titleCase` | Convert to Title Case |
-| `uuid` | Generate UUIDv4 |
+| `uuid` | Generate a random UUIDv4 (a rerun gives new ids) |
+| `uuidv5` | Derive a UUIDv5 from `options.namespace` and an `options.name` template such as `exercises_v6/Exercises/{{v6Id}}`; the same input always gives the same id |
 | `toArray` | Ensure value is array |
 | `toMediaArray` | Convert URLs to FDS media format |
 | `registryLookup` | Find in registry with fuzzy matching |
-| `timestamp` | Generate ISO timestamp |
+| `timestamp` | Format the source instant, or `options.clock` (an ISO 8601 instant with a zone) when the source is empty. Without a clock it throws; `"clock": "now"` opts into the wall clock |
 | `autoGenerate` | Auto-generate metadata fields |
 | `template` | Apply template strings |
 | `urlTransform` | Transform URLs |
+
+### Repeatable runs
+
+The same input and config give byte-identical output. Use `uuidv5` for ids and
+take timestamps from the source or a fixed `clock`. Two records that produce the
+same `canonical.slug` or id fail the run before anything is written. Enrichment
+checkpoints are keyed by each record's slug plus a hash of what the model is
+given, so `--resume` reuses a result only for a record that has not changed.
 
 ## AI Enrichment
 
@@ -287,6 +296,9 @@ Use in config:
   }
 }
 ```
+
+A relative path resolves against the mapping file. A plugin is code: loading a
+mapping file runs the plugins it names, so use mapping files you trust.
 
 ## Example: Full Enrichment Workflow
 

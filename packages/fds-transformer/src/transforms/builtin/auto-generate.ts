@@ -5,14 +5,19 @@
 import type { TransformFunction, TransformContext } from '../../core/types.js';
 
 /**
- * Generate a timestamp
+ * Format an instant taken from the source, or from a configured clock.
+ *
+ * A run must be repeatable, so an empty source value never falls back to the
+ * wall clock on its own. `options.clock` is an ISO 8601 instant with a zone,
+ * stamped on every record that has no source value, or `"now"` to opt into
+ * the wall clock. Without either, the transform throws.
  */
 export const timestamp: TransformFunction = (
   value: unknown,
   options: Record<string, unknown> = {}
 ): string => {
   const format = String(options.format || 'iso8601');
-  const date = value ? new Date(String(value)) : new Date();
+  const date = instantOf(value, options.clock);
 
   switch (format) {
     case 'iso8601':
@@ -28,6 +33,37 @@ export const timestamp: TransformFunction = (
       return date.toISOString();
   }
 };
+
+function instantOf(value: unknown, clock: unknown): Date {
+  if (value !== undefined && value !== null && value !== '') {
+    return parseInstant(value, `${JSON.stringify(value)} is not a date`);
+  }
+
+  if (clock === undefined) {
+    throw new Error(
+      'timestamp: the source has no value and no clock is configured. ' +
+        'Map the field from the source, or set options.clock to an ISO 8601 instant ' +
+        '("now" stamps the wall clock).'
+    );
+  }
+
+  if (clock === 'now') return new Date();
+  if (typeof clock !== 'string' || !/(?:Z|[+-]\d{2}:?\d{2})$/i.test(clock)) {
+    throw new Error(
+      `timestamp: options.clock ${JSON.stringify(clock)} needs a zone (Z or an offset), ` +
+        'or it reads as a different instant on each host'
+    );
+  }
+  return parseInstant(clock, `options.clock ${JSON.stringify(clock)} is not an instant or "now"`);
+}
+
+function parseInstant(raw: unknown, problem: string): Date {
+  const date = new Date(String(raw));
+  if (Number.isNaN(date.getTime())) {
+    throw new Error(`timestamp: ${problem}`);
+  }
+  return date;
+}
 
 /**
  * Auto-generate metadata fields
