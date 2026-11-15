@@ -7,20 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Changed
-
-- **Release 1.5.0 is bundled and is the default.** It names body-atlas 1.1.0,
-  which adds optional `license` and `attribution` on a view's asset. 1.0.0
-  through 1.4.0 stay bundled; pin one to keep validating against it.
-- **`transform` writes `provenance.sidecar.json` into the output directory**
-  beside the documents. A pipeline that reads every `*.json` there should skip
-  it.
-- **Breaking: `when` no longer lets enrichment replace a value.** `"always"`
-  used to regenerate a field on every run; it now behaves as `"empty"`.
-  `"empty"` now also counts `[]` and `{}` as empty.
-
 ### Added
 
+- **`uuidv5` derives ids from the input.** `options.namespace` is the namespace
+  UUID and `options.name` a template over the source record
+  (`exercises_v6/Exercises/{{v6Id}}`). The same input always gives the same id.
+  An unfilled or unreadable placeholder, a template with no placeholder, or an
+  object for a name throws rather than giving many records one id.
+- **Config `plugins` are loaded.** They were declared and never read. A string
+  or `{ name, options }` names the module; a relative path resolves against the
+  config file; a module may export a factory that receives `options`. A plugin
+  that fails to load fails the run. A plugin is code, so loading a mapping file
+  now runs the plugins it names: use mapping files you trust.
 - **Every written value carries its origin.** Each `TransformResult` has a
   `provenance` map, field path to origin: `source` (with the source path and
   transforms), `default`, `transform` (generated with no input), or `model`
@@ -36,6 +34,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   may not hold a mapping default; a record fails when a default supplies the
   value there (at the path, from a default object above it, or beneath it),
   whatever `enabled` and `strict` say.
+
+### Changed
+
+- **Breaking: `timestamp` no longer reads the wall clock by default.** It
+  formats the source value, or `options.clock` (an ISO 8601 instant with a
+  zone) when the source is empty, and throws when there is neither. Set `"clock": "now"` to
+  keep the old behaviour. A source value that is not a date throws and names
+  the value.
+- **A slug or id collision fails the run.** Two records that produce the same
+  `canonical.slug` used to overwrite each other's `<slug>.json` and swap
+  enrichment results, and with `uuidv5` two records whose names match share an
+  id. Now the run stops and names the records.
+- **Enrichment checkpoints resume.** Records were checkpointed under their
+  `exerciseId`, a fresh random UUID on every run, so a resume never matched.
+  The key is now the record's slug, unique within a run, plus a hash of the
+  input the model is given, so a resume matches even when `exerciseId` is a
+  random `uuid`, and a record that changed since the checkpoint is enriched again. A
+  record skips only the tiers its checkpoint already holds, so a tier that
+  failed is retried. Checkpoints written by 0.2.0 do not match and are ignored.
+
+- **Release 1.5.0 is bundled and is the default.** It names body-atlas 1.1.0,
+  which adds optional `license` and `attribution` on a view's asset. 1.0.0
+  through 1.4.0 stay bundled; pin one to keep validating against it.
+- **`transform` writes `provenance.sidecar.json` into the output directory**
+  beside the documents. A pipeline that reads every `*.json` there should skip
+  it.
+- **Breaking: `when` no longer lets enrichment replace a value.** `"always"`
+  used to regenerate a field on every run; it now behaves as `"empty"`.
+  `"empty"` now also counts `[]` and `{}` as empty.
 
 ### Fixed
 

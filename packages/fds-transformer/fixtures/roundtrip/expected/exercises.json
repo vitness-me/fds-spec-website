@@ -1,6 +1,6 @@
 [
   {
-    "exerciseId": "47b06e82-3215-4ab8-8a32-ce1ad70ee1cb",
+    "exerciseId": "665379ca-04d1-586a-a1fd-e5ff052eef26",
     "schemaVersion": "1.1.0",
     "canonical": {
       "name": "Back Squat",
@@ -46,8 +46,8 @@
     ],
     "metadata": {
       "status": "active",
-      "createdAt": "2026-08-12T00:10:17.705Z",
-      "updatedAt": "2026-08-12T00:10:17.706Z",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z",
       "source": "roundtrip.fixture",
       "externalRefs": [
         {
@@ -58,7 +58,7 @@
     }
   },
   {
-    "exerciseId": "8ee67200-336c-4912-afbe-e671d0891f72",
+    "exerciseId": "d8b1203b-ed97-5aa3-9e13-3725faff39ef",
     "schemaVersion": "1.1.0",
     "canonical": {
       "name": "Lat Pulldown",
@@ -104,8 +104,8 @@
     ],
     "metadata": {
       "status": "active",
-      "createdAt": "2026-08-12T00:10:17.705Z",
-      "updatedAt": "2026-08-12T00:10:17.706Z",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z",
       "source": "roundtrip.fixture",
       "externalRefs": [
         {
@@ -116,7 +116,7 @@
     }
   },
   {
-    "exerciseId": "ae002ef8-3aaf-4fe9-91a2-4618d5506290",
+    "exerciseId": "a2baccf4-db39-58d7-a8f3-c841024cf0c1",
     "schemaVersion": "1.1.0",
     "canonical": {
       "name": "Dumbbell Crunch",
@@ -162,8 +162,8 @@
     ],
     "metadata": {
       "status": "active",
-      "createdAt": "2026-08-12T00:10:17.705Z",
-      "updatedAt": "2026-08-12T00:10:17.706Z",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z",
       "source": "roundtrip.fixture",
       "externalRefs": [
         {

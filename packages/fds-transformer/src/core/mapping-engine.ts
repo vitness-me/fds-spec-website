@@ -6,6 +6,7 @@ import type {
   FieldMapping,
   FieldMappingObject,
   FieldProvenance,
+  PluginConfig,
   RecordProvenance,
   TransformContext,
 } from './types.js';
@@ -17,6 +18,13 @@ export class MappingEngine {
 
   constructor() {
     this.transformRegistry = new TransformRegistry();
+  }
+
+  /**
+   * Load a config plugin so its transforms can be named in mappings
+   */
+  async loadPlugin(plugin: PluginConfig): Promise<void> {
+    await this.transformRegistry.loadPlugin(plugin);
   }
 
   /**

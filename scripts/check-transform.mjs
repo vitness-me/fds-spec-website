@@ -45,8 +45,9 @@
  *   - every document validates against the published schema for the version it
  *     declares, resolved through the release manifest
  *   - the documents match `fixtures/roundtrip/expected/exercises.json`, field
- *     for field, once the values only a run can know — the generated UUID and
- *     the two timestamps — are checked for shape and set aside. That file is a
+ *     for field and then byte for byte. Nothing is set aside: ids are UUIDv5
+ *     of the source id and timestamps come from the source or a fixed clock,
+ *     so a run has no value only it can know. That file is a
  *     committed copy of the CLI's own output, and the website's landing page
  *     renders it as "what the transformer produces". A demo that quotes a tool
  *     is asserted in one place and implemented in another, which is this
@@ -59,20 +60,22 @@
  *     displays, and the gate replays those arguments in a scratch directory
  *     holding only the fixture's files and diffs the result. Spinner redraws
  *     are collapsed to the frame a finished terminal shows, and elapsed-time
- *     figures are excused the way UUIDs are above. If it fails because the
+ *     figures are excused, since a fresh run cannot reproduce them. If it fails because the
  *     CLI's output legitimately changed, re-record with `--record-transcript`
  *     and commit the result.
  *   - every written value carries its origin: the run writes a provenance
  *     sidecar that validates against the published provenance schema, holds
  *     one record per document with that document's id and slug, and names an
  *     origin for every mapped field the document holds. The same transform run
- *     from another working directory writes the same provenance
+ *     from another working directory writes the same sidecar, byte for byte
  *   - no registry lookup silently resolved to nothing — a lookup that was asked
  *     for and matched nothing returns an empty array, which validates, writes,
  *     and is indistinguishable from a field nobody asked to fill
- *   - the same transform run from an unrelated working directory produces the
- *     same documents, so schema resolution does not depend on where the tool
- *     was invoked from
+ *   - the same transform run again, from an unrelated working directory,
+ *     writes the same bytes (compared by sha256): a rerun is byte-identical,
+ *     and schema resolution does not depend on where the tool was invoked
+ *     from. Both runs have the enrichment key removed from their environment,
+ *     so no model can be called
  *   - `validate --version <release>` reads the release it was given. It did not:
  *     commander's own `--version` flag answered first, printed the package
  *     version and exited 0, so a script checking the exit status was told data
@@ -91,6 +94,7 @@
  */
 
 import { execFile, spawn } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import { access, cp, mkdir, mkdtemp, open, readdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -337,20 +341,6 @@ export function inspectDocuments({
 
 // ── the committed expected output ────────────────────────────────────────────
 
-const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-const ISO_INSTANT = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$/;
-
-/** Fields a fresh run cannot reproduce, each with the shape it must still have. */
-const RUN_DEPENDENT = [
-  { path: 'exerciseId', pattern: UUID, expects: 'a UUID' },
-  { path: 'metadata.createdAt', pattern: ISO_INSTANT, expects: 'an ISO 8601 instant' },
-  { path: 'metadata.updatedAt', pattern: ISO_INSTANT, expects: 'an ISO 8601 instant' },
-];
-
-function valueAt(node, dotted) {
-  return dotted.split('.').reduce((current, key) => (current == null ? current : current[key]), node);
-}
-
 /** Every path at which two JSON values differ, depth-first, capped by the caller. */
 function diffPaths(actual, expected, path = '') {
   if (actual === expected) return [];
@@ -368,6 +358,10 @@ function diffPaths(actual, expected, path = '') {
 // ── the provenance sidecar ───────────────────────────────────────────────────
 
 const SIDECAR_NAME = 'provenance.sidecar.json';
+
+function valueAt(node, dotted) {
+  return dotted.split('.').reduce((current, key) => (current == null ? current : current[key]), node);
+}
 
 /**
  * The run's provenance sidecar against its documents and the published schema.
@@ -410,20 +404,10 @@ export function inspectSidecar({ sidecar, documents, mappedPaths, validate }) {
   });
 }
 
-/** The provenance of two runs of one transform, ids aside: they may be generated. */
-export function sameProvenance(a, b) {
-  const shape = (sidecar) => JSON.stringify(sidecar?.records.map(({ slug, fields }) => ({ slug, fields })));
-  return shape(a) === shape(b);
-}
-
 /**
- * The run's documents against the committed expected output.
- *
- * Both sides are compared with the run-dependent fields replaced by a
- * placeholder — after each is checked, on the *run* side, for the shape it
- * cannot help having. The expected file is a real CLI run committed verbatim,
- * so its own UUIDs and timestamps stay in the repository and in what the
- * website renders, but never decide this comparison.
+ * The run's documents against the committed expected output, field by field,
+ * so a drift names the path that moved. The byte comparison below is the one
+ * that cannot be argued with; this one says where to look.
  */
 export function compareToExpected({ documents, expected }) {
   const problems = [];
@@ -439,24 +423,7 @@ export function compareToExpected({ documents, expected }) {
 
   for (const [index, document] of documents.entries()) {
     const where = `document ${index + 1}`;
-    const masked = { actual: structuredClone(document), expected: structuredClone(expected[index]) };
-
-    for (const { path, pattern, expects } of RUN_DEPENDENT) {
-      const produced = valueAt(document, path);
-      if (typeof produced !== 'string' || !pattern.test(produced)) {
-        problems.push(
-          `${where}: ${path} is ${JSON.stringify(produced)}, not ${expects}.\n` +
-            '    This field is excused from the expected-output comparison because a ' +
-            'fresh run cannot reproduce it — but only while it keeps its shape.'
-        );
-      }
-      for (const side of Object.values(masked)) {
-        const parent = valueAt(side, path.split('.').slice(0, -1).join('.')) ?? side;
-        if (parent && typeof parent === 'object') parent[path.split('.').at(-1)] = '<run-dependent>';
-      }
-    }
-
-    const diverged = diffPaths(masked.actual, masked.expected);
+    const diverged = diffPaths(document, expected[index]);
     if (diverged.length) {
       problems.push(
         `${where} does not match fixtures/roundtrip/expected/exercises.json:\n` +
@@ -469,6 +436,23 @@ export function compareToExpected({ documents, expected }) {
   }
 
   return problems;
+}
+
+const sha256 = (bytes) => createHash('sha256').update(bytes).digest('hex');
+
+/**
+ * Two outputs that must be the same bytes: two runs of the same input, or a
+ * run and the committed copy of one. The same input gives the same ids,
+ * timestamps and order, so any difference is a defect, never noise.
+ */
+export function compareBytes({ what, left, right }) {
+  const [a, b] = [sha256(left), sha256(right)];
+  if (a === b) return [];
+  return [
+    `${what} differ: sha256 ${a.slice(0, 12)}… != ${b.slice(0, 12)}…\n` +
+      '    The same input must give the same output. A value read from the wall ' +
+      'clock or a random id is the usual cause.',
+  ];
 }
 
 // ── the committed terminal transcript ────────────────────────────────────────
@@ -715,7 +699,6 @@ function selfTest(context) {
     },
   };
   const committed = structuredClone(produced);
-  committed.exerciseId = '11111111-1111-4111-8111-111111111111'; // differs; must not matter
 
   expect(
     'a field that drifted from the committed expected output',
@@ -727,12 +710,12 @@ function selfTest(context) {
   );
 
   expect(
-    'an exerciseId that stopped being a UUID',
+    'an exerciseId that differs from the committed one',
     compareToExpected({
-      documents: [{ ...produced, exerciseId: 'not-a-uuid' }],
-      expected: [committed],
+      documents: [produced],
+      expected: [{ ...committed, exerciseId: '11111111-1111-4111-8111-111111111111' }],
     }),
-    'not a UUID'
+    'exerciseId'
   );
 
   expect(
@@ -743,9 +726,23 @@ function selfTest(context) {
 
   if (compareToExpected({ documents: [produced], expected: [committed] }).length) {
     cases += 1;
-    failures.push(
-      'self-test: documents differing only in run-dependent fields were reported as drift'
-    );
+    failures.push('self-test: identical documents were reported as drift');
+  }
+
+  // A rerun stamped a millisecond later is a different file.
+  const firstRun = Buffer.from(JSON.stringify([produced], null, 2));
+  const secondRun = Buffer.from(
+    JSON.stringify([{ ...produced, metadata: { ...produced.metadata, updatedAt: '2026-01-01T00:00:00.001Z' } }], null, 2)
+  );
+  expect(
+    'two runs whose bytes differ',
+    compareBytes({ what: 'two runs', left: firstRun, right: secondRun }),
+    'two runs differ: sha256'
+  );
+
+  if (compareBytes({ what: 'two runs', left: firstRun, right: Buffer.from(firstRun) }).length) {
+    cases += 1;
+    failures.push('self-test: two identical runs were reported as different bytes');
   }
 
   {
@@ -835,10 +832,6 @@ function selfTest(context) {
     cases += 1;
     if (inspectSidecar({ sidecar, documents, mappedPaths, validate }).length) {
       failures.push('self-test: a sound sidecar was reported as a problem');
-    }
-    cases += 1;
-    if (sameProvenance(sidecar, { ...sidecar, records: [{ ...record, slug: 'y' }] })) {
-      failures.push('self-test: provenance that differs between runs was reported as the same');
     }
   }
 
@@ -947,9 +940,12 @@ const outputName = fixtureConfig.output?.singleFileName ?? 'exercises.json';
  * The transform, run through the built CLI rather than the library, because the
  * CLI is what ships. Absolute paths and an explicit `cwd`, so the only thing
  * left that could depend on the working directory is schema resolution — which
- * is what the second run exists to catch.
+ * is what the second run exists to catch. Without a key the transformer has
+ * no provider, so neither run can call a model.
  */
 async function transformInto(outDir, cwd) {
+  const env = { ...process.env };
+  delete env.OPENROUTER_API_KEY;
   await run(
     process.execPath,
     [
@@ -960,13 +956,22 @@ async function transformInto(outDir, cwd) {
       '--no-enrichment',
       '--log-level', 'error',
     ],
-    { cwd }
+    { cwd, env }
   );
-  return JSON.parse(await readFile(join(outDir, outputName), 'utf8'));
+  const bytes = await readFile(join(outDir, outputName));
+  return { bytes, documents: JSON.parse(bytes.toString('utf8')) };
+}
+
+async function sidecarBytes(outDir) {
+  return readFile(join(outDir, SIDECAR_NAME)).catch(() => Buffer.alloc(0));
 }
 
 async function sidecarIn(outDir) {
-  return readFile(join(outDir, SIDECAR_NAME), 'utf8').then(JSON.parse, () => null);
+  try {
+    return JSON.parse((await readFile(join(outDir, SIDECAR_NAME))).toString('utf8'));
+  } catch {
+    return null;
+  }
 }
 
 const workspace = await mkdtemp(join(tmpdir(), 'fds-roundtrip-'));
@@ -1012,11 +1017,14 @@ async function captureTranscript(args) {
   return normalizeTranscript(await readFile(capturePath, 'utf8'));
 }
 
+/** The first run's output. Reported by sha256 once both runs and the committed copy agree. */
+let bytes = null;
+
 try {
   let documents = null;
 
   try {
-    documents = await transformInto(join(workspace, 'from-root'), ROOT);
+    ({ documents, bytes } = await transformInto(join(workspace, 'from-root'), ROOT));
   } catch (error) {
     problems.push(
       'the transform did not complete when run from the repository root: ' +
@@ -1025,10 +1033,17 @@ try {
   }
 
   if (documents) {
-    const expected = JSON.parse(
-      await readFile(join(ROOT, FIXTURE_DIR, 'expected', outputName), 'utf8')
+    const committed = await readFile(join(ROOT, FIXTURE_DIR, 'expected', outputName));
+    problems.push(
+      ...compareToExpected({ documents, expected: JSON.parse(committed.toString('utf8')) })
     );
-    problems.push(...compareToExpected({ documents, expected }));
+    problems.push(
+      ...compareBytes({
+        what: `the run's output and fixtures/roundtrip/expected/${outputName}`,
+        left: bytes,
+        right: committed,
+      })
+    );
 
     const sidecar = await sidecarIn(join(workspace, 'from-root'));
     problems.push(
@@ -1052,27 +1067,25 @@ try {
       })
     );
 
-    // Same inputs, a working directory with no relation to this repository. A
-    // tool whose schema resolution depends on where it was invoked from is
-    // broken for anyone scripting it, and the failure surfaces as a missing file
-    // on a path the caller never wrote. Strict validation drops what it cannot
-    // check, so a resolution failure shows up as a shorter output.
+    // Same inputs, a second run, from a working directory with no relation to
+    // this repository. It must write the same bytes: a rerun is byte-identical,
+    // and a tool whose schema resolution depends on where it was invoked from
+    // is broken for anyone scripting it. Strict validation drops what it cannot
+    // check, so a resolution failure shows up as different bytes too.
     try {
-      const elsewhere = await transformInto(join(workspace, 'from-elsewhere'), workspace);
-      if (elsewhere.length !== documents.length) {
-        problems.push(
-          `the transform produced ${documents.length} document(s) from the ` +
-            `repository root and ${elsewhere.length} from ${workspace}.\n` +
-            '    Its behaviour depends on the working directory.'
-        );
-      }
-      const sidecarElsewhere = await sidecarIn(join(workspace, 'from-elsewhere'));
-      if (!sameProvenance(sidecar, sidecarElsewhere)) {
-        problems.push(
-          `the same transform recorded different provenance from the repository root ` +
-            `and from ${workspace}.\n    Its provenance is not deterministic.`
-        );
-      }
+      const rerun = await transformInto(join(workspace, 'from-elsewhere'), workspace);
+      problems.push(
+        ...compareBytes({
+          what: `two runs of the same input (from the repository root and from ${workspace})`,
+          left: bytes,
+          right: rerun.bytes,
+        }),
+        ...compareBytes({
+          what: `the provenance sidecars of those two runs`,
+          left: await sidecarBytes(join(workspace, 'from-root')),
+          right: await sidecarBytes(join(workspace, 'from-elsewhere')),
+        })
+      );
     } catch (error) {
       problems.push(
         `the transform completed from the repository root but not from ${workspace}: ` +
@@ -1184,5 +1197,6 @@ if (report(problems)) process.exit(1);
 console.log(
   `  ok    ${configs.length} mapping configuration(s) name published versions and ` +
     `write constants their schema accepts; ${source.length} source record(s) ` +
-    'transformed and validated against their published schema.'
+    'transformed and validated against their published schema; a rerun wrote ' +
+    `the same bytes as the first run and the committed copy (sha256 ${sha256(bytes)}).`
 );

@@ -37,6 +37,15 @@ export const DEFAULT_CHECKPOINT_CONFIG: CheckpointConfig = {
 };
 
 /**
+ * The key a record's enrichment is checkpointed under: its stable id plus a
+ * hash of the input the model is given. A resume reuses a result only for
+ * the same record with the same input; a changed record is enriched again.
+ */
+export function checkpointKey(stableId: string, input: unknown): string {
+  return `${stableId}@${shortHash(input)}`;
+}
+
+/**
  * Options for initializing a new checkpoint
  */
 export interface CheckpointInitOptions {
@@ -396,77 +405,7 @@ export class CheckpointManager {
    * Hash configuration for change detection
    */
   private hashConfig(config: unknown): string {
-    const json = this.stableStringify(config);
-    return createHash('sha256').update(json).digest('hex').substring(0, 16);
-  }
-
-  private stableStringify(value: unknown): string {
-    const seen = new WeakSet<object>();
-
-    const stringify = (input: unknown): string | undefined => {
-      if (input === null) {
-        return 'null';
-      }
-
-      const inputType = typeof input;
-
-      if (inputType === 'number') {
-        return Number.isFinite(input) ? String(input) : 'null';
-      }
-
-      if (inputType === 'string') {
-        return JSON.stringify(input);
-      }
-
-      if (inputType === 'boolean') {
-        return input ? 'true' : 'false';
-      }
-
-      if (inputType === 'bigint') {
-        return JSON.stringify(String(input));
-      }
-
-      if (inputType === 'undefined' || inputType === 'function' || inputType === 'symbol') {
-        return undefined;
-      }
-
-      if (inputType !== 'object') {
-        return JSON.stringify(input);
-      }
-
-      const objectValue = input as Record<string, unknown>;
-
-      if (typeof objectValue.toJSON === 'function') {
-        return stringify(objectValue.toJSON());
-      }
-
-      if (Array.isArray(objectValue)) {
-        const items = objectValue.map((item) => stringify(item) ?? 'null');
-        return `[${items.join(',')} ]`.replace(', ]', ']');
-      }
-
-      if (seen.has(objectValue)) {
-        throw new TypeError('Cannot stringify circular structure');
-      }
-
-      seen.add(objectValue);
-
-      const keys = Object.keys(objectValue).sort();
-      const entries: string[] = [];
-
-      for (const key of keys) {
-        const valueString = stringify(objectValue[key]);
-        if (valueString !== undefined) {
-          entries.push(`${JSON.stringify(key)}:${valueString}`);
-        }
-      }
-
-      seen.delete(objectValue);
-
-      return `{${entries.join(',')}}`;
-    };
-
-    return stringify(value) ?? 'null';
+    return shortHash(config);
   }
 
   /**
@@ -478,4 +417,78 @@ export class CheckpointManager {
       mkdirSync(dir, { recursive: true });
     }
   }
+}
+
+/** First 16 hex digits of the sha256 of a value's key-sorted JSON */
+function shortHash(value: unknown): string {
+  return createHash('sha256').update(stableStringify(value)).digest('hex').substring(0, 16);
+}
+
+function stableStringify(value: unknown): string {
+  const seen = new WeakSet<object>();
+
+  const stringify = (input: unknown): string | undefined => {
+    if (input === null) {
+      return 'null';
+    }
+
+    const inputType = typeof input;
+
+    if (inputType === 'number') {
+      return Number.isFinite(input) ? String(input) : 'null';
+    }
+
+    if (inputType === 'string') {
+      return JSON.stringify(input);
+    }
+
+    if (inputType === 'boolean') {
+      return input ? 'true' : 'false';
+    }
+
+    if (inputType === 'bigint') {
+      return JSON.stringify(String(input));
+    }
+
+    if (inputType === 'undefined' || inputType === 'function' || inputType === 'symbol') {
+      return undefined;
+    }
+
+    if (inputType !== 'object') {
+      return JSON.stringify(input);
+    }
+
+    const objectValue = input as Record<string, unknown>;
+
+    if (typeof objectValue.toJSON === 'function') {
+      return stringify(objectValue.toJSON());
+    }
+
+    if (Array.isArray(objectValue)) {
+      const items = objectValue.map((item) => stringify(item) ?? 'null');
+      return `[${items.join(',')} ]`.replace(', ]', ']');
+    }
+
+    if (seen.has(objectValue)) {
+      throw new TypeError('Cannot stringify circular structure');
+    }
+
+    seen.add(objectValue);
+
+    const keys = Object.keys(objectValue).sort();
+    const entries: string[] = [];
+
+    for (const key of keys) {
+      const valueString = stringify(objectValue[key]);
+      if (valueString !== undefined) {
+        entries.push(`${JSON.stringify(key)}:${valueString}`);
+      }
+    }
+
+    seen.delete(objectValue);
+
+    return `{${entries.join(',')}}`;
+  };
+
+  return stringify(value) ?? 'null';
 }

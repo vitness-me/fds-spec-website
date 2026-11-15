@@ -30,6 +30,8 @@ import {
   type BatchEnrichmentResult,
 } from '../ai/enrichment-engine.js';
 import { ConfigLoader } from '../config/config-loader.js';
+import { checkpointKey } from '../ai/checkpoint-manager.js';
+import { assertUniqueIdentities } from './identity-collisions.js';
 import { getMappingPathValue, isBeneath } from './paths.js';
 
 export interface TransformerOptions extends TransformOptions {
@@ -131,6 +133,10 @@ export class Transformer {
       this.config = await ConfigLoader.load(this.config);
     }
 
+    for (const plugin of this.config.plugins ?? []) {
+      await this.mappingEngine.loadPlugin(plugin);
+    }
+
     // Initialize enrichment engine with config settings
     if (this.config.enrichment?.enabled !== false) {
       this.enrichmentEngine = new EnrichmentEngine(this.config.enrichment);
@@ -224,6 +230,7 @@ export class Transformer {
     for await (const result of this.transformStream(sources)) {
       results.push(result);
     }
+    assertUniqueIdentities(results.map((result) => result.data));
     return results;
   }
 
@@ -300,8 +307,15 @@ export class Transformer {
       }
     }
 
+    const mappedBySourceIndex: Record<string, unknown>[] = [];
+    for (const { index, mapped } of mappedExercises) mappedBySourceIndex[index] = mapped;
+    assertUniqueIdentities(mappedBySourceIndex);
+
     // Phase 2: Batch enrichment (if tiered enrichment is configured)
     let enrichmentResults: BatchEnrichmentResult | null = null;
+    // Enrichment is keyed by slug plus input hash, so a resumed run
+    // reuses a checkpointed result only for an unchanged record
+    const enrichmentKeys = new Map<number, string>();
 
     if (
       !options.skipEnrichment &&
@@ -321,8 +335,7 @@ export class Transformer {
         const targets = mapped.targets as Record<string, unknown> | undefined;
         const equipment = mapped.equipment as Record<string, unknown> | undefined;
 
-        return {
-          id: (mapped.exerciseId as string) || `exercise-${index}`,
+        const input = {
           slug: (canonical?.slug as string) || `exercise-${index}`,
           name: (canonical?.name as string) || `Exercise ${index}`,
           description: canonical?.description as string | undefined,
@@ -333,6 +346,10 @@ export class Transformer {
             .filter(({ path, when }) => needsEnrichment(mapped, path, when))
             .map(({ path }) => path),
         };
+        // The slug, unique in a run, keeps the key stable even when exerciseId is a random uuid
+        const key = checkpointKey(input.slug, input);
+        enrichmentKeys.set(index, key);
+        return { id: key, ...input };
       });
 
       // Get schema $defs for validation context
@@ -373,26 +390,24 @@ export class Transformer {
       // Merge enrichment results if available
       let enriched: string[] = [];
       if (enrichmentResults) {
-        const exerciseId =
-          (mapped.exerciseId as string) ||
-          ((mapped.canonical as Record<string, unknown> | undefined)?.slug as string) ||
-          `exercise-${index}`;
+        const exerciseId = this.stableIdOf(mapped, index);
+        const key = enrichmentKeys.get(index)!;
 
-        const enrichmentData = enrichmentResults.results.get(exerciseId);
+        const enrichmentData = enrichmentResults.results.get(key);
         if (enrichmentData) {
           this.mergeEnrichment(
             mapped,
             provenance,
             enrichmentData,
-            enrichmentResults.provenance.get(exerciseId)
+            enrichmentResults.provenance.get(key)
           );
           enriched = Object.keys(enrichmentData);
           enrichedCount++;
         }
 
         // Check if this exercise failed enrichment
-        if (enrichmentResults.failedIds.includes(exerciseId)) {
-          const error = enrichmentResults.errors.find((e) => e.exerciseId === exerciseId);
+        if (enrichmentResults.failedIds.includes(key)) {
+          const error = enrichmentResults.errors.find((e) => e.exerciseId === key);
           errors.push({
             index,
             exerciseId,
@@ -516,6 +531,17 @@ export class Transformer {
       nearest !== undefined &&
       provenance[nearest].origin === 'default' &&
       getMappingPathValue(mapped, path) !== undefined
+    );
+  }
+
+  /**
+   * The id a record keeps across runs: its exerciseId, else its slug
+   */
+  private stableIdOf(mapped: Record<string, unknown>, index: number): string {
+    return (
+      (mapped.exerciseId as string) ||
+      ((mapped.canonical as Record<string, unknown> | undefined)?.slug as string) ||
+      `exercise-${index}`
     );
   }
 
