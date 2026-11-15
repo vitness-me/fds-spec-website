@@ -22,6 +22,7 @@ import {
   EnrichmentEngine,
   isEmptyValue,
   needsEnrichment,
+  pickPaths,
   type ExerciseInput,
   type BatchEnrichmentOptions,
   type BatchEnrichmentResult,
@@ -312,6 +313,8 @@ export class Transformer {
 
     // Phase 2: Batch enrichment (if tiered enrichment is configured)
     let enrichmentResults: BatchEnrichmentResult | null = null;
+    // Configured field paths that are gaps in each record, by index
+    const gapPaths = new Map<number, string[]>();
 
     if (
       !options.skipEnrichment &&
@@ -319,10 +322,18 @@ export class Transformer {
       this.config.enrichment?.enabled !== false &&
       this.enrichmentEngine.isTieredEnabled()
     ) {
-      const enrichedPaths = Object.keys(this.config.enrichment?.fields ?? {});
+      // Each configured field with the `when` its mapping sets for enrichment
+      const enrichedFields = Object.keys(this.config.enrichment?.fields ?? {}).map((path) => {
+        const mapping = this.config.mappings?.[path];
+        return { path, when: typeof mapping === 'object' ? mapping.enrichment?.when : undefined };
+      });
 
       // Prepare exercise inputs for batch enrichment
       const exerciseInputs: ExerciseInput[] = mappedExercises.map(({ mapped, index }) => {
+        const fieldsToEnrich = enrichedFields
+          .filter(({ path, when }) => needsEnrichment(mapped, path, when))
+          .map(({ path }) => path);
+        gapPaths.set(index, fieldsToEnrich);
         const canonical = mapped.canonical as Record<string, unknown> | undefined;
         const targets = mapped.targets as Record<string, unknown> | undefined;
         const equipment = mapped.equipment as Record<string, unknown> | undefined;
@@ -335,9 +346,7 @@ export class Transformer {
           primaryTargets: (targets?.primary as Array<{ id: string; name: string }>) || undefined,
           requiredEquipment:
             (equipment?.required as Array<{ id: string; name: string }>) || undefined,
-          fieldsToEnrich: enrichedPaths.filter((path) =>
-            needsEnrichment(mapped, path, this.enrichmentWhen(path))
-          ),
+          fieldsToEnrich,
         };
       });
 
@@ -386,7 +395,8 @@ export class Transformer {
 
         const enrichmentData = enrichmentResults.results.get(exerciseId);
         if (enrichmentData) {
-          this.deepMerge(mapped, enrichmentData);
+          // A value resumed from a checkpoint may predate the current mapping
+          this.deepMerge(mapped, pickPaths(enrichmentData, gapPaths.get(index) ?? []));
           enriched = Object.keys(enrichmentData);
           enrichedCount++;
         }
@@ -477,14 +487,6 @@ export class Transformer {
   }
 
   /**
-   * The `when` a field's mapping sets for its enrichment, if any
-   */
-  private enrichmentWhen(path: string) {
-    const mapping = this.config.mappings?.[path];
-    return typeof mapping === 'object' ? mapping.enrichment?.when : undefined;
-  }
-
-  /**
    * Deep merge enrichment into the mapped target, filling gaps only: a value
    * lands only where the target holds nothing, so a mapped value is never
    * replaced.
@@ -505,7 +507,6 @@ export class Transformer {
         sourceValue !== null &&
         typeof sourceValue === 'object' &&
         !Array.isArray(sourceValue) &&
-        targetValue !== null &&
         typeof targetValue === 'object' &&
         !Array.isArray(targetValue)
       ) {

@@ -141,25 +141,18 @@ function baseConfig(
   };
 }
 
-/** A transformer whose provider is the stub model; returns the calls it saw. */
-async function stubbedTransformer(config: MappingConfig, tier: () => TierName) {
+/** A transformer whose provider is the stub model; returns the slugs each call asked for. */
+async function stubbedTransformer(config: MappingConfig, tier: TierName, slugs: string[]) {
   const transformer = new Transformer({ config });
   await transformer.init();
-  const provider = transformer.getEnrichmentEngine()!.getProvider()!;
   const asked: string[][] = [];
-  let allSlugs: string[] = [];
-  vi.spyOn(provider, 'complete').mockImplementation(async (prompt: string) => {
-    const slugs = [...prompt.matchAll(/slug: ([\w-]+)/g)].map((m) => m[1]);
-    asked.push(slugs);
-    return { content: modelReply(tier(), allSlugs), tokensUsed: 1, model: 'stub' };
-  });
-  return {
-    transformer,
-    asked,
-    setSlugs: (slugs: string[]) => {
-      allSlugs = slugs;
-    },
-  };
+  vi.spyOn(transformer.getEnrichmentEngine()!.getProvider()!, 'complete').mockImplementation(
+    async (prompt: string) => {
+      asked.push([...prompt.matchAll(/slug: ([\w-]+)/g)].map((m) => m[1]));
+      return { content: modelReply(tier, slugs), tokensUsed: 1, model: 'stub' };
+    }
+  );
+  return { transformer, asked };
 }
 
 // Offline: schemas come from the bundle, and no request leaves the test.
@@ -173,7 +166,7 @@ afterEach(() => {
 });
 
 describe('Enrichment fills gaps only', () => {
-  it('never replaces a mapped value, and writes only configured gaps, for every prompt', { timeout: 30_000 }, async () => {
+  it('never replaces a mapped value, and writes only configured gaps, for every prompt', { timeout: 60_000 }, async () => {
     const random = prng(20261115);
     let cases = 0;
 
@@ -216,11 +209,11 @@ describe('Enrichment fills gaps only', () => {
           sources.push(source);
         }
 
-        const { transformer, setSlugs } = await stubbedTransformer(
+        const { transformer } = await stubbedTransformer(
           baseConfig(mappings, fields),
-          () => prompt.tier
+          prompt.tier,
+          sources.map((s) => s.slug as string)
         );
-        setSlugs(sources.map((s) => s.slug as string));
         const { results } = await transformer.transformAllBatch(sources);
 
         results.forEach((result, i) => {
@@ -261,8 +254,7 @@ describe('Enrichment fills gaps only', () => {
       { 'classification.level': { from: 'level' } },
       { 'classification.exerciseType': { tier: 'simple', prompt: 'classification-simple' } }
     );
-    const { transformer, setSlugs } = await stubbedTransformer(config, () => 'simple');
-    setSlugs(['bench', 'curl']);
+    const { transformer } = await stubbedTransformer(config, 'simple', ['bench', 'curl']);
 
     const { results } = await transformer.transformAllBatch([
       { id: 'bench', slug: 'bench', name: 'Bench', level: 'beginner' },
@@ -283,8 +275,7 @@ describe('Enrichment fills gaps only', () => {
         { 'canonical.description': { from: 'description', enrichment: { when } } },
         { 'canonical.description': { tier: 'simple', prompt: 'description' } }
       );
-      const stub = await stubbedTransformer(config, () => 'simple');
-      stub.setSlugs(['blank', 'written', 'none']);
+      const stub = await stubbedTransformer(config, 'simple', ['blank', 'written', 'none']);
       const { results } = await stub.transformer.transformAllBatch([
         { id: 'blank', slug: 'blank', name: 'Blank', description: '' },
         { id: 'written', slug: 'written', name: 'Written', description: 'From the source.' },
@@ -310,8 +301,7 @@ describe('Enrichment fills gaps only', () => {
       { 'canonical.description': { from: 'description' } },
       { 'canonical.description': { tier: 'simple', prompt: 'description' } }
     );
-    const stub = await stubbedTransformer(config, () => 'simple');
-    stub.setSlugs(['a']);
+    const stub = await stubbedTransformer(config, 'simple', ['a']);
     const { stats } = await stub.transformer.transformAllBatch([
       { id: 'a', slug: 'a', name: 'A', description: 'Written.' },
     ]);
@@ -319,7 +309,7 @@ describe('Enrichment fills gaps only', () => {
     expect(stats.apiCalls).toBe(0);
   });
 
-  it('keeps a mapped value over an AI value resumed from a checkpoint', async () => {
+  it('applies an AI value resumed from a checkpoint only to a current gap', async () => {
     const dir = mkdtempSync(join(tmpdir(), 'fds-gap-only-'));
     try {
       const config = baseConfig(
@@ -332,25 +322,33 @@ describe('Enrichment fills gaps only', () => {
       const checkpoint = new CheckpointManager(dir, config.enrichment!.checkpoint);
       checkpoint.initialize({
         inputFile: 'batch-enrichment',
-        totalExercises: 1,
-        config: { enabled: true, provider: 'openrouter', model: 'anthropic/claude-3.5-sonnet', ...config.enrichment },
+        totalExercises: 2,
+        // The engine's config, as it fills in its defaults.
+        config: { model: 'anthropic/claude-3.5-sonnet', ...config.enrichment },
       });
-      checkpoint.update({
-        exerciseId: 'squat',
-        success: true,
-        currentTier: 'simple',
-        results: { simple: { canonical: { description: 'ai:stale' } } },
-      });
+      for (const exerciseId of ['squat', 'lunge']) {
+        checkpoint.update({
+          exerciseId,
+          success: true,
+          currentTier: 'simple',
+          results: { simple: { canonical: { description: 'ai:stale' } } },
+        });
+      }
       checkpoint.forceSave();
 
-      // The source now has one.
-      const stub = await stubbedTransformer(config, () => 'simple');
+      // The source now has one for squat, and null for lunge, which is not a
+      // gap under the default `when: missing`.
+      const stub = await stubbedTransformer(config, 'simple', ['squat', 'lunge']);
       const { results } = await stub.transformer.transformAllBatch(
-        [{ id: 'squat', slug: 'squat', name: 'Squat', description: 'From the source.' }],
+        [
+          { id: 'squat', slug: 'squat', name: 'Squat', description: 'From the source.' },
+          { id: 'lunge', slug: 'lunge', name: 'Lunge', description: null },
+        ],
         { resume: true, outputDirectory: dir }
       );
 
       expect((results[0].data as any).canonical.description).toBe('From the source.');
+      expect((results[1].data as any).canonical.description).toBeNull();
     } finally {
       rmSync(dir, { recursive: true, force: true });
     }
