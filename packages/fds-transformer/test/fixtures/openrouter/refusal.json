@@ -1,0 +1,21 @@
+{
+  "status": 200,
+  "body": {
+    "id": "gen-fixture-refusal",
+    "object": "chat.completion",
+    "created": 1763164800,
+    "model": "anthropic/claude-haiku-4.5",
+    "choices": [
+      {
+        "finish_reason": "content_filter",
+        "native_finish_reason": "refusal",
+        "message": {
+          "role": "assistant",
+          "content": null,
+          "refusal": "I can't help with that request."
+        }
+      }
+    ],
+    "usage": { "prompt_tokens": 412, "completion_tokens": 9, "total_tokens": 421, "cost": 0.000148 }
+  }
+}

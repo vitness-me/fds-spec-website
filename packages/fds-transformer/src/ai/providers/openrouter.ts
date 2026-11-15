@@ -6,6 +6,7 @@
 
 import type { AIProvider, AIProviderOptions, AIResponse } from '../../core/types.js';
 import type { RateLimiter } from '../rate-limiter.js';
+import { AbstentionError, readReply } from '../response-schema.js';
 
 /**
  * OpenRouter provider configuration
@@ -56,6 +57,40 @@ export class OpenRouterAPIError extends Error {
   }
 }
 
+/**
+ * The parts of a Chat Completions reply this provider reads.
+ * https://openrouter.ai/docs/api-reference/overview
+ */
+interface ChatCompletion {
+  model?: string;
+  choices?: Array<{
+    finish_reason?: string | null;
+    message?: { content?: string | null; refusal?: string | null };
+    error?: OpenRouterErrorBody;
+  }>;
+  usage?: { prompt_tokens?: number; completion_tokens?: number; total_tokens?: number; cost?: number };
+  error?: OpenRouterErrorBody;
+}
+
+interface OpenRouterErrorBody {
+  code?: number;
+  message?: string;
+  metadata?: { error_type?: string };
+}
+
+/**
+ * The message of an error that reports a model refusal or a content policy
+ * block, or null for any other error. OpenRouter sends these as a 403, or in
+ * a 200 body, at the root or on the choice.
+ */
+function policyRefusal(error: OpenRouterErrorBody | undefined): string | null {
+  const type = error?.metadata?.error_type;
+  if (type === 'refusal' || type === 'content_policy_violation') {
+    return error?.message || type;
+  }
+  return null;
+}
+
 export class OpenRouterProvider implements AIProvider {
   name = 'openrouter';
 
@@ -102,6 +137,8 @@ export class OpenRouterProvider implements AIProvider {
 
   /**
    * Set the model for subsequent requests
+   * @deprecated Pass `model` per call instead. The provider is shared, so
+   * setting its model changes every later call.
    */
   setModel(model: string): void {
     this.model = model;
@@ -133,13 +170,25 @@ export class OpenRouterProvider implements AIProvider {
             'HTTP-Referer': 'https://spec.vitness.me',
             'X-Title': 'FDS Transformer',
           },
-          body: JSON.stringify({
-            model: this.model,
-            messages,
-            temperature: options.temperature ?? this.defaultTemperature,
-            max_tokens: options.maxTokens ?? this.defaultMaxTokens,
-          }),
+          body: JSON.stringify(this.requestBody(messages, options)),
         });
+
+        // A refusal the provider reports as an error is still the model's
+        // answer. Retrying the same prompt would not change it.
+        if (response.status === 403) {
+          const errorBody = await response.text();
+          let parsedError: OpenRouterErrorBody | undefined;
+          try {
+            parsedError = (JSON.parse(errorBody) as ChatCompletion).error;
+          } catch {
+            // not JSON: not a policy block we can recognise
+          }
+          const refusal = policyRefusal(parsedError);
+          if (refusal !== null) {
+            return { content: '', tokensUsed: 0, model: options.model ?? this.model, finishReason: 'content_filter', refusal };
+          }
+          throw new OpenRouterAPIError(`OpenRouter API error: 403 ${errorBody}`, 403);
+        }
 
         // Handle 429 rate limit response
         if (response.status === 429) {
@@ -164,13 +213,37 @@ export class OpenRouterProvider implements AIProvider {
           );
         }
 
-        const data = await response.json() as {
-          choices?: Array<{ message?: { content?: string } }>;
-          usage?: { total_tokens?: number };
-          model?: string;
-        };
-        const content = data.choices?.[0]?.message?.content || '';
-        const tokensUsed = data.usage?.total_tokens || 0;
+        const data = await response.json() as ChatCompletion;
+
+        // OpenRouter can answer 200 with an error in the body, either alone or
+        // on the choice.
+        const bodyError = data.error ?? data.choices?.[0]?.error;
+        const bodyRefusal = policyRefusal(bodyError);
+        if (bodyRefusal !== null) {
+          return {
+            content: '',
+            tokensUsed: data.usage?.total_tokens ?? 0,
+            model: data.model || options.model || this.model,
+            finishReason: 'content_filter',
+            refusal: bodyRefusal,
+          };
+        }
+        if (bodyError) {
+          throw new OpenRouterAPIError(
+            `OpenRouter API error: ${bodyError.code ?? ''} ${bodyError.message ?? ''}`.trim(),
+            bodyError.code ?? response.status
+          );
+        }
+
+        const choice = data.choices?.[0];
+        const usage = data.usage
+          ? {
+              promptTokens: data.usage.prompt_tokens ?? 0,
+              completionTokens: data.usage.completion_tokens ?? 0,
+              totalTokens: data.usage.total_tokens ?? 0,
+              cost: data.usage.cost,
+            }
+          : undefined;
 
         // Record successful request
         if (this.rateLimiter) {
@@ -178,9 +251,12 @@ export class OpenRouterProvider implements AIProvider {
         }
 
         return {
-          content,
-          tokensUsed,
-          model: data.model || this.model,
+          content: choice?.message?.content || '',
+          tokensUsed: usage?.totalTokens ?? 0,
+          model: data.model || options.model || this.model,
+          finishReason: choice?.finish_reason ?? null,
+          refusal: choice?.message?.refusal ?? undefined,
+          usage,
         };
       } catch (error) {
         lastError = error instanceof Error ? error : new Error(String(error));
@@ -212,6 +288,26 @@ export class OpenRouterProvider implements AIProvider {
     }
 
     throw lastError || new Error('Failed to complete request after retries');
+  }
+
+  private requestBody(
+    messages: Array<{ role: string; content: string }>,
+    options: AIProviderOptions
+  ): Record<string, unknown> {
+    const body: Record<string, unknown> = {
+      model: options.model ?? this.model,
+      messages,
+      temperature: options.temperature ?? this.defaultTemperature,
+      max_tokens: options.maxTokens ?? this.defaultMaxTokens,
+    };
+    if (options.responseSchema) {
+      const { name, schema, strict } = options.responseSchema;
+      body.response_format = { type: 'json_schema', json_schema: { name, strict, schema } };
+      // Route only to endpoints that honour response_format, rather than to
+      // ones that would ignore it.
+      body.provider = { require_parameters: true };
+    }
+    return body;
   }
 
   /**
@@ -252,23 +348,15 @@ export class OpenRouterProvider implements AIProvider {
       systemPrompt,
     });
 
-    // Extract JSON from response
-    const content = response.content.trim();
-    
-    // Try to find JSON in the response
-    let jsonStr = content;
-    
-    // Handle markdown code blocks
-    const codeBlockMatch = content.match(/```(?:json)?\s*([\s\S]*?)\s*```/);
-    if (codeBlockMatch) {
-      jsonStr = codeBlockMatch[1];
+    // A refusal or a reply cut off at the token limit is never parsed.
+    const reply = readReply(response);
+    if (!reply.ok) {
+      if (reply.reason !== 'invalid') {
+        throw new AbstentionError(reply.reason, reply.detail);
+      }
+      throw new Error(`Failed to parse JSON response: ${response.content.trim().slice(0, 200)}`);
     }
-
-    try {
-      return JSON.parse(jsonStr) as T;
-    } catch (error) {
-      throw new Error(`Failed to parse JSON response: ${content.slice(0, 200)}`);
-    }
+    return reply.value as T;
   }
 
   /**

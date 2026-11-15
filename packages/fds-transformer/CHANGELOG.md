@@ -19,6 +19,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   config file; a module may export a factory that receives `options`. A plugin
   that fails to load fails the run. A plugin is code, so loading a mapping file
   now runs the plugins it names: use mapping files you trust.
+- **Tiered enrichment asks OpenRouter for structured output.** Each prompt call
+  sends a JSON schema as `response_format`, routed only to endpoints that
+  support it. The schema asks only for the configured fields that are gaps, and
+  in a batch only for the exercises that have them, each exactly once.
+- **Every call is reported.** `enrichBatch` returns `calls`, with the model
+  requested and the model that served, any degrade, token usage, cost when
+  OpenRouter reports it, and the outcome.
 
 ### Changed
 
@@ -42,6 +49,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Release 1.5.0 is bundled and is the default.** It names body-atlas 1.1.0,
   which adds optional `license` and `attribution` on a view's asset. 1.0.0
   through 1.4.0 stay bundled; pin one to keep validating against it.
+- **A refusal, a reply cut off at the token limit, or a reply that fails its
+  schema is an abstention.** Nothing from it is written, it is not retried,
+  and `enrichBatch` lists it in `abstentions` with the reason. Previously a
+  reply that did not parse was dropped with a warning, and one that parsed
+  was written whatever it held.
+- **Breaking: the OpenRouter key is read only from `OPENROUTER_API_KEY`.**
+  `--api-key`, `enrichment.apiKey` and `enrichment.options.apiKey` are ignored
+  with a warning, so a caller that passes the key in configuration now runs
+  without enrichment until the variable is set. A key on the command line ends
+  up in shell history.
+- **Degrading a tier no longer changes the model of later calls.** The model
+  is chosen per call instead of being set on the shared provider.
 - **Breaking: `when` no longer lets enrichment replace a value.** `"always"`
   used to regenerate a field on every run; it now behaves as `"empty"`.
   `"empty"` now also counts `[]` and `{}` as empty.

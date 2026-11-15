@@ -20,6 +20,14 @@ import type {
   EnrichmentProgress,
 } from '../../src/core/types.js';
 
+// The engine reads its key only from OPENROUTER_API_KEY.
+beforeEach(() => {
+  vi.stubEnv('OPENROUTER_API_KEY', 'test-key');
+});
+afterEach(() => {
+  vi.unstubAllEnvs();
+});
+
 // ============================================================================
 // Test Fixtures
 // ============================================================================
@@ -59,7 +67,6 @@ const createTestExercises = (count: number): ExerciseInput[] => {
 const createTieredConfig = (): EnrichmentConfig => ({
   enabled: true,
   provider: 'openrouter',
-  apiKey: 'test-api-key',
   tiers: {
     simple: {
       model: 'anthropic/claude-haiku-4.5',
@@ -134,6 +141,7 @@ describe('EnrichmentEngine', () => {
     });
 
     it('should not be enabled without API key', () => {
+      vi.stubEnv('OPENROUTER_API_KEY', '');
       const engine = new EnrichmentEngine({ enabled: true, provider: 'openrouter' });
       expect(engine.isEnabled()).toBe(false);
     });
@@ -142,7 +150,6 @@ describe('EnrichmentEngine', () => {
       const engine = new EnrichmentEngine({
         enabled: true,
         provider: 'openrouter',
-        apiKey: 'test-key',
       });
       expect(engine.isEnabled()).toBe(true);
     });
@@ -427,7 +434,6 @@ describe('EnrichmentEngine - enrichBatch()', () => {
     const engine = new EnrichmentEngine({
       enabled: true,
       provider: 'openrouter',
-      apiKey: 'test-key',
     });
 
     // Mock the provider
@@ -456,7 +462,6 @@ describe('EnrichmentEngine - enrichBatch()', () => {
     const engine = new EnrichmentEngine({
       enabled: true,
       provider: 'openrouter',
-      apiKey: 'test-key',
     });
 
     // Mock the provider to throw
@@ -580,7 +585,6 @@ describe('EnrichmentEngine - Legacy API', () => {
     const engine = new EnrichmentEngine({
       enabled: true,
       provider: 'openrouter',
-      apiKey: 'test-key',
     });
 
     const mockProvider = engine.getProvider();
@@ -614,7 +618,6 @@ describe('EnrichmentEngine - Legacy API', () => {
     const engine = new EnrichmentEngine({
       enabled: true,
       provider: 'openrouter',
-      apiKey: 'test-key',
     });
 
     const result = await engine.enrich(
@@ -832,7 +835,6 @@ describe('EnrichmentEngine - Provider Access', () => {
     const engine = new EnrichmentEngine({
       enabled: true,
       provider: 'openrouter',
-      apiKey: 'test-key',
     });
 
     const provider = engine.getProvider();
@@ -856,7 +858,6 @@ describe('EnrichmentEngine - Provider Access', () => {
     const engine = new EnrichmentEngine({
       enabled: true,
       provider: 'openrouter',
-      apiKey: 'test-key',
     });
     const rateLimiter = engine.getRateLimiter();
     expect(rateLimiter).toBeNull();

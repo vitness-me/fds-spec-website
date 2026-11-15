@@ -148,14 +148,6 @@ export class ConfigLoader {
   static applyEnvOverrides(config: MappingConfig): MappingConfig {
     const result = { ...config };
 
-    // API key from environment
-    if (!result.enrichment?.apiKey && process.env.OPENROUTER_API_KEY) {
-      result.enrichment = {
-        ...result.enrichment,
-        apiKey: process.env.OPENROUTER_API_KEY,
-      };
-    }
-
     // Model override
     if (process.env.FDS_TRANSFORMER_MODEL) {
       result.enrichment = {

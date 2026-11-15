@@ -319,7 +319,7 @@ program
   .option('-c, --config <path>', 'Mapping configuration file')
   .option('-o, --output <path>', 'Output directory')
   .option('--no-ai', 'Disable AI enrichment (legacy)')
-  .option('--api-key <key>', 'API key for enrichment provider')
+  .option('--api-key <key>', 'Ignored: set OPENROUTER_API_KEY instead')
   .option('--model <model>', 'AI model to use (legacy single-model mode)')
   .option('--version <version>', 'Target FDS schema version', DEFAULT_SCHEMA_VERSION)
   .option('--dry-run', 'Preview transformation without writing files')
@@ -384,8 +384,13 @@ program
       }
 
       // Apply CLI overrides for enrichment config
+      // A key on the command line ends up in shell history. The key is read
+      // only from the environment.
       if (options.apiKey) {
-        config.enrichment = { ...config.enrichment, apiKey: options.apiKey };
+        log(
+          'warn',
+          '--api-key is ignored: set OPENROUTER_API_KEY in the environment instead, and remove the key from your shell history.'
+        );
       }
       if (options.model) {
         config.enrichment = { ...config.enrichment, model: options.model };
