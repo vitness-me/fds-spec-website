@@ -273,9 +273,11 @@ Agregar los plugins al archivo `mapping.json`:
 }
 ```
 
+Una ruta relativa se resuelve respecto al archivo de mapeo. Un plugin que no se puede cargar hace fallar la ejecución.
+
 ### Con opciones
 
-Pasar opciones a la inicialización del plugin:
+Pasar opciones a la inicialización del plugin. La exportación por defecto del módulo es entonces una función que recibe las opciones y devuelve el plugin:
 
 ```json fds:fragment entity=mapping
 {

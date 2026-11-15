@@ -86,6 +86,39 @@ Generate a UUIDv4 string. FDS requires plain UUIDs for all identifiers.
 
 **Example Output:** `"550e8400-e29b-41d4-a716-446655440000"`
 
+A rerun gives every record a new id. Use `uuidv5` when ids must survive a rerun.
+
+---
+
+### `uuidv5`
+
+Derive a UUIDv5 from a namespace and a name. The same input always gives the same id.
+
+**Input:** Any (used as `{{value}}`)  
+**Output:** String
+
+**Options:**
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `namespace` | string | (required) | Namespace UUID |
+| `name` | string | `{{value}}` | Name template; `{{value}}` is the mapped value, any other placeholder a dotted path into the source record |
+
+```json fds:fragment entity=mapping
+{
+  "exerciseId": {
+    "from": null,
+    "transform": "uuidv5",
+    "options": {
+      "namespace": "3a9a7a4e-5b1c-4f55-9a3e-6f2d1c0b8e71",
+      "name": "exercises_v6/Exercises/{{v6Id}}"
+    }
+  }
+}
+```
+
+A placeholder the source does not fill throws, because it would give every such record the same id.
+
 ---
 
 ### `toArray`
@@ -222,21 +255,31 @@ Look up a value in a registry with optional fuzzy matching.
 
 ### `timestamp`
 
-Generate an ISO 8601 timestamp.
+Format an instant as an ISO 8601 timestamp. The instant comes from the source or from a configured clock, never from the wall clock by default, so a rerun gives the same output.
 
-**Input:** Any (ignored)  
+**Input:** A date string, or empty  
 **Output:** String
+
+**Options:**
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `clock` | string | (none) | ISO 8601 instant used when the source is empty, or `"now"` for the wall clock |
+| `format` | string | `iso8601` | `iso8601`, `unix`, `unixms` or `date` |
 
 ```json fds:fragment entity=mapping
 {
   "metadata.createdAt": {
-    "from": null,
-    "transform": "timestamp"
+    "from": "createdAt",
+    "transform": "timestamp",
+    "options": { "clock": "2026-01-01T00:00:00.000Z" }
   }
 }
 ```
 
 **Example Output:** `"2025-01-27T15:30:00.000Z"`
+
+With an empty source and no `clock`, the transform throws.
 
 ---
 

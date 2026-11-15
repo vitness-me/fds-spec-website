@@ -86,6 +86,39 @@ Generiše UUIDv4 string. FDS zahteva obične UUID vrednosti za sve identifikator
 
 **Primer izlaza:** `"550e8400-e29b-41d4-a716-446655440000"`
 
+Svako ponovno pokretanje daje svakom zapisu novi id. Koristite `uuidv5` kada id-jevi moraju ostati isti između pokretanja.
+
+---
+
+### `uuidv5`
+
+Izvodi UUIDv5 iz prostora imena i imena. Isti ulaz uvek daje isti id.
+
+**Ulaz:** Bilo šta (koristi se kao `{{value}}`)  
+**Izlaz:** String
+
+**Opcije:**
+
+| Opcija | Tip | Podrazumevana vrednost | Opis |
+|--------|------|---------|-------------|
+| `namespace` | string | (obavezno) | UUID prostora imena |
+| `name` | string | `{{value}}` | Šablon imena; `{{value}}` je mapirana vrednost, a svaki drugi čuvar mesta je putanja s tačkama u izvornom zapisu |
+
+```json fds:fragment entity=mapping
+{
+  "exerciseId": {
+    "from": null,
+    "transform": "uuidv5",
+    "options": {
+      "namespace": "3a9a7a4e-5b1c-4f55-9a3e-6f2d1c0b8e71",
+      "name": "exercises_v6/Exercises/{{v6Id}}"
+    }
+  }
+}
+```
+
+Čuvar mesta koji izvor ne popunjava baca grešku, jer bi svim takvim zapisima dao isti id.
+
 ---
 
 ### `toArray`
@@ -222,21 +255,31 @@ Traži vrednost u registru uz opciono približno poklapanje.
 
 ### `timestamp`
 
-Generiše ISO 8601 vremensku oznaku.
+Formatira trenutak kao ISO 8601 vremensku oznaku. Trenutak dolazi iz izvora ili iz podešenog sata, nikad podrazumevano iz sistemskog sata, pa ponovno pokretanje daje isti izlaz.
 
-**Ulaz:** Bilo šta (ignoriše se)  
+**Ulaz:** String sa datumom, ili prazno  
 **Izlaz:** String
+
+**Opcije:**
+
+| Opcija | Tip | Podrazumevana vrednost | Opis |
+|--------|------|---------|-------------|
+| `clock` | string | (nema) | ISO 8601 trenutak koji se koristi kada je izvor prazan, ili `"now"` za sistemski sat |
+| `format` | string | `iso8601` | `iso8601`, `unix`, `unixms` ili `date` |
 
 ```json fds:fragment entity=mapping
 {
   "metadata.createdAt": {
-    "from": null,
-    "transform": "timestamp"
+    "from": "createdAt",
+    "transform": "timestamp",
+    "options": { "clock": "2026-01-01T00:00:00.000Z" }
   }
 }
 ```
 
 **Primer izlaza:** `"2025-01-27T15:30:00.000Z"`
+
+Ako je izvor prazan i nema `clock`, transformacija baca grešku.
 
 ---
 

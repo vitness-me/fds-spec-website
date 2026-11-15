@@ -7,7 +7,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **`uuidv5` derives ids from the input.** `options.namespace` is the namespace
+  UUID and `options.name` a template over the source record
+  (`exercises_v6/Exercises/{{v6Id}}`). The same input always gives the same id;
+  an unfilled placeholder throws rather than giving every such record one id.
+- **Config `plugins` are loaded.** They were declared and never read. A string
+  or `{ name, options }` names the module; a relative path resolves against the
+  config file; a module may export a factory that receives `options`. A plugin
+  that fails to load fails the run.
+
 ### Changed
+
+- **Breaking: `timestamp` no longer reads the wall clock by default.** It
+  formats the source value, or `options.clock` (an ISO 8601 instant) when the
+  source is empty, and throws when there is neither. Set `"clock": "now"` to
+  keep the old behaviour. A source value that is not a date throws and names
+  the value.
+- **A slug collision fails the run.** Two records that produce the same
+  `canonical.slug` used to overwrite each other's `<slug>.json` and swap
+  enrichment results; now the run stops and names the records.
+- **Enrichment checkpoints resume.** Records were checkpointed under their
+  `exerciseId`, a fresh random UUID on every run, so a resume never matched.
+  The key is now the record's stable id plus a hash of the input the model is
+  given, and a record that changed since the checkpoint is enriched again.
 
 - **Release 1.5.0 is bundled and is the default.** It names body-atlas 1.1.0,
   which adds optional `license` and `attribution` on a view's asset. 1.0.0
