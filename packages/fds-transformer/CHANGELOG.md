@@ -42,6 +42,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Release 1.5.0 is bundled and is the default.** It names body-atlas 1.1.0,
   which adds optional `license` and `attribution` on a view's asset. 1.0.0
   through 1.4.0 stay bundled; pin one to keep validating against it.
+- **Breaking: `when` no longer lets enrichment replace a value.** `"always"`
+  used to regenerate a field on every run; it now behaves as `"empty"`.
+  `"empty"` now also counts `[]` and `{}` as empty.
+
+### Fixed
+
+- **Enrichment fills gaps and never overwrites mapped values.** A model's value
+  used to overwrite whatever the mapping wrote, arrays included, and the tiered
+  path wrote every key a prompt returned: enabling `exerciseType` also replaced
+  `level`, and enabling `kineticChain` replaced force, mechanics, movement, tags
+  and secondary muscles. Now a value lands only in a configured field path and
+  only where the mapped value is a gap. The tiered path honours each field's
+  mapping `when` and sends only records with a gap.
+- **Fields enriched by different prompts no longer erase each other.** Results
+  were combined one top-level key at a time, so `canonical.aliases` erased
+  `canonical.description`, and a later tier's `classification` erased an
+  earlier one's, in a run and on resume. They now merge field by field.
 
 ## [0.2.0] - 2026-08-11
 

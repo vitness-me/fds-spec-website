@@ -18,7 +18,14 @@ import { MappingEngine } from './mapping-engine.js';
 import { RegistryManager } from '../registries/registry-manager.js';
 import { SchemaManager } from '../schemas/schema-manager.js';
 import { DEFAULT_SCHEMA_VERSION } from '../schemas/versions.js';
-import { EnrichmentEngine, type ExerciseInput, type BatchEnrichmentOptions, type BatchEnrichmentResult } from '../ai/enrichment-engine.js';
+import {
+  EnrichmentEngine,
+  isEmptyValue,
+  needsEnrichment,
+  type ExerciseInput,
+  type BatchEnrichmentOptions,
+  type BatchEnrichmentResult,
+} from '../ai/enrichment-engine.js';
 import { ConfigLoader } from '../config/config-loader.js';
 import { checkpointKey } from '../ai/checkpoint-manager.js';
 import { assertUniqueIdentities } from './identity-collisions.js';
@@ -326,6 +333,12 @@ export class Transformer {
       this.config.enrichment?.enabled !== false &&
       this.enrichmentEngine.isTieredEnabled()
     ) {
+      // Each configured field with the `when` its mapping sets for enrichment
+      const enrichedFields = Object.keys(this.config.enrichment?.fields ?? {}).map((path) => {
+        const mapping = this.config.mappings?.[path];
+        return { path, when: typeof mapping === 'object' ? mapping.enrichment?.when : undefined };
+      });
+
       // Prepare exercise inputs for batch enrichment
       const exerciseInputs: ExerciseInput[] = mappedExercises.map(({ mapped, index }) => {
         const canonical = mapped.canonical as Record<string, unknown> | undefined;
@@ -339,6 +352,9 @@ export class Transformer {
           primaryTargets: (targets?.primary as Array<{ id: string; name: string }>) || undefined,
           requiredEquipment:
             (equipment?.required as Array<{ id: string; name: string }>) || undefined,
+          fieldsToEnrich: enrichedFields
+            .filter(({ path, when }) => needsEnrichment(mapped, path, when))
+            .map(({ path }) => path),
         };
         // The slug, unique in a run, keeps the key stable even when exerciseId is a random uuid
         const key = checkpointKey(input.slug, input);
@@ -491,7 +507,9 @@ export class Transformer {
   }
 
   /**
-   * Deep merge source object into target
+   * Deep merge enrichment into the mapped target, filling gaps only: a value
+   * lands only where the target holds nothing, so a mapped value is never
+   * replaced.
    */
   private deepMerge(
     target: Record<string, unknown>,
@@ -501,11 +519,14 @@ export class Transformer {
       const sourceValue = source[key];
       const targetValue = target[key];
 
-      if (
+      if (isEmptyValue(targetValue)) {
+        if (sourceValue !== undefined) {
+          target[key] = sourceValue;
+        }
+      } else if (
         sourceValue !== null &&
         typeof sourceValue === 'object' &&
         !Array.isArray(sourceValue) &&
-        targetValue !== null &&
         typeof targetValue === 'object' &&
         !Array.isArray(targetValue)
       ) {
@@ -514,9 +535,6 @@ export class Transformer {
           targetValue as Record<string, unknown>,
           sourceValue as Record<string, unknown>
         );
-      } else if (sourceValue !== undefined) {
-        // Overwrite with source value (including arrays)
-        target[key] = sourceValue;
       }
     }
   }
