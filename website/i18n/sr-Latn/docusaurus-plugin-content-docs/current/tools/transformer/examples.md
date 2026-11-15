@@ -37,7 +37,7 @@ Transformišite jednostavan skup podataka o vežbama bez AI obogaćivanja.
 
 ```json title="mapping.json"
 {
-  "$schema": "https://spec.vitness.me/schemas/transformer/v1.2.0/mapping.schema.json",
+  "$schema": "https://spec.vitness.me/schemas/transformer/v1.3.0/mapping.schema.json",
   "version": "1.0.0",
   "targetSchema": {
     "version": "1.0.0",
@@ -183,7 +183,7 @@ Transformišite uz višestepeno AI obogaćivanje za kompletne podatke o vežbama
 
 ```json title="mapping-enriched.json"
 {
-  "$schema": "https://spec.vitness.me/schemas/transformer/v1.2.0/mapping.schema.json",
+  "$schema": "https://spec.vitness.me/schemas/transformer/v1.3.0/mapping.schema.json",
   "version": "1.0.0",
   "targetSchema": {
     "version": "1.0.0",

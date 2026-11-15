@@ -8,7 +8,7 @@ sidebar_position: 6
 
 Every value the FDS Transformer writes carries its origin. When it writes output, the transformer also writes `provenance.sidecar.json` in the same directory. For each document written, the sidecar records where each field it wrote came from. A reviewer can then tell a value read from the source apart from a default, a generated id, or a model's answer.
 
-The sidecar is validated by a published schema, `/schemas/transformer/provenance/v1.0.0/provenance.schema.json`.
+The sidecar is validated by a published schema, `/schemas/transformer/provenance/v1.1.0/provenance.schema.json`.
 
 ## What it holds
 

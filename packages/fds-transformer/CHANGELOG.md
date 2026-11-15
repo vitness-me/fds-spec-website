@@ -27,7 +27,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   and written; an unknown id fails the run before any call.
 - **Model provenance records the provider.** A `model` origin carries
   `provider` (`openrouter`, `claude-code`) beside the model the provider
-  reports.
+  reports. The sidecar names `transformer/provenance/v1.1.0`, which requires
+  it; mapping configurations validate against `transformer/v1.3.0`, which
+  adds `claude-code` and `enrichment.claudeCode`.
 
 - **`uuidv5` derives ids from the input.** `options.namespace` is the namespace
   UUID and `options.name` a template over the source record

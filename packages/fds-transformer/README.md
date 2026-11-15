@@ -73,7 +73,7 @@ Create a `mapping.json` file to define how source fields map to FDS:
 
 ```json
 {
-  "$schema": "https://spec.vitness.me/schemas/transformer/v1.2.0/mapping.schema.json",
+  "$schema": "https://spec.vitness.me/schemas/transformer/v1.3.0/mapping.schema.json",
   "version": "1.0.0",
   "targetSchema": {
     "version": "1.0.0",
@@ -294,11 +294,11 @@ For simpler use cases, you can still use field-level enrichment:
 
 ## Provenance
 
-Every value the transformer writes carries its origin. Next to its output, the CLI writes `provenance.sidecar.json`, validated by [`transformer/provenance/v1.0.0`](https://spec.vitness.me/schemas/transformer/provenance/v1.0.0/provenance.schema.json). It holds one record per document written, and in each record one entry per field path:
+Every value the transformer writes carries its origin. Next to its output, the CLI writes `provenance.sidecar.json`, validated by [`transformer/provenance/v1.1.0`](https://spec.vitness.me/schemas/transformer/provenance/v1.1.0/provenance.schema.json). It holds one record per document written, and in each record one entry per field path:
 
 ```json
 {
-  "$schema": "https://spec.vitness.me/schemas/transformer/provenance/v1.0.0/provenance.schema.json",
+  "$schema": "https://spec.vitness.me/schemas/transformer/provenance/v1.1.0/provenance.schema.json",
   "records": [
     {
       "fields": {

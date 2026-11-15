@@ -30,7 +30,7 @@ const validateSidecar = (() => {
       readFileSync(
         join(
           dirname(fileURLToPath(import.meta.url)),
-          '../../../../specification/schemas/transformer/provenance/v1.0.0/provenance.schema.json'
+          '../../../../specification/schemas/transformer/provenance/v1.1.0/provenance.schema.json'
         ),
         'utf8'
       )

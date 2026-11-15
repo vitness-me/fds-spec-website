@@ -103,7 +103,7 @@ const CURRENT_RELEASE = '1.5.0';
  * counterpart and share no `common` definitions, so there is nothing to flatten.
  * They are still served from spec.vitness.me, so they are still hashed and
  * freezable — only exempt from being *rendered*, not from being *tracked*.
- * v1.0.0 and v1.1.0 are superseded by v1.2.0 and stay served: each is the
+ * v1.0.0, v1.1.0 and v1.2.0 are superseded by v1.3.0 and stay served: each is the
  * `$schema` URL every configuration written against it names, and no FDS release
  * governs when a tooling schema may disappear, so nothing else would ever
  * license removing them.
@@ -137,7 +137,9 @@ const UNGENERATED = [
   { name: 'mapping', kind: 'tooling', path: 'transformer/v1.0.0/mapping.schema.json' },
   { name: 'mapping', kind: 'tooling', path: 'transformer/v1.1.0/mapping.schema.json' },
   { name: 'mapping', kind: 'tooling', path: 'transformer/v1.2.0/mapping.schema.json' },
+  { name: 'mapping', kind: 'tooling', path: 'transformer/v1.3.0/mapping.schema.json' },
   { name: 'provenance', kind: 'tooling', path: 'transformer/provenance/v1.0.0/provenance.schema.json' },
+  { name: 'provenance', kind: 'tooling', path: 'transformer/provenance/v1.1.0/provenance.schema.json' },
   { name: 'workout', kind: 'entity', path: 'workout/v1.0.0/workout.schema.json' },
   { name: 'body-atlas', kind: 'entity', path: 'atlas/v1.0.0/body-atlas.schema.json' },
 ];

@@ -1,5 +1,5 @@
 {
-  "$id": "https://spec.vitness.me/schemas/transformer/v1.2.0/mapping.schema.json",
+  "$id": "https://spec.vitness.me/schemas/transformer/v1.3.0/mapping.schema.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "FDS Transformer Mapping Configuration",
   "description": "Every configuration key the FDS Transformer reads, and nothing else. `additionalProperties` is closed throughout on purpose: this document exists so an editor can tell a user that a key is misspelled or does not exist, and a schema that accepts anything cannot say that. A key the tool grew is a defect in this document, not licence to write one the tool ignores.",

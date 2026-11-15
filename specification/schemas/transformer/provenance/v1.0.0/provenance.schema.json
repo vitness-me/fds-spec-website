@@ -86,16 +86,11 @@
     "model": {
       "type": "object",
       "description": "Written by a model during enrichment",
-      "required": ["origin", "provider", "model", "prompt", "promptVersion", "confidence"],
+      "required": ["origin", "model", "prompt", "promptVersion", "confidence"],
       "additionalProperties": false,
       "properties": {
         "origin": { "const": "model" },
-        "provider": {
-          "type": "string",
-          "minLength": 1,
-          "description": "The enrichment provider that made the call, such as openrouter or claude-code"
-        },
-        "model": { "type": "string", "minLength": 1, "description": "The model that answered, as the provider reports it" },
+        "model": { "type": "string", "minLength": 1, "description": "The model that answered" },
         "prompt": { "type": "string", "minLength": 1, "description": "The prompt id" },
         "promptVersion": {
           "type": "string",
