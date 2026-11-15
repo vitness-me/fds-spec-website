@@ -37,7 +37,7 @@ Transformar un conjunto de datos simple de ejercicios sin enriquecimiento con IA
 
 ```json title="mapping.json"
 {
-  "$schema": "https://spec.vitness.me/schemas/transformer/v1.1.0/mapping.schema.json",
+  "$schema": "https://spec.vitness.me/schemas/transformer/v1.2.0/mapping.schema.json",
   "version": "1.0.0",
   "targetSchema": {
     "version": "1.0.0",
@@ -183,7 +183,7 @@ Transformar con enriquecimiento con IA por niveles para obtener datos de ejercic
 
 ```json title="mapping-enriched.json"
 {
-  "$schema": "https://spec.vitness.me/schemas/transformer/v1.1.0/mapping.schema.json",
+  "$schema": "https://spec.vitness.me/schemas/transformer/v1.2.0/mapping.schema.json",
   "version": "1.0.0",
   "targetSchema": {
     "version": "1.0.0",

@@ -49,14 +49,39 @@ export function buildResponseSchema(
   const fields = Object.fromEntries(fieldPaths.map((path) => [replyKey(path), {}]));
   const schema =
     slugs === null
-      ? closedObject(fields)
+      ? withConfidence(closedObject(fields), fieldPaths)
       : closedObject({
           results: {
             type: 'array',
-            items: closedObject({ slug: { type: 'string', enum: slugs }, ...fields }),
+            items: withConfidence(
+              closedObject({ slug: { type: 'string', enum: slugs }, ...fields }),
+              fieldPaths
+            ),
           },
         });
   return { name: promptId.replace(/[^a-zA-Z0-9_-]/g, '_'), schema, strict: false };
+}
+
+/**
+ * Allow an optional `confidence` object beside the fields, keyed like them.
+ * Optional, nullable, open and any number, so a missing or odd confidence
+ * never turns an answer into an abstention; only the requested fields'
+ * confidence is read, and an unusable one is recorded as null.
+ */
+function withConfidence(
+  object: Record<string, unknown>,
+  fieldPaths: string[]
+): Record<string, unknown> {
+  const confidence = {
+    type: ['object', 'null'],
+    properties: Object.fromEntries(
+      fieldPaths.map((path) => [replyKey(path), { type: ['number', 'null'] }])
+    ),
+  };
+  return {
+    ...object,
+    properties: { ...(object.properties as Record<string, unknown>), confidence },
+  };
 }
 
 function closedObject(properties: Record<string, unknown>): Record<string, unknown> {

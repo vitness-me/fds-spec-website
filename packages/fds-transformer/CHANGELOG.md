@@ -26,6 +26,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Every call is reported.** `enrichBatch` returns `calls`, with the model
   requested and the model that served, any degrade, token usage, cost when
   OpenRouter reports it, and the outcome.
+- **Every written value carries its origin.** Each `TransformResult` has a
+  `provenance` map, field path to origin: `source` (with the source path and
+  transforms), `default`, `transform` (generated with no input), or `model`
+  (the model that answered, the prompt, a `promptVersion` hash of its fixed
+  text, the tier and the model's `confidence`). The CLI writes it as
+  `provenance.sidecar.json` beside the output, with keys sorted so the same
+  input gives the same bytes, validated by the new published schema
+  `transformer/provenance/v1.0.0`. Provenance survives checkpoint resume.
+- **Enrichment prompts ask for a confidence per field**, from 0 to 1, on the
+  tiered and the single-model path. A value outside that range, or none, is
+  recorded as `null`.
+- **`validation.rejectDefaults`** (mapping schema 1.2.0) names field paths that
+  may not hold a mapping default; a record fails when a default supplies the
+  value there (at the path, from a default object above it, or beneath it),
+  whatever `enabled` and `strict` say.
 
 ### Changed
 
@@ -61,6 +76,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   up in shell history.
 - **Degrading a tier no longer changes the model of later calls.** The model
   is chosen per call instead of being set on the shared provider.
+- **`transform` writes `provenance.sidecar.json` into the output directory**
+  beside the documents. A pipeline that reads every `*.json` there should skip
+  it.
 - **Breaking: `when` no longer lets enrichment replace a value.** `"always"`
   used to regenerate a field on every run; it now behaves as `"empty"`.
   `"empty"` now also counts `[]` and `{}` as empty.

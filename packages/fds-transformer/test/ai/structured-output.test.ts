@@ -166,7 +166,10 @@ describe('EnrichmentEngine structured output', () => {
     expect(format.type).toBe('json_schema');
     const item = format.json_schema.schema.properties.results.items;
     expect(item.properties.slug.enum).toEqual(['barbell-bench-press', 'push-up']);
-    expect(Object.keys(item.properties).sort()).toEqual(['description', 'slug']);
+    // Each answered field, plus the optional confidence the model may give for it
+    expect(Object.keys(item.properties).sort()).toEqual(['confidence', 'description', 'slug']);
+    expect(item.required.sort()).toEqual(['description', 'slug']);
+    expect(Object.keys(item.properties.confidence.properties)).toEqual(['description']);
     expect(item.additionalProperties).toBe(false);
 
     expect(result.results.get('ex-1')).toEqual({
