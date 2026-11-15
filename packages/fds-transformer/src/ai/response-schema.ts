@@ -18,6 +18,14 @@ import type { AIResponse, AIResponseSchema } from '../core/types.js';
 /** Why a reply was not written. */
 export type AbstentionReason = 'refusal' | 'length' | 'invalid';
 
+/** A reply the model gave but that must not be used: it refused or was cut off. */
+export class AbstentionError extends Error {
+  constructor(readonly reason: AbstentionReason, detail: string) {
+    super(`No usable JSON reply (${reason}): ${detail}`);
+    this.name = 'AbstentionError';
+  }
+}
+
 export type ReplyOutcome =
   | { ok: true; value: unknown }
   | { ok: false; reason: AbstentionReason; detail: string };
@@ -62,10 +70,15 @@ function closedObject(properties: Record<string, unknown>): Record<string, unkno
 
 /**
  * Read a reply against the schema it was requested with. A refusal, a reply
- * cut off at the token limit, and anything that is not JSON matching the
- * schema are abstentions: nothing from them may be written.
+ * cut off at the token limit, anything that is not JSON matching the schema,
+ * and a batch reply that does not answer each of `slugs` exactly once are
+ * abstentions: nothing from them may be written.
  */
-export function readReply(response: AIResponse, schema?: Record<string, unknown>): ReplyOutcome {
+export function readReply(
+  response: AIResponse,
+  schema?: Record<string, unknown>,
+  slugs?: string[]
+): ReplyOutcome {
   if (response.refusal || response.finishReason === 'content_filter') {
     return { ok: false, reason: 'refusal', detail: response.refusal ?? 'content_filter' };
   }
@@ -90,6 +103,14 @@ export function readReply(response: AIResponse, schema?: Record<string, unknown>
     const validate = ajv.compile(schema);
     if (!validate(value)) {
       return { ok: false, reason: 'invalid', detail: ajv.errorsText(validate.errors) };
+    }
+  }
+  if (slugs) {
+    // The schema already limits each slug to the batch; this makes each appear once.
+    const answered = (value as { results: Array<{ slug: string }> }).results.map((r) => r.slug);
+    const expected = new Set(slugs).size;
+    if (answered.length !== expected || new Set(answered).size !== expected) {
+      return { ok: false, reason: 'invalid', detail: 'the reply must answer each exercise in the batch exactly once' };
     }
   }
   return { ok: true, value };

@@ -6,7 +6,7 @@
 
 import type { AIProvider, AIProviderOptions, AIResponse } from '../../core/types.js';
 import type { RateLimiter } from '../rate-limiter.js';
-import { readReply } from '../response-schema.js';
+import { AbstentionError, readReply } from '../response-schema.js';
 
 /**
  * OpenRouter provider configuration
@@ -76,6 +76,19 @@ interface OpenRouterErrorBody {
   code?: number;
   message?: string;
   metadata?: { error_type?: string };
+}
+
+/**
+ * The message of an error that reports a model refusal or a content policy
+ * block, or null for any other error. OpenRouter sends these as a 403, or in
+ * a 200 body, at the root or on the choice.
+ */
+function policyRefusal(error: OpenRouterErrorBody | undefined): string | null {
+  const type = error?.metadata?.error_type;
+  if (type === 'refusal' || type === 'content_policy_violation') {
+    return error?.message || type;
+  }
+  return null;
 }
 
 export class OpenRouterProvider implements AIProvider {
@@ -164,15 +177,15 @@ export class OpenRouterProvider implements AIProvider {
         // answer. Retrying the same prompt would not change it.
         if (response.status === 403) {
           const errorBody = await response.text();
-          const refusal = this.parsePolicyBlock(errorBody);
+          let parsedError: OpenRouterErrorBody | undefined;
+          try {
+            parsedError = (JSON.parse(errorBody) as ChatCompletion).error;
+          } catch {
+            // not JSON: not a policy block we can recognise
+          }
+          const refusal = policyRefusal(parsedError);
           if (refusal !== null) {
-            return {
-              content: '',
-              tokensUsed: 0,
-              model: options.model ?? this.model,
-              finishReason: 'content_filter',
-              refusal,
-            };
+            return { content: '', tokensUsed: 0, model: options.model ?? this.model, finishReason: 'content_filter', refusal };
           }
           throw new OpenRouterAPIError(`OpenRouter API error: 403 ${errorBody}`, 403);
         }
@@ -205,6 +218,16 @@ export class OpenRouterProvider implements AIProvider {
         // OpenRouter can answer 200 with an error in the body, either alone or
         // on the choice.
         const bodyError = data.error ?? data.choices?.[0]?.error;
+        const bodyRefusal = policyRefusal(bodyError);
+        if (bodyRefusal !== null) {
+          return {
+            content: '',
+            tokensUsed: data.usage?.total_tokens ?? 0,
+            model: data.model || options.model || this.model,
+            finishReason: 'content_filter',
+            refusal: bodyRefusal,
+          };
+        }
         if (bodyError) {
           throw new OpenRouterAPIError(
             `OpenRouter API error: ${bodyError.code ?? ''} ${bodyError.message ?? ''}`.trim(),
@@ -288,23 +311,6 @@ export class OpenRouterProvider implements AIProvider {
   }
 
   /**
-   * The refusal message of a 403 that reports a model refusal or a content
-   * policy block, or null for any other 403.
-   */
-  private parsePolicyBlock(body: string): string | null {
-    try {
-      const error = (JSON.parse(body) as ChatCompletion).error;
-      const type = error?.metadata?.error_type;
-      if (type === 'refusal' || type === 'content_policy_violation') {
-        return error?.message || type;
-      }
-    } catch {
-      // not JSON: not a policy block we can recognise
-    }
-    return null;
-  }
-
-  /**
    * Parse the Retry-After header value
    * Can be either seconds or HTTP-date format
    */
@@ -345,11 +351,10 @@ export class OpenRouterProvider implements AIProvider {
     // A refusal or a reply cut off at the token limit is never parsed.
     const reply = readReply(response, schema as Record<string, unknown> | undefined);
     if (!reply.ok) {
-      throw new Error(
-        reply.reason === 'invalid'
-          ? `Failed to parse JSON response: ${response.content.trim().slice(0, 200)}`
-          : `No usable JSON reply (${reply.reason}): ${reply.detail}`
-      );
+      if (reply.reason !== 'invalid') {
+        throw new AbstentionError(reply.reason, reply.detail);
+      }
+      throw new Error(`Failed to parse JSON response: ${response.content.trim().slice(0, 200)}`);
     }
     return reply.value as T;
   }

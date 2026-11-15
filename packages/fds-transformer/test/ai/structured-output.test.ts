@@ -196,6 +196,61 @@ describe('EnrichmentEngine structured output', () => {
     expect(result.abstentions.map((a) => a.reason)).toEqual(['refusal', 'refusal']);
   });
 
+  const validReply = { results: exercises.map((e) => ({ slug: e.slug, description: 'Looks fine.' })) };
+
+  it('treats message.refusal alone as a refusal, even with schema-valid content', async () => {
+    const reply = completion(validReply);
+    (reply.body as any).choices[0].message.refusal = 'I will not.';
+    stub.reply(reply);
+    const result = await new EnrichmentEngine(engineConfig(stub, descriptionOnly)).enrichBatch(exercises);
+    expect(result.results.size).toBe(0);
+    expect(result.abstentions.map((a) => a.reason)).toEqual(['refusal', 'refusal']);
+  });
+
+  it('treats finish_reason content_filter alone as a refusal, even with schema-valid content', async () => {
+    stub.reply(completion(validReply, { finishReason: 'content_filter' }));
+    const result = await new EnrichmentEngine(engineConfig(stub, descriptionOnly)).enrichBatch(exercises);
+    expect(result.results.size).toBe(0);
+    expect(result.abstentions.map((a) => a.reason)).toEqual(['refusal', 'refusal']);
+  });
+
+  it.each([
+    ['at the root', { error: { code: 403, message: 'Refused.', metadata: { error_type: 'refusal' } } }],
+    [
+      'inside the choice',
+      { choices: [{ finish_reason: 'error', message: { content: '' }, error: { code: 403, message: 'Refused.', metadata: { error_type: 'refusal' } } }] },
+    ],
+  ])('records a refusal error in a 200 body %s as an abstention, without retrying', async (_where, body) => {
+    stub.reply({ status: 200, body }, completion(validReply), completion(validReply));
+    const config = engineConfig(stub, descriptionOnly);
+    config.options = { maxRetries: 3, retryDelay: 1 };
+    const result = await new EnrichmentEngine(config).enrichBatch(exercises);
+    expect(result.results.size).toBe(0);
+    expect(result.abstentions.map((a) => a.reason)).toEqual(['refusal', 'refusal']);
+    expect(stub.requests).toHaveLength(1);
+  });
+
+  it('records a batch reply that leaves out an exercise as an abstention', async () => {
+    stub.reply(completion({ results: [{ slug: 'barbell-bench-press', description: 'A press.' }] }));
+    const result = await new EnrichmentEngine(engineConfig(stub, descriptionOnly)).enrichBatch(exercises);
+    expect(result.results.size).toBe(0);
+    expect(result.abstentions.map((a) => a.reason)).toEqual(['invalid', 'invalid']);
+  });
+
+  it('records a batch reply that answers an exercise twice as an abstention', async () => {
+    stub.reply(
+      completion({
+        results: [
+          { slug: 'barbell-bench-press', description: 'First.' },
+          { slug: 'barbell-bench-press', description: 'Last.' },
+        ],
+      })
+    );
+    const result = await new EnrichmentEngine(engineConfig(stub, descriptionOnly)).enrichBatch(exercises);
+    expect(result.results.size).toBe(0);
+    expect(result.abstentions.map((a) => a.reason)).toEqual(['invalid', 'invalid']);
+  });
+
   it('records a length stop as an abstention, and writes nothing from the cut-off reply', async () => {
     stub.reply(fixture('length'));
     const engine = new EnrichmentEngine(engineConfig(stub, descriptionOnly));
@@ -244,6 +299,26 @@ describe('EnrichmentEngine structured output', () => {
         outcome: 'ok',
       },
     ]);
+  });
+});
+
+describe('legacy enrich() path', () => {
+  const context = {
+    source: { name: 'Push Up' },
+    target: {},
+    field: '',
+    registries: { muscles: [], equipment: [], muscleCategories: [] },
+    config: {} as never,
+  };
+
+  it.each(['refusal', 'refusal-403', 'length'])('writes nothing after a %s, and does not fall back to per-field calls', async (name) => {
+    stub.reply(fixture(name), completion({ description: 'Written anyway.' }));
+    const engine = new EnrichmentEngine({ enabled: true, baseUrl: stub.baseUrl, options: { maxRetries: 1, retryDelay: 1 } });
+
+    const result = await engine.enrich({}, { 'canonical.description': { enrichment: { enabled: true } } }, context);
+
+    expect(result.data).toEqual({});
+    expect(stub.requests).toHaveLength(1);
   });
 });
 
@@ -337,6 +412,14 @@ describe('API key', () => {
     const warnings = warn.mock.calls.map((c) => String(c[0]));
     expect(warnings.some((w) => w.includes('enrichment.apiKey is ignored') && w.includes('OPENROUTER_API_KEY'))).toBe(true);
     expect(warnings.some((w) => w.includes('key-in-config'))).toBe(false);
+  });
+
+  it('is never taken from enrichment.options either', async () => {
+    stub.reply(fixture('valid-description'));
+    const config = engineConfig(stub, descriptionOnly);
+    config.options = { ...config.options, apiKey: 'key-in-options' } as typeof config.options;
+    await new EnrichmentEngine(config).enrichBatch(exercises);
+    expect(stub.headers[0].authorization).toBe('Bearer env-key-for-stub');
   });
 
   it('is not copied from the environment into the config', () => {

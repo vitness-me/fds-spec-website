@@ -38,7 +38,7 @@ import type {
 import { OpenRouterProvider } from './providers/openrouter.js';
 import { RateLimiter, DEFAULT_RATE_LIMIT_CONFIG } from './rate-limiter.js';
 import { CheckpointManager } from './checkpoint-manager.js';
-import { buildResponseSchema, readReply, type AbstentionReason } from './response-schema.js';
+import { AbstentionError, buildResponseSchema, readReply, type AbstentionReason } from './response-schema.js';
 import {
   EXERCISE_SYSTEM_PROMPT,
   getExerciseEnrichmentPrompt,
@@ -262,7 +262,7 @@ export class EnrichmentEngine {
    * Initialize the AI provider
    */
   private initializeProvider(): void {
-    if (this.config.apiKey) {
+    if (this.config.apiKey || (this.config.options as { apiKey?: unknown } | undefined)?.apiKey) {
       console.warn(
         'enrichment.apiKey is ignored: the OpenRouter key is read only from the OPENROUTER_API_KEY environment variable.'
       );
@@ -283,11 +283,11 @@ export class EnrichmentEngine {
     switch (this.config.provider) {
       case 'openrouter':
         this.provider = new OpenRouterProvider({
-          apiKey,
           model: this.config.model,
           baseUrl: this.config.baseUrl,
           rateLimiter: this.rateLimiter ?? undefined,
           ...this.config.options,
+          apiKey,
         });
         break;
       default:
@@ -774,11 +774,8 @@ export class EnrichmentEngine {
       if (requestedPaths.length === 0) {
         continue;
       }
-      const responseSchema = buildResponseSchema(
-        promptId,
-        requestedPaths,
-        tier === 'complex' ? null : batch.exercises.map((e) => e.slug)
-      );
+      const slugs = tier === 'complex' ? null : batch.exercises.map((e) => e.slug);
+      const responseSchema = buildResponseSchema(promptId, requestedPaths, slugs);
 
       // Report progress
       if (onProgress) {
@@ -819,7 +816,7 @@ export class EnrichmentEngine {
         apiCalls++;
         tokensUsed += response.tokensUsed || 0;
 
-        const reply = readReply(response, responseSchema.schema);
+        const reply = readReply(response, responseSchema.schema, slugs ?? undefined);
         calls.push({
           tier: call.tier,
           promptId,
@@ -1230,6 +1227,11 @@ export class EnrichmentEngine {
         tokensUsed: 0,
       };
     } catch (error) {
+      // The model refused or was cut off: write nothing, and do not ask again
+      // field by field.
+      if (error instanceof AbstentionError) {
+        return { success: true, data: {} };
+      }
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Unknown error',
