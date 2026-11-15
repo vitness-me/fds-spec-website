@@ -341,12 +341,16 @@ export class Transformer {
         tierFilter: options.tierFilter,
         onProgress: options.onProgress,
         outputDirectory: options.outputDirectory,
-        targetSchema: (schema as Record<string, unknown> | null) ?? undefined,
-        registries: {
-          muscles: this.registryManager.getMuscles(),
-          equipment: this.registryManager.getEquipment(),
-          muscleCategories: this.registryManager.getMuscleCategories(),
-        },
+        target: schema
+          ? {
+              schema: schema as Record<string, unknown>,
+              registries: {
+                muscles: this.registryManager.getMuscles(),
+                equipment: this.registryManager.getEquipment(),
+                muscleCategories: this.registryManager.getMuscleCategories(),
+              },
+            }
+          : undefined,
       };
 
       // Run batch enrichment

@@ -84,6 +84,25 @@ describe('buildRequest', () => {
     expect(itemOf(request, 'validation').properties.description).toEqual(nullable({ type: 'string', minLength: 1 }));
   });
 
+  // Registry references are recognised by their $defs name. If a release ever
+  // renames or reshapes one, the field would fall back to its inlined object
+  // schema and the model could write refs of its own again.
+  it.each(['1.0.0', '1.1.0', '1.2.0', '1.3.0', '1.4.0', '1.5.0'])(
+    'recognises every muscle and equipment reference in release %s',
+    (version) => {
+      const schema = JSON.parse(
+        readFileSync(join(here, `../../src/schemas/bundled/v${version}/exercise.schema.json`), 'utf-8')
+      );
+      const request = buildRequest(
+        'all',
+        ['targets.primary', 'targets.secondary', 'equipment.required', 'equipment.optional'].map((path) => ({ path })),
+        null,
+        { schema, registries }
+      );
+      expect(request.refs).toEqual({ primary: 'muscles', secondary: 'muscles', required: 'equipment', optional: 'equipment' });
+    }
+  );
+
   it('refuses a field the target schema does not have', () => {
     expect(() => buildRequest('description', [{ path: 'canonical.nickname' }], ['push-up'], target)).toThrow(
       /canonical\.nickname/
@@ -155,7 +174,7 @@ describe('EnrichmentEngine with a target schema and registries', () => {
     stub.reply(completion({ secondary: ['deltoids'] }));
     const engine = new EnrichmentEngine(config({ 'targets.secondary': { tier: 'complex', prompt: 'biomechanics' } }));
 
-    const result = await engine.enrichBatch([exercise], { targetSchema: exerciseSchema, registries });
+    const result = await engine.enrichBatch([exercise], { target });
 
     const deltoids = testMuscles.find((m) => m.canonical.slug === 'deltoids')!;
     expect(result.results.get('ex-1')).toEqual({
@@ -171,7 +190,7 @@ describe('EnrichmentEngine with a target schema and registries', () => {
     stub.reply(completion({ secondary: [{ id: 'anterior-deltoid', name: 'Anterior Deltoid' }] }));
     const engine = new EnrichmentEngine(config({ 'targets.secondary': { tier: 'complex', prompt: 'biomechanics' } }));
 
-    const result = await engine.enrichBatch([exercise], { targetSchema: exerciseSchema, registries });
+    const result = await engine.enrichBatch([exercise], { target });
 
     expect(result.results.size).toBe(0);
     expect(result.abstentions.map((a) => a.reason)).toEqual(['invalid']);
@@ -181,7 +200,7 @@ describe('EnrichmentEngine with a target schema and registries', () => {
     stub.reply(completion({ movement: 'push' }));
     const engine = new EnrichmentEngine(config({ 'classification.movement': { tier: 'complex', prompt: 'biomechanics' } }));
 
-    const result = await engine.enrichBatch([exercise], { targetSchema: exerciseSchema, registries });
+    const result = await engine.enrichBatch([exercise], { target });
 
     expect(result.results.size).toBe(0);
     expect(result.abstentions.map((a) => a.reason)).toEqual(['invalid']);

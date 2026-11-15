@@ -133,8 +133,10 @@ function fieldSchema(
   target: RequestTarget
 ): { schema: Record<string, unknown>; registry?: RegistryName } {
   const defs = (target.schema.$defs ?? {}) as Record<string, Record<string, unknown>>;
-  const deref = (node: Record<string, unknown>) =>
-    typeof node.$ref === 'string' ? defs[node.$ref.replace('#/$defs/', '')] : node;
+  const deref = (node: Record<string, unknown>) => {
+    const name = defName(node);
+    return name ? defs[name] : node;
+  };
 
   let node: Record<string, unknown> | undefined = target.schema;
   for (const segment of field.path.split('.')) {
@@ -158,8 +160,14 @@ function fieldSchema(
   return { schema: field.enum ? narrow(schema, field.enum, field.path) : schema };
 }
 
+/** The `$defs` entry a local `$ref` names, if `node` is one. */
+function defName(node: Record<string, unknown>): string | undefined {
+  return typeof node.$ref === 'string' ? node.$ref.replace('#/$defs/', '') : undefined;
+}
+
 function registryOf(node: Record<string, unknown>): RegistryName | undefined {
-  return typeof node.$ref === 'string' ? REGISTRY_REFS[node.$ref.replace('#/$defs/', '')] : undefined;
+  const name = defName(node);
+  return name ? REGISTRY_REFS[name] : undefined;
 }
 
 /** A copy of `node` with every local `$ref` replaced by its definition. */
@@ -167,8 +175,9 @@ function inline(node: unknown, defs: Record<string, unknown>): unknown {
   if (Array.isArray(node)) return node.map((item) => inline(item, defs));
   if (!node || typeof node !== 'object') return node;
   const record = node as Record<string, unknown>;
-  if (typeof record.$ref === 'string') {
-    return inline(defs[record.$ref.replace('#/$defs/', '')], defs);
+  const name = defName(record);
+  if (name) {
+    return inline(defs[name], defs);
   }
   return Object.fromEntries(Object.entries(record).map(([key, value]) => [key, inline(value, defs)]));
 }
@@ -196,12 +205,16 @@ function withoutValidationOnly(node: unknown): unknown {
   return Object.fromEntries(
     Object.entries(node as Record<string, unknown>)
       .filter(([key]) => !VALIDATION_ONLY.has(key))
-      .map(([key, value]) => [key, key === 'properties' ? mapValues(value, withoutValidationOnly) : withoutValidationOnly(value)])
+      .map(([key, value]) => [
+        key,
+        // property names are not keywords: keep every one, strip inside each
+        key === 'properties'
+          ? Object.fromEntries(
+              Object.entries(value as Record<string, unknown>).map(([name, sub]) => [name, withoutValidationOnly(sub)])
+            )
+          : withoutValidationOnly(value),
+      ])
   );
-}
-
-function mapValues(record: unknown, fn: (value: unknown) => unknown): unknown {
-  return Object.fromEntries(Object.entries(record as Record<string, unknown>).map(([k, v]) => [k, fn(v)]));
 }
 
 /**
@@ -211,8 +224,9 @@ function mapValues(record: unknown, fn: (value: unknown) => unknown): unknown {
 export function resolveRefs(
   fields: Record<string, unknown>,
   refs: Record<string, RegistryName>,
-  registries: Registries
+  registries: Registries | undefined
 ): Record<string, unknown> {
+  if (!registries) return fields;
   const resolved = { ...fields };
   for (const [key, registry] of Object.entries(refs)) {
     const value = resolved[key];

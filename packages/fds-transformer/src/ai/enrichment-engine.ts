@@ -45,6 +45,7 @@ import {
   resolveRefs,
   type AbstentionReason,
   type Registries,
+  type RegistryName,
   type RequestTarget,
 } from './response-schema.js';
 import {
@@ -147,12 +148,12 @@ export interface BatchEnrichmentOptions {
   /** Output directory for checkpoints */
   outputDirectory?: string;
   /**
-   * The target entity schema. With it, each field is asked for with the value
-   * schema the target schema gives it, and replies are validated against it.
+   * The target entity schema and the loaded registries. With them, each field
+   * is asked for with the value schema the target schema gives it, muscle and
+   * equipment references are chosen from the registries, and replies are
+   * validated against both.
    */
-  targetSchema?: Record<string, unknown>;
-  /** The loaded registries that muscle and equipment references are chosen from. */
-  registries?: Registries;
+  target?: RequestTarget;
 }
 
 /**
@@ -507,12 +508,7 @@ export class EnrichmentEngine {
             tierFields,
             options.onProgress,
             checkpointManager,
-            options.targetSchema
-              ? {
-                  schema: options.targetSchema,
-                  registries: options.registries ?? { muscles: [], equipment: [], muscleCategories: [] },
-                }
-              : undefined
+            options.target
           );
 
           // Merge batch results
@@ -796,7 +792,6 @@ export class EnrichmentEngine {
       }
       const slugs = tier === 'complex' ? null : batch.exercises.map((e) => e.slug);
       const request = buildRequest(promptId, requested, slugs, target);
-      const { responseSchema } = request;
 
       // Report progress
       if (onProgress) {
@@ -832,7 +827,7 @@ export class EnrichmentEngine {
         }
 
         // Make API call with retry/fallback handling
-        const call = await this.callWithFallback(tier, builtPrompt, tierConfig, responseSchema);
+        const call = await this.callWithFallback(tier, builtPrompt, tierConfig, request.responseSchema);
         const { response } = call;
         apiCalls++;
         tokensUsed += response.tokensUsed || 0;
@@ -871,9 +866,7 @@ export class EnrichmentEngine {
         }
 
         // Parse and distribute results
-        const parsedResults = this.parseResponse(reply.value, batch.exercises, promptId, (fields) =>
-          target ? resolveRefs(fields, request.refs, target.registries) : fields
-        );
+        const parsedResults = this.parseResponse(reply.value, batch.exercises, promptId, request.refs, target?.registries);
 
         if (debug) {
           console.log(`[DEBUG processTierBatch] Parsed results count: ${parsedResults.size}`);
@@ -983,13 +976,14 @@ export class EnrichmentEngine {
     reply: unknown,
     exercises: ExerciseInput[],
     promptId: string,
-    resolve: (fields: Record<string, unknown>) => Record<string, unknown>
+    refs: Record<string, RegistryName>,
+    registries: Registries | undefined
   ): Map<string, Record<string, unknown>> {
     const results = new Map<string, Record<string, unknown>>();
     const parsed = reply as Record<string, unknown>;
     // null is how the model declines a field: nothing is written for it.
     const answered = (fields: Record<string, unknown>) =>
-      resolve(Object.fromEntries(Object.entries(fields).filter(([, value]) => value !== null)));
+      resolveRefs(Object.fromEntries(Object.entries(fields).filter(([, value]) => value !== null)), refs, registries);
 
     // Batched prompts reply with one item per exercise, named by slug
     if (Array.isArray(parsed.results)) {
