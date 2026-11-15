@@ -8,8 +8,8 @@ sidebar_position: 1
 
 FDS je definisan u formatu JSON Schema (Draft 2020-12). Svaka šema ispod objavljena je na zamrznutom URL-u: bajtovi na URL-u verzije nikada se ne menjaju, a izmena se isporučuje na novom.
 
-<!-- fds:count schemas=14 entities=7 libraries=1 tooling=2 superseded=4 -->
-Objavljeno je 14 šema. Od toga je 7 entiteta, 1 je biblioteka definicija, 2 pripadaju alatu, a 4 su zamenjene verzije koje se i dalje služe.
+<!-- fds:count schemas=16 entities=7 libraries=1 tooling=2 superseded=6 -->
+Objavljeno je 16 šema. Od toga je 7 entiteta, 1 je biblioteka definicija, 2 pripadaju alatu, a 6 su zamenjene verzije koje se i dalje služe.
 
 ## Verzije entiteta nisu ujednačene
 
@@ -75,17 +75,19 @@ Ova šema **nije entitet** i provajder je ne izvozi. Koren njene šeme po konstr
 
 ## Šeme alata
 
-### Mapiranje transformatora — v1.2.0
+### Mapiranje transformatora — v1.3.0
 Konfiguracija za FDS Transformer: kako se izvorna polja mapiraju na FDS entitet. Opisuje ulaz alata, a ne entitet, pa je dokumentovana uz alat. Ne pripada nijednom izdanju — izdanje imenuje entitete i biblioteke koje oni kombinuju, a ovo konfiguriše alat.
 
-**Šema:** `/schemas/transformer/v1.2.0/mapping.schema.json` — pogledajte [konfiguraciju transformatora](/docs/tools/transformer/configuration).
+**Šema:** `/schemas/transformer/v1.3.0/mapping.schema.json` — pogledajte [konfiguraciju transformatora](/docs/tools/transformer/configuration).
 
-Verzija 1.2.0 dodala je `validation.rejectDefaults`, koji odbacuje zapis čije imenovano polje sadrži podrazumevanu vrednost iz mapiranja.
+Verzija 1.3.0 dodala je provajdera obogaćivanja `claude-code` i njegova podešavanja `enrichment.claudeCode`.
 
-### Poreklo podataka transformatora — v1.0.0
+### Poreklo podataka transformatora — v1.1.0
 Opisuje `provenance.sidecar.json`, datoteku koju FDS Transformer upisuje pored svog izlaza: za svaki dokument, odakle potiče svako upisano polje (izvorna putanja, podrazumevana vrednost iz mapiranja, transformacija ili model, sa verzijom prompta i pouzdanošću). To je izlaz alata, a ne izvezeni podaci, i kao ni šema mapiranja ne pripada nijednom izdanju.
 
-**Šema:** `/schemas/transformer/provenance/v1.0.0/provenance.schema.json`
+**Šema:** `/schemas/transformer/provenance/v1.1.0/provenance.schema.json`
+
+Verzija 1.1.0 zahteva `provider` u unosu modela: provajdera obogaćivanja koji je uputio poziv.
 
 ## Zamenjene, i dalje dostupne
 
@@ -93,6 +95,20 @@ Opisuje `provenance.sidecar.json`, datoteku koju FDS Transformer upisuje pored s
 <!-- fds:pin atlas/v1.0.0/body-atlas.schema.json — listed on purpose: releases 1.0.0 through 1.4.0 declare body-atlas at 1.0.0, so a client pinned to any of them must keep resolving this URL. The section says plainly not to build against it. -->
 <!-- fds:pin transformer/v1.0.0/mapping.schema.json — listed on purpose: it is the `$schema` URL every configuration written before 1.1.0 names, and an editor resolving it must keep getting a document. -->
 <!-- fds:pin transformer/v1.1.0/mapping.schema.json — listed on purpose: it is the `$schema` URL every configuration written before 1.2.0 names, and an editor resolving it must keep getting a document. -->
+<!-- fds:pin transformer/v1.2.0/mapping.schema.json — listed on purpose: it is the `$schema` URL every configuration written before 1.3.0 names, and an editor resolving it must keep getting a document. -->
+<!-- fds:pin transformer/provenance/v1.0.0/provenance.schema.json — listed on purpose: it is the `$schema` every sidecar written before 1.1.0 names, and such a sidecar must keep validating against it. -->
+
+### Mapiranje transformatora — v1.2.0
+
+**Šema:** `/schemas/transformer/v1.2.0/mapping.schema.json`
+
+Zamenjena mapiranjem 1.3.0, koje je dodalo provajdera `claude-code` i `enrichment.claudeCode`. Svaka 1.2.0 konfiguracija i dalje je validna pod 1.3.0 — dodaci su opcioni. I dalje se služi jer je upravo ona ono što konfiguracija napisana prema njoj imenuje u sopstvenom `$schema`.
+
+### Poreklo podataka transformatora — v1.0.0
+
+**Šema:** `/schemas/transformer/provenance/v1.0.0/provenance.schema.json`
+
+Zamenjena verzijom provenance 1.1.0, koja zahteva `provider` u unosu modela, pa sidecar 1.0.0 sa unosima modela nije validan pod 1.1.0. I dalje se služi jer je sidecar napisan pre 1.1.0 navodi kao svoj `$schema` i i dalje je validan prema njoj.
 
 ### Mapiranje transformatora — v1.1.0
 

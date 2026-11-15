@@ -14,7 +14,7 @@ Create a `mapping.json` file in your project:
 
 ```json
 {
-  "$schema": "https://spec.vitness.me/schemas/transformer/v1.2.0/mapping.schema.json",
+  "$schema": "https://spec.vitness.me/schemas/transformer/v1.3.0/mapping.schema.json",
   "version": "1.0.0",
   "targetSchema": {
     "version": "1.0.0",
@@ -363,7 +363,7 @@ See [Plugin Development](/docs/tools/transformer/plugins) for details.
 
 ```json
 {
-  "$schema": "https://spec.vitness.me/schemas/transformer/v1.2.0/mapping.schema.json",
+  "$schema": "https://spec.vitness.me/schemas/transformer/v1.3.0/mapping.schema.json",
   "version": "1.0.0",
   "targetSchema": {
     "version": "1.0.0",

@@ -8,8 +8,8 @@ sidebar_position: 1
 
 FDS se define en JSON Schema (Draft 2020-12). Cada esquema listado abajo se publica en una URL congelada: los bytes en una URL de versión nunca cambian, y un cambio se publica en una URL nueva.
 
-<!-- fds:count schemas=14 entities=7 libraries=1 tooling=2 superseded=4 -->
-Se publican 14 esquemas: 7 son entidades, 1 es una biblioteca de definiciones, 2 pertenecen a una herramienta y 4 son versiones sustituidas que se siguen sirviendo.
+<!-- fds:count schemas=16 entities=7 libraries=1 tooling=2 superseded=6 -->
+Se publican 16 esquemas: 7 son entidades, 1 es una biblioteca de definiciones, 2 pertenecen a una herramienta y 6 son versiones sustituidas que se siguen sirviendo.
 
 ## Las versiones de entidades no son uniformes
 
@@ -75,17 +75,19 @@ Este esquema **no es una entidad**, y un proveedor no lo exporta. Su raíz no va
 
 ## Esquemas de herramientas
 
-### Mapeo del Transformer — v1.2.0
+### Mapeo del Transformer — v1.3.0
 Configuración del FDS Transformer: cómo los campos de origen se mapean a una entidad FDS. Describe la entrada de una herramienta, no una entidad, de modo que se documenta junto con la herramienta. No pertenece a ningún lanzamiento — un lanzamiento nombra entidades y las bibliotecas que estas componen, y esto configura una herramienta.
 
-**Esquema:** `/schemas/transformer/v1.2.0/mapping.schema.json` — véase [la configuración del Transformer](/docs/tools/transformer/configuration).
+**Esquema:** `/schemas/transformer/v1.3.0/mapping.schema.json` — véase [la configuración del Transformer](/docs/tools/transformer/configuration).
 
-La 1.2.0 agregó `validation.rejectDefaults`, que hace fallar un registro cuyo campo nombrado contiene un valor por defecto del mapeo.
+La 1.3.0 agregó el proveedor de enriquecimiento `claude-code` y su configuración `enrichment.claudeCode`.
 
-### Procedencia del Transformer — v1.0.0
+### Procedencia del Transformer — v1.1.0
 Describe `provenance.sidecar.json`, el archivo que el FDS Transformer escribe junto a su salida: para cada documento, de dónde vino cada campo escrito (la ruta de origen, un valor por defecto del mapeo, una transformación o un modelo, con la versión del prompt y su confianza). Es la salida de una herramienta, no datos exportados, y como el esquema de mapeo no pertenece a ningún lanzamiento.
 
-**Esquema:** `/schemas/transformer/provenance/v1.0.0/provenance.schema.json`
+**Esquema:** `/schemas/transformer/provenance/v1.1.0/provenance.schema.json`
+
+La 1.1.0 exige `provider` en la entrada de un modelo: el proveedor de enriquecimiento que hizo la llamada.
 
 ## Sustituidos, todavía servidos
 
@@ -93,6 +95,20 @@ Describe `provenance.sidecar.json`, el archivo que el FDS Transformer escribe ju
 <!-- fds:pin atlas/v1.0.0/body-atlas.schema.json — listed on purpose: releases 1.0.0 through 1.4.0 declare body-atlas at 1.0.0, so a client pinned to any of them must keep resolving this URL. The section says plainly not to build against it. -->
 <!-- fds:pin transformer/v1.0.0/mapping.schema.json — listed on purpose: it is the `$schema` URL every configuration written before 1.1.0 names, and an editor resolving it must keep getting a document. -->
 <!-- fds:pin transformer/v1.1.0/mapping.schema.json — listed on purpose: it is the `$schema` URL every configuration written before 1.2.0 names, and an editor resolving it must keep getting a document. -->
+<!-- fds:pin transformer/v1.2.0/mapping.schema.json — listed on purpose: it is the `$schema` URL every configuration written before 1.3.0 names, and an editor resolving it must keep getting a document. -->
+<!-- fds:pin transformer/provenance/v1.0.0/provenance.schema.json — listed on purpose: it is the `$schema` every sidecar written before 1.1.0 names, and such a sidecar must keep validating against it. -->
+
+### Mapeo del Transformer — v1.2.0
+
+**Esquema:** `/schemas/transformer/v1.2.0/mapping.schema.json`
+
+Sustituido por mapping 1.3.0, que agregó el proveedor `claude-code` y `enrichment.claudeCode`. Toda configuración 1.2.0 sigue siendo válida bajo la 1.3.0 — las adiciones son opcionales. Se sigue sirviendo porque es lo que una configuración escrita contra ella nombra en su propio `$schema`.
+
+### Procedencia del Transformer — v1.0.0
+
+**Esquema:** `/schemas/transformer/provenance/v1.0.0/provenance.schema.json`
+
+Sustituido por provenance 1.1.0, que exige `provider` en la entrada de un modelo, de modo que un sidecar 1.0.0 con entradas de modelo no es válido bajo la 1.1.0. Se sigue sirviendo porque un sidecar escrito antes de la 1.1.0 lo nombra como su `$schema` y sigue siendo válido contra él.
 
 ### Mapeo del Transformer — v1.1.0
 

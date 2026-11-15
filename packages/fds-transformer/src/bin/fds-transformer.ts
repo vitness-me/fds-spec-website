@@ -335,6 +335,8 @@ program
   .option('--clear-checkpoint', 'Clear existing checkpoint before running')
   .option('--no-checkpoint', 'Disable checkpoint saving')
   .option('--no-enrichment', 'Skip AI enrichment entirely')
+  .option('--ids <ids>', 'Transform only these records, by exerciseId or slug (comma-separated)')
+  .option('--max-records <n>', 'Transform at most this many records, the first in input order', Number)
   .option(
     '--log-level <level>',
     'Log verbosity (error|warn|info|debug)',
@@ -474,6 +476,10 @@ program
 
       // Check if we should use batch processing (tiered enrichment)
       const useBatchMode = transformer.isTieredEnrichmentEnabled();
+      if (!useBatchMode && (options.ids !== undefined || options.maxRecords !== undefined)) {
+        p.cancel('--ids and --max-records need tiered enrichment (enrichment.tiers and enrichment.fields in the config).');
+        process.exit(1);
+      }
 
       if (useBatchMode) {
         log('debug', 'Using batch mode with tiered enrichment');
@@ -485,6 +491,11 @@ program
           outputDirectory: outputDir,
           skipEnrichment: options.noEnrichment || options.noAi,
           onProgress: createProgressCallback(),
+          ids:
+            options.ids === undefined
+              ? undefined
+              : (options.ids as string).split(',').map((id) => id.trim()).filter(Boolean),
+          maxRecords: options.maxRecords,
         };
 
         const spinner = p.spinner();

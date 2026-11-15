@@ -68,7 +68,7 @@ export interface FieldEnrichmentConfig {
 
 export interface EnrichmentConfig {
   enabled?: boolean;
-  provider?: 'openrouter' | 'openai' | 'anthropic' | 'ollama';
+  provider?: 'openrouter' | 'claude-code' | 'openai' | 'anthropic' | 'ollama';
   model?: string;
   /**
    * Ignored, with a warning: the key is read only from `OPENROUTER_API_KEY`.
@@ -86,6 +86,23 @@ export interface EnrichmentConfig {
   fallback?: FallbackConfig;
   rateLimit?: RateLimitConfig;
   checkpoint?: CheckpointConfig;
+  /** The `claude-code` provider's settings; read only when it is the provider */
+  claudeCode?: ClaudeCodeConfig;
+}
+
+/**
+ * The `claude-code` provider runs the local `claude` CLI, signed in with a
+ * Claude subscription. It reads no key: the CLI's own sign-in is the only auth.
+ */
+export interface ClaudeCodeConfig {
+  /** Model for every enrichment call, in every tier (default: claude-opus-5-5) */
+  writerModel?: string;
+  /** Model a caller's check pass uses (default: claude-sonnet-5-5) */
+  checkerModel?: string;
+  /** The CLI executable (default: claude, found on PATH) */
+  command?: string;
+  /** How long one call may run before it is stopped, in ms (default: 600000) */
+  timeoutMs?: number;
 }
 
 // ============================================================================
@@ -298,6 +315,8 @@ export interface EnrichmentResult {
 
 export interface AIProvider {
   name: string;
+  /** The model every enrichment call writes with, for a provider that fixes one; tiers' models are then not used */
+  readonly writerModel?: string;
   complete(prompt: string, options?: AIProviderOptions): Promise<AIResponse>;
   completeJSON<T>(prompt: string, schema?: object, options?: AIProviderOptions): Promise<T>;
 }
@@ -786,6 +805,8 @@ export interface TransformProvenance {
 /** Written by a model */
 export interface ModelProvenance {
   origin: 'model';
+  /** The provider that made the call: `openrouter`, `claude-code` */
+  provider: string;
   /** The model that served the call */
   model: string;
   /** Prompt id */

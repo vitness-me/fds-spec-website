@@ -9,6 +9,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **`provider: "claude-code"` enriches through the local `claude` CLI on a
+  Claude subscription.** It sends the same request schema as `openrouter`
+  (as `--json-schema`) and keeps gap-only scoping, constrained values and
+  provenance. A refusal, a `max_tokens` stop or a reply that never matched its
+  schema is an abstention; a CLI that cannot answer fails the call. The CLI
+  runs with no tools, MCP servers, settings or saved session. No key is read:
+  API-key, API-endpoint and cloud-provider variables are removed from its
+  environment, so the CLI answers on its own sign-in. `enrichment.claudeCode`
+  sets `writerModel` (default `claude-opus-5-5`), which writes every tier,
+  `checkerModel` (default `claude-sonnet-5-5`) for a caller's check pass,
+  `command` and `timeoutMs`. `scripts/smoke-claude-code.mjs` is a manual
+  smoke test against the real CLI.
+- **A run can be limited to chosen records.** `transformAllBatch` takes `ids`
+  (a record's `exerciseId` or slug) and `maxRecords`, and the CLI
+  `--ids` and `--max-records`. Only the chosen records are mapped, enriched
+  and written; an unknown id fails the run before any call.
+- **Model provenance records the provider.** A `model` origin carries
+  `provider` (`openrouter`, `claude-code`) beside the model the provider
+  reports. The sidecar names `transformer/provenance/v1.1.0`, which requires
+  it; mapping configurations validate against `transformer/v1.3.0`, which
+  adds `claude-code` and `enrichment.claudeCode`.
+
 - **`uuidv5` derives ids from the input.** `options.namespace` is the namespace
   UUID and `options.name` a template over the source record
   (`exercises_v6/Exercises/{{v6Id}}`). The same input always gives the same id.

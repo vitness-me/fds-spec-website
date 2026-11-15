@@ -8,7 +8,7 @@ import type { RecordProvenance } from './types.js';
 
 /** The published schema a provenance sidecar is validated by */
 export const PROVENANCE_SCHEMA_URL =
-  'https://spec.vitness.me/schemas/transformer/provenance/v1.0.0/provenance.schema.json';
+  'https://spec.vitness.me/schemas/transformer/provenance/v1.1.0/provenance.schema.json';
 
 /** The sidecar's file name; the dot keeps it clear of any `<slug>.json` output file */
 export const PROVENANCE_SIDECAR_FILENAME = 'provenance.sidecar.json';

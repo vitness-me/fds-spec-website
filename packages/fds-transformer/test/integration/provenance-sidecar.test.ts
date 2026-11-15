@@ -19,7 +19,7 @@ import type { MappingConfig, TransformResult } from '../../src/core/types.js';
 
 const SCHEMA_PATH = join(
   dirname(fileURLToPath(import.meta.url)),
-  '../../../../specification/schemas/transformer/provenance/v1.0.0/provenance.schema.json'
+  '../../../../specification/schemas/transformer/provenance/v1.1.0/provenance.schema.json'
 );
 
 const published = (() => {

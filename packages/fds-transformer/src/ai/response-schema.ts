@@ -361,3 +361,23 @@ export function readReply(
   }
   return { ok: true, value };
 }
+
+/** The system prompt a JSON-only call is given when the caller gives none */
+export const JSON_SYSTEM_PROMPT =
+  'You are a helpful assistant that responds only with valid JSON. Do not include any text outside the JSON object.';
+
+/**
+ * A reply's JSON, for `completeJSON`. A refusal or a reply cut off at the
+ * token limit throws an AbstentionError and is never parsed; any other reply
+ * that is not JSON throws.
+ */
+export function jsonReply<T>(response: AIResponse): T {
+  const reply = readReply(response);
+  if (!reply.ok) {
+    if (reply.reason !== 'invalid') {
+      throw new AbstentionError(reply.reason, reply.detail);
+    }
+    throw new Error(`Failed to parse JSON response: ${response.content.trim().slice(0, 200)}`);
+  }
+  return reply.value as T;
+}

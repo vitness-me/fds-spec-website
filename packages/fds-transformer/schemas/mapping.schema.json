@@ -1,5 +1,5 @@
 {
-  "$id": "https://spec.vitness.me/schemas/transformer/v1.2.0/mapping.schema.json",
+  "$id": "https://spec.vitness.me/schemas/transformer/v1.3.0/mapping.schema.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "FDS Transformer Mapping Configuration",
   "description": "Every configuration key the FDS Transformer reads, and nothing else. `additionalProperties` is closed throughout on purpose: this document exists so an editor can tell a user that a key is misspelled or does not exist, and a schema that accepts anything cannot say that. A key the tool grew is a defect in this document, not licence to write one the tool ignores.",
@@ -84,9 +84,9 @@
         },
         "provider": {
           "type": "string",
-          "enum": ["openrouter", "openai", "anthropic", "ollama"],
+          "enum": ["openrouter", "claude-code", "openai", "anthropic", "ollama"],
           "default": "openrouter",
-          "description": "AI provider to use"
+          "description": "AI provider to use. `claude-code` runs the local `claude` CLI signed in with a Claude subscription, and is set up under `claudeCode`"
         },
         "model": {
           "type": "string",
@@ -291,6 +291,37 @@
               "minimum": 1,
               "default": 10,
               "description": "Save after this many enriched items"
+            }
+          }
+        },
+        "claudeCode": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Settings for provider `claude-code`, which enriches through the local `claude` CLI on its own subscription sign-in. No key is read. The CLI runs with no tools, settings or session, and every enrichment call is written by `writerModel`, whatever model a tier names.",
+          "properties": {
+            "writerModel": {
+              "type": "string",
+              "minLength": 1,
+              "default": "claude-opus-5-5",
+              "description": "The model every enrichment call writes with"
+            },
+            "checkerModel": {
+              "type": "string",
+              "minLength": 1,
+              "default": "claude-sonnet-5-5",
+              "description": "The model a caller's check pass uses; the provider exposes it as `checkerModel`"
+            },
+            "command": {
+              "type": "string",
+              "minLength": 1,
+              "default": "claude",
+              "description": "The CLI executable"
+            },
+            "timeoutMs": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 600000,
+              "description": "How long one call may run before it is stopped, in milliseconds"
             }
           }
         }

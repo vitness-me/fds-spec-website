@@ -52,6 +52,13 @@ export interface BatchTransformOptions {
   outputDirectory?: string;
   /** Skip AI enrichment entirely */
   skipEnrichment?: boolean;
+  /**
+   * Transform only the records with these ids: a record's `exerciseId`, or
+   * its `canonical.slug`. Every id must name a record in the input.
+   */
+  ids?: string[];
+  /** Transform at most this many records, the first in input order, after `ids` */
+  maxRecords?: number;
 }
 
 /**
@@ -311,6 +318,10 @@ export class Transformer {
     for (const { index, mapped } of mappedExercises) mappedBySourceIndex[index] = mapped;
     assertUniqueIdentities(mappedBySourceIndex);
 
+    // Limit the run to the chosen records before any of them reaches a model
+    const selected = this.selectRecords(sources.length, mappedExercises, options);
+    const chosen = mappedExercises.filter(({ index }) => selected.has(index));
+
     // Phase 2: Batch enrichment (if tiered enrichment is configured)
     let enrichmentResults: BatchEnrichmentResult | null = null;
     // Enrichment is keyed by slug plus input hash, so a resumed run
@@ -330,7 +341,7 @@ export class Transformer {
       });
 
       // Prepare exercise inputs for batch enrichment
-      const exerciseInputs: ExerciseInput[] = mappedExercises.map(({ mapped, index }) => {
+      const exerciseInputs: ExerciseInput[] = chosen.map(({ mapped, index }) => {
         const canonical = mapped.canonical as Record<string, unknown> | undefined;
         const targets = mapped.targets as Record<string, unknown> | undefined;
         const equipment = mapped.equipment as Record<string, unknown> | undefined;
@@ -387,7 +398,7 @@ export class Transformer {
     }
 
     // Phase 3: Merge enrichment results and validate
-    for (const { index, mapped, provenance, source } of mappedExercises) {
+    for (const { index, mapped, provenance, source } of chosen) {
       // Skip if already errored in mapping phase
       if (results[index]) {
         continue;
@@ -463,13 +474,14 @@ export class Transformer {
     }
 
     // Calculate stats
-    const successCount = results.filter((r) => r?.success).length;
-    const failedCount = sources.length - successCount;
+    const selectedResults = [...selected].map((index) => results[index]);
+    const successCount = selectedResults.filter((r) => r?.success).length;
+    const failedCount = selected.size - successCount;
 
     return {
-      results,
+      results: selectedResults,
       stats: {
-        total: sources.length,
+        total: selected.size,
         success: successCount,
         failed: failedCount,
         enriched: enrichedCount,
@@ -477,8 +489,48 @@ export class Transformer {
         tokensUsed,
         durationMs: Date.now() - startTime,
       },
-      errors,
+      errors: errors.filter(({ index }) => selected.has(index)),
     };
+  }
+
+  /**
+   * The source indexes a run is limited to, in input order: those whose
+   * record has a listed id, then at most `maxRecords` of them. A record that
+   * failed to map has no id, so only a run without `ids` keeps it.
+   */
+  private selectRecords(
+    count: number,
+    mapped: Array<{ index: number; mapped: Record<string, unknown> }>,
+    options: BatchTransformOptions
+  ): Set<number> {
+    const { ids, maxRecords } = options;
+    if (maxRecords !== undefined && !(Number.isInteger(maxRecords) && maxRecords > 0)) {
+      throw new Error(`maxRecords must be a positive whole number, got ${maxRecords}`);
+    }
+
+    if (ids?.length === 0) {
+      throw new Error('ids lists no record: give at least one id, or leave ids out');
+    }
+
+    let indexes = Array.from({ length: count }, (_, index) => index);
+    if (ids) {
+      const idsOf = new Map(
+        mapped.map(({ index, mapped: record }) => [
+          index,
+          [record.exerciseId, getMappingPathValue(record, 'canonical.slug')].filter(
+            (id): id is string => typeof id === 'string'
+          ),
+        ])
+      );
+      const known = new Set([...idsOf.values()].flat());
+      const missing = ids.filter((id) => !known.has(id));
+      if (missing.length > 0) {
+        throw new Error(`Selected ids are not in the input: ${missing.join(', ')}`);
+      }
+      const wanted = new Set(ids);
+      indexes = indexes.filter((index) => idsOf.get(index)?.some((id) => wanted.has(id)));
+    }
+    return new Set(maxRecords === undefined ? indexes : indexes.slice(0, maxRecords));
   }
 
   /**

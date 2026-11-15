@@ -39,6 +39,7 @@ import type {
 } from '../core/types.js';
 import { promptVersion, readConfidence } from '../core/provenance.js';
 import { OpenRouterProvider } from './providers/openrouter.js';
+import { ClaudeCodeProvider } from './providers/claude-code.js';
 import { RateLimiter, DEFAULT_RATE_LIMIT_CONFIG } from './rate-limiter.js';
 import { CheckpointManager } from './checkpoint-manager.js';
 import {
@@ -433,6 +434,21 @@ export class EnrichmentEngine {
    * Initialize the AI provider
    */
   private initializeProvider(): void {
+    switch (this.config.provider) {
+      case 'claude-code':
+        // The CLI's own sign-in is the only auth: no key is read
+        this.provider = new ClaudeCodeProvider(this.config.claudeCode);
+        break;
+      case 'openrouter':
+        this.provider = this.openRouterProvider();
+        break;
+      default:
+        console.warn(`Unknown AI provider: ${this.config.provider}`);
+    }
+  }
+
+  /** The OpenRouter provider, or null without a key in OPENROUTER_API_KEY */
+  private openRouterProvider(): OpenRouterProvider | null {
     if (this.config.apiKey || (this.config.options as { apiKey?: unknown } | undefined)?.apiKey) {
       console.warn(
         'enrichment.apiKey is ignored: the OpenRouter key is read only from the OPENROUTER_API_KEY environment variable.'
@@ -442,7 +458,7 @@ export class EnrichmentEngine {
 
     if (!apiKey) {
       console.warn('No API key provided for AI enrichment. Enrichment will be skipped.');
-      return;
+      return null;
     }
 
     // Initialize rate limiter if tiered enrichment is configured
@@ -451,19 +467,13 @@ export class EnrichmentEngine {
       this.rateLimiter = new RateLimiter(rateLimitConfig);
     }
 
-    switch (this.config.provider) {
-      case 'openrouter':
-        this.provider = new OpenRouterProvider({
-          model: this.config.model,
-          baseUrl: this.config.baseUrl,
-          rateLimiter: this.rateLimiter ?? undefined,
-          ...this.config.options,
-          apiKey,
-        });
-        break;
-      default:
-        console.warn(`Unknown AI provider: ${this.config.provider}`);
-    }
+    return new OpenRouterProvider({
+      model: this.config.model,
+      baseUrl: this.config.baseUrl,
+      rateLimiter: this.rateLimiter ?? undefined,
+      ...this.config.options,
+      apiKey,
+    });
   }
 
   // ==========================================================================
@@ -887,12 +897,11 @@ export class EnrichmentEngine {
   getTierConfig(tier: TierName): TierConfig {
     const defaultConfig = DEFAULT_TIER_CONFIGS[tier];
     const customConfig = this.config.tiers?.[tier];
+    const config = customConfig ? { ...defaultConfig, ...customConfig } : defaultConfig;
 
-    if (!customConfig) {
-      return defaultConfig;
-    }
-
-    return { ...defaultConfig, ...customConfig };
+    // A provider with a writer model writes every tier with it
+    const writerModel = this.provider?.writerModel;
+    return writerModel ? { ...config, model: writerModel } : config;
   }
 
   /**
@@ -1117,6 +1126,7 @@ export class EnrichmentEngine {
             if (getPathValue(fieldValues, path) !== undefined) {
               entries[path] = {
                 origin: 'model',
+                provider: this.provider.name,
                 model: response.model,
                 prompt: promptId,
                 promptVersion: version,
@@ -1699,7 +1709,8 @@ export class EnrichmentEngine {
   ): ModelProvenance {
     return {
       origin: 'model',
-      model: this.config.model ?? '',
+      provider: this.provider?.name ?? '',
+      model: this.provider?.writerModel ?? this.config.model ?? '',
       prompt,
       promptVersion: version,
       confidence,
