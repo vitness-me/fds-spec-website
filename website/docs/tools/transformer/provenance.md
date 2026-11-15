@@ -19,11 +19,12 @@ The sidecar holds one record per document written, in output order. Each record 
 | `source` | Read from the source record | `from`: the source path read; `transform`: the transforms applied, if any |
 | `default` | A configured value standing in for missing data: the mapping's `default`, or an enrichment `fallback`. It is not data about the record | `transform`, if any |
 | `transform` | Generated with no source value, such as an id or a timestamp | `transform` |
-| `model` | Written by a model during enrichment | `model`, `prompt`, `promptVersion`, `tier`, `confidence` |
+| `model` | Written by a model during enrichment | `provider`, `model`, `prompt`, `promptVersion`, `tier`, `confidence` |
 
 For a model's value:
 
-- `model` is the model that answered.
+- `provider` is the enrichment provider that made the call: `openrouter`, or `claude-code` for the local Claude Code CLI.
+- `model` is the model that answered, as the provider reports it.
 - `promptVersion` is `sha256:` followed by the first 16 hex digits of the hash of the prompt's fixed text, so it changes when the prompt does.
 - `confidence` is the model's own confidence in that field, from 0 to 1, or `null` when it reported none. Every enrichment prompt asks for it.
 

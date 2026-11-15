@@ -302,6 +302,7 @@ describe('Provenance of enriched values', () => {
 
     expect(provenance['classification.exerciseType']).toEqual({
       origin: 'model',
+      provider: 'openrouter',
       model: 'stub/served',
       prompt: 'classification-simple',
       promptVersion: expect.stringMatching(PROMPT_VERSION),
@@ -311,6 +312,7 @@ describe('Provenance of enriched values', () => {
     // A gap the mapping left ('') and the model filled is the model's now.
     expect(provenance['canonical.description']).toEqual({
       origin: 'model',
+      provider: 'openrouter',
       model: 'stub/served',
       prompt: 'description',
       promptVersion: expect.stringMatching(PROMPT_VERSION),
@@ -448,6 +450,7 @@ describe('Provenance of enriched values', () => {
 
     expect(result.provenance!['canonical.description']).toEqual({
       origin: 'model',
+      provider: 'openrouter',
       model: 'stub/single',
       prompt: 'comprehensive',
       promptVersion: expect.stringMatching(PROMPT_VERSION),

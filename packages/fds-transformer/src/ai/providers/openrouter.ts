@@ -6,7 +6,7 @@
 
 import type { AIProvider, AIProviderOptions, AIResponse } from '../../core/types.js';
 import type { RateLimiter } from '../rate-limiter.js';
-import { AbstentionError, readReply } from '../response-schema.js';
+import { JSON_SYSTEM_PROMPT, jsonReply } from '../response-schema.js';
 
 /**
  * OpenRouter provider configuration
@@ -340,23 +340,11 @@ export class OpenRouterProvider implements AIProvider {
     _schema?: object,
     options: AIProviderOptions = {}
   ): Promise<T> {
-    const systemPrompt = options.systemPrompt || 
-      'You are a helpful assistant that responds only with valid JSON. Do not include any text outside the JSON object.';
-
     const response = await this.complete(prompt, {
       ...options,
-      systemPrompt,
+      systemPrompt: options.systemPrompt || JSON_SYSTEM_PROMPT,
     });
-
-    // A refusal or a reply cut off at the token limit is never parsed.
-    const reply = readReply(response);
-    if (!reply.ok) {
-      if (reply.reason !== 'invalid') {
-        throw new AbstentionError(reply.reason, reply.detail);
-      }
-      throw new Error(`Failed to parse JSON response: ${response.content.trim().slice(0, 200)}`);
-    }
-    return reply.value as T;
+    return jsonReply<T>(response);
   }
 
   /**

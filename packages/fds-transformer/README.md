@@ -222,6 +222,43 @@ fds-transformer transform --config ./mapping.json --input ./data.json --tier com
 fds-transformer transform --config ./mapping.json --input ./data.json
 ```
 
+### Claude Code provider (subscription)
+
+`"provider": "claude-code"` enriches through the local `claude` CLI, signed in with a Claude subscription. It gives the same guarantees as `openrouter`: the same request schema (passed as `--json-schema`), gap-only scoping, values constrained to the schema and the registries, provenance, and abstention on a refusal, a reply cut off at the token limit, or a reply that fails its schema.
+
+```json
+{
+  "enrichment": {
+    "enabled": true,
+    "provider": "claude-code",
+    "claudeCode": {
+      "writerModel": "claude-opus-5-5",
+      "checkerModel": "claude-sonnet-5-5"
+    }
+  }
+}
+```
+
+- **Auth.** The CLI's own sign-in is the only auth: run `claude` once and log in, or set `CLAUDE_CODE_OAUTH_TOKEN` from `claude setup-token`. No key is read, written or logged. `ANTHROPIC_*`, other `CLAUDE_CODE_*`, `AWS_*`, `GOOGLE_*`, `VERTEX_*` and `OPENROUTER_*` variables are removed from the CLI's environment, so it can never fall back to API billing, a proxy or a cloud provider.
+- **Isolation.** The CLI runs in print mode with no tools, no MCP servers, no settings, CLAUDE.md or skills, and no saved session, from the system temp directory.
+- **Models.** Every enrichment call, in every tier, is written by `writerModel` (default `claude-opus-5-5`); the tiers' own `model`s are not used. `checkerModel` (default `claude-sonnet-5-5`) is exposed on the provider for a caller's check pass. `temperature` and `maxTokens` have no CLI flag and are not applied.
+- **Failures.** A CLI that cannot answer (not signed in, an API error, a timeout after `timeoutMs`, default 10 minutes) fails the call, like an OpenRouter API error: nothing is written. `command` names the executable if `claude` is not on `PATH`.
+- **Smoke test.** `node scripts/smoke-claude-code.mjs [writer-model]`, after `npm run build`, enriches two exercises through the real CLI and prints what was written and its provenance. It is never run in CI.
+
+### Enriching chosen records
+
+A batch run can be limited to chosen records, so enrichment can go in small batches reviewed one at a time:
+
+```bash
+# Only these records, by exerciseId or slug
+fds-transformer transform --config ./mapping.json --input ./data.json --ids barbell-back-squat,push-up
+
+# At most 25 records, the first in input order (after --ids, if given)
+fds-transformer transform --config ./mapping.json --input ./data.json --max-records 25
+```
+
+Only the chosen records are mapped into the output, sent to a model and written. An id that names no record fails the run before any call. In code, pass `ids` and `maxRecords` to `transformAllBatch`. Both need tiered enrichment.
+
 ### Debug Mode
 
 Enable verbose logging to troubleshoot enrichment:
@@ -271,6 +308,7 @@ Every value the transformer writes carries its origin. Next to its output, the C
           "origin": "model",
           "prompt": "description",
           "promptVersion": "sha256:4b1d0c3e9f2a7d65",
+          "provider": "openrouter",
           "tier": "simple"
         },
         "canonical.name": { "from": "name", "origin": "source", "transform": ["titleCase"] },
@@ -287,7 +325,7 @@ Every value the transformer writes carries its origin. Next to its output, the C
 - `source`: read from the source at `from`, through `transform` if any.
 - `default`: the mapping's `default` stood in for an empty source.
 - `transform`: generated with no source value (an id, a timestamp).
-- `model`: written by enrichment. Records the model that answered, the prompt, a `promptVersion` that changes when the prompt's fixed text does, the tier, and the model's own `confidence` from 0 to 1 (`null` when it reported none).
+- `model`: written by enrichment. Records the provider that made the call (`openrouter`, `claude-code`), the model that answered as the provider reports it, the prompt, a `promptVersion` that changes when the prompt's fixed text does, the tier, and the model's own `confidence` from 0 to 1 (`null` when it reported none).
 
 Keys are sorted and nothing depends on when the run happened, so the same input gives the same bytes. In code, each `TransformResult` carries the same map as `provenance`, and `buildProvenanceSidecar` / `serializeProvenanceSidecar` produce the file.
 
@@ -303,7 +341,7 @@ Keys are sorted and nothing depends on when the run happened, so the same input 
 
 | Variable | Description |
 |----------|-------------|
-| `OPENROUTER_API_KEY` | API key for OpenRouter |
+| `OPENROUTER_API_KEY` | API key for OpenRouter; the `claude-code` provider reads no key |
 | `FDS_TRANSFORMER_MODEL` | Override AI model |
 | `DEBUG_ENRICHMENT` | Set to `true` for verbose enrichment logging |
 

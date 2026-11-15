@@ -34,7 +34,7 @@
       "frozen": true
     },
     "transformer/provenance/v1.0.0/provenance.schema.json": {
-      "sha256": "2244aeec081cb6fc5611ffcd3c5749f56bc2b526ade6311593bee1b5daca9bec",
+      "sha256": "228d33e3be5f3efe8f22d6f1db64f3fd498a715e34d00d85e26f9e18c18768be",
       "frozen": false
     },
     "transformer/v1.0.0/mapping.schema.json": {
@@ -46,7 +46,7 @@
       "frozen": true
     },
     "transformer/v1.2.0/mapping.schema.json": {
-      "sha256": "dfae44fe1ed49050e6617e393bbde5cd6fff32976074a35c44ecfc9267bd1757",
+      "sha256": "4cd97478eac7df1ea392d2e3d2e5b60acaba6472b355271fb6cd594022bc07c5",
       "frozen": false
     },
     "workout/v1.0.0/workout.schema.json": {

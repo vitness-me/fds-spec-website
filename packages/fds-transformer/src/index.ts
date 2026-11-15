@@ -35,6 +35,12 @@ export { Validator } from './schemas/validator.js';
 // AI exports
 export { EnrichmentEngine } from './ai/enrichment-engine.js';
 export { OpenRouterProvider } from './ai/providers/openrouter.js';
+export {
+  ClaudeCodeProvider,
+  ClaudeCodeError,
+  DEFAULT_WRITER_MODEL,
+  DEFAULT_CHECKER_MODEL,
+} from './ai/providers/claude-code.js';
 
 // Transform exports
 export { TransformRegistry } from './transforms/transform-registry.js';
@@ -61,6 +67,7 @@ export type {
 
   // AI types
   EnrichmentConfig,
+  ClaudeCodeConfig,
   EnrichmentResult,
   AIProvider,
   AIProviderOptions,

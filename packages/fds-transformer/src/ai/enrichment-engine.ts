@@ -39,6 +39,7 @@ import type {
 } from '../core/types.js';
 import { promptVersion, readConfidence } from '../core/provenance.js';
 import { OpenRouterProvider } from './providers/openrouter.js';
+import { ClaudeCodeProvider } from './providers/claude-code.js';
 import { RateLimiter, DEFAULT_RATE_LIMIT_CONFIG } from './rate-limiter.js';
 import { CheckpointManager } from './checkpoint-manager.js';
 import {
@@ -415,6 +416,8 @@ export class EnrichmentEngine {
   private provider: AIProvider | null = null;
   private config: EnrichmentConfig;
   private rateLimiter: RateLimiter | null = null;
+  /** The model every enrichment call writes with, when the provider has one (claude-code) */
+  private writerModel: string | null = null;
 
   constructor(config: EnrichmentConfig = {}) {
     this.config = {
@@ -433,6 +436,14 @@ export class EnrichmentEngine {
    * Initialize the AI provider
    */
   private initializeProvider(): void {
+    if (this.config.provider === 'claude-code') {
+      // The CLI's own sign-in is the only auth: no key is read
+      const provider = new ClaudeCodeProvider(this.config.claudeCode);
+      this.writerModel = provider.writerModel;
+      this.provider = provider;
+      return;
+    }
+
     if (this.config.apiKey || (this.config.options as { apiKey?: unknown } | undefined)?.apiKey) {
       console.warn(
         'enrichment.apiKey is ignored: the OpenRouter key is read only from the OPENROUTER_API_KEY environment variable.'
@@ -887,12 +898,10 @@ export class EnrichmentEngine {
   getTierConfig(tier: TierName): TierConfig {
     const defaultConfig = DEFAULT_TIER_CONFIGS[tier];
     const customConfig = this.config.tiers?.[tier];
+    const config = customConfig ? { ...defaultConfig, ...customConfig } : defaultConfig;
 
-    if (!customConfig) {
-      return defaultConfig;
-    }
-
-    return { ...defaultConfig, ...customConfig };
+    // A provider with a writer model writes every tier with it
+    return this.writerModel ? { ...config, model: this.writerModel } : config;
   }
 
   /**
@@ -1117,6 +1126,7 @@ export class EnrichmentEngine {
             if (getPathValue(fieldValues, path) !== undefined) {
               entries[path] = {
                 origin: 'model',
+                provider: this.provider.name,
                 model: response.model,
                 prompt: promptId,
                 promptVersion: version,
@@ -1699,7 +1709,8 @@ export class EnrichmentEngine {
   ): ModelProvenance {
     return {
       origin: 'model',
-      model: this.config.model ?? '',
+      provider: this.provider?.name ?? '',
+      model: this.writerModel ?? this.config.model ?? '',
       prompt,
       promptVersion: version,
       confidence,
