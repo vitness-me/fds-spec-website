@@ -2,6 +2,7 @@
  * Enrichment Engine Tests - Tiered AI Enrichment
  */
 
+import { exerciseTarget } from '../support/exercise-target.js';
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { existsSync, mkdirSync, rmSync } from 'fs';
 import { join } from 'path';
@@ -424,7 +425,7 @@ describe('EnrichmentEngine - enrichBatch()', () => {
   it('should return empty results when no provider', async () => {
     const engine = new EnrichmentEngine({ enabled: false });
     const exercises = createTestExercises(5);
-    const result = await engine.enrichBatch(exercises);
+    const result = await engine.enrichBatch(exercises, { target: exerciseTarget });
 
     expect(result.results.size).toBe(0);
     expect(result.failedIds.length).toBe(0);
@@ -447,7 +448,7 @@ describe('EnrichmentEngine - enrichBatch()', () => {
     }
 
     const exercises = createTestExercises(2);
-    const result = await engine.enrichBatch(exercises);
+    const result = await engine.enrichBatch(exercises, { target: exerciseTarget });
 
     expect(result).toBeDefined();
     expect(result.results).toBeInstanceOf(Map);
@@ -471,7 +472,7 @@ describe('EnrichmentEngine - enrichBatch()', () => {
     }
 
     const exercises = createTestExercises(3);
-    const result = await engine.enrichBatch(exercises);
+    const result = await engine.enrichBatch(exercises, { target: exerciseTarget });
 
     expect(result.failedIds.length).toBeGreaterThan(0);
     expect(result.errors.length).toBeGreaterThan(0);
@@ -494,7 +495,7 @@ describe('EnrichmentEngine - enrichBatch()', () => {
     }
 
     const exercises = createTestExercises(3);
-    await engine.enrichBatch(exercises, {
+    await engine.enrichBatch(exercises, { target: exerciseTarget,
       onProgress: (progress) => {
         progressUpdates.push({ ...progress });
       },
@@ -524,7 +525,7 @@ describe('EnrichmentEngine - enrichBatch()', () => {
     }
 
     const exercises = createTestExercises(2);
-    await engine.enrichBatch(exercises, { tierFilter: 'simple' });
+    await engine.enrichBatch(exercises, { target: exerciseTarget, tierFilter: 'simple' });
 
     // Should have made API calls only for simple tier prompts
     // (description, aliases, classification-simple, metrics, equipment)
@@ -555,7 +556,7 @@ describe('EnrichmentEngine - Response Parsing', () => {
       createTestExercise('2', 'Test 2', 'test-2'),
     ];
 
-    const result = await engine.enrichBatch(exercises, { tierFilter: 'simple' });
+    const result = await engine.enrichBatch(exercises, { target: exerciseTarget, tierFilter: 'simple' });
 
     expect(result.results.size).toBeGreaterThanOrEqual(0);
   });
@@ -573,7 +574,7 @@ describe('EnrichmentEngine - Response Parsing', () => {
     }
 
     const exercises = [createTestExercise('1', 'Test 1', 'test-1')];
-    const result = await engine.enrichBatch(exercises, { tierFilter: 'simple' });
+    const result = await engine.enrichBatch(exercises, { target: exerciseTarget, tierFilter: 'simple' });
 
     // Should not fail on code block format
     expect(result.errors.filter((e) => e.error.includes('parse')).length).toBe(0);
@@ -702,7 +703,7 @@ describe('EnrichmentEngine - Checkpoint Integration', () => {
     }
 
     const exercises = createTestExercises(2);
-    await engine.enrichBatch(exercises, {
+    await engine.enrichBatch(exercises, { target: exerciseTarget,
       outputDirectory: testDir,
     });
 
@@ -726,7 +727,7 @@ describe('EnrichmentEngine - Checkpoint Integration', () => {
     }
 
     const exercises = createTestExercises(2);
-    await engine.enrichBatch(exercises, {
+    await engine.enrichBatch(exercises, { target: exerciseTarget,
       outputDirectory: testDir,
     });
 

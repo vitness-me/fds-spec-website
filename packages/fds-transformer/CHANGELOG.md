@@ -23,6 +23,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   sends a JSON schema as `response_format`, routed only to endpoints that
   support it. The schema asks only for the configured fields that are gaps, and
   in a batch only for the exercises that have them, each exactly once.
+- **Model output is constrained to the target schema and the registries.**
+  Each requested field takes the value schema the target exercise schema
+  gives its path, with `$defs` inlined and narrowed by the field's configured
+  `enum`; the request is sent strict where strict endpoints accept it.
+  Secondary muscles and optional equipment are chosen from the loaded
+  registries by slug and written as the registry's entries, never as the
+  model's text. A value the schema or the registry does not allow is an
+  abstention.
 - **Every call is reported.** `enrichBatch` returns `calls`, with the model
   requested and the model that served, any degrade, token usage, cost when
   OpenRouter reports it, and the outcome.
@@ -44,6 +52,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **Breaking: tiered `enrichBatch` needs `options.target`** (the target
+  schema and the loaded registries), which replaces the never-read
+  `schemaDefs`. Without it, or with a field the target schema cannot satisfy,
+  the run stops before any model call. The transformer passes it.
 - **Breaking: `timestamp` no longer reads the wall clock by default.** It
   formats the source value, or `options.clock` (an ISO 8601 instant with a
   zone) when the source is empty, and throws when there is neither. Set `"clock": "now"` to

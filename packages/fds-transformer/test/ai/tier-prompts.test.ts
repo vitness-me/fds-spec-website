@@ -326,9 +326,11 @@ describe('SIMPLE_TIER_PROMPTS', () => {
       expect(SIMPLE_TIER_PROMPTS.equipment.fields).toContain('equipment.optional');
     });
 
-    it('should mention equipment examples', () => {
-      expect(SIMPLE_TIER_PROMPTS.equipment.template).toContain('dumbbell');
-      expect(SIMPLE_TIER_PROMPTS.equipment.template).toContain('barbell');
+    it('should point at the registry slugs rather than name equipment of its own', () => {
+      // Named examples ("bench", "safety rack") were written back as equipment
+      // refs no registry held.
+      expect(SIMPLE_TIER_PROMPTS.equipment.template).toContain('slugs the response schema allows');
+      expect(SIMPLE_TIER_PROMPTS.equipment.template).not.toMatch(/\bbench\b/);
     });
   });
 });

@@ -43,10 +43,15 @@ import { RateLimiter, DEFAULT_RATE_LIMIT_CONFIG } from './rate-limiter.js';
 import { CheckpointManager } from './checkpoint-manager.js';
 import {
   AbstentionError,
-  buildResponseSchema,
+  buildRequest,
   readReply,
   replyKey,
+  resolveRefs,
   type AbstentionReason,
+  type Registries,
+  type RegistryName,
+  type RequestedField,
+  type RequestTarget,
 } from './response-schema.js';
 import {
   EXERCISE_SYSTEM_PROMPT,
@@ -156,8 +161,13 @@ export interface BatchEnrichmentOptions {
   onProgress?: ProgressCallback;
   /** Output directory for checkpoints */
   outputDirectory?: string;
-  /** Schema $defs for validation context */
-  schemaDefs?: Record<string, unknown>;
+  /**
+   * The target entity schema and the loaded registries. With them, each field
+   * is asked for with the value schema the target schema gives it, muscle and
+   * equipment references are chosen from the registries, and replies are
+   * validated against both.
+   */
+  target?: RequestTarget;
 }
 
 /**
@@ -383,6 +393,20 @@ export function getPathValue(obj: Record<string, unknown>, path: string): unknow
 
 
 
+/**
+ * The configured fields a prompt is asked for, among `paths`: those it can
+ * answer, each with the enum its config narrows it to.
+ */
+function requestedFields(
+  fields: Map<string, TieredFieldEnrichmentConfig>,
+  paths: string[],
+  promptFields: string[]
+): RequestedField[] {
+  return paths
+    .filter((path) => promptFields.includes(path))
+    .map((path) => ({ path, enum: fields.get(path)?.enum }));
+}
+
 // ============================================================================
 // EnrichmentEngine Class
 // ============================================================================
@@ -569,6 +593,24 @@ export class EnrichmentEngine {
       };
     }
 
+    // Constrained output needs its constraints. Every request is built once
+    // here, so a config the target schema cannot satisfy fails before any call.
+    const target = options.target;
+    if (!target) {
+      throw new Error(
+        'Tiered enrichment needs the target schema and the loaded registries (options.target): ' +
+          'without them a value cannot be constrained or a muscle or equipment reference resolved.'
+      );
+    }
+    for (const [tier, tierFields] of this.groupFieldsByTier()) {
+      for (const promptId of new Set([...tierFields.values()].map((f) => f.prompt))) {
+        const template = getPromptTemplate(tier, promptId);
+        const paths = [...tierFields].filter(([, f]) => f.prompt === promptId).map(([path]) => path);
+        const requested = template ? requestedFields(tierFields, paths, template.fields) : [];
+        if (requested.length > 0) buildRequest(promptId, requested, null, target);
+      }
+    }
+
     // Initialize checkpoint manager if configured
     let checkpointManager: CheckpointManager | null = null;
     const checkpointConfig = this.config.checkpoint;
@@ -664,7 +706,8 @@ export class EnrichmentEngine {
             batch,
             tierFields,
             options.onProgress,
-            checkpointManager
+            checkpointManager,
+            target
           );
 
           // Merge batch results
@@ -885,8 +928,9 @@ export class EnrichmentEngine {
     tierConfig: TierConfig,
     batch: ProcessingBatch,
     fields: Map<string, TieredFieldEnrichmentConfig>,
-    onProgress?: ProgressCallback,
-    _checkpointManager?: CheckpointManager | null
+    onProgress: ProgressCallback | undefined,
+    _checkpointManager: CheckpointManager | null | undefined,
+    target: RequestTarget
   ): Promise<BatchEnrichmentResult> {
     const startTime = Date.now();
     const results = new Map<string, Record<string, unknown>>();
@@ -963,14 +1007,12 @@ export class EnrichmentEngine {
       }
 
       // Ask only for the gaps this prompt can answer, for the exercises that have them.
-      const requestedPaths = [...new Set([...writablePaths.values()].flat())].filter((path) =>
-        builtPrompt.fields.includes(path)
-      );
-      if (requestedPaths.length === 0) {
+      const requested = requestedFields(fields, [...new Set([...writablePaths.values()].flat())], builtPrompt.fields);
+      if (requested.length === 0) {
         continue;
       }
       const slugs = tier === 'complex' ? null : exercises.map((e) => e.slug);
-      const responseSchema = buildResponseSchema(promptId, requestedPaths, slugs);
+      const request = buildRequest(promptId, requested, slugs, target);
 
       // Report progress
       if (onProgress) {
@@ -1006,12 +1048,12 @@ export class EnrichmentEngine {
         }
 
         // Make API call with retry/fallback handling
-        const call = await this.callWithFallback(tier, builtPrompt, tierConfig, responseSchema);
+        const call = await this.callWithFallback(tier, builtPrompt, tierConfig, request.responseSchema);
         const { response } = call;
         apiCalls++;
         tokensUsed += response.tokensUsed || 0;
 
-        const reply = readReply(response, responseSchema.schema, slugs ?? undefined);
+        const reply = readReply(response, request.validationSchema, slugs ?? undefined);
         calls.push({
           tier: call.tier,
           promptId,
@@ -1045,7 +1087,14 @@ export class EnrichmentEngine {
         }
 
         // Parse and distribute results
-        const parsedResults = this.parseResponse(reply.value, exercises, promptId, writablePaths);
+        const parsedResults = this.parseResponse(
+          reply.value,
+          exercises,
+          promptId,
+          writablePaths,
+          request.refs,
+          target.registries
+        );
 
         if (debug) {
           console.log(`[DEBUG processTierBatch] Parsed results count: ${parsedResults.size}`);
@@ -1179,7 +1228,9 @@ export class EnrichmentEngine {
     reply: unknown,
     exercises: ExerciseInput[],
     promptId: string,
-    writablePaths: Map<string, string[]>
+    writablePaths: Map<string, string[]>,
+    refs: Record<string, RegistryName>,
+    registries: Registries
   ): Map<string, ParsedReply> {
     const results = new Map<string, ParsedReply>();
     const parsed = reply as Record<string, unknown>;
@@ -1192,7 +1243,7 @@ export class EnrichmentEngine {
       const { confidence, ...fields } = item;
       return {
         fields: pickPaths(
-          this.mapFieldsFromPrompt(promptId, answered(fields)),
+          this.mapFieldsFromPrompt(promptId, resolveRefs(answered(fields), refs, registries)),
           writablePaths.get(exercise.id) ?? []
         ),
         confidence: asObject(confidence),

@@ -23,6 +23,8 @@ import type {
   TierName,
   TieredFieldEnrichmentConfig,
 } from '../../src/core/types.js';
+import { exerciseTarget } from '../support/exercise-target.js';
+import { testMuscles, testEquipment } from '../fixtures/registries.js';
 import { requestedOnly } from '../support/requested-reply.js';
 
 // The engine reads its key only from OPENROUTER_API_KEY.
@@ -112,15 +114,10 @@ function getPath(obj: unknown, path: string): unknown {
 }
 
 /** Every path in `doc` that holds a value the stub model wrote. */
-function aiWrittenPaths(doc: unknown, prefix = ''): string[] {
-  if (typeof doc === 'string') return doc.startsWith('ai:') ? [prefix] : [];
-  if (doc === null || typeof doc !== 'object') return [];
-  if (Array.isArray(doc)) {
-    return doc.some((v) => aiWrittenPaths(v).length > 0) ? [prefix] : [];
-  }
-  return Object.entries(doc).flatMap(([k, v]) =>
-    aiWrittenPaths(v, prefix ? `${prefix}.${k}` : k)
-  );
+function modelPaths(provenance: Record<string, { origin: string }> | undefined): string[] {
+  return Object.entries(provenance ?? {})
+    .filter(([, entry]) => entry.origin === 'model')
+    .map(([path]) => path);
 }
 
 /** The model answers every key of every prompt, for every slug given. */
@@ -146,6 +143,11 @@ function baseConfig(
   return {
     version: '1.0.0',
     targetSchema: { version: '1.4.0', entity: 'exercise' },
+    // Muscle and equipment references can only be chosen from a loaded registry
+    registries: {
+      muscles: { source: 'inline', inline: testMuscles },
+      equipment: { source: 'inline', inline: testEquipment },
+    },
     mappings: {
       exerciseId: { from: 'id' },
       'canonical.name': { from: 'name' },
@@ -256,7 +258,7 @@ describe('Enrichment fills gaps only', () => {
             }
           }
 
-          expect(aiWrittenPaths(doc).sort(), `${label}: AI wrote outside configured gaps`).toEqual(
+          expect(modelPaths(result.provenance).sort(), `${label}: AI wrote outside configured gaps`).toEqual(
             expectedWritten.sort()
           );
           cases++;
@@ -288,7 +290,7 @@ describe('Enrichment fills gaps only', () => {
 
     const { results } = await transformer.transformAllBatch([{ id: 'squat', slug: 'squat', name: 'Squat' }]);
 
-    expect(aiWrittenPaths(results[0].data).sort()).toEqual(ALL_PATHS.slice().sort());
+    expect(modelPaths(results[0].provenance).sort()).toEqual(ALL_PATHS.slice().sort());
   });
 
   it('keeps every tier of a result resumed from a checkpoint', async () => {
@@ -324,7 +326,7 @@ describe('Enrichment fills gaps only', () => {
       const engine = new EnrichmentEngine(config);
       const { results } = await engine.enrichBatch(
         [{ id: 'squat', slug: 'squat', name: 'Squat' }],
-        { resume: true, outputDirectory: dir }
+        { resume: true, outputDirectory: dir, target: exerciseTarget }
       );
 
       expect(results.get('squat')).toEqual({
@@ -489,7 +491,7 @@ describe('Enrichment fills gaps only', () => {
       const engine = new EnrichmentEngine(config);
       const { results } = await engine.enrichBatch(
         [{ id: 'squat', slug: 'squat', name: 'Squat', fieldsToEnrich: [] }],
-        { resume: true, outputDirectory: dir }
+        { resume: true, outputDirectory: dir, target: exerciseTarget }
       );
 
       expect(results.get('squat')).toEqual({});
@@ -511,7 +513,9 @@ describe('Enrichment fills gaps only', () => {
       model: 'stub',
     }));
 
-    const { results } = await engine.enrichBatch([{ id: 'squat', slug: 'squat', name: 'Squat' }]);
+    const { results } = await engine.enrichBatch([{ id: 'squat', slug: 'squat', name: 'Squat' }], {
+      target: exerciseTarget,
+    });
 
     expect(results.get('squat')).toEqual({ classification: { exerciseType: 'ai:exerciseType' } });
   });
