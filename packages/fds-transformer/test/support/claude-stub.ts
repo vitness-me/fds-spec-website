@@ -16,6 +16,8 @@ export interface ClaudeReply {
   stderr?: string;
   exitCode?: number;
   delayMs?: number;
+  /** Send stdout as two writes, cut at this byte */
+  splitAtByte?: number;
 }
 
 export interface ClaudeCall {

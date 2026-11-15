@@ -6,7 +6,7 @@
  *
  * Call n records its arguments, stdin, working directory and environment
  * variable *names* to `<dir>/call-<n>.json`, then answers with
- * `<dir>/reply-<n>.json`: `{ stdout, stderr?, exitCode?, delayMs? }`. With no
+ * `<dir>/reply-<n>.json`: `{ stdout, stderr?, exitCode?, delayMs?, splitAtByte? }`. With no
  * reply queued it fails the way the CLI does. It never reads a value from its
  * environment and never touches the network.
  */
@@ -35,8 +35,15 @@ process.stdin.on('end', () => {
       };
 
   setTimeout(() => {
-    process.stdout.write(reply.stdout ?? '');
-    process.stderr.write(reply.stderr ?? '');
-    process.exitCode = reply.exitCode ?? 0;
+    // splitAtByte sends stdout as two writes, cut at that byte
+    const out = Buffer.from(reply.stdout ?? '');
+    const cut = reply.splitAtByte ?? out.length;
+    process.stdout.write(out.subarray(0, cut), () =>
+      setTimeout(() => {
+        process.stdout.write(out.subarray(cut));
+        process.stderr.write(reply.stderr ?? '');
+        process.exitCode = reply.exitCode ?? 0;
+      }, 50)
+    );
   }, reply.delayMs ?? 0);
 });

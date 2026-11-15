@@ -133,8 +133,9 @@ export class ClaudeCodeProvider implements AIProvider {
         child.kill('SIGTERM');
         reject(new ClaudeCodeError(`${this.command} timed out after ${this.timeoutMs} ms`));
       }, this.timeoutMs);
-      child.stdout.on('data', (chunk: Buffer) => (stdout += chunk.toString()));
-      child.stderr.on('data', (chunk: Buffer) => (stderr += chunk.toString()));
+      // Decoded per stream, so a character split across chunks stays whole
+      child.stdout.setEncoding('utf8').on('data', (chunk: string) => (stdout += chunk));
+      child.stderr.setEncoding('utf8').on('data', (chunk: string) => (stderr += chunk));
       child.on('error', (error) => {
         clearTimeout(timer);
         reject(new ClaudeCodeError(`Could not start ${this.command}: ${error.message}`));

@@ -128,6 +128,13 @@ describe('ClaudeCodeProvider', () => {
     expect(response.tokensUsed).toBe(340);
   });
 
+  it('keeps a character the CLI output splits across two chunks whole', async () => {
+    const reply = structured({ a: 'Hold — then press' });
+    stub.reply({ ...reply, splitAtByte: Buffer.from(reply.stdout).lastIndexOf('—') + 1 });
+    const response = await provider().complete('prompt');
+    expect(JSON.parse(response.content)).toEqual({ a: 'Hold — then press' });
+  });
+
   it('reports the model that wrote most of the reply when the CLI used more than one', async () => {
     const reply = JSON.parse(structured({ a: 'x' }, 'claude-opus-5-5').stdout);
     reply.modelUsage['claude-haiku-5-5'] = { inputTokens: 50, outputTokens: 5 };

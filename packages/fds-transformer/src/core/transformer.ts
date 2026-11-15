@@ -513,7 +513,7 @@ export class Transformer {
       const idsOf = new Map(
         mapped.map(({ index, mapped: record }) => [
           index,
-          [record.exerciseId, (record.canonical as Record<string, unknown> | undefined)?.slug].filter(
+          [record.exerciseId, getMappingPathValue(record, 'canonical.slug')].filter(
             (id): id is string => typeof id === 'string'
           ),
         ])

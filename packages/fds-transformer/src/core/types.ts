@@ -315,6 +315,8 @@ export interface EnrichmentResult {
 
 export interface AIProvider {
   name: string;
+  /** The model every enrichment call writes with, for a provider that fixes one; tiers' models are then not used */
+  readonly writerModel?: string;
   complete(prompt: string, options?: AIProviderOptions): Promise<AIResponse>;
   completeJSON<T>(prompt: string, schema?: object, options?: AIProviderOptions): Promise<T>;
 }
