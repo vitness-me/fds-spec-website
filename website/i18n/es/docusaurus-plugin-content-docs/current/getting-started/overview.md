@@ -18,14 +18,15 @@ Habilitar la portabilidad de datos y la interoperabilidad entre aplicaciones de 
 
 ### Alcance actual
 
-<!-- fds:count rfcs=8 -->
-**Dentro del alcance** — 8 RFC publicados:
+<!-- fds:count rfcs=9 -->
+**Dentro del alcance** — 9 RFC publicados:
 
 - **Modelo de datos de ejercicio** (RFC-001)
 - **Entidades de catálogo**: equipamiento (RFC-002), músculos (RFC-003), categorías de músculos (RFC-004), atlas corporal (RFC-005)
 - **Primitivas de prescripción** (RFC-006) — carga, repeticiones, tempo, descanso, zonas de intensidad, esquemas de series y reglas de progresión, definidos una sola vez para que una serie signifique lo mismo dondequiera que aparezca
 - **Modelo de datos de sesión de entrenamiento** (RFC-007) — una sesión prescrita, como bloques de elementos con un modo de ejecución por bloque
 - **Modelo de datos de programa de entrenamiento** (RFC-008) — un cronograma de referencias a sesiones de entrenamiento a lo largo del tiempo, con ciclos, semanas, progresión y ramificación condicional
+- **Registro oficial de músculos** (RFC-010, borrador): los nombres de músculos y grupos musculares que comparten todas las aplicaciones FDS
 
 **Fuera del alcance** — por decisión, no por omisión:
 

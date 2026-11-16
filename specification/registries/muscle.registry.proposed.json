@@ -1,0 +1,450 @@
+{
+  "registry": "muscle",
+  "version": "1.0.0",
+  "status": "proposed",
+  "description": "PROPOSED, NOT NORMATIVE (RFC-010, Draft). The muscle names every FDS application would share, so a user's training history moves between applications without translation. An entry is either a muscle (a muscle or a named part of one) or a group that rolls up other entries. atlasAreas are informative hints naming areas of the VITNESS production body atlas (vulovix/body-muscles, Apache-2.0); they do not constrain any FDS document.",
+  "policy": "open",
+  "governs": [
+    {
+      "source": "specification/schema-sources/exercises/v1.1.0/exercise.schema.json",
+      "pointer": "targets.primary[].slug"
+    },
+    {
+      "source": "specification/schema-sources/exercises/v1.1.0/exercise.schema.json",
+      "pointer": "targets.secondary[].slug"
+    },
+    {
+      "source": "specification/schema-sources/muscle/v1.0.0/muscle.schema.json",
+      "pointer": "canonical.slug"
+    }
+  ],
+  "categories": ["arms", "back", "chest", "core", "full-body", "legs", "neck", "shoulders"],
+  "entries": [
+    {
+      "value": "abductors",
+      "label": "Abductors",
+      "kind": "group",
+      "category": "legs",
+      "members": ["gluteus-medius"],
+      "atlasAreas": ["gluteus-medius"],
+      "description": "The hip abductors, which move the thigh away from the midline. Rolls up the gluteus medius, the only abductor this list names on its own."
+    },
+    {
+      "value": "abs",
+      "label": "Abs",
+      "kind": "group",
+      "category": "core",
+      "members": ["rectus-abdominis"],
+      "atlasAreas": ["abs-lower", "abs-mid", "abs-top"],
+      "description": "The abdominal wall at the front of the trunk, as most people use the word. Rolls up the rectus abdominis."
+    },
+    {
+      "value": "adductors",
+      "label": "Adductors",
+      "kind": "muscle",
+      "category": "legs",
+      "atlasAreas": ["adductors"],
+      "description": "The inner-thigh muscles that draw the thigh toward the midline."
+    },
+    {
+      "value": "anterior-deltoid",
+      "label": "Anterior Deltoid",
+      "kind": "muscle",
+      "category": "shoulders",
+      "atlasAreas": ["deltoid-anterior"],
+      "description": "The front head of the deltoid. Raises the arm forward and helps in pressing."
+    },
+    {
+      "value": "back",
+      "label": "Back",
+      "kind": "group",
+      "category": "back",
+      "members": ["upper-back", "middle-back", "lower-back", "lats", "traps"],
+      "atlasAreas": ["deltoid-rear", "deltoid-rear-cap", "lats-lower", "lats-mid", "lats-upper", "lower-back-erectors", "lower-back-ql", "shoulder-front", "traps-lower", "traps-mid", "traps-upper"],
+      "description": "The whole back of the trunk, from the upper trapezius to the lower back."
+    },
+    {
+      "value": "biceps",
+      "label": "Biceps",
+      "kind": "group",
+      "category": "arms",
+      "members": ["biceps-brachii"],
+      "atlasAreas": ["biceps"],
+      "description": "The front of the upper arm, as most people use the word. Rolls up the biceps brachii."
+    },
+    {
+      "value": "biceps-brachii",
+      "label": "Biceps brachii",
+      "kind": "muscle",
+      "category": "arms",
+      "atlasAreas": ["biceps"],
+      "description": "The two-headed muscle at the front of the upper arm. Bends the elbow and turns the palm up."
+    },
+    {
+      "value": "biceps-femoris",
+      "label": "Biceps femoris",
+      "kind": "muscle",
+      "category": "legs",
+      "atlasAreas": ["hamstrings-lateral"],
+      "description": "The outer hamstring. Bends the knee and extends the hip."
+    },
+    {
+      "value": "brachialis",
+      "label": "Brachialis",
+      "kind": "muscle",
+      "category": "arms",
+      "atlasAreas": ["brachialis"],
+      "description": "The muscle under the biceps that bends the elbow whatever the grip."
+    },
+    {
+      "value": "brachioradialis",
+      "label": "Brachioradialis",
+      "kind": "muscle",
+      "category": "arms",
+      "atlasAreas": ["brachioradialis"],
+      "description": "The forearm muscle on the thumb side that bends the elbow, strongest with a neutral grip."
+    },
+    {
+      "value": "calves",
+      "label": "Calves",
+      "kind": "group",
+      "category": "legs",
+      "members": ["gastrocnemius", "soleus"],
+      "atlasAreas": ["calves-gastroc-lateral", "calves-gastroc-medial", "calves-soleus"],
+      "description": "The back of the lower leg."
+    },
+    {
+      "value": "chest",
+      "label": "Chest",
+      "kind": "group",
+      "category": "chest",
+      "members": ["upper-pecs", "lower-pecs", "inner-pecs"],
+      "atlasAreas": ["chest-lower", "chest-upper", "inner-pecs-lower"],
+      "description": "The pectoral muscles at the front of the chest."
+    },
+    {
+      "value": "deltoid",
+      "label": "Deltoid",
+      "kind": "group",
+      "category": "shoulders",
+      "members": ["anterior-deltoid", "lateral-deltoid", "posterior-deltoid"],
+      "atlasAreas": ["deltoid-anterior", "shoulder-side", "deltoid-rear", "deltoid-rear-cap"],
+      "description": "The shoulder's cap muscle, made of three heads."
+    },
+    {
+      "value": "erector-spinae",
+      "label": "Erector Spinae",
+      "kind": "muscle",
+      "category": "back",
+      "atlasAreas": ["lower-back-erectors"],
+      "description": "The long muscles either side of the spine that extend and hold it upright."
+    },
+    {
+      "value": "forearms",
+      "label": "Forearms",
+      "kind": "group",
+      "category": "arms",
+      "members": ["brachioradialis", "wrist-flexors", "wrist-extensors"],
+      "atlasAreas": ["brachioradialis", "forearm", "forearm-extensors", "forearm-flexors"],
+      "description": "The muscles between the elbow and the wrist."
+    },
+    {
+      "value": "full-body",
+      "label": "Full Body",
+      "kind": "group",
+      "category": "full-body",
+      "members": ["abs", "back", "biceps", "brachialis", "chest", "forearms", "legs", "neck", "obliques", "serratus", "shoulders", "triceps"],
+      "atlasAreas": ["abs-lower", "abs-mid", "abs-top", "abs-upper", "adductors", "biceps", "brachialis", "brachioradialis", "calves-gastroc-lateral", "calves-gastroc-medial", "calves-soleus", "chest-lower", "chest-upper", "deltoid-anterior", "deltoid-rear", "deltoid-rear-cap", "forearm", "forearm-extensors", "forearm-flexors", "gluteus-maximus", "gluteus-medius", "hamstrings-lateral", "hamstrings-medial", "hip-flexor", "inner-pecs-lower", "lats-lower", "lats-mid", "lats-upper", "lower-back-erectors", "lower-back-ql", "nape", "neck", "obliques", "quads", "serratus-anterior", "shoulder-front", "shoulder-side", "tibialis-anterior", "traps-lower", "traps-mid", "traps-upper", "triceps-lateral", "triceps-long", "triceps-medial"],
+      "description": "The whole body. For work that loads no particular group more than the rest."
+    },
+    {
+      "value": "gastrocnemius",
+      "label": "Gastrocnemius",
+      "kind": "muscle",
+      "category": "legs",
+      "atlasAreas": ["calves-gastroc-medial", "calves-gastroc-lateral"],
+      "description": "The two-headed surface calf muscle. Points the foot and helps bend the knee."
+    },
+    {
+      "value": "glutes",
+      "label": "Glutes",
+      "kind": "group",
+      "category": "legs",
+      "members": ["gluteus-maximus", "gluteus-medius"],
+      "atlasAreas": ["gluteus-maximus", "gluteus-medius"],
+      "description": "The buttock muscles."
+    },
+    {
+      "value": "gluteus-maximus",
+      "label": "Gluteus Maximus",
+      "kind": "muscle",
+      "category": "legs",
+      "atlasAreas": ["gluteus-maximus"],
+      "description": "The largest buttock muscle. Extends the hip."
+    },
+    {
+      "value": "gluteus-medius",
+      "label": "Gluteus Medius",
+      "kind": "muscle",
+      "category": "legs",
+      "atlasAreas": ["gluteus-medius"],
+      "description": "The buttock muscle on the side of the hip. Abducts the hip and steadies the pelvis on one leg."
+    },
+    {
+      "value": "hamstrings",
+      "label": "Hamstrings",
+      "kind": "group",
+      "category": "legs",
+      "members": ["biceps-femoris"],
+      "atlasAreas": ["hamstrings-lateral", "hamstrings-medial"],
+      "description": "The back of the thigh."
+    },
+    {
+      "value": "hip-flexors",
+      "label": "Hip Flexors",
+      "kind": "muscle",
+      "category": "legs",
+      "atlasAreas": ["hip-flexor"],
+      "description": "The muscles at the front of the hip that lift the thigh toward the trunk."
+    },
+    {
+      "value": "inner-pecs",
+      "label": "Inner Pecs",
+      "kind": "muscle",
+      "category": "chest",
+      "atlasAreas": ["inner-pecs-lower"],
+      "description": "The inner portion of the pectoralis major, beside the sternum."
+    },
+    {
+      "value": "lateral-deltoid",
+      "label": "Lateral Deltoid",
+      "kind": "muscle",
+      "category": "shoulders",
+      "atlasAreas": ["shoulder-side"],
+      "description": "The side head of the deltoid. Raises the arm out to the side."
+    },
+    {
+      "value": "lats",
+      "label": "Lats",
+      "kind": "muscle",
+      "category": "back",
+      "atlasAreas": ["lats-lower", "lats-mid"],
+      "description": "The latissimus dorsi, the broad muscle of the mid and lower back. Pulls the arm down and back."
+    },
+    {
+      "value": "legs",
+      "label": "Legs",
+      "kind": "group",
+      "category": "legs",
+      "members": ["quadriceps", "hamstrings", "glutes", "adductors", "abductors", "calves", "hip-flexors", "tibialis-anterior"],
+      "atlasAreas": ["adductors", "calves-gastroc-lateral", "calves-gastroc-medial", "calves-soleus", "gluteus-maximus", "gluteus-medius", "hamstrings-lateral", "hamstrings-medial", "hip-flexor", "quads", "tibialis-anterior"],
+      "description": "Everything from the hips down."
+    },
+    {
+      "value": "lower-back",
+      "label": "Lower Back",
+      "kind": "group",
+      "category": "back",
+      "members": ["erector-spinae", "quadratus-lumborum"],
+      "atlasAreas": ["lower-back-erectors", "lower-back-ql"],
+      "description": "The lumbar region of the back."
+    },
+    {
+      "value": "lower-pecs",
+      "label": "Lower Pecs",
+      "kind": "muscle",
+      "category": "chest",
+      "atlasAreas": ["chest-lower", "inner-pecs-lower"],
+      "description": "The lower portion of the pectoralis major."
+    },
+    {
+      "value": "lower-trapezius",
+      "label": "Lower Trapezius",
+      "kind": "muscle",
+      "category": "back",
+      "atlasAreas": ["traps-lower"],
+      "description": "The lower fibres of the trapezius. Draws the shoulder blade down."
+    },
+    {
+      "value": "middle-back",
+      "label": "Middle Back",
+      "kind": "group",
+      "category": "back",
+      "members": ["middle-trapezius", "lower-trapezius"],
+      "atlasAreas": ["traps-lower", "traps-mid"],
+      "description": "The region between the shoulder blades."
+    },
+    {
+      "value": "middle-trapezius",
+      "label": "Middle Trapezius",
+      "kind": "muscle",
+      "category": "back",
+      "atlasAreas": ["traps-mid"],
+      "description": "The middle fibres of the trapezius. Draws the shoulder blades together."
+    },
+    {
+      "value": "neck",
+      "label": "Neck",
+      "kind": "muscle",
+      "category": "neck",
+      "atlasAreas": ["nape", "neck"],
+      "description": "The muscles of the neck, front and back."
+    },
+    {
+      "value": "obliques",
+      "label": "Obliques",
+      "kind": "muscle",
+      "category": "core",
+      "atlasAreas": ["abs-upper", "obliques"],
+      "description": "The muscles on the sides of the abdomen that rotate and side-bend the trunk."
+    },
+    {
+      "value": "posterior-deltoid",
+      "label": "Posterior Deltoid",
+      "kind": "muscle",
+      "category": "shoulders",
+      "atlasAreas": ["deltoid-rear", "deltoid-rear-cap"],
+      "description": "The rear head of the deltoid. Draws the arm back."
+    },
+    {
+      "value": "quadratus-lumborum",
+      "label": "Quadratus Lumborum",
+      "kind": "muscle",
+      "category": "back",
+      "atlasAreas": ["lower-back-ql"],
+      "description": "The deep lower-back muscle between the ribs and the pelvis. Side-bends the trunk and steadies the pelvis."
+    },
+    {
+      "value": "quadriceps",
+      "label": "Quadriceps",
+      "kind": "muscle",
+      "category": "legs",
+      "atlasAreas": ["quads"],
+      "description": "The four-headed muscle at the front of the thigh. Extends the knee."
+    },
+    {
+      "value": "rectus-abdominis",
+      "label": "Rectus Abdominis",
+      "kind": "muscle",
+      "category": "core",
+      "atlasAreas": ["abs-lower", "abs-mid", "abs-top"],
+      "description": "The vertical muscle at the front of the abdomen. Flexes the trunk."
+    },
+    {
+      "value": "serratus",
+      "label": "Serratus",
+      "kind": "muscle",
+      "category": "core",
+      "atlasAreas": ["serratus-anterior"],
+      "description": "The serratus anterior, on the side of the ribcage. Holds the shoulder blade against the ribs and moves it forward."
+    },
+    {
+      "value": "shoulders",
+      "label": "Shoulders",
+      "kind": "group",
+      "category": "shoulders",
+      "members": ["deltoid"],
+      "atlasAreas": ["deltoid-anterior", "deltoid-rear", "deltoid-rear-cap", "shoulder-side"],
+      "description": "The shoulder region, as most people use the word."
+    },
+    {
+      "value": "soleus",
+      "label": "Soleus",
+      "kind": "muscle",
+      "category": "legs",
+      "atlasAreas": ["calves-soleus"],
+      "description": "The flat calf muscle under the gastrocnemius. Points the foot, and works most with the knee bent."
+    },
+    {
+      "value": "tibialis-anterior",
+      "label": "Tibialis Anterior",
+      "kind": "muscle",
+      "category": "legs",
+      "atlasAreas": ["tibialis-anterior"],
+      "description": "The muscle at the front of the shin that lifts the foot."
+    },
+    {
+      "value": "traps",
+      "label": "Traps",
+      "kind": "group",
+      "category": "back",
+      "members": ["upper-trapezius", "middle-trapezius", "lower-trapezius"],
+      "atlasAreas": ["shoulder-front", "traps-upper"],
+      "description": "The trapezius, the large muscle from the neck across the upper back."
+    },
+    {
+      "value": "triceps",
+      "label": "Triceps",
+      "kind": "group",
+      "category": "arms",
+      "members": ["triceps-long-head", "triceps-lateral-head", "triceps-medial-head"],
+      "atlasAreas": ["triceps-lateral", "triceps-long", "triceps-medial"],
+      "description": "The back of the upper arm, made of three heads."
+    },
+    {
+      "value": "triceps-lateral-head",
+      "label": "Triceps Lateral Head",
+      "kind": "muscle",
+      "category": "arms",
+      "atlasAreas": ["triceps-lateral"],
+      "description": "The outer head of the triceps."
+    },
+    {
+      "value": "triceps-long-head",
+      "label": "Triceps Long Head",
+      "kind": "muscle",
+      "category": "arms",
+      "atlasAreas": ["triceps-long"],
+      "description": "The head of the triceps that crosses the shoulder."
+    },
+    {
+      "value": "triceps-medial-head",
+      "label": "Triceps Medial Head",
+      "kind": "muscle",
+      "category": "arms",
+      "atlasAreas": ["triceps-medial"],
+      "description": "The deep head of the triceps, closest to the bone."
+    },
+    {
+      "value": "upper-back",
+      "label": "Upper Back",
+      "kind": "group",
+      "category": "back",
+      "members": ["posterior-deltoid", "lats", "middle-trapezius", "lower-trapezius"],
+      "atlasAreas": ["deltoid-rear", "deltoid-rear-cap", "lats-upper", "traps-lower", "traps-mid"],
+      "description": "The upper back: the rear shoulder, the upper lats and the trapezius below the neck."
+    },
+    {
+      "value": "upper-pecs",
+      "label": "Upper Pecs",
+      "kind": "muscle",
+      "category": "chest",
+      "atlasAreas": ["chest-upper"],
+      "description": "The upper (clavicular) portion of the pectoralis major."
+    },
+    {
+      "value": "upper-trapezius",
+      "label": "Upper Trapezius",
+      "kind": "muscle",
+      "category": "back",
+      "atlasAreas": ["traps-upper"],
+      "description": "The upper fibres of the trapezius. Shrugs the shoulders."
+    },
+    {
+      "value": "wrist-extensors",
+      "label": "Wrist Extensors",
+      "kind": "muscle",
+      "category": "arms",
+      "atlasAreas": ["forearm-extensors"],
+      "description": "The muscles on the back of the forearm that extend the wrist."
+    },
+    {
+      "value": "wrist-flexors",
+      "label": "Wrist Flexors",
+      "kind": "muscle",
+      "category": "arms",
+      "atlasAreas": ["forearm-flexors"],
+      "description": "The muscles on the palm side of the forearm that flex the wrist."
+    }
+  ]
+}

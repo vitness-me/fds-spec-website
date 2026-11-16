@@ -38,3 +38,11 @@ The contrast is `blocks[].mode` and `schedule.model`, which are **not** here. Th
 These are **examples of a published catalog**, not vocabulary. They exist to show the shape a provider serves — an array of entity documents, each carrying its own `schemaVersion`. They are not normative and nothing in FDS requires these particular entries.
 
 The `.example.` in the filename is the distinction. A file named `*.registry.json` is the registry; a file named `*.registry.example.json` is an example of one.
+
+## Proposed registries — not normative
+
+| File | Proposed by |
+|---|---|
+| `muscle.registry.proposed.json` | RFC-010, the official muscle registry |
+
+A file named `*.registry.proposed.json` is under review and binds nobody. Nothing checks documents against it. When its RFC is accepted it is renamed to `*.registry.json`, listed above with the vocabulary registries, and added to `npm run check:registries`.
