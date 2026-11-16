@@ -1,8 +1,7 @@
 {
   "registry": "muscle",
   "version": "1.0.0",
-  "status": "proposed",
-  "description": "PROPOSED, NOT NORMATIVE (RFC-010, Draft). The muscle names every FDS application would share, so a user's training history moves between applications without translation. An entry is either a muscle (a muscle or a named part of one) or a group that rolls up other entries. atlasAreas are informative hints naming areas of the VITNESS production body atlas (vulovix/body-muscles, Apache-2.0); they do not constrain any FDS document.",
+  "description": "The muscle and muscle-group names every FDS application uses for the same anatomy (RFC-010). An entry is a muscle (a muscle, or a named part of one that training distinguishes) or a group that rolls up other entries through members. Open by policy: a slug not listed here is anatomy this registry has not caught up with, not an invalid document. Private additions use the x-<vendor>- prefix. atlasAreas are informative hints naming areas of the VITNESS production body atlas (vulovix/body-muscles, Apache-2.0); they do not constrain any FDS document.",
   "policy": "open",
   "governs": [
     {

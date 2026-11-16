@@ -18,8 +18,8 @@
     "tags": ["machine", "upper-body"]
   },
   "targets": {
-    "primary": [ { "id": "mus.lats", "name": "Latissimus Dorsi", "categoryId": "cat.back" } ],
-    "secondary": [ { "id": "mus.biceps", "name": "Biceps", "categoryId": "cat.arms" } ]
+    "primary": [ { "id": "mus.lats", "slug": "lats", "name": "Latissimus Dorsi", "categoryId": "cat.back" } ],
+    "secondary": [ { "id": "mus.biceps", "slug": "biceps", "name": "Biceps", "categoryId": "cat.arms" } ]
   },
   "equipment": {
     "required": [ { "id": "eq.latPulldown", "name": "Lat Pulldown Machine" } ]

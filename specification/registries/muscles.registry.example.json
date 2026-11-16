@@ -9,7 +9,7 @@
   {
     "schemaVersion": "1.0.0",
     "id": "mus.lats",
-    "canonical": { "name": "Latissimus Dorsi", "slug": "latissimus-dorsi", "aliases": ["Lats"] },
+    "canonical": { "name": "Latissimus Dorsi", "slug": "lats", "aliases": ["Lats"] },
     "classification": { "categoryId": "cat.back", "region": "upper-back", "laterality": "bilateral" },
     "metadata": { "createdAt": "2025-01-01T00:00:00Z", "updatedAt": "2025-09-03T00:00:00Z", "status": "active" }
   },

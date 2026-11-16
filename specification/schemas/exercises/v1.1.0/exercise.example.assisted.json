@@ -19,8 +19,8 @@
     "tags": ["machine", "upper-body", "regression"]
   },
   "targets": {
-    "primary": [{ "id": "mus.lats", "name": "Latissimus Dorsi", "categoryId": "cat.back" }],
-    "secondary": [{ "id": "mus.biceps", "name": "Biceps", "categoryId": "cat.arms" }]
+    "primary": [{ "id": "mus.lats", "slug": "lats", "name": "Latissimus Dorsi", "categoryId": "cat.back" }],
+    "secondary": [{ "id": "mus.biceps", "slug": "biceps", "name": "Biceps", "categoryId": "cat.arms" }]
   },
   "equipment": {
     "required": [{ "id": "eq.assistedPullUpMachine", "name": "Assisted Pull-Up Machine" }]

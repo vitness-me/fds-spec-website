@@ -18,8 +18,8 @@
     "tags": ["isometric", "core"]
   },
   "targets": {
-    "primary": [ { "id": "mus.rectusAbdominis", "name": "Rectus Abdominis", "categoryId": "cat.core" } ],
-    "secondary": [ { "id": "mus.obliques", "name": "Obliques", "categoryId": "cat.core" } ]
+    "primary": [ { "id": "mus.rectusAbdominis", "slug": "rectus-abdominis", "name": "Rectus Abdominis", "categoryId": "cat.core" } ],
+    "secondary": [ { "id": "mus.obliques", "slug": "obliques", "name": "Obliques", "categoryId": "cat.core" } ]
   },
   "equipment": {
     "optional": [ { "id": "eq.mat", "name": "Exercise Mat" } ]

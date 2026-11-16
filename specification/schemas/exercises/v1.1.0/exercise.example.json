@@ -32,11 +32,11 @@
   },
   "targets": {
     "primary": [
-      { "id": "mus.quadriceps", "name": "Quadriceps", "categoryId": "cat.legs" }
+      { "id": "mus.quadriceps", "slug": "quadriceps", "name": "Quadriceps", "categoryId": "cat.legs" }
     ],
     "secondary": [
-      { "id": "mus.hamstrings", "name": "Hamstrings", "categoryId": "cat.legs" },
-      { "id": "mus.erectorSpinae", "name": "Erector Spinae", "categoryId": "cat.back" }
+      { "id": "mus.hamstrings", "slug": "hamstrings", "name": "Hamstrings", "categoryId": "cat.legs" },
+      { "id": "mus.erectorSpinae", "slug": "erector-spinae", "name": "Erector Spinae", "categoryId": "cat.back" }
     ]
   },
   "equipment": {

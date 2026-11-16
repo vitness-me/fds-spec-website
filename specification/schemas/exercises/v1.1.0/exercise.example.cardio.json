@@ -22,11 +22,11 @@
   },
   "targets": {
     "primary": [
-      { "id": "mus.quadriceps", "name": "Quadriceps", "categoryId": "cat.legs" }
+      { "id": "mus.quadriceps", "slug": "quadriceps", "name": "Quadriceps", "categoryId": "cat.legs" }
     ],
     "secondary": [
-      { "id": "mus.hamstrings", "name": "Hamstrings", "categoryId": "cat.legs" },
-      { "id": "mus.glutes", "name": "Glutes", "categoryId": "cat.legs" }
+      { "id": "mus.hamstrings", "slug": "hamstrings", "name": "Hamstrings", "categoryId": "cat.legs" },
+      { "id": "mus.glutes", "slug": "glutes", "name": "Glutes", "categoryId": "cat.legs" }
     ]
   },
   "equipment": {

@@ -26,7 +26,7 @@ Omogućiti prenosivost podataka i interoperabilnost među fitnes aplikacijama pr
 - **Primitivi preskripcije** (RFC-006) — opterećenje, ponavljanja, tempo, odmor, zone intenziteta, šeme serija i pravila progresije, definisani jednom, tako da serija znači isto gde god da se pojavi
 - **Model podataka treninga** (RFC-007) — jedan propisan trening, kao blokovi stavki sa režimom izvršavanja po bloku
 - **Model podataka trenažnog programa** (RFC-008) — raspored referenci na treninge kroz vreme, sa ciklusima, nedeljama, progresijom i uslovnim grananjem
-- **Zvanični registar mišića** (RFC-010, nacrt): nazivi mišića i mišićnih grupa koje dele sve FDS aplikacije
+- **Zvanični registar mišića** (RFC-010): nazivi mišića i mišićnih grupa koje dele sve FDS aplikacije
 
 **Van obuhvata** — odlukom, ne propustom:
 

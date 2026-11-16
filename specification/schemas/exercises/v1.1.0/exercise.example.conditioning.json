@@ -19,8 +19,8 @@
     "tags": ["machine", "conditioning", "interval"]
   },
   "targets": {
-    "primary": [{ "id": "mus.quadriceps", "name": "Quadriceps", "categoryId": "cat.legs" }],
-    "secondary": [{ "id": "mus.deltoids", "name": "Deltoids", "categoryId": "cat.shoulders" }]
+    "primary": [{ "id": "mus.quadriceps", "slug": "quadriceps", "name": "Quadriceps", "categoryId": "cat.legs" }],
+    "secondary": [{ "id": "mus.deltoid", "slug": "deltoid", "name": "Deltoid", "categoryId": "cat.shoulders" }]
   },
   "equipment": {
     "required": [{ "id": "eq.airBike", "name": "Air Bike" }]

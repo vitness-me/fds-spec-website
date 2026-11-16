@@ -1,14 +1,11 @@
 # RFC-010: Official Muscle Registry
 
-**Status**: Draft
-**Version**: 0.1.0
+**Status**: Accepted
+**Version**: 1.0.0
 **Date**: 2026-11-16
 **Authors**: VITNESS Team
 **Category**: Standards Track
-
-:::warning DRAFT, NOT NORMATIVE
-This RFC is open for review. Four decisions in §8 are unresolved, and the text below is written as if the recommended option for each were chosen. Nothing here binds a producer or consumer until the RFC is accepted. The proposed registry is `specification/registries/muscle.registry.proposed.json`. On acceptance it becomes `muscle.registry.json` and is checked by `npm run check:registries`.
-:::
+**Registry**: `specification/registries/muscle.registry.json`, version 1.0.0
 
 ## Abstract
 
@@ -18,7 +15,7 @@ FDS defines what a muscle record looks like (RFC-003) but not which muscles exis
 
 ### 1.1. Background
 
-Today the muscle catalog is an illustrative example: `specification/registries/muscles.registry.example.json` holds three muscles, and the registries README says nothing in FDS requires those entries. The only normative vocabularies are open classifiers such as `exerciseType`, `workoutType`, `blocks[].role` and `intensityZone.boundsRef`.
+Before this RFC the muscle catalog was only an illustrative example: `specification/registries/muscles.registry.example.json` holds three muscles, and the registries README says nothing in FDS requires those entries. The only normative vocabularies were open classifiers such as `exerciseType`, `workoutType`, `blocks[].role` and `intensityZone.boundsRef`.
 
 Muscles are where that gap costs most. Every exercise names its targets, and per-muscle volume is the figure users compare across applications. If the names differ, history doesn't carry over.
 
@@ -45,7 +42,7 @@ Muscles are where that gap costs most. Every exercise names its targets, and per
 
 ## 2. Terminology
 
-- **Registry**: the file `muscle.registry.json`, once accepted. Until then, `muscle.registry.proposed.json`.
+- **Registry**: the file `specification/registries/muscle.registry.json`, served at `https://spec.vitness.me/registries/muscle.registry.json`.
 - **Entry**: one item of the registry, identified by its slug (`value`).
 - **Muscle**: an entry with `kind: "muscle"`. A muscle, or a named part of one that training distinguishes (`upper-pecs`, `triceps-long-head`).
 - **Group**: an entry with `kind: "group"`. A name for a set of other entries (`back`, `glutes`), listed in its `members`.
@@ -57,7 +54,7 @@ Muscles are where that gap costs most. Every exercise names its targets, and per
 
 ### 3.1. Entries
 
-The proposed registry has 51 entries: 33 muscles and 18 groups. It is VITNESS's 42-entry muscle catalog, plus 11 muscles that the production body atlas already draws an area for, minus `olympic` and `other`. Those two are not anatomy and are deprecated.
+The registry has 51 entries: 33 muscles and 18 groups. It is VITNESS's 42-entry muscle catalog, plus 11 muscles that the production body atlas already draws an area for, minus `olympic` and `other`. Those two are not anatomy and are deprecated.
 
 | Added muscle | Atlas area(s) |
 |---|---|
@@ -128,7 +125,7 @@ A muscle record (RFC-003) describing an official muscle uses the official slug a
 
 :::danger MUST
 - A producer **MUST NOT** use an official slug for anatomy other than what that entry describes.
-- A producer that refers to anatomy the registry covers **MUST** use the official slug for it in `muscleRef.slug` and in `canonical.slug`.
+- Where a producer gives a slug (`muscleRef.slug` or `canonical.slug`) for anatomy the registry covers, it **MUST** be the official slug for that anatomy.
 - A consumer **MUST NOT** reject a document because a slug is not in the registry.
 :::
 
@@ -149,7 +146,7 @@ The registry carries its own semantic version, starting at 1.0.0, like the other
 - **Major**: an official slug is removed, renamed, or changed to mean different anatomy. A slug is never reused for different anatomy, even across a major version.
 - An entry being retired is marked deprecated, with the slug that replaces it, and stays listed for the rest of the major version.
 
-No schema version changes, so no FDS release is required and the current release's schemas are unaffected. The registry is recorded in the changelog when it is accepted.
+No schema version changes, so no FDS release is required and the current release's schemas are unaffected. The registry is recorded in the changelog.
 
 ### 5.1. Migration
 
@@ -163,7 +160,9 @@ From the example catalogs this repository published:
 
 From the VITNESS catalog, every camelCase key becomes kebab-case (`posteriorDeltoid` → `posterior-deltoid`), and `olympic` and `other` have no official slug. `biceps-femoris` moves from the `arms` category to `legs`.
 
-The example files are updated to carry official slugs when this RFC is accepted.
+`deltoid` changes meaning. It used to name the side of the shoulder and is now the group of all three heads. Data that used plain `deltoid` for the side of the shoulder **MUST** map to `lateral-deltoid`. Mapping it to `deltoid` would say the data covers all three heads, which it never did.
+
+The example files in this repository carry official slugs, and `npm run check:registries` fails on any muscle slug in them that is neither official nor `x-<vendor>-` prefixed.
 
 ## 6. Extension
 
@@ -179,33 +178,33 @@ A new entry is proposed by a PR that amends this RFC and the registry together a
 
 The registry names anatomy only. It carries nothing about a person and creates no new field.
 
-## 8. Decisions pending
+## 8. Decision record
 
-Each decision below lists its options and the recommendation the text above assumes.
+Four questions were open while this RFC was in draft. Each was decided as follows, with the alternatives that were rejected.
 
 ### 8.1. Slug form, and what is normative
 
-- **A. Kebab-case slug is the normative key; ids stay provider-owned.** (recommended) `canonical.slug` in the frozen common schema already requires `[a-z0-9-]`, so a camelCase slug would make the muscle record itself invalid. `muscleRef.slug` already exists.
-- **B. camelCase key.** Matches the VITNESS prototype. Fails `canonical.slug` validation, so it could live only in a new field, which means a new schema version.
-- **C. FDS also publishes a fixed id per entry.** Lets ids converge too, but conflicts with the UUIDv4 identifier policy unless FDS mints and freezes UUIDs, and two portable keys for one thing is one too many.
+**Decided:** the kebab-case slug is the normative key; ids stay provider-owned. `canonical.slug` in the frozen common schema already requires `[a-z0-9-]`, and `muscleRef.slug` already exists.
+
+Rejected: a camelCase key, which fails `canonical.slug` validation and could live only in a new field and so a new schema version; and a fixed id per entry, which conflicts with the UUIDv4 identifier policy and gives one muscle two portable keys.
 
 ### 8.2. Enforcement and extension
 
-- **A. Open vocabulary registry, checked in CI.** (recommended) Same as `exerciseType`. No schema change. Private additions use `x-<vendor>-`.
-- **B. Schema enum.** Machine-enforced, but adding an enum where there was none tightens validation, which governance classes as a major release, and every new muscle becomes a schema version.
-- **C. Both:** registry now, enum at the next major.
+**Decided:** an open vocabulary registry checked in CI, as `exerciseType` is. Private additions use `x-<vendor>-`.
+
+Rejected: a schema enum, because adding one where there was none tightens validation, which governance classes as a major release, and each new muscle would then need a schema version.
 
 ### 8.3. Groups and muscles
 
-- **A. One list, one slug namespace, `kind` plus `members`, many-to-many.** (recommended) A document can target `back` when it can't be more precise, and a consumer can always expand it.
-- **B. Groups become RFC-004 muscle categories.** Reuses an existing entity, but a category is a strict partition (one per muscle), and `gluteus-medius` belongs to two groups.
-- **C. Groups stay out of the registry.** Smallest list, but the broad names users train by stop being portable.
+**Decided:** one list and one slug namespace, with `kind` and `members`, many-to-many.
+
+Rejected: groups as RFC-004 muscle categories, because a category allows one per muscle and `gluteus-medius` belongs to two groups; and leaving groups out, which would stop the broad names users train by from being portable.
 
 ### 8.4. Version and compatibility
 
-- **A. Registry versioned on its own at 1.0.0, recorded in the changelog, no FDS release.** (recommended) Matches the four existing vocabulary registries, none of which a release names.
-- **B. Cut the next minor FDS release naming the registry.** One number to pin, but the release manifest describes schema versions only and would need extending to carry registries.
-- **C. Wait for the next major and ship with an enum.** Delays the list for a validation guarantee §8.2 doesn't recommend.
+**Decided:** the registry is versioned on its own from 1.0.0 and recorded in the changelog, with no FDS release, matching the four existing vocabulary registries.
+
+Rejected: cutting a release to name the registry, since the release manifest describes schema versions only; and waiting for the next major to ship it with an enum.
 
 ## 9. References
 

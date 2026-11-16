@@ -26,7 +26,7 @@ Enable data portability and interoperability across fitness applications by prov
 - **Prescription primitives** (RFC-006) — load, repetitions, tempo, rest, intensity zones, set schemes and progression rules, defined once so a set means the same thing wherever it appears
 - **Workout data model** (RFC-007) — one prescribed session, as blocks of items with an execution mode per block
 - **Training program data model** (RFC-008) — a schedule of workout references over time, with cycles, weeks, progression and conditional branching
-- **Official muscle registry** (RFC-010, draft): the muscle and muscle-group names every FDS application shares
+- **Official muscle registry** (RFC-010): the muscle and muscle-group names every FDS application shares
 
 **Out of scope** — by decision, not by omission:
 

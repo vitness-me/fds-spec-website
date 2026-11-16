@@ -12,6 +12,7 @@ These define the **recommended values for an open classifier**. Several FDS fiel
 | `workout-type.registry.json` | `classification.workoutType` on a workout | open |
 | `block-role.registry.json` | `blocks[].role` on a workout | open |
 | `intensity-zone.registry.json` | `intensityZone.boundsRef` in a prescription | open |
+| `muscle.registry.json` | `slug` on a muscle reference (`targets.primary[]`, `targets.secondary[]`) and `canonical.slug` on a muscle record | open |
 
 `exerciseType` is the one that matters most, because its schema carries no `enum` and no `examples` — **this registry is the only place its vocabulary is written down.**
 
@@ -22,6 +23,12 @@ These define the **recommended values for an open classifier**. Several FDS fiel
 A producer emitting a value that is not listed here has produced a valid document. A consumer encountering one **MUST NOT** reject it and **SHOULD** ignore or pass through the value it does not recognise. That is the warn-don't-reject rule from RFC-001, and it is why these are registries rather than enums.
 
 The contrast is `blocks[].mode` and `schedule.model`, which are **not** here. Those are structural discriminators: they decide how a document is read, so they are closed enums with an explicit catch-all branch, and an unrecognised value is not executed (RFC-006 §3.2, RFC-007 §3.5, RFC-008 §3.6).
+
+### Muscles are shared names, not shared records
+
+`muscle.registry.json` is the list of muscle and muscle-group names every FDS application uses for the same anatomy (RFC-010). The slug is what is shared; a muscle's `id` stays the provider's own. Groups such as `back` and `legs` name their `members`, a muscle may sit in several groups, and `atlasAreas` is an informative hint for a renderer using the VITNESS production atlas.
+
+Two rules beyond the other registries. A provider's own muscle uses the `x-<vendor>-` prefix, so it can never collide with an official slug added later. And `check:registries` also checks the registry itself: every member is an entry, no group contains itself, and `full-body` rolls up every muscle.
 
 ### Zone systems carry no numbers
 
@@ -35,14 +42,6 @@ The contrast is `blocks[].mode` and `schedule.model`, which are **not** here. Th
 | `muscle-categories.registry.example.json` | A category catalog as an array of RFC-004 records |
 | `equipment.registry.example.json` | An equipment catalog as an array of RFC-002 records |
 
-These are **examples of a published catalog**, not vocabulary. They exist to show the shape a provider serves — an array of entity documents, each carrying its own `schemaVersion`. They are not normative and nothing in FDS requires these particular entries.
+These are **examples of a published catalog**, not vocabulary. Their muscle slugs are official ones, as RFC-010 requires of any catalog. They exist to show the shape a provider serves — an array of entity documents, each carrying its own `schemaVersion`. They are not normative and nothing in FDS requires these particular entries.
 
 The `.example.` in the filename is the distinction. A file named `*.registry.json` is the registry; a file named `*.registry.example.json` is an example of one.
-
-## Proposed registries — not normative
-
-| File | Proposed by |
-|---|---|
-| `muscle.registry.proposed.json` | RFC-010, the official muscle registry |
-
-A file named `*.registry.proposed.json` is under review and binds nobody. Nothing checks documents against it. When its RFC is accepted it is renamed to `*.registry.json`, listed above with the vocabulary registries, and added to `npm run check:registries`.

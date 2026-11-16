@@ -19,8 +19,8 @@
     "tags": ["barbell", "lower-body", "velocity-based"]
   },
   "targets": {
-    "primary": [{ "id": "mus.quadriceps", "name": "Quadriceps", "categoryId": "cat.legs" }],
-    "secondary": [{ "id": "mus.gluteusMaximus", "name": "Gluteus Maximus", "categoryId": "cat.glutes" }]
+    "primary": [{ "id": "mus.quadriceps", "slug": "quadriceps", "name": "Quadriceps", "categoryId": "cat.legs" }],
+    "secondary": [{ "id": "mus.gluteusMaximus", "slug": "gluteus-maximus", "name": "Gluteus Maximus", "categoryId": "cat.legs" }]
   },
   "equipment": {
     "required": [

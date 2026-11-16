@@ -3,7 +3,7 @@
   "id": "mus.lats",
   "canonical": {
     "name": "Latissimus Dorsi",
-    "slug": "latissimus-dorsi",
+    "slug": "lats",
     "aliases": ["Lats"],
     "localized": [ { "lang": "sr", "name": "Latissimus dorsi", "aliases": ["Latis"] } ]
   },
