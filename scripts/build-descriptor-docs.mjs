@@ -8,7 +8,7 @@
  * `specification/descriptors/question-flow.json`, run this, and commit what it
  * writes. The prose between regions is hand-written and left alone.
  *
- * A mirror is `website/docs/descriptors/<name>.md`: its own frontmatter, then
+ * A mirror is `website/docs/core-concepts/descriptors/<name>.md`: its own frontmatter, then
  * the source verbatim. This rewrites the body of a mirror that exists and
  * creates none; `check:mirrors` names a source without a page.
  *

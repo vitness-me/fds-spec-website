@@ -87,7 +87,7 @@ const DRIFT_EXEMPT = new Set();
  */
 const MIRRORED_DIRS = [
   { source: 'specification/rfc', docs: 'specifications', isPage: (name) => name.startsWith('rfc-') && name.endsWith('.md'), what: 'source RFC' },
-  { source: 'specification/descriptors', docs: 'descriptors', isPage: (name) => name.endsWith('.md'), what: 'source in specification/descriptors/' },
+  { source: 'specification/descriptors', docs: 'core-concepts/descriptors', isPage: (name) => name.endsWith('.md'), what: 'source in specification/descriptors/' },
 ];
 for (const dir of MIRRORED_DIRS) {
   dir.sources = (await readdir(join(ROOT, dir.source))).filter(dir.isPage).sort();

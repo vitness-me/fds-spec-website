@@ -23,7 +23,7 @@ import { join } from 'node:path';
 export const REGISTRY_DIR = 'specification/registries/descriptors';
 export const FLOW_FILE = 'specification/descriptors/question-flow.json';
 export const PAGE_DIR = 'specification/descriptors';
-export const SITE_DIR = 'website/docs/descriptors';
+export const SITE_DIR = 'website/docs/core-concepts/descriptors';
 
 /** Every registry file, keyed by its `registry` field, plus the flow. */
 export async function loadDescriptors(root) {

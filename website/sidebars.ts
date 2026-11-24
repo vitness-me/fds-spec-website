@@ -60,6 +60,21 @@ const sidebars: SidebarsConfig = {
         'core-concepts/metrics',
         'core-concepts/extensions',
         'core-concepts/discovery',
+        {
+          type: 'category',
+          label: 'Structural Descriptors (draft)',
+          collapsed: true,
+          // Draft pages pending the descriptor RFC. Linked to the overview for the
+          // same breadcrumb reason as Specifications (RFCs) below.
+          link: {type: 'doc', id: 'core-concepts/descriptors/overview'},
+          items: [
+            'core-concepts/descriptors/fxi',
+            'core-concepts/descriptors/question-flow',
+            'core-concepts/descriptors/fxe',
+            'core-concepts/descriptors/fxm',
+            'core-concepts/descriptors/compare-and-match',
+          ],
+        },
       ],
     },
     {
@@ -80,21 +95,6 @@ const sidebars: SidebarsConfig = {
         'specifications/rfc-006-prescription-primitives',
         'specifications/rfc-007-workout-data-model',
         'specifications/rfc-008-program-data-model',
-      ],
-    },
-    {
-      type: 'category',
-      label: 'Structural Descriptors (draft)',
-      collapsed: true,
-      // Draft pages pending the descriptor RFC. Linked to the overview for the
-      // same breadcrumb reason as Specifications (RFCs) above.
-      link: {type: 'doc', id: 'descriptors/overview'},
-      items: [
-        'descriptors/fxi',
-        'descriptors/question-flow',
-        'descriptors/fxe',
-        'descriptors/fxm',
-        'descriptors/compare-and-match',
       ],
     },
     {
