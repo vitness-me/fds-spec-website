@@ -73,6 +73,7 @@ const sidebars: SidebarsConfig = {
             'core-concepts/descriptors/fxe',
             'core-concepts/descriptors/fxm',
             'core-concepts/descriptors/compare-and-match',
+            'core-concepts/descriptors/conformance',
           ],
         },
       ],

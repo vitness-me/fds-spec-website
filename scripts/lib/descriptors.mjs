@@ -24,6 +24,7 @@ export const REGISTRY_DIR = 'specification/registries/descriptors';
 export const FLOW_FILE = 'specification/descriptors/question-flow.json';
 export const PAGE_DIR = 'specification/descriptors';
 export const SITE_DIR = 'website/docs/core-concepts/descriptors';
+export const CONFORMANCE_DIR = 'specification/descriptors/conformance';
 
 /** Every registry file, keyed by its `registry` field, plus the flow. */
 export async function loadDescriptors(root) {
@@ -36,7 +37,11 @@ export async function loadDescriptors(root) {
     files[name] = file;
   }
   const flow = JSON.parse(await readFile(join(root, FLOW_FILE), 'utf8'));
-  return { registries, files, flow };
+  const conformance = {};
+  for (const file of (await readdir(join(root, CONFORMANCE_DIR)).catch(() => [])).filter((f) => f.endsWith('.json')).sort()) {
+    conformance[file] = JSON.parse(await readFile(join(root, CONFORMANCE_DIR, file), 'utf8'));
+  }
+  return { registries, files, flow, conformance };
 }
 
 // ── rendering ────────────────────────────────────────────────────────────────
@@ -205,8 +210,35 @@ function changeOpensTable(flow) {
   );
 }
 
+const GITHUB = 'https://github.com/vitness-me/fds-spec-website/blob/main';
+
+/** The conformance tier files, in the order a reader meets them, and the tables they define. */
+function conformanceTables(conformance) {
+  const order = ['syntax', 'builder', 'compare', 'resolver'];
+  const tiers = Object.entries(conformance)
+    .filter(([, doc]) => doc.tier !== undefined)
+    .sort(([, a], [, b]) => order.indexOf(a.tier) - order.indexOf(b.tier));
+  const out = {};
+  if (tiers.length === 0) return out;
+  out['conformance#tiers'] = () =>
+    table(
+      ['Tier', 'Vectors', 'File', 'Data it reads'],
+      tiers.map(([file, doc]) => [
+        code(doc.tier),
+        String(doc.vectors.length),
+        `[\`${file}\`](${GITHUB}/${CONFORMANCE_DIR}/${file})`,
+        [doc.words, doc.vocabulary].filter(Boolean).map((f) => `[\`${f}\`](${GITHUB}/${CONFORMANCE_DIR}/${f})`).join(', ') || '(none)',
+      ])
+    );
+  const syntax = tiers.find(([, doc]) => doc.tier === 'syntax')?.[1];
+  if (syntax?.codes) out['conformance#codes'] = () => table(['Code', 'Reported for'], Object.entries(syntax.codes).map(([c, text]) => [code(c), mixed(text)]));
+  const resolver = tiers.find(([, doc]) => doc.tier === 'resolver')?.[1];
+  if (resolver?.reasons) out['conformance#reasons'] = () => table(['Reason', 'Means'], Object.entries(resolver.reasons).map(([c, text]) => [code(c), mixed(text)]));
+  return out;
+}
+
 /** Every region a page may ask for, by `<source>#<what>`. */
-export function regionRenderers({ registries, flow }) {
+export function regionRenderers({ registries, flow, conformance = {} }) {
   const out = {};
   for (const [name, registry] of Object.entries(registries)) {
     if (registry.layers) out[`${name}#layers`] = () => layerTable(registry);
@@ -222,6 +254,7 @@ export function regionRenderers({ registries, flow }) {
   out['flow#facts'] = () => flowFacts(flow);
   out['flow#changeOpens'] = () => changeOpensTable(flow);
   out['flow#questions'] = () => flow.questions.map((q) => questionSection(q, flow.facts)).join('\n\n');
+  Object.assign(out, conformanceTables(conformance));
   return out;
 }
 

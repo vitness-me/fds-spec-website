@@ -64,11 +64,18 @@ A resolver matches a record against a library:
 1. **Auto-match** only when exactly one library record compares `identical` to the query, neither record carries a gap marker, both have provenance `owner` or `owner-assisted`, and, when both records carry an FXE, the two FXEs compare `identical`. Two machines that guide different motions never auto-match on the FXI alone.
 2. Otherwise, **confirm**: offer a ranked list of at most three library records, each once, with the reason auto-match was refused, for a person to pick from or reject.
 3. A **confirmed link is stored** against the library's identifier, in the record's `xrefs`, so the match is never made again.
+4. The result is **absent** only when the library is empty. A library with records always offers a list.
+
+The confirm list is filled in three steps, each record taking the first place it qualifies for:
+
+1. **FXI candidates**: the records whose FXI is `identical` to the query's, then those it `refines` or is `refined-by`, then those it is `compatible` with. Within one of those, more standard layers `equal` ranks first; then, when both records carry an FXE, an identical FXE before a refining one before any other; then name similarity; then library order.
+2. **Near-compatible**: the records that contradict the query in exactly one standard layer, which the list names. By name similarity, then library order.
+3. **By name**: the rest, by name similarity, then library order.
 
 Import-mode FXIs are for candidate search only: the protocol never auto-matches them, and this standard makes no accuracy claim for them.
 
 :::note Pending
-The ranking of the confirm list is being revised and is left to the RFC (pending). It starts from the compare relations above (`identical`, then `refines` or `refined-by`, then `compatible`) and may add FXE and name evidence. The shape of `xrefs` is also the RFC's to define.
+The shape of `xrefs` is the RFC's to define. How name similarity is scored is an implementation's choice; the conformance vectors rank by name only where any reasonable score agrees.
 :::
 
 ## Versioning
@@ -93,6 +100,4 @@ It never removes a code, never changes what a code means, and never changes an e
 
 ## Conformance
 
-Implementations are tested in four tiers, each at 100% on published test vectors: **syntax** (parse, canonicalise and validate), **builder** (answers to byte-identical strings), **compare** (the right relation for every pair, and never `identical` for two different strings), and **resolver** (the match protocol on a published suite). No tier certifies that a person or a program encodes accurately: that cannot be certified, and is reported as measured agreement instead.
-
-<!-- TODO (pending the RFC): the test vectors and the resolver suite. -->
+Implementations are tested in four tiers, each at 100% on published test vectors: **syntax** (parse, canonicalise and validate), **builder** (answers to byte-identical strings), **compare** (the right relation for every pair, and never `identical` for two different strings), and **resolver** (the match protocol). No tier certifies that a person or a program encodes accurately: that cannot be certified, and is reported as measured agreement instead. The vectors, their format and the measured reports are on [the conformance page](./conformance.md).

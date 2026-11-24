@@ -73,3 +73,4 @@ The question flow ends with [worked examples](./question-flow.md#worked-examples
 | [FXE](./fxe.md) | The equipment descriptor: kinds, layers, the procedure and every code. |
 | [FXM](./fxm.md) | The muscle key: format, anchoring and group semantics. |
 | [Compare, match and versioning](./compare-and-match.md) | Relations between strings, the match protocol, provenance, the gap marker and how rules revisions evolve. |
+| [Conformance](./conformance.md) | The test vectors every implementation passes, in four tiers, and the measured reports beside them. |

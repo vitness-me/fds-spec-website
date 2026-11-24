@@ -83,7 +83,8 @@ const DRIFT_EXEMPT = new Set();
 /**
  * Directories whose every matching file is a published page of the same name
  * under `website/docs/<docs>/`. The structural descriptor directory holds only
- * pages and the JSON they render, so every markdown file in it is a page.
+ * pages and the JSON they render (the question flow, and the conformance
+ * vectors in `conformance/`), so every markdown file in it is a page.
  */
 const MIRRORED_DIRS = [
   { source: 'specification/rfc', docs: 'specifications', isPage: (name) => name.startsWith('rfc-') && name.endsWith('.md'), what: 'source RFC' },
