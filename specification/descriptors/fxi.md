@@ -1,7 +1,7 @@
 # FXI: Exercise Descriptor
 
-:::caution Draft / experimental
-Not normative until [RFC-010](https://github.com/vitness-me/fds-spec-website/blob/main/specification/rfc/rfc-010-structural-descriptors.md), which adopts the structural descriptors, is accepted. RFC-010 is a draft. See [the overview](./overview.md).
+:::caution Draft
+Not normative until [RFC-010](/docs/specifications/rfc-010-structural-descriptors), which adopts the structural descriptors, is accepted. RFC-010 is a draft. See [the overview](./overview.md).
 :::
 
 An FXI describes the structure of one exercise: which joints move and how, the body position, what it rests on, what loads it, and the handful of choices that make one variant a different exercise from another. This page defines the string. [The question flow](./question-flow.md) is the way to build one without writing notation.

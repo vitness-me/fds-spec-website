@@ -1,7 +1,7 @@
 # Structural Descriptors: FXI, FXE and FXM
 
-:::caution Draft / experimental
-These pages describe a draft. Nothing here is normative until [RFC-010](https://github.com/vitness-me/fds-spec-website/blob/main/specification/rfc/rfc-010-structural-descriptors.md), which adopts the structural descriptors, is accepted. RFC-010 is a draft. Codes, questions and field names may still change before then. The vocabularies are versioned by rules revision, separately from the entity schemas, and no published schema carries these fields yet.
+:::caution Draft
+These pages describe a draft. Nothing here is normative until [RFC-010](/docs/specifications/rfc-010-structural-descriptors), which adopts the structural descriptors, is accepted. RFC-010 is a draft. [Its §2](/docs/specifications/rfc-010-structural-descriptors#2-terminology) says what may still change while the descriptors are experimental and what acceptance freezes. The vocabularies are versioned by rules revision, separately from the entity schemas. Release 1.6.0, proposed with RFC-010, carries these fields in exercise 1.2.0, equipment 1.2.0 and muscle 1.1.0; it is published when RFC-010 is accepted.
 :::
 
 A structural descriptor is a short string that says how an exercise is done, what a piece of equipment is, or which muscle is meant, in a closed vocabulary rather than in words. Two catalogues that describe the same exercise in different languages, with different names, can still write the same descriptor, and software can compare the two strings without reading either name.
@@ -49,10 +49,10 @@ A record that carries an FXI carries these beside it:
 |---|---|
 | `fxi` | The canonical FXI. |
 | `fxe` | The canonical **standard** FXE of the record's main equipment (`FXE=1.0S/…`). Extended FXE layers appear only in an equipment registry record. |
-| `fxiProvenance` | Who answered for the FXI: `owner`, `owner-assisted`, `agent` or `import`. See [Compare, match and versioning](./compare-and-match.md#provenance). |
+| `fxiProvenance` | Who answered for the FXI: `owner`, `owner-assisted`, `agent` or `import`. See [RFC-010 §5.3](/docs/specifications/rfc-010-structural-descriptors#53-fxiprovenance-and-fxigap). |
 | `fxiGap` | The owner's plain-text note of what the notation misses about this exercise, or `null`. A gap marker blocks auto-match. |
 
-Confirmed links between catalogues are stored in an `xrefs` array, each entry naming the other catalogue (`system`), the record there (`id`) and how the link was made (`link`: `auto` or `confirmed`). An equipment record carries its own `fxe`, and a muscle record its `fxm`. [RFC-010](https://github.com/vitness-me/fds-spec-website/blob/main/specification/rfc/rfc-010-structural-descriptors.md) §5 defines where each field sits on the exercise, equipment and muscle entities, and why `xrefs` is kept apart from `metadata.externalRefs`.
+Confirmed links between catalogues are stored in an `xrefs` array, each entry naming the other catalogue (`system`), the record there (`id`) and how the link was made (`link`: `auto` or `confirmed`). An equipment record carries its own `fxe`, and a muscle record its `fxm`. [RFC-010](/docs/specifications/rfc-010-structural-descriptors) §5 defines where each field sits on the exercise, equipment and muscle entities, and why `xrefs` is kept apart from `metadata.externalRefs`.
 
 ## Encoding by hand: where to start
 

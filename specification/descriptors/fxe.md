@@ -1,7 +1,7 @@
 # FXE: Equipment Descriptor
 
-:::caution Draft / experimental
-Not normative until [RFC-010](https://github.com/vitness-me/fds-spec-website/blob/main/specification/rfc/rfc-010-structural-descriptors.md), which adopts the structural descriptors, is accepted. RFC-010 is a draft. See [the overview](./overview.md).
+:::caution Draft
+Not normative until [RFC-010](/docs/specifications/rfc-010-structural-descriptors), which adopts the structural descriptors, is accepted. RFC-010 is a draft. See [the overview](./overview.md).
 :::
 
 An FXE describes a piece of equipment by its structure. Two pieces of equipment are the same when every exercise written for one can be done on the other with the same body contacts, the same guided motion relative to the body and the same kind of moving part, changing only settings the exercise records.

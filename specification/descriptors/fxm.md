@@ -1,7 +1,7 @@
 # FXM: Muscle Key
 
-:::caution Draft / experimental
-Not normative until [RFC-010](https://github.com/vitness-me/fds-spec-website/blob/main/specification/rfc/rfc-010-structural-descriptors.md), which adopts the structural descriptors, is accepted. RFC-010 is a draft. See [the overview](./overview.md).
+:::caution Draft
+Not normative until [RFC-010](/docs/specifications/rfc-010-structural-descriptors), which adopts the structural descriptors, is accepted. RFC-010 is a draft. See [the overview](./overview.md).
 :::
 
 An FXM names a muscle, a part of one, or a group of muscles, so that two catalogues that call the same muscle different things, in different languages, can tell that they mean the same tissue.

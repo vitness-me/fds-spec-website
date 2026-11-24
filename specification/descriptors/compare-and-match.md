@@ -1,7 +1,7 @@
 # Compare, Match and Versioning
 
-:::caution Draft / experimental
-Not normative until [RFC-010](https://github.com/vitness-me/fds-spec-website/blob/main/specification/rfc/rfc-010-structural-descriptors.md), which adopts the structural descriptors, is accepted. RFC-010 is a draft. See [the overview](./overview.md).
+:::caution Draft
+Not normative until [RFC-010](/docs/specifications/rfc-010-structural-descriptors), which adopts the structural descriptors, is accepted. RFC-010 is a draft. See [the overview](./overview.md).
 :::
 
 ## Compare
@@ -42,62 +42,13 @@ Compare is not transitive. Deduplicate only on `identical`.
 | `FXI=1.0S/m:el.flex+sh.ext/o:seated/l:mach@hands/g:ne` | `FXI=1.0S/m:el.flex+sh.ext/o:seated/l:mach@hands` | `contradicting` (`ne` against the default overhand) |
 | `FXI=1.0S/m:el.flex+sh.ext.oh/o:seated/l:mach@hands/g:ne` | `FXI=1.0S/m:el.flex+sh.ext/o:seated/l:mach@hands/g:ne` | `refines` (motion narrower: a pull from overhead against any shoulder extension) |
 
-## Provenance
+## Provenance, match and versioning
 
-Every FXI travels with `fxiProvenance`, which says who answered for it:
+[RFC-010](/docs/specifications/rfc-010-structural-descriptors) is the normative home of everything that travels beside a descriptor or acts on a comparison, and this page does not restate it:
 
-| Value | Meaning |
-|---|---|
-| `owner` | The owner of the exercise answered the question flow. |
-| `owner-assisted` | Someone else, or software, proposed the answers and the owner confirmed them. |
-| `agent` | Someone else, or software, answered, and the owner did not confirm. |
-| `import` | Read from another catalogue's row in import mode. Import mode always writes `import`, and only import mode does. |
+- who answered for an FXI, `fxiProvenance`, and the gap marker, `fxiGap`: [§5.3](/docs/specifications/rfc-010-structural-descriptors#53-fxiprovenance-and-fxigap);
+- stored links between catalogues, `xrefs`, and how far a received link is trusted: [§5.4](/docs/specifications/rfc-010-structural-descriptors#54-xrefs);
+- the match protocol, auto-match, the confirm list and its ranking, and import mode: [§7](/docs/specifications/rfc-010-structural-descriptors#7-match-protocol);
+- how the descriptors and their rules revisions are versioned, and how stored answers rebuild a string: [§8](/docs/specifications/rfc-010-structural-descriptors#8-versioning).
 
-## The gap marker
-
-`fxiGap` is the owner's plain-text note that the notation misses something that separates this exercise from others, or `null`. An owner writes it whenever the vocabulary cannot say a difference that matters. It blocks auto-match, and it is the evidence a later rules revision draws on.
-
-## Match protocol
-
-A resolver matches a record against a library:
-
-1. **Auto-match** only when exactly one library record compares `identical` to the query, neither record carries a gap marker, both have provenance `owner` or `owner-assisted`, and, when both records carry an FXE, the two FXEs compare `identical`. Two machines that guide different motions never auto-match on the FXI alone.
-2. Otherwise, **confirm**: offer a ranked list of at most three library records, each once, with the reason auto-match was refused, for a person to pick from or reject.
-3. A **confirmed link is stored** against the library's identifier, in the record's `xrefs`, so the match is never made again.
-4. The result is **absent** only when the library is empty. A library with records always offers a list.
-
-The confirm list is filled in three steps, each record taking the first place it qualifies for:
-
-1. **FXI candidates**: the records whose FXI is `identical` to the query's, then those it `refines` or is `refined-by`, then those it is `compatible` with. Within one of those, more standard layers `equal` ranks first; then, when both records carry an FXE, an identical FXE before a refining one before any other; then name similarity; then library order.
-2. **Near-compatible**: the records that contradict the query in exactly one standard layer, which the list names. By name similarity, then library order.
-3. **By name**: the rest, by name similarity, then library order.
-
-Import-mode FXIs are for candidate search only: the protocol never auto-matches them, and this standard makes no accuracy claim for them.
-
-:::note
-The shape of `xrefs` is defined in [RFC-010](https://github.com/vitness-me/fds-spec-website/blob/main/specification/rfc/rfc-010-structural-descriptors.md) §5.4. How name similarity is scored is an implementation's choice; the conformance vectors rank by name only where any reasonable score agrees.
-:::
-
-## Versioning
-
-**Two numbers, kept apart.** The string header carries the major version and the syntax revision (`FXI=1.0`, `FXE=1.0`, `FXM=1.0`). The syntax revision changes only when the grammar does. The **rules revision**, named by the `rules` field of each descriptor registry and of the question flow, is the revision of the vocabularies and layer rules. It is not written in the string.
-
-**One rules revision per release.** A release of the standard carries at most one new rules revision, and each new ruling in it rests on at least two failing cases from at least two catalogues.
-
-**Refinement only, within a major.** A rules revision of the same major may only refine:
-
-- add a code;
-- split a code into children, the old code becoming their parent, which covers them in compare;
-- add a layer, which older strings read as `?`;
-- add a table entry where the old reading was `?`;
-- give a published default to a layer whose absence was open.
-
-It never removes a code, never changes what a code means, and never changes an existing default. **Defaults are forever:** a string that leaves a layer at its default means the same thing under every later rules revision of its major. Every string valid under one rules revision stays valid, and two strings that were `identical` stay `identical`.
-
-**Answers are kept, so strings can be rebuilt.** A producer stores the answers record beside each string: the question ids and the options chosen, the movement word and the movement-word dataset it came from, if any, the provenance and the gap marker. When a new rules revision refines a reading, `upgrade` rebuilds every string from its stored answers instead of re-asking anyone. A string with no stored answers stays valid as written.
-
-**No hashed key.** Version 1 defines no hash or short key derived from a string. Strings are compared as strings.
-
-## Conformance
-
-Implementations are tested in four tiers, each at 100% on published test vectors: **syntax** (parse, canonicalise and validate), **builder** (answers to byte-identical strings), **compare** (the right relation for every pair, and never `identical` for two different strings), and **resolver** (the match protocol). No tier certifies that a person or a program encodes accurately: that cannot be certified, and is reported as measured agreement instead. The vectors, their format and the measured reports are on [the conformance page](./conformance.md).
+The tests every implementation runs, and what passing them shows, are on [the conformance page](./conformance.md).

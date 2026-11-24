@@ -29,7 +29,7 @@ The contrast is `blocks[].mode` and `schedule.model`, which are **not** here. Th
 
 ## Descriptor vocabularies — closed, draft
 
-`descriptors/` holds the alphabets of the structural descriptors: every code an FXI or FXE string may contain, by layer. They are described on the descriptor pages (`specification/descriptors/`), which render their tables from these files. Both are **drafts** pending the descriptor RFC.
+`descriptors/` holds the alphabets of the structural descriptors: every code an FXI or FXE string may contain, by layer. They are described on the descriptor pages (`specification/descriptors/`), which render their tables from these files. Both are **drafts**: RFC-010 proposes them, and they are normative once it is accepted.
 
 | File | Governs | Policy |
 |---|---|---|

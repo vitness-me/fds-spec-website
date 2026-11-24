@@ -1,7 +1,7 @@
 # Question Flow: Building FXI and FXE
 
-:::caution Draft / experimental
-Not normative until [RFC-010](https://github.com/vitness-me/fds-spec-website/blob/main/specification/rfc/rfc-010-structural-descriptors.md), which adopts the structural descriptors, is accepted. RFC-010 is a draft. See [the overview](./overview.md).
+:::caution Draft
+Not normative until [RFC-010](/docs/specifications/rfc-010-structural-descriptors), which adopts the structural descriptors, is accepted. RFC-010 is a draft. See [the overview](./overview.md).
 :::
 
 Nobody needs to write FXI notation. An owner answers closed questions about one exercise, or one piece of equipment, and the answers build the strings. This page is the whole flow, written out so that a person can walk it by hand and two implementations build byte-identical strings from the same answers.
