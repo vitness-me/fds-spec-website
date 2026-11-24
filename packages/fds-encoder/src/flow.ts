@@ -131,6 +131,9 @@ export const JOINT_OPTIONS: Readonly<Record<string, { label: string; options: re
   kn: { label: 'Knee', options: [opt('flex', 'Bends against resistance (leg curl)', 'kn.flex'), opt('ext', 'Straightens (standing up from a squat)', 'kn.ext')] },
   ank: { label: 'Ankle', options: [opt('pf', 'Rises onto the toes or pushes off', 'ank.pf'), opt('df', 'Toes pulled toward the shin', 'ank.df'), opt('inv', 'Sole turns in', 'ank.inv'), opt('ev', 'Sole turns out', 'ank.ev'), opt('circ', 'Circles', 'ank.circ')] },
 };
+
+/** A joint's name in a question: its option label, lower-cased, without a parenthesis or a qualifying clause. */
+const jointNoun = (j: string): string => JOINT_OPTIONS[j]!.label.split(/ \(|,/)[0]!.toLowerCase();
 export const JOINT_IDS = Object.keys(JOINT_OPTIONS);
 
 const JOINT_HELP = 'Count a joint only when the working muscles move it through a clear range (about 30° or more) as part of what the exercise trains. '
@@ -158,7 +161,7 @@ function partQuestions(n: number, part: 'a' | 'b'): FlowQuestion[] {
     ...JOINT_IDS.map((j): FlowQuestion => ({
       id: `${p}.${j}`, layer: 'FXI m (joint actions)', select: 'many',
       when: { all: [moving, { q: `${p}.joints`, has: j }] },
-      text: `${which[0]!.toUpperCase()}${which.slice(1)}: which way does the ${JOINT_OPTIONS[j]!.label.split(' (')[0]!.toLowerCase()} move?`,
+      text: `${which[0]!.toUpperCase()}${which.slice(1)}: which way ${jointNoun(j).endsWith('s') ? 'do' : 'does'} the ${jointNoun(j)} move?`,
       help: 'For a moving rep, answer for the working direction: the way the joint moves while the working muscles shorten against the load. Never the lowering or the return. For a hold, answer what the muscles push toward. For a stretch, the direction the joint is taken.',
       usual: null, options: [...JOINT_OPTIONS[j]!.options, UNK('It moves, direction not known')],
     })),
