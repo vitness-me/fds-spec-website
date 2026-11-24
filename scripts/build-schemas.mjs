@@ -276,7 +276,16 @@ async function publishedSchemaFiles() {
 }
 
 const SCHEMA_BASE = 'https://spec.vitness.me/schemas/';
-const COMMON_REL = 'common/v1.0.0/common.schema.json';
+/**
+ * Every version of the authoring-only common definitions, read from the tree.
+ *
+ * Frozen entities keep referencing the common version they were built from, so
+ * a shared definition that gains a field gains it in a new common version: an
+ * edit in place would change the rendered bytes of every frozen schema that
+ * flattens it. Each version is seeded as its own library, keyed by `$id`, and
+ * an entity takes whichever one its `$ref`s name.
+ */
+const COMMON_DIR = 'common';
 
 /**
  * The version a published path carries.
@@ -814,7 +823,13 @@ ${releases}
 // ── run ──────────────────────────────────────────────────────────────────────
 
 const check = process.argv.includes('--check');
-libraries.set(`${SCHEMA_BASE}${COMMON_REL}`, (await readJson(join(SRC, COMMON_REL))).$defs);
+for (const entry of await readdir(join(SRC, COMMON_DIR), { withFileTypes: true })) {
+  if (!entry.isDirectory()) continue;
+  const rel = `${COMMON_DIR}/${entry.name}/common.schema.json`;
+  const common = await readJson(join(SRC, rel));
+  assertIdMatchesPath(common, rel);
+  libraries.set(common.$id, common.$defs);
+}
 const integrity = await readIntegrity();
 const recorded = integrity.schemas ?? {};
 const recordedBundles = integrity.bundles ?? {};

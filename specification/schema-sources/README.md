@@ -41,8 +41,8 @@ npm run build:schemas    # regenerate all three
 npm run check:schemas    # verify they match sources (CI runs this)
 ```
 
-Change a shared definition once in `common/v1.0.0/common.schema.json`, rebuild, and
-every entity that references it is updated.
+Change a shared definition once in a common version, rebuild, and every entity
+that references that version is updated.
 
 CI fails if any generated artifact does not match what the sources produce — so a
 hand-edit to `specification/schemas/`, a hand-edit to a bundled copy, or a source
@@ -100,6 +100,15 @@ Holds definitions shared by every entity: `canonical` and its parts (`slug`,
 (`muscleRef`, `equipmentRef`, `exerciseRef`, `workoutRef`, `programRef`).
 
 It is authoring-only and is not published — after flattening, nothing refers to it.
+
+### Common versions
+
+`common/` holds one directory per version, and the build seeds every one it finds.
+An entity takes the version its `$ref`s name. A frozen entity flattens whatever
+version it references, so editing a definition in place would change the bytes of
+every frozen schema built from it, and the build would refuse. A shared definition
+that gains a field gains it in a new common version, which only the entity versions
+that move reference.
 
 ### Extending an entity beyond the shared shape
 
