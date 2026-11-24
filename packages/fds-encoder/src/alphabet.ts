@@ -84,7 +84,6 @@ export const FXI_LAYERS: Readonly<Record<FxiLayer, { readonly std: boolean; read
   Object.fromEntries(registryLayers.map((l) => [l.layer, { std: l.standard, source: l.source, gloss: l.description }])) as Record<FxiLayer, { std: boolean; source: string; gloss: string }>;
 export const FXI_LAYER_ORDER: readonly FxiLayer[] = [...CODE_LAYERS];
 export const FXI_STANDARD_LAYERS: readonly FxiLayer[] = FXI_LAYER_ORDER.filter((l) => FXI_LAYERS[l].std);
-export const FXI_EXTENDED_LAYERS: readonly FxiLayer[] = FXI_LAYER_ORDER.filter((l) => !FXI_LAYERS[l].std);
 
 export const JOINTS: Glossary = glossary(FXI_REGISTRY, 'joints');
 export const ARM_JOINTS: readonly string[] = values(FXI_REGISTRY, 'joints', (e) => e.limb === 'arm');
@@ -94,9 +93,6 @@ export const CIRC_JOINTS: readonly string[] = values(FXI_REGISTRY, 'joints', (e)
 
 export const JOINT_ACTIONS: Glossary = glossary(FXI_REGISTRY, 'jointActions');
 export const OPPOSITE_ACTIONS = pairs(FXI_REGISTRY, 'jointActions', 'opposite');
-
-/** Phase prefixes. The empty prefix is a normal moving phase. */
-export const PHASE_PREFIXES: Glossary = glossary(FXI_REGISTRY, 'phasePrefixes');
 
 export const ORIENTATIONS: Glossary = glossary(FXI_REGISTRY, 'orientations');
 /** Body points each start orientation implies on its support. Never written. */

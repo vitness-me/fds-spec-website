@@ -5,7 +5,7 @@ import {
   BODY_POINTS, EQUIPMENT_TOKENS, ERG_TYPES, FXI_LAYERS, FXI_MAJOR, FXI_REV, HOLD_ONLY, LOAD_IFACES, MAC_DIRECTIONS,
   MAC_SINGLE_JOINT, MAC_VERBS,
 } from './alphabet.js';
-import { parseFxi } from './syntax.js';
+import { issueText, parseFxi } from './syntax.js';
 
 export interface MachineDefault {
   /** FXE guided motion (`m`) of the machine built for this movement. */
@@ -125,7 +125,7 @@ function layerProblems(where: string, text: string, allowRemove: boolean): strin
 function fxiProblems(where: string, layers: Record<string, string>): string[] {
   const text = `FXI=${FXI_MAJOR}.${FXI_REV}/${Object.entries(layers).map(([k, v]) => `${k}:${v}`).join('/')}`;
   const p = parseFxi(text);
-  return p.ok ? [] : [`${where}: ${p.issues.map((i) => i.message).join('; ')}`];
+  return p.ok ? [] : [`${where}: ${issueText(p.issues)}`];
 }
 
 function machineProblems(where: string, mac: unknown): string[] {

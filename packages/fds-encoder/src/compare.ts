@@ -3,7 +3,7 @@
 // `identical` is returned only for byte-equal canonical strings with no `?` or `*`.
 import { EQUIPMENT_TOKENS, FORMS, FXE_STANDARD, FXI_LAYERS, FXI_LAYER_ORDER, GENERIC, RANGE_PARENT, UNKNOWN } from './alphabet.js';
 import type { FxeKind, FxiLayer } from './alphabet.js';
-import { parseFxe, parseFxi } from './syntax.js';
+import { parseFxe, parseFxi, PHASE_PREFIX } from './syntax.js';
 import type { FxeConfig } from './syntax.js';
 
 export type LayerRelation = 'equal' | 'narrower' | 'broader' | 'open' | 'contradicts';
@@ -79,7 +79,7 @@ function unifyOpenSet(a: string[], b: string[]): boolean {
 
 function unifyActions(a: string, b: string): boolean {
   if (a === b) return true;
-  const prefix = (t: string): string => (/^[~=%&^]/.test(t) ? t[0]! : '');
+  const prefix = (t: string): string => (PHASE_PREFIX.test(t) ? t[0]! : '');
   if (prefix(a) !== prefix(b)) return false;
   const ba = a.slice(prefix(a).length);
   const bb = b.slice(prefix(b).length);

@@ -117,8 +117,7 @@ import { loadManifest, manifestProblems, ROOT } from './lib/releases.mjs';
 
 /**
  * Every package is a directory under `packages/` with a manifest — read from disk, so a new package is packed and
- * checked from its first commit. This was a hand-kept list of two names, and a third package added beside them was
- * invisible to every rule here.
+ * checked from its first commit.
  */
 const PACKAGES = readdirSync(join(ROOT, 'packages'), { withFileTypes: true })
   .filter((entry) => entry.isDirectory() && existsSync(join(ROOT, 'packages', entry.name, 'package.json')))

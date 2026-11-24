@@ -1,15 +1,15 @@
 // Turns owner answers into canonical FXI and FXE strings through the reference code.
 // The same answers always give the same strings. Invalid or contradictory answers raise AnswerError.
 import {
-  ARM_JOINTS, ERG_TYPES, FXE_MAJOR, FXE_REV, FXI_MAJOR, FXI_REV, HELD_CONFLICTS, LEG_JOINTS, LINE_CONFLICTS, OPPOSITE_ACTIONS,
-  START_RANGES, UNKNOWN,
+  ARM_JOINTS, ERG_TYPES, FXE_MAJOR, FXE_REV, FXI_MAJOR, FXI_REV, GRIP_WIDTHS, HAND_ORIENTATIONS, HELD_CONFLICTS, LEG_JOINTS,
+  LINE_CONFLICTS, OPPOSITE_ACTIONS, RANGES, STANCES, START_RANGES, UNKNOWN,
 } from './alphabet.js';
 import { feetImplied, mainEquipment } from './crosscheck.js';
 import { CHANGE_OPENS, DEFAULT_FLOW, JOINT_IDS, PHASE_KINDS } from './flow.js';
 import type { Cond, FactId, Flow, FlowQuestion } from './flow.js';
 import { PROVENANCES } from './rows.js';
 import type { Provenance } from './rows.js';
-import { motionJoints, parseFxe, parseFxi, standardFxe } from './syntax.js';
+import { issueText, motionJoints, parseFxe, parseFxi, PHASE_PREFIX, standardFxe } from './syntax.js';
 import { patchedLayers } from './words.js';
 import type { MovementWord } from './words.js';
 
@@ -83,7 +83,7 @@ const IFACE_TO_POINT: Readonly<Record<string, string>> = {
 const STATIONS = ['cable', 'smith', 'landmine'];
 /** Two-hand bars: the only loads a template's bar-only grip width applies to. */
 const BARS = ['bb', 'ez', 'axle', 'camber', 'smith'];
-const DEPTHS = ['partial', 'deep', 'deficit'];
+const DEPTHS = Object.keys(RANGES).filter((r) => !START_RANGES.includes(r));
 /** A motion with no joint direction: a balance or pressure hold (`=0`) or rolling (`~0`). */
 const NO_JOINTS = /^[~=]0$/;
 
@@ -363,7 +363,7 @@ function motion(r: Reading): string | undefined {
     return r.fail(`motion.kind: "${r.template!.label}" has ${NO_JOINTS.test(m) ? 'no joint actions to change' : 'several phases or parts'}; pick "The joint movement itself" in changes and describe it instead.`);
   }
   const prefix = kind === 'normal' ? '' : PREFIX[kind]!;
-  return prefix + m.replace(/^[\^~=%&]/, '');
+  return prefix + m.replace(PHASE_PREFIX, '');
 }
 
 function orientation(r: Reading): string | undefined {
@@ -423,9 +423,9 @@ function symmetry(r: Reading): string | undefined {
   return scope === undefined || scope === 'usual' ? a : `${a}@${scope}`;
 }
 
-const HANDS = ['pr', 'su', 'ne', 'mx'];
-const WIDTHS = ['w-t', 'w-n', 'w-m', 'w-w'];
-const STANCES = ['st-n', 'st-m', 'st-w'];
+const HANDS = Object.keys(HAND_ORIENTATIONS);
+const WIDTHS = Object.keys(GRIP_WIDTHS);
+const STANCE_CODES = Object.keys(STANCES);
 
 /** True when the arms work one side at a time, so one hand holds the implement. */
 const oneHand = (x: string | undefined): boolean => (x ?? '').split('+').some((i) => i === 'u@arms' || i === 'a@arms');
@@ -452,7 +452,7 @@ function grip(r: Reading, start: string, x: string | undefined): string | undefi
     return r.value(q, v);
   };
   const width = groupAnswer('grip.width', WIDTHS);
-  const stance = groupAnswer('stance', STANCES);
+  const stance = groupAnswer('stance', STANCE_CODES);
   const st = r.one('stance');
   if (st !== undefined && st !== 'usual' && !['standing', 'standing.bent', '*', UNKNOWN].includes(start) && !r.footPlate()) {
     r.fail(`stance: stance is recorded only for standing exercises and foot-plate machines, and this one starts ${start}. Answer "usual", or change the body position.`);
@@ -586,8 +586,9 @@ function buildExercise(r: Reading): { fxi: string; fxe: string } | undefined {
   if (m === undefined || o === undefined) return undefined;
   const start = o.split('>')[0]!;
   const x = symmetry(r);
-  const mac = r.firstLoad()?.kind === 'mach' ? machine(r) : undefined;
-  const erg = r.firstLoad()?.kind === 'erg' ? ergType(r) : undefined;
+  const loadKind = r.firstLoad()?.kind;
+  const mac = loadKind === 'mach' ? machine(r) : undefined;
+  const erg = loadKind === 'erg' ? ergType(r) : undefined;
   const g = grip(r, start, x);
   const layers: Partial<Record<string, string>> = {
     m: verticalPull(r, m, g), o,
@@ -605,14 +606,14 @@ function buildExercise(r: Reading): { fxi: string; fxe: string } | undefined {
   if (r.problems.length > 0) return undefined;
   const text = FXI_HEAD + Object.entries(layers).filter(([, v]) => v !== undefined).map(([k, v]) => `${k}:${v}`).join('/');
   const p = parseFxi(text);
-  if (!p.ok) throw new InternalError(`${r.entryId}: the builder wrote ${text}, which the parser rejects: ${p.issues.map((i) => i.message).join('; ')}`);
+  if (!p.ok) throw new InternalError(`${r.entryId}: the builder wrote ${text}, which the parser rejects: ${issueText(p.issues)}`);
   const fxe = rowFxe(r, p.layers, mac, erg, start);
   return { fxi: p.canonical, fxe: canonicalFxeOrThrow(r.entryId, fxe) };
 }
 
 function canonicalFxeOrThrow(id: string, text: string): string {
   const p = parseFxe(text);
-  if (!p.ok) throw new InternalError(`${id}: the builder wrote ${text}, which the parser rejects: ${p.issues.map((i) => i.message).join('; ')}`);
+  if (!p.ok) throw new InternalError(`${id}: the builder wrote ${text}, which the parser rejects: ${issueText(p.issues)}`);
   return p.canonical;
 }
 

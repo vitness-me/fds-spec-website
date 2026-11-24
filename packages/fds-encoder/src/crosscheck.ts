@@ -63,12 +63,6 @@ export function fitsToken(token: string, fxe: string): boolean {
   return c.relation !== 'invalid' && c.relation !== 'contradicting' && Object.values(c.layers).every((r) => r !== 'broader');
 }
 
-/** The FXI equipment token that names the row's main equipment, if one does. */
-export function mainToken(fxi: string): string | undefined {
-  const p = parseFxi(fxi);
-  return p.ok ? mainEquipment(p.layers).token : undefined;
-}
-
 /** Warnings when the FXI and the FXE of one row disagree. An empty list means they are consistent. */
 export function crossCheck(fxi: string, fxe: string): string[] {
   const out: string[] = [];

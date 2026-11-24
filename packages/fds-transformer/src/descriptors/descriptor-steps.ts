@@ -7,7 +7,7 @@
  * validates only once the RFC's schemas are published.
  */
 
-import { AnswerError, build, createFlow, FXI_RULES, match } from '@vitness/fds-encoder';
+import { AnswerError, build, createFlow, DEFAULT_FLOW, FXI_RULES, match } from '@vitness/fds-encoder';
 import type { Answers, Entry, Flow, MatchResult, MatchRow, WordSet } from '@vitness/fds-encoder';
 import type { RecordProvenance } from '../core/types.js';
 import { getMappingPathValue } from '../core/paths.js';
@@ -76,7 +76,8 @@ export class DescriptorSteps {
     if (options.resolve !== undefined && options.resolve.system.trim() === '') {
       throw new Error('descriptors.resolve.system names the library each link points into; it is empty.');
     }
-    this.flow = createFlow(options.propose?.words);
+    const words = options.propose?.words;
+    this.flow = words === undefined ? DEFAULT_FLOW : createFlow(words);
   }
 
   /**
@@ -148,24 +149,23 @@ export class DescriptorSteps {
     provenance: RecordProvenance,
     outcome: DescriptorOutcome
   ): boolean {
-    const at = mapped;
-    if (typeof at.fxi !== 'string') return false;
+    if (typeof mapped.fxi !== 'string') return false;
     const canonical = mapped.canonical as Record<string, unknown> | undefined;
     const query: MatchRow = {
       id,
-      fxi: at.fxi,
-      fxiProvenance: typeof at.fxiProvenance === 'string' ? at.fxiProvenance : undefined,
-      fxiGap: typeof at.fxiGap === 'string' ? at.fxiGap : null,
+      fxi: mapped.fxi,
+      fxiProvenance: typeof mapped.fxiProvenance === 'string' ? mapped.fxiProvenance : undefined,
+      fxiGap: typeof mapped.fxiGap === 'string' ? mapped.fxiGap : null,
       name: typeof canonical?.name === 'string' ? canonical.name : null,
-      fxe: typeof at.fxe === 'string' ? at.fxe : null,
+      fxe: typeof mapped.fxe === 'string' ? mapped.fxe : null,
     };
     const result = match(query, options.library, { top: options.top ?? 3 });
     outcome.match = result;
     if (result.kind === 'auto') {
-      const xrefs = Array.isArray(at.xrefs) ? (at.xrefs as unknown[]) : [];
+      const xrefs = Array.isArray(mapped.xrefs) ? (mapped.xrefs as unknown[]) : [];
       const link = { system: options.system, id: result.id, link: 'auto' };
       if (!xrefs.some((x) => isObject(x) && x.system === link.system && x.id === link.id)) xrefs.push(link);
-      at.xrefs = xrefs;
+      mapped.xrefs = xrefs;
       provenance.xrefs = { origin: 'transform', transform: ['fds-encoder:match'] };
     }
     return true;

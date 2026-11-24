@@ -1,18 +1,13 @@
 import { describe, expect, test } from 'vitest';
-import { parseFxe, parseFxi, standardFxi } from '../src/syntax.js';
+import { canonicalFxe, canonicalFxi as canon, parseFxe, parseFxi, standardFxi } from '../src/syntax.js';
 
-const canon = (s: string): string => {
-  const p = parseFxi(s);
-  if (!p.ok) throw new Error(p.issues.map((i) => i.message).join('; '));
-  return p.canonical;
-};
 const issues = (s: string): string[] => parseFxi(s).issues.map((i) => i.code);
 
 describe('FXI header', () => {
   test('requires the revision', () => expect(issues('FXI=1/m:el.flex/o:?/l:?')).toContain('no-rev'));
   test('computes the flag', () => {
     expect(canon('FXI=1.0/m:hip.ext+kn.ext/o:standing/l:bw')).toBe('FXI=1.0S/m:hip.ext+kn.ext/o:standing/l:bw');
-    // Rules 1.1: h and p are standard, so every FXI is S; a written N is corrected.
+    // h and p are standard, so every FXI is S; a written N is corrected.
     expect(canon('FXI=1.0N/m:hip.ext+kn.ext/o:standing/l:bw/h:hands.head')).toBe('FXI=1.0S/m:hip.ext+kn.ext/o:standing/l:bw/h:hands.head');
     expect(canon('FXI=1.0/m:sh.hadd/o:standing/l:cable@hands/p:hi')).toBe('FXI=1.0S/m:sh.hadd/o:standing/l:cable@hands/p:hi');
   });
@@ -72,7 +67,7 @@ describe('validation', () => {
 });
 
 describe('FXE', () => {
-  const c = (s: string): string => { const p = parseFxe(s); if (!p.ok) throw new Error(p.issues.map((i) => i.message).join('; ')); return p.canonical; };
+  const c = canonicalFxe;
   test('writes ? for missing standard layers', () => expect(c('FXE=1.0/k:mac/l:foot')).toBe('FXE=1.0S/k:mac/l:foot/s:?/m:?'));
   test('drops extended values the form implies', () => expect(c('FXE=1.0/k:imp/f:bell.dumb/r:grav')).toBe('FXE=1.0S/k:imp/f:bell.dumb'));
   test('keeps stated extended layers and flags N', () => expect(c('FXE=1.0/k:mac/l:foot/s:recline/m:push.fwd/g:incl/r:plate')).toBe('FXE=1.0N/k:mac/l:foot/s:recline/m:push.fwd/r:plate/g:incl'));

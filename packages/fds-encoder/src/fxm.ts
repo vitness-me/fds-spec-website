@@ -8,6 +8,7 @@
 // FDS publishes no muscle list. The format is checked alone; whether a muscle, part or group exists is checked only
 // against a provider's vocabulary, when one is given.
 import { FXM_MAJOR, FXM_REV } from './alphabet.js';
+import { issueText } from './syntax.js';
 import type { Issue } from './syntax.js';
 
 /** An identifier for the same structure in an open anatomy ontology. */
@@ -220,9 +221,6 @@ export function expandFxm(input: string, vocabulary: FxmVocabulary): string[] {
   return [...leaves].sort();
 }
 
-/** How two FXM keys relate, from the anatomical leaves each covers. */
-export type FxmGrade = 'identical' | 'contains' | 'overlaps' | 'disjoint';
-
 export type FxmMatch =
   | { readonly grade: 'identical' | 'overlaps' | 'disjoint'; readonly shared: readonly string[] }
   | { readonly grade: 'contains'; readonly container: 'a' | 'b'; readonly shared: readonly string[] };
@@ -243,14 +241,6 @@ export function gradeFxm(a: string, b: string, vocabulary: FxmVocabulary): FxmMa
   if (allOfRight) return { grade: 'contains', container: 'a', shared };
   if (allOfLeft) return { grade: 'contains', container: 'b', shared };
   return { grade: 'overlaps', shared };
-}
-
-/** The vocabulary term a valid key names: its name, its anchors and, for a muscle or part, its UBERON gap. */
-export function fxmTerm(input: string, vocabulary: FxmVocabulary): { name: string; anchors: readonly Anchor[]; uberonGap?: string } {
-  const key = keyOrThrow(input, vocabulary);
-  if (key.kind === 'group') return vocabulary.groups.get(key.group)!;
-  const muscle = vocabulary.muscles.get(key.muscle)!;
-  return key.kind === 'part' ? (muscle.parts ?? []).find((p) => p.token === key.part)! : muscle;
 }
 
 // ───────────────────────────── muscle rows ─────────────────────────────
@@ -300,7 +290,7 @@ export function checkMuscleRow(row: MuscleRow, vocabulary?: FxmVocabulary): Musc
     if (typeof row.fxm !== 'string') problems.push(`a ${cls} row needs an fxm key`);
     else {
       const p = parseFxm(row.fxm, vocabulary);
-      if (!p.ok) problems.push(`fxm: ${p.issues.map((i) => i.message).join('; ')}`);
+      if (!p.ok) problems.push(`fxm: ${issueText(p.issues)}`);
       else {
         if (p.key?.kind !== kind) problems.push(`a ${cls} row needs ${KIND_FORM[kind]}`);
         if (p.canonical !== row.fxm) { changed.push('fxm'); out.fxm = p.canonical; }

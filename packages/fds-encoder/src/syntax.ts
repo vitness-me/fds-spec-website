@@ -12,6 +12,9 @@ import type { FxeKind, FxiLayer, Glossary } from './alphabet.js';
 
 export interface Issue { readonly code: string; readonly message: string; readonly at?: string }
 
+/** The messages of a parse's issues, joined for one line of output. */
+export const issueText = (issues: readonly Issue[]): string => issues.map((i) => i.message).join('; ');
+
 export interface ParsedFxi {
   readonly ok: boolean;
   readonly issues: readonly Issue[];
@@ -51,6 +54,8 @@ const collapseRuns = (xs: string[]): string[] => xs.filter((v, i) => i === 0 || 
 
 const FXI_HEAD = /^FXI=(\d+)\.(\d+)([SN]?)\/(.*)$/s;
 const PREFIX_CHARS = '^~=%&';
+/** A phase prefix at the start of a motion action. */
+export const PHASE_PREFIX = /^[\^~=%&]/;
 
 /** Reads an FXI v1 string, validates it and returns its canonical form. */
 export function parseFxi(input: string): ParsedFxi {
@@ -105,7 +110,7 @@ function setIf(L: Partial<Record<FxiLayer, string>>, k: FxiLayer, v: string | un
 /** The canonical FXI, or throws listing every issue. */
 export function canonicalFxi(input: string): string {
   const p = parseFxi(input);
-  if (!p.ok) throw new Error(`${input}: ${p.issues.map((i) => i.message).join('; ')}`);
+  if (!p.ok) throw new Error(`${input}: ${issueText(p.issues)}`);
   return p.canonical;
 }
 
@@ -221,14 +226,12 @@ function readLoad(text: string, log: Log): string {
 
 /** Joint codes of a canonical motion value, without prefixes and suffixes; `=0` counts as the legs. */
 export function motionJoints(m: string): string[] {
-  if (m === UNKNOWN) return [];
-  return m.split(/[>|+]/).map((a) => a.replace(/^[~=%&^]/, '').replace(/-$/, ''))
-    .filter((a) => a !== UNKNOWN && a !== '')
-    .map((a) => (a === '0' ? 'hip' : a.split('.')[0]!));
+  return motionActions(m).map((a) => (a === '0' ? 'hip' : a.split('.')[0]!));
 }
+/** Joint actions of a canonical motion value, without prefixes and suffixes. */
 export function motionActions(m: string): string[] {
   if (m === UNKNOWN) return [];
-  return m.split(/[>|+]/).map((a) => a.replace(/^[~=%&^]/, '').replace(/-$/, '')).filter((a) => a !== UNKNOWN && a !== '');
+  return m.split(/[>|+]/).map((a) => a.replace(PHASE_PREFIX, '').replace(/-$/, '')).filter((a) => a !== UNKNOWN && a !== '');
 }
 const TRUNK_TURN = ['sp.rot', 'sp.lflex', 'nk.rot', 'nk.lflex'];
 
@@ -327,7 +330,7 @@ function readNameSet(text: string | undefined, table: Glossary, dflt: string, wh
 /** The standard projection: extended layers dropped, flag S. */
 export function standardFxi(input: string): string {
   const p = parseFxi(input);
-  if (!p.ok) throw new Error(`${input}: ${p.issues.map((i) => i.message).join('; ')}`);
+  if (!p.ok) throw new Error(`${input}: ${issueText(p.issues)}`);
   const layers = FXI_LAYER_ORDER.filter((k) => FXI_LAYERS[k].std && p.layers[k] !== undefined);
   return `FXI=${FXI_MAJOR}.${FXI_REV}S/` + layers.map((k) => `${k}:${p.layers[k]}`).join('/');
 }
@@ -368,7 +371,7 @@ export function parseFxe(input: string): ParsedFxe {
 
 export function canonicalFxe(input: string): string {
   const p = parseFxe(input);
-  if (!p.ok) throw new Error(`${input}: ${p.issues.map((i) => i.message).join('; ')}`);
+  if (!p.ok) throw new Error(`${input}: ${issueText(p.issues)}`);
   return p.canonical;
 }
 
@@ -450,7 +453,7 @@ function readFxeValue(k: FxeKind, name: string, v: string, standard: boolean, lo
 /** The standard projection of an FXE: extended layers dropped, flag S. */
 export function standardFxe(input: string): string {
   const p = parseFxe(input);
-  if (!p.ok) throw new Error(`${input}: ${p.issues.map((i) => i.message).join('; ')}`);
+  if (!p.ok) throw new Error(`${input}: ${issueText(p.issues)}`);
   const texts = sortUnique(p.configs.map((c) => configText(c.k === '?' ? c : { k: c.k, layers: Object.fromEntries(Object.entries(c.layers).filter(([n]) => FXE_STANDARD[c.k as FxeKind].includes(n))) })));
   return `FXE=${FXE_MAJOR}.${FXE_REV}S/${texts.join(';')}`;
 }

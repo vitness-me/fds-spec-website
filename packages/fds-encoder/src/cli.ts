@@ -9,7 +9,7 @@ import type { Built, Entry } from './build.js';
 import { checkCollisions, readLibrary } from './collide.js';
 import type { Collision } from './collide.js';
 import { compare } from './compare.js';
-import { createFlow, FACTS } from './flow.js';
+import { createFlow, DEFAULT_FLOW, FACTS } from './flow.js';
 import type { Cond, Flow, FlowQuestion } from './flow.js';
 import { checkMuscleRow, parseFxm, readFxmVocabulary } from './fxm.js';
 import type { FxmVocabulary } from './fxm.js';
@@ -39,7 +39,7 @@ const MODE_HELP = 'owner: the owner of the exercise answers. import: someone rea
 const WORDS_HELP = 'a movement-word dataset (file or http(s) URL); without one, describe the motion joint by joint through "other"';
 
 async function flowFor(words: string | undefined): Promise<Flow> {
-  return createFlow(words === undefined ? undefined : await loadWordSet(words));
+  return words === undefined ? DEFAULT_FLOW : createFlow(await loadWordSet(words));
 }
 
 function describe(c: Cond): string {

@@ -4,7 +4,7 @@
 import type { Built, Entry } from './build.js';
 import { DEFAULT_FLOW } from './flow.js';
 import type { Flow } from './flow.js';
-import { parseFxe, parseFxi } from './syntax.js';
+import { issueText, parseFxe, parseFxi } from './syntax.js';
 
 /**
  * An entry of the owner's existing library: an exercise (by FXI) or a piece of equipment (by FXE). `sameAs` lists
@@ -24,7 +24,7 @@ export interface Gap extends Collision { readonly differs: string }
 
 function canonical(where: string, text: string): string {
   const p = text.trim().startsWith('FXE=') ? parseFxe(text) : parseFxi(text);
-  if (!p.ok) throw new Error(`${where}: ${text} is not a valid FXI or FXE: ${p.issues.map((i) => i.message).join('; ')}`);
+  if (!p.ok) throw new Error(`${where}: ${text} is not a valid FXI or FXE: ${issueText(p.issues)}`);
   return p.canonical;
 }
 

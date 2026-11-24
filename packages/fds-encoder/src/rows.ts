@@ -1,6 +1,6 @@
 // One output row: {id, fxi, fxe, confidence, notes, fxiProvenance?, fxiGap?}. Validates it and writes its canonical form.
 import { crossCheck } from './crosscheck.js';
-import { parseFxe, parseFxi } from './syntax.js';
+import { issueText, parseFxe, parseFxi } from './syntax.js';
 
 /** Who answered for an FXI. Only `owner` and `owner-assisted` allow auto-match. */
 export type Provenance = 'owner' | 'owner-assisted' | 'agent' | 'import';
@@ -54,7 +54,7 @@ export function checkRow(row: Row): RowCheck {
     if (typeof v !== 'string') { problems.push(`${field} must be a string`); continue; }
     const p = field === 'fxi' ? parseFxi(v) : parseFxe(v);
     if (!v.trim().startsWith(field === 'fxi' ? 'FXI=' : 'FXE=')) problems.push(`${field} holds the wrong kind of string`);
-    if (!p.ok) problems.push(`${field}: ${p.issues.map((i) => i.message).join('; ')}`);
+    if (!p.ok) problems.push(`${field}: ${issueText(p.issues)}`);
     else if (p.canonical !== v) { changed.push(field); out[field] = p.canonical; }
   }
   const hasFxi = typeof row.fxi === 'string';

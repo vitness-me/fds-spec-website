@@ -5,7 +5,7 @@ import { FXI_RULES } from './alphabet.js';
 import { AnswerError, build } from './build.js';
 import type { Entry } from './build.js';
 import type { Flow } from './flow.js';
-import { parseFxe, parseFxi } from './syntax.js';
+import { issueText, parseFxe, parseFxi } from './syntax.js';
 
 /** A record as `build` writes it: the strings, the rules revision they were built under, and the answers record. */
 export interface UpgradeInput {
@@ -49,7 +49,7 @@ function stringProblems(r: UpgradeInput): string[] {
     const v = r[field];
     if (typeof v !== 'string') continue;
     const p = field === 'fxi' ? parseFxi(v) : parseFxe(v);
-    if (!p.ok) out.push(`${field}: ${p.issues.map((i) => i.message).join('; ')}`);
+    if (!p.ok) out.push(`${field}: ${issueText(p.issues)}`);
   }
   return out;
 }
