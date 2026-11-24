@@ -123,7 +123,7 @@
     "fxe": {
       "description": "A canonical FXE structural descriptor of a piece of equipment (RFC-010), standard (flag S) or with extended build-detail layers (flag N). Only an equipment record carries the extended form.",
       "type": "string",
-      "pattern": "^FXE=1\\.[0-9]+[SN]/\\S+$"
+      "pattern": "^FXE=1\\.(0|[1-9][0-9]*)[SN]/\\S+$"
     },
     "localizedNames": {
       "type": "array",

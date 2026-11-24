@@ -164,9 +164,9 @@
       }
     },
     "fxm": {
-      "description": "A canonical FXM muscle key (RFC-010): a muscle, a part of one, or a group, in the vocabulary of the provider that publishes it.",
+      "description": "A canonical FXM muscle key (RFC-010): a muscle, a part of one, or a group, in the vocabulary of the provider that publishes it. The pattern checks the whole key: the header and lowercase kebab-case tokens. Whether a token is in that vocabulary is the vocabulary’s to check.",
       "type": "string",
-      "pattern": "^FXM=1\\.[0-9]+/\\S+$"
+      "pattern": "^FXM=1\\.(0|[1-9][0-9]*)/(g:[a-z][a-z0-9]*(-[a-z0-9]+)*|[a-z][a-z0-9]*(-[a-z0-9]+)*(\\.[a-z][a-z0-9]*(-[a-z0-9]+)*)?)$"
     },
     "laterality": {
       "type": "string",

@@ -398,12 +398,12 @@
     "fxeStandard": {
       "description": "A canonical standard FXE structural descriptor of a piece of equipment (RFC-010): standard layers only, so the flag is always S. What an exercise record and an equipment reference carry.",
       "type": "string",
-      "pattern": "^FXE=1\\.[0-9]+S/\\S+$"
+      "pattern": "^FXE=1\\.(0|[1-9][0-9]*)S/\\S+$"
     },
     "fxi": {
-      "description": "A canonical FXI structural descriptor of an exercise (RFC-010). The pattern checks the header and that the body is one token; the grammar and the codes are the descriptor registries’ to check, not this schema’s.",
+      "description": "A canonical FXI structural descriptor of an exercise (RFC-010). The pattern checks the header (major version 1, a syntax revision without leading zeros, the flag) and that the body is one token; the grammar and the codes are the descriptor registries’ to check, not this schema’s.",
       "type": "string",
-      "pattern": "^FXI=1\\.[0-9]+[SN]/\\S+$"
+      "pattern": "^FXI=1\\.(0|[1-9][0-9]*)[SN]/\\S+$"
     },
     "fxiProvenance": {
       "description": "Who answered for an FXI: its owner; someone else or software, confirmed by the owner; someone else or software, unconfirmed; or read out of another catalogue in import mode.",
@@ -416,9 +416,9 @@
       ]
     },
     "fxm": {
-      "description": "A canonical FXM muscle key (RFC-010): a muscle, a part of one, or a group, in the vocabulary of the provider that publishes it.",
+      "description": "A canonical FXM muscle key (RFC-010): a muscle, a part of one, or a group, in the vocabulary of the provider that publishes it. The pattern checks the whole key: the header and lowercase kebab-case tokens. Whether a token is in that vocabulary is the vocabulary’s to check.",
       "type": "string",
-      "pattern": "^FXM=1\\.[0-9]+/\\S+$"
+      "pattern": "^FXM=1\\.(0|[1-9][0-9]*)/(g:[a-z][a-z0-9]*(-[a-z0-9]+)*|[a-z][a-z0-9]*(-[a-z0-9]+)*(\\.[a-z][a-z0-9]*(-[a-z0-9]+)*)?)$"
     },
     "kineticChain": {
       "type": "string",
@@ -709,7 +709,7 @@
       "default": "active"
     },
     "xref": {
-      "description": "A confirmed link from this record to the record describing the same thing in another catalogue (RFC-010). Distinct from metadata.externalRefs, which records this record’s own identifiers elsewhere and says nothing about how a link was made.",
+      "description": "A link from this record to the record describing the same thing in another catalogue (RFC-010), made by a resolver under the match protocol (link: auto) or by a person (link: confirmed). Distinct from metadata.externalRefs, which records this record’s own identifiers elsewhere and says nothing about how a link was made.",
       "type": "object",
       "required": [
         "system",

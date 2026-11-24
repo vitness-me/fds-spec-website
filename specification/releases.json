@@ -132,7 +132,7 @@
           "path": "equipment/v1.2.0/equipment.schema.json",
           "$id": "https://spec.vitness.me/schemas/equipment/v1.2.0/equipment.schema.json",
           "frozen": false,
-          "sha256": "17131d8fe25207b8c1c5d16d0eea5556f06ff5d3b7d3420b09d8ba8079b2f58c"
+          "sha256": "4bbe2ddc0f2aee6eabad5be40a3a0a6fd757de7ab1526a79875d43cb42d37f7c"
         }
       }
     },
@@ -155,7 +155,7 @@
           "path": "exercises/v1.2.0/exercise.schema.json",
           "$id": "https://spec.vitness.me/schemas/exercises/v1.2.0/exercise.schema.json",
           "frozen": false,
-          "sha256": "e90b39839eb17bc67b340f41a591d292fdf49624dae529027dc8d4da6eb90ae8"
+          "sha256": "fc0deae212502cbc719d35b7470a4c2dedead9268560830a34ce84a168b6bec4"
         }
       }
     },
@@ -209,7 +209,7 @@
           "path": "muscle/v1.1.0/muscle.schema.json",
           "$id": "https://spec.vitness.me/schemas/muscle/v1.1.0/muscle.schema.json",
           "frozen": false,
-          "sha256": "01b56c79af9c5dd28429fdce2e8b754ec9278f8862a59c00381a1fbba90d438c"
+          "sha256": "93493ea223dfbb506a408ca1739cbd365df200e980df8d0431f2de3b998f6dbb"
         }
       }
     },
