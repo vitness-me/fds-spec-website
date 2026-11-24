@@ -12,7 +12,7 @@ Compare takes two FXIs, or two FXEs, and says how the exercises (or the equipmen
 
 **Absent standard layers are values.** A standard layer left out of a string takes its published default, which contradicts every other known value. Only `?` and `*` are open. An **extended** layer (FXI `a`, the FXE build details) is compared only when both strings carry it; when only one does, that side is the more specific one.
 
-**Per layer**, side A is `equal`, `narrower` (A names a subset of what B names), `broader`, `open` (both incomplete and compatible), or `contradicts`. Multi-item values match item by item: every item on one side must pair with an item on the other.
+**Per layer**, side A is `equal`, `narrower` (A names a subset of what B names), `broader`, `open` (both incomplete and compatible), or `contradicts`. Multi-item values match item by item: every item on one side must pair with an item on the other. In `l`, a count a string leaves out is its usual count under that string's own symmetry, hold point and motion ([counts](./fxi.md#load-l)), and counts compare as numbers; where a side's usual count is unknown, its count is open. So `l:db*2@hands/x:?` is refined by the two-dumbbell curl `l:db@hands`, not contradicted by it.
 
 **Overall**, the result is one of:
 
