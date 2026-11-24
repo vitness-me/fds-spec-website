@@ -1,7 +1,7 @@
 // Set-based compare for FXI v1 and FXE v1.
 // Every value denotes a set of fully specified exercises (or equipment). `?` and `*` denote every value.
 // `identical` is returned only for byte-equal canonical strings with no `?` or `*`.
-import { EQUIPMENT_TOKENS, FORMS, FXE_STANDARD, FXI_LAYERS, FXI_LAYER_ORDER, GENERIC, RANGE_PARENT, UNKNOWN } from './alphabet.js';
+import { ACTION_PARENT, EQUIPMENT_TOKENS, FORMS, FXE_STANDARD, FXI_LAYERS, FXI_LAYER_ORDER, GENERIC, RANGE_PARENT, UNKNOWN } from './alphabet.js';
 import type { FxeKind, FxiLayer } from './alphabet.js';
 import { parseFxe, parseFxi, PHASE_PREFIX, sortUnique, usualCount } from './syntax.js';
 import type { FxeConfig } from './syntax.js';
@@ -20,11 +20,12 @@ export interface CompareResult {
 const DEFAULT = '\u0000default';
 const incomplete = (v: string): boolean => v === GENERIC || v.includes(UNKNOWN);
 
-/** The parent of a child FXI code (an equipment token or a range code), if it has one. */
-const parentOf = (code: string): string | undefined => EQUIPMENT_TOKENS[code]?.parent ?? RANGE_PARENT[code];
+/** The parent of a child FXI code (an equipment token, a range code or a joint action), if it has one. */
+const parentOf = (code: string): string | undefined => EQUIPMENT_TOKENS[code]?.parent ?? RANGE_PARENT[code] ?? ACTION_PARENT[code];
 /** Equal codes, or one is the other's parent. */
 const related = (x: string, y: string): boolean => x === y || parentOf(y) === x || parentOf(x) === y;
-const codes = (v: string): string[] => v.split(/[+@,*>|]/);
+/** The codes of a value, with motion prefixes and the short-drive suffix stripped. */
+const codes = (v: string): string[] => v.split(/[+@,*>|]/).map((c) => c.replace(/^[~=%&^]/, '').replace(/-$/, ''));
 /** `a` names a parent code where `b` names one of its children: `a` is the broader description there. */
 function coarser(a: string, b: string): boolean {
   const ca = codes(a);
@@ -88,10 +89,12 @@ function unifyActions(a: string, b: string): boolean {
   const xb = bb.split('+');
   if (xa.length !== xb.length) return false;
   const covers = (wild: string[], act: string): boolean => wild.some((w) => act.startsWith(w.slice(0, -1)));
+  const short = (x: string): boolean => x.endsWith('-');
+  const sameAction = (x: string, y: string): boolean => short(x) === short(y) && related(x.replace(/-$/, ''), y.replace(/-$/, ''));
   const wa = xa.filter((x) => x.endsWith('.?'));
   const wb = xb.filter((x) => x.endsWith('.?'));
-  return xa.filter((x) => !x.endsWith('.?')).every((x) => xb.includes(x) || covers(wb, x))
-    && xb.filter((x) => !x.endsWith('.?')).every((x) => xa.includes(x) || covers(wa, x));
+  return xa.filter((x) => !x.endsWith('.?')).every((x) => xb.some((y) => sameAction(x, y)) || covers(wb, x))
+    && xb.filter((x) => !x.endsWith('.?')).every((x) => xa.some((y) => sameAction(x, y)) || covers(wa, x));
 }
 
 function unifyMotion(a: string, b: string): boolean {

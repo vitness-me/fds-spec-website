@@ -82,7 +82,7 @@ describe('builder rules', () => {
   });
   test('an assisted machine drops the template bar', () => {
     expect(fxi(ex('chin-up', ['equipment'], { load: 'machine', 'mac.motion': 'assist', 'mac.direction': 'up', 'mac.contact': 'knee', 'mac.chest': 'usual' })))
-      .toBe('FXI=1.0S/m:el.flex+sh.ext/o:hanging/l:mach@assist/g:su');
+      .toBe('FXI=1.0S/m:el.flex+sh.ext.oh/o:hanging/l:mach@assist/g:su');
   });
   test('the snatch width belongs to a bar only', () => {
     expect(fxi(ex('snatch', ['equipment', 'sides'], { load: 'implement', imp1: 'kb', hold1: 'usual', symmetry: 'u', 'symmetry.scope': 'arms' }))).not.toContain('w-w');

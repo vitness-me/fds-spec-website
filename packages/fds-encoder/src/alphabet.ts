@@ -93,6 +93,9 @@ export const CIRC_JOINTS: readonly string[] = values(FXI_REGISTRY, 'joints', (e)
 
 export const JOINT_ACTIONS: Glossary = glossary(FXI_REGISTRY, 'jointActions');
 export const OPPOSITE_ACTIONS = pairs(FXI_REGISTRY, 'jointActions', 'opposite');
+/** Joint actions that refine a parent action. A parent covers its children in compare and shares their opposite. */
+export const ACTION_PARENT: Readonly<Record<string, string>> =
+  Object.fromEntries(entries(FXI_REGISTRY, 'jointActions').filter((e) => typeof e.parent === 'string').map((e) => [e.value, e.parent as string]));
 
 export const ORIENTATIONS: Glossary = glossary(FXI_REGISTRY, 'orientations');
 /** Body points each start orientation implies on its support. Never written. */

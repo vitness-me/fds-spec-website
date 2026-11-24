@@ -1,7 +1,7 @@
 // FXI and FXE: parser, canonicaliser and serialiser.
 // parseFxi / parseFxe return every issue found, or the canonical string and its layer values.
 import {
-  ACCESSORIES, ARM_JOINTS, DEFAULTS, LINE_CONFLICTS, BODY_POINTS, CIRC_JOINTS, COMPLIANCE, DESIGN_ATTRS, DRIVES, EQUIPMENT_TOKENS, ERG_CYCLES, ERG_TRACKS,
+  ACCESSORIES, ACTION_PARENT, ARM_JOINTS, DEFAULTS, LINE_CONFLICTS, BODY_POINTS, CIRC_JOINTS, COMPLIANCE, DESIGN_ATTRS, DRIVES, EQUIPMENT_TOKENS, ERG_CYCLES, ERG_TRACKS,
   FOOTWORK, FORMS, FXE_EXTENDED, FXE_KINDS, FXE_EXTENDED_ORDER, FXE_MAJOR, FXE_REV, FXE_STANDARD, FXI_LAYERS,
   FXI_LAYER_ORDER, FXI_MAJOR, FXI_REV, GENERIC, GRIP_ELEMENTS, GRIP_WIDTHS, GUIDE_ANGLES, HAND_ORIENTATIONS, HELD, HELD_CONFLICTS,
   HOLD_ONLY, IMPLIED_POINTS, JOINT_ACTIONS, JOINTS, LEG_JOINTS, LINES, LOAD_IFACES, MAC_CONSTRAINTS, MAC_DIRECTIONS,
@@ -152,8 +152,20 @@ function readPart(text: string, log: Log): string {
     if (short && !has(JOINT_ACTIONS, b)) log.add('short-suffix', 'The short-drive suffix "-" goes only on a named joint action.', a);
     bare.push(b);
   }
-  for (const [x, y] of OPPOSITE_ACTIONS) if (bare.includes(x) && bare.includes(y)) log.add('opposite-actions', `${x} and ${y} cannot be in one phase; split them with ">".`, text);
+  const pair = oppositePair(bare);
+  if (pair !== undefined) log.add('opposite-actions', `${pair[0]} and ${pair[1]} cannot be in one phase; split them with ">".`, text);
   return prefix + sortUnique(actions.filter((a) => a !== UNKNOWN && a !== `${UNKNOWN}-`)).join('+');
+}
+
+/** Two written actions that move one joint in opposite directions, a child action counting as its parent; else undefined. */
+export function oppositePair(actions: readonly string[]): readonly [string, string] | undefined {
+  const find = (code: string): string | undefined => actions.find((a) => a === code || ACTION_PARENT[a] === code);
+  for (const [x, y] of OPPOSITE_ACTIONS) {
+    const ax = find(x);
+    const ay = find(y);
+    if (ax !== undefined && ay !== undefined) return [ax, ay];
+  }
+  return undefined;
 }
 
 function readSequence(text: string, table: Glossary, what: string, log: Log): string {

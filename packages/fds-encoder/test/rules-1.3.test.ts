@@ -23,10 +23,10 @@ describe('the rules revision', () => {
 
 
 describe('a grip change on a pull-up or pulldown word changes the shoulder action', () => {
-  test('close, neutral or underhand grips pull down in front of the face', () => {
-    expect(fxi(ex('lat-pulldown', ['width'], { 'grip.width': 'narrow' }))).toBe('FXI=1.0S/m:el.flex+sh.ext/o:seated/l:mach@hands/g:w-n');
-    expect(fxi(ex('lat-pulldown', ['hand'], { 'grip.hand': 'ne' }))).toBe('FXI=1.0S/m:el.flex+sh.ext/o:seated/l:mach@hands/g:ne');
-    expect(fxi(ex('pull-up', ['hand'], { 'grip.hand': 'su' }))).toBe('FXI=1.0S/m:el.flex+sh.ext/o:hanging/s:bar/l:bw/g:su');
+  test('close, neutral or underhand grips pull down from overhead in front of the face', () => {
+    expect(fxi(ex('lat-pulldown', ['width'], { 'grip.width': 'narrow' }))).toBe('FXI=1.0S/m:el.flex+sh.ext.oh/o:seated/l:mach@hands/g:w-n');
+    expect(fxi(ex('lat-pulldown', ['hand'], { 'grip.hand': 'ne' }))).toBe('FXI=1.0S/m:el.flex+sh.ext.oh/o:seated/l:mach@hands/g:ne');
+    expect(fxi(ex('pull-up', ['hand'], { 'grip.hand': 'su' }))).toBe('FXI=1.0S/m:el.flex+sh.ext.oh/o:hanging/s:bar/l:bw/g:su');
   });
   test('an overhand grip at medium or wide width keeps the pull out at the sides', () => {
     expect(fxi(ex('lat-pulldown', ['width'], { 'grip.width': 'wide' }))).toBe('FXI=1.0S/m:el.flex+sh.add/o:seated/l:mach@hands/g:w-w');

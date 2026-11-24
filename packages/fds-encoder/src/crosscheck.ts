@@ -1,5 +1,5 @@
 // Cross-checks between a row's FXI and its FXE. Shared facts are checked, never counted twice in compare.
-import { EQUIPMENT_TOKENS, FXE_MAJOR, FXE_REV, GENERIC, POINT_TO_IFACE, POSTURE_TO_ORIENT, UNKNOWN } from './alphabet.js';
+import { ACTION_PARENT, EQUIPMENT_TOKENS, FXE_MAJOR, FXE_REV, GENERIC, POINT_TO_IFACE, POSTURE_TO_ORIENT, UNKNOWN } from './alphabet.js';
 import { compareFxe } from './compare.js';
 import { motionActions, parseFxe, parseFxi } from './syntax.js';
 
@@ -93,7 +93,7 @@ export function crossCheck(fxi: string, fxe: string): string[] {
     out.push(`FXI hold @${hold} does not fit FXE load interface l:${ifaces}`);
   }
   const m = c.layers.m;
-  if (c.k === 'mac' && m !== undefined && m.includes('.') && !/^(push|pull|assist)\./.test(m) && i.layers.m !== UNKNOWN && !motionActions(i.layers.m ?? '').includes(m)) {
+  if (c.k === 'mac' && m !== undefined && m.includes('.') && !/^(push|pull|assist)\./.test(m) && i.layers.m !== UNKNOWN && !motionActions(i.layers.m ?? '').some((x) => x === m || ACTION_PARENT[x] === m)) {
     out.push(`off-design use: the machine's motion ${m} is not in the FXI motion (allowed only when the name names the machine)`);
   }
   return out;

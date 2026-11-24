@@ -10,7 +10,7 @@ const CITED = { name: WORDS.name, version: WORDS.version };
 const narrowPulldown: Entry = { id: 'close-pulldown', answers: ex('lat-pulldown', ['width'], { 'grip.width': 'narrow' }), words: CITED };
 /** What an earlier rules revision wrote for the same answers: the pull still out at the sides. */
 const OLDER = 'FXI=1.0S/m:el.flex+sh.add/o:seated/l:mach@hands/g:w-n';
-const CURRENT = 'FXI=1.0S/m:el.flex+sh.ext/o:seated/l:mach@hands/g:w-n';
+const CURRENT = 'FXI=1.0S/m:el.flex+sh.ext.oh/o:seated/l:mach@hands/g:w-n';
 
 const stored = (e: Entry, over: Record<string, unknown> = {}): Record<string, unknown> => {
   const b = build(e, FLOW);

@@ -2,14 +2,14 @@
 // The same answers always give the same strings. Invalid or contradictory answers raise AnswerError.
 import {
   ERG_TYPES, FXE_MAJOR, FXE_REV, FXI_MAJOR, FXI_REV, GRIP_WIDTHS, HAND_ORIENTATIONS, HELD_CONFLICTS, LEG_JOINTS,
-  LINE_CONFLICTS, OPPOSITE_ACTIONS, RANGES, STANCES, START_RANGES, UNKNOWN,
+  LINE_CONFLICTS, RANGES, STANCES, START_RANGES, UNKNOWN,
 } from './alphabet.js';
 import { feetImplied, mainEquipment } from './crosscheck.js';
 import { CHANGE_OPENS, DEFAULT_FLOW, JOINT_IDS, PHASE_KINDS } from './flow.js';
 import type { Cond, FactId, Flow, FlowQuestion } from './flow.js';
 import { PROVENANCES, UNSPECIFIED_GAP } from './rows.js';
 import type { Provenance } from './rows.js';
-import { issueText, motionJoints, parseFxe, parseFxi, PHASE_PREFIX, standardFxe } from './syntax.js';
+import { issueText, motionJoints, oppositePair, parseFxe, parseFxi, PHASE_PREFIX, standardFxe } from './syntax.js';
 import { patchedLayers } from './words.js';
 import type { MovementWord } from './words.js';
 
@@ -313,8 +313,8 @@ function walk(entryId: string, provide: Provider, extra: readonly string[], flow
 const PREFIX: Readonly<Record<string, string>> = Object.fromEntries(PHASE_KINDS.map((k) => [k.id, k.value ?? '']));
 
 function opposite(actions: string[]): string | undefined {
-  for (const [a, b] of OPPOSITE_ACTIONS) if (actions.includes(a) && actions.includes(b)) return `${a} and ${b}`;
-  return undefined;
+  const pair = oppositePair(actions);
+  return pair === undefined ? undefined : `${pair[0]} and ${pair[1]}`;
 }
 
 function partFromAnswers(r: Reading, p: string, where: string): string | undefined {
@@ -465,12 +465,12 @@ function grip(r: Reading, start: string, x: string | undefined): string | undefi
 
 /**
  * A pull-up or pulldown word pulls down out at the sides (`sh.add`) only with an overhand grip at medium or
- * wide width. An underhand, neutral or close grip pulls down in front of the face (`sh.ext`).
+ * wide width. An underhand, neutral or close grip pulls down from overhead in front of the face (`sh.ext.oh`).
  */
 function verticalPull(r: Reading, m: string, g: string | undefined): string {
   if (r.fact('motion-from-scratch') || !m.includes('el.flex+sh.add')) return m;
   const elements = (g ?? '').split('>')[0]!.split('+');
-  return elements.some((e) => ['su', 'ne', 'w-n', 'w-t'].includes(e)) ? m.replaceAll('el.flex+sh.add', 'el.flex+sh.ext') : m;
+  return elements.some((e) => ['su', 'ne', 'w-n', 'w-t'].includes(e)) ? m.replaceAll('el.flex+sh.add', 'el.flex+sh.ext.oh') : m;
 }
 
 function range(r: Reading): string | undefined {

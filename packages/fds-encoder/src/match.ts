@@ -1,5 +1,5 @@
-// Match protocol: auto-match only on a unique identical FXI with owner provenance, no gap marker and no import mode on
-// either side; otherwise a ranked list of up to three to confirm (FXI candidates, then near-compatible, then by name);
+// Match protocol: auto-match only on a unique identical FXI with owner provenance, no gap marker, no import mode on
+// either side and identical FXEs when both rows carry one; otherwise a ranked list of up to three to confirm (FXI candidates, then near-compatible, then by name);
 // "absent" only when the library is empty.
 import { FXI_STANDARD_LAYERS } from './alphabet.js';
 import type { FxiLayer } from './alphabet.js';
@@ -39,12 +39,13 @@ export interface MatchOptions {
   readonly top?: number;
 }
 
+const hasFxe = (r: MatchRow): r is MatchRow & { fxe: string } => typeof r.fxe === 'string' && r.fxe.trim() !== '';
 const hasGap = (r: MatchRow): boolean => r.fxiGap !== undefined && r.fxiGap !== null && r.fxiGap !== false;
 const ownerMade = (r: MatchRow): boolean => OWNER_PROVENANCES.includes(r.fxiProvenance as Provenance);
 
 /**
  * Why two rows with identical FXIs may not be matched automatically, or undefined when they may. A gap marker, import
- * mode or missing owner provenance on either side refuses.
+ * mode or missing owner provenance on either side refuses, and so do FXEs on both rows that do not compare identical.
  */
 export function autoMatchRefusal(query: MatchRow, candidate: MatchRow): string | undefined {
   if (hasGap(query)) return 'the query carries a gap marker';
@@ -53,6 +54,7 @@ export function autoMatchRefusal(query: MatchRow, candidate: MatchRow): string |
   if (candidate.mode === 'import') return 'the library entry is an import';
   if (!ownerMade(query)) return 'the query has no owner provenance';
   if (!ownerMade(candidate)) return 'the library entry has no owner provenance';
+  if (hasFxe(query) && hasFxe(candidate) && compare(query.fxe, candidate.fxe).relation !== 'identical') return 'the FXEs are not identical';
   return undefined;
 }
 
@@ -124,7 +126,6 @@ interface Scored {
 
 const byNameThenOrder = (a: Scored, b: Scored): number => b.name - a.name || a.i - b.i;
 const equalLayers = (c: CompareResult): number => FXI_STANDARD_LAYERS.filter((l) => c.layers[l] === 'equal').length;
-const hasFxe = (r: MatchRow): r is MatchRow & { fxe: string } => typeof r.fxe === 'string' && r.fxe.trim() !== '';
 
 /** The one standard layer that contradicts, when exactly one does; otherwise undefined. */
 function nearLayer(c: CompareResult): FxiLayer | undefined {
@@ -133,7 +134,8 @@ function nearLayer(c: CompareResult): FxiLayer | undefined {
 }
 
 /**
- * Matches one row against a library. Auto only on a unique identical FXI that `autoMatchRefusal` accepts. Otherwise the
+ * Matches one row against a library. Auto only on a unique identical FXI that `autoMatchRefusal` accepts (which also
+ * asks for identical FXEs when both rows carry one). Otherwise the
  * confirm list holds `top` entries, each listed once: FXI candidates (identical, refines or refined-by, compatible; then
  * more standard layers equal, FXE relation, name similarity, library order), then near-compatible entries (exactly one
  * standard layer contradicts; by name similarity, then library order), then the rest by name similarity. Absent only

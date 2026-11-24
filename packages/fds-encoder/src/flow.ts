@@ -116,7 +116,7 @@ export const JOINT_OPTIONS: Readonly<Record<string, { label: string; options: re
       opt('row-close', 'Toward the trunk from in front, elbows close (row)', 'sh.ext'),
       opt('row-wide', 'Toward the trunk from in front, elbows wide at shoulder height (rear-delt row, face pull)', 'sh.habd'),
       opt('apart', 'Apart sideways at chest height, arms nearly straight (reverse fly, pull-apart)', 'sh.habd'),
-      opt('pull-front', 'Down from overhead in front of the face (chin-up; any pull-up or pulldown with an underhand, neutral or close grip; straight-arm pulldown)', 'sh.ext'),
+      opt('pull-front', 'Down from overhead in front of the face (chin-up; any pull-up or pulldown with an underhand, neutral or close grip; straight-arm pulldown, pullover, slam)', 'sh.ext.oh'),
       opt('pull-side', 'Down from overhead out at the sides (pull-up or pulldown with an overhand grip at medium or wide width)', 'sh.add'),
       opt('up-side', 'Up out to the side (lateral raise, upright row)', 'sh.abd'),
       opt('rot-in', 'Rotates in: forearm turns toward the belly, elbow bent', 'sh.ir'),
@@ -150,7 +150,7 @@ function partQuestions(n: number, part: 'a' | 'b'): FlowQuestion[] {
     {
       id: `${p}.kind`, layer: 'FXI m (prefix)', select: 'one', when: partOn,
       text: `What kind of movement is ${which}?`,
-      help: 'Pick how the joints move. "Explosive" or "fast" alone is a normal rep: ballistic needs flight or release.',
+      help: 'Pick how the joints move. "Explosive" or "fast" alone is a normal rep: ballistic needs flight or release. A slam is ballistic even when the implement stays in the hands (a battle rope slam).',
       usual: 'A normal moving rep.', options: [U('A normal moving rep (the usual way)'), ...PHASE_KINDS.slice(1), UNK()],
     },
     {
@@ -386,7 +386,7 @@ function questions(words: WordSet): FlowQuestion[] {
     id: 'orientation', layer: 'FXI o', select: 'one',
     when: { all: [EX, { any: [{ not: { fact: 'posture-has-usual' } }, changed('posture')] }] },
     text: 'What is the body position at the start of the rep?',
-    help: 'Flat means within about 15° of horizontal; incline and decline 15–60°. Hinged forward and held there (bent-over row) is "standing, bent". On hands and knees, in a plank or a push-up is "prone". On a machine, use your body position.',
+    help: 'Flat means within about 15° of horizontal; incline and decline 15–60°. Hinged forward and held there (bent-over row) is "standing, bent". On hands and knees, in a plank or a push-up is "prone". The trunk decides: kneeling with the trunk folded forward over the thighs (child\'s pose) is "prone"; "kneeling" has the trunk upright. On a machine, use your body position.',
     usual: 'The position the movement word fixes.',
     options: [U('The usual position for this movement', { fact: 'posture-has-usual' }, 'no movement word with a fixed position was chosen'), ...fromGlossary(ORIENTATIONS), opt('either', 'Either way on purpose ("seated or standing")', '*'), UNK()],
   },
@@ -464,14 +464,14 @@ function questions(words: WordSet): FlowQuestion[] {
     id: 'hold1', layer: 'FXI l (hold point)', select: 'one',
     when: { all: [EX, { fact: 'load-holdable' }, { any: [{ not: { fact: 'hold-has-usual' } }, changed('hold'), { q: 'load', is: ['implement', 'cable', 'smith', 'landmine'] }] }] },
     text: 'Where is it held?',
-    help: 'In the hands, at the sides, swung or by a handle is "hands", and so are dumbbells held at shoulder height and a bar pressed without resting on the shoulders. Resting on the front of the shoulders (front rack), or a landmine end held at the shoulder, is "shoulders". A bar behind the neck rests on the "back". Straight-armed overhead for the whole rep is "overhead". A load on the lap in a seated calf raise is "thighs". A band goes where it presses or pulls on the body; in leg-only work that is usually the feet or ankles.',
+    help: 'In the hands, at the sides, swung or by a handle is "hands", and so are dumbbells held at shoulder height and a bar pressed without resting on the shoulders. Resting on the front of the shoulders (front rack), or a landmine end held at the shoulder, is "shoulders". A bar behind the neck rests on the "back". Straight-armed overhead for the whole rep is "overhead". A load on the lap in a seated calf raise is "thighs". A band goes where it presses or pulls on the body; in leg-only work that is usually the feet or ankles. A band whose ends you hold at the shoulders (a band thruster) is "hands": "shoulders" is a load resting on them.',
     usual: 'The hold the movement word gives for this implement, else the hands for an implement held in the hands.',
     options: [U('The usual place for this movement', { fact: 'hold-has-usual' }, 'the rules give no usual hold for this implement here'), ...HOLD_POINTS, UNK()],
   },
   {
     id: 'count1', layer: 'FXI l (count "*n")', select: 'one', when: { all: [EX, { fact: 'load-holdable' }, changed('count')] },
     text: 'How many of them, in total?',
-    help: 'The usual count is one per working hand for a one-hand implement (two dumbbells in a two-arm curl, one in a one-arm curl) and one for a two-hand implement or anything held on the trunk. If your total is the usual one, the answer changes nothing.',
+    help: 'The usual count is one per working hand for a one-hand implement (two dumbbells in a two-arm curl, one in a one-arm curl) and one for a two-hand implement or anything held on the trunk. When the legs also work one side at a time (a lunge with a one-arm press), the usual count is two: answer 1 if you hold one dumbbell. If your total is the usual one, the answer changes nothing.',
     usual: 'The usual count.', options: [U('The usual count'), ...[1, 2, 3, 4].map((n) => opt(String(n), String(n), String(n)))],
   },
   {
@@ -502,7 +502,7 @@ function questions(words: WordSet): FlowQuestion[] {
   {
     id: 'symmetry', layer: 'FXI x', select: 'one', when: { all: [EX, { any: [changed('sides'), { fact: 'motion-from-scratch' }] }] },
     text: 'How do the two sides work?',
-    help: 'Doing every rep on one side and then switching is different from alternating sides rep by rep. Reciprocal means both sides move at once in opposite directions: walking, flutter kicks, alternating rope waves. A stretch or roll that works one limb and then the other is "one side, then the other".',
+    help: 'Doing every rep on one side and then switching is different from alternating sides rep by rep. Reciprocal means both sides move at once in opposite directions: walking, flutter kicks, alternating rope waves. A stretch or roll that works one limb and then the other is "one side, then the other". Legs that pedal are reciprocal even when the trunk turns to each side in turn (bicycle crunch); a trunk turn alone has no sides.',
     importHelp: 'Import mode: from the name and fields only. "Alternating" means the sides take turns only when nothing else in the name alternates ("alternating front and lateral raise" alternates two raises).',
     usual: 'What the movement word says, else both sides together.',
     options: [
@@ -526,7 +526,7 @@ function questions(words: WordSet): FlowQuestion[] {
   {
     id: 'grip.hand', layer: 'FXI g (hand)', select: 'one', when: { all: [EX, changed('hand')] },
     text: 'Which way do the palms face?',
-    help: 'Overhand is palms down or away; underhand palms up or toward you; neutral palms facing each other. A turn during the rep (Zottman, Arnold press) is "turns".',
+    help: 'Overhand is palms down or away; underhand palms up or toward you; neutral palms facing each other. A turn during the rep (Zottman, Arnold press) is "turns". A grip the implement forces still counts: parallel handles (farmer or rickshaw handles) or a rope attachment are "neutral". Only a trap bar\'s neutral grip is left out, by the encoder.',
     usual: 'What the movement word says, else underhand for a curl and overhand for everything else.',
     importHelp: 'Import mode: "reverse grip" in a name means the grip opposite the movement word\'s usual one: overhand on a curl, underhand elsewhere.',
     options: [
@@ -579,10 +579,10 @@ function questions(words: WordSet): FlowQuestion[] {
   {
     id: 'line', layer: 'FXI p', select: 'many', when: { all: [EX, changed('line')] },
     text: 'Where does the load pull from, compared with the usual way?',
-    help: 'Usual anchors: low for curls, raises, upright rows, shrugs, kickbacks and hip work; high for pushdowns, pulldowns, face pulls, kneeling crunches and woodchops; middle for rows, flys, crossovers, rotations and chest presses; from the side for a Pallof press. Answer "high" or "low" only when yours differs. "Low row" or "low pulley" in a name is a machine, not a line.',
+    help: 'Usual anchors: low for curls, raises, upright rows, shrugs, kickbacks and hip work; high for pushdowns, pulldowns, face pulls, kneeling crunches and woodchops; middle for rows, flys, crossovers, rotations and chest presses; from the side for a Pallof press. Answer "high" or "low" only when yours differs; an anchor on the floor (a sled on the ground, a band under the feet) is low. "Low row" or "low pulley" in a name is a machine, not a line. A bar lowered to the neck or throat (JM press, guillotine press) and a rope that passes twice in each jump (double under) are lines too.',
     importHelp: 'Import mode: only from the name, through the import lexicon.',
     usual: 'The line the movement word implies.',
-    options: [U('The usual line for this movement'), opt('hi', 'Anchored higher than usual (high-to-low)', 'hi'), opt('lo', 'Anchored lower than usual (low-to-high)', 'lo'), opt('side', 'Pulls from one side: you stand side-on to the anchor', 'side'), opt('behind', 'The load or body passes behind the head or trunk (behind-the-neck press, rear pull-up)', 'behind'), UNK()],
+    options: [U('The usual line for this movement'), opt('hi', 'Anchored higher than usual (high-to-low)', 'hi'), opt('lo', 'Anchored lower than usual (low-to-high)', 'lo'), opt('side', 'Pulls from one side: you stand side-on to the anchor', 'side'), opt('behind', 'The load or body passes behind the head or trunk (behind-the-neck press, rear pull-up)', 'behind'), opt('neck', 'The load comes down to the neck, throat or chin instead of the chest (JM press, guillotine press)', 'neck'), opt('double', 'A rope passes under the feet twice in each jump (double under)', 'double'), UNK()],
   },
   {
     id: 'accessory', layer: 'FXI a (extended)', select: 'many', when: { all: [EX, changed('accessory')] },
