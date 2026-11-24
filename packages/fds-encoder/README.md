@@ -46,7 +46,7 @@ In **owner** mode, the owner of the exercise answers: the record's `fxiProvenanc
 
 ### Match
 
-A row is linked automatically only when exactly one library entry is `identical` to it, both sides have `owner` or `owner-assisted` provenance, neither is an import-mode row (`mode: import`), and neither carries a gap marker. Any `fxiGap` other than absent, `null`, `false` or `""` is a gap marker. Otherwise `match` returns a ranked list to confirm, with the reason it did not link: first the entries whose FXI is identical, refines, is refined by or is compatible with the query; then the entries that differ in exactly one standard layer; then the rest by name. A match is `absent` only when the library is empty.
+A row is linked automatically only when exactly one library entry is `identical` to it, both sides have `owner` or `owner-assisted` provenance, neither is an import-mode row (`mode: import`), and neither carries a gap marker. Any `fxiGap` other than absent, `null` or `false` is a gap marker, an empty or blank note included. Otherwise `match` returns a ranked list to confirm, with the reason it did not link: first the entries whose FXI is identical, refines, is refined by or is compatible with the query; then the entries that differ in exactly one standard layer; then the rest by name. A match is `absent` only when the library is empty.
 
 ```bash
 fds-encoder match queries.json --library library.json

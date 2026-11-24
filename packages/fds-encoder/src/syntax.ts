@@ -92,7 +92,7 @@ export function parseFxi(input: string): ParsedFxi {
   setIf(L, 's', readSupport(raw.get('s'), start, log));
   L.l = readLoad(raw.get('l') ?? UNKNOWN, log);
   setIf(L, 'x', readSymmetry(raw.get('x'), L.m, log));
-  L.l = dropUsualCounts(L.l, L.x ?? DEFAULTS.symmetry, L.m);
+  L.l = dropUsualCounts(L.l, L.x, L.m);
   setIf(L, 'g', readGrip(raw.get('g'), L.m, L.l, start, log));
   setIf(L, 'r', readRange(raw.get('r'), log));
   setIf(L, 'h', readNameSet(raw.get('h'), HELD, DEFAULTS.held, 'a held posture', HELD_CONFLICTS, log));
@@ -225,30 +225,38 @@ function readLoad(text: string, log: Log): string {
   return out.join('+');
 }
 
-/** Implements held one per working hand. */
+/** One-hand implements: the usual count is one per working hand. Every other load token is usually one. */
 const ONE_HAND = ['db', 'kb', 'plate', 'club'];
-/** Hold points on the trunk: an implement held there is one, whatever it is. */
+/** Trunk hold points: any implement held there is usually one. */
 const TRUNK_POINTS = ['chest', 'back', 'hips', 'waist'];
 
 /**
- * The usual count of an implement: one per working hand for a one-hand implement not held at a trunk point, otherwise
- * one. The arms work one at a time when `x` is `u@arms`, or `u` with a motion of arm joints only.
+ * The usual count of an implement, or undefined when an unknown part leaves it open. A one-hand implement held away
+ * from the trunk is one per working hand: one when the arms work one side at a time (`u@arms`, or `u` on a motion of
+ * arm joints only), two otherwise. Any other implement, and any implement at a trunk point, is one. `x` is the symmetry
+ * value (absent is `b`); `m` is the motion value.
  */
-export function usualCount(token: string, hold: string, x: string, m: string): number {
-  if (!ONE_HAND.includes(token) || TRUNK_POINTS.includes(hold)) return 1;
-  const armJointsOnly = m !== UNKNOWN && motionJoints(m).length > 0 && motionJoints(m).every((j) => ARM_JOINTS.includes(j));
-  const oneArm = x.split('+').some((i) => i === 'u@arms' || (i === 'u' && armJointsOnly));
-  return oneArm ? 1 : 2;
+export function usualCount(token: string, hold: string, x: string | undefined, m: string): number | undefined {
+  if (token === UNKNOWN || token === GENERIC) return undefined;
+  if (!ONE_HAND.includes(token)) return 1;
+  if (hold === UNKNOWN || hold === GENERIC) return undefined;
+  if (TRUNK_POINTS.includes(hold)) return 1;
+  const items = (x ?? 'b').split('+');
+  if (items.includes('u@arms')) return 1;
+  if (items.includes(UNKNOWN) || items.includes(GENERIC)) return undefined;
+  if (!items.includes('u')) return 2;
+  if (m.includes(UNKNOWN)) return undefined;
+  const joints = motionJoints(m);
+  return joints.length > 0 && joints.every((j) => ARM_JOINTS.includes(j)) ? 1 : 2;
 }
 
-/** Drops every written count equal to the usual count. An implement of unknown kind has no usual count, so it keeps its count. */
-function dropUsualCounts(l: string, x: string, m: string): string {
-  if (l === UNKNOWN || l === GENERIC || !l.includes('*')) return l;
+/** Drops every `*n` in a load value that equals the implement's usual count. */
+function dropUsualCounts(l: string, x: string | undefined, m: string): string {
+  if (l === UNKNOWN || l === GENERIC) return l;
   return sortUnique(l.split('+').map((item) => {
-    const [head = '', hold = UNKNOWN] = splitOnce(item, '@');
-    const [token = '', count] = splitOnce(head, '*');
-    if (count === undefined || token === UNKNOWN || Number(count) !== usualCount(token, hold, x, m)) return item;
-    return `${token}@${hold}`;
+    const [head, hold = ''] = splitOnce(item, '@');
+    const [token, count] = splitOnce(head, '*');
+    return count !== undefined && Number(count) === usualCount(token, hold, x, m) ? `${token}@${hold}` : item;
   })).join('+');
 }
 

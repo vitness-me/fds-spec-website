@@ -41,18 +41,18 @@ describe('auto-match', () => {
     expect(match(query(), library)).toMatchObject({ kind: 'confirm', why: 'the query has no owner provenance' });
     expect(autoMatchRefusal(row('q', BACK_SQUAT), row('l', BACK_SQUAT, { fxiProvenance: 'import' }))).toMatch(/provenance/);
   });
-  test('the gap check fails closed: any marker but absent, null, false or "" refuses auto-match', () => {
+  test('the gap check fails closed: any marker but absent, null or false refuses auto-match', () => {
     const library = [row('lib:back', BACK_SQUAT)];
-    for (const fxiGap of [true, '   ', 'tempo', { note: 'grip' }, 0] as unknown as MatchRow['fxiGap'][]) {
+    for (const fxiGap of [true, '', '   ', 'tempo', { note: 'grip' }, 0] as unknown as MatchRow['fxiGap'][]) {
       expect(match(row('q', BACK_SQUAT, { fxiGap }), library)).toMatchObject({ kind: 'confirm', why: 'the query carries a gap marker' });
       expect(match(row('q', BACK_SQUAT), [row('lib:back', BACK_SQUAT, { fxiGap })])).toMatchObject({ kind: 'confirm', why: 'the library entry carries a gap marker' });
     }
-    for (const fxiGap of [undefined, null, false, '']) expect(match(row('q', BACK_SQUAT, { fxiGap }), library)).toEqual({ kind: 'auto', id: 'lib:back' });
+    for (const fxiGap of [undefined, null, false]) expect(match(row('q', BACK_SQUAT, { fxiGap }), library)).toEqual({ kind: 'auto', id: 'lib:back' });
   });
   test('an import-mode row never auto-matches, whatever its provenance says', () => {
     const library = [row('lib:back', BACK_SQUAT)];
-    expect(match(row('q', BACK_SQUAT, { mode: 'import' }), library)).toMatchObject({ kind: 'confirm', why: 'the query is an import-mode row' });
-    expect(match(row('q', BACK_SQUAT), [row('lib:back', BACK_SQUAT, { mode: 'import' })])).toMatchObject({ kind: 'confirm', why: 'the library entry is an import-mode row' });
+    expect(match(row('q', BACK_SQUAT, { mode: 'import' }), library)).toMatchObject({ kind: 'confirm', why: 'the query is an import' });
+    expect(match(row('q', BACK_SQUAT), [row('lib:back', BACK_SQUAT, { mode: 'import' })])).toMatchObject({ kind: 'confirm', why: 'the library entry is an import' });
     expect(match(row('q', BACK_SQUAT, { mode: 'owner' }), library)).toEqual({ kind: 'auto', id: 'lib:back' });
   });
   test('several identical entries go to confirm', () => {

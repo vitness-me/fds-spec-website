@@ -1,4 +1,4 @@
-// One output row: {id, fxi, fxe, confidence, notes, fxiProvenance?, fxiGap?}. Validates it and writes its canonical form.
+// One output row: {id, fxi, fxe, confidence, notes, mode?, fxiProvenance?, fxiGap?}. Validates it and writes its canonical form.
 import { crossCheck } from './crosscheck.js';
 import { issueText, parseFxe, parseFxi } from './syntax.js';
 
@@ -15,6 +15,7 @@ export interface Row {
   readonly fxe?: unknown;
   readonly confidence?: unknown;
   readonly notes?: unknown;
+  readonly mode?: unknown;
   readonly fxiProvenance?: unknown;
   readonly fxiGap?: unknown;
 }
@@ -39,7 +40,8 @@ export function rowsOf(data: unknown): Row[] | undefined {
 
 /**
  * Checks one output row. An equipment row may leave `fxi` out or write `null`; both read as "no FXI". `notes` may be
- * left out, `null` or a string. `fxiProvenance` and `fxiGap` belong to rows that carry an FXI.
+ * left out, `null` or a string. `fxiProvenance` and `fxiGap` belong to rows that carry an FXI. A row in `import` mode
+ * cannot carry an owner provenance.
  */
 export function checkRow(row: Row): RowCheck {
   const problems: string[] = [];
@@ -61,6 +63,7 @@ export function checkRow(row: Row): RowCheck {
   if (!hasFxi && typeof row.fxe !== 'string') problems.push('fxi is missing: an exercise row needs an fxi, an equipment row an fxe (its fxi is null or left out)');
   if (row.fxiProvenance !== undefined && !PROVENANCES.includes(row.fxiProvenance as Provenance)) problems.push(`fxiProvenance must be one of ${PROVENANCES.join(', ')}`);
   if (row.fxiGap !== undefined && row.fxiGap !== null && typeof row.fxiGap !== 'string') problems.push('fxiGap must be a string or null');
+  if (row.mode === 'import' && OWNER_PROVENANCES.includes(row.fxiProvenance as Provenance)) problems.push(`a row in import mode cannot have fxiProvenance ${String(row.fxiProvenance)}`);
   if (!hasFxi && (row.fxiProvenance !== undefined || (row.fxiGap !== undefined && row.fxiGap !== null))) problems.push('fxiProvenance and fxiGap belong to a row with an fxi');
   const warnings = problems.length === 0 && hasFxi && typeof out.fxe === 'string' ? crossCheck(out.fxi as string, out.fxe) : [];
   const canonical: Record<string, unknown> = { id: out.id, fxi: hasFxi ? out.fxi : null, ...(out.fxe === undefined ? {} : { fxe: out.fxe }), confidence: out.confidence, notes: out.notes ?? null };

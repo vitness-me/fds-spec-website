@@ -167,6 +167,13 @@ describe('templates and flow data', () => {
   });
 });
 
+describe('implement counts', () => {
+  test('a template count that the chosen symmetry makes usual is not written', () => {
+    const built = build({ id: 'one-arm', answers: ex('american-swing', ['sides'], { symmetry: 'u', 'symmetry.scope': 'arms' }) }, FLOW);
+    expect(built.fxi).toBe('FXI=1.0S/m:hip.ext+sh.flex/o:standing/l:kb@hands/x:u@arms');
+  });
+});
+
 describe('errors are clear', () => {
   const problems = (answers: Answers): string[] => {
     try { build({ id: 'x', answers }, FLOW); } catch (e) { if (e instanceof AnswerError) return [...e.problems]; throw e; }

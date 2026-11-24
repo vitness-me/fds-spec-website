@@ -62,6 +62,15 @@ describe('canonicalisation', () => {
       ['two barbells', 'FXI=1.0S/m:hip.ext+kn.ext/o:standing/l:bb*2@hands'],
       ['an implement of unknown kind has no usual count', 'FXI=1.0S/m:hip.ext+kn.ext/o:standing/l:?*1@hands'],
     ])('keeps a count that differs: %s', (_, s) => expect(canon(s)).toBe(s));
+    test.each([
+      ['a one-hand hold point is unknown', 'FXI=1.0S/m:el.flex/o:standing/l:db*2@?'],
+      ['the symmetry is unknown', 'FXI=1.0S/m:el.flex/o:standing/l:db*2@hands/x:?'],
+      ['the motion under a plain u is unknown', 'FXI=1.0S/m:?/o:standing/l:db*1@hands/x:u'],
+      ['the motion under a plain u is unknown, either count', 'FXI=1.0S/m:?/o:standing/l:db*2@hands/x:u'],
+    ])('keeps a count when the usual count is unknown: %s', (_, s) => expect(canon(s)).toBe(s));
+    test('u@arms decides the count even when the motion is unknown', () => {
+      expect(canon('FXI=1.0S/m:?/o:standing/l:kb*1@hands/x:u@arms')).toBe('FXI=1.0S/m:?/o:standing/l:kb@hands/x:u@arms');
+    });
     test('the two spellings compare identical', () => {
       expect(compare('FXI=1.0S/m:el.flex/o:standing/l:db*1@hands/x:u', curl).relation).toBe('identical');
       expect(compare('FXI=1.0S/m:hip.ext+kn.ext/o:standing/l:db*2@hands', 'FXI=1.0S/m:hip.ext+kn.ext/o:standing/l:db@hands').relation).toBe('identical');

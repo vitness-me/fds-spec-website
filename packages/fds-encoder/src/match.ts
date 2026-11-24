@@ -1,6 +1,6 @@
-// Match protocol: auto-match only on a unique identical FXI with owner provenance, outside import mode, and no gap marker
-// on either side; otherwise a ranked list of up to three to confirm (FXI candidates, then near-compatible, then by
-// name); "absent" only when the library is empty.
+// Match protocol: auto-match only on a unique identical FXI with owner provenance, no gap marker and no import mode on
+// either side; otherwise a ranked list of up to three to confirm (FXI candidates, then near-compatible, then by name);
+// "absent" only when the library is empty.
 import { FXI_STANDARD_LAYERS } from './alphabet.js';
 import type { FxiLayer } from './alphabet.js';
 import { compare } from './compare.js';
@@ -9,17 +9,16 @@ import { OWNER_PROVENANCES, PROVENANCES } from './rows.js';
 import type { Provenance } from './rows.js';
 
 /**
- * A row on either side of a match: its FXI, who answered it and in which mode, the gap marker when the owner said the
- * notation misses something, and optionally its name (the query's in the library's language) and its standard FXE.
+ * A row on either side of a match: its FXI, who answered it, the gap marker when the owner said the notation misses
+ * something, the mode it was built in, and optionally its name (the query's in the library's language) and its standard
+ * FXE. Any gap marker other than `null`, absent or `false` counts as a gap.
  */
 export interface MatchRow {
   readonly id: string;
   readonly fxi: string;
   readonly fxiProvenance?: string | undefined;
-  /** `import` rows never auto-match, whatever their provenance says. */
-  readonly mode?: string | undefined;
-  /** Any value other than absent, `null`, `false` or `""` is a gap marker and blocks auto-match. */
   readonly fxiGap?: string | boolean | null | undefined;
+  readonly mode?: 'owner' | 'import' | undefined;
   readonly name?: string | null | undefined;
   readonly fxe?: string | null | undefined;
 }
@@ -40,16 +39,18 @@ export interface MatchOptions {
   readonly top?: number;
 }
 
-/** Fails closed: every gap value but the four that mean "no gap" blocks auto-match. */
-const hasGap = (r: MatchRow): boolean => r.fxiGap !== undefined && r.fxiGap !== null && r.fxiGap !== false && r.fxiGap !== '';
+const hasGap = (r: MatchRow): boolean => r.fxiGap !== undefined && r.fxiGap !== null && r.fxiGap !== false;
 const ownerMade = (r: MatchRow): boolean => OWNER_PROVENANCES.includes(r.fxiProvenance as Provenance);
 
-/** Why two rows with identical FXIs may not be matched automatically, or undefined when they may. */
+/**
+ * Why two rows with identical FXIs may not be matched automatically, or undefined when they may. A gap marker, import
+ * mode or missing owner provenance on either side refuses.
+ */
 export function autoMatchRefusal(query: MatchRow, candidate: MatchRow): string | undefined {
   if (hasGap(query)) return 'the query carries a gap marker';
   if (hasGap(candidate)) return 'the library entry carries a gap marker';
-  if (query.mode === 'import') return 'the query is an import-mode row';
-  if (candidate.mode === 'import') return 'the library entry is an import-mode row';
+  if (query.mode === 'import') return 'the query is an import';
+  if (candidate.mode === 'import') return 'the library entry is an import';
   if (!ownerMade(query)) return 'the query has no owner provenance';
   if (!ownerMade(candidate)) return 'the library entry has no owner provenance';
   return undefined;

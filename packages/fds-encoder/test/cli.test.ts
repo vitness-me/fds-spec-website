@@ -166,7 +166,7 @@ describe('match', () => {
     const library = file('library-gap.json', [row('lib:squat', SQUAT)]);
     const rows = file('queries-gap.json', [row('q1', SQUAT, { fxiGap: true }), row('q2', SQUAT, { mode: 'import', fxiProvenance: 'import' })]);
     const r = await cli(['match', rows, '--library', library]);
-    expect(JSON.parse(r.out).map((m: { match: { why?: string } }) => m.match.why)).toEqual(['the query carries a gap marker', 'the query is an import-mode row']);
+    expect(JSON.parse(r.out).map((m: { match: { why?: string } }) => m.match.why)).toEqual(['the query carries a gap marker', 'the query is an import']);
   });
 
   test('a row whose provenance contradicts its mode is refused, in the queries or the library', async () => {

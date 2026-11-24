@@ -9,7 +9,7 @@ import { CHANGE_OPENS, DEFAULT_FLOW, JOINT_IDS, PHASE_KINDS } from './flow.js';
 import type { Cond, FactId, Flow, FlowQuestion } from './flow.js';
 import { PROVENANCES } from './rows.js';
 import type { Provenance } from './rows.js';
-import { issueText, motionJoints, parseFxe, parseFxi, PHASE_PREFIX, standardFxe, usualCount } from './syntax.js';
+import { issueText, motionJoints, parseFxe, parseFxi, PHASE_PREFIX, standardFxe } from './syntax.js';
 import { patchedLayers } from './words.js';
 import type { MovementWord } from './words.js';
 
@@ -522,7 +522,7 @@ function ergFxe(type: string | undefined): string {
   return e === undefined ? `${FXE_HEAD}k:erg/c:?/l:?/s:?/m:?` : `${FXE_HEAD}k:erg/c:${e.c}/l:${e.l}/s:${e.s}/m:${e.m}`;
 }
 
-function loadLayer(r: Reading, x: string, m: string, mac: Machine | undefined, erg: string | undefined): string | undefined {
+function loadLayer(r: Reading, m: string, mac: Machine | undefined, erg: string | undefined): string | undefined {
   const items = r.loadItems();
   if (items.length === 0) return undefined;
   const out: string[] = [];
@@ -552,8 +552,9 @@ function loadLayer(r: Reading, x: string, m: string, mac: Machine | undefined, e
       const tlItem = r.tl.l?.split('+')[0] ?? '';
       const tCount = tlItem.startsWith(`${it.token}*`) ? tlItem.split('@')[0]!.split('*')[1]! : undefined;
       const c = r.one('count1');
+      // The parser drops a count equal to the usual one.
       if (c === undefined || c === 'usual') count = tCount === undefined ? '' : `*${tCount}`;
-      else if (Number(c) !== usualCount(it.token, hold, x, m)) count = `*${c}`;
+      else count = `*${c}`;
     }
     out.push(`${it.token}${count}@${hold}`);
   });
@@ -594,7 +595,7 @@ function buildExercise(r: Reading): { fxi: string; fxe: string } | undefined {
     k: fromTemplateOr(r, 'end', 'k'),
     f: fromTemplateOr(r, 'footwork', 'f'),
     s: support(r),
-    l: loadLayer(r, x ?? 'b', m, mac, erg),
+    l: loadLayer(r, m, mac, erg),
     x,
     g,
     r: range(r),

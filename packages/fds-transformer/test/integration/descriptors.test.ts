@@ -184,7 +184,7 @@ describe('resolve', () => {
     const input = sources().map((s, i) => (i === 0 ? { ...s, ownFxi: SQUAT, ownProvenance: 'owner' } : s));
     const imported = [{ id: 'lib:back-squat', fxi: SQUAT, fxiProvenance: 'import', mode: 'import', fxiGap: null }];
     const [squat] = await run({ resolve: { library: imported, system: 'gym-library' } }, input, mapping);
-    expect(squat!.descriptors!.match).toMatchObject({ kind: 'confirm', why: 'the library entry is an import-mode row' });
+    expect(squat!.descriptors!.match).toMatchObject({ kind: 'confirm', why: 'the library entry is an import' });
   });
 
   it('a gap marker refuses the link', async () => {
