@@ -460,7 +460,7 @@ For a moving rep, answer for the working direction: the way the joint moves whil
 | `circ` | Circles | `sp.circ` |  |
 | `unknown` | It moves, direction not known | `?` | Alone. |
 
-#### `p1.sc`: Phase 1: which way does the shoulder blades, moving on their own move?
+#### `p1.sc`: Phase 1: which way do the shoulder blades move?
 
 - **Fills:** FXI m (joint actions).
 - **Pick:** one or more.
@@ -735,7 +735,7 @@ For a moving rep, answer for the working direction: the way the joint moves whil
 | `circ` | Circles | `sp.circ` |  |
 | `unknown` | It moves, direction not known | `?` | Alone. |
 
-#### `p1b.sc`: The second part of phase 1: which way does the shoulder blades, moving on their own move?
+#### `p1b.sc`: The second part of phase 1: which way do the shoulder blades move?
 
 - **Fills:** FXI m (joint actions).
 - **Pick:** one or more.

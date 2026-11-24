@@ -310,7 +310,7 @@
           {"q":"p1.joints","has":"sc"}
         ]
       },
-      "text": "Phase 1: which way does the shoulder blades, moving on their own move?",
+      "text": "Phase 1: which way do the shoulder blades move?",
       "help": "For a moving rep, answer for the working direction: the way the joint moves while the working muscles shorten against the load. Never the lowering or the return. For a hold, answer what the muscles push toward. For a stretch, the direction the joint is taken.",
       "usual": null,
       "options": [
@@ -703,7 +703,7 @@
           {"q":"p1b.joints","has":"sc"}
         ]
       },
-      "text": "The second part of phase 1: which way does the shoulder blades, moving on their own move?",
+      "text": "The second part of phase 1: which way do the shoulder blades move?",
       "help": "For a moving rep, answer for the working direction: the way the joint moves while the working muscles shorten against the load. Never the lowering or the return. For a hold, answer what the muscles push toward. For a stretch, the direction the joint is taken.",
       "usual": null,
       "options": [
