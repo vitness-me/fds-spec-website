@@ -303,47 +303,47 @@ export const testMuscleCategories: MuscleCategoryRegistryEntry[] = [
 ];
 
 /**
- * Sample exercises in ExerciseDB format (user's source format)
+ * Sample exercises in a simple source format: id, name, body part, equipment, target muscle and a media URL
  */
 export const sampleExercises = [
   {
-    id: '0001',
-    name: '3/4 sit-up',
-    bodyPart: 'waist',
+    id: 'vx-0001',
+    name: '3/4 crunch',
+    bodyPart: 'core',
     equipment: 'body weight',
     target: 'abs',
-    gifUrl: 'http://d205bpvrqc9yn1.cloudfront.net/0001.gif'
+    mediaUrl: 'https://example.com/media/three-quarter-crunch.mp4'
   },
   {
-    id: '0002',
+    id: 'vx-0002',
     name: 'barbell bench press',
     bodyPart: 'chest',
     equipment: 'barbell',
     target: 'pectorals',
-    gifUrl: 'http://d205bpvrqc9yn1.cloudfront.net/0002.gif'
+    mediaUrl: 'https://example.com/media/barbell-bench-press.mp4'
   },
   {
-    id: '0003',
+    id: 'vx-0003',
     name: 'cable biceps curl',
-    bodyPart: 'upper arms',
+    bodyPart: 'arms',
     equipment: 'cable',
     target: 'biceps',
-    gifUrl: 'http://d205bpvrqc9yn1.cloudfront.net/0003.gif'
+    mediaUrl: 'https://example.com/media/cable-biceps-curl.mp4'
   },
   {
-    id: '0045',
+    id: 'vx-0004',
     name: 'dumbbell lateral raise',
     bodyPart: 'shoulders',
     equipment: 'dumbbell',
     target: 'delts',
-    gifUrl: 'http://d205bpvrqc9yn1.cloudfront.net/0045.gif'
+    mediaUrl: 'https://example.com/media/dumbbell-lateral-raise.mp4'
   },
   {
-    id: '1234',
-    name: 'lever leg extension',
-    bodyPart: 'upper legs',
+    id: 'vx-0005',
+    name: 'machine leg extension',
+    bodyPart: 'legs',
     equipment: 'leverage machine',
     target: 'quads',
-    gifUrl: 'http://d205bpvrqc9yn1.cloudfront.net/1234.gif'
+    mediaUrl: 'https://example.com/media/machine-leg-extension.mp4'
   }
 ];

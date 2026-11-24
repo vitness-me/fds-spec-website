@@ -52,7 +52,7 @@ describe('slugify', () => {
 
   describe('word replacements', () => {
     it('should replace 3/4 with three-quarter', () => {
-      expect(slugify('3/4 sit-up', {})).toBe('three-quarter-sit-up');
+      expect(slugify('3/4 crunch', {})).toBe('three-quarter-crunch');
     });
 
     it('should replace 1/4 with quarter', () => {
@@ -111,8 +111,8 @@ describe('slugify', () => {
   });
 
   describe('real-world exercise names', () => {
-    it('should slugify "3/4 sit-up"', () => {
-      expect(slugify('3/4 sit-up', {})).toBe('three-quarter-sit-up');
+    it('should slugify "3/4 crunch"', () => {
+      expect(slugify('3/4 crunch', {})).toBe('three-quarter-crunch');
     });
 
     it('should slugify "Incline Dumbbell Press"', () => {

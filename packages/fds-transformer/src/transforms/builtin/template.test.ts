@@ -196,20 +196,20 @@ describe('template', () => {
     it('should create media object from source URL', () => {
       const ctx = createContext({
         source: {
-          gifUrl: 'http://example.com/0001.gif',
+          mediaUrl: 'https://example.com/media/push-up.gif',
           name: 'Push Up'
         } as any
       });
       const result = template(null, {
         template: {
           type: 'gif',
-          uri: '{{gifUrl}}',
+          uri: '{{mediaUrl}}',
           caption: '{{name}} demonstration'
         }
       }, ctx);
       expect(result).toEqual({
         type: 'gif',
-        uri: 'http://example.com/0001.gif',
+        uri: 'https://example.com/media/push-up.gif',
         caption: 'Push Up demonstration'
       });
     });

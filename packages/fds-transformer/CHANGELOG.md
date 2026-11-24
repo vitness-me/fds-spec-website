@@ -87,6 +87,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **The example configuration and the proof-of-concept are written in
+  neutral sample data.** Their source rows, catalogue name and media URLs are
+  authored for this repository, with media at `example.com`; the source field
+  that carries the media URL is `mediaUrl`, written as `video`. Nothing in the
+  transformer changes: these are inputs it is shown with.
 - **Breaking: tiered `enrichBatch` needs `options.target`** (the target
   schema and the loaded registries), which replaces the never-read
   `schemaDefs`. Without it, or with a field the target schema cannot satisfy,

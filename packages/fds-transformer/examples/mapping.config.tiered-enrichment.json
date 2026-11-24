@@ -1,7 +1,7 @@
 {
   "$schema": "../schemas/mapping.schema.json",
   "version": "1.0.0",
-  "description": "Example configuration with tiered AI enrichment for ExerciseDB to FDS transformation. targetSchema.version names an FDS *release*; schemaVersion below is the exercise entity version that release publishes, and the two are not the same number. Release 1.0.0 named exercise 1.0.0, which has since been withdrawn — a document stamped 1.0.0 resolves to nothing.",
+  "description": "Example configuration with tiered AI enrichment, from a simple exercise catalogue to FDS. targetSchema.version names an FDS *release*; schemaVersion below is the exercise entity version that release publishes, and the two are not the same number. Release 1.0.0 named exercise 1.0.0, which has since been withdrawn — a document stamped 1.0.0 resolves to nothing.",
 
   "targetSchema": {
     "version": "1.4.0",
@@ -43,20 +43,20 @@
     },
     
     "media": {
-      "from": "gifUrl",
+      "from": "mediaUrl",
       "transform": "toMediaArray",
-      "options": { "type": "image" }
+      "options": { "type": "video" }
     },
     
     "metadata.status": { "from": null, "default": "draft" },
     "metadata.createdAt": { "from": null, "transform": "timestamp", "options": { "clock": "now" } },
     "metadata.updatedAt": { "from": null, "transform": "timestamp", "options": { "clock": "now" } },
-    "metadata.source": { "from": null, "default": "exercisedb" },
+    "metadata.source": { "from": null, "default": "example-catalog" },
     "metadata.externalRefs": {
       "from": "id",
       "transform": "template",
       "options": {
-        "template": [{ "system": "exercisedb", "id": "{{value}}" }]
+        "template": [{ "system": "example-catalog", "id": "{{value}}" }]
       }
     }
   },

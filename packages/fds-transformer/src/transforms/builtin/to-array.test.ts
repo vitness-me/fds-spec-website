@@ -148,31 +148,31 @@ describe('toMediaArray', () => {
   describe('URL transformation', () => {
     it('should apply regex pattern replacement', () => {
       const result = toMediaArray(
-        'http://d205bpvrqc9yn1.cloudfront.net/0001.gif',
-        { urlTransform: { pattern: 'd205bpvrqc9yn1\\.cloudfront\\.net', replace: 'cdn.example.com' } }
+        'https://media.example.com/back-squat.gif',
+        { urlTransform: { pattern: 'media\\.example\\.com', replace: 'cdn.example.com' } }
       );
       expect(result).toEqual([
-        { type: 'image', uri: 'http://cdn.example.com/0001.gif' }
+        { type: 'image', uri: 'https://cdn.example.com/back-squat.gif' }
       ]);
     });
 
     it('should apply base URL transformation', () => {
       const result = toMediaArray(
-        'http://old-cdn.com/path/to/0001.gif',
+        'http://old-cdn.com/path/to/back-squat.gif',
         { baseUrl: 'https://new-cdn.com/images' }
       );
       expect(result).toEqual([
-        { type: 'image', uri: 'https://new-cdn.com/images/0001.gif' }
+        { type: 'image', uri: 'https://new-cdn.com/images/back-squat.gif' }
       ]);
     });
 
     it('should handle base URL with trailing slash', () => {
       const result = toMediaArray(
-        'http://old.com/0001.gif',
+        'http://old.com/back-squat.gif',
         { baseUrl: 'https://new.com/' }
       );
       expect(result).toEqual([
-        { type: 'image', uri: 'https://new.com/0001.gif' }
+        { type: 'image', uri: 'https://new.com/back-squat.gif' }
       ]);
     });
   });
@@ -219,16 +219,16 @@ describe('toMediaArray', () => {
   });
 
   describe('real-world scenarios', () => {
-    it('should transform exercise gif URL from source to local path', () => {
+    it('should transform an exercise gif URL from the source to a local path', () => {
       const result = toMediaArray(
-        'http://d205bpvrqc9yn1.cloudfront.net/0001.gif',
+        'https://media.example.com/back-squat.gif',
         { 
           type: 'gif',
-          baseUrl: '/Users/vpetkovic/Data/Animations/gymVisuals'
+          baseUrl: '/data/media/animations'
         }
       );
       expect(result).toEqual([
-        { type: 'gif', uri: '/Users/vpetkovic/Data/Animations/gymVisuals/0001.gif' }
+        { type: 'gif', uri: '/data/media/animations/back-squat.gif' }
       ]);
     });
   });

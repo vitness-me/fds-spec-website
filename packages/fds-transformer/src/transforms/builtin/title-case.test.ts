@@ -135,9 +135,8 @@ describe('titleCase', () => {
   });
 
   describe('real-world exercise names', () => {
-    it('should convert "3/4 sit-up"', () => {
-      // "up" is in lowercase words list, so stays lowercase after hyphen
-      expect(titleCase('3/4 sit-up', {})).toBe('3/4 Sit-up');
+    it('should convert "3/4 crunch"', () => {
+      expect(titleCase('3/4 crunch', {})).toBe('3/4 Crunch');
     });
 
     it('should convert "incline dumbbell press"', () => {

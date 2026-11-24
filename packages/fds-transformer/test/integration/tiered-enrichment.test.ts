@@ -125,14 +125,14 @@ const createTieredMappingConfig = (): MappingConfig => ({
       options: { registry: 'equipment', toArray: true, fuzzyMatch: true },
     },
     media: {
-      from: 'gifUrl',
+      from: 'mediaUrl',
       transform: 'toMediaArray',
       options: { type: 'gif' },
     },
     'metadata.status': { from: null, default: 'draft' },
     'metadata.createdAt': { from: null, transform: 'timestamp', options: { clock: '2026-01-01T00:00:00.000Z' } },
     'metadata.updatedAt': { from: null, transform: 'timestamp', options: { clock: '2026-01-01T00:00:00.000Z' } },
-    'metadata.source': { from: null, default: 'exercisedb' },
+    'metadata.source': { from: null, default: 'example-catalog' },
   },
   validation: { enabled: false },
   enrichment: createTieredEnrichmentConfig(),
@@ -720,7 +720,7 @@ describe('Integration: Tiered Enrichment System', () => {
               content: JSON.stringify({
                 results: [
                   {
-                    slug: 'three-quarter-sit-up',
+                    slug: 'three-quarter-crunch',
                     description: 'An effective core exercise targeting the abdominals.',
                   },
                 ],
@@ -732,7 +732,7 @@ describe('Integration: Tiered Enrichment System', () => {
           if (prompt.includes('aliases')) {
             return {
               content: JSON.stringify({
-                results: [{ slug: 'three-quarter-sit-up', aliases: ['3/4 crunch', 'partial sit-up'] }],
+                results: [{ slug: 'three-quarter-crunch', aliases: ['partial crunch', 'three-quarter crunch'] }],
               }),
               tokensUsed: 30,
               model: 'test',
@@ -753,8 +753,8 @@ describe('Integration: Tiered Enrichment System', () => {
       const data = result.results[0].data as Record<string, unknown>;
       expect(data.exerciseId).toBeDefined();
       expect(data.canonical).toBeDefined();
-      expect((data.canonical as any).name).toBe('3/4 Sit-up');
-      expect((data.canonical as any).slug).toBe('three-quarter-sit-up');
+      expect((data.canonical as any).name).toBe('3/4 Crunch');
+      expect((data.canonical as any).slug).toBe('three-quarter-crunch');
     });
 
     it('should handle empty exercise array gracefully', async () => {

@@ -435,12 +435,12 @@ describe('MappingEngine', () => {
   describe('real-world exercise transformation', () => {
     it('should transform user exercise format to FDS structure', async () => {
       const source = {
-        id: '0001',
-        name: '3/4 sit-up',
-        bodyPart: 'waist',
+        id: 'vx-0001',
+        name: '3/4 crunch',
+        bodyPart: 'core',
         equipment: 'body weight',
         target: 'abs',
-        gifUrl: 'http://d205bpvrqc9yn1.cloudfront.net/0001.gif'
+        mediaUrl: 'https://example.com/media/three-quarter-crunch.gif'
       };
 
       const mappings: Record<string, FieldMapping> = {
@@ -451,7 +451,7 @@ describe('MappingEngine', () => {
           from: 'id',
           transform: 'template',
           options: {
-            template: [{ system: 'exercisedb', id: '{{value}}' }]
+            template: [{ system: 'example-catalog', id: '{{value}}' }]
           }
         }
       };
@@ -459,12 +459,12 @@ describe('MappingEngine', () => {
       const result = await engine.apply(source, mappings, defaultContext);
       
       expect(result.canonical).toBeDefined();
-      expect((result.canonical as any).name).toBe('3/4 Sit-up');
-      expect((result.canonical as any).slug).toBe('three-quarter-sit-up');
+      expect((result.canonical as any).name).toBe('3/4 Crunch');
+      expect((result.canonical as any).slug).toBe('three-quarter-crunch');
       expect(result.exerciseId).toMatch(/^[0-9a-f]{8}-/);
       expect(result.metadata).toBeDefined();
       expect((result.metadata as any).externalRefs).toEqual([
-        { system: 'exercisedb', id: '0001' }
+        { system: 'example-catalog', id: 'vx-0001' }
       ]);
     });
   });

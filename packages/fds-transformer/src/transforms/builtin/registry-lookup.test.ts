@@ -400,7 +400,7 @@ describe('registryLookup', () => {
 
   describe('real-world exercise data scenarios', () => {
     it('should lookup target muscle from source data "waist"', () => {
-      // In the user's data, bodyPart is "waist" which should map to abs
+      // A body-part word such as "waist" is not a muscle; fuzzy matching may still find one
       // This tests alias matching
       const result = registryLookup('waist', { registry: 'muscles', fuzzyMatch: true }, context);
       // May or may not match depending on aliases - this tests realistic scenario

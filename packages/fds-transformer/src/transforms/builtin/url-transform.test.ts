@@ -40,12 +40,12 @@ describe('urlTransform', () => {
       expect(result).toBe('http://new-cdn.com/path/image.jpg');
     });
 
-    it('should replace CloudFront domain', () => {
+    it('should replace a CDN domain', () => {
       const result = urlTransform(
-        'http://d205bpvrqc9yn1.cloudfront.net/0001.gif',
-        { pattern: 'd205bpvrqc9yn1\\.cloudfront\\.net', replace: 'cdn.example.com' }
+        'https://media.example.com/back-squat.gif',
+        { pattern: 'media\\.example\\.com', replace: 'cdn.example.com' }
       );
-      expect(result).toBe('http://cdn.example.com/0001.gif');
+      expect(result).toBe('https://cdn.example.com/back-squat.gif');
     });
 
     it('should handle replacement with empty string', () => {
@@ -78,10 +78,10 @@ describe('urlTransform', () => {
   describe('base URL transformation', () => {
     it('should replace URL path with base URL', () => {
       const result = urlTransform(
-        'http://old-cdn.com/path/to/0001.gif',
+        'http://old-cdn.com/path/to/back-squat.gif',
         { baseUrl: 'https://new-cdn.com/images' }
       );
-      expect(result).toBe('https://new-cdn.com/images/0001.gif');
+      expect(result).toBe('https://new-cdn.com/images/back-squat.gif');
     });
 
     it('should handle base URL with trailing slash', () => {
@@ -94,10 +94,10 @@ describe('urlTransform', () => {
 
     it('should extract filename from complex path', () => {
       const result = urlTransform(
-        'http://cdn.example.com/a/b/c/d/e/0001.gif',
+        'http://cdn.example.com/a/b/c/d/e/back-squat.gif',
         { baseUrl: 'https://local/path' }
       );
-      expect(result).toBe('https://local/path/0001.gif');
+      expect(result).toBe('https://local/path/back-squat.gif');
     });
 
     it('should handle URL with no path', () => {
@@ -141,14 +141,14 @@ describe('urlTransform', () => {
     it('should apply pattern replacement and base URL', () => {
       // Note: pattern replacement happens first, then base URL
       const result = urlTransform(
-        'http://cdn1.example.com/original/path/0001.gif',
+        'http://cdn1.example.com/original/path/back-squat.gif',
         { 
           pattern: 'cdn1', 
           replace: 'cdn2',
           baseUrl: 'https://final.com/assets'
         }
       );
-      expect(result).toBe('https://final.com/assets/0001.gif');
+      expect(result).toBe('https://final.com/assets/back-squat.gif');
     });
 
     it('should apply pattern replacement and protocol change', () => {
@@ -178,31 +178,31 @@ describe('urlTransform', () => {
   });
 
   describe('real-world scenarios', () => {
-    it('should transform CloudFront URL to local path', () => {
+    it('should transform a CDN URL to a local path', () => {
       const result = urlTransform(
-        'http://d205bpvrqc9yn1.cloudfront.net/0001.gif',
-        { baseUrl: '/Users/data/animations' }
+        'https://media.example.com/back-squat.gif',
+        { baseUrl: '/data/media/animations' }
       );
-      expect(result).toBe('/Users/data/animations/0001.gif');
+      expect(result).toBe('/data/media/animations/back-squat.gif');
     });
 
     it('should transform to CDN URL', () => {
       const result = urlTransform(
-        'http://d205bpvrqc9yn1.cloudfront.net/0001.gif',
+        'https://media.example.com/back-squat.gif',
         { 
-          pattern: 'http://d205bpvrqc9yn1\\.cloudfront\\.net',
+          pattern: 'https://media\\.example\\.com',
           replace: 'https://cdn.vitness.io/exercises'
         }
       );
-      expect(result).toBe('https://cdn.vitness.io/exercises/0001.gif');
+      expect(result).toBe('https://cdn.vitness.io/exercises/back-squat.gif');
     });
 
     it('should keep filename and change entire URL structure', () => {
       const result = urlTransform(
-        'http://d205bpvrqc9yn1.cloudfront.net/0001.gif',
+        'https://media.example.com/back-squat.gif',
         { baseUrl: 'https://assets.vitness.io/gifs' }
       );
-      expect(result).toBe('https://assets.vitness.io/gifs/0001.gif');
+      expect(result).toBe('https://assets.vitness.io/gifs/back-squat.gif');
     });
   });
 });

@@ -137,12 +137,12 @@ describe('Transformer', () => {
 
       const transformer = new Transformer({ config });
       const result = await transformer.transform({
-        name: '3/4 sit-up'
+        name: '3/4 crunch'
       });
 
       expect(result.success).toBe(true);
-      expect((result.data as any).canonical.name).toBe('3/4 Sit-up');
-      expect((result.data as any).canonical.slug).toBe('three-quarter-sit-up');
+      expect((result.data as any).canonical.name).toBe('3/4 Crunch');
+      expect((result.data as any).canonical.slug).toBe('three-quarter-crunch');
     });
   });
 
@@ -196,11 +196,11 @@ describe('Transformer', () => {
   });
 
   describe('media transformation', () => {
-    it('should transform gifUrl to media array', async () => {
+    it('should transform mediaUrl to media array', async () => {
       const config = createTestConfig({
         'canonical.name': 'name',
         media: {
-          from: 'gifUrl',
+          from: 'mediaUrl',
           transform: 'toMediaArray',
           options: { type: 'gif' }
         }
@@ -209,7 +209,7 @@ describe('Transformer', () => {
       const transformer = new Transformer({ config });
       const result = await transformer.transform({
         name: 'Squat',
-        gifUrl: 'http://example.com/squat.gif'
+        mediaUrl: 'http://example.com/squat.gif'
       });
 
       expect(result.success).toBe(true);
@@ -224,7 +224,7 @@ describe('Transformer', () => {
       const config = createTestConfig({
         'canonical.name': 'name',
         media: {
-          from: 'gifUrl',
+          from: 'mediaUrl',
           transform: 'toMediaArray',
           options: {
             type: 'gif',
@@ -236,12 +236,12 @@ describe('Transformer', () => {
       const transformer = new Transformer({ config });
       const result = await transformer.transform({
         name: 'Squat',
-        gifUrl: 'http://d205bpvrqc9yn1.cloudfront.net/0001.gif'
+        mediaUrl: 'https://media.example.com/back-squat.gif'
       });
 
       expect(result.success).toBe(true);
       const media = (result.data as any).media;
-      expect(media[0].uri).toBe('https://cdn.example.com/gifs/0001.gif');
+      expect(media[0].uri).toBe('https://cdn.example.com/gifs/back-squat.gif');
     });
   });
 
@@ -320,7 +320,7 @@ describe('Transformer', () => {
           from: 'id',
           transform: 'template',
           options: {
-            template: [{ system: 'exercisedb', id: '{{value}}' }]
+            template: [{ system: 'example-catalog', id: '{{value}}' }]
           }
         }
       });
@@ -328,12 +328,12 @@ describe('Transformer', () => {
       const transformer = new Transformer({ config });
       const result = await transformer.transform({
         name: 'Squat',
-        id: '0001'
+        id: 'vx-0001'
       });
 
       expect(result.success).toBe(true);
       expect((result.data as any).metadata.externalRefs).toEqual([
-        { system: 'exercisedb', id: '0001' }
+        { system: 'example-catalog', id: 'vx-0001' }
       ]);
     });
   });
@@ -394,7 +394,7 @@ describe('Transformer', () => {
       const transformer = new Transformer({ config });
       const result = await transformer.transform({
         // name is missing
-        id: '0001'
+        id: 'vx-0001'
       });
 
       expect(result.success).toBe(false);
@@ -437,7 +437,7 @@ describe('Transformer', () => {
           options: { registry: 'equipment', toArray: true }
         },
         media: {
-          from: 'gifUrl',
+          from: 'mediaUrl',
           transform: 'toMediaArray',
           options: { type: 'gif' }
         },
@@ -448,19 +448,19 @@ describe('Transformer', () => {
           from: 'id',
           transform: 'template',
           options: {
-            template: [{ system: 'exercisedb', id: '{{value}}' }]
+            template: [{ system: 'example-catalog', id: '{{value}}' }]
           }
         }
       });
 
       const transformer = new Transformer({ config });
       const result = await transformer.transform({
-        id: '0001',
-        name: '3/4 sit-up',
-        bodyPart: 'waist',
+        id: 'vx-0001',
+        name: '3/4 crunch',
+        bodyPart: 'core',
         equipment: 'body weight',
         target: 'abs',
-        gifUrl: 'http://d205bpvrqc9yn1.cloudfront.net/0001.gif'
+        mediaUrl: 'https://example.com/media/three-quarter-crunch.gif'
       });
 
       expect(result.success).toBe(true);
@@ -472,8 +472,8 @@ describe('Transformer', () => {
       );
 
       // Check canonical
-      expect(data.canonical.name).toBe('3/4 Sit-up');
-      expect(data.canonical.slug).toBe('three-quarter-sit-up');
+      expect(data.canonical.name).toBe('3/4 Crunch');
+      expect(data.canonical.slug).toBe('three-quarter-crunch');
 
       // Check targets (looked up from registry)
       expect(data.targets.primary).toHaveLength(1);
@@ -492,7 +492,7 @@ describe('Transformer', () => {
       expect(data.metadata.status).toBe('draft');
       expect(data.metadata.createdAt).toMatch(/^\d{4}-\d{2}-\d{2}T/);
       expect(data.metadata.externalRefs).toEqual([
-        { system: 'exercisedb', id: '0001' }
+        { system: 'example-catalog', id: 'vx-0001' }
       ]);
     });
   });

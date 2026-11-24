@@ -64,23 +64,23 @@ const exerciseMappingConfig: MappingConfig = {
       options: { registry: 'equipment', toArray: true, fuzzyMatch: true }
     },
     
-    // Media - transform gif URL to media array
+    // Media - transform the media URL to a media array
     media: {
-      from: 'gifUrl',
+      from: 'mediaUrl',
       transform: 'toMediaArray',
-      options: { type: 'gif' }
+      options: { type: 'video' }
     },
     
     // Metadata
     'metadata.status': { from: null, default: 'draft' },
     'metadata.createdAt': { from: null, transform: 'timestamp', options: { clock: '2026-01-01T00:00:00.000Z' } },
     'metadata.updatedAt': { from: null, transform: 'timestamp', options: { clock: '2026-01-01T00:00:00.000Z' } },
-    'metadata.source': { from: null, default: 'exercisedb' },
+    'metadata.source': { from: null, default: 'example-catalog' },
     'metadata.externalRefs': {
       from: 'id',
       transform: 'template',
       options: {
-        template: [{ system: 'exercisedb', id: '{{value}}' }]
+        template: [{ system: 'example-catalog', id: '{{value}}' }]
       }
     }
   },
@@ -167,7 +167,7 @@ describe('Integration: Full Exercise Transformation', () => {
     });
 
     it('should transform exercise with registry lookups', async () => {
-      const source = sampleExercises[0]; // 3/4 sit-up
+      const source = sampleExercises[0]; // 3/4 crunch
       const result = await mappingEngine.apply(
         source,
         exerciseMappingConfig.mappings,
@@ -176,8 +176,8 @@ describe('Integration: Full Exercise Transformation', () => {
 
       // Check canonical fields
       expect(result.canonical).toBeDefined();
-      expect((result.canonical as any).name).toBe('3/4 Sit-up');
-      expect((result.canonical as any).slug).toBe('three-quarter-sit-up');
+      expect((result.canonical as any).name).toBe('3/4 Crunch');
+      expect((result.canonical as any).slug).toBe('three-quarter-crunch');
 
       // Check targets
       expect(result.targets).toBeDefined();
@@ -192,14 +192,14 @@ describe('Integration: Full Exercise Transformation', () => {
 
       // Check media
       expect(result.media).toBeInstanceOf(Array);
-      expect((result.media as any)[0].type).toBe('gif');
-      expect((result.media as any)[0].uri).toContain('0001.gif');
+      expect((result.media as any)[0].type).toBe('video');
+      expect((result.media as any)[0].uri).toContain('three-quarter-crunch.mp4');
 
       // Check metadata
       expect(result.metadata).toBeDefined();
       expect((result.metadata as any).status).toBe('draft');
       expect((result.metadata as any).externalRefs).toEqual([
-        { system: 'exercisedb', id: '0001' }
+        { system: 'example-catalog', id: 'vx-0001' }
       ]);
     });
   });
@@ -211,7 +211,7 @@ describe('Integration: Full Exercise Transformation', () => {
       transformer = new Transformer({ config: exerciseMappingConfig });
     });
 
-    it('should transform "3/4 sit-up" exercise', async () => {
+    it('should transform "3/4 crunch" exercise', async () => {
       const result = await transformer.transform(sampleExercises[0]);
 
       expect(result.success).toBe(true);
@@ -225,8 +225,8 @@ describe('Integration: Full Exercise Transformation', () => {
       );
 
       // Verify canonical
-      expect(data.canonical.name).toBe('3/4 Sit-up');
-      expect(data.canonical.slug).toBe('three-quarter-sit-up');
+      expect(data.canonical.name).toBe('3/4 Crunch');
+      expect(data.canonical.slug).toBe('three-quarter-crunch');
 
       // Verify targets (abs should resolve to a muscle)
       expect(data.targets.primary).toBeInstanceOf(Array);
@@ -239,7 +239,7 @@ describe('Integration: Full Exercise Transformation', () => {
 
       // Verify media
       expect(data.media).toHaveLength(1);
-      expect(data.media[0].type).toBe('gif');
+      expect(data.media[0].type).toBe('video');
     });
 
     it('should transform "barbell bench press" exercise', async () => {
@@ -308,12 +308,12 @@ describe('Integration: Full Exercise Transformation', () => {
 
     it('should handle exercise with unrecognized muscle target', async () => {
       const exercise = {
-        id: '9999',
+        id: 'vx-9999',
         name: 'unknown exercise',
         bodyPart: 'unknown',
         equipment: 'body weight',
         target: 'unknown_muscle_xyz',
-        gifUrl: 'http://example.com/9999.gif'
+        mediaUrl: 'https://example.com/media/unknown-exercise.mp4'
       };
 
       const result = await transformer.transform(exercise);
@@ -325,12 +325,12 @@ describe('Integration: Full Exercise Transformation', () => {
 
     it('should handle exercise with empty target', async () => {
       const exercise = {
-        id: '9998',
+        id: 'vx-9998',
         name: 'no target exercise',
         bodyPart: 'full body',
         equipment: 'body weight',
         target: '',
-        gifUrl: 'http://example.com/9998.gif'
+        mediaUrl: 'https://example.com/media/no-target-exercise.mp4'
       };
 
       const result = await transformer.transform(exercise);
@@ -341,14 +341,14 @@ describe('Integration: Full Exercise Transformation', () => {
       expect((result.data as any).targets.primary).toEqual([]);
     });
 
-    it('should handle exercise with missing gifUrl', async () => {
+    it('should handle exercise with missing mediaUrl', async () => {
       const exercise = {
         id: '9997',
         name: 'no gif exercise',
         bodyPart: 'chest',
         equipment: 'barbell',
         target: 'pectorals'
-        // gifUrl is missing
+        // mediaUrl is missing
       };
 
       const result = await transformer.transform(exercise as any);
@@ -473,8 +473,8 @@ describe('Integration: Full Exercise Transformation', () => {
       
       expect(mediaItem).toHaveProperty('type');
       expect(mediaItem).toHaveProperty('uri');
-      expect(mediaItem.type).toBe('gif');
-      expect(mediaItem.uri).toMatch(/\.gif$/);
+      expect(mediaItem.type).toBe('video');
+      expect(mediaItem.uri).toMatch(/\.mp4$/);
     });
   });
 });
