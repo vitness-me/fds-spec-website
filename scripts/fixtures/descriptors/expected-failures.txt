@@ -34,3 +34,4 @@ string:page.md:FXI=1.1S/m:hip.ext/o:standing/l:bb@back
 string:page.md:FXI=1.0S/m:hip.flex/o:standing/l:bb@shoulders
 string:page.md:FXE=1.0N/k:imp/f:bar.straight
 string:page.md:FXM=1.0/Gluteus
+string:page.md:FXM=1.0/gluteus-maximus

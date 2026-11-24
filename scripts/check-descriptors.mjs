@@ -25,7 +25,8 @@
  *   4. Every FXI, FXE and FXM string quoted on a descriptor page — in prose,
  *      tables or code — has the current header, its layers in canonical order,
  *      and only codes the registries define. A worked example cannot quote a
- *      code the vocabulary dropped.
+ *      code the vocabulary dropped. FXM has no registry, so its header is
+ *      checked against the one its own page's format block writes.
  *
  * What it does not prove: that a quoted string is *canonical* in every respect,
  * or that a worked example's answers build its result. Those need the full
@@ -54,6 +55,14 @@ const fail = (key, message) => problems.push({ key, message });
 
 const data = await loadDescriptors(ROOT);
 const { registries, files, flow } = data;
+
+/** FXM has no registry: its version is the header its page's format block writes. */
+const FXM_PAGE = `${PAGE_DIR}/fxm.md`;
+const fxmSyntax = await readFile(join(ROOT, FXM_PAGE), 'utf8').then(
+  (text) => /^FXM=(\d+\.\d+)\/<muscle>/m.exec(text)?.[1],
+  () => undefined
+);
+if (fxmSyntax === undefined) fail('fxm-syntax', `${FXM_PAGE}: no format block line "FXM=<major>.<revision>/<muscle>", so FXM strings have no version to check against. Restore the format block.`);
 
 // ── 1. registries ────────────────────────────────────────────────────────────
 
@@ -277,7 +286,7 @@ function parseFxm(text, syntax) {
   const m = /^FXM=(\d+\.\d+)\/(g:)?([a-z][a-z0-9]*(?:-[a-z0-9]+)*)(?:\.([a-z][a-z0-9]*(?:-[a-z0-9]+)*))?$/.exec(text);
   if (!m) return [`"${text}" is not FXM=<major>.<revision>/<muscle>[.<part>] or FXM=<major>.<revision>/g:<group>`];
   if (m[2] && m[4]) return [`"${text}": a group has no part`];
-  if (m[1] !== syntax) return [`header FXM=${m[1]}, the descriptors are at ${syntax}`];
+  if (syntax !== undefined && m[1] !== syntax) return [`header FXM=${m[1]}, ${FXM_PAGE} defines FXM=${syntax}`];
   return [];
 }
 
@@ -359,7 +368,7 @@ for (const file of pages) {
       // A form written to explain the grammar, with placeholders or an ellipsis, is not a string.
       if (/[<…]/.test(s) || /^(FXI|FXE|FXM)=\d+\/$/.test(s) || body === '') continue;
       if (/^FX[IEM]=\d+\.\d+[SN]?\/?$/.test(s)) continue; // a bare header, named in prose
-      const errors = kind === 'FXI' ? parseFxi(s, registries.fxi) : kind === 'FXE' ? parseFxe(s, registries.fxe) : parseFxm(s, registries.fxi.syntax);
+      const errors = kind === 'FXI' ? parseFxi(s, registries.fxi) : kind === 'FXE' ? parseFxe(s, registries.fxe) : parseFxm(s, fxmSyntax);
       quoted += 1;
       if (errors.length) fail(`string:${file}:${s}`, `${path}:${i + 1}: ${s}\n    ${errors.join('\n    ')}`);
     }
