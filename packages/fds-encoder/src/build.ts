@@ -1,7 +1,7 @@
 // Turns owner answers into canonical FXI and FXE strings through the reference code.
 // The same answers always give the same strings. Invalid or contradictory answers raise AnswerError.
 import {
-  ARM_JOINTS, ERG_TYPES, FXE_MAJOR, FXE_REV, FXI_MAJOR, FXI_REV, GRIP_WIDTHS, HAND_ORIENTATIONS, HELD_CONFLICTS, LEG_JOINTS,
+  ERG_TYPES, FXE_MAJOR, FXE_REV, FXI_MAJOR, FXI_REV, GRIP_WIDTHS, HAND_ORIENTATIONS, HELD_CONFLICTS, LEG_JOINTS,
   LINE_CONFLICTS, OPPOSITE_ACTIONS, RANGES, STANCES, START_RANGES, UNKNOWN,
 } from './alphabet.js';
 import { feetImplied, mainEquipment } from './crosscheck.js';
@@ -9,7 +9,7 @@ import { CHANGE_OPENS, DEFAULT_FLOW, JOINT_IDS, PHASE_KINDS } from './flow.js';
 import type { Cond, FactId, Flow, FlowQuestion } from './flow.js';
 import { PROVENANCES } from './rows.js';
 import type { Provenance } from './rows.js';
-import { issueText, motionJoints, parseFxe, parseFxi, PHASE_PREFIX, standardFxe } from './syntax.js';
+import { issueText, motionJoints, parseFxe, parseFxi, PHASE_PREFIX, standardFxe, usualCount } from './syntax.js';
 import { patchedLayers } from './words.js';
 import type { MovementWord } from './words.js';
 
@@ -71,9 +71,6 @@ const FXI_HEAD = `FXI=${FXI_MAJOR}.${FXI_REV}/`;
 const FXE_HEAD = `FXE=${FXE_MAJOR}.${FXE_REV}/`;
 
 const BAR_LIKE = ['bb', 'ez', 'tb', 'axle', 'camber', 'smith'];
-const TWO_HAND = ['bb', 'ez', 'tb', 'axle', 'camber', 'mb', 'slam', 'bag', 'rope', 'landmine'];
-const ONE_HAND = ['db', 'kb', 'plate', 'club'];
-const TRUNK_POINTS = ['chest', 'back', 'hips', 'waist'];
 const NATURAL_HOLD: Readonly<Record<string, string>> = { yoke: 'back', ankwt: 'ankles', harness: 'head' };
 const NOT_IN_HANDS = ['vest', UNKNOWN];
 const IFACE_TO_POINT: Readonly<Record<string, string>> = {
@@ -248,15 +245,6 @@ class Reading {
     if (t.holdBehind !== undefined && (BAR_LIKE.includes(token) && token !== 'smith') && this.many('line').includes('behind')) return t.holdBehind;
     const map = t.hold ?? {};
     return map[token] ?? (BAR_LIKE.includes(token) ? map.bb : undefined) ?? map['*'] ?? NATURAL_HOLD[token] ?? (NOT_IN_HANDS.includes(token) ? undefined : 'hands');
-  }
-
-  /** The usual count of an implement: one per working hand for a one-hand implement, else one. */
-  usualCount(token: string, hold: string, x: string, m: string): number {
-    if (TWO_HAND.includes(token) || TRUNK_POINTS.includes(hold) || !ONE_HAND.includes(token)) return 1;
-    const items = x.split('+');
-    const armJointsOnly = m !== UNKNOWN && motionJoints(m).length > 0 && motionJoints(m).every((j) => ARM_JOINTS.includes(j));
-    const oneArm = items.some((i) => i === 'u@arms' || (i === 'u' && armJointsOnly));
-    return oneArm ? 1 : 2;
   }
 }
 
@@ -554,7 +542,7 @@ function loadLayer(r: Reading, x: string, m: string, mac: Machine | undefined, e
       const tCount = tlItem.startsWith(`${it.token}*`) ? tlItem.split('@')[0]!.split('*')[1]! : undefined;
       const c = r.one('count1');
       if (c === undefined || c === 'usual') count = tCount === undefined ? '' : `*${tCount}`;
-      else if (Number(c) !== r.usualCount(it.token, hold, x, m)) count = `*${c}`;
+      else if (Number(c) !== usualCount(it.token, hold, x, m)) count = `*${c}`;
     }
     out.push(`${it.token}${count}@${hold}`);
   });

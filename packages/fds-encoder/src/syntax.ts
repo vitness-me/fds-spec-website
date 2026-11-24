@@ -92,6 +92,7 @@ export function parseFxi(input: string): ParsedFxi {
   setIf(L, 's', readSupport(raw.get('s'), start, log));
   L.l = readLoad(raw.get('l') ?? UNKNOWN, log);
   setIf(L, 'x', readSymmetry(raw.get('x'), L.m, log));
+  L.l = dropUsualCounts(L.l, L.x ?? DEFAULTS.symmetry, L.m);
   setIf(L, 'g', readGrip(raw.get('g'), L.m, L.l, start, log));
   setIf(L, 'r', readRange(raw.get('r'), log));
   setIf(L, 'h', readNameSet(raw.get('h'), HELD, DEFAULTS.held, 'a held posture', HELD_CONFLICTS, log));
@@ -222,6 +223,33 @@ function readLoad(text: string, log: Log): string {
   let out = sortUnique(items);
   if (out.length > 1) out = out.filter((i) => i !== 'bw'); // an implement already implies the body moves
   return out.join('+');
+}
+
+/** Implements held one per working hand. */
+const ONE_HAND = ['db', 'kb', 'plate', 'club'];
+/** Hold points on the trunk: an implement held there is one, whatever it is. */
+const TRUNK_POINTS = ['chest', 'back', 'hips', 'waist'];
+
+/**
+ * The usual count of an implement: one per working hand for a one-hand implement not held at a trunk point, otherwise
+ * one. The arms work one at a time when `x` is `u@arms`, or `u` with a motion of arm joints only.
+ */
+export function usualCount(token: string, hold: string, x: string, m: string): number {
+  if (!ONE_HAND.includes(token) || TRUNK_POINTS.includes(hold)) return 1;
+  const armJointsOnly = m !== UNKNOWN && motionJoints(m).length > 0 && motionJoints(m).every((j) => ARM_JOINTS.includes(j));
+  const oneArm = x.split('+').some((i) => i === 'u@arms' || (i === 'u' && armJointsOnly));
+  return oneArm ? 1 : 2;
+}
+
+/** Drops every written count equal to the usual count. An implement of unknown kind has no usual count, so it keeps its count. */
+function dropUsualCounts(l: string, x: string, m: string): string {
+  if (l === UNKNOWN || l === GENERIC || !l.includes('*')) return l;
+  return sortUnique(l.split('+').map((item) => {
+    const [head = '', hold = UNKNOWN] = splitOnce(item, '@');
+    const [token = '', count] = splitOnce(head, '*');
+    if (count === undefined || token === UNKNOWN || Number(count) !== usualCount(token, hold, x, m)) return item;
+    return `${token}@${hold}`;
+  })).join('+');
 }
 
 /** Joint codes of a canonical motion value, without prefixes and suffixes; `=0` counts as the legs. */

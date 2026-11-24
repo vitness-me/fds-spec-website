@@ -1,4 +1,5 @@
 import { describe, expect, test } from 'vitest';
+import { compare } from '../src/compare.js';
 import { canonicalFxe, canonicalFxi as canon, parseFxe, parseFxi, standardFxi } from '../src/syntax.js';
 
 const issues = (s: string): string[] => parseFxi(s).issues.map((i) => i.code);
@@ -38,6 +39,34 @@ describe('canonicalisation', () => {
   });
   test('drops symmetry for trunk turning', () => expect(canon('FXI=1.0/m:sp.rot/o:supine.incline/l:bw/x:a')).toBe('FXI=1.0S/m:sp.rot/o:supine.incline/l:bw'));
   test('two scoped symmetry items stay', () => expect(canon('FXI=1.0/m:~hip.ext+kn.ext/o:standing/f:travel.fwd/l:db@hands/x:u@arms+rc@legs')).toContain('x:rc@legs+u@arms'));
+  describe('drops a count equal to the usual count', () => {
+    const curl = 'FXI=1.0S/m:el.flex/o:standing/l:db@hands/x:u';
+    test.each([
+      ['a one-arm curl: one dumbbell', 'FXI=1.0/m:el.flex/o:standing/l:db*1@hands/x:u', curl],
+      ['both arms: two dumbbells', 'FXI=1.0/m:hip.ext+kn.ext/o:standing/l:db*2@hands', 'FXI=1.0S/m:hip.ext+kn.ext/o:standing/l:db@hands'],
+      ['alternating arms hold two', 'FXI=1.0/m:el.flex/o:standing/l:db*2@hands/x:a', 'FXI=1.0S/m:el.flex/o:standing/l:db@hands/x:a'],
+      ['one leg at a time, both hands hold', 'FXI=1.0/m:hip.ext+kn.ext/o:standing/f:split/l:db*2@hands/x:u', 'FXI=1.0S/m:hip.ext+kn.ext/o:standing/f:split/l:db@hands/x:u'],
+      ['u@arms in a whole-body motion', 'FXI=1.0/m:hip.ext+kn.ext+sh.flex/o:standing/l:kb*1@hands/x:u@arms', 'FXI=1.0S/m:hip.ext+kn.ext+sh.flex/o:standing/l:kb@hands/x:u@arms'],
+      ['a scoped carry', 'FXI=1.0/m:~hip.ext+kn.ext/o:standing/f:travel.fwd/l:kb*1@hands/x:rc@legs+u@arms', 'FXI=1.0S/m:~hip.ext+kn.ext/o:standing/f:travel.fwd/l:kb@hands/x:rc@legs+u@arms'],
+      ['a two-hand implement is one', 'FXI=1.0/m:hip.ext+kn.ext/o:standing/l:bb*1@back', 'FXI=1.0S/m:hip.ext+kn.ext/o:standing/l:bb@back'],
+      ['a one-hand implement at a trunk point is one', 'FXI=1.0/m:hip.ext+kn.ext/o:standing/l:db*1@chest', 'FXI=1.0S/m:hip.ext+kn.ext/o:standing/l:db@chest'],
+      ['every item of a load', 'FXI=1.0/m:hip.ext+kn.ext/o:standing/l:vest*1@chest+db*2@hands', 'FXI=1.0S/m:hip.ext+kn.ext/o:standing/l:db@hands+vest@chest'],
+    ])('%s', (_, written, canonical) => {
+      expect(canon(written)).toBe(canonical);
+      expect(canon(canonical)).toBe(canonical);
+    });
+    test.each([
+      ['one kettlebell in both hands', 'FXI=1.0S/m:hip.ext+kn.ext/o:standing/l:kb*1@hands'],
+      ['one dumbbell in a one-leg exercise', 'FXI=1.0S/m:hip.ext+kn.ext/o:standing/f:split/l:db*1@hands/x:u'],
+      ['two dumbbells in a one-arm exercise', 'FXI=1.0S/m:el.flex/o:standing/l:db*2@hands/x:u'],
+      ['two barbells', 'FXI=1.0S/m:hip.ext+kn.ext/o:standing/l:bb*2@hands'],
+      ['an implement of unknown kind has no usual count', 'FXI=1.0S/m:hip.ext+kn.ext/o:standing/l:?*1@hands'],
+    ])('keeps a count that differs: %s', (_, s) => expect(canon(s)).toBe(s));
+    test('the two spellings compare identical', () => {
+      expect(compare('FXI=1.0S/m:el.flex/o:standing/l:db*1@hands/x:u', curl).relation).toBe('identical');
+      expect(compare('FXI=1.0S/m:hip.ext+kn.ext/o:standing/l:db*2@hands', 'FXI=1.0S/m:hip.ext+kn.ext/o:standing/l:db@hands').relation).toBe('identical');
+    });
+  });
   test('h and p keep ? and drop their default codes', () => {
     expect(canon('FXI=1.0/m:hip.ext+kn.ext/o:standing/l:bw/h:?/p:?')).toBe('FXI=1.0S/m:hip.ext+kn.ext/o:standing/l:bw/h:?/p:?');
     expect(canon('FXI=1.0/m:hip.ext+kn.ext/o:standing/l:bw/h:none/p:usual')).toBe('FXI=1.0S/m:hip.ext+kn.ext/o:standing/l:bw');
