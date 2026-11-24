@@ -1,0 +1,30 @@
+# Every failure scripts/check-conformance.mjs --self-test must report over this
+# fixture tree, by key, and nothing else. One line per deliberate break.
+
+# the suite's own shape
+unknown-tier:timing.json
+orphan:orphan.json
+missing-data:builder.json:missing-words.json
+rules:builder
+rules-encoder:builder
+duplicate:syntax:passes
+
+# syntax
+syntax:wrong-canonical
+syntax:undefined-code
+syntax-code-undefined:not-a-joint
+syntax-code-untested:never-expected
+
+# builder
+builder:wrong-fxi
+
+# compare: a backwards relation fails both ways round
+compare:backwards
+compare:backwards (swapped)
+compare:wrong-layer
+compare:wrong-layer (swapped)
+
+# resolver
+resolver:wrong-order
+resolver-reason-untested:made-up
+resolver-reasons-differ

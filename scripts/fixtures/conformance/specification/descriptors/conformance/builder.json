@@ -1,0 +1,9 @@
+{
+  "tier": "builder",
+  "rules": "0.9",
+  "description": "Self-test fixture: written for a rules revision that is not the registries', with one wrong expectation and a words file that does not exist.",
+  "words": "missing-words.json",
+  "vectors": [
+    { "id": "wrong-fxi", "entry": { "id": "x", "answers": { "subject": "equipment", "eq.kind": "imp", "eq.form.imp": "band.loop", "eq.details": "usual" } }, "expect": { "fxi": null, "fxe": "FXE=1.0S/k:imp/f:band" } }
+  ]
+}

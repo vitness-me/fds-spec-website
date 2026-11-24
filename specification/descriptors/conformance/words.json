@@ -1,0 +1,22 @@
+{
+  "name": "fds-conformance-words",
+  "version": "1",
+  "description": "A movement-word dataset written for the builder conformance vectors and nothing else. FDS publishes no movement words: a provider loads its own. These few exist so the vectors can exercise the word route, word holds, word machines and word questions.",
+  "words": [
+    { "id": "squat", "label": "Squat", "group": "Legs", "fxi": "m:hip.ext+kn.ext/o:standing", "hold": { "bb": "back", "kb": "chest" } },
+    { "id": "seated-row", "label": "Seated row machine", "group": "Pulls", "fxi": "m:el.flex+sh.ext/o:seated/l:mach@hands", "mac": { "m": "pull.back", "l": "hand" } },
+    { "id": "push-up", "label": "Push-up", "group": "Pushes", "fxi": "m:el.ext+sh.hadd/o:prone/s:floor@feet,hands/l:bw" },
+    { "id": "curl", "label": "Curl", "group": "Arms", "fxi": "m:el.flex/o:standing" },
+    {
+      "id": "hamstring-stretch", "label": "Hamstring stretch", "group": "Stretches", "fxi": "m:%hip.flex+kn.ext/o:standing/l:bw/x:u",
+      "asks": { "word.position": { "usual": "standing", "options": { "standing": "o:standing", "seated": "o:seated" } } }
+    }
+  ],
+  "questions": {
+    "word.position": {
+      "text": "Is the stretch done standing or seated?",
+      "help": "",
+      "labels": { "standing": "Standing", "seated": "Seated on the floor" }
+    }
+  }
+}

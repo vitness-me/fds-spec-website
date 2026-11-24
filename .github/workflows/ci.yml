@@ -104,6 +104,14 @@ jobs:
       - name: Build
         run: npm run build
 
+      # The conformance vectors in specification/descriptors/conformance/,
+      # run against the encoder just built: every tier at 100%, and the
+      # suite's own shape (rules revision, codes and reasons defined and
+      # tested). The self-test proves the runner fails on bad vectors first.
+      - name: Conformance vectors
+        working-directory: .
+        run: npm run check:conformance
+
   schemas:
     name: Schemas — validate examples
     runs-on: blacksmith-4vcpu-ubuntu-2404

@@ -1,0 +1,20 @@
+{
+  "description": "A made-up muscle vocabulary for the FXM conformance vectors only. Its tokens name no real muscle: FDS publishes no muscle list, and this file exists to exercise the key grammar, vocabulary checks and grades. Anchors are empty because nothing here is anatomy.",
+  "muscles": [
+    { "token": "alpha", "name": "Test muscle alpha", "anchors": [], "parts": [
+      { "token": "upper", "name": "Upper part of alpha", "anchors": [] },
+      { "token": "lower", "name": "Lower part of alpha", "anchors": [] }
+    ] },
+    { "token": "beta", "name": "Test muscle beta", "anchors": [] },
+    { "token": "gamma", "name": "Test muscle gamma", "anchors": [], "parts": [
+      { "token": "long", "name": "Long part of gamma", "anchors": [] },
+      { "token": "short", "name": "Short part of gamma", "anchors": [] }
+    ] }
+  ],
+  "groups": [
+    { "token": "alpha-beta", "name": "Alpha and beta", "members": ["FXM=1.0/alpha", "FXM=1.0/beta"], "anchors": [] },
+    { "token": "uppers", "name": "Upper alpha and long gamma", "members": ["FXM=1.0/alpha.upper", "FXM=1.0/gamma.long"], "anchors": [] },
+    { "token": "all", "name": "Every test muscle", "members": ["FXM=1.0/g:alpha-beta", "FXM=1.0/gamma"], "anchors": [] },
+    { "token": "only-beta", "name": "A group of beta alone", "members": ["FXM=1.0/beta"], "anchors": [] }
+  ]
+}

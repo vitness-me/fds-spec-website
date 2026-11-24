@@ -1,0 +1,9 @@
+{
+  "tier": "compare",
+  "rules": "1.3",
+  "description": "Self-test fixture: a relation written the wrong way round fails both directions; a wrong layer fails one vector.",
+  "vectors": [
+    { "id": "backwards", "kind": "fxe", "a": "FXE=1.0S/k:imp/f:band.loop", "b": "FXE=1.0S/k:imp/f:band", "expect": { "relation": "refined-by", "layers": { "k": "equal", "f": "broader" } } },
+    { "id": "wrong-layer", "kind": "fxe", "a": "FXE=1.0S/k:imp/f:bar.straight", "b": "FXE=1.0S/k:imp/f:bar.ez", "expect": { "relation": "contradicting", "layers": { "k": "equal", "f": "open" } } }
+  ]
+}

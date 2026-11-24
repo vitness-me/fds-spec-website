@@ -82,6 +82,9 @@ if run_job encoder; then
   try "tests"         npm run test:run
   try "build"         npm run build
   popd >/dev/null
+  # Runs the built encoder, so it follows the build. From the repository root:
+  # the vectors are specification content, not package content.
+  try "conformance vectors pass at 100%" npm run check:conformance
 fi
 
 # ── schemas ────────────────────────────────────────────────────────────────────
