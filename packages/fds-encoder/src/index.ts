@@ -20,7 +20,7 @@ export { NO_WORDS, patchedLayers, readWordSet, WordSetError } from './words.js';
 export type { MovementWord, WordAsk, WordQuestion, WordSet } from './words.js';
 export { createFlow, DEFAULT_FLOW, publishedQuestions } from './flow.js';
 export type { Cond, Flow, FlowOption, FlowQuestion } from './flow.js';
-export { AnswerError, build, buildWith, InternalError, rowMeta } from './build.js';
+export { AnswerError, build, builtFrom, buildWith, InternalError, rowMeta } from './build.js';
 export type { Answer, Answers, Built, Entry, RowMeta, WordsCited } from './build.js';
 export { checkCollisions, readLibrary } from './collide.js';
 export type { Collision, Gap, LibraryEntry } from './collide.js';

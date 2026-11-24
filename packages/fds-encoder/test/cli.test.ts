@@ -78,6 +78,19 @@ describe('build and upgrade', () => {
     expect(built[1]!.record).toEqual({ id: 'joint-by-joint', answers: squatBy('other') });
   });
 
+  test('build cites the dataset that built the strings, whatever the answers record cited, so upgrade works with it', async () => {
+    const answers = file('answers-cited.json', [
+      { id: 'back-squat', answers: squatBy('squat'), words: { name: 'some-other-dataset', version: '7' } },
+      { id: 'joint-by-joint', answers: squatBy('other'), words: { name: 'some-other-dataset', version: '7' } },
+    ]);
+    const built = JSON.parse((await cli(['build', answers, '--words', WORDS])).out) as { record: Record<string, unknown> }[];
+    expect(built[0]!.record.words).toEqual({ name: 'vitness-test-words', version: '1' });
+    expect(built[1]!.record.words).toBeUndefined();
+    const up = await cli(['upgrade', file('built-cited.json', built), '--words', WORDS, '--check']);
+    expect(up.code).toBe(0);
+    expect(up.out).toContain('0 strings change, 0 kept as written, 0 failed');
+  });
+
   test('build without a dataset still encodes through "other", and names what a word needs', async () => {
     const answers = file('answers-nowords.json', [{ id: 'a', answers: squatBy('other') }, { id: 'b', answers: squatBy('squat') }]);
     const r = await cli(['build', answers]);

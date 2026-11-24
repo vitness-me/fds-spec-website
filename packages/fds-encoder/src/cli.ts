@@ -4,7 +4,7 @@ import { Command, CommanderError, Option } from 'commander';
 import { FXI_RULES } from './alphabet.js';
 import { answersText, askRows, MODE_TEXT, startAsk, stepAsk } from './ask.js';
 import type { AskStep } from './ask.js';
-import { AnswerError, build, rowMeta } from './build.js';
+import { AnswerError, build, builtFrom, rowMeta } from './build.js';
 import type { Built, Entry } from './build.js';
 import { checkCollisions, readLibrary } from './collide.js';
 import type { Collision } from './collide.js';
@@ -89,9 +89,7 @@ function entriesOf(raw: unknown, file: string): Entry[] {
  */
 export function builtRecord(e: Entry, b: Built, mode: Mode, flow: Flow): Record<string, unknown> {
   const meta = rowMeta(e, mode);
-  const { name, version } = flow.words;
-  const cites = typeof e.answers.movement === 'string' && flow.wordById.has(e.answers.movement);
-  const record: Entry = { ...e, ...(cites && e.words === undefined ? { words: { name, version } } : {}) };
+  const record = builtFrom(e, flow);
   return {
     id: b.id,
     fxi: b.fxi,

@@ -52,6 +52,17 @@ export function rowMeta(e: Entry, defaultMode: 'owner' | 'import'): RowMeta {
   return { mode, fxiProvenance: p, fxiGap: text(e.gap) ?? text(e.differs) };
 }
 /**
+ * The answers record to keep beside built strings: `words` cites the movement-word dataset of `flow` when the movement
+ * word comes from it, and is left out otherwise, whatever the entry cited. `upgrade` then asks for the dataset that
+ * actually built the strings.
+ */
+export function builtFrom(e: Entry, flow: Flow): Entry {
+  const { words: _cited, ...rest } = e;
+  const cites = typeof e.answers.movement === 'string' && flow.wordById.has(e.answers.movement);
+  return cites ? { ...rest, words: { name: flow.words.name, version: flow.words.version } } : rest;
+}
+
+/**
  * A built entry. `fxe` is always the standard FXE: the row's main equipment for an exercise, the registry record's standard
  * projection for equipment on its own. `fxeFull` is the full registry record, present only when build details were given.
  */
