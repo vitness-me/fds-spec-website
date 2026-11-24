@@ -1,0 +1,65 @@
+{
+  "name": "@vitness/fds-encoder",
+  "version": "0.1.0",
+  "description": "Encode exercises and equipment as FDS structural descriptors (FXI, FXE, FXM): ask, build, validate, compare, match, review and upgrade",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "fds-encoder": "./dist/bin/fds-encoder.js"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "prepack": "npm run build"
+  },
+  "keywords": [
+    "fds",
+    "fitness",
+    "data",
+    "standard",
+    "fxi",
+    "fxe",
+    "fxm",
+    "descriptor",
+    "exercise",
+    "cli"
+  ],
+  "author": "VITNESS",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vitness-me/fds-spec-website.git",
+    "directory": "packages/fds-encoder"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  },
+  "dependencies": {
+    "commander": "^13.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.6",
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.3",
+    "vitest": "^2.1.8"
+  }
+}

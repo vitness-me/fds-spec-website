@@ -1,0 +1,28 @@
+{
+ "muscles": [
+  {"token":"deltoid","name":"Deltoid","anchors":[],"parts":[
+   {"token":"clavicular","name":"Clavicular part of deltoid","anchors":[]},
+   {"token":"acromial","name":"Acromial part of deltoid","anchors":[]},
+   {"token":"spinal","name":"Spinal part of deltoid","anchors":[]}]},
+  {"token":"pectoralis-major","name":"Pectoralis major","anchors":[],"parts":[
+   {"token":"clavicular","name":"Clavicular part of pectoralis major","anchors":[]},
+   {"token":"sternocostal","name":"Sternocostal part of pectoralis major","anchors":[]},
+   {"token":"abdominal","name":"Abdominal part of pectoralis major","anchors":[]}]},
+  {"token":"latissimus-dorsi","name":"Latissimus dorsi","anchors":[]},
+  {"token":"biceps-femoris","name":"Biceps femoris","anchors":[]},
+  {"token":"semitendinosus","name":"Semitendinosus","anchors":[]},
+  {"token":"semimembranosus","name":"Semimembranosus","anchors":[]},
+  {"token":"rectus-femoris","name":"Rectus femoris","anchors":[]},
+  {"token":"vastus-lateralis","name":"Vastus lateralis","anchors":[]},
+  {"token":"iliopsoas","name":"Iliopsoas","anchors":[]},
+  {"token":"soleus","name":"Soleus","anchors":[]},
+  {"token":"extensor-carpi-radialis-longus","name":"Extensor carpi radialis longus","anchors":[]}
+ ],
+ "groups": [
+  {"token":"hamstrings","name":"Hamstrings","members":["FXM=1.0/biceps-femoris","FXM=1.0/semimembranosus","FXM=1.0/semitendinosus"],"anchors":[]},
+  {"token":"quadriceps","name":"Quadriceps","members":["FXM=1.0/rectus-femoris","FXM=1.0/vastus-lateralis"],"anchors":[]},
+  {"token":"hip-flexors","name":"Hip flexors","members":["FXM=1.0/iliopsoas","FXM=1.0/rectus-femoris"],"anchors":[]},
+  {"token":"shoulders","name":"Shoulders","members":["FXM=1.0/deltoid"],"anchors":[]},
+  {"token":"thighs","name":"Thighs","members":["FXM=1.0/g:hamstrings","FXM=1.0/g:quadriceps"],"anchors":[]}
+ ]
+}

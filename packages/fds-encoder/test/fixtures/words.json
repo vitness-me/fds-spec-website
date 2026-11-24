@@ -1,0 +1,39 @@
+{
+ "name": "vitness-test-words",
+ "version": "1",
+ "words": [
+  {"id":"squat","label":"Squat","group":"Legs","fxi":"m:hip.ext+kn.ext/o:standing","hold":{"bb":"back"}},
+  {"id":"push-up","label":"Push-up","group":"Pushes","fxi":"m:el.ext+sh.hadd/o:prone/s:floor@feet,hands/l:bw"},
+  {"id":"shoulder-press","label":"Overhead press","group":"Pushes","fxi":"m:el.ext+sh.flex/o:standing","hold":{"bb":"shoulders","kb":"shoulders","smith":"hands","*":"hands"},"holdBehind":"back","note":"Not a front raise: the elbows bend."},
+  {"id":"cable-fly","label":"Cable fly","group":"Pushes","fxi":"m:sh.hadd/o:standing"},
+  {"id":"triceps-pushdown","label":"Triceps pushdown","group":"Arms","fxi":"m:el.ext/o:standing/l:cable@hands"},
+  {"id":"curl","label":"Curl","group":"Arms","fxi":"m:el.flex/o:standing"},
+  {"id":"lateral-raise","label":"Lateral raise","group":"Shoulders","fxi":"m:sh.abd/o:standing"},
+  {"id":"pull-up","label":"Pull-up","group":"Pulls","fxi":"m:el.flex+sh.add/o:hanging/s:bar/l:bw"},
+  {"id":"chin-up","label":"Chin-up","group":"Pulls","fxi":"m:el.flex+sh.ext/o:hanging/s:bar/l:bw/g:su"},
+  {"id":"lat-pulldown","label":"Pulldown machine","group":"Pulls","fxi":"m:el.flex+sh.add/o:seated/l:mach@hands","mac":{"m":"pull.down","l":"hand"}},
+  {"id":"row-machine","label":"Chest-supported row machine","group":"Pulls","fxi":"m:el.flex+sh.ext/o:seated/l:mach@hands","mac":{"m":"pull.back","l":"hand","chest":true}},
+  {"id":"inverted-row","label":"Bodyweight row under a bar","group":"Pulls","fxi":"m:el.flex+sh.ext/o:supine/s:bar@hands+floor@feet/l:bw"},
+  {"id":"seated-leg-curl","label":"Seated leg curl machine","group":"Legs","fxi":"m:kn.flex/o:seated/l:mach@ankles","mac":{"m":"kn.flex","l":"ankle"}},
+  {"id":"leg-press","label":"Leg press","group":"Legs","fxi":"m:hip.ext+kn.ext/o:supine.incline/l:mach@feet","mac":{"m":"push.fwd","l":"foot"}},
+  {"id":"american-swing","label":"Two-hand bell swing to overhead","group":"Hinges","fxi":"m:hip.ext+sh.flex/o:standing/l:kb*1@hands"},
+  {"id":"clean","label":"Full clean","group":"Olympic","fxi":"m:ank.pf+hip.ext+kn.ext>el.flex>hip.ext+kn.ext/o:standing/l:bb@hands"},
+  {"id":"snatch","label":"Full snatch","group":"Olympic","fxi":"m:ank.pf+hip.ext+kn.ext>sh.flex>hip.ext+kn.ext/o:standing/l:bb@hands/g:w-w","gBar":true},
+  {"id":"crunch","label":"Crunch","group":"Trunk","fxi":"m:sp.flex/o:supine/k:trunk/l:bw"},
+  {"id":"hanging-leg-raise","label":"Hanging straight-leg raise","group":"Trunk","fxi":"m:hip.flex/o:hanging/s:bar/l:bw"},
+  {"id":"hanging-knee-raise","label":"Hanging bent-knee raise","group":"Trunk","fxi":"m:hip.flex/o:hanging/s:bar/l:bw/h:kn.bent"},
+  {"id":"plank-limb-raise","label":"Plank with a limb lift","group":"Trunk","fxi":"m:=sp.flex|hip.ext+sh.flex/o:prone/s:floor@feet,forearms/l:bw/x:a","asks":{"word.limbs":{"options":{"arm":"m:=sp.flex|sh.flex","leg":"m:=sp.flex|hip.ext","both":"m:=sp.flex|hip.ext+sh.flex"}},"word.base":{"usual":"forearms","options":{"forearms":"s:floor@feet,forearms","hands":"s:floor@feet,hands","unknown":"s:floor@feet,?"}}}},
+  {"id":"walk","label":"Walk","group":"Locomotion","fxi":"m:~hip.ext+kn.ext/o:standing/f:travel.fwd/l:bw/x:rc"},
+  {"id":"monster-walk","label":"Banded side-to-side walk","group":"Locomotion","fxi":"m:~hip.abd/o:standing/f:travel.fwd/l:band@?/x:rc"},
+  {"id":"rower","label":"Rowing machine","group":"Cardio","fxi":"m:~el.flex+hip.ext+kn.ext+sh.ext/o:seated/l:erg.row@hands","erg":"rower"},
+  {"id":"depth-jump","label":"Drop and rebound jump","group":"Jumps","fxi":"m:^ank.pf+hip.ext+kn.ext/o:standing/l:bw/r:from-drop"},
+  {"id":"hip-flexor-stretch","label":"Kneeling hip flexor stretch","group":"Stretches","fxi":"m:%hip.ext/o:kneeling.half/l:bw/x:u"},
+  {"id":"calf-stretch","label":"Calf stretch","group":"Stretches","fxi":"m:%ank.df+kn.ext/o:standing/l:bw/x:u","asks":{"word.knee":{"usual":"straight","options":{"straight":"m:%ank.df+kn.ext","bent":"m:%ank.df+kn.flex","unknown":"m:%ank.df+kn.?"}},"word.setup":{"usual":"free","options":{"free":"","wall-hands":"s:wall@hands","step":"s:box","strap":"o:seated/a:strap"}}}}
+ ],
+ "questions": {
+  "word.knee": {"text":"Is the knee of the stretched leg straight or bent?","help":"Answer for the leg being stretched.","labels":{"straight":"Straight","bent":"Bent","unknown":"Not known"}},
+  "word.setup": {"text":"What is the stretch done against?","help":"Pick what the body leans on, or where the foot goes.","labels":{"free":"Nothing: standing free","wall-hands":"A wall, hands on it","step":"A step, heel dropped off it","strap":"Seated, a strap pulls the foot"}},
+  "word.limbs": {"text":"Which limbs lift?","help":"Count the limbs that leave the floor in one rep.","labels":{"arm":"One arm","leg":"One leg","both":"An arm and the opposite leg"}},
+  "word.base": {"text":"Is the plank on the forearms or the hands?","help":"On the hands, the arms are straight.","labels":{"forearms":"Forearms","hands":"Hands","unknown":"Not known"}}
+ }
+}
