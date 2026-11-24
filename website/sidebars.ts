@@ -84,6 +84,21 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: 'category',
+      label: 'Structural Descriptors (draft)',
+      collapsed: true,
+      // Draft pages pending the descriptor RFC. Linked to the overview for the
+      // same breadcrumb reason as Specifications (RFCs) above.
+      link: {type: 'doc', id: 'descriptors/overview'},
+      items: [
+        'descriptors/fxi',
+        'descriptors/question-flow',
+        'descriptors/fxe',
+        'descriptors/fxm',
+        'descriptors/compare-and-match',
+      ],
+    },
+    {
+      type: 'category',
       label: 'JSON Schemas',
       collapsed: false,
       // Linked for the same reason as Specifications (RFCs) above.

@@ -44,6 +44,8 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const RFC_DIR = join(ROOT, 'specification/rfc');
 const INTEGRITY = join(ROOT, 'specification/schemas/.integrity.json');
 const RFC_PAGES = join(ROOT, 'website/docs/specifications');
+const DESCRIPTOR_DIR = join(ROOT, 'specification/descriptors');
+const DESCRIPTOR_PAGES = join(ROOT, 'website/docs/descriptors');
 const SIDEBARS = join(ROOT, 'website/sidebars.ts');
 
 /**
@@ -87,12 +89,26 @@ const isRfc = (name) => name.startsWith('rfc-') && name.endsWith('.md');
 const rfcSources = (await readdir(RFC_DIR)).filter(isRfc).sort();
 const rfcPages = new Set((await readdir(RFC_PAGES)).filter(isRfc));
 
+/**
+ * The structural descriptor pages are discovered the way RFCs are: every
+ * markdown file in the directory is a published page. Nothing else lives
+ * there except the question flow's JSON, which the pages render.
+ */
+const isPage = (name) => name.endsWith('.md');
+const descriptorSources = (await readdir(DESCRIPTOR_DIR).catch(() => [])).filter(isPage).sort();
+const descriptorPages = new Set((await readdir(DESCRIPTOR_PAGES).catch(() => [])).filter(isPage));
+
 /** Everything this check compares, as {source, page, docId}. */
 const PAIRS = [
   ...rfcSources.map((name) => ({
     source: `specification/rfc/${name}`,
     page: `website/docs/specifications/${name}`,
     docId: `specifications/${name.replace(/\.md$/, '')}`,
+  })),
+  ...descriptorSources.map((name) => ({
+    source: `specification/descriptors/${name}`,
+    page: `website/docs/descriptors/${name}`,
+    docId: `descriptors/${name.replace(/\.md$/, '')}`,
   })),
   ...DOC_PAIRS.map(([source, docId]) => ({
     source,
@@ -176,6 +192,16 @@ if (orphans.length) {
   problems.push(
     `${orphans.length} page(s) in website/docs/specifications/ with no source RFC:\n` +
       orphans.map((name) => `    ${name}`).join('\n') +
+      '\n    Either the source was deleted or renamed, or the page never had one.'
+  );
+}
+
+const knownDescriptorPages = new Set(descriptorSources);
+const descriptorOrphans = [...descriptorPages].filter((name) => !knownDescriptorPages.has(name)).sort();
+if (descriptorOrphans.length) {
+  problems.push(
+    `${descriptorOrphans.length} page(s) in website/docs/descriptors/ with no source in specification/descriptors/:\n` +
+      descriptorOrphans.map((name) => `    ${name}`).join('\n') +
       '\n    Either the source was deleted or renamed, or the page never had one.'
   );
 }

@@ -23,6 +23,10 @@
     "message": "Especificaciones (RFC)",
     "description": "The label for category 'Specifications (RFCs)' in sidebar 'mainSidebar'"
   },
+  "sidebar.mainSidebar.category.Structural Descriptors (draft)": {
+    "message": "Descriptores estructurales (borrador)",
+    "description": "The label for category 'Structural Descriptors (draft)' in sidebar 'mainSidebar'"
+  },
   "sidebar.mainSidebar.category.Tools": {
     "message": "Herramientas",
     "description": "The label for category 'Tools' in sidebar 'mainSidebar'"
