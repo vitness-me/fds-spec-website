@@ -4,7 +4,17 @@
 Not normative until the RFC that adopts the structural descriptors is accepted: RFC (pending). See [the overview](./overview.md).
 :::
 
-An implementation of FXI, FXE and FXM conforms when it passes every published test vector, in each of four tiers, at 100%. The vectors are data: each one is an input and the output this specification requires, so any implementation, in any language, runs the same files through a small adapter of its own.
+An implementation of FXI, FXE and FXM conforms when it passes, at 100%, every published test vector in each tier its role uses. The vectors are data: each one is an input and an expected output, so any implementation, in any language, runs the same files through a small adapter of its own.
+
+| An implementation that | Passes the tiers |
+|---|---|
+| reads, validates and canonicalises strings | `syntax` |
+| builds strings from answers records | `syntax`, `builder` |
+| compares and matches strings (a resolver) | `syntax`, `compare`, `resolver` |
+
+A resolver does not build strings, so it is not required to pass the `builder` tier.
+
+**What passing shows.** Each expected output is what the reference encoder computes for that input. Passing the vectors shows that an implementation agrees with the reference; it does not show that the reference is right. A rule the reference gets wrong, the vectors get wrong with it, and it is corrected in both under a new rules revision. The reference is so far the only implementation that has run them.
 
 Conformance says that an implementation computes what the specification says. It does not say that the people, or the programs, who answer the question flow describe exercises accurately. That cannot be certified. It is measured instead, and published as [reports](#measured-not-certified).
 
@@ -137,7 +147,7 @@ The reference encoder, [`@vitness/fds-encoder`](https://github.com/vitness-me/fd
 
 ## Measured, not certified
 
-The tiers above have one right answer per vector. Two things that matter as much do not, and FDS publishes them as measurements, with their method and sample, rather than as a pass or a fail:
+The tiers above have one right answer per vector. Two things that matter as much do not, and FDS publishes them as measurements, with their method, rather than as a pass or a fail:
 
 - **Encoder agreement.** When different people, or different programs, answer the question flow for the same exercise without seeing each other's answers, how often their strings are `identical`, and how the remaining pairs divide between `refines`, `compatible` and `contradicting`, per layer.
 - **Adopter outcomes.** When a catalogue that has encoded its own exercises is matched against another, how many of its rows link automatically, how many confirm lists hold the right entry and at what rank, how many hold none, and how many automatic links a person later rejects.
