@@ -1,6 +1,6 @@
 # FDS AI Enrichment Guide
 
-<!-- fds:not-a-field bodyPart, gifUrl, target — field names belonging to the *source* database this guide enriches from -->
+<!-- fds:not-a-field bodyPart, mediaUrl, target — field names belonging to the *source* database this guide enriches from -->
 
 ## Overview
 
@@ -20,7 +20,7 @@ AI enrichment fills gaps when source data lacks fields required by FDS. This gui
 | `target` | `targets.primary` | Registry lookup + AI fallback |
 | `equipment` | `equipment.required` | Registry lookup + AI fallback |
 | - | `metrics.primary` | **AI Enrich** |
-| `gifUrl` | `media` | Transform (toMediaArray) |
+| `mediaUrl` | `media` | Transform (toMediaArray) |
 | - | `metadata.*` | Auto-generate |
 
 ---

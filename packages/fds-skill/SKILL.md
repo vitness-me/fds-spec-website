@@ -454,12 +454,12 @@ What type of exercise?
 ```json fds:not-a-field — the source database's own field names, which is the whole point of showing them
 // Source
 {
-  "id": "0001",
-  "name": "3/4 sit-up",
-  "bodyPart": "waist",
+  "id": "vx-0001",
+  "name": "3/4 crunch",
+  "bodyPart": "core",
   "equipment": "body weight",
   "target": "abs",
-  "gifUrl": "http://example.com/0001.gif"
+  "mediaUrl": "https://example.com/media/three-quarter-crunch.mp4"
 }
 ```
 
@@ -469,10 +469,10 @@ What type of exercise?
   "schemaVersion": "1.1.0",
   "exerciseId": "550e8400-e29b-41d4-a716-446655440001",
   "canonical": {
-    "name": "3/4 Sit-Up",
-    "slug": "three-quarter-sit-up",
-    "description": "A partial sit-up variation that targets the rectus abdominis while reducing lower back strain compared to full sit-ups.",
-    "aliases": ["three-quarter situp", "partial sit-up"]
+    "name": "3/4 Crunch",
+    "slug": "three-quarter-crunch",
+    "description": "A crunch that stops short of full range at the top, so the abdominals stay loaded for the whole set.",
+    "aliases": ["three-quarter crunch", "partial crunch"]
   },
   "classification": {
     "exerciseType": "strength",
@@ -500,17 +500,17 @@ What type of exercise?
     "primary": { "type": "reps", "unit": "count" }
   },
   "media": [{
-    "type": "image",
-    "uri": "file:///path/to/animations/0001.gif"
+    "type": "video",
+    "uri": "https://example.com/media/three-quarter-crunch.mp4"
   }],
   "metadata": {
     "createdAt": "2026-01-25T00:00:00Z",
     "updatedAt": "2026-01-25T00:00:00Z",
     "status": "draft",
-    "source": "exercises-db-import",
+    "source": "example-catalog-import",
     "externalRefs": [{
-      "system": "legacy-exercises-db",
-      "id": "0001"
+      "system": "example-catalog",
+      "id": "vx-0001"
     }]
   }
 }

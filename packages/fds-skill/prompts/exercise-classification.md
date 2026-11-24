@@ -129,7 +129,7 @@ Equipment: dumbbell
 **Input:**
 ```
 Exercise: Plank
-Body Part: waist
+Body Part: core
 Target Muscle: abs
 Equipment: body weight
 ```

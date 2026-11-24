@@ -1,5 +1,5 @@
 {
-  "$comment": "fds:not-a-field — Example source schema: a simple exercise database format. It is the input side of a mapping, so none of its field names are FDS.",
+  "$comment": "fds:not-a-field — Example source schema: a simple exercise catalogue format. It is the input side of a mapping, so none of its field names are FDS.",
   "schema": {
     "type": "array",
     "items": {
@@ -7,7 +7,7 @@
       "properties": {
         "id": {
           "type": "string",
-          "description": "Unique identifier (typically numeric string)"
+          "description": "Unique identifier in the source catalogue"
         },
         "name": {
           "type": "string",
@@ -16,50 +16,85 @@
         "bodyPart": {
           "type": "string",
           "description": "General body region",
-          "enum": ["waist", "upper legs", "back", "chest", "upper arms", "shoulders", "lower legs", "lower arms", "neck", "cardio"]
+          "enum": [
+            "legs",
+            "back",
+            "chest",
+            "shoulders",
+            "arms",
+            "core",
+            "full body"
+          ]
         },
         "equipment": {
           "type": "string",
           "description": "Equipment needed",
-          "enum": ["body weight", "barbell", "dumbbell", "cable", "machine", "kettlebell", "band", "medicine ball", "stability ball", "other"]
+          "enum": [
+            "body weight",
+            "barbell",
+            "dumbbell",
+            "kettlebell",
+            "cable",
+            "machine",
+            "band",
+            "other"
+          ]
         },
         "target": {
           "type": "string",
           "description": "Primary target muscle",
-          "enum": ["abs", "quads", "lats", "pectorals", "biceps", "delts", "triceps", "hamstrings", "glutes", "calves", "forearms", "traps", "cardiovascular system"]
+          "enum": [
+            "quads",
+            "hamstrings",
+            "glutes",
+            "calves",
+            "lats",
+            "pectorals",
+            "delts",
+            "biceps",
+            "triceps",
+            "abs"
+          ]
         },
-        "gifUrl": {
+        "mediaUrl": {
           "type": "string",
-          "description": "URL to exercise animation GIF"
+          "description": "URL of a demonstration video"
         }
       },
-      "required": ["id", "name", "bodyPart", "equipment", "target", "gifUrl"]
+      "required": [
+        "id",
+        "name",
+        "bodyPart",
+        "equipment",
+        "target",
+        "mediaUrl"
+      ]
     }
   },
   "examples": [
     {
-      "id": "0001",
-      "name": "3/4 sit-up",
-      "bodyPart": "waist",
+      "id": "vx-0001",
+      "name": "3/4 crunch",
+      "bodyPart": "core",
       "equipment": "body weight",
       "target": "abs",
-      "gifUrl": "http://d205bpvrqc9yn1.cloudfront.net/0001.gif"
+      "mediaUrl": "https://example.com/media/three-quarter-crunch.mp4"
     },
     {
-      "id": "0025",
+      "id": "vx-0002",
       "name": "barbell bench press",
       "bodyPart": "chest",
       "equipment": "barbell",
       "target": "pectorals",
-      "gifUrl": "http://d205bpvrqc9yn1.cloudfront.net/0025.gif"
+      "mediaUrl": "https://example.com/media/barbell-bench-press.mp4"
     },
     {
-      "id": "0007",
-      "name": "alternate lateral pulldown",
+      "id": "vx-0003",
+      "name": "seated cable row",
       "bodyPart": "back",
       "equipment": "cable",
       "target": "lats",
-      "gifUrl": "http://d205bpvrqc9yn1.cloudfront.net/0007.gif"
+      "mediaUrl": "https://example.com/media/seated-cable-row.mp4"
     }
   ]
 }

@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Documents release 1.5.0: body-atlas 1.1.0 and the optional `license` and
   `attribution` on a view's asset.
+- The worked examples use sample rows written for this package. The
+  source-format example is renamed to simple-exercise-catalog.json, the
+  source field that carries the media URL is renamed to match, and every
+  media URL is a placeholder on the reserved example domain.
 
 ## [0.2.0] - 2026-08-11
 

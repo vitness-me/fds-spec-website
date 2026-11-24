@@ -92,13 +92,13 @@
       }
     },
     "media": {
-      "from": "gifUrl",
+      "from": "mediaUrl",
       "transform": "toMediaArray",
       "options": {
-        "type": "image",
+        "type": "video",
         "urlTransform": {
-          "pattern": "http://d205bpvrqc9yn1.cloudfront.net/(\\d+)\\.gif",
-          "replace": "file:///path/to/animations/$1.gif"
+          "pattern": "https://example\\.com/media/",
+          "replace": "https://media.example.org/exercises/"
         }
       }
     },
@@ -120,7 +120,7 @@
       "default": "draft"
     },
     "metadata.source": {
-      "default": "exercises-db-import"
+      "default": "example-catalog-import"
     },
     "metadata.externalRefs": {
       "from": "id",
@@ -128,7 +128,7 @@
       "options": {
         "template": [
           {
-            "system": "legacy-exercises-db",
+            "system": "example-catalog",
             "id": "{{value}}"
           }
         ]

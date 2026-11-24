@@ -3,10 +3,10 @@
     "schemaVersion": "1.1.0",
     "exerciseId": "550e8400-e29b-41d4-a716-446655440001",
     "canonical": {
-      "name": "3/4 Sit-Up",
-      "slug": "three-quarter-sit-up",
-      "description": "A partial sit-up variation that targets the rectus abdominis while reducing strain on the lower back. This beginner-friendly core exercise focuses on the upper portion of the abdominal contraction.",
-      "aliases": ["three-quarter situp", "partial sit-up", "half sit-up"]
+      "name": "3/4 Crunch",
+      "slug": "three-quarter-crunch",
+      "description": "A crunch that stops short of full range at the top, so the abdominals stay loaded for the whole set. Lie on your back with knees bent and curl the shoulders off the floor.",
+      "aliases": ["three-quarter crunch", "partial crunch"]
     },
     "classification": {
       "exerciseType": "strength",
@@ -42,26 +42,26 @@
     },
     "media": [
       {
-        "type": "image",
-        "uri": "file:///path/to/animations/0001.gif"
+        "type": "video",
+        "uri": "https://media.example.org/exercises/three-quarter-crunch.mp4"
       }
     ],
     "metadata": {
       "createdAt": "2026-01-25T00:00:00Z",
       "updatedAt": "2026-01-25T00:00:00Z",
       "status": "draft",
-      "source": "exercises-db-import",
+      "source": "example-catalog-import",
       "externalRefs": [
         {
-          "system": "legacy-exercises-db",
-          "id": "0001"
+          "system": "example-catalog",
+          "id": "vx-0001"
         }
       ]
     }
   },
   {
     "schemaVersion": "1.1.0",
-    "exerciseId": "550e8400-e29b-41d4-a716-446655440025",
+    "exerciseId": "550e8400-e29b-41d4-a716-446655440002",
     "canonical": {
       "name": "Barbell Bench Press",
       "slug": "barbell-bench-press",
@@ -129,39 +129,38 @@
     },
     "media": [
       {
-        "type": "image",
-        "uri": "file:///path/to/animations/0025.gif"
+        "type": "video",
+        "uri": "https://media.example.org/exercises/barbell-bench-press.mp4"
       }
     ],
     "metadata": {
       "createdAt": "2026-01-25T00:00:00Z",
       "updatedAt": "2026-01-25T00:00:00Z",
       "status": "draft",
-      "source": "exercises-db-import",
+      "source": "example-catalog-import",
       "externalRefs": [
         {
-          "system": "legacy-exercises-db",
-          "id": "0025"
+          "system": "example-catalog",
+          "id": "vx-0002"
         }
       ]
     }
   },
   {
     "schemaVersion": "1.1.0",
-    "exerciseId": "550e8400-e29b-41d4-a716-446655440007",
+    "exerciseId": "550e8400-e29b-41d4-a716-446655440003",
     "canonical": {
-      "name": "Alternate Lateral Pulldown",
-      "slug": "alternate-lateral-pulldown",
-      "description": "A unilateral cable exercise that targets the latissimus dorsi with alternating arm pulls. This variation allows for focused muscle engagement on each side, helping to address muscle imbalances while building back width.",
-      "aliases": ["alternating lat pulldown", "single arm pulldown", "unilateral pulldown"]
+      "name": "Seated Cable Row",
+      "slug": "seated-cable-row",
+      "description": "Seated at a low cable with the feet braced, pull a handle to the lower ribs and return under control. Works the upper back and lats with the elbows travelling close to the body.",
+      "aliases": ["cable row", "low cable row"]
     },
     "classification": {
       "exerciseType": "strength",
-      "movement": "pull-vertical",
+      "movement": "pull-horizontal",
       "mechanics": "compound",
       "force": "pull",
-      "level": "intermediate",
-      "unilateral": true
+      "level": "beginner"
     },
     "targets": {
       "primary": [
@@ -204,19 +203,19 @@
     },
     "media": [
       {
-        "type": "image",
-        "uri": "file:///path/to/animations/0007.gif"
+        "type": "video",
+        "uri": "https://media.example.org/exercises/seated-cable-row.mp4"
       }
     ],
     "metadata": {
       "createdAt": "2026-01-25T00:00:00Z",
       "updatedAt": "2026-01-25T00:00:00Z",
       "status": "draft",
-      "source": "exercises-db-import",
+      "source": "example-catalog-import",
       "externalRefs": [
         {
-          "system": "legacy-exercises-db",
-          "id": "0007"
+          "system": "example-catalog",
+          "id": "vx-0003"
         }
       ]
     }

@@ -1,18 +1,18 @@
 # FDS Mapping Strategies
 
-<!-- fds:not-a-field bodyPart, gifUrl, target, category, subcategory, difficulty — field names belonging to the *source* databases this guide maps from; naming them is the point of a mapping table -->
+<!-- fds:not-a-field bodyPart, mediaUrl, target, category, subcategory, difficulty — field names belonging to the *source* databases this guide maps from; naming them is the point of a mapping table -->
 
 ## Common Source Formats
 
 ### Format 1: Simple Exercise Database
 ```json fds:not-a-field — a source database record, shown so a reader can see what they are mapping from
 {
-  "id": "0001",
-  "name": "3/4 sit-up",
-  "bodyPart": "waist",
+  "id": "vx-0001",
+  "name": "3/4 crunch",
+  "bodyPart": "core",
   "equipment": "body weight",
   "target": "abs",
-  "gifUrl": "http://example.com/0001.gif"
+  "mediaUrl": "https://example.com/media/three-quarter-crunch.mp4"
 }
 ```
 
@@ -27,7 +27,7 @@
 | `bodyPart` | Context for AI | Used in classification |
 | `equipment` | `equipment.required[0]` | Registry lookup |
 | `target` | `targets.primary[0]` | Registry lookup + AI |
-| `gifUrl` | `media[0]` | `toMediaArray` |
+| `mediaUrl` | `media[0]` | `toMediaArray` |
 | - | `classification.*` | AI enrichment |
 | - | `metrics.primary` | AI enrichment |
 
@@ -83,7 +83,7 @@ Converts a string to a URL-safe slug.
 **Edge Cases:**
 - Numbers: `"21s Bicep Curl"` → `"21s-bicep-curl"`
 - Special chars: `"Push-Up (Incline)"` → `"push-up-incline"`
-- Fractions: `"3/4 Sit-Up"` → `"three-quarter-sit-up"` (needs special handling)
+- Fractions: `"3/4 Crunch"` → `"three-quarter-crunch"` (needs special handling)
 
 ### titleCase
 Converts to title case for display names.
@@ -127,21 +127,21 @@ Converts URL(s) to FDS media array format.
 **Options:**
 ```json
 {
-  "type": "image",
+  "type": "video",
   "baseUrl": "file:///path/to/local/",
   "urlTransform": {
-    "pattern": "http://old.cdn.com/(\\d+)\\.gif",
-    "replace": "https://new.cdn.com/$1.gif"
+    "pattern": "https://old-media\\.example\\.com/(.+)\\.mp4",
+    "replace": "https://media.example.com/$1.mp4"
   }
 }
 ```
 
-**Input:** `"http://old.cdn.com/0001.gif"`  
+**Input:** `"https://old-media.example.com/three-quarter-crunch.mp4"`  
 **Output:**
 ```json
 [{
-  "type": "image",
-  "uri": "https://new.cdn.com/0001.gif"
+  "type": "video",
+  "uri": "https://media.example.com/three-quarter-crunch.mp4"
 }]
 ```
 
@@ -157,7 +157,7 @@ Generates or formats UUIDs with optional prefix.
 ```
 
 **If source has ID:**
-- Input: `"0001"` → Output: `"ex-0001-{uuid}"` or preserve + add external ref
+- Input: `"vx-0001"` → Output: `"ex-vx-0001-{uuid}"` or preserve + add external ref
 
 **If generate:**
 - Output: `"ex-{generated-uuid-v4}"`
@@ -233,7 +233,7 @@ Auto-generates metadata fields.
       }
     },
     "media": {
-      "from": "gifUrl",
+      "from": "mediaUrl",
       "transform": "toMediaArray",
       "options": { "type": "image" }
     },
