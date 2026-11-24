@@ -7,7 +7,7 @@ sidebar_position: 4
 
 # FXE: Equipment Descriptor
 
-:::caution Draft / experimental
+:::caution Draft
 Not normative until the RFC that adopts the structural descriptors is accepted: RFC (pending). See [the overview](./overview.md).
 :::
 

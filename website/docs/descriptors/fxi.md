@@ -7,7 +7,7 @@ sidebar_position: 2
 
 # FXI: Exercise Descriptor
 
-:::caution Draft / experimental
+:::caution Draft
 Not normative until the RFC that adopts the structural descriptors is accepted: RFC (pending). See [the overview](./overview.md).
 :::
 

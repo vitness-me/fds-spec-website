@@ -1,6 +1,6 @@
 # Structural Descriptors: FXI, FXE and FXM
 
-:::caution Draft / experimental
+:::caution Draft
 These pages describe a draft. Nothing here is normative until the RFC that adopts the structural descriptors is accepted: RFC (pending). Codes, questions and field names may still change before then. The vocabularies are versioned by rules revision, separately from the entity schemas, and no published schema carries these fields yet.
 :::
 

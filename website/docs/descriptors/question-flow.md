@@ -7,7 +7,7 @@ sidebar_position: 3
 
 # Question Flow: Building FXI and FXE
 
-:::caution Draft / experimental
+:::caution Draft
 Not normative until the RFC that adopts the structural descriptors is accepted: RFC (pending). See [the overview](./overview.md).
 :::
 
