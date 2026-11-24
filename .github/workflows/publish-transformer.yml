@@ -50,7 +50,7 @@ jobs:
 
       # The transformer bundles the current release and defaults to it, so it
       # ships only once that release is frozen and dated.
-      - name: The current release is frozen and dated
+      - name: The current release is frozen, dated and accepted
         working-directory: .
         run: node scripts/check-release-state.mjs
 

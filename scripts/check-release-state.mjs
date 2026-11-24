@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * The current release is published only when it is frozen and dated.
+ * The current release is published only when it is frozen, dated and accepted.
  *
  * A release can be prepared on a branch before the RFC that introduces it is
  * accepted: the schemas, the manifest naming it as `currentRelease`, the
@@ -16,11 +16,14 @@
  *   1. every schema version the current release names is `frozen: true` in
  *      the manifest, and
  *   2. the changelog section that introduces the current release carries the
- *      date it shipped in its heading, `(YYYY-MM-DD)`.
+ *      date it shipped in its heading, `(YYYY-MM-DD)`, and
+ *   3. every RFC that proposes the current release (its text says
+ *      "Release **<version>**") has the status Accepted.
  *
- * The change that accepts the RFC makes both true in one merge: it flips the
- * new versions' `frozen` flags in `specification/schemas/.integrity.json`,
- * rebuilds the manifest, and dates the changelog heading.
+ * The change that accepts the RFC makes all three true in one merge: it sets
+ * the RFC's status, flips the new versions' `frozen` flags in
+ * `specification/schemas/.integrity.json`, rebuilds the manifest, and dates
+ * the changelog heading.
  *
  * It does not run on pull requests. A branch that prepares a release is
  * expected to fail it, and that is not a defect in the branch: it is the state
@@ -31,7 +34,7 @@
  *   node scripts/check-release-state.mjs --self-test  prove it fails on the fixtures
  */
 
-import { readFile } from 'node:fs/promises';
+import { readFile, readdir } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { assertRecordedFailures } from './lib/self-test.mjs';
@@ -80,6 +83,21 @@ if (introducing === undefined) {
   }
 }
 
+// An RFC that proposes the release names it the way the changelog does.
+const RFC_DIR = 'specification/rfc';
+for (const file of (await readdir(join(ROOT, RFC_DIR)).catch(() => [])).filter((f) => /^rfc-\d+.*\.md$/.test(f)).sort()) {
+  const text = await readFile(join(ROOT, RFC_DIR, file), 'utf8');
+  if (!text.includes(`Release **${release}**`)) continue;
+  const status = /^\*\*Status\*\*:\s*(.+)$/m.exec(text)?.[1]?.trim();
+  if (status !== 'Accepted') {
+    fail(
+      `rfc-status:${file}`,
+      `${RFC_DIR}/${file}: proposes release ${release}, and its status is "${status ?? '(none)'}".\n` +
+        '    A release is published only once the RFC that proposes it is accepted. Set "**Status**: Accepted" in the change that accepts it.'
+    );
+  }
+}
+
 if (SELF_TEST) await assertRecordedFailures(join(FIXTURES, 'expected-failures.txt'), problems.map((p) => p.key));
 
 if (problems.length) {
@@ -87,4 +105,4 @@ if (problems.length) {
   for (const p of problems) console.error(`  ${p.message}\n`);
   process.exit(1);
 }
-console.log(`  ok    release ${release} is frozen and dated: ${Object.keys(named).length} schema versions frozen.`);
+console.log(`  ok    release ${release} is frozen, dated and accepted: ${Object.keys(named).length} schema versions frozen.`);

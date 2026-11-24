@@ -6,3 +6,6 @@ unfrozen:exercise@2.0.0
 
 # the entry that introduces release 2.0.0 says "proposed" instead of a date
 undated
+
+# rfc-099 proposes the current release and is still a draft; rfc-098 proposes an older one
+rfc-status:rfc-099-fixture.md

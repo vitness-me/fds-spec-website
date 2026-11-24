@@ -392,10 +392,12 @@ is never right after deployment.
 from an RFC still in review, the release can be prepared on its branch with the
 new versions unfrozen and its changelog heading marked proposed instead of
 dated. The change that accepts the RFC freezes them, rebuilds, and dates the
-heading, in one merge. Until then the deploy and both publish workflows stop at
+heading, and sets the RFC's status to Accepted, in one merge. Until then the
+deploy and both publish workflows stop at
 `node scripts/check-release-state.mjs`, which refuses a current release that
-names an unfrozen schema or has an undated changelog entry, so a merge ahead of
-acceptance publishes nothing. CI runs only its self-test.
+names an unfrozen schema, has an undated changelog entry, or is proposed by an
+RFC that is not Accepted, so a merge ahead of acceptance publishes nothing. CI
+runs only its self-test.
 
 ### 6. Make the documents catch up
 
