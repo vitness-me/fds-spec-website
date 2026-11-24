@@ -41,7 +41,7 @@
  */
 
 import { readFile, readdir } from 'node:fs/promises';
-import { dirname, join, relative } from 'node:path';
+import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { PAGE_DIR, REGISTRY_DIR, changedRegions, loadDescriptors, refreshRegions, regionRenderers, regionsIn } from './lib/descriptors.mjs';
 import { assertRecordedFailures } from './lib/self-test.mjs';
@@ -388,16 +388,13 @@ function checkQuoted(text, file, path) {
 const RFC_DIR = 'specification/rfc';
 const SCHEMA_DIR = 'specification/schemas';
 const listed = async (dir, recursive) =>
-  (await readdir(join(ROOT, dir), { recursive, withFileTypes: true }).catch(() => []))
-    .filter((e) => e.isFile())
-    .map((e) => relative(join(ROOT, dir), join(e.parentPath ?? e.path, e.name)).split('\\').join('/'))
-    .sort();
-for (const file of (await listed(RFC_DIR, false)).filter((f) => f.endsWith('.md'))) {
-  const path = `${RFC_DIR}/${file}`;
-  checkQuoted(await readFile(join(ROOT, path), 'utf8'), file, path);
-}
-for (const file of (await listed(SCHEMA_DIR, true)).filter((f) => /\.example[^/]*\.json$/.test(f))) {
-  const path = `${SCHEMA_DIR}/${file}`;
+  (await readdir(join(ROOT, dir), { recursive }).catch(() => [])).map((f) => f.split('\\').join('/')).sort();
+const quotedFiles = [
+  ...(await listed(RFC_DIR, false)).filter((f) => f.endsWith('.md')).map((f) => [RFC_DIR, f]),
+  ...(await listed(SCHEMA_DIR, true)).filter((f) => /\.example[^/]*\.json$/.test(f)).map((f) => [SCHEMA_DIR, f]),
+];
+for (const [dir, file] of quotedFiles) {
+  const path = `${dir}/${file}`;
   checkQuoted(await readFile(join(ROOT, path), 'utf8'), file, path);
 }
 
