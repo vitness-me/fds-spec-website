@@ -109,6 +109,7 @@ if run_job schemas; then
   try "use-case pages stay honest" npm run check:usecases
   try "every matrix scenario has an example" npm run check:scenarios
   try "recommended values are in a registry" npm run check:registries
+  try "descriptor registries, flow and pages agree" npm run check:descriptors
   try "skill knowledge names real fields" npm run check:skill
   try "every version claim matches the manifest" npm run check:versions
   try "the publish-credential rules can fail" npm run check:publish-auth

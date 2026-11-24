@@ -1,0 +1,28 @@
+{
+  "registry": "fxe",
+  "descriptor": "FXE",
+  "status": "draft",
+  "syntax": "1.0",
+  "rules": "1.3",
+  "policy": "closed",
+  "description": "Self-test fixture.",
+  "vocabularies": {
+    "kinds": { "layer": "k", "description": "Kinds.", "entries": [
+      { "value": "none", "description": "No equipment.", "standard": [], "extended": [] },
+      { "value": "imp", "description": "Implement.", "standard": ["f"], "extended": ["r"] }
+    ] },
+    "forms": { "layer": "f", "description": "bell.dumb claims a kind nobody lists.", "entries": [
+      { "value": "bar.straight", "description": "Barbell.", "kind": "imp", "implies": { "r": "grav" } },
+      { "value": "bell.dumb", "description": "Dumbbell.", "kind": "free" }
+    ] },
+    "drives": { "layer": "r", "description": "Drives.", "entries": [
+      { "value": "grav", "description": "Gravity." }
+    ] },
+    "loadInterfaces": { "layer": "l", "description": "hand fits a hold point FXI does not list.", "entries": [
+      { "value": "hand", "description": "Hands.", "holdPoints": ["palms"] }
+    ] },
+    "postures": { "layer": "s", "description": "seat fits an orientation FXI does not list.", "entries": [
+      { "value": "seat", "description": "Seated.", "orientations": ["seated"] }
+    ] }
+  }
+}

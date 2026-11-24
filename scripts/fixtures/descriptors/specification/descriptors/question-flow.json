@@ -1,0 +1,17 @@
+{
+  "flow": "fxi-owner-questions",
+  "rules": "1.3",
+  "facts": { "exercise": "The subject is an exercise.", "unused": "Nothing asks for this." },
+  "changeOpens": { "extra": ["ghost"] },
+  "maxPhases": 1,
+  "questions": [
+    { "id": "subject", "layer": "FXI or FXE", "select": "one", "text": "Exercise or equipment?", "help": "", "usual": "An exercise.",
+      "options": [{ "id": "usual", "label": "An exercise" }] },
+    { "id": "load", "layer": "FXI l", "select": "one", "text": "What loads it?", "help": "", "usual": null,
+      "when": { "all": [{ "fact": "exercise" }, { "q": "later", "is": "x" }] },
+      "options": [{ "id": "bb", "label": "Barbell", "value": "bb" }, { "id": "zz", "label": "Unlisted", "value": "zz.code" }, { "id": "bb", "label": "Barbell, again", "value": "bb" }] },
+    { "id": "later", "layer": "FXI x", "select": "one", "text": "Sides?", "help": "", "usual": null,
+      "when": { "fact": "nofact" }, "options": [{ "id": "b", "label": "Both", "value": "b" }] },
+    { "id": "later", "layer": "FXI x", "select": "one", "text": "Sides, again?", "help": "", "usual": null, "options": [] }
+  ]
+}

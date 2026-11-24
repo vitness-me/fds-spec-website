@@ -1,0 +1,36 @@
+# Every failure scripts/check-descriptors.mjs --self-test must report over this
+# fixture tree, by key, and nothing else. One line per deliberate break.
+
+# 1. registries
+unknown-registry:fxz.registry.json
+duplicate:fxi.jointActions:kn.ext
+reference:fxi.jointActions:hip.ext:opposite
+joint:wr.flex
+implied:standing:toes
+description:fxi.symmetry:u
+layer:grips
+alias:zz
+form-kind:bell.dumb
+hold:hand:palms
+orient:seat:seated
+
+# 2. the question flow
+order:load:later
+option-code:load:zz
+duplicate-option:load:bb
+fact:later:nofact
+duplicate-question:later
+unused-fact:unused
+opens-option:extra
+opens:extra:ghost
+
+# 3. generated regions
+stale:page.md
+unknown-region:page.md:fxi#nope
+
+# 4. quoted strings
+string:page.md:FXI=1.0S/o:standing/m:hip.ext/l:bb@back
+string:page.md:FXI=1.1S/m:hip.ext/o:standing/l:bb@back
+string:page.md:FXI=1.0S/m:hip.flex/o:standing/l:bb@shoulders
+string:page.md:FXE=1.0N/k:imp/f:bar.straight
+string:page.md:FXM=1.0/Gluteus

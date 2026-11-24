@@ -1,0 +1,53 @@
+{
+  "registry": "fxi",
+  "descriptor": "FXI",
+  "status": "draft",
+  "syntax": "1.0",
+  "rules": "1.3",
+  "policy": "closed",
+  "description": "Self-test fixture. Each break below is recorded in expected-failures.txt.",
+  "layers": [
+    { "layer": "m", "standard": true, "source": "body", "description": "Motion." },
+    { "layer": "o", "standard": true, "source": "body", "description": "Orientation." },
+    { "layer": "l", "standard": true, "source": "body", "description": "Load." },
+    { "layer": "x", "standard": true, "source": "name", "description": "Symmetry." },
+    { "layer": "a", "standard": false, "source": "body", "description": "Accessory." }
+  ],
+  "vocabularies": {
+    "joints": { "layer": "m", "description": "Joints.", "entries": [
+      { "value": "hip", "description": "Hip.", "circles": true },
+      { "value": "kn", "description": "Knee." }
+    ] },
+    "jointActions": { "layer": "m", "description": "Joint actions; kn.ext is listed twice, wr.flex names a joint nobody lists, hip.ext's opposite is missing.", "entries": [
+      { "value": "hip.ext", "description": "Hip extension.", "opposite": "hip.flex" },
+      { "value": "kn.ext", "description": "Knee extension." },
+      { "value": "kn.ext", "description": "Knee extension, again." },
+      { "value": "wr.flex", "description": "Wrist flexion." }
+    ] },
+    "phasePrefixes": { "layer": "m", "description": "Prefixes.", "entries": [
+      { "value": "", "description": "Dynamic." },
+      { "value": "%", "description": "Static stretch." }
+    ] },
+    "orientations": { "layer": "o", "description": "Standing implies a body point nobody lists.", "entries": [
+      { "value": "standing", "description": "Standing.", "impliedPoints": ["feet", "toes"] }
+    ] },
+    "bodyPoints": { "layer": "l", "description": "Body points.", "entries": [
+      { "value": "feet", "description": "Feet." },
+      { "value": "back", "description": "Upper back." }
+    ] },
+    "holdOnlyPoints": { "layer": "l", "description": "Hold-only points.", "entries": [
+      { "value": "overhead", "description": "Overhead." }
+    ] },
+    "symmetry": { "layer": "x", "description": "u has no description.", "entries": [
+      { "value": "b", "description": "Both.", "default": true },
+      { "value": "u", "description": "" }
+    ] },
+    "grips": { "layer": "g", "description": "Claims a layer the registry does not have.", "entries": [
+      { "value": "pr", "description": "Pronated." }
+    ] },
+    "equipmentTokens": { "layer": "l", "description": "zz aliases a form FXE does not have.", "entries": [
+      { "value": "bb", "description": "Barbell.", "fxe": "FXE=1.0S/k:imp/f:bar.straight", "load": true, "support": true },
+      { "value": "zz", "description": "Nothing.", "fxe": "FXE=1.0S/k:imp/f:nope", "load": true, "support": true }
+    ] }
+  }
+}
