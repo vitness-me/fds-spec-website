@@ -10,7 +10,7 @@ export type { CompareResult, LayerRelation, Relation } from './compare.js';
 export { crossCheck, mainEquipment } from './crosscheck.js';
 export { checkRow, OWNER_PROVENANCES, PROVENANCES, rowsOf } from './rows.js';
 export type { Provenance, Row, RowCheck } from './rows.js';
-export { autoMatchRefusal, match, nameSimilarity } from './match.js';
+export { autoMatchRefusal, checkMatchRow, match, nameSimilarity } from './match.js';
 export type { Candidate, MatchOptions, MatchResult, MatchRow } from './match.js';
 export {
   canonicalFxm, checkMuscleRow, createFxmVocabulary, expandFxm, formatFxm, gradeFxm, parseFxm, readFxmVocabulary,

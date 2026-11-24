@@ -1,22 +1,25 @@
-// Match protocol: auto-match only on a unique identical FXI with owner provenance and no gap marker on
-// either side; otherwise a ranked list of up to three to confirm (FXI candidates, then near-compatible, then by name);
-// "absent" only when the library is empty.
+// Match protocol: auto-match only on a unique identical FXI with owner provenance, outside import mode, and no gap marker
+// on either side; otherwise a ranked list of up to three to confirm (FXI candidates, then near-compatible, then by
+// name); "absent" only when the library is empty.
 import { FXI_STANDARD_LAYERS } from './alphabet.js';
 import type { FxiLayer } from './alphabet.js';
 import { compare } from './compare.js';
 import type { CompareResult, Relation } from './compare.js';
-import { OWNER_PROVENANCES } from './rows.js';
+import { OWNER_PROVENANCES, PROVENANCES } from './rows.js';
 import type { Provenance } from './rows.js';
 
 /**
- * A row on either side of a match: its FXI, who answered it, the gap marker when the owner said the notation misses
- * something, and optionally its name (the query's in the library's language) and its standard FXE.
+ * A row on either side of a match: its FXI, who answered it and in which mode, the gap marker when the owner said the
+ * notation misses something, and optionally its name (the query's in the library's language) and its standard FXE.
  */
 export interface MatchRow {
   readonly id: string;
   readonly fxi: string;
   readonly fxiProvenance?: string | undefined;
-  readonly fxiGap?: string | null | undefined;
+  /** `import` rows never auto-match, whatever their provenance says. */
+  readonly mode?: string | undefined;
+  /** Any value other than absent, `null`, `false` or `""` is a gap marker and blocks auto-match. */
+  readonly fxiGap?: string | boolean | null | undefined;
   readonly name?: string | null | undefined;
   readonly fxe?: string | null | undefined;
 }
@@ -37,16 +40,39 @@ export interface MatchOptions {
   readonly top?: number;
 }
 
-const hasGap = (r: MatchRow): boolean => typeof r.fxiGap === 'string' && r.fxiGap.trim() !== '';
+/** Fails closed: every gap value but the four that mean "no gap" blocks auto-match. */
+const hasGap = (r: MatchRow): boolean => r.fxiGap !== undefined && r.fxiGap !== null && r.fxiGap !== false && r.fxiGap !== '';
 const ownerMade = (r: MatchRow): boolean => OWNER_PROVENANCES.includes(r.fxiProvenance as Provenance);
 
 /** Why two rows with identical FXIs may not be matched automatically, or undefined when they may. */
 export function autoMatchRefusal(query: MatchRow, candidate: MatchRow): string | undefined {
   if (hasGap(query)) return 'the query carries a gap marker';
   if (hasGap(candidate)) return 'the library entry carries a gap marker';
+  if (query.mode === 'import') return 'the query is an import-mode row';
+  if (candidate.mode === 'import') return 'the library entry is an import-mode row';
   if (!ownerMade(query)) return 'the query has no owner provenance';
   if (!ownerMade(candidate)) return 'the library entry has no owner provenance';
   return undefined;
+}
+
+/**
+ * Problems that make a row unfit for matching: no id, an FXI that is not a string, an unknown mode or provenance, a
+ * provenance that contradicts the mode (import mode has provenance `import`, and only import mode has it), or a gap
+ * marker that is not a string, a boolean or null. Empty when the row is fit.
+ */
+export function checkMatchRow(row: unknown): string[] {
+  if (typeof row !== 'object' || row === null || Array.isArray(row)) return ['not a row {id, fxi, …}'];
+  const r = row as Record<string, unknown>;
+  const problems: string[] = [];
+  if (typeof r.id !== 'string' && typeof r.id !== 'number') problems.push('id is missing');
+  if (typeof r.fxi !== 'string') problems.push('fxi must be a string');
+  if (r.mode !== undefined && r.mode !== 'owner' && r.mode !== 'import') problems.push('mode must be owner or import');
+  if (r.fxiProvenance !== undefined && !PROVENANCES.includes(r.fxiProvenance as Provenance)) problems.push(`fxiProvenance must be one of ${PROVENANCES.join(', ')}`);
+  if (r.mode !== undefined && r.fxiProvenance !== undefined && (r.mode === 'import') !== (r.fxiProvenance === 'import')) {
+    problems.push(`fxiProvenance "${String(r.fxiProvenance)}" contradicts mode "${String(r.mode)}": import mode has provenance import, and only import mode has it`);
+  }
+  if (r.fxiGap !== undefined && r.fxiGap !== null && typeof r.fxiGap !== 'string' && typeof r.fxiGap !== 'boolean') problems.push('fxiGap must be a string, a boolean or null');
+  return problems;
 }
 
 const FILLER = new Set(['a', 'an', 'the', 'and', 'of', 'with', 'on', 'in', 'to', 'for', 'de', 'del', 'la', 'el', 'los', 'las', 'con', 'en', 'y']);
@@ -110,7 +136,7 @@ function nearLayer(c: CompareResult): FxiLayer | undefined {
  * confirm list holds `top` entries, each listed once: FXI candidates (identical, refines or refined-by, compatible; then
  * more standard layers equal, FXE relation, name similarity, library order), then near-compatible entries (exactly one
  * standard layer contradicts; by name similarity, then library order), then the rest by name similarity. Absent only
- * when the library is empty.
+ * when the library is empty. Rows are taken as given: check rows from outside with `checkMatchRow` first.
  */
 export function match(query: MatchRow, library: readonly MatchRow[], options: MatchOptions | number = {}): MatchResult {
   const top = typeof options === 'number' ? options : options.top ?? 3;

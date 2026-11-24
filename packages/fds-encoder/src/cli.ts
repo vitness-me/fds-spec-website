@@ -14,7 +14,7 @@ import type { Cond, Flow, FlowQuestion } from './flow.js';
 import { checkMuscleRow, parseFxm, readFxmVocabulary } from './fxm.js';
 import type { FxmVocabulary } from './fxm.js';
 import { loadWordSet, readJson } from './load.js';
-import { match } from './match.js';
+import { checkMatchRow, match } from './match.js';
 import type { MatchRow } from './match.js';
 import { checkRow, rowsOf } from './rows.js';
 import type { Row } from './rows.js';
@@ -149,6 +149,22 @@ async function validateRows(file: string, vocabulary: FxmVocabulary | undefined,
 
 const json = (v: unknown): string => JSON.stringify(v, null, 1);
 
+/**
+ * The rows of a match file that carry an FXI; an equipment row (`fxi` null or left out) is skipped. Undefined, with
+ * every problem reported, when the file is not a rows file or any row is unfit for matching.
+ */
+async function matchRows(file: string, io: Io): Promise<MatchRow[] | undefined> {
+  const rows = rowsOf(await readJson(file));
+  if (rows === undefined) { io.err(`${file}: not a rows file (a JSON array of rows, or an object with an entries array)`); return undefined; }
+  const withFxi = rows.filter((r) => r.fxi !== undefined && r.fxi !== null);
+  const bad = withFxi.flatMap((r, n) => {
+    const problems = checkMatchRow(r);
+    return problems.length === 0 ? [] : [`${file}: row ${n} (${String(r.id)}): ${problems.join(' | ')}`];
+  });
+  for (const line of bad) io.err(line);
+  return bad.length === 0 ? (withFxi as unknown as MatchRow[]) : undefined;
+}
+
 /** Runs one command. Resolves to the exit code. */
 export async function run(argv: readonly string[], io: Io, version = '0.0.0'): Promise<number> {
   let code = 0;
@@ -242,19 +258,20 @@ export async function run(argv: readonly string[], io: Io, version = '0.0.0'): P
     });
 
   program.command('match')
-    .description('match each row against a library by the match protocol: auto only on a unique identical FXI with owner provenance and no gap marker on either side; otherwise a ranked list to confirm')
-    .argument('<rows>', 'a JSON list of {id, fxi, fxiProvenance?, fxiGap?, name?, fxe?}')
+    .description('match each row against a library by the match protocol: auto only on a unique identical FXI with owner provenance, outside import mode, and no gap marker on either side; otherwise a ranked list to confirm')
+    .argument('<rows>', 'a JSON list of {id, fxi, fxiProvenance?, mode?, fxiGap?, name?, fxe?}; a row whose provenance contradicts its mode is refused')
     .requiredOption('--library <file>', 'the library to match against, in the same shape')
     .option('--top <n>', 'length of the confirm list', '3')
     .action(async (file: string, o: { library: string; top: string }) => {
       const top = Number(o.top);
       if (!Number.isInteger(top) || top < 1) { io.err('--top is a whole number of 1 or more.'); code = 1; return; }
-      const rows = (rowsOf(await readJson(file)) ?? []) as unknown as MatchRow[];
-      const library = ((rowsOf(await readJson(o.library)) ?? []) as unknown as MatchRow[]).filter((r) => typeof r.fxi === 'string');
-      const queries = rows.filter((r) => typeof r.fxi === 'string');
-      if (queries.some((r) => r.fxiProvenance === 'import') || library.some((r) => r.fxiProvenance === 'import')) io.err(`Note: ${CANDIDATE_SEARCH_ONLY}.`);
+      const queries = await matchRows(file, io);
+      const library = await matchRows(o.library, io);
+      if (queries === undefined || library === undefined) { code = 1; return; }
+      const imported = (r: MatchRow): boolean => r.fxiProvenance === 'import' || r.mode === 'import';
+      if (queries.some(imported) || library.some(imported)) io.err(`Note: ${CANDIDATE_SEARCH_ONLY}.`);
       // The query's id and the match sit side by side: an auto result names the library entry as its own `id`.
-      io.out(json(queries.map((r) => ({ id: r.id, ...(r.fxiProvenance === 'import' ? { use: 'candidate search only' } : {}), match: match(r, library, { top }) }))));
+      io.out(json(queries.map((r) => ({ id: r.id, ...(imported(r) ? { use: 'candidate search only' } : {}), match: match(r, library, { top }) }))));
     });
 
   program.command('review')

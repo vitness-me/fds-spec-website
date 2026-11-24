@@ -130,6 +130,22 @@ describe('match', () => {
     ]);
     expect(r.err).toContain('candidate search only');
   });
+
+  test('an import-mode row never links, whatever its provenance, and a gap of true blocks auto', async () => {
+    const library = file('library-gap.json', [row('lib:squat', SQUAT)]);
+    const rows = file('queries-gap.json', [row('q1', SQUAT, { fxiGap: true }), row('q2', SQUAT, { mode: 'import', fxiProvenance: 'import' })]);
+    const r = await cli(['match', rows, '--library', library]);
+    expect(JSON.parse(r.out).map((m: { match: { why?: string } }) => m.match.why)).toEqual(['the query carries a gap marker', 'the query is an import-mode row']);
+  });
+
+  test('a row whose provenance contradicts its mode is refused, in the queries or the library', async () => {
+    const library = file('library-bad.json', [row('lib:squat', SQUAT, { mode: 'import' })]);
+    const rows = file('queries-ok.json', [row('q1', SQUAT)]);
+    const r = await cli(['match', rows, '--library', library]);
+    expect(r.code).toBe(1);
+    expect(r.out).toBe('');
+    expect(r.err).toContain('row 0 (lib:squat): fxiProvenance "owner" contradicts mode "import"');
+  });
 });
 
 describe('review', () => {
