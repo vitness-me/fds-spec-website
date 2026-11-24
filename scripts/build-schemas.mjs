@@ -59,9 +59,9 @@ const BUNDLED = join(ROOT, 'packages/fds-transformer/src/schemas/bundled');
  * that validates nothing.
  */
 const ENTITIES = [
-  { name: 'exercise', path: 'exercises/v1.1.0/exercise.schema.json' },
-  { name: 'equipment', path: 'equipment/v1.1.0/equipment.schema.json' },
-  { name: 'muscle', path: 'muscle/v1.0.0/muscle.schema.json' },
+  { name: 'exercise', path: 'exercises/v1.2.0/exercise.schema.json' },
+  { name: 'equipment', path: 'equipment/v1.2.0/equipment.schema.json' },
+  { name: 'muscle', path: 'muscle/v1.1.0/muscle.schema.json' },
   { name: 'muscle-category', path: 'muscle/muscle-category/v1.0.0/muscle-category.schema.json' },
   { name: 'body-atlas', path: 'atlas/v1.1.0/body-atlas.schema.json' },
   // A definition library rather than an entity — nothing is ever "a prescription
@@ -93,7 +93,7 @@ const kindOf = (declaration) => declaration.kind ?? 'entity';
  * name rather than being folded into the last one — a consumer pinned to 1.1.0
  * should not find a workout schema appearing in it.
  */
-const CURRENT_RELEASE = '1.5.0';
+const CURRENT_RELEASE = '1.6.0';
 
 /**
  * Published schemas that are served but not generated from an authoring source.
@@ -124,6 +124,11 @@ const CURRENT_RELEASE = '1.5.0';
  * optional asset `license` and `attribution`. Releases 1.0.0 through 1.4.0 name
  * it, so it stays served, hashed and frozen.
  *
+ * `exercises/v1.1.0`, `equipment/v1.1.0` and `muscle/v1.0.0` are superseded by
+ * the RFC-010 structural descriptor fields. Releases 1.1.0 through 1.5.0 name
+ * the first two and 1.0.0 through 1.5.0 the third, so all three stay served,
+ * hashed and frozen.
+ *
  * Each entry carries the same `name` and `kind` a generated one does, because
  * the release manifest has to describe these too and inferring either from a
  * file path is how a tooling schema ends up listed as an entity a provider can
@@ -142,6 +147,9 @@ const UNGENERATED = [
   { name: 'provenance', kind: 'tooling', path: 'transformer/provenance/v1.1.0/provenance.schema.json' },
   { name: 'workout', kind: 'entity', path: 'workout/v1.0.0/workout.schema.json' },
   { name: 'body-atlas', kind: 'entity', path: 'atlas/v1.0.0/body-atlas.schema.json' },
+  { name: 'exercise', kind: 'entity', path: 'exercises/v1.1.0/exercise.schema.json' },
+  { name: 'equipment', kind: 'entity', path: 'equipment/v1.1.0/equipment.schema.json' },
+  { name: 'muscle', kind: 'entity', path: 'muscle/v1.0.0/muscle.schema.json' },
 ];
 
 /**
@@ -240,6 +248,20 @@ const RELEASES = {
     exercise: '1.1.0',
     equipment: '1.1.0',
     muscle: '1.0.0',
+    'muscle-category': '1.0.0',
+    'body-atlas': '1.1.0',
+    prescription: '1.0.0',
+    workout: '1.1.0',
+    program: '1.0.0',
+  },
+  // Moves exercise and equipment to 1.2.0 and muscle to 1.1.0 — the RFC-010
+  // structural descriptor fields, all optional. Workout, program and the
+  // prescription library embed the same references but did not move: their
+  // frozen bytes are built from common 1.0.0, which this release left alone.
+  '1.6.0': {
+    exercise: '1.2.0',
+    equipment: '1.2.0',
+    muscle: '1.1.0',
     'muscle-category': '1.0.0',
     'body-atlas': '1.1.0',
     prescription: '1.0.0',

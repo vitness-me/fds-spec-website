@@ -242,6 +242,10 @@ Napomene:
 - `weight` je `0..1` i predstavlja relativni intenzitet/pokrivenost; podrazumevano `1.0`.
 - Konzumenti TREBALO BI da ograniče težine na `[0,1]` i mapiraju ih na skale boje/providnosti po potrebi.
 
+### 4.7. Strukturni deskriptor
+
+Od verzije muscle 1.1.0, zapis mišića MOŽE da nosi `fxm`, njegov kanonski FXM ključ kako ga definiše RFC-010: mišić, deo mišića ili grupu definisanu svojim članovima. Ključ dolazi iz sopstvenog vokabulara dobavljača, usidren za FMA, sa UBERON kao unakrsnom referencom. FDS objavljuje format ključa i pravila sidrenja, ne spisak mišića. Vežba koja cilja mišić MOŽE da nosi isti ključ u `muscleRef`.
+
 ## 5. Verzionisanje i kompatibilnost
 
 ### 5.1. Verzionisanje šeme
@@ -309,7 +313,7 @@ graph LR
 ## 8. Referenca JSON šeme
 
 Kompletna JSON šema je dostupna na:
-- **Muscle**: `/specification/schemas/muscle/v1.0.0/muscle.schema.json`
+- **Muscle**: `/specification/schemas/muscle/v1.1.0/muscle.schema.json`
 - **Body Atlas**: `/specification/schemas/atlas/v1.1.0/body-atlas.schema.json`
 
 ## 8.1. Validacija
@@ -318,15 +322,15 @@ Validirajte pomoću Ajv (Draft 2020-12):
 
 ```
 npx --package=ajv-cli --package=ajv-formats ajv validate --spec=draft2020 -c ajv-formats \
-  -s specification/schemas/muscle/v1.0.0/muscle.schema.json \
-  -d specification/schemas/muscle/v1.0.0/muscle.example.json
+  -s specification/schemas/muscle/v1.1.0/muscle.schema.json \
+  -d specification/schemas/muscle/v1.1.0/muscle.example.json
 ```
 
 ## 9. Primer implementacije
 
 ### 9.1. Kompletan zapis mišića kvadricepsa
 
-Na osnovu referentne implementacije (`/specification/schemas/muscle/v1.0.0/muscle.example.json`):
+Na osnovu referentne implementacije (`/specification/schemas/muscle/v1.1.0/muscle.example.json`):
 
 ```json
 {

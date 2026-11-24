@@ -16,7 +16,7 @@ This document defines an optional HTTP discovery endpoint that allows clients to
 ## Response Schema (informal)
 ```json fds:ignore a discovery document, defined by specification/discovery.md rather than by a published schema
 {
-  "spec_version": "1.5.0",
+  "spec_version": "1.6.0",
   "provider": "Acme Fitness Platform",
   "supported_entities": [
     "exercise",
@@ -28,9 +28,9 @@ This document defines an optional HTTP discovery endpoint that allows clients to
     "program"
   ],
   "entity_versions": {
-    "exercise": "1.1.0",
-    "equipment": "1.1.0",
-    "muscle": "1.0.0",
+    "exercise": "1.2.0",
+    "equipment": "1.2.0",
+    "muscle": "1.1.0",
     "muscle-category": "1.0.0",
     "body-atlas": "1.1.0",
     "workout": "1.1.0",
@@ -59,7 +59,7 @@ This document defines an optional HTTP discovery endpoint that allows clients to
 
 `spec_version` names a release. It is **not** a version that every entity shares, and a client that assumes it is will request URLs that were never published.
 
-Entities version independently. Release 1.5.0 publishes exercise, equipment, workout and body-atlas at 1.1.0 while muscle, muscle-category and program remain at 1.0.0. There is no `muscle/v1.5.0/` and there never will be unless muscle itself changes.
+Entities version independently. Release 1.6.0 publishes exercise and equipment at 1.2.0, muscle, workout and body-atlas at 1.1.0, while muscle-category and program remain at 1.0.0. There is no `muscle/v1.6.0/` and there never will be unless muscle itself changes.
 
 A superseded entity version stays served. `workout/v1.0.0/` is still published and still frozen, because releases 1.2.0 and 1.3.0 declare workout at 1.0.0 and a client pinned to either must keep resolving. `atlas/v1.0.0/` stays for the same reason: releases 1.0.0 through 1.4.0 declare body-atlas at 1.0.0.
 
@@ -79,6 +79,7 @@ Unlike a schema, the manifest is not frozen. It gains a release every time FDS p
 | 1.3.0 | program |
 | 1.4.0 | workout moves to 1.1.0 — per-set intensity zones and machine settings |
 | 1.5.0 | body-atlas moves to 1.1.0 — licence and attribution on view assets |
+| 1.6.0 | exercise and equipment move to 1.2.0, muscle to 1.1.0 — the RFC-010 structural descriptor fields |
 
 Gaining an entity is a new release even when nothing existing changed, because a release names the *set* it publishes.
 

@@ -15,9 +15,9 @@ When working in this codebase, you have access to comprehensive FDS knowledge:
 Published schemas, at the versions release 1.5.0 names. Entities version
 independently, so these paths do **not** share a version number.
 
-- **Exercise Schema** - `/specification/schemas/exercises/v1.1.0/exercise.schema.json`
-- **Equipment Schema** - `/specification/schemas/equipment/v1.1.0/equipment.schema.json`
-- **Muscle Schema** - `/specification/schemas/muscle/v1.0.0/muscle.schema.json`
+- **Exercise Schema** - `/specification/schemas/exercises/v1.2.0/exercise.schema.json`
+- **Equipment Schema** - `/specification/schemas/equipment/v1.2.0/equipment.schema.json`
+- **Muscle Schema** - `/specification/schemas/muscle/v1.1.0/muscle.schema.json`
 - **Muscle Category Schema** - `/specification/schemas/muscle/muscle-category/v1.0.0/muscle-category.schema.json`
 - **Body Atlas Schema** - `/specification/schemas/atlas/v1.1.0/body-atlas.schema.json`
 - **Workout Schema** - `/specification/schemas/workout/v1.1.0/workout.schema.json`

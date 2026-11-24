@@ -16,9 +16,10 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), '../..');
 /** Every authoring source. A schema missing here is invisible to both checks. */
 export const SCHEMA_SOURCES = [
   'specification/schema-sources/common/v1.0.0/common.schema.json',
-  'specification/schema-sources/exercises/v1.1.0/exercise.schema.json',
-  'specification/schema-sources/equipment/v1.1.0/equipment.schema.json',
-  'specification/schema-sources/muscle/v1.0.0/muscle.schema.json',
+  'specification/schema-sources/common/v1.1.0/common.schema.json',
+  'specification/schema-sources/exercises/v1.2.0/exercise.schema.json',
+  'specification/schema-sources/equipment/v1.2.0/equipment.schema.json',
+  'specification/schema-sources/muscle/v1.1.0/muscle.schema.json',
   'specification/schema-sources/muscle/muscle-category/v1.0.0/muscle-category.schema.json',
   'specification/schema-sources/atlas/v1.1.0/body-atlas.schema.json',
   'specification/schema-sources/prescription/v1.0.0/prescription.schema.json',

@@ -35,11 +35,11 @@ Oni pokazuju oblik koji provajder servira — niz dokumenata entiteta, od kojih 
 
 ## Primeri entiteta
 
-<!-- fds:count examples=136 -->
-Objavljeno je 136 primera dokumenata, od kojih se svaki servira sa iste verzionisane putanje kao i šema koju demonstrira. Svaki od njih validira se u CI-ju, pa primer koji prestane da odgovara svojoj šemi obara build.
+<!-- fds:count examples=139 -->
+Objavljeno je 139 primera dokumenata, od kojih se svaki servira sa iste verzionisane putanje kao i šema koju demonstrira. Svaki od njih validira se u CI-ju, pa primer koji prestane da odgovara svojoj šemi obara build.
 
-<!-- fds:count examples:exercise=8 -->
-### Primeri vežbi (8)
+<!-- fds:count examples:exercise=9 -->
+### Primeri vežbi (9)
 - Osnovna definicija vežbe
 - Kardio vežba
 - Kondiciona vežba
@@ -48,16 +48,19 @@ Objavljeno je 136 primera dokumenata, od kojih se svaki servira sa iste verzioni
 - Unilateralna vežba
 - Vežba sa asistencijom
 - Vežba zasnovana na brzini
+- Vežba sa strukturnim deskriptorima u nacrtu (RFC-010)
 
-<!-- fds:count examples:equipment=2 -->
-### Primeri opreme (2)
+<!-- fds:count examples:equipment=3 -->
+### Primeri opreme (3)
 - Osnovna definicija opreme (šipka)
 - Oprema sa opterećenjem na steku, kod koje se opterećenje bira u fiksnim koracima
+- Mašina sa svojim FXE deskriptorom u nacrtu (RFC-010)
 
-<!-- fds:count examples:muscle=2 -->
-### Primeri mišića (2)
+<!-- fds:count examples:muscle=3 -->
+### Primeri mišića (3)
 - Mišić sa regionima toplotne mape i lokalizovanim nazivom
 - Drugi mišić koji uz svoje regione nosi lokalizovane alijase
+- Mišić sa svojim FXM ključem u nacrtu (RFC-010)
 
 <!-- fds:count examples:muscle-category=1 -->
 ### Primeri kategorija mišića (1)

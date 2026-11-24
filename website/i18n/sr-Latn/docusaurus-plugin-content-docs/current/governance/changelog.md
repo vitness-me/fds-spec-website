@@ -13,6 +13,46 @@ Format je inspirisan pristupom Keep a Changelog, a projekat se pridržava semant
 ## [Neobjavljeno]
 - Politika imenskog prostora ekstenzija (nacrt) i odeljci o usaglašenosti (planirano).
 
+## Izdanje šeme — exercise 1.2.0, equipment 1.2.0, muscle 1.1.0 (predloženo uz nacrt RFC-010)
+
+Predloženo, još nije izdato: objavljuje se kada RFC-010 bude prihvaćen i ovaj
+unos dobije datum. Do tada su nove verzije zabeležene kao nezamrznute.
+
+### Dodato
+- **RFC-010, Strukturni deskriptori (nacrt).** FXI za vežbu, FXE za komad opreme
+  i FXM za mišić: nizovi iz zatvorenih vokabulara kojima dva kataloga porede
+  zapise bez zajedničkog naziva. RFC usvaja stranice deskriptora, definiše
+  protokol podudaranja i objavljuje merenja prema kojima su deskriptori
+  testirani, uključujući i to da prag za izlazak iz eksperimentalnog statusa još
+  nije dostignut.
+- Na vežbi: `fxi`, `fxe` (standardni FXE njene glavne opreme), `fxiProvenance`,
+  `fxiGap` i `xrefs`, sva opciona, na najvišem nivou zapisa. Svaka referenca na
+  opremu unutar vežbe može da nosi `fxe`, a svaka referenca na mišić `fxm`.
+- Na opremi `fxe`; na mišiću `fxm`.
+- Unosi u `xrefs` su `{system, id, link}`, gde je `link` `auto` ili
+  `confirmed`. Odvojeni su od `metadata.externalRefs`, koje navodi sopstvene
+  identifikatore zapisa u drugim sistemima i nema gde da kaže kako je veza
+  napravljena (RFC-010 §5.4).
+- Po jedan primer za svaki entitet sa novim poljima.
+
+### Izmenjeno
+- Izdanje **1.6.0** imenuje exercise i equipment na 1.2.0, a muscle na 1.1.0.
+  Svi ostali entiteti i biblioteka preskripcija ostaju na verzijama koje
+  imenuje 1.5.0.
+- Transformator uključuje izdanje 1.6.0 i podrazumevano ga koristi. Izdanja od
+  1.0.0 do 1.5.0 ostaju uključena. Njegovi opcioni koraci za deskriptore sada
+  pišu dokumente koji prolaze validaciju.
+- Primeri za exercise, equipment i muscle premeštaju se pored novih verzija.
+
+### Kompatibilnost
+- Čisto aditivno. Svaki dokument validan pod exercise 1.1.0, equipment 1.1.0 ili
+  muscle 1.0.0 validira se prema novoj verziji nepromenjen.
+- **`exercises/v1.1.0/`, `equipment/v1.1.0/` i `muscle/v1.0.0/` ostaju
+  objavljeni i zamrznuti.** Izdanja pre 1.6.0 ih imenuju, a klijent fiksiran na
+  bilo koje od njih mora i dalje moći da ih razrešava.
+- Workout, program i biblioteka preskripcija sadrže iste reference i nisu se
+  pomerili, pa njihove reference još ne mogu da nose deskriptor (RFC-010 §5.5).
+
 ## Izdanje šeme — body-atlas 1.1.0 (2026-11-14)
 
 ### Dodato

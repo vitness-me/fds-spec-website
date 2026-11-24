@@ -4,24 +4,25 @@ description: JSON šema za model podataka vežbe
 sidebar_position: 2
 ---
 
-# Šema vežbe (v1.1.0)
+# Šema vežbe (v1.2.0)
 
 Šema vežbe definiše osnovni model podataka za fitnes vežbe. Uključuje klasifikaciju, ciljane mišiće, zahteve za opremom i medijske sadržaje.
 
 ## Lokacija šeme
 
-**URL:** `https://spec.vitness.me/schemas/exercises/v1.1.0/exercise.schema.json`
+**URL:** `https://spec.vitness.me/schemas/exercises/v1.2.0/exercise.schema.json`
 
-**Preuzimanje:** [exercise.schema.json](https://spec.vitness.me/schemas/exercises/v1.1.0/exercise.schema.json)
+**Preuzimanje:** [exercise.schema.json](https://spec.vitness.me/schemas/exercises/v1.2.0/exercise.schema.json)
 
 ## Primeri
 
 Pogledajte primere vežbi:
-- [Osnovna vežba](https://spec.vitness.me/schemas/exercises/v1.1.0/exercise.example.json)
-- [Kardio vežba](https://spec.vitness.me/schemas/exercises/v1.1.0/exercise.example.cardio.json)
-- [Vežba mobilnosti](https://spec.vitness.me/schemas/exercises/v1.1.0/exercise.example.mobility.json)
-- [Vežba na mašini](https://spec.vitness.me/schemas/exercises/v1.1.0/exercise.example.machine.json)
-- [Unilateralna vežba](https://spec.vitness.me/schemas/exercises/v1.1.0/exercise.example.unilateral.json)
+- [Osnovna vežba](https://spec.vitness.me/schemas/exercises/v1.2.0/exercise.example.json)
+- [Kardio vežba](https://spec.vitness.me/schemas/exercises/v1.2.0/exercise.example.cardio.json)
+- [Vežba mobilnosti](https://spec.vitness.me/schemas/exercises/v1.2.0/exercise.example.mobility.json)
+- [Vežba na mašini](https://spec.vitness.me/schemas/exercises/v1.2.0/exercise.example.machine.json)
+- [Unilateralna vežba](https://spec.vitness.me/schemas/exercises/v1.2.0/exercise.example.unilateral.json)
+- [Vežba sa strukturnim deskriptorima (nacrt, RFC-010)](https://spec.vitness.me/schemas/exercises/v1.2.0/exercise.example.descriptors.json)
 
 ## Specifikacija
 

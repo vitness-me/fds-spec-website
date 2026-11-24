@@ -35,11 +35,11 @@ The `.example.` in the filename is the distinction — a file named `*.registry.
 
 ## Example Entities
 
-<!-- fds:count examples=136 -->
-136 example documents are published, each served from the same versioned path as the schema it demonstrates. Every one is validated in CI, so an example that stops matching its schema fails the build.
+<!-- fds:count examples=139 -->
+139 example documents are published, each served from the same versioned path as the schema it demonstrates. Every one is validated in CI, so an example that stops matching its schema fails the build.
 
-<!-- fds:count examples:exercise=8 -->
-### Exercise Examples (8)
+<!-- fds:count examples:exercise=9 -->
+### Exercise Examples (9)
 - Basic exercise definition
 - Cardio exercise
 - Conditioning exercise
@@ -48,16 +48,19 @@ The `.example.` in the filename is the distinction — a file named `*.registry.
 - Unilateral exercise
 - Assisted exercise
 - Velocity-based exercise
+- An exercise carrying the draft structural descriptors (RFC-010)
 
-<!-- fds:count examples:equipment=2 -->
-### Equipment Examples (2)
+<!-- fds:count examples:equipment=3 -->
+### Equipment Examples (3)
 - Basic equipment definition (a barbell)
 - Stack-loaded equipment, where load is selected in fixed increments
+- A machine carrying its draft FXE descriptor (RFC-010)
 
-<!-- fds:count examples:muscle=2 -->
-### Muscle Examples (2)
+<!-- fds:count examples:muscle=3 -->
+### Muscle Examples (3)
 - A muscle with heatmap regions and a localized name
 - A second muscle carrying localized aliases alongside its regions
+- A muscle carrying its draft FXM key (RFC-010)
 
 <!-- fds:count examples:muscle-category=1 -->
 ### Muscle Category Examples (1)

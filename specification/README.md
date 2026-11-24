@@ -129,18 +129,18 @@ Validate examples with Ajv (Draft 2020‑12):
 ```bash
 # Exercise
 npx --package=ajv-cli --package=ajv-formats ajv validate --spec=draft2020 -c ajv-formats \
-  -s specification/schemas/exercises/v1.1.0/exercise.schema.json \
-  -d specification/schemas/exercises/v1.1.0/exercise.example.json
+  -s specification/schemas/exercises/v1.2.0/exercise.schema.json \
+  -d specification/schemas/exercises/v1.2.0/exercise.example.json
 
 # Equipment
 npx --package=ajv-cli --package=ajv-formats ajv validate --spec=draft2020 -c ajv-formats \
-  -s specification/schemas/equipment/v1.1.0/equipment.schema.json \
-  -d specification/schemas/equipment/v1.1.0/equipment.example.json
+  -s specification/schemas/equipment/v1.2.0/equipment.schema.json \
+  -d specification/schemas/equipment/v1.2.0/equipment.example.json
 
 # Muscle
 npx --package=ajv-cli --package=ajv-formats ajv validate --spec=draft2020 -c ajv-formats \
-  -s specification/schemas/muscle/v1.0.0/muscle.schema.json \
-  -d specification/schemas/muscle/v1.0.0/muscle.example.json
+  -s specification/schemas/muscle/v1.1.0/muscle.schema.json \
+  -d specification/schemas/muscle/v1.1.0/muscle.example.json
 
 # Muscle Category
 npx --package=ajv-cli --package=ajv-formats ajv validate --spec=draft2020 -c ajv-formats \
@@ -156,8 +156,8 @@ Notes:
 - `specification/rfc/` — one file per RFC. Which RFCs exist is listed once, under **In scope** above, and in the gated table in the repository's root `README.md`; a second copy here would be one more list to keep by hand.
 - `specification/schema-sources/` — **authoring**. Entity schemas `$ref` a shared `common` envelope here; hand‑edit these.
 - `specification/schemas/` — **generated and published**. Each file is flattened to be self‑contained, so validating one entity never requires fetching another. Never hand‑edit a `*.schema.json`; the examples and READMEs beside them are hand‑written.
-  - `exercises/v1.1.0/`, `equipment/v1.1.0/` schema + examples
-  - `muscle/v1.0.0/`, `muscle/muscle-category/v1.0.0/` schema + examples
+  - `exercises/v1.2.0/`, `equipment/v1.2.0/` schema + examples
+  - `muscle/v1.1.0/`, `muscle/muscle-category/v1.0.0/` schema + examples
   - `atlas/v1.1.0/` schema + example; `atlas/v1.0.0/` schema only, superseded but still served and frozen
   <!-- fds:count fixtures:prescription=73 -->
   - `prescription/v1.0.0/` definition library + 73 fixtures

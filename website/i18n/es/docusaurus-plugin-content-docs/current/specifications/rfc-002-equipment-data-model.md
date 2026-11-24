@@ -212,6 +212,10 @@ El objeto opcional `loading` describe cómo un implemento transporta la carga. E
 
 Esta es la contraparte de `exercise.loading` (RFC-001 §4.6): el ejercicio declara *si* un movimiento acepta carga; el equipamiento declara *en qué pasos*.
 
+### 4.5. Descriptor estructural
+
+A partir de equipment 1.2.0, un registro de equipamiento PUEDE llevar `fxe`, su descriptor estructural FXE canónico tal como lo define RFC-010. Es estándar (indicador `S`) o lleva las capas extendidas de detalle de construcción que solo lleva un registro de equipamiento (indicador `N`). Un ejercicio que hace referencia al equipamiento PUEDE llevar su FXE estándar en el `equipmentRef`. FXE clasifica la estructura; FDS publica los códigos, no un catálogo de equipamiento.
+
 ## 5. Versionado y compatibilidad
 
 ### 5.1. Versionado de esquemas
@@ -280,7 +284,7 @@ graph LR
 ## 8. Referencia de JSON Schema
 
 El JSON Schema completo está disponible en:
-- **Equipamiento**: `/specification/schemas/equipment/v1.1.0/equipment.schema.json`
+- **Equipamiento**: `/specification/schemas/equipment/v1.2.0/equipment.schema.json`
 
 ## 8.1. Validación
 
@@ -288,15 +292,15 @@ Validar con Ajv (Draft 2020-12):
 
 ```
 npx --package=ajv-cli --package=ajv-formats ajv validate --spec=draft2020 -c ajv-formats \
-  -s specification/schemas/equipment/v1.1.0/equipment.schema.json \
-  -d specification/schemas/equipment/v1.1.0/equipment.example.json
+  -s specification/schemas/equipment/v1.2.0/equipment.schema.json \
+  -d specification/schemas/equipment/v1.2.0/equipment.example.json
 ```
 
 ## 9. Ejemplo de implementación
 
 ### 9.1. Registro completo del equipamiento barra
 
-Basado en la implementación de referencia (`/specification/schemas/equipment/v1.1.0/equipment.example.json`):
+Basado en la implementación de referencia (`/specification/schemas/equipment/v1.2.0/equipment.example.json`):
 
 ```json fds:document entity=equipment
 {

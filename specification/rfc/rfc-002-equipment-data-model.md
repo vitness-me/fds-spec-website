@@ -205,6 +205,10 @@ The optional `loading` object describes how an implement carries load. It is the
 
 This is the counterpart to `exercise.loading` (RFC-001 §4.6): the exercise states *whether* a movement takes load, the equipment states *in what steps*.
 
+### 4.5. Structural Descriptor
+
+From equipment 1.2.0, an equipment record MAY carry `fxe`, its canonical FXE structural descriptor as RFC-010 defines it. It is either standard (flag `S`) or carries the extended build-detail layers that only an equipment record carries (flag `N`). An exercise that references the equipment MAY carry its standard FXE on the `equipmentRef`. FXE classifies structure; FDS publishes the codes, not an equipment catalogue.
+
 ## 5. Versioning and Compatibility
 
 ### 5.1. Schema Versioning
@@ -273,7 +277,7 @@ graph LR
 ## 8. JSON Schema Reference
 
 Complete JSON Schema available at:
-- **Equipment**: `/specification/schemas/equipment/v1.1.0/equipment.schema.json`
+- **Equipment**: `/specification/schemas/equipment/v1.2.0/equipment.schema.json`
 
 ## 8.1. Validation
 
@@ -281,15 +285,15 @@ Validate with Ajv (Draft 2020-12):
 
 ```
 npx --package=ajv-cli --package=ajv-formats ajv validate --spec=draft2020 -c ajv-formats \
-  -s specification/schemas/equipment/v1.1.0/equipment.schema.json \
-  -d specification/schemas/equipment/v1.1.0/equipment.example.json
+  -s specification/schemas/equipment/v1.2.0/equipment.schema.json \
+  -d specification/schemas/equipment/v1.2.0/equipment.example.json
 ```
 
 ## 9. Example Implementation
 
 ### 9.1. Complete Barbell Equipment Record
 
-Based on reference implementation (`/specification/schemas/equipment/v1.1.0/equipment.example.json`):
+Based on reference implementation (`/specification/schemas/equipment/v1.2.0/equipment.example.json`):
 
 ```json fds:document entity=equipment
 {

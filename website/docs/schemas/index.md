@@ -8,41 +8,41 @@ sidebar_position: 1
 
 FDS is defined in JSON Schema (Draft 2020-12). Every schema below is published at a frozen URL: the bytes at a version URL never change, and a change ships at a new one.
 
-<!-- fds:count schemas=16 entities=7 libraries=1 tooling=2 superseded=6 -->
-Sixteen schemas are published. Seven are entities, one is a definition library, two belong to a tool, and six are superseded versions that are still served.
+<!-- fds:count schemas=19 entities=7 libraries=1 tooling=2 superseded=9 -->
+Nineteen schemas are published. Seven are entities, one is a definition library, two belong to a tool, and nine are superseded versions that are still served.
 
 ## Entity versions are not uniform
 
-A release names a *set* of entity versions rather than one version they all share. The current release is **1.5.0**, and it publishes:
+A release names a *set* of entity versions rather than one version they all share. The current release is **1.6.0**, and it publishes:
 
 | Entity | Version | Schema URL |
 |---|---|---|
-| [Exercise](/docs/schemas/exercise) | 1.1.0 | `/schemas/exercises/v1.1.0/exercise.schema.json` |
-| [Equipment](/docs/schemas/equipment) | 1.1.0 | `/schemas/equipment/v1.1.0/equipment.schema.json` |
-| [Muscle](/docs/schemas/muscle) | 1.0.0 | `/schemas/muscle/v1.0.0/muscle.schema.json` |
+| [Exercise](/docs/schemas/exercise) | 1.2.0 | `/schemas/exercises/v1.2.0/exercise.schema.json` |
+| [Equipment](/docs/schemas/equipment) | 1.2.0 | `/schemas/equipment/v1.2.0/equipment.schema.json` |
+| [Muscle](/docs/schemas/muscle) | 1.1.0 | `/schemas/muscle/v1.1.0/muscle.schema.json` |
 | [Muscle Category](/docs/schemas/muscle-category) | 1.0.0 | `/schemas/muscle/muscle-category/v1.0.0/muscle-category.schema.json` |
 | [Body Atlas](/docs/schemas/body-atlas) | 1.1.0 | `/schemas/atlas/v1.1.0/body-atlas.schema.json` |
 | [Workout](/docs/schemas/workout) | 1.1.0 | `/schemas/workout/v1.1.0/workout.schema.json` |
 | [Program](/docs/schemas/program) | 1.0.0 | `/schemas/program/v1.0.0/program.schema.json` |
 
-There is no `muscle/v1.5.0/`, and there will not be unless muscle itself changes. Build schema URLs from the entity version, never from the release — see the [discovery endpoint](/docs/core-concepts/discovery) for how a provider advertises which entity version it serves.
+There is no `muscle/v1.6.0/`, and there will not be unless muscle itself changes. Build schema URLs from the entity version, never from the release — see the [discovery endpoint](/docs/core-concepts/discovery) for how a provider advertises which entity version it serves.
 
 ## The entities
 
-### [Exercise Schema](/docs/schemas/exercise) — v1.1.0
-The core exercise data model with classification, targets, equipment, metrics and media.
+### [Exercise Schema](/docs/schemas/exercise) — v1.2.0
+The core exercise data model with classification, targets, equipment, metrics and media. 1.2.0 added the optional structural descriptor fields of the draft RFC-010.
 
-**Schema:** `/schemas/exercises/v1.1.0/exercise.schema.json`
+**Schema:** `/schemas/exercises/v1.2.0/exercise.schema.json`
 
-### [Equipment Schema](/docs/schemas/equipment) — v1.1.0
-Fitness equipment definitions with classification, loading characteristics and metadata.
+### [Equipment Schema](/docs/schemas/equipment) — v1.2.0
+Fitness equipment definitions with classification, loading characteristics and metadata. 1.2.0 added the optional FXE descriptor of the draft RFC-010.
 
-**Schema:** `/schemas/equipment/v1.1.0/equipment.schema.json`
+**Schema:** `/schemas/equipment/v1.2.0/equipment.schema.json`
 
-### [Muscle Schema](/docs/schemas/muscle) — v1.0.0
-Anatomical muscle definitions with heatmap visualization support.
+### [Muscle Schema](/docs/schemas/muscle) — v1.1.0
+Anatomical muscle definitions with heatmap visualization support. 1.1.0 added the optional FXM key of the draft RFC-010.
 
-**Schema:** `/schemas/muscle/v1.0.0/muscle.schema.json`
+**Schema:** `/schemas/muscle/v1.1.0/muscle.schema.json`
 
 ### [Muscle Category Schema](/docs/schemas/muscle-category) — v1.0.0
 Muscle grouping and categorization structure.
@@ -93,6 +93,9 @@ Describes `provenance.sidecar.json`, the file the FDS Transformer writes beside 
 
 <!-- fds:pin workout/v1.0.0/workout.schema.json — listed on purpose: releases 1.2.0 and 1.3.0 declare workout at 1.0.0, so a client pinned to either must keep resolving this URL. The section says plainly not to build against it. -->
 <!-- fds:pin atlas/v1.0.0/body-atlas.schema.json — listed on purpose: releases 1.0.0 through 1.4.0 declare body-atlas at 1.0.0, so a client pinned to any of them must keep resolving this URL. The section says plainly not to build against it. -->
+<!-- fds:pin exercises/v1.1.0/exercise.schema.json — listed on purpose: releases 1.1.0 through 1.5.0 declare exercise at 1.1.0, so a client pinned to any of them must keep resolving this URL. The section says plainly not to build against it. -->
+<!-- fds:pin equipment/v1.1.0/equipment.schema.json — listed on purpose: releases 1.1.0 through 1.5.0 declare equipment at 1.1.0, so a client pinned to any of them must keep resolving this URL. The section says plainly not to build against it. -->
+<!-- fds:pin muscle/v1.0.0/muscle.schema.json — listed on purpose: releases 1.0.0 through 1.5.0 declare muscle at 1.0.0, so a client pinned to any of them must keep resolving this URL. The section says plainly not to build against it. -->
 <!-- fds:pin transformer/v1.0.0/mapping.schema.json — listed on purpose: it is the `$schema` URL every configuration written before 1.1.0 names, and an editor resolving it must keep getting a document. -->
 <!-- fds:pin transformer/v1.1.0/mapping.schema.json — listed on purpose: it is the `$schema` URL every configuration written before 1.2.0 names, and an editor resolving it must keep getting a document. -->
 <!-- fds:pin transformer/v1.2.0/mapping.schema.json — listed on purpose: it is the `$schema` URL every configuration written before 1.3.0 names, and an editor resolving it must keep getting a document. -->
@@ -141,6 +144,36 @@ Superseded by body-atlas 1.1.0. It stays published and stays frozen, because rel
 Do not build against it. New work should use body-atlas 1.1.0; 1.0.0 documents remain valid under it unchanged, since 1.1.0 only added optional fields.
 
 The example lives alongside the current version, at `/schemas/atlas/v1.1.0/`.
+
+### Exercise — v1.1.0
+
+**Schema:** `/schemas/exercises/v1.1.0/exercise.schema.json`
+
+Superseded by exercise 1.2.0. It stays published and stays frozen, because releases 1.1.0 through 1.5.0 declare exercise at 1.1.0 and a client pinned to any of them must keep resolving.
+
+Do not build against it. New work should use exercise 1.2.0; 1.1.0 documents remain valid under it unchanged, since 1.2.0 only added optional fields.
+
+Examples live alongside the current version, at `/schemas/exercises/v1.2.0/`.
+
+### Equipment — v1.1.0
+
+**Schema:** `/schemas/equipment/v1.1.0/equipment.schema.json`
+
+Superseded by equipment 1.2.0. It stays published and stays frozen, because releases 1.1.0 through 1.5.0 declare equipment at 1.1.0 and a client pinned to any of them must keep resolving.
+
+Do not build against it. New work should use equipment 1.2.0; 1.1.0 documents remain valid under it unchanged, since 1.2.0 only added optional fields.
+
+Examples live alongside the current version, at `/schemas/equipment/v1.2.0/`.
+
+### Muscle — v1.0.0
+
+**Schema:** `/schemas/muscle/v1.0.0/muscle.schema.json`
+
+Superseded by muscle 1.1.0. It stays published and stays frozen, because releases 1.0.0 through 1.5.0 declare muscle at 1.0.0 and a client pinned to any of them must keep resolving.
+
+Do not build against it. New work should use muscle 1.1.0; 1.0.0 documents remain valid under it unchanged, since 1.1.0 only added optional fields.
+
+Examples live alongside the current version, at `/schemas/muscle/v1.1.0/`.
 
 ## Validation
 

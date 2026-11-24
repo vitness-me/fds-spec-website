@@ -8,41 +8,41 @@ sidebar_position: 1
 
 FDS se define en JSON Schema (Draft 2020-12). Cada esquema listado abajo se publica en una URL congelada: los bytes en una URL de versión nunca cambian, y un cambio se publica en una URL nueva.
 
-<!-- fds:count schemas=16 entities=7 libraries=1 tooling=2 superseded=6 -->
-Se publican 16 esquemas: 7 son entidades, 1 es una biblioteca de definiciones, 2 pertenecen a una herramienta y 6 son versiones sustituidas que se siguen sirviendo.
+<!-- fds:count schemas=19 entities=7 libraries=1 tooling=2 superseded=9 -->
+Se publican 19 esquemas: 7 son entidades, 1 es una biblioteca de definiciones, 2 pertenecen a una herramienta y 9 son versiones sustituidas que se siguen sirviendo.
 
 ## Las versiones de entidades no son uniformes
 
-Un lanzamiento nombra un *conjunto* de versiones de entidades, no una versión que todas compartan. El lanzamiento actual es **1.5.0**, y publica:
+Un lanzamiento nombra un *conjunto* de versiones de entidades, no una versión que todas compartan. El lanzamiento actual es **1.6.0**, y publica:
 
 | Entidad | Versión | URL del esquema |
 |---|---|---|
-| [Ejercicio](/docs/schemas/exercise) | 1.1.0 | `/schemas/exercises/v1.1.0/exercise.schema.json` |
-| [Equipamiento](/docs/schemas/equipment) | 1.1.0 | `/schemas/equipment/v1.1.0/equipment.schema.json` |
-| [Músculo](/docs/schemas/muscle) | 1.0.0 | `/schemas/muscle/v1.0.0/muscle.schema.json` |
+| [Ejercicio](/docs/schemas/exercise) | 1.2.0 | `/schemas/exercises/v1.2.0/exercise.schema.json` |
+| [Equipamiento](/docs/schemas/equipment) | 1.2.0 | `/schemas/equipment/v1.2.0/equipment.schema.json` |
+| [Músculo](/docs/schemas/muscle) | 1.1.0 | `/schemas/muscle/v1.1.0/muscle.schema.json` |
 | [Categoría de músculos](/docs/schemas/muscle-category) | 1.0.0 | `/schemas/muscle/muscle-category/v1.0.0/muscle-category.schema.json` |
 | [Atlas corporal](/docs/schemas/body-atlas) | 1.1.0 | `/schemas/atlas/v1.1.0/body-atlas.schema.json` |
 | [Sesión de entrenamiento](/docs/schemas/workout) | 1.1.0 | `/schemas/workout/v1.1.0/workout.schema.json` |
 | [Programa](/docs/schemas/program) | 1.0.0 | `/schemas/program/v1.0.0/program.schema.json` |
 
-No existe `muscle/v1.5.0/`, y no existirá a menos que muscle mismo cambie. Construir las URLs de esquemas a partir de la versión de la entidad, nunca a partir del lanzamiento — véase el [endpoint de descubrimiento](/docs/core-concepts/discovery) para saber cómo un proveedor anuncia qué versión de entidad sirve.
+No existe `muscle/v1.6.0/`, y no existirá a menos que muscle mismo cambie. Construir las URLs de esquemas a partir de la versión de la entidad, nunca a partir del lanzamiento — véase el [endpoint de descubrimiento](/docs/core-concepts/discovery) para saber cómo un proveedor anuncia qué versión de entidad sirve.
 
 ## Las entidades
 
-### [Esquema de ejercicio](/docs/schemas/exercise) — v1.1.0
-El modelo de datos central de ejercicios, con clasificación, objetivos, equipamiento, métricas y medios.
+### [Esquema de ejercicio](/docs/schemas/exercise) — v1.2.0
+El modelo de datos central de ejercicios, con clasificación, objetivos, equipamiento, métricas y medios. La 1.2.0 agregó los campos opcionales de descriptor estructural del borrador RFC-010.
 
-**Esquema:** `/schemas/exercises/v1.1.0/exercise.schema.json`
+**Esquema:** `/schemas/exercises/v1.2.0/exercise.schema.json`
 
-### [Esquema de equipamiento](/docs/schemas/equipment) — v1.1.0
-Definiciones de equipamiento de fitness con clasificación, características de carga y metadatos.
+### [Esquema de equipamiento](/docs/schemas/equipment) — v1.2.0
+Definiciones de equipamiento de fitness con clasificación, características de carga y metadatos. La 1.2.0 agregó el descriptor FXE opcional del borrador RFC-010.
 
-**Esquema:** `/schemas/equipment/v1.1.0/equipment.schema.json`
+**Esquema:** `/schemas/equipment/v1.2.0/equipment.schema.json`
 
-### [Esquema de músculo](/docs/schemas/muscle) — v1.0.0
-Definiciones anatómicas de músculos con visualización de mapa de calor.
+### [Esquema de músculo](/docs/schemas/muscle) — v1.1.0
+Definiciones anatómicas de músculos con visualización de mapa de calor. La 1.1.0 agregó la clave FXM opcional del borrador RFC-010.
 
-**Esquema:** `/schemas/muscle/v1.0.0/muscle.schema.json`
+**Esquema:** `/schemas/muscle/v1.1.0/muscle.schema.json`
 
 ### [Esquema de categoría de músculos](/docs/schemas/muscle-category) — v1.0.0
 Estructura de agrupación y categorización de músculos.
@@ -93,6 +93,9 @@ La 1.1.0 exige `provider` en la entrada de un modelo: el proveedor de enriquecim
 
 <!-- fds:pin workout/v1.0.0/workout.schema.json — listed on purpose: releases 1.2.0 and 1.3.0 declare workout at 1.0.0, so a client pinned to either must keep resolving this URL. The section says plainly not to build against it. -->
 <!-- fds:pin atlas/v1.0.0/body-atlas.schema.json — listed on purpose: releases 1.0.0 through 1.4.0 declare body-atlas at 1.0.0, so a client pinned to any of them must keep resolving this URL. The section says plainly not to build against it. -->
+<!-- fds:pin exercises/v1.1.0/exercise.schema.json — listed on purpose: releases 1.1.0 through 1.5.0 declare exercise at 1.1.0, so a client pinned to any of them must keep resolving this URL. The section says plainly not to build against it. -->
+<!-- fds:pin equipment/v1.1.0/equipment.schema.json — listed on purpose: releases 1.1.0 through 1.5.0 declare equipment at 1.1.0, so a client pinned to any of them must keep resolving this URL. The section says plainly not to build against it. -->
+<!-- fds:pin muscle/v1.0.0/muscle.schema.json — listed on purpose: releases 1.0.0 through 1.5.0 declare muscle at 1.0.0, so a client pinned to any of them must keep resolving this URL. The section says plainly not to build against it. -->
 <!-- fds:pin transformer/v1.0.0/mapping.schema.json — listed on purpose: it is the `$schema` URL every configuration written before 1.1.0 names, and an editor resolving it must keep getting a document. -->
 <!-- fds:pin transformer/v1.1.0/mapping.schema.json — listed on purpose: it is the `$schema` URL every configuration written before 1.2.0 names, and an editor resolving it must keep getting a document. -->
 <!-- fds:pin transformer/v1.2.0/mapping.schema.json — listed on purpose: it is the `$schema` URL every configuration written before 1.3.0 names, and an editor resolving it must keep getting a document. -->
@@ -141,6 +144,36 @@ Sustituido por body-atlas 1.1.0. Sigue publicado y sigue congelado, porque los l
 No construir contra él. El trabajo nuevo debería usar body-atlas 1.1.0; los documentos 1.0.0 siguen siendo válidos bajo ella sin cambios, ya que la 1.1.0 solo agregó campos opcionales.
 
 El ejemplo vive junto a la versión actual, en `/schemas/atlas/v1.1.0/`.
+
+### Ejercicio — v1.1.0
+
+**Esquema:** `/schemas/exercises/v1.1.0/exercise.schema.json`
+
+Sustituido por exercise 1.2.0. Sigue publicado y sigue congelado, porque los lanzamientos 1.1.0 a 1.5.0 declaran exercise en 1.1.0 y un cliente fijado a cualquiera de ellos debe poder seguir resolviéndolo.
+
+No construir contra él. El trabajo nuevo debería usar exercise 1.2.0; los documentos 1.1.0 siguen siendo válidos bajo ella sin cambios, ya que la 1.2.0 solo agregó campos opcionales.
+
+Los ejemplos viven junto a la versión actual, en `/schemas/exercises/v1.2.0/`.
+
+### Equipamiento — v1.1.0
+
+**Esquema:** `/schemas/equipment/v1.1.0/equipment.schema.json`
+
+Sustituido por equipment 1.2.0. Sigue publicado y sigue congelado, porque los lanzamientos 1.1.0 a 1.5.0 declaran equipment en 1.1.0 y un cliente fijado a cualquiera de ellos debe poder seguir resolviéndolo.
+
+No construir contra él. El trabajo nuevo debería usar equipment 1.2.0; los documentos 1.1.0 siguen siendo válidos bajo ella sin cambios, ya que la 1.2.0 solo agregó campos opcionales.
+
+Los ejemplos viven junto a la versión actual, en `/schemas/equipment/v1.2.0/`.
+
+### Músculo — v1.0.0
+
+**Esquema:** `/schemas/muscle/v1.0.0/muscle.schema.json`
+
+Sustituido por muscle 1.1.0. Sigue publicado y sigue congelado, porque los lanzamientos 1.0.0 a 1.5.0 declaran muscle en 1.0.0 y un cliente fijado a cualquiera de ellos debe poder seguir resolviéndolo.
+
+No construir contra él. El trabajo nuevo debería usar muscle 1.1.0; los documentos 1.0.0 siguen siendo válidos bajo ella sin cambios, ya que la 1.1.0 solo agregó campos opcionales.
+
+Los ejemplos viven junto a la versión actual, en `/schemas/muscle/v1.1.0/`.
 
 ## Validación
 

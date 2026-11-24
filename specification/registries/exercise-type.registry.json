@@ -5,7 +5,7 @@
   "policy": "open",
   "governs": [
     {
-      "source": "specification/schema-sources/exercises/v1.1.0/exercise.schema.json",
+      "source": "specification/schema-sources/exercises/v1.2.0/exercise.schema.json",
       "pointer": "classification.exerciseType"
     }
   ],

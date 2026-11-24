@@ -1,11 +1,13 @@
 /**
  * The descriptor steps: proposing an FXI and FXE from answers a source carries, and resolving each record's FXI
  * against a library. Runs the round-trip fixture with no network. The fields go at the top level of the record, where
- * the descriptor RFC defines them; the published schemas do not have them yet, so these runs turn validation off,
- * except the one that shows the current schema refusing them.
+ * RFC-010 defines them. Release 1.6.0 publishes them, and the transformer validates against the current release, so
+ * the validating runs pass with the steps on. Most runs turn validation off to test one step at a time.
  */
 
 import { readFileSync } from 'fs';
+import Ajv2020 from 'ajv/dist/2020.js';
+import addFormats from 'ajv-formats';
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { Transformer } from '../../src/core/transformer.js';
 import { ConfigLoader } from '../../src/config/config-loader.js';
@@ -31,12 +33,30 @@ async function config(validate = false): Promise<MappingConfig> {
   return validate ? mapping : { ...mapping, validation: { ...mapping.validation, enabled: false } };
 }
 
+/** The fixture's mapping, validating against the first release whose exercise schema has the descriptor fields. */
+async function descriptorRelease(): Promise<MappingConfig> {
+  const mapping = await config(true);
+  return {
+    ...mapping,
+    targetSchema: { ...mapping.targetSchema, version: '1.6.0' },
+    mappings: { ...mapping.mappings, schemaVersion: { from: null, default: '1.2.0' } },
+  };
+}
+
 async function run(descriptors: DescriptorOptions | undefined, input = withAnswers(), mapping?: MappingConfig): Promise<TransformResult[]> {
   const transformer = new Transformer({ config: mapping ?? (await config()), ...(descriptors ? { descriptors } : {}) });
   return transformer.transformAll(input);
 }
 
 const FIELDS = ['fxi', 'fxe', 'fxiProvenance', 'fxiGap', 'xrefs'];
+
+/** A validator for one bundled release's exercise schema, read from the files the build generates. */
+const exerciseSchemaOf = (release: string) => {
+  const schema = JSON.parse(readFileSync(new URL(`../../src/schemas/bundled/v${release}/exercise.schema.json`, import.meta.url), 'utf8'));
+  const ajv = new Ajv2020({ allErrors: true, strict: false });
+  addFormats(ajv);
+  return ajv.compile(schema);
+};
 /** The descriptor fields at the top level of a record, or undefined when it has none. */
 const descriptorsOf = (r: TransformResult): Record<string, any> | undefined => {
   const data = r.data as Record<string, unknown>;
@@ -77,9 +97,20 @@ describe('propose', () => {
     expect(rest.map(descriptorsOf)).toEqual([undefined, undefined]);
   });
 
-  it('the published exercise schema does not have the fields yet: with the step on, validation refuses them', async () => {
-    const [squat] = await run({ propose: { answersFrom: 'fxiAnswers' } }, withAnswers(), await config(true));
-    expect(squat!.errors!.map((e) => e.message).join()).toMatch(/additional propert/i);
+  it('with the step on, the record validates against release 1.6.0, which publishes the fields', async () => {
+    const results = await run({ propose: { answersFrom: 'fxiAnswers' } }, withAnswers(), await descriptorRelease());
+    expect(results.map((r) => r.errors ?? [])).toEqual([[], [], []]);
+    expect(results.every((r) => r.success)).toBe(true);
+    expect(descriptorsOf(results[0]!)).toEqual({ fxi: SQUAT, fxe: 'FXE=1.0S/k:imp/f:bar.straight', fxiProvenance: 'import', fxiGap: null });
+  });
+
+  it('the same record is refused by release 1.5.0, whose exercise schema does not have the fields', async () => {
+    const [squat] = await run({ propose: { answersFrom: 'fxiAnswers' } });
+    const record = { ...(squat!.data as Record<string, unknown>), schemaVersion: '1.1.0' };
+    const before = exerciseSchemaOf('1.5.0');
+    expect(before(record)).toBe(false);
+    expect(before.errors!.map((e) => e.params)).toContainEqual({ additionalProperty: 'fxi' });
+    expect(exerciseSchemaOf('1.6.0')({ ...record, schemaVersion: '1.2.0' })).toBe(true);
   });
 
   it('marks an agent proposal as agent, and never accepts an owner provenance', async () => {
@@ -159,6 +190,17 @@ describe('resolve', () => {
     expect(squat!.descriptors!.match).toEqual({ kind: 'auto', id: 'lib:back-squat' });
     expect(squat!.provenance!.xrefs).toEqual({ origin: 'transform', transform: ['fds-encoder:match'] });
     expect(other!.descriptors).toBeUndefined();
+  });
+
+  it('a record carrying an automatic link validates against release 1.6.0', async () => {
+    const mapping = await descriptorRelease();
+    mapping.mappings.fxi = { from: 'ownFxi' };
+    mapping.mappings.fxiProvenance = { from: 'ownProvenance' };
+    const input = sources().map((s, i) => (i === 0 ? { ...s, ownFxi: SQUAT, ownProvenance: 'owner' } : s));
+    const [squat] = await run({ resolve: { library, system: 'gym-library' } }, input, mapping);
+    expect(squat!.errors ?? []).toEqual([]);
+    expect(squat!.success).toBe(true);
+    expect(descriptorsOf(squat!)!.xrefs).toEqual([{ system: 'gym-library', id: 'lib:back-squat', link: 'auto' }]);
   });
 
   it('owner provenance from a mapping default is written as import, with a warning, and never links', async () => {

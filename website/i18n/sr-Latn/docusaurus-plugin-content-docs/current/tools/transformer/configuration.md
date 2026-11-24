@@ -59,7 +59,7 @@ Određuje koja se FDS šema cilja:
   "targetSchema": {
     "version": "1.0.0",
     "entity": "exercise",
-    "url": "https://spec.vitness.me/schemas/exercises/v1.1.0/exercise.schema.json"
+    "url": "https://spec.vitness.me/schemas/exercises/v1.2.0/exercise.schema.json"
   }
 }
 ```

@@ -235,6 +235,10 @@ Notes:
 - `weight` is `0..1` and represents relative intensity/coverage; default `1.0`.
 - Consumers SHOULD clamp weights to `[0,1]` and map them to color/opacity scales as appropriate.
 
+### 4.7. Structural Descriptor
+
+From muscle 1.1.0, a muscle record MAY carry `fxm`, its canonical FXM key as RFC-010 defines it: a muscle, a part of one, or a group defined by its members. The key comes from the provider's own vocabulary, anchored to FMA with UBERON as a cross-reference. FDS publishes the key format and the anchoring rules, not a muscle list. An exercise that targets the muscle MAY carry the same key on the `muscleRef`.
+
 ## 5. Versioning and Compatibility
 
 ### 5.1. Schema Versioning
@@ -302,7 +306,7 @@ graph LR
 ## 8. JSON Schema Reference
 
 Complete JSON Schema available at:
-- **Muscle**: `/specification/schemas/muscle/v1.0.0/muscle.schema.json`
+- **Muscle**: `/specification/schemas/muscle/v1.1.0/muscle.schema.json`
 - **Body Atlas**: `/specification/schemas/atlas/v1.1.0/body-atlas.schema.json`
 
 ## 8.1. Validation
@@ -311,15 +315,15 @@ Validate with Ajv (Draft 2020-12):
 
 ```
 npx --package=ajv-cli --package=ajv-formats ajv validate --spec=draft2020 -c ajv-formats \
-  -s specification/schemas/muscle/v1.0.0/muscle.schema.json \
-  -d specification/schemas/muscle/v1.0.0/muscle.example.json
+  -s specification/schemas/muscle/v1.1.0/muscle.schema.json \
+  -d specification/schemas/muscle/v1.1.0/muscle.example.json
 ```
 
 ## 9. Example Implementation
 
 ### 9.1. Complete Quadriceps Muscle Record
 
-Based on reference implementation (`/specification/schemas/muscle/v1.0.0/muscle.example.json`):
+Based on reference implementation (`/specification/schemas/muscle/v1.1.0/muscle.example.json`):
 
 ```json
 {

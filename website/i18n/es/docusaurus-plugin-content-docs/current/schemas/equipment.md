@@ -4,20 +4,21 @@ description: JSON Schema del modelo de datos de equipamiento
 sidebar_position: 3
 ---
 
-# Esquema de equipamiento (v1.1.0)
+# Esquema de equipamiento (v1.2.0)
 
 El esquema de equipamiento define entidades de equipamiento de fitness con clasificación, metadatos y atributos extensibles.
 
 ## Ubicación del esquema
 
-**URL:** `https://spec.vitness.me/schemas/equipment/v1.1.0/equipment.schema.json`
+**URL:** `https://spec.vitness.me/schemas/equipment/v1.2.0/equipment.schema.json`
 
-**Descarga:** [equipment.schema.json](https://spec.vitness.me/schemas/equipment/v1.1.0/equipment.schema.json)
+**Descarga:** [equipment.schema.json](https://spec.vitness.me/schemas/equipment/v1.2.0/equipment.schema.json)
 
 ## Ejemplos
 
 Ver los ejemplos de equipamiento:
-- [Equipamiento básico](https://spec.vitness.me/schemas/equipment/v1.1.0/equipment.example.json)
+- [Equipamiento básico](https://spec.vitness.me/schemas/equipment/v1.2.0/equipment.example.json)
+- [Máquina con su descriptor FXE (borrador, RFC-010)](https://spec.vitness.me/schemas/equipment/v1.2.0/equipment.example.descriptors.json)
 
 ## Especificación
 

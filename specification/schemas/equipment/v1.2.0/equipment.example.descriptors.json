@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "1.2.0",
+  "id": "eq.seated-row-machine",
+  "canonical": {
+    "name": "Seated Row Machine",
+    "slug": "seated-row-machine",
+    "aliases": ["Seated Cable Row Machine"]
+  },
+  "classification": {
+    "tags": ["machine", "selectorized"]
+  },
+  "fxe": "FXE=1.0N/k:mac/l:hand/s:seat/m:pull.back/r:stack/c:cable",
+  "metadata": {
+    "createdAt": "2026-11-24T00:00:00Z",
+    "updatedAt": "2026-11-24T00:00:00Z",
+    "source": "vitness.registry",
+    "status": "active"
+  }
+}

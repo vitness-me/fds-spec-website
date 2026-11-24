@@ -194,7 +194,7 @@ const NOT_COVERAGE = new Set([METHOD, 'CHANGELOG.md']);
  * opt out whole, `files` JSON files that do. Asserted rather than logged: a
  * number in a log still grows quietly.
  */
-const EXPECTED = { names: 26, blocks: 9, files: 1 };
+const EXPECTED = { names: 28, blocks: 9, files: 1 };
 
 /**
  * `package.json` is an npm manifest. `files`, `keywords` and `exports` are npm's

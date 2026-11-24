@@ -13,6 +13,50 @@ El formato se inspira en Keep a Changelog, y el proyecto se adhiere al Versionad
 ## [Sin publicar]
 - Política de espacio de nombres de extensiones (borrador) y secciones de conformidad (planificadas).
 
+## Lanzamiento de esquema — exercise 1.2.0, equipment 1.2.0, muscle 1.1.0 (propuesto con el borrador RFC-010)
+
+Propuesto, aún no lanzado: se publica cuando se acepte RFC-010 y esta entrada
+reciba su fecha. Hasta entonces, las nuevas versiones se registran sin congelar.
+
+### Agregado
+- **RFC-010, Descriptores estructurales (borrador).** FXI para un ejercicio, FXE
+  para una pieza de equipamiento y FXM para un músculo: cadenas de vocabularios
+  cerrados que permiten a dos catálogos comparar registros sin un nombre
+  compartido. El RFC adopta las páginas de descriptores, define el protocolo de
+  coincidencia y publica las mediciones con las que se probaron los
+  descriptores, incluido que todavía no se cumple el umbral para salir del
+  estado experimental.
+- En un ejercicio: `fxi`, `fxe` (el FXE estándar de su equipamiento principal),
+  `fxiProvenance`, `fxiGap` y `xrefs`, todos opcionales, en el nivel superior
+  del registro. Cada referencia a equipamiento dentro de un ejercicio puede
+  llevar `fxe`, y cada referencia a músculo, `fxm`.
+- En el equipamiento, `fxe`; en un músculo, `fxm`.
+- Las entradas de `xrefs` son `{system, id, link}`, donde `link` es `auto` o
+  `confirmed`. Se mantienen separadas de `metadata.externalRefs`, que enumera
+  los identificadores propios de un registro en otros sistemas y no tiene dónde
+  decir cómo se hizo un enlace (RFC-010 §5.4).
+- Un ejemplo por entidad con los nuevos campos.
+
+### Cambiado
+- El lanzamiento **1.6.0** nombra exercise y equipment en 1.2.0 y muscle en
+  1.1.0. Todas las demás entidades y la biblioteca de prescripción se quedan en
+  las versiones que nombra 1.5.0.
+- El transformador incluye el lanzamiento 1.6.0 y lo usa por defecto. Los
+  lanzamientos 1.0.0 a 1.5.0 siguen incluidos. Sus pasos opcionales de
+  descriptores ahora escriben documentos que validan.
+- Los ejemplos de exercise, equipment y muscle pasan junto a las nuevas
+  versiones.
+
+### Compatibilidad
+- Puramente aditivo. Todo documento válido bajo exercise 1.1.0, equipment 1.1.0
+  o muscle 1.0.0 valida contra la nueva versión sin cambios.
+- **`exercises/v1.1.0/`, `equipment/v1.1.0/` y `muscle/v1.0.0/` siguen
+  publicados y congelados.** Los lanzamientos anteriores a 1.6.0 los nombran, y
+  un cliente fijado a cualquiera de ellos debe poder seguir resolviéndolos.
+- Workout, program y la biblioteca de prescripción incluyen las mismas
+  referencias y no cambiaron, así que sus referencias todavía no pueden llevar
+  un descriptor (RFC-010 §5.5).
+
 ## Lanzamiento de esquema — body-atlas 1.1.0 (2026-11-14)
 
 ### Agregado

@@ -13,6 +13,48 @@ The format is inspired by Keep a Changelog, and the project adheres to Semantic 
 ## [Unreleased]
 - Extension namespace policy (draft) and conformance sections (planned).
 
+## Schema release — exercise 1.2.0, equipment 1.2.0, muscle 1.1.0 (proposed with draft RFC-010)
+
+Proposed, not yet released: it is cut when RFC-010 is accepted and this entry
+gains its date. The new versions are recorded unfrozen until then.
+
+### Added
+- **RFC-010, Structural Descriptors (draft).** FXI for an exercise, FXE for a
+  piece of equipment and FXM for a muscle: strings from closed vocabularies that
+  let two catalogues compare records without a shared name. The RFC adopts the
+  descriptor pages, defines the match protocol, and publishes the measurements
+  the descriptors were tested against, including that the release gate for
+  leaving experimental status is not yet met.
+- On an exercise: `fxi`, `fxe` (the standard FXE of its main equipment),
+  `fxiProvenance`, `fxiGap` and `xrefs`, all optional, at the top level of the
+  record. Each equipment reference inside an exercise may carry `fxe`, and each
+  muscle reference `fxm`.
+- On equipment, `fxe`; on a muscle, `fxm`.
+- `xrefs` entries are `{system, id, link}`, where `link` is `auto` or
+  `confirmed`. They are kept apart from `metadata.externalRefs`, which lists a
+  record's own identifiers elsewhere and has no place to say how a link was
+  made (RFC-010 §5.4).
+- One example per entity carrying the new fields.
+
+### Changed
+- Release **1.6.0** names exercise and equipment at 1.2.0 and muscle at 1.1.0.
+  Every other entity and the prescription library stay at the versions 1.5.0
+  names.
+- The transformer bundles release 1.6.0 and defaults to it. 1.0.0 through 1.5.0
+  remain bundled. Its optional descriptor steps now write documents that
+  validate.
+- The exercise, equipment and muscle examples move beside the new versions.
+
+### Compatibility
+- Purely additive. Every document valid under exercise 1.1.0, equipment 1.1.0 or
+  muscle 1.0.0 validates against the new version unchanged.
+- **`exercises/v1.1.0/`, `equipment/v1.1.0/` and `muscle/v1.0.0/` stay
+  published and frozen.** Releases before 1.6.0 name them, and a client pinned
+  to any of those must keep resolving them.
+- Workout, program and the prescription library embed the same references and
+  did not move, so their references cannot carry a descriptor yet (RFC-010
+  §5.5).
+
 ## Schema release — body-atlas 1.1.0 (2026-11-14)
 
 ### Added

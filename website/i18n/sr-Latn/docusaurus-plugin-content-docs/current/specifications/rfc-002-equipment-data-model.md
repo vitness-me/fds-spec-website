@@ -212,6 +212,10 @@ Opcioni objekat `loading` opisuje kako sprava nosi opterećenje. On je merodavan
 
 Ovo je pandan objektu `exercise.loading` (RFC-001 §4.6): vežba iskazuje *da li* pokret prima opterećenje, a oprema *u kojim koracima*.
 
+### 4.5. Strukturni deskriptor
+
+Od verzije equipment 1.2.0, zapis opreme MOŽE da nosi `fxe`, njen kanonski strukturni deskriptor FXE kako ga definiše RFC-010. On je ili standardni (oznaka `S`) ili nosi proširene slojeve detalja konstrukcije koje nosi samo zapis opreme (oznaka `N`). Vežba koja upućuje na opremu MOŽE da nosi njen standardni FXE u `equipmentRef`. FXE klasifikuje strukturu; FDS objavljuje kodove, ne katalog opreme.
+
 ## 5. Verzionisanje i kompatibilnost
 
 ### 5.1. Verzionisanje šema
@@ -280,7 +284,7 @@ graph LR
 ## 8. Referenca JSON šeme
 
 Kompletna JSON šema je dostupna na:
-- **Equipment**: `/specification/schemas/equipment/v1.1.0/equipment.schema.json`
+- **Equipment**: `/specification/schemas/equipment/v1.2.0/equipment.schema.json`
 
 ## 8.1. Validacija
 
@@ -288,15 +292,15 @@ Validirajte pomoću Ajv (Draft 2020-12):
 
 ```
 npx --package=ajv-cli --package=ajv-formats ajv validate --spec=draft2020 -c ajv-formats \
-  -s specification/schemas/equipment/v1.1.0/equipment.schema.json \
-  -d specification/schemas/equipment/v1.1.0/equipment.example.json
+  -s specification/schemas/equipment/v1.2.0/equipment.schema.json \
+  -d specification/schemas/equipment/v1.2.0/equipment.example.json
 ```
 
 ## 9. Primer implementacije
 
 ### 9.1. Kompletan zapis opreme za šipku
 
-Na osnovu referentne implementacije (`/specification/schemas/equipment/v1.1.0/equipment.example.json`):
+Na osnovu referentne implementacije (`/specification/schemas/equipment/v1.2.0/equipment.example.json`):
 
 ```json fds:document entity=equipment
 {

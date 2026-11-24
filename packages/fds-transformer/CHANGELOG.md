@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Release 1.6.0 is bundled and is the default.** It names exercise and
+  equipment at 1.2.0 and muscle at 1.1.0, which carry the RFC-010 structural
+  descriptor fields. 1.0.0 through 1.5.0 remain bundled.
 - **Optional descriptor steps for the draft FXI and FXE.** `--fxi-answers`
   proposes an FXI and FXE for each record from an answers record in its
   source, marked `import` (or `agent` with `--fxi-provenance agent`, never
@@ -18,8 +21,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `xrefs`; owner provenance counts only when mapped from the source record,
   never from a mapping default. `descriptors.report.json` lists every match to confirm, for a
   person, and the answers record each proposal was built from. These fields
-  are defined by the descriptor RFC; until its schemas are published,
-  output from either step does not validate against the current ones. `--words` gives the movement-word
+  are defined by RFC-010 and published by release 1.6.0, so output from
+  either step validates against it. `--words` gives the movement-word
   dataset. Programmatically, `TransformerOptions.descriptors`. Off unless
   asked for. The encoder's code is bundled from `@vitness/fds-encoder`.
 - **`provider: "claude-code"` enriches through the local `claude` CLI on a

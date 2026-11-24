@@ -102,8 +102,8 @@ export default function TrustSection(): JSX.Element {
             </span>
           </div>
           <div className={styles.stat}>
-            {/* fds:count examples=136 */}
-            <span className={styles.statNum}>136</span>
+            {/* fds:count examples=139 */}
+            <span className={styles.statNum}>139</span>
             <span className={styles.statLabel}>
               <Translate id="landing.trust.stat.examples">
                 worked examples shipped beside the schemas

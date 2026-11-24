@@ -6,11 +6,11 @@ usecase_promise: Describe an exercise once, in a shape another system reads with
 usecase_family: foundations
 usecase_audiences: [app-developer, researcher]
 usecase_sources:
-  - specification/schemas/exercises/v1.1.0/exercise.example.json
+  - specification/schemas/exercises/v1.2.0/exercise.example.json
 ---
 
 import {SpecExample, BeforeAfter, Panel, Audience, NextSteps, Next} from './_shared/UseCase';
-import backSquat from '../../../specification/schemas/exercises/v1.1.0/exercise.example.json';
+import backSquat from '../../../specification/schemas/exercises/v1.2.0/exercise.example.json';
 
 # Publish an exercise catalog another system can read
 
@@ -41,7 +41,7 @@ targets with their category ids, the equipment it needs, and the metrics it is
 measured in. Vendor-specific extras live under the `x:` namespace, out of the
 way of the core.
 
-<SpecExample source="specification/schemas/exercises/v1.1.0/exercise.example.json" data={backSquat}>
+<SpecExample source="specification/schemas/exercises/v1.2.0/exercise.example.json" data={backSquat}>
   A back squat, fully described. Note `targets.primary[].id` — a muscle id another
   document resolves — and the `x:vitness.*` extension keys, which a consumer that
   does not know them ignores.

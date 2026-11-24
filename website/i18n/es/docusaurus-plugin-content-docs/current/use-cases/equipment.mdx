@@ -6,13 +6,13 @@ usecase_promise: Decir lo que hace una máquina en números sobre los que otro g
 usecase_family: foundations
 usecase_audiences: [oem-engineer, platform-lead]
 usecase_sources:
-  - specification/schemas/equipment/v1.1.0/equipment.example.json
-  - specification/schemas/equipment/v1.1.0/equipment.example.stack.json
+  - specification/schemas/equipment/v1.2.0/equipment.example.json
+  - specification/schemas/equipment/v1.2.0/equipment.example.stack.json
 ---
 
 import {SpecExample, BeforeAfter, Panel, Audience, NextSteps, Next} from '@site/docs/use-cases/_shared/UseCase';
-import barbell from '@site/../specification/schemas/equipment/v1.1.0/equipment.example.json';
-import cableStack from '@site/../specification/schemas/equipment/v1.1.0/equipment.example.stack.json';
+import barbell from '@site/../specification/schemas/equipment/v1.2.0/equipment.example.json';
+import cableStack from '@site/../specification/schemas/equipment/v1.2.0/equipment.example.stack.json';
 
 # Modelar el equipamiento para que una prescripción siga siendo reproducible
 
@@ -41,7 +41,7 @@ Una barra es identidad, clasificación y el detalle localizado y específico del
 que un gimnasio quiere — pero ninguna regla de carga, porque una barra admite cualquier
 disco.
 
-<SpecExample source="specification/schemas/equipment/v1.1.0/equipment.example.json" data={barbell}>
+<SpecExample source="specification/schemas/equipment/v1.2.0/equipment.example.json" data={barbell}>
   Una barra. La extensión `x:gym-management` lleva inventario y mantenimiento que un
   consumidor puede ignorar; el núcleo sigue tratando del equipamiento en sí.
 </SpecExample>
@@ -49,7 +49,7 @@ disco.
 Una torre de placas con pasador es distinta: su carga cambia en pasos fijos, y ese es
 un hecho al que una prescripción aguas abajo necesita redondear.
 
-<SpecExample source="specification/schemas/equipment/v1.1.0/equipment.example.stack.json" data={cableStack}>
+<SpecExample source="specification/schemas/equipment/v1.2.0/equipment.example.stack.json" data={cableStack}>
   `loading.increment` es 5 kg y `stackBased` es true — los incrementos son fijos,
   así que un consumidor sabe que una prescripción debe ajustarse a ellos.
 </SpecExample>

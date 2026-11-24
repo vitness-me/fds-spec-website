@@ -1,7 +1,7 @@
 # FDS Specification Expert Skill
 
 > **Version:** 2.0.0  
-> **Specification Version:** FDS release 1.5.0  
+> **Specification Version:** FDS release 1.6.0  
 > **Last Updated:** November 2026
 
 ## What this document is
@@ -46,9 +46,9 @@ You validate against a *definition inside it*. The transformer does not carry th
 ### Schema URLs (Production)
 
 ```
-https://spec.vitness.me/schemas/exercises/v1.1.0/exercise.schema.json
-https://spec.vitness.me/schemas/equipment/v1.1.0/equipment.schema.json
-https://spec.vitness.me/schemas/muscle/v1.0.0/muscle.schema.json
+https://spec.vitness.me/schemas/exercises/v1.2.0/exercise.schema.json
+https://spec.vitness.me/schemas/equipment/v1.2.0/equipment.schema.json
+https://spec.vitness.me/schemas/muscle/v1.1.0/muscle.schema.json
 https://spec.vitness.me/schemas/muscle/muscle-category/v1.0.0/muscle-category.schema.json
 https://spec.vitness.me/schemas/atlas/v1.1.0/body-atlas.schema.json
 https://spec.vitness.me/schemas/prescription/v1.0.0/prescription.schema.json
@@ -70,8 +70,9 @@ Release 1.3.0 serves exercise and equipment at 1.1.0 and everything else at 1.0.
 | 1.3.0 | as 1.2.0, plus program 1.0.0 |
 | 1.4.0 | as 1.3.0, but workout moves to 1.1.0 |
 | 1.5.0 | as 1.4.0, but body-atlas moves to 1.1.0 |
+| 1.6.0 | as 1.5.0, but exercise and equipment move to 1.2.0 and muscle to 1.1.0 |
 
-A superseded entity version stays published. `workout/v1.0.0/` is still served and still frozen, because releases 1.2.0 and 1.3.0 declare workout at 1.0.0. `atlas/v1.0.0/` likewise, because releases 1.0.0 through 1.4.0 declare body-atlas at 1.0.0.
+A superseded entity version stays published. `workout/v1.0.0/` is still served and still frozen, because releases 1.2.0 and 1.3.0 declare workout at 1.0.0. `atlas/v1.0.0/` likewise, because releases 1.0.0 through 1.4.0 declare body-atlas at 1.0.0, and the exercise, equipment and muscle versions that 1.6.0 superseded stay served for the releases before it.
 
 **Every published URL is frozen.** Its bytes never change; a change ships at a new version URL.
 
@@ -371,6 +372,50 @@ and whether the sides load independently (`asymmetric`). The smallest usable
 load *step* is a property of the implement, so it lives on equipment as
 `loading.increment`, alongside `loading.stackBased` for a machine whose load
 comes from discrete stack positions.
+
+### Structural descriptors (draft, RFC-010)
+
+<!-- fds:not-a-field identical, null — `identical` is a compare relation from the descriptor pages, not a schema name; `null` is the JSON literal fxiGap takes -->
+
+Experimental. Every field below is optional, and a record without them means
+what it always meant. They sit at the **top level** of the record, never under
+`extensions`.
+
+| Field | On | Holds |
+|---|---|---|
+| `fxi` | exercise | canonical FXI, e.g. `FXI=1.0S/m:hip.ext+kn.ext/o:standing/l:bb@back` |
+| `fxe` | exercise | standard FXE of the **main** equipment, e.g. `FXE=1.0S/k:imp/f:bar.straight` |
+| `fxiProvenance` | exercise | `owner`, `owner-assisted`, `agent` or `import` |
+| `fxiGap` | exercise | the owner's note of what the FXI misses, or `null` |
+| `xrefs` | exercise | `[{system, id, link}]`, `link` is `auto` or `confirmed` |
+| `fxe` | equipment, and each equipment reference in an exercise | an equipment record may carry extended layers (`FXE=1.0N/…`); a reference is standard only |
+| `fxm` | muscle, and each muscle reference in an exercise | e.g. `FXM=1.0/latissimus-dorsi` |
+
+Rules an assistant must not get wrong:
+
+- **A descriptor is not an identifier.** The claim is: a deterministic
+  descriptor and compare; auto-match on unique identical keys; one-click
+  confirm otherwise; the confirmed link is stored. Never call it
+  identification.
+- **Auto-match** only when exactly one library record is `identical`, neither
+  side has a gap marker, and both are `owner` or `owner-assisted`. Otherwise
+  offer at most three records to confirm.
+- **Import mode is candidate search only.** A descriptor built from another
+  catalogue's row is `import`, never auto-matches, and carries no accuracy
+  claim. Software that proposes answers writes `agent`, never `owner`.
+- **`xrefs` is not `metadata.externalRefs`.** `externalRefs` lists the record's
+  own ids elsewhere; `xrefs` records that a record in another catalogue is the
+  same exercise, and how that was decided.
+- **Never invent codes.** The codes are in
+  `specification/registries/descriptors/`. Without a code for something,
+  answer the question flow with `other` and describe the motion joint by joint,
+  or write a gap marker. Tempo, load, pauses and reps are prescription, never
+  part of a descriptor.
+- FDS publishes no muscle list, equipment catalogue or movement words; those
+  are a provider's data.
+
+Workout, program and prescription references do not carry descriptors yet:
+their schemas did not move in 1.6.0.
 
 ---
 

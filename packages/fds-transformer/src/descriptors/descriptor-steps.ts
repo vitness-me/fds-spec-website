@@ -2,9 +2,8 @@
  * Descriptor steps: propose an FXI and FXE for each record from answers its source carries, and resolve each record's
  * FXI against a library by the match protocol. Both are off unless `TransformerOptions.descriptors` names them.
  *
- * The fields are written where the descriptor RFC defines them: `fxi`, `fxe`, `fxiProvenance`, `fxiGap` and `xrefs` at
- * the top level of the record. The published entity schemas do not have them yet, so a document carrying them
- * validates only once the RFC's schemas are published.
+ * The fields are written where RFC-010 defines them: `fxi`, `fxe`, `fxiProvenance`, `fxiGap` and `xrefs` at the top
+ * level of the record. Release 1.6.0 and later publish them; an older release's schemas reject a record carrying them.
  */
 
 import { AnswerError, build, builtFrom, checkMatchRow, createFlow, DEFAULT_FLOW, FXI_RULES, match, OWNER_PROVENANCES, rowMeta } from '@vitness/fds-encoder';

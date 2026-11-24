@@ -8,41 +8,41 @@ sidebar_position: 1
 
 FDS je definisan u formatu JSON Schema (Draft 2020-12). Svaka šema ispod objavljena je na zamrznutom URL-u: bajtovi na URL-u verzije nikada se ne menjaju, a izmena se isporučuje na novom.
 
-<!-- fds:count schemas=16 entities=7 libraries=1 tooling=2 superseded=6 -->
-Objavljeno je 16 šema. Od toga je 7 entiteta, 1 je biblioteka definicija, 2 pripadaju alatu, a 6 su zamenjene verzije koje se i dalje služe.
+<!-- fds:count schemas=19 entities=7 libraries=1 tooling=2 superseded=9 -->
+Objavljeno je 19 šema. Od toga je 7 entiteta, 1 je biblioteka definicija, 2 pripadaju alatu, a 9 su zamenjene verzije koje se i dalje služe.
 
 ## Verzije entiteta nisu ujednačene
 
-Izdanje imenuje *skup* verzija entiteta, a ne jednu verziju koju svi dele. Aktuelno izdanje je **1.5.0** i ono objavljuje:
+Izdanje imenuje *skup* verzija entiteta, a ne jednu verziju koju svi dele. Aktuelno izdanje je **1.6.0** i ono objavljuje:
 
 | Entitet | Verzija | URL šeme |
 |---|---|---|
-| [Vežba](/docs/schemas/exercise) | 1.1.0 | `/schemas/exercises/v1.1.0/exercise.schema.json` |
-| [Oprema](/docs/schemas/equipment) | 1.1.0 | `/schemas/equipment/v1.1.0/equipment.schema.json` |
-| [Mišić](/docs/schemas/muscle) | 1.0.0 | `/schemas/muscle/v1.0.0/muscle.schema.json` |
+| [Vežba](/docs/schemas/exercise) | 1.2.0 | `/schemas/exercises/v1.2.0/exercise.schema.json` |
+| [Oprema](/docs/schemas/equipment) | 1.2.0 | `/schemas/equipment/v1.2.0/equipment.schema.json` |
+| [Mišić](/docs/schemas/muscle) | 1.1.0 | `/schemas/muscle/v1.1.0/muscle.schema.json` |
 | [Kategorija mišića](/docs/schemas/muscle-category) | 1.0.0 | `/schemas/muscle/muscle-category/v1.0.0/muscle-category.schema.json` |
 | [Atlas tela](/docs/schemas/body-atlas) | 1.1.0 | `/schemas/atlas/v1.1.0/body-atlas.schema.json` |
 | [Trening](/docs/schemas/workout) | 1.1.0 | `/schemas/workout/v1.1.0/workout.schema.json` |
 | [Program](/docs/schemas/program) | 1.0.0 | `/schemas/program/v1.0.0/program.schema.json` |
 
-Ne postoji `muscle/v1.5.0/` i neće postojati osim ako se sam muscle ne promeni. URL-ove šema gradite iz verzije entiteta, nikada iz izdanja — pogledajte [krajnju tačku za otkrivanje](/docs/core-concepts/discovery) za to kako provajder oglašava koju verziju entiteta služi.
+Ne postoji `muscle/v1.6.0/` i neće postojati osim ako se sam muscle ne promeni. URL-ove šema gradite iz verzije entiteta, nikada iz izdanja — pogledajte [krajnju tačku za otkrivanje](/docs/core-concepts/discovery) za to kako provajder oglašava koju verziju entiteta služi.
 
 ## Entiteti
 
-### [Šema vežbe](/docs/schemas/exercise) — v1.1.0
-Osnovni model podataka vežbe sa klasifikacijom, ciljanim mišićima, opremom, metrikama i medijskim sadržajima.
+### [Šema vežbe](/docs/schemas/exercise) — v1.2.0
+Osnovni model podataka vežbe sa klasifikacijom, ciljanim mišićima, opremom, metrikama i medijskim sadržajima. Verzija 1.2.0 dodala je opciona polja strukturnog deskriptora iz nacrta RFC-010.
 
-**Šema:** `/schemas/exercises/v1.1.0/exercise.schema.json`
+**Šema:** `/schemas/exercises/v1.2.0/exercise.schema.json`
 
-### [Šema opreme](/docs/schemas/equipment) — v1.1.0
-Definicije fitnes opreme sa klasifikacijom, karakteristikama opterećivanja i metapodacima.
+### [Šema opreme](/docs/schemas/equipment) — v1.2.0
+Definicije fitnes opreme sa klasifikacijom, karakteristikama opterećivanja i metapodacima. Verzija 1.2.0 dodala je opcioni FXE deskriptor iz nacrta RFC-010.
 
-**Šema:** `/schemas/equipment/v1.1.0/equipment.schema.json`
+**Šema:** `/schemas/equipment/v1.2.0/equipment.schema.json`
 
-### [Šema mišića](/docs/schemas/muscle) — v1.0.0
-Definicije anatomskih mišića sa podrškom za vizualizaciju toplotnom mapom.
+### [Šema mišića](/docs/schemas/muscle) — v1.1.0
+Definicije anatomskih mišića sa podrškom za vizualizaciju toplotnom mapom. Verzija 1.1.0 dodala je opcioni FXM ključ iz nacrta RFC-010.
 
-**Šema:** `/schemas/muscle/v1.0.0/muscle.schema.json`
+**Šema:** `/schemas/muscle/v1.1.0/muscle.schema.json`
 
 ### [Šema kategorije mišića](/docs/schemas/muscle-category) — v1.0.0
 Struktura grupisanja i kategorizacije mišića.
@@ -93,6 +93,9 @@ Verzija 1.1.0 zahteva `provider` u unosu modela: provajdera obogaćivanja koji j
 
 <!-- fds:pin workout/v1.0.0/workout.schema.json — listed on purpose: releases 1.2.0 and 1.3.0 declare workout at 1.0.0, so a client pinned to either must keep resolving this URL. The section says plainly not to build against it. -->
 <!-- fds:pin atlas/v1.0.0/body-atlas.schema.json — listed on purpose: releases 1.0.0 through 1.4.0 declare body-atlas at 1.0.0, so a client pinned to any of them must keep resolving this URL. The section says plainly not to build against it. -->
+<!-- fds:pin exercises/v1.1.0/exercise.schema.json — listed on purpose: releases 1.1.0 through 1.5.0 declare exercise at 1.1.0, so a client pinned to any of them must keep resolving this URL. The section says plainly not to build against it. -->
+<!-- fds:pin equipment/v1.1.0/equipment.schema.json — listed on purpose: releases 1.1.0 through 1.5.0 declare equipment at 1.1.0, so a client pinned to any of them must keep resolving this URL. The section says plainly not to build against it. -->
+<!-- fds:pin muscle/v1.0.0/muscle.schema.json — listed on purpose: releases 1.0.0 through 1.5.0 declare muscle at 1.0.0, so a client pinned to any of them must keep resolving this URL. The section says plainly not to build against it. -->
 <!-- fds:pin transformer/v1.0.0/mapping.schema.json — listed on purpose: it is the `$schema` URL every configuration written before 1.1.0 names, and an editor resolving it must keep getting a document. -->
 <!-- fds:pin transformer/v1.1.0/mapping.schema.json — listed on purpose: it is the `$schema` URL every configuration written before 1.2.0 names, and an editor resolving it must keep getting a document. -->
 <!-- fds:pin transformer/v1.2.0/mapping.schema.json — listed on purpose: it is the `$schema` URL every configuration written before 1.3.0 names, and an editor resolving it must keep getting a document. -->
@@ -141,6 +144,36 @@ Zamenjena atlasom tela 1.1.0. Ostaje objavljena i ostaje zamrznuta, jer izdanja 
 Ne gradite prema njoj. Nov rad treba da koristi body-atlas 1.1.0; 1.0.0 dokumenti ostaju validni pod njom nepromenjeni, pošto je 1.1.0 samo dodala opciona polja.
 
 Primer živi uz aktuelnu verziju, na `/schemas/atlas/v1.1.0/`.
+
+### Vežba — v1.1.0
+
+**Šema:** `/schemas/exercises/v1.1.0/exercise.schema.json`
+
+Zamenjena verzijom exercise 1.2.0. Ostaje objavljena i ostaje zamrznuta, jer izdanja od 1.1.0 do 1.5.0 deklarišu exercise na 1.1.0, a klijent fiksiran na bilo koje od njih mora i dalje moći da razrešava.
+
+Ne gradite prema njoj. Nov rad treba da koristi exercise 1.2.0; 1.1.0 dokumenti ostaju validni pod njom nepromenjeni, pošto je 1.2.0 samo dodala opciona polja.
+
+Primeri žive uz aktuelnu verziju, na `/schemas/exercises/v1.2.0/`.
+
+### Oprema — v1.1.0
+
+**Šema:** `/schemas/equipment/v1.1.0/equipment.schema.json`
+
+Zamenjena verzijom equipment 1.2.0. Ostaje objavljena i ostaje zamrznuta, jer izdanja od 1.1.0 do 1.5.0 deklarišu equipment na 1.1.0, a klijent fiksiran na bilo koje od njih mora i dalje moći da razrešava.
+
+Ne gradite prema njoj. Nov rad treba da koristi equipment 1.2.0; 1.1.0 dokumenti ostaju validni pod njom nepromenjeni, pošto je 1.2.0 samo dodala opciona polja.
+
+Primeri žive uz aktuelnu verziju, na `/schemas/equipment/v1.2.0/`.
+
+### Mišić — v1.0.0
+
+**Šema:** `/schemas/muscle/v1.0.0/muscle.schema.json`
+
+Zamenjena verzijom muscle 1.1.0. Ostaje objavljena i ostaje zamrznuta, jer izdanja od 1.0.0 do 1.5.0 deklarišu muscle na 1.0.0, a klijent fiksiran na bilo koje od njih mora i dalje moći da razrešava.
+
+Ne gradite prema njoj. Nov rad treba da koristi muscle 1.1.0; 1.0.0 dokumenti ostaju validni pod njom nepromenjeni, pošto je 1.1.0 samo dodala opciona polja.
+
+Primeri žive uz aktuelnu verziju, na `/schemas/muscle/v1.1.0/`.
 
 ## Validacija
 

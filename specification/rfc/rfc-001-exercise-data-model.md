@@ -306,6 +306,12 @@ The optional `loading` object describes **how a movement accepts external load**
 
 Consumers MUST NOT reject an exercise that omits `loading`. Absence means unstated, not `none`.
 
+### 4.7. Structural Descriptors
+
+From exercise 1.2.0, an exercise MAY carry the structural descriptor fields of RFC-010, at the top level of the record: `fxi`, its canonical FXI; `fxe`, the standard FXE of its main equipment; `fxiProvenance`, who answered for the FXI; `fxiGap`, the owner's note of what the FXI misses; and `xrefs`, links to the same exercise in other catalogues, each naming a `system`, an `id` and how the `link` was made. Inside the exercise, each `equipmentRef` MAY carry `fxe` and each `muscleRef` MAY carry `fxm`.
+
+Every one of them is optional, and RFC-010 is normative for what they mean and how a resolver uses them. `xrefs` is not `metadata.externalRefs`: the second lists this record's own identifiers elsewhere, the first records a decision that a record in another catalogue describes the same exercise (RFC-010 §5.4).
+
 ## 5. Versioning and Compatibility
 
 ### 5.1. Schema Versioning
@@ -396,9 +402,9 @@ Potential response structure:
 ## 8. JSON Schema Reference
 
 Complete JSON Schema available at:
-- **Exercise**: `/specification/schemas/exercises/v1.1.0/exercise.schema.json`
-- **Equipment**: `/specification/schemas/equipment/v1.1.0/equipment.schema.json`  
-- **Muscle**: `/specification/schemas/muscle/v1.0.0/muscle.schema.json`
+- **Exercise**: `/specification/schemas/exercises/v1.2.0/exercise.schema.json`
+- **Equipment**: `/specification/schemas/equipment/v1.2.0/equipment.schema.json`  
+- **Muscle**: `/specification/schemas/muscle/v1.1.0/muscle.schema.json`
 
 ## 8.1. Validation
 
@@ -406,29 +412,29 @@ Validate with Ajv (Draft 2020-12):
 
 ```
 npx --package=ajv-cli --package=ajv-formats ajv validate --spec=draft2020 -c ajv-formats \
-  -s specification/schemas/exercises/v1.1.0/exercise.schema.json \
-  -d specification/schemas/exercises/v1.1.0/exercise.example.json
+  -s specification/schemas/exercises/v1.2.0/exercise.schema.json \
+  -d specification/schemas/exercises/v1.2.0/exercise.example.json
 
 # Additional examples (optional):
 npx --package=ajv-cli --package=ajv-formats ajv validate --spec=draft2020 -c ajv-formats \
-  -s specification/schemas/exercises/v1.1.0/exercise.schema.json \
-  -d specification/schemas/exercises/v1.1.0/exercise.example.cardio.json
+  -s specification/schemas/exercises/v1.2.0/exercise.schema.json \
+  -d specification/schemas/exercises/v1.2.0/exercise.example.cardio.json
 npx --package=ajv-cli --package=ajv-formats ajv validate --spec=draft2020 -c ajv-formats \
-  -s specification/schemas/exercises/v1.1.0/exercise.schema.json \
-  -d specification/schemas/exercises/v1.1.0/exercise.example.mobility.json
+  -s specification/schemas/exercises/v1.2.0/exercise.schema.json \
+  -d specification/schemas/exercises/v1.2.0/exercise.example.mobility.json
 npx --package=ajv-cli --package=ajv-formats ajv validate --spec=draft2020 -c ajv-formats \
-  -s specification/schemas/exercises/v1.1.0/exercise.schema.json \
-  -d specification/schemas/exercises/v1.1.0/exercise.example.machine.json
+  -s specification/schemas/exercises/v1.2.0/exercise.schema.json \
+  -d specification/schemas/exercises/v1.2.0/exercise.example.machine.json
 npx --package=ajv-cli --package=ajv-formats ajv validate --spec=draft2020 -c ajv-formats \
-  -s specification/schemas/exercises/v1.1.0/exercise.schema.json \
-  -d specification/schemas/exercises/v1.1.0/exercise.example.unilateral.json
+  -s specification/schemas/exercises/v1.2.0/exercise.schema.json \
+  -d specification/schemas/exercises/v1.2.0/exercise.example.unilateral.json
 ```
 
 ## 9. Example Implementation
 
 ### 9.1. Complete Back Squat Export
 
-Based on reference implementation (`/specification/schemas/exercises/v1.1.0/exercise.example.json`):
+Based on reference implementation (`/specification/schemas/exercises/v1.2.0/exercise.example.json`):
 
 ```json
 {

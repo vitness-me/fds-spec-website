@@ -7,6 +7,6 @@ hiding behind an unresolvable binary.
 
 ```bash
 npx --package=ajv-cli --package=ajv-formats ajv \
-  -s specification/schemas/exercises/v1.1.0/exercise.schema.json \
-  -d specification/schemas/exercises/v1.1.0/exercise.example.json
+  -s specification/schemas/exercises/v1.2.0/exercise.schema.json \
+  -d specification/schemas/exercises/v1.2.0/exercise.example.json
 ```

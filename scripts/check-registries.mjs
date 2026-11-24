@@ -41,7 +41,7 @@ const REGISTRIES = [
   {
     file: 'exercise-type.registry.json',
     field: 'exerciseType',
-    usedIn: ['exercises/v1.1.0'],
+    usedIn: ['exercises/v1.2.0'],
   },
   {
     file: 'workout-type.registry.json',

@@ -313,6 +313,12 @@ Vrednosti `externalLoad`:
 
 Konzumenti NE SMEJU da odbace vežbu koja izostavlja `loading`. Odsustvo znači da nije iskazano, a ne `none`.
 
+### 4.7. Strukturni deskriptori
+
+Od verzije exercise 1.2.0, vežba MOŽE da nosi polja strukturnog deskriptora iz RFC-010, na najvišem nivou zapisa: `fxi`, njen kanonski FXI; `fxe`, standardni FXE njene glavne opreme; `fxiProvenance`, ko je odgovorio za FXI; `fxiGap`, beleška vlasnika o tome šta FXI ne obuhvata; i `xrefs`, veze ka istoj vežbi u drugim katalozima, svaka sa `system`, `id` i načinom na koji je `link` napravljen. Unutar vežbe, svaki `equipmentRef` MOŽE da nosi `fxe`, a svaki `muscleRef` MOŽE da nosi `fxm`.
+
+Sva su opciona, a RFC-010 je normativan za to šta znače i kako ih razrešivač koristi. `xrefs` nije `metadata.externalRefs`: drugo navodi sopstvene identifikatore ovog zapisa u drugim sistemima, a prvo beleži odluku da zapis u drugom katalogu opisuje istu vežbu (RFC-010 §5.4).
+
 ## 5. Verzionisanje i kompatibilnost
 
 ### 5.1. Verzionisanje šema
@@ -403,9 +409,9 @@ Moguća struktura odgovora:
 ## 8. Referenca JSON šeme
 
 Kompletna JSON šema je dostupna na:
-- **Exercise**: `/specification/schemas/exercises/v1.1.0/exercise.schema.json`
-- **Equipment**: `/specification/schemas/equipment/v1.1.0/equipment.schema.json`  
-- **Muscle**: `/specification/schemas/muscle/v1.0.0/muscle.schema.json`
+- **Exercise**: `/specification/schemas/exercises/v1.2.0/exercise.schema.json`
+- **Equipment**: `/specification/schemas/equipment/v1.2.0/equipment.schema.json`  
+- **Muscle**: `/specification/schemas/muscle/v1.1.0/muscle.schema.json`
 
 ## 8.1. Validacija
 
@@ -413,29 +419,29 @@ Validirajte pomoću Ajv (Draft 2020-12):
 
 ```
 npx --package=ajv-cli --package=ajv-formats ajv validate --spec=draft2020 -c ajv-formats \
-  -s specification/schemas/exercises/v1.1.0/exercise.schema.json \
-  -d specification/schemas/exercises/v1.1.0/exercise.example.json
+  -s specification/schemas/exercises/v1.2.0/exercise.schema.json \
+  -d specification/schemas/exercises/v1.2.0/exercise.example.json
 
 # Additional examples (optional):
 npx --package=ajv-cli --package=ajv-formats ajv validate --spec=draft2020 -c ajv-formats \
-  -s specification/schemas/exercises/v1.1.0/exercise.schema.json \
-  -d specification/schemas/exercises/v1.1.0/exercise.example.cardio.json
+  -s specification/schemas/exercises/v1.2.0/exercise.schema.json \
+  -d specification/schemas/exercises/v1.2.0/exercise.example.cardio.json
 npx --package=ajv-cli --package=ajv-formats ajv validate --spec=draft2020 -c ajv-formats \
-  -s specification/schemas/exercises/v1.1.0/exercise.schema.json \
-  -d specification/schemas/exercises/v1.1.0/exercise.example.mobility.json
+  -s specification/schemas/exercises/v1.2.0/exercise.schema.json \
+  -d specification/schemas/exercises/v1.2.0/exercise.example.mobility.json
 npx --package=ajv-cli --package=ajv-formats ajv validate --spec=draft2020 -c ajv-formats \
-  -s specification/schemas/exercises/v1.1.0/exercise.schema.json \
-  -d specification/schemas/exercises/v1.1.0/exercise.example.machine.json
+  -s specification/schemas/exercises/v1.2.0/exercise.schema.json \
+  -d specification/schemas/exercises/v1.2.0/exercise.example.machine.json
 npx --package=ajv-cli --package=ajv-formats ajv validate --spec=draft2020 -c ajv-formats \
-  -s specification/schemas/exercises/v1.1.0/exercise.schema.json \
-  -d specification/schemas/exercises/v1.1.0/exercise.example.unilateral.json
+  -s specification/schemas/exercises/v1.2.0/exercise.schema.json \
+  -d specification/schemas/exercises/v1.2.0/exercise.example.unilateral.json
 ```
 
 ## 9. Primer implementacije
 
 ### 9.1. Kompletan izvoz zadnjeg čučnja
 
-Na osnovu referentne implementacije (`/specification/schemas/exercises/v1.1.0/exercise.example.json`):
+Na osnovu referentne implementacije (`/specification/schemas/exercises/v1.2.0/exercise.example.json`):
 
 ```json
 {

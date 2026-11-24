@@ -15,7 +15,7 @@
  */
 
 /** The newest published release. */
-export const CURRENT_RELEASE = '1.5.0';
+export const CURRENT_RELEASE = '1.6.0';
 
 /** Entity schema versions per release. */
 export const RELEASE_ENTITY_VERSIONS: Record<string, Record<string, string>> = {
@@ -63,6 +63,15 @@ export const RELEASE_ENTITY_VERSIONS: Record<string, Record<string, string>> = {
     exercise: '1.1.0',
     equipment: '1.1.0',
     muscle: '1.0.0',
+    'muscle-category': '1.0.0',
+    'body-atlas': '1.1.0',
+    workout: '1.1.0',
+    program: '1.0.0',
+  },
+  '1.6.0': {
+    exercise: '1.2.0',
+    equipment: '1.2.0',
+    muscle: '1.1.0',
     'muscle-category': '1.0.0',
     'body-atlas': '1.1.0',
     workout: '1.1.0',

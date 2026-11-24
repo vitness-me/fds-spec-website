@@ -35,11 +35,11 @@ El `.example.` en el nombre del archivo es la distinción: un archivo llamado `*
 
 ## Entidades de ejemplo
 
-<!-- fds:count examples=136 -->
-Se publican 136 documentos de ejemplo, cada uno servido desde la misma ruta versionada que el esquema que demuestra. Todos se validan en CI, de modo que un ejemplo que deja de coincidir con su esquema hace fallar la compilación.
+<!-- fds:count examples=139 -->
+Se publican 139 documentos de ejemplo, cada uno servido desde la misma ruta versionada que el esquema que demuestra. Todos se validan en CI, de modo que un ejemplo que deja de coincidir con su esquema hace fallar la compilación.
 
-<!-- fds:count examples:exercise=8 -->
-### Ejemplos de ejercicio (8)
+<!-- fds:count examples:exercise=9 -->
+### Ejemplos de ejercicio (9)
 - Definición básica de ejercicio
 - Ejercicio de cardio
 - Ejercicio de acondicionamiento
@@ -48,16 +48,19 @@ Se publican 136 documentos de ejemplo, cada uno servido desde la misma ruta vers
 - Ejercicio unilateral
 - Ejercicio asistido
 - Ejercicio basado en velocidad
+- Un ejercicio con los descriptores estructurales en borrador (RFC-010)
 
-<!-- fds:count examples:equipment=2 -->
-### Ejemplos de equipamiento (2)
+<!-- fds:count examples:equipment=3 -->
+### Ejemplos de equipamiento (3)
 - Definición básica de equipamiento (una barra)
 - Equipamiento con torre de placas, donde la carga se selecciona en incrementos fijos
+- Una máquina con su descriptor FXE en borrador (RFC-010)
 
-<!-- fds:count examples:muscle=2 -->
-### Ejemplos de músculo (2)
+<!-- fds:count examples:muscle=3 -->
+### Ejemplos de músculo (3)
 - Un músculo con regiones de mapa de calor y un nombre localizado
 - Un segundo músculo que lleva alias localizados junto a sus regiones
+- Un músculo con su clave FXM en borrador (RFC-010)
 
 <!-- fds:count examples:muscle-category=1 -->
 ### Ejemplos de categoría de músculo (1)

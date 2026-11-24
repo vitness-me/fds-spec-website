@@ -16,7 +16,7 @@ Ovaj dokument definiše opcionu HTTP krajnju tačku za otkrivanje, koja klijenti
 ## Šema odgovora (neformalna)
 ```json fds:ignore a discovery document, defined by specification/discovery.md rather than by a published schema
 {
-  "spec_version": "1.5.0",
+  "spec_version": "1.6.0",
   "provider": "Acme Fitness Platform",
   "supported_entities": [
     "exercise",
@@ -28,9 +28,9 @@ Ovaj dokument definiše opcionu HTTP krajnju tačku za otkrivanje, koja klijenti
     "program"
   ],
   "entity_versions": {
-    "exercise": "1.1.0",
-    "equipment": "1.1.0",
-    "muscle": "1.0.0",
+    "exercise": "1.2.0",
+    "equipment": "1.2.0",
+    "muscle": "1.1.0",
     "muscle-category": "1.0.0",
     "body-atlas": "1.1.0",
     "workout": "1.1.0",
@@ -59,7 +59,7 @@ Ovaj dokument definiše opcionu HTTP krajnju tačku za otkrivanje, koja klijenti
 
 `spec_version` imenuje izdanje. To **nije** verzija koju deli svaki entitet, i klijent koji pretpostavi da jeste tražiće URL-ove koji nikada nisu objavljeni.
 
-Entiteti se verzionišu nezavisno. Izdanje 1.5.0 objavljuje exercise, equipment, workout i body-atlas u verziji 1.1.0, dok muscle, muscle-category i program ostaju na 1.0.0. Ne postoji `muscle/v1.5.0/` i nikada neće postojati osim ako se sam muscle ne promeni.
+Entiteti se verzionišu nezavisno. Izdanje 1.6.0 objavljuje exercise i equipment u verziji 1.2.0, a muscle, workout i body-atlas u verziji 1.1.0, dok muscle-category i program ostaju na 1.0.0. Ne postoji `muscle/v1.6.0/` i nikada neće postojati osim ako se sam muscle ne promeni.
 
 Zamenjena verzija entiteta ostaje dostupna. `workout/v1.0.0/` je i dalje objavljen i i dalje zamrznut, jer izdanja 1.2.0 i 1.3.0 deklarišu workout na 1.0.0, a klijent fiksiran na bilo koje od njih mora i dalje moći da razrešava. `atlas/v1.0.0/` ostaje iz istog razloga: izdanja od 1.0.0 do 1.4.0 deklarišu body-atlas na 1.0.0.
 
@@ -79,6 +79,7 @@ Za razliku od šeme, manifest nije zamrznut. Dobija novo izdanje svaki put kada 
 | 1.3.0 | program |
 | 1.4.0 | workout prelazi na 1.1.0 — zone intenziteta po seriji i podešavanja mašina |
 | 1.5.0 | body-atlas prelazi na 1.1.0 — licenca i atribucija na resursima prikaza |
+| 1.6.0 | exercise i equipment prelaze na 1.2.0, muscle na 1.1.0 — polja strukturnih deskriptora iz RFC-010 |
 
 Dobijanje novog entiteta jeste novo izdanje čak i kada se ništa postojeće nije promenilo, jer izdanje imenuje *skup* koji objavljuje.
 

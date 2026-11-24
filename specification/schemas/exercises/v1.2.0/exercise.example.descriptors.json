@@ -1,0 +1,57 @@
+{
+  "schemaVersion": "1.2.0",
+  "exerciseId": "550e8400-e29b-41d4-a716-446655440010",
+  "canonical": {
+    "name": "Back Squat",
+    "slug": "back-squat",
+    "aliases": ["Barbell Back Squat"],
+    "localized": [
+      { "lang": "es", "name": "Sentadilla trasera" }
+    ]
+  },
+  "classification": {
+    "exerciseType": "strength",
+    "movement": "squat",
+    "mechanics": "compound",
+    "force": "push",
+    "level": "intermediate"
+  },
+  "targets": {
+    "primary": [
+      { "id": "mus.quadriceps", "name": "Quadriceps", "categoryId": "cat.legs", "fxm": "FXM=1.0/quadriceps-femoris" }
+    ],
+    "secondary": [
+      { "id": "mus.hamstrings", "name": "Hamstrings", "categoryId": "cat.legs", "fxm": "FXM=1.0/g:hamstrings" },
+      { "id": "mus.erectorSpinae", "name": "Erector Spinae", "categoryId": "cat.back" }
+    ]
+  },
+  "equipment": {
+    "required": [
+      { "id": "eq.barbell", "name": "Barbell", "fxe": "FXE=1.0S/k:imp/f:bar.straight" },
+      { "id": "eq.rack", "name": "Power Rack" }
+    ]
+  },
+  "fxi": "FXI=1.0S/m:hip.ext+kn.ext/o:standing/l:bb@back",
+  "fxe": "FXE=1.0S/k:imp/f:bar.straight",
+  "fxiProvenance": "owner",
+  "fxiGap": null,
+  "xrefs": [
+    { "system": "example-catalog", "id": "vx-0001", "link": "auto" },
+    { "system": "partner-gym", "id": "squat-back-bb", "link": "confirmed" }
+  ],
+  "metrics": {
+    "primary": { "type": "reps", "unit": "count" },
+    "secondary": [
+      { "type": "weight", "unit": "kg" }
+    ]
+  },
+  "metadata": {
+    "createdAt": "2026-11-24T00:00:00Z",
+    "updatedAt": "2026-11-24T00:00:00Z",
+    "source": "vitness.core",
+    "status": "active",
+    "externalRefs": [
+      { "system": "vitness.legacy", "id": "ex-000123" }
+    ]
+  }
+}

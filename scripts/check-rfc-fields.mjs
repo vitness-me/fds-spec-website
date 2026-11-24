@@ -88,15 +88,15 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const PAIRS = [
   {
     rfc: 'specification/rfc/rfc-001-exercise-data-model.md',
-    source: 'specification/schema-sources/exercises/v1.1.0/exercise.schema.json',
+    source: 'specification/schema-sources/exercises/v1.2.0/exercise.schema.json',
   },
   {
     rfc: 'specification/rfc/rfc-002-equipment-data-model.md',
-    source: 'specification/schema-sources/equipment/v1.1.0/equipment.schema.json',
+    source: 'specification/schema-sources/equipment/v1.2.0/equipment.schema.json',
   },
   {
     rfc: 'specification/rfc/rfc-003-muscle-data-model.md',
-    source: 'specification/schema-sources/muscle/v1.0.0/muscle.schema.json',
+    source: 'specification/schema-sources/muscle/v1.1.0/muscle.schema.json',
   },
   {
     rfc: 'specification/rfc/rfc-004-muscle-category-data-model.md',

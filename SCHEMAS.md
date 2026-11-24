@@ -3,20 +3,20 @@
 Every schema published by the Fitness Data Standard, at the version it is published under.
 
 <!-- fds:covers schemas -->
-<!-- fds:count schemas=16 entities=7 libraries=1 tooling=2 superseded=6 -->
-The list here is `specification/schemas/.integrity.json`, which is what the build writes and what `npm run check:published` fetches. Sixteen schemas are published: seven entities, one definition library, two tooling schemas, and six superseded versions that are still served.
+<!-- fds:count schemas=19 entities=7 libraries=1 tooling=2 superseded=9 -->
+The list here is `specification/schemas/.integrity.json`, which is what the build writes and what `npm run check:published` fetches. Nineteen schemas are published: seven entities, one definition library, two tooling schemas, and nine superseded versions that are still served.
 
 ## A release is a set of entity versions
 
-`spec_version` names a release; it is **not** a version every entity shares. The current release is **1.5.0**, and it publishes:
+`spec_version` names a release; it is **not** a version every entity shares. The current release is **1.6.0**, and it publishes:
 
 <!-- fds:covers entities -->
 
 | Entity | Version |
 |---|---|
-| exercise | 1.1.0 |
-| equipment | 1.1.0 |
-| muscle | 1.0.0 |
+| exercise | 1.2.0 |
+| equipment | 1.2.0 |
+| muscle | 1.1.0 |
 | muscle-category | 1.0.0 |
 | body-atlas | 1.1.0 |
 | workout | 1.1.0 |
@@ -32,36 +32,43 @@ The list here is `specification/schemas/.integrity.json`, which is what the buil
 | 1.3.0 | program |
 | 1.4.0 | workout moves to 1.1.0 |
 | 1.5.0 | body-atlas moves to 1.1.0 |
+| 1.6.0 | exercise and equipment move to 1.2.0, muscle to 1.1.0 |
 
-There is no `muscle/v1.5.0/`, and there will not be unless muscle itself changes. Build URLs from the entity version, not the release. See `specification/discovery.md`.
+There is no `muscle/v1.6.0/`, and there will not be unless muscle itself changes. Build URLs from the entity version, not the release. See `specification/discovery.md`.
 
 Both tables above are published, machine-readable, at **https://spec.vitness.me/releases.json** — the release manifest, generated from the schemas themselves. Read it rather than transcribing this page. It is not frozen: it gains a release every time one is published, which is exactly why it is worth fetching.
 
 ## Production URLs (spec.vitness.me)
 
-### Exercise Schema (v1.1.0)
-- **Schema**: https://spec.vitness.me/schemas/exercises/v1.1.0/exercise.schema.json
+### Exercise Schema (v1.2.0)
+- **Schema**: https://spec.vitness.me/schemas/exercises/v1.2.0/exercise.schema.json
+- 1.2.0 added the optional RFC-010 structural descriptor fields: `fxi`, `fxe`, `fxiProvenance`, `fxiGap` and `xrefs`, and `fxe` and `fxm` on equipment and muscle references
 - **Examples**:
-  - https://spec.vitness.me/schemas/exercises/v1.1.0/exercise.example.json
-  - https://spec.vitness.me/schemas/exercises/v1.1.0/exercise.example.cardio.json
-  - https://spec.vitness.me/schemas/exercises/v1.1.0/exercise.example.mobility.json
-  - https://spec.vitness.me/schemas/exercises/v1.1.0/exercise.example.machine.json
-  - https://spec.vitness.me/schemas/exercises/v1.1.0/exercise.example.unilateral.json
-  - https://spec.vitness.me/schemas/exercises/v1.1.0/exercise.example.assisted.json
-  - https://spec.vitness.me/schemas/exercises/v1.1.0/exercise.example.conditioning.json
-  - https://spec.vitness.me/schemas/exercises/v1.1.0/exercise.example.velocity.json
+  - https://spec.vitness.me/schemas/exercises/v1.2.0/exercise.example.json
+  - https://spec.vitness.me/schemas/exercises/v1.2.0/exercise.example.cardio.json
+  - https://spec.vitness.me/schemas/exercises/v1.2.0/exercise.example.mobility.json
+  - https://spec.vitness.me/schemas/exercises/v1.2.0/exercise.example.machine.json
+  - https://spec.vitness.me/schemas/exercises/v1.2.0/exercise.example.unilateral.json
+  - https://spec.vitness.me/schemas/exercises/v1.2.0/exercise.example.assisted.json
+  - https://spec.vitness.me/schemas/exercises/v1.2.0/exercise.example.conditioning.json
+  - https://spec.vitness.me/schemas/exercises/v1.2.0/exercise.example.velocity.json
+  - https://spec.vitness.me/schemas/exercises/v1.2.0/exercise.example.descriptors.json
 
-### Equipment Schema (v1.1.0)
-- **Schema**: https://spec.vitness.me/schemas/equipment/v1.1.0/equipment.schema.json
+### Equipment Schema (v1.2.0)
+- **Schema**: https://spec.vitness.me/schemas/equipment/v1.2.0/equipment.schema.json
+- 1.2.0 added the optional RFC-010 structural descriptor `fxe`
 - **Examples**:
-  - https://spec.vitness.me/schemas/equipment/v1.1.0/equipment.example.json
-  - https://spec.vitness.me/schemas/equipment/v1.1.0/equipment.example.stack.json
+  - https://spec.vitness.me/schemas/equipment/v1.2.0/equipment.example.json
+  - https://spec.vitness.me/schemas/equipment/v1.2.0/equipment.example.stack.json
+  - https://spec.vitness.me/schemas/equipment/v1.2.0/equipment.example.descriptors.json
 
-### Muscle Schema (v1.0.0)
-- **Schema**: https://spec.vitness.me/schemas/muscle/v1.0.0/muscle.schema.json
+### Muscle Schema (v1.1.0)
+- **Schema**: https://spec.vitness.me/schemas/muscle/v1.1.0/muscle.schema.json
+- 1.1.0 added the optional RFC-010 muscle key `fxm`
 - **Examples**:
-  - https://spec.vitness.me/schemas/muscle/v1.0.0/muscle.example.json
-  - https://spec.vitness.me/schemas/muscle/v1.0.0/muscle.example.lats.json
+  - https://spec.vitness.me/schemas/muscle/v1.1.0/muscle.example.json
+  - https://spec.vitness.me/schemas/muscle/v1.1.0/muscle.example.lats.json
+  - https://spec.vitness.me/schemas/muscle/v1.1.0/muscle.example.descriptors.json
 
 ### Muscle Category Schema (v1.0.0)
 - **Schema**: https://spec.vitness.me/schemas/muscle/muscle-category/v1.0.0/muscle-category.schema.json
@@ -119,6 +126,9 @@ Both tables above are published, machine-readable, at **https://spec.vitness.me/
 <!-- fds:pin transformer/v1.0.0/mapping.schema.json — listed on purpose: it is the `$schema` URL every configuration written before 1.1.0 names, and an editor resolving it must keep getting a document. -->
 <!-- fds:pin transformer/v1.1.0/mapping.schema.json — listed on purpose: it is the `$schema` URL every configuration written before 1.2.0 names, and an editor resolving it must keep getting a document. -->
 <!-- fds:pin transformer/v1.2.0/mapping.schema.json — listed on purpose: it is the `$schema` URL every configuration written before 1.3.0 names, and an editor resolving it must keep getting a document. -->
+<!-- fds:pin exercises/v1.1.0/exercise.schema.json — listed on purpose: releases 1.1.0 through 1.5.0 declare exercise at 1.1.0, so a client pinned to any of them must keep resolving this URL. It is frozen, and this section says it is not for new work. -->
+<!-- fds:pin equipment/v1.1.0/equipment.schema.json — listed on purpose: releases 1.1.0 through 1.5.0 declare equipment at 1.1.0, so a client pinned to any of them must keep resolving this URL. It is frozen, and this section says it is not for new work. -->
+<!-- fds:pin muscle/v1.0.0/muscle.schema.json — listed on purpose: releases 1.0.0 through 1.5.0 declare muscle at 1.0.0, so a client pinned to any of them must keep resolving this URL. It is frozen, and this section says it is not for new work. -->
 <!-- fds:pin transformer/provenance/v1.0.0/provenance.schema.json — listed on purpose: it is the `$schema` every sidecar written before 1.1.0 names, and such a sidecar must keep validating against it. -->
 
 ### Transformer Mapping (v1.2.0)
@@ -163,13 +173,34 @@ Both tables above are published, machine-readable, at **https://spec.vitness.me/
 - Not for new work. 1.1.0 only added optional fields, so every 1.0.0 document remains valid under it
 - The example lives with the current version, under `atlas/v1.1.0/`
 
+### Exercise Schema (v1.1.0)
+- **Schema**: https://spec.vitness.me/schemas/exercises/v1.1.0/exercise.schema.json
+- Superseded by exercise 1.2.0, and still published and still frozen: releases 1.1.0 through 1.5.0
+  declare exercise at 1.1.0, so a client pinned to any of them must keep resolving this URL
+- Not for new work. 1.2.0 only added optional fields, so every 1.1.0 document remains valid under it
+- Examples live with the current version, under `exercises/v1.2.0/`
+
+### Equipment Schema (v1.1.0)
+- **Schema**: https://spec.vitness.me/schemas/equipment/v1.1.0/equipment.schema.json
+- Superseded by equipment 1.2.0, and still published and still frozen: releases 1.1.0 through 1.5.0
+  declare equipment at 1.1.0, so a client pinned to any of them must keep resolving this URL
+- Not for new work. 1.2.0 only added optional fields, so every 1.1.0 document remains valid under it
+- Examples live with the current version, under `equipment/v1.2.0/`
+
+### Muscle Schema (v1.0.0)
+- **Schema**: https://spec.vitness.me/schemas/muscle/v1.0.0/muscle.schema.json
+- Superseded by muscle 1.1.0, and still published and still frozen: releases 1.0.0 through 1.5.0
+  declare muscle at 1.0.0, so a client pinned to any of them must keep resolving this URL
+- Not for new work. 1.1.0 only added optional fields, so every 1.0.0 document remains valid under it
+- Examples live with the current version, under `muscle/v1.1.0/`
+
 ## Schema $id Fields
 
 All schema `$id` fields match their serving URLs:
 
 ```json fds:ignore a schema identifier, not a document
 {
-  "$id": "https://spec.vitness.me/schemas/exercises/v1.1.0/exercise.schema.json"
+  "$id": "https://spec.vitness.me/schemas/exercises/v1.2.0/exercise.schema.json"
 }
 ```
 
@@ -181,8 +212,8 @@ The URLs above serve the same bytes as `specification/schemas/` in this reposito
 
 ```bash
 npx --package=ajv-cli --package=ajv-formats ajv validate --spec=draft2020 -c ajv-formats \
-  -s specification/schemas/exercises/v1.1.0/exercise.schema.json \
-  -d specification/schemas/exercises/v1.1.0/exercise.example.json
+  -s specification/schemas/exercises/v1.2.0/exercise.schema.json \
+  -d specification/schemas/exercises/v1.2.0/exercise.example.json
 ```
 
 That validates the example shipped beside the schema. To validate your own document, replace the `-d` path with your file. Working without a checkout, download the schema from its URL above first and pass the downloaded filename to `-s`.

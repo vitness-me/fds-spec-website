@@ -10,7 +10,7 @@ import styles from './styles.module.css';
 // served beside the schema. Importing it (rather than retyping a "minimal"
 // document here) means this panel is validated by the same gates as the
 // spec, and the version it names is the file's own, not this page's claim.
-import exampleDocument from '../../../../../specification/schemas/exercises/v1.1.0/exercise.example.json';
+import exampleDocument from '../../../../../specification/schemas/exercises/v1.2.0/exercise.example.json';
 
 const example = JSON.stringify(exampleDocument, null, 2);
 

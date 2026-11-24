@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "1.1.0",
+  "id": "mus.lats",
+  "canonical": {
+    "name": "Latissimus Dorsi",
+    "slug": "latissimus-dorsi",
+    "aliases": ["Lats"]
+  },
+  "classification": {
+    "categoryId": "cat.back",
+    "region": "upper-back",
+    "laterality": "bilateral"
+  },
+  "fxm": "FXM=1.0/latissimus-dorsi",
+  "metadata": {
+    "createdAt": "2026-11-24T00:00:00Z",
+    "updatedAt": "2026-11-24T00:00:00Z",
+    "source": "vitness.registry",
+    "status": "active"
+  }
+}
