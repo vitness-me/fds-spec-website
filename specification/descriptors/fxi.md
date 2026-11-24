@@ -115,7 +115,7 @@ Every FXI has exactly one canonical spelling, and only the canonical spelling is
 3. Drop every layer at its default: `k:limbs`, `f:level`, `x:b`, `h:none`, `p:usual`, `a:none`, and a support that is only `floor`.
 4. Inside a value, sort the items joined by `+`, the parts joined by `|` and the body points joined by `,` in code-unit order, with `?` and `*` after every letter. Keep `>` sequences in rep order; in `o`, `f` and `g`, collapse a code repeated in a row (`standing>standing` is `standing`).
 5. In `s`, drop the body points the start orientation implies (the orientation table lists them), a bare `floor`, and a bare `bench`, `box`, `chair` or `floor` under a seated body.
-6. In `l`, drop `bw` when an implement is also written.
+6. In `l`, drop `bw` when an implement is also written, and drop every count equal to the usual count ([counts](#load-l)): `l:db*1@hands/x:u` is `l:db@hands/x:u`.
 7. In `x`, drop a scope the motion already implies (a lunge's `u@legs` is `u`), and drop `x` entirely for a motion that is only trunk or neck rotation or side bend.
 8. In `g`, with one grip phase, drop the usual hand orientation, `w-m` and `st-m`, and drop `ne` with a trap bar, which forces it. With several phases, drop `w-m` and `st-m` from a phase unless that leaves it empty. Drop a stance unless the start is `standing`, `standing.bent` or `?`, or the feet push a machine foot plate (`mach@feet`).
 9. Set the flag: `N` when `a` is written, else `S`.
@@ -369,7 +369,7 @@ List every implement that loads the working muscles, each with `@` and where it 
 | `assist` | The implement takes part of the body weight (assist band, assisted machine). |
 <!-- /fds:generated -->
 
-**Counts.** Leave the count out when it is the usual one. A one-hand implement (`db`, `kb`, `plate`, `club`) is one per working hand: `db@hands` is two dumbbells when both arms work and one in a one-arm exercise. A two-hand implement (`bb`, `ez`, `tb`, `axle`, `camber`, `mb`, `slam`, `bag`, `rope`, `landmine`) is one, and so is any implement held at a trunk point. Write `*n` only when the count differs: one kettlebell in both hands is `kb*1@hands`.
+**Counts.** Leave the count out when it is the usual one; canonicalisation drops a written count equal to it. A one-hand implement (`db`, `kb`, `plate`, `club`) is one per working hand: one when the arms work one at a time (`x` is `u@arms`, or `u` with a motion of arm joints only), two otherwise. So `db@hands` is one dumbbell in a one-arm row (`x:u`) and two in a squat, an alternating curl (`x:a`) or a split squat (`x:u`, the legs). Every other implement is one, and so is any implement held at a trunk point (`chest`, `back`, `hips`, `waist`). Write `*n` only when the count differs: one kettlebell in both hands is `kb*1@hands`. An implement of unknown kind (`?`) has no usual count, so a count written on it stays.
 
 **Unknowns.** An implement of unknown kind: `?@chest`. A hold point unknown: `kb@?`. An implement of unknown kind at an unknown point ("weighted", nothing more): `?@?`. Nothing known, not even whether there is an implement: `l:?`.
 
