@@ -12,7 +12,7 @@ This specification adds three structural descriptors to the Fitness Data Standar
 
 It defines where the descriptors sit on the exercise, equipment and muscle entities, the fields that travel beside them (who answered, what the notation misses, and the links a person or a resolver confirmed), the match protocol a resolver follows, and how the descriptors are versioned. It publishes the measurements the descriptors have been tested against so far, and states which of them do not yet meet the bar this RFC sets for leaving experimental status.
 
-The descriptors are experimental. Every field this RFC adds is optional, no existing field changes meaning, and the schema change is a minor version.
+The descriptors are experimental (§2 says what that allows to change and what it does not). Every field this RFC adds is optional, no existing field changes meaning, and the schema change is a minor version.
 
 ## 1. Introduction
 
@@ -59,6 +59,9 @@ The key words MUST, MUST NOT, SHOULD, SHOULD NOT and MAY are to be interpreted a
 - **Import mode**: building a descriptor from another catalogue's row without its owner.
 - **Gap marker**: the owner's note that the notation misses something about this record.
 - **Link**: a stored statement that a record and a record in another catalogue describe the same thing.
+- **Experimental**: the status of the descriptors from this RFC's acceptance until a fresh test passes the release gate of §9.5. While they are experimental:
+  - **may still change**: a rules revision within major 1 may add codes and refine readings, under §8.1 only; the ranking detail of the confirm list (§7.2, the order within and between its steps) and the conformance vectors that pin it; the auto-match conditions, which may only be tightened, never loosened (§12); and the open items of §12;
+  - **frozen on acceptance**: the field names, their types and where they sit on each entity (§5); the string headers and the meaning of every published code; every published default (§8.1); the provenance values and what each one allows (§5.3, §7.1); and the bytes of the schema versions release 1.6.0 names (§8.2). These stay as published whether or not the gate is ever met; leaving experimental status changes no field and no string.
 
 ## 3. The Claim
 
@@ -84,7 +87,7 @@ The descriptor pages are the normative text for the syntax, the canonical form, 
 | FXE | [FXE](../descriptors/fxe.md) | `FXE=1.0S/k:mac/l:hand/s:seat/m:pull.back` |
 | FXM | [FXM](../descriptors/fxm.md) | `FXM=1.0/latissimus-dorsi` |
 
-Compare, provenance, the gap marker and versioning are on [Compare, match and versioning](../descriptors/compare-and-match.md), and the test vectors on [Conformance](../descriptors/conformance.md). The vocabularies are the registries in `specification/registries/descriptors/`.
+Compare is on [Compare, match and versioning](../descriptors/compare-and-match.md#compare), and the test vectors on [Conformance](../descriptors/conformance.md). This RFC is the normative home of the record fields (§5), among them provenance and the gap marker (§5.3), of the match protocol (§7) and of versioning (§8); the pages link here for them. The vocabularies are the registries in `specification/registries/descriptors/`.
 
 ### 4.1. Rules this RFC fixes
 
@@ -109,7 +112,8 @@ FXE describes a piece of equipment by its structure: its kind first, then the st
 FXM is a key for a muscle (`FXM=1.0/<muscle>`), a part of one (`FXM=1.0/<muscle>.<part>`), or a group (`FXM=1.0/g:<group>`).
 
 - **Anchoring.** Every muscle and part is anchored to the Foundational Model of Anatomy (FMA), which is primary. Where UBERON has a term for the same structure it is carried as a cross-reference. Where an ontology has no term, the entry records the gap in words; an anchor is never borrowed from a broader or narrower structure.
-- **Groups are member sets.** A group is defined by the FXM keys of its members, never by its name. Two keys that cover the same anatomical leaves mean the same tissue, whatever they are called.
+- **Tokens derive from FMA.** A muscle token is the preferred label of its FMA term, lowercased, with the words "muscle group", or else the word "muscle", removed, and its words joined by single hyphens; a part token is the qualifier in the FMA label of the part or head, the word before "part of" or "head of". The [FXM page](../descriptors/fxm.md#anchoring) gives the rule with examples. A provider MUST derive its muscle and part tokens this way. Two providers that anchor a structure to the same FMA term therefore write the same key, and a reader resolves a muscle or part key from FMA without the provider's vocabulary.
+- **Groups are member sets.** A group is defined by the FXM keys of its members, never by its name. Two keys that cover the same anatomical leaves mean the same tissue, whatever they are called. A group token is the provider's own and is not derived: a `g:` key is resolved only through the vocabulary that defines it, and nothing in the key says whose that is (§12).
 - **No muscle list.** FDS publishes the key format, the anchoring rules and what a group means. Which muscles, parts and groups exist is a provider's vocabulary.
 
 ### 4.5. What a provider supplies
@@ -136,7 +140,7 @@ The record-level fields sit at the top level of the record, beside `classificati
 
 ### 5.1. Descriptor strings
 
-A producer MUST write each descriptor in canonical form. The schema checks the envelope only: the header (`FXI=`, `FXE=` or `FXM=`, major version 1, then the syntax revision), the flag where the descriptor has one, and a body without whitespace. It does not check the grammar or the codes; those are the registries', and the conformance vectors' syntax tier tests them. A consumer SHOULD validate a descriptor against the registries before comparing it, and MUST treat an invalid one as absent.
+A producer MUST write each descriptor in canonical form. The schema checks the envelope only: the header (`FXI=`, `FXE=` or `FXM=`, major version 1, then the syntax revision without leading zeros), the flag where the descriptor has one, and a body without whitespace; for FXM, whose grammar is a key, the whole key. It does not check the FXI and FXE grammar or any code; those are the registries', and the conformance vectors' syntax tier tests them. A consumer MUST validate a descriptor against the registries before comparing it, and MUST treat an invalid one as absent.
 
 The schema accepts major version 1 only. A new major of a descriptor is a new major of its grammar, and would need a new schema version to be carried.
 
@@ -159,7 +163,7 @@ They answer different questions. The record-level `fxe` names the exercise's **m
 
 An absent `fxiProvenance` is unknown, and is treated like `agent`: it never qualifies a record for auto-match.
 
-`fxiGap` is the owner's plain-text note that the notation misses something that separates this exercise from others. `null` states that there is none, and so does a note of only whitespace. Any other note is a gap marker: it blocks auto-match (§7.1), and it is the evidence a later rules revision draws on. Prescription is never a gap: a pause, a tempo or a load belongs to RFC-006, not to the exercise.
+`fxiGap` is the owner's plain-text note that the notation misses something that separates this exercise from others. `null`, or no `fxiGap` at all, states that there is none; the schema does not accept an empty string, so write `null`. Any note present is a gap marker, a note of only whitespace included: it blocks auto-match (§7.1), and it is the evidence a later rules revision draws on. A resolver that meets a value the schema does not allow treats it as a gap marker, so an unexpected value never enables an auto-match. Prescription is never a gap: a pause, a tempo or a load belongs to RFC-006, not to the exercise.
 
 Neither field means anything without an FXI, and the schema rejects either one on a record that has no `fxi`.
 
@@ -173,7 +177,9 @@ Neither field means anything without an FXI, and the schema rejects either one o
 | `id` | The linked record's identifier in that catalogue. |
 | `link` | How the link was made: `auto`, by a resolver under §7.1; or `confirmed`, by a person choosing it from a confirm list or stating it directly. |
 
-A record SHOULD carry at most one entry per `system` and `id`. A consumer that receives a record whose `xrefs` already link it to a record in its own catalogue MAY use that link without running the match protocol.
+A record SHOULD carry at most one entry per `system` and `id`.
+
+**Received links are hints, not authority.** The `xrefs` on a record that arrives from another catalogue are its sender's claims: an `auto` entry was made by the sender's resolver, and a `confirmed` one by a person the receiver does not know. A consumer MAY use such an entry as a hint, for example to put the record it names first on a confirm list. It MUST NOT store a received entry as a link of its own, or auto-match on it, without running the match protocol (§7) itself.
 
 **Why not `metadata.externalRefs`.** The two look alike and were kept apart on purpose.
 
@@ -185,11 +191,11 @@ A record SHOULD carry at most one entry per `system` and `id`. A consumer that r
 
 ### 5.5. What this release does not yet carry
 
-`exerciseRef` gains `fxi`, and every `equipmentRef` and `muscleRef` gains `fxe` and `fxm`, wherever they occur. In this release they occur with the new fields only inside the exercise entity. Workout and program embed the same references, and the prescription library embeds `equipmentRef`; their published versions are frozen and were not moved here, so a workout's or program's references cannot yet carry a descriptor. See §12.
+In this release `equipmentRef` gains `fxe` and `muscleRef` gains `fxm`, and they carry them only inside the exercise, equipment and muscle entities this release moves. `exerciseRef` does not gain `fxi` now: it occurs only in workout and program, whose published versions are frozen and were not moved here. Workout and program embed `equipmentRef` and `muscleRef` too, and the prescription library embeds `equipmentRef`, so their references cannot yet carry a descriptor either. `fxi` on `exerciseRef`, and `fxe` and `fxm` on the references inside workout, program and the prescription library, are staged for the next version of each of those schemas (§12).
 
 ## 6. Compare
 
-Compare takes two FXIs, or two FXEs, and returns `identical`, `refines`, `refined-by`, `compatible`, `contradicting` or `invalid`, overall and per layer. FXM keys compare as `identical`, `contains`, `overlaps` or `disjoint`, by the anatomical leaves each covers. The rules are on [Compare, match and versioning](../descriptors/compare-and-match.md#compare). Compare reads only the strings: never a name, never a movement word. It is not transitive, and a consumer MUST deduplicate only on `identical`.
+Compare takes two FXIs, or two FXEs, and returns `identical`, `refines`, `refined-by`, `compatible`, `contradicting` or `invalid`, overall and per layer. FXM keys compare as `identical`, `contains`, `overlaps` or `disjoint`, by the anatomical leaves each covers. The rules are on [Compare, match and versioning](../descriptors/compare-and-match.md#compare). An FXM `g:` key compares only with both providers' vocabularies in hand, since its leaves come from the vocabulary that defines it. Compare reads only the strings: never a name, never a movement word. It is not transitive, and a consumer MUST deduplicate only on `identical`.
 
 ## 7. Match Protocol
 
@@ -200,10 +206,11 @@ This section is normative. A resolver matches one record, the **query**, against
 A resolver MAY link the query to a library record without asking a person only when all of these hold:
 
 1. exactly one library record has an FXI that compares `identical` to the query's;
-2. neither the query nor that record carries a gap marker;
-3. both have `fxiProvenance` `owner` or `owner-assisted`.
+2. neither the query nor that record carries a gap marker (§5.3);
+3. both have `fxiProvenance` `owner` or `owner-assisted`;
+4. neither was built in import mode (§7.4). Where a row says the mode it was built in, as an answers record or an encoder's output row does, an import-mode row never auto-matches, whatever its `fxiProvenance` says.
 
-The link is stored in the query's `xrefs` with `link: "auto"`. In every other case a resolver MUST NOT link without a person.
+The link is stored in the query's `xrefs` with `link: "auto"`. In every other case a resolver MUST NOT link without a person. Where a row says its mode, a resolver MUST refuse a row whose `fxiProvenance` contradicts it (an import-mode row with any provenance but `import`, or `import` outside import mode) rather than match it.
 
 ### 7.2. Confirm
 
@@ -213,7 +220,7 @@ Otherwise the resolver offers a confirm list: at most three library records, eac
 2. **Near-compatible**: records that contradict the query in exactly one standard layer, which the list names. By name similarity, then library order.
 3. **Name candidates**: the rest, by name similarity, then library order.
 
-A link a person picks is stored in the query's `xrefs` with `link: "confirmed"`. How name similarity is scored is an implementation's choice; the conformance vectors rank by name only where any reasonable score agrees.
+A link a person picks is stored in the query's `xrefs` with `link: "confirmed"`. How name similarity is scored is an implementation's choice; the conformance vectors rank by name only where any reasonable score agrees. The ranking detail may still change while the descriptors are experimental (§2); the three steps and the list's length do not.
 
 ### 7.3. Absent
 
@@ -228,47 +235,59 @@ A descriptor built in import mode is for candidate search only. It MAY place rec
 ### 8.1. The descriptors
 
 - **Two numbers, kept apart.** The string header carries the major version and the syntax revision; the syntax revision moves only when the grammar does. The rules revision is the revision of the vocabularies and layer rules, and is not written in the string.
-- **Refinement only, within a major.** A rules revision may add a code, split a code into children that its old code then covers, add a layer that older strings read as `?`, or give a published default to a layer whose absence was open. It never removes a code, never changes what a code means, and never changes an existing default.
+- **Refinement only, within a major.** A rules revision may add a code, split a code into children that its old code then covers, add a layer that older strings read as `?`, add a table entry where the old reading was `?`, or give a published default to a layer whose absence was open. It never removes a code, never changes what a code means, and never changes an existing default. Every string valid under one rules revision stays valid under the next, and two strings that were `identical` stay `identical`.
 - **Defaults are forever.** A string that leaves a layer at its default means the same thing under every later rules revision of its major.
-- **One rules revision per release.** A release of the standard carries at most one new rules revision.
-- **Answers are stored.** A producer SHOULD keep each record's answers record. When a rules revision refines a reading, `upgrade` rebuilds every string from its stored answers rather than asking anyone again. A string with no stored answers stays valid as written.
+- **One rules revision per release.** A release of the standard carries at most one new rules revision, and each new ruling in it rests on at least two failing cases from at least two catalogues.
+- **Answers are stored.** A producer SHOULD keep each record's answers record: the question ids and the options chosen, the movement word and the movement-word dataset it came from, if any, the provenance and the gap marker. When a rules revision refines a reading, an upgrade rebuilds every string from its stored answers rather than asking anyone again. A string with no stored answers stays valid as written.
 
 ### 8.2. The schemas
 
 Release **1.6.0** carries the fields of §5. It moves exercise and equipment to 1.2.0 and muscle to 1.1.0; every other entity, and the prescription library, stays where release 1.5.0 named it. Every change is an optional addition, so every document valid under the previous versions is valid under the new ones, and the superseded versions stay published and frozen.
 
+Release 1.6.0 is proposed with this RFC and is not published while the RFC is a draft. The change that accepts this RFC freezes exercise 1.2.0, equipment 1.2.0 and muscle 1.1.0 and dates the release's changelog entry, in one merge. Until then the site and the packages are not published from a tree whose current release is unfrozen or undated.
+
 ## 9. Evidence
 
-The conformance vectors say whether an implementation computes what this specification says. They cannot say whether people and programs describe exercises well enough for the match protocol to be useful. That is measured, and published here as measurements, not as a pass or a fail. Brackets give the interval reported with each figure.
+The conformance vectors say whether an implementation computes what this specification says. They cannot say whether people and programs describe exercises well enough for the match protocol to be useful. That is measured, and published here as measurements, not as a pass or a fail.
 
-### 9.1. Name-disjoint re-test
+### 9.1. Method
 
-624 queries in six parts, none sharing a name with the library it was matched against: rows authored in French, in Italian and in Portuguese; real non-English rows from third-party catalogues; gym jargon; and renamed exercises. Two independent encoders encoded the set, and the figures are from cross-encoder runs, in which the queries one encoder built were matched against a library the other built.
+- **Encoders.** Two encoders, both software agents, encoded the library and the queries independently, without seeing each other's output. They worked in owner mode as stand-ins for the catalogues' owners, so their rows carried owner provenance and could auto-match: the auto-match figures below simulate owners encoding their own catalogues. A calibration with people encoding is pending (§9.4).
+- **Queries.** 624 scored queries in six parts, none sharing a name with the library it was matched against: rows authored in French, in Italian and in Portuguese; real non-English rows from third-party catalogues; gym jargon; and renamed exercises. 496 have their exercise in the library and 128 do not. The **real parts** are the last three, 174 queries.
+- **Runs.** Cross-encoder: the queries one encoder built were matched against the library the other built, and the other way round. Each figure is the mean of the two runs.
+- **Resolver.** The match protocol of §7, as the reference encoder implements it, fixed before the queries were encoded.
+- **Measures.** *Top-3 recall* is the share of in-library queries whose right record is linked automatically or listed in the top three of the confirm list; its denominator is the in-library queries. *Wrong auto-matches* is the share of all scored queries, in the library or not, that were linked automatically to a wrong record; an absent query linked to anything is wrong.
+- **Intervals.** Brackets give 95% Wilson score intervals. For the mean of the two runs, the interval uses the pooled rate and the denominator of one run.
+- **Data.** The queries, the libraries and the encoded rows stay with the provider that ran the test, because they contain third-party catalogue text. The method and the scorer are described here so the test can be repeated on another set.
+
+### 9.2. Name-disjoint re-test
 
 | Measure | All parts (624) | Real parts only (174) |
 |---|---|---|
-| Top-3 recall: the right record is on the confirm list | 98.4% [96.8–99.2] | 96.3% [91.7–98.4] |
+| Top-3 recall: the right record is linked or on the confirm list | 98.4% [96.8–99.2] | 96.3% [91.7–98.4] |
 | Wrong auto-matches | 2.1% [1.2–3.5] | 3.4% [1.6–7.3] |
 
-On the same set, matching by name with translation reached a top-3 recall of 88.3% (93.3% without an absent cut-off), with 1.1% wrong auto-matches.
+On the same set, matching by name with translation reached a top-3 recall of 88.3% when it answered absent below a fixed similarity cut-off, and 93.3% when it always offered a list, with 1.1% wrong auto-matches.
 
-### 9.2. Separation and agreement
+### 9.3. Separation and agreement
 
 - **Separation of close variants**: on 98 authored pairs of exercises that differ in one detail, the descriptors kept 98.0% of pairs apart.
 - **Encoder agreement**: two encoders encoding the same real row wrote the same whole string in about 78% to 95% of rows, depending on the set.
 
-### 9.3. Pending
+### 9.4. Pending
 
 - **Person-encoded calibration**: owners against encoders, on the same rows. *Pending — not yet measured.*
 
-### 9.4. The release gate
+### 9.5. The release gate
 
-The descriptors leave experimental status only when a fresh name-disjoint test passes both:
+The descriptors leave experimental status only when a test run as §9.1 describes, on a fresh name-disjoint set of queries none of the earlier tests used, with cross-encoder runs, meets both, on all parts and on the real parts:
 
 - wrong auto-matches **at most 2%**;
 - top-3 recall **at least 98%**.
 
-**The gate is not yet met.** Wrong auto-matches are above it on the whole set (2.1%), and both measures miss it on the real parts (3.4% and 96.3%). Top-3 recall on the whole set (98.4%) meets it.
+The gate is read on the point estimate. The intervals are reported beside it, so a reader can see how far the result could move.
+
+**The gate is not yet met.** Wrong auto-matches are above it on all parts (2.1%), and both measures miss it on the real parts (3.4% and 96.3%). Top-3 recall on all parts (98.4%) meets it.
 
 ## 10. Implementation Guidance
 
@@ -282,7 +301,7 @@ The descriptors leave experimental status only when a fresh name-disjoint test p
 ### 10.2. Consumers
 
 - Validate every descriptor against the registries before use. Treat an invalid one as absent.
-- Read an existing link in `xrefs` before running the match protocol.
+- Treat the `xrefs` a received record carries as the sender's hints (§5.4). Run the match protocol yourself before storing a link of your own.
 - Do not treat two `compatible` or `refines` FXIs as the same exercise; only a person confirms that.
 
 ### 10.3. Resolvers
@@ -297,17 +316,22 @@ A descriptor describes an exercise, a piece of equipment or a muscle. It describ
 
 `fxiGap` is free text written by a catalogue owner. Consumers SHOULD treat it as untrusted text, as they treat any description.
 
+An `xrefs` entry on a received record is the sender's claim, whether `auto` or `confirmed`: a wrong link, made by mistake or on purpose, would otherwise spread from one catalogue to every catalogue that copies it. §5.4 therefore makes received links hints, and only a link the receiver's own resolver or person makes is stored as the receiver's.
+
 ## 12. Open Items
 
 **Planned before release.** Each of these must land before the descriptors leave experimental status:
 
-1. **Auto-match will also require the equipment to match.** When both records carry an FXE, auto-match will additionally require them to be `identical`. §7.1 does not require it yet.
+1. **Auto-match will also require the equipment to match.** When both records carry an FXE, auto-match will additionally require them to be `identical`. §7.1 does not require it yet. The figures of §9 were measured without it.
 2. **One rules revision closes the recorded notation gaps.** The gap markers and contradictions recorded so far are resolved in a single rules revision, under the refinement rules of §8.1.
-3. **A fresh name-disjoint test passes the release gate** of §9.4, on queries none of the earlier tests used.
+3. **A fresh name-disjoint test passes the release gate** of §9.5, on queries none of the earlier tests used.
 
 **Staged.** `exerciseRef` carries `fxi`, and the references inside workout, program and the prescription library carry `fxe` and `fxm`, from the next version of each of those schemas (§5.5).
 
-**Open.** Two exchange shapes are not fixed here: where a provider publishes its FXM vocabulary, with the shape of a vocabulary entry; and the answers record. The reference encoder's `--muscles` input and the answers record on the question flow page are the working shapes.
+**Open.**
+
+1. **Whose group an FXM key names.** A muscle or part key derives from FMA and means the same in every vocabulary (§4.4). A `g:` key does not: it is resolved only through the vocabulary of the provider that defined it, and neither the key nor the record names that vocabulary. How a record or a document says which vocabulary its group keys come from is not decided.
+2. **Exchange shapes.** Where a provider publishes its FXM vocabulary, with the shape of a vocabulary entry; and the answers record. The reference encoder's `--muscles` input and the answers record on the question flow page are the working shapes.
 
 **Deliberately undecided.** The boundary between an open encoder and a provider's matching service, and whether mechanics, force or pattern are derived from the key (§1.3).
 
@@ -316,6 +340,7 @@ A descriptor describes an exercise, a piece of equipment or a muscle. It describ
 - **Exercise**: `https://spec.vitness.me/schemas/exercises/v1.2.0/exercise.schema.json`
 - **Equipment**: `https://spec.vitness.me/schemas/equipment/v1.2.0/equipment.schema.json`
 - **Muscle**: `https://spec.vitness.me/schemas/muscle/v1.1.0/muscle.schema.json`
+- **Shared definitions**: the common schema, version 1.1.0, defines `fxi`, `fxe`, `fxeStandard` (the standard-only FXE an exercise and an equipment reference carry), `fxm`, `fxiProvenance` and `xref`; the build copies them into each entity schema.
 - **Registries**: `specification/registries/descriptors/fxi.registry.json` and `fxe.registry.json`
 - **Conformance vectors**: `specification/descriptors/conformance/`
 
@@ -449,26 +474,33 @@ Answers records and their exchange shape are shown on the [question flow](../des
 **A conforming producer:**
 
 :::danger MUST
-- **MUST** write every descriptor in canonical form, at the top level of the record.
+- **MUST** write every descriptor in canonical form, in the field §5 defines for it: a record-level field at the top level of the record, a reference field on the reference.
 - **MUST** write `fxiProvenance` as it happened, and `import` for every descriptor built in import mode.
-- **MUST NOT** present a descriptor as an identifier.
+- **MUST** derive FXM muscle and part tokens from their FMA labels (§4.4).
+- **MUST NOT** present a descriptor as an identifier, or describe the descriptors as identification (§3).
+- A producer that builds descriptors from answers records **MUST** pass the `syntax` and `builder` tiers of the conformance vectors at 100%.
 :::
 
 **A conforming resolver:**
 
 :::danger MUST
-- **MUST** pass the four tiers of conformance vectors at 100%.
+- **MUST** pass the `syntax`, `compare` and `resolver` tiers of the conformance vectors at 100%. The `builder` tier is not required of a resolver.
 - **MUST** auto-match only under §7.1, and store every link it makes or a person confirms in `xrefs` with the right `link`.
-- **MUST NOT** auto-match on a descriptor built in import mode.
-- **MUST** offer a confirm list for every query against a non-empty library.
+- **MUST NOT** auto-match on a descriptor built in import mode, and **MUST** refuse a row whose provenance contradicts its mode (§7.1).
+- **MUST** offer a confirm list for every query against a non-empty library that it does not auto-match.
 :::
 
 **A conforming consumer:**
 
 :::danger MUST
 - **MUST** accept a record that carries none of these fields, and a record that carries any of them.
-- **MUST** treat an invalid descriptor as absent.
+- **MUST** validate a descriptor against the registries before comparing it, and treat an invalid one as absent (§5.1).
+- **MUST NOT** infer which equipment is the main one from the order of `equipment.required` (§5.2).
+- **MUST** deduplicate only on `identical` (§6).
+- **MUST NOT** store a received `xrefs` entry as a link of its own, or auto-match on it, without running the match protocol itself (§5.4).
 :::
+
+The conformance vectors pin the behaviour of the reference encoder: each expected output is what it computes. Passing them shows that an implementation agrees with the reference, not that the reference is right; a rule the reference gets wrong is corrected in both, under a new rules revision.
 
 ## 15. References
 
@@ -488,8 +520,4 @@ Answers records and their exchange shape are shown on the [question flow](../des
 
 ### 15.3. Implementation
 
-The reference implementation of this RFC was proposed in three pull requests:
-
-- [#86](https://github.com/vitness-me/fds-spec-website/pull/86): the descriptor pages, the registries and the question flow;
-- [#87](https://github.com/vitness-me/fds-spec-website/pull/87): the reference encoder, `@vitness/fds-encoder`, and the transformer's optional descriptor steps;
-- [#88](https://github.com/vitness-me/fds-spec-website/pull/88): the conformance vectors and the check that runs the encoder against them.
+The reference implementation of this RFC is `@vitness/fds-encoder`, in `packages/fds-encoder/` of this repository. The transformer's optional descriptor steps are built from it.
