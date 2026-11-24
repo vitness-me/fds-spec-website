@@ -55,7 +55,7 @@ Each layer is built from its answers as follows, then the whole string is [canon
 - Described joint by joint: `motion.phases` `unknown` gives `m:?`. Otherwise each phase is its first part, and when `p<n>.also` is `yes`, `|` and its second part. Phases are joined with `>`.
 - A part whose kind is `unknown` is `?`; `balance` is `=0`. Otherwise it is the kind's prefix (none for a normal rep), then its actions joined with `+`: for each picked joint, in joint order, the code each picked direction writes (a direction may write two actions, such as `sh.flex+sh.hadd`). A direction `unknown` writes `<joint>.?`. Joints `unknown` make the part `?`, or the prefix and `?` for a part of a known kind. A joint picked in `p<n>.short` adds `-` after each of its actions; that needs a named direction. Two opposite actions in one part are an error: split them into two phases.
 - From a word: the word's motion. A `motion.kind` answer replaces the prefix of a word with one phase.
-- A word whose motion pulls down from overhead (`el.flex+sh.add`) writes `el.flex+sh.ext` instead when the grip, in its first phase, is underhand, neutral, narrow or touching (`su`, `ne`, `w-n`, `w-t`).
+- A word whose motion pulls down from overhead (`el.flex+sh.add`) writes `el.flex+sh.ext.oh` instead when the grip, in its first phase, is underhand, neutral, narrow or touching (`su`, `ne`, `w-n`, `w-t`).
 
 **`o`, orientation.** The `orientation` answer, or the word's. An `orientation.end` other than `usual` makes the value `start>end`; the end must differ from the start, and a start of `*` cannot have an end.
 
@@ -378,7 +378,7 @@ Ask one closed question for each pair of movements: does the second start before
 - **Usual:** A normal moving rep.
 - **Repeated** for every phase: see [the phase questions](#the-phase-questions).
 
-Pick how the joints move. "Explosive" or "fast" alone is a normal rep: ballistic needs flight or release.
+Pick how the joints move. "Explosive" or "fast" alone is a normal rep: ballistic needs flight or release. A slam is ballistic even when the implement stays in the hands (a battle rope slam).
 
 | Option | Means | Writes | Note |
 |---|---|---|---|
@@ -491,7 +491,7 @@ For a moving rep, answer for the working direction: the way the joint moves whil
 | `row-close` | Toward the trunk from in front, elbows close (row) | `sh.ext` |  |
 | `row-wide` | Toward the trunk from in front, elbows wide at shoulder height (rear-delt row, face pull) | `sh.habd` |  |
 | `apart` | Apart sideways at chest height, arms nearly straight (reverse fly, pull-apart) | `sh.habd` |  |
-| `pull-front` | Down from overhead in front of the face (chin-up; any pull-up or pulldown with an underhand, neutral or close grip; straight-arm pulldown) | `sh.ext` |  |
+| `pull-front` | Down from overhead in front of the face (chin-up; any pull-up or pulldown with an underhand, neutral or close grip; straight-arm pulldown, pullover, slam) | `sh.ext.oh` |  |
 | `pull-side` | Down from overhead out at the sides (pull-up or pulldown with an overhand grip at medium or wide width) | `sh.add` |  |
 | `up-side` | Up out to the side (lateral raise, upright row) | `sh.abd` |  |
 | `rot-in` | Rotates in: forearm turns toward the belly, elbow bent | `sh.ir` |  |
@@ -653,7 +653,7 @@ Example: the arms hold the sled handles still while the legs walk, or the trunk 
 - **Usual:** A normal moving rep.
 - **Repeated** for every phase: see [the phase questions](#the-phase-questions).
 
-Pick how the joints move. "Explosive" or "fast" alone is a normal rep: ballistic needs flight or release.
+Pick how the joints move. "Explosive" or "fast" alone is a normal rep: ballistic needs flight or release. A slam is ballistic even when the implement stays in the hands (a battle rope slam).
 
 | Option | Means | Writes | Note |
 |---|---|---|---|
@@ -766,7 +766,7 @@ For a moving rep, answer for the working direction: the way the joint moves whil
 | `row-close` | Toward the trunk from in front, elbows close (row) | `sh.ext` |  |
 | `row-wide` | Toward the trunk from in front, elbows wide at shoulder height (rear-delt row, face pull) | `sh.habd` |  |
 | `apart` | Apart sideways at chest height, arms nearly straight (reverse fly, pull-apart) | `sh.habd` |  |
-| `pull-front` | Down from overhead in front of the face (chin-up; any pull-up or pulldown with an underhand, neutral or close grip; straight-arm pulldown) | `sh.ext` |  |
+| `pull-front` | Down from overhead in front of the face (chin-up; any pull-up or pulldown with an underhand, neutral or close grip; straight-arm pulldown, pullover, slam) | `sh.ext.oh` |  |
 | `pull-side` | Down from overhead out at the sides (pull-up or pulldown with an overhand grip at medium or wide width) | `sh.add` |  |
 | `up-side` | Up out to the side (lateral raise, upright row) | `sh.abd` |  |
 | `rot-in` | Rotates in: forearm turns toward the belly, elbow bent | `sh.ir` |  |
@@ -912,7 +912,7 @@ Only the dip-and-drive of a push press or jerk, or the short stand-up after a po
 - **Asked when:** the subject is an exercise (the usual answer to "subject"); and either not (the movement word fixes a posture), or `changes` includes `posture`.
 - **Usual:** The position the movement word fixes.
 
-Flat means within about 15° of horizontal; incline and decline 15–60°. Hinged forward and held there (bent-over row) is "standing, bent". On hands and knees, in a plank or a push-up is "prone". On a machine, use your body position.
+Flat means within about 15° of horizontal; incline and decline 15–60°. Hinged forward and held there (bent-over row) is "standing, bent". On hands and knees, in a plank or a push-up is "prone". The trunk decides: kneeling with the trunk folded forward over the thighs (child's pose) is "prone"; "kneeling" has the trunk upright. On a machine, use your body position.
 
 | Option | Means | Writes | Note |
 |---|---|---|---|
@@ -1327,7 +1327,7 @@ The kind of object, not its weight. Any resistance band, tube, superband or mini
 - **Asked when:** the subject is an exercise (the usual answer to "subject"); and the first load is a free implement, a cable, a Smith machine or a landmine; and either not (the rules give a usual hold point for that implement in this movement), or `changes` includes `hold`, or `load` is `implement` or `cable` or `smith` or `landmine`.
 - **Usual:** The hold the movement word gives for this implement, else the hands for an implement held in the hands.
 
-In the hands, at the sides, swung or by a handle is "hands", and so are dumbbells held at shoulder height and a bar pressed without resting on the shoulders. Resting on the front of the shoulders (front rack), or a landmine end held at the shoulder, is "shoulders". A bar behind the neck rests on the "back". Straight-armed overhead for the whole rep is "overhead". A load on the lap in a seated calf raise is "thighs". A band goes where it presses or pulls on the body; in leg-only work that is usually the feet or ankles.
+In the hands, at the sides, swung or by a handle is "hands", and so are dumbbells held at shoulder height and a bar pressed without resting on the shoulders. Resting on the front of the shoulders (front rack), or a landmine end held at the shoulder, is "shoulders". A bar behind the neck rests on the "back". Straight-armed overhead for the whole rep is "overhead". A load on the lap in a seated calf raise is "thighs". A band goes where it presses or pulls on the body; in leg-only work that is usually the feet or ankles. A band whose ends you hold at the shoulders (a band thruster) is "hands": "shoulders" is a load resting on them.
 
 | Option | Means | Writes | Note |
 |---|---|---|---|
@@ -1360,7 +1360,7 @@ In the hands, at the sides, swung or by a handle is "hands", and so are dumbbell
 - **Asked when:** the subject is an exercise (the usual answer to "subject"); and the first load is a free implement, a cable, a Smith machine or a landmine; and `changes` includes `count`.
 - **Usual:** The usual count.
 
-The usual count is one per working hand for a one-hand implement (two dumbbells in a two-arm curl, one in a one-arm curl) and one for a two-hand implement or anything held on the trunk. If your total is the usual one, the answer changes nothing.
+The usual count is one per working hand for a one-hand implement (two dumbbells in a two-arm curl, one in a one-arm curl) and one for a two-hand implement or anything held on the trunk. When the legs also work one side at a time (a lunge with a one-arm press), the usual count is two: answer 1 if you hold one dumbbell. If your total is the usual one, the answer changes nothing.
 
 | Option | Means | Writes | Note |
 |---|---|---|---|
@@ -1608,7 +1608,7 @@ Pick the type. If you only know it is a stationary bike or a stair machine, pick
 - **Asked when:** the subject is an exercise (the usual answer to "subject"); and either `changes` includes `sides`, or the movement is "other", or the owner said the joint movement differs from the movement word.
 - **Usual:** What the movement word says, else both sides together.
 
-Doing every rep on one side and then switching is different from alternating sides rep by rep. Reciprocal means both sides move at once in opposite directions: walking, flutter kicks, alternating rope waves. A stretch or roll that works one limb and then the other is "one side, then the other".
+Doing every rep on one side and then switching is different from alternating sides rep by rep. Reciprocal means both sides move at once in opposite directions: walking, flutter kicks, alternating rope waves. A stretch or roll that works one limb and then the other is "one side, then the other". Legs that pedal are reciprocal even when the trunk turns to each side in turn (bicycle crunch); a trunk turn alone has no sides.
 
 *Import mode:* from the name and fields only. "Alternating" means the sides take turns only when nothing else in the name alternates ("alternating front and lateral raise" alternates two raises).
 
@@ -1678,7 +1678,7 @@ A suitcase carry: the legs are reciprocal, the arms one side then the other.
 - **Asked when:** the subject is an exercise (the usual answer to "subject"); and `changes` includes `hand`.
 - **Usual:** What the movement word says, else underhand for a curl and overhand for everything else.
 
-Overhand is palms down or away; underhand palms up or toward you; neutral palms facing each other. A turn during the rep (Zottman, Arnold press) is "turns".
+Overhand is palms down or away; underhand palms up or toward you; neutral palms facing each other. A turn during the rep (Zottman, Arnold press) is "turns". A grip the implement forces still counts: parallel handles (farmer or rickshaw handles) or a rope attachment are "neutral". Only a trap bar's neutral grip is left out, by the encoder.
 
 *Import mode:* "reverse grip" in a name means the grip opposite the movement word's usual one: overhand on a curl, underhand elsewhere.
 
@@ -1833,7 +1833,7 @@ Pick every held posture your exercise is done with, whether or not its name says
 - **Asked when:** the subject is an exercise (the usual answer to "subject"); and `changes` includes `line`.
 - **Usual:** The line the movement word implies.
 
-Usual anchors: low for curls, raises, upright rows, shrugs, kickbacks and hip work; high for pushdowns, pulldowns, face pulls, kneeling crunches and woodchops; middle for rows, flys, crossovers, rotations and chest presses; from the side for a Pallof press. Answer "high" or "low" only when yours differs. "Low row" or "low pulley" in a name is a machine, not a line.
+Usual anchors: low for curls, raises, upright rows, shrugs, kickbacks and hip work; high for pushdowns, pulldowns, face pulls, kneeling crunches and woodchops; middle for rows, flys, crossovers, rotations and chest presses; from the side for a Pallof press. Answer "high" or "low" only when yours differs; an anchor on the floor (a sled on the ground, a band under the feet) is low. "Low row" or "low pulley" in a name is a machine, not a line. A bar lowered to the neck or throat (JM press, guillotine press) and a rope that passes twice in each jump (double under) are lines too.
 
 *Import mode:* only from the name, through the import lexicon.
 
@@ -1844,6 +1844,8 @@ Usual anchors: low for curls, raises, upright rows, shrugs, kickbacks and hip wo
 | `lo` | Anchored lower than usual (low-to-high) | `lo` |  |
 | `side` | Pulls from one side: you stand side-on to the anchor | `side` |  |
 | `behind` | The load or body passes behind the head or trunk (behind-the-neck press, rear pull-up) | `behind` |  |
+| `neck` | The load comes down to the neck, throat or chin instead of the chest (JM press, guillotine press) | `neck` |  |
+| `double` | A rope passes under the feet twice in each jump (double under) | `double` |  |
 | `unknown` | I don't know | `?` | Alone. |
 
 #### `accessory`: What helps the exercise without loading it?

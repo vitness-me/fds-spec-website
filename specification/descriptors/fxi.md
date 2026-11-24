@@ -117,7 +117,7 @@ Every FXI has exactly one canonical spelling, and only the canonical spelling is
 5. In `s`, drop the body points the start orientation implies (the orientation table lists them), a bare `floor`, and a bare `bench`, `box`, `chair` or `floor` under a seated body.
 6. In `l`, drop `bw` when an implement is also written, and drop every count equal to the usual count ([counts](#load-l)): `l:db*1@hands/x:u` is `l:db@hands/x:u`.
 7. In `x`, drop a scope the motion already implies (a lunge's `u@legs` is `u`), and drop `x` entirely for a motion that is only trunk or neck rotation or side bend.
-8. In `g`, with one grip phase, drop the usual hand orientation, `w-m` and `st-m`, and drop `ne` with a trap bar, which forces it. With several phases, drop `w-m` and `st-m` from a phase unless that leaves it empty. Drop a stance unless the start is `standing`, `standing.bent` or `?`, or the feet push a machine foot plate (`mach@feet`).
+8. In `g`, with one grip phase, drop the usual hand orientation, `w-m` and `st-m`, and drop `ne` with a trap bar, which forces it. Any other grip an implement forces is still written: parallel handles and a rope attachment are `ne`. With several phases, drop `w-m` and `st-m` from a phase unless that leaves it empty. Drop a stance unless the start is `standing`, `standing.bent` or `?`, or the feet push a machine foot plate (`mach@feet`).
 9. Set the flag: `N` when `a` is written, else `S`.
 
 Every implement carries a hold point (`@?` when unknown); a layer with no value, a layer written twice, an unknown code, two opposite actions in one part, two start codes, `partial` with `deep`, or two codes a table marks "never with" make the string invalid. A string that breaks a rule on this page is not an FXI. A checker reports every problem it finds rather than guessing.
@@ -143,7 +143,7 @@ The import lexicon, which maps name words to codes, is catalogue data in the sam
 
 Write the joint actions of the working phase. For a moving exercise write the **concentric** direction: the way the joints move while the working muscles shorten against the load. Never write the lowering, the return, the landing or a pause.
 
-**Which joints count.** A joint counts when the working muscles move it through a clear range (about 30° or more) as part of what the exercise trains. A joint held still on purpose never counts:
+**Which joints count.** A joint counts when the working muscles move it through a clear range (about 30° or more) as part of what the exercise trains. A joint held still on purpose never counts in a moving part; a held base, or a held push the exercise is built on, is a `=` part of its own (see simultaneous parts below):
 
 - the spine only when bending, extending, side-bending or twisting the trunk is the movement;
 - the scapula only when the shoulder blade moves on its own (a shrug, a scapular push-up);
@@ -166,9 +166,11 @@ Write the joint actions of the working phase. For a moving exercise write the **
 | Toward the trunk from in front, elbows close (row) | `sh.ext` |
 | Toward the trunk from in front, elbows wide at shoulder height (face pull) | `sh.habd` |
 | Apart sideways at chest height, arms nearly straight (reverse fly) | `sh.habd` |
-| Down from overhead in front of the face (chin-up; a pull-up or pulldown with an underhand, neutral or close grip) | `sh.ext` |
+| Down from overhead in front of the face (chin-up; a pull-up or pulldown with an underhand, neutral or close grip; a straight-arm pulldown, a pullover, a slam) | `sh.ext.oh` |
 | Down from overhead out at the sides (a pull-up or pulldown with an overhand grip at medium or wide width) | `sh.add` |
 | Up out to the side (lateral raise; upright row with `el.flex`) | `sh.abd` |
+
+`sh.ext.oh` is a child of `sh.ext`: write it whenever the hands start above the head and come down in front. A pulldown and a row then never share a motion, whatever the grip. `sh.ext` alone is not wrong for a pull from overhead, only less specific: compare reads it as covering both paths. On a pull-up or pulldown, the grip decides between the two rows that start overhead: an underhand, neutral or close grip (`su`, `ne`, `w-n`, `w-t`) pulls in front of the face, `sh.ext.oh`.
 
 **Phases (`>`).** One phase per distinct movement, in rep order. For each pair of movements ask: does the second start before the first ends? Yes: one phase (a thruster, where the press starts while the body still rises). No: two phases (a squat, then a press). One joint may move in opposite directions in different phases, never in one part. A phase you cannot work out is `?`.
 
@@ -185,11 +187,11 @@ Write the joint actions of the working phase. For a moving exercise write the **
 | `&` | Dynamic stretch: the same directions, taken to end range and released repeatedly (swings, pass-throughs). |
 <!-- /fds:generated -->
 
-"Explosive" or "fast" alone is not flight: `^` needs the body to leave the ground or the implement to leave the hands. An action done in the air is the next phase. Cyclic phases and Olympic lifts never take `^`. `~0` is rolling on a roller or ball with no joint direction; `=0` is a balance or pressure hold.
+"Explosive" or "fast" alone is not flight: `^` needs the body to leave the ground or the implement to leave the hands. A slam is ballistic even when the implement stays in the hands (a battle rope slam). An action done in the air is the next phase. Cyclic phases and Olympic lifts never take `^`. `~0` is rolling on a roller or ball with no joint direction; `=0` is a balance or pressure hold.
 
 **Short drive (`-`).** After an action that moves through a short range on purpose: the dip-and-drive of a push press (`hip.ext-+kn.ext-`), the short stand-up after a power receive.
 
-**Simultaneous parts (`|`).** Two parts at once in one phase: parts of different kinds (an isometric arm hold while the legs walk, `=sh.hadd|~hip.ext+kn.ext`; a held plank under a leg lift, `=sp.flex|hip.ext`), or two limbs taken in opposite directions in one stretch (`%hip.ext|%hip.flex`). A phase with several parts cannot hold a `?` part.
+**Simultaneous parts (`|`).** Two parts at once in one phase: parts of different kinds (an isometric arm hold while the legs walk, `=sh.hadd|~hip.ext+kn.ext`; a held plank under a leg lift, `=sp.flex|hip.ext`), or two limbs taken in opposite directions in one stretch (`%hip.ext|%hip.flex`). **A held push of limbs that do not move, when the exercise is built on it, is a `=` part too**: a sit-up that pulls the heels down into the floor through the whole rep is `=kn.flex|hip.flex+sp.flex`. A cue to brace or squeeze is not a held push. A phase with several parts cannot hold a `?` part.
 
 **Held joints in a stretch.** Write a held joint when it decides which muscle is stretched: the knee in a calf or hamstring stretch (`kn.ext` straight, `kn.flex` bent).
 
@@ -228,7 +230,8 @@ Write the joint actions of the working phase. For a moving exercise write the **
 | `sc.pro` | Scapular protraction: shoulder blades spread around the ribs. | Opposite of `sc.ret`. |
 | `sc.ret` | Scapular retraction: shoulder blades squeezed together. | Opposite of `sc.pro`. |
 | `sh.flex` | Shoulder flexion: arm forward and up, as in a front raise or overhead press. | Opposite of `sh.ext`. |
-| `sh.ext` | Shoulder extension: arm down and back from in front, as in a row or straight-arm pulldown. | Opposite of `sh.flex`. |
+| `sh.ext` | Shoulder extension: arm down and back from in front, as in a row or a dip. Covers `sh.ext.oh`. | Opposite of `sh.flex`. |
+| `sh.ext.oh` | Shoulder extension from overhead: the arms come down in front of the face from above the head, as in a chin-up, a close or neutral pulldown, a straight-arm pulldown, a pullover or a slam. | Child of `sh.ext`; `sh.ext` covers it in compare. |
 | `sh.abd` | Shoulder abduction: arm out to the side and up, as in a lateral raise. | Opposite of `sh.add`. |
 | `sh.add` | Shoulder adduction: arm down to the side from out to the side, as in a wide pull-up. | Opposite of `sh.abd`. |
 | `sh.hadd` | Horizontal adduction: arm across the front at chest height, as in a press or fly. | Opposite of `sh.habd`. |
@@ -262,7 +265,7 @@ Write the joint actions of the working phase. For a moving exercise write the **
 The body's orientation **at the start of the first written phase**. Trunk angles are measured from horizontal: flat within 15°, incline or decline 15–60°, more than 60° head-up is seated or standing.
 
 - Hinged forward more than about 30° and **held** there for the set is `standing.bent`. A hinge in which the trunk moves (a deadlift, a swing) starts `standing`.
-- On hands and knees, in a plank or a push-up, lying face down: `prone` and its incline buckets. Hips highest in an upside-down V: `prone.pike`.
+- On hands and knees, in a plank or a push-up, lying face down: `prone` and its incline buckets. Orientation follows the trunk, not the knees: kneeling with the trunk folded forward over the thighs (child's pose) is `prone`; `kneeling` has the trunk upright. Hips highest in an upside-down V: `prone.pike`.
 - Sitting on the floor leaning back 30–60°: `supine.incline`.
 - Held up by the hands, including propped on dip bars: `hanging`.
 - On a machine, write the body's position: a seated leg extension is `seated`, a lying leg curl `prone`, a reclined leg press `supine.incline`.
@@ -360,7 +363,7 @@ List every implement that loads the working muscles, each with `@` and where it 
 - A band is `band`, held where it presses or pulls on the body; where it is anchored is not written. Its type goes only in the FXE. In work that moves only the legs, a band is `@feet` unless stated otherwise.
 - Assistance is held `@assist`. An assisted pull-up or dip machine is always `mach@assist`; the FXE records where its pad meets the body.
 
-**Hold points.** In the hands, at the sides, at arm's length or swung: `@hands`, and so are dumbbells held at shoulder height and a bar pressed without resting on the shoulders. Straight-armed overhead for the whole rep: `@overhead`. Resting on the front of the shoulders, or a landmine end held at the shoulder: `@shoulders`. Hugged to the chest: `@chest`. Across the upper back, including a bar behind the neck: `@back`. Across the hips: `@hips`. From a belt: `@waist`. In the crook of the elbows: `@elbows`. A weight on the lap in a seated calf raise: `@thighs`.
+**Hold points.** In the hands, at the sides, at arm's length or swung: `@hands`, and so are dumbbells held at shoulder height, a band whose ends are held in the hands at the shoulders, and a bar pressed without resting on the shoulders. Straight-armed overhead for the whole rep: `@overhead`. Resting on the front of the shoulders, or a landmine end held at the shoulder: `@shoulders`. Hugged to the chest: `@chest`. Across the upper back, including a bar behind the neck: `@back`. Across the hips: `@hips`. From a belt: `@waist`. In the crook of the elbows: `@elbows`. A weight on the lap in a seated calf raise: `@thighs`.
 
 <!-- fds:generated fxi#holdOnlyPoints -->
 | Code | Meaning |
@@ -369,7 +372,7 @@ List every implement that loads the working muscles, each with `@` and where it 
 | `assist` | The implement takes part of the body weight (assist band, assisted machine). |
 <!-- /fds:generated -->
 
-**Counts.** Leave the count out when it is the usual one; canonicalisation drops a written count equal to it. A one-hand implement (`db`, `kb`, `plate`, `club`) is one per working hand: one when the arms work one at a time (`x` is `u@arms`, or `u` with a motion of arm joints only), two otherwise. So `db@hands` is one dumbbell in a one-arm row (`x:u`) and two in a squat, an alternating curl (`x:a`) or a split squat (`x:u`, the legs). Every other implement is one, and so is any implement held at a trunk point (`chest`, `back`, `hips`, `waist`). Write `*n` only when the count differs: one kettlebell in both hands is `kb*1@hands`. When the implement, the hold point of a one-hand implement, the symmetry, or the motion under an unscoped `x:u` is `?`, the usual count is unknown, and a written count stays.
+**Counts.** Leave the count out when it is the usual one; canonicalisation drops a written count equal to it. A one-hand implement (`db`, `kb`, `plate`, `club`) is one per working hand: one when the arms work one at a time (`x` is `u@arms`, or `u` with a motion of arm joints only), two otherwise. An unscoped `x:u` on a motion of leg joints, or of arm and leg joints (a lunge with a one-arm press), leaves both hands loaded: one dumbbell there is `db*1@hands`. So `db@hands` is one dumbbell in a one-arm row (`x:u`) and two in a squat, an alternating curl (`x:a`) or a split squat (`x:u`, the legs). Every other implement is one, and so is any implement held at a trunk point (`chest`, `back`, `hips`, `waist`). Write `*n` only when the count differs: one kettlebell in both hands is `kb*1@hands`. When the implement, the hold point of a one-hand implement, the symmetry, or the motion under an unscoped `x:u` is `?`, the usual count is unknown, and a written count stays.
 
 **Unknowns.** An implement of unknown kind: `?@chest`. A hold point unknown: `kb@?`. An implement of unknown kind at an unknown point ("weighted", nothing more): `?@?`. Nothing known, not even whether there is an implement: `l:?`.
 
@@ -523,6 +526,8 @@ At most one start code, and only where it is not the movement's usual start. Nev
 
 Both are standard name layers with a default. An owner writes the held posture and line the exercise really uses. `h:?` or `p:?` is for a source that says the posture or line differs without saying how.
 
+An anchor on the floor (a sled on the ground, a band under the feet) is `lo`. `p:neck` separates a press lowered to the neck or throat from the bench press of the same grip; `p:double` separates a rope that passes twice in each jump from plain rope jumping.
+
 <!-- fds:generated fxi#heldPostures -->
 | Code | Meaning | Notes |
 |---|---|---|
@@ -550,6 +555,8 @@ Both are standard name layers with a default. An owner writes the held posture a
 | `lo` | Anchored lower than usual for the movement word. | Never with `hi`, `side`. |
 | `behind` | The load or the body passes behind the head or trunk instead of in front (behind-the-neck press, rear pull-up). |  |
 | `side` | The load pulls from one side: the body stands side-on to the anchor (a cable press done side-on). | Never with `hi`, `lo`. |
+| `neck` | The load comes down to the neck, throat or chin instead of the chest (JM press, guillotine press). |  |
+| `double` | A rope passes under the feet twice in each jump (double under). |  |
 <!-- /fds:generated -->
 
 ### Accessory (`a`, extended)

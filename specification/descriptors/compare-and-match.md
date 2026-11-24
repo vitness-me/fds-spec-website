@@ -8,7 +8,7 @@ Not normative until the RFC that adopts the structural descriptors is accepted: 
 
 Compare takes two FXIs, or two FXEs, and says how the exercises (or the equipment) they describe relate. It reads only the strings: never a name, never a movement word.
 
-**Every value denotes a set.** A known code denotes itself. `?` and `*` denote every value. A parent code covers its children: an FXE form covers its child forms (`band` covers `band.loop`), an equipment token covers its child tokens (`dome` covers `dome.up` and `dome.down`, `erg` covers every `erg.<cycle>`), and a range code covers its child (`from-top` covers `from-top.knee`).
+**Every value denotes a set.** A known code denotes itself. `?` and `*` denote every value. A parent code covers its children: an FXE form covers its child forms (`band` covers `band.loop`), an equipment token covers its child tokens (`dome` covers `dome.up` and `dome.down`, `erg` covers every `erg.<cycle>`), a range code covers its child (`from-top` covers `from-top.knee`), and a joint action covers its child (`sh.ext` covers `sh.ext.oh`) under any prefix, beside other actions and in a held part.
 
 **Absent standard layers are values.** A standard layer left out of a string takes its published default, which contradicts every other known value. Only `?` and `*` are open. An **extended** layer (FXI `a`, the FXE build details) is compared only when both strings carry it; when only one does, that side is the more specific one.
 
@@ -40,6 +40,7 @@ Compare is not transitive. Deduplicate only on `identical`.
 | `FXI=1.0S/m:hip.ext+kn.ext/o:standing/l:bb@back` | `FXI=1.0S/m:hip.ext+kn.ext/o:standing/l:?@back` | `refines` (load narrower) |
 | `FXI=1.0S/m:el.flex+sh.ext/o:seated/l:mach@hands/g:ne` | `FXI=1.0S/m:el.flex+sh.ext/o:seated/l:mach@hands/g:?` | `refines` (grip narrower) |
 | `FXI=1.0S/m:el.flex+sh.ext/o:seated/l:mach@hands/g:ne` | `FXI=1.0S/m:el.flex+sh.ext/o:seated/l:mach@hands` | `contradicting` (`ne` against the default overhand) |
+| `FXI=1.0S/m:el.flex+sh.ext.oh/o:seated/l:mach@hands/g:ne` | `FXI=1.0S/m:el.flex+sh.ext/o:seated/l:mach@hands/g:ne` | `refines` (motion narrower: a pull from overhead against any shoulder extension) |
 
 ## Provenance
 
@@ -60,7 +61,7 @@ Every FXI travels with `fxiProvenance`, which says who answered for it:
 
 A resolver matches a record against a library:
 
-1. **Auto-match** only when exactly one library record compares `identical` to the query, neither record carries a gap marker, and both have provenance `owner` or `owner-assisted`.
+1. **Auto-match** only when exactly one library record compares `identical` to the query, neither record carries a gap marker, both have provenance `owner` or `owner-assisted`, and, when both records carry an FXE, the two FXEs compare `identical`. Two machines that guide different motions never auto-match on the FXI alone.
 2. Otherwise, **confirm**: offer a ranked list of at most three library records, each once, with the reason auto-match was refused, for a person to pick from or reject.
 3. A **confirmed link is stored** against the library's identifier, in the record's `xrefs`, so the match is never made again.
 

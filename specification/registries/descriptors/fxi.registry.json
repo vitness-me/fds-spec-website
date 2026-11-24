@@ -3,7 +3,7 @@
   "descriptor": "FXI",
   "status": "draft",
   "syntax": "1.0",
-  "rules": "1.3",
+  "rules": "1.4",
   "policy": "closed",
   "description": "The FXI alphabet: every code an FXI string may contain, by layer. Closed within a rules revision: a code not listed here makes the string invalid. A later rules revision of the same major may only add codes or split a code into children.",
   "layers": [
@@ -96,8 +96,13 @@
         {"value":"sh.flex","description":"Shoulder flexion: arm forward and up, as in a front raise or overhead press.","opposite":"sh.ext"},
         {
           "value": "sh.ext",
-          "description": "Shoulder extension: arm down and back from in front, as in a row or straight-arm pulldown.",
+          "description": "Shoulder extension: arm down and back from in front, as in a row or a dip. Covers `sh.ext.oh`.",
           "opposite": "sh.flex"
+        },
+        {
+          "value": "sh.ext.oh",
+          "description": "Shoulder extension from overhead: the arms come down in front of the face from above the head, as in a chin-up, a close or neutral pulldown, a straight-arm pulldown, a pullover or a slam.",
+          "parent": "sh.ext"
         },
         {"value":"sh.abd","description":"Shoulder abduction: arm out to the side and up, as in a lateral raise.","opposite":"sh.add"},
         {
@@ -397,7 +402,12 @@
           "value": "side",
           "description": "The load pulls from one side: the body stands side-on to the anchor (a cable press done side-on).",
           "conflictsWith": ["hi","lo"]
-        }
+        },
+        {
+          "value": "neck",
+          "description": "The load comes down to the neck, throat or chin instead of the chest (JM press, guillotine press)."
+        },
+        {"value":"double","description":"A rope passes under the feet twice in each jump (double under)."}
       ]
     },
     "accessories": {

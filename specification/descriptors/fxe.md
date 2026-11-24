@@ -131,7 +131,7 @@ A record's FXI and FXE are checked against each other. A checker warns when any 
 1. The record's FXE does not contradict the FXE of the FXI's main token.
 2. A machine's posture fits the FXI start orientation (the postures table lists which).
 3. A machine's load interface fits the FXI hold point of `mach` or `erg` (the load interface table lists which).
-4. A single-joint machine's motion appears in the FXI motion, unless the exercise names the machine (a calf raise on a leg press).
+4. A single-joint machine's motion appears in the FXI motion, or a child of it does (a pullover machine's `sh.ext` and an FXI's `sh.ext.oh`), unless the exercise names the machine (a calf raise on a leg press).
 5. `k:none` goes with `l:bw`.
 6. A cardio child token fits the FXE cycle: `erg.gait` with `m:gait`, and so on.
 7. `floor@feet` beside another support is implied under a seated body, and under a face-up body lying on a support that bears its trunk.

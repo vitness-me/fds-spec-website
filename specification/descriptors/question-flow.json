@@ -1,7 +1,7 @@
 {
   "flow": "fxi-owner-questions",
   "status": "draft",
-  "rules": "1.3",
+  "rules": "1.4",
   "description": "The owner question flow: closed questions whose answers build an FXI and an FXE. Questions are asked in this order, each only when its `when` condition holds. Options carry the code they write in `value`; `usual` keeps the published default; `unknown` writes `?`.",
   "facts": {
     "exercise": "The subject is an exercise (the usual answer to \"subject\").",
@@ -197,7 +197,7 @@
       "select": "one",
       "when": {"all":[{"fact":"motion-from-scratch"},{"q":"motion.phases","atLeast":1}]},
       "text": "What kind of movement is phase 1?",
-      "help": "Pick how the joints move. \"Explosive\" or \"fast\" alone is a normal rep: ballistic needs flight or release.",
+      "help": "Pick how the joints move. \"Explosive\" or \"fast\" alone is a normal rep: ballistic needs flight or release. A slam is ballistic even when the implement stays in the hands (a battle rope slam).",
       "usual": "A normal moving rep.",
       "options": [
         {"id":"usual","label":"A normal moving rep (the usual way)","exclusive":true},
@@ -364,8 +364,8 @@
         {"id":"apart","label":"Apart sideways at chest height, arms nearly straight (reverse fly, pull-apart)","value":"sh.habd"},
         {
           "id": "pull-front",
-          "label": "Down from overhead in front of the face (chin-up; any pull-up or pulldown with an underhand, neutral or close grip; straight-arm pulldown)",
-          "value": "sh.ext"
+          "label": "Down from overhead in front of the face (chin-up; any pull-up or pulldown with an underhand, neutral or close grip; straight-arm pulldown, pullover, slam)",
+          "value": "sh.ext.oh"
         },
         {
           "id": "pull-side",
@@ -578,7 +578,7 @@
       "select": "one",
       "when": {"all":[{"all":[{"fact":"motion-from-scratch"},{"q":"motion.phases","atLeast":1}]},{"q":"p1.also","is":"yes"}]},
       "text": "What kind of movement is the second part of phase 1?",
-      "help": "Pick how the joints move. \"Explosive\" or \"fast\" alone is a normal rep: ballistic needs flight or release.",
+      "help": "Pick how the joints move. \"Explosive\" or \"fast\" alone is a normal rep: ballistic needs flight or release. A slam is ballistic even when the implement stays in the hands (a battle rope slam).",
       "usual": "A normal moving rep.",
       "options": [
         {"id":"usual","label":"A normal moving rep (the usual way)","exclusive":true},
@@ -760,8 +760,8 @@
         {"id":"apart","label":"Apart sideways at chest height, arms nearly straight (reverse fly, pull-apart)","value":"sh.habd"},
         {
           "id": "pull-front",
-          "label": "Down from overhead in front of the face (chin-up; any pull-up or pulldown with an underhand, neutral or close grip; straight-arm pulldown)",
-          "value": "sh.ext"
+          "label": "Down from overhead in front of the face (chin-up; any pull-up or pulldown with an underhand, neutral or close grip; straight-arm pulldown, pullover, slam)",
+          "value": "sh.ext.oh"
         },
         {
           "id": "pull-side",
@@ -996,7 +996,7 @@
       "select": "one",
       "when": {"all":[{"fact":"exercise"},{"any":[{"not":{"fact":"posture-has-usual"}},{"q":"changes","has":"posture"}]}]},
       "text": "What is the body position at the start of the rep?",
-      "help": "Flat means within about 15° of horizontal; incline and decline 15–60°. Hinged forward and held there (bent-over row) is \"standing, bent\". On hands and knees, in a plank or a push-up is \"prone\". On a machine, use your body position.",
+      "help": "Flat means within about 15° of horizontal; incline and decline 15–60°. Hinged forward and held there (bent-over row) is \"standing, bent\". On hands and knees, in a plank or a push-up is \"prone\". The trunk decides: kneeling with the trunk folded forward over the thighs (child's pose) is \"prone\"; \"kneeling\" has the trunk upright. On a machine, use your body position.",
       "usual": "The position the movement word fixes.",
       "options": [
         {
@@ -1464,7 +1464,7 @@
         ]
       },
       "text": "Where is it held?",
-      "help": "In the hands, at the sides, swung or by a handle is \"hands\", and so are dumbbells held at shoulder height and a bar pressed without resting on the shoulders. Resting on the front of the shoulders (front rack), or a landmine end held at the shoulder, is \"shoulders\". A bar behind the neck rests on the \"back\". Straight-armed overhead for the whole rep is \"overhead\". A load on the lap in a seated calf raise is \"thighs\". A band goes where it presses or pulls on the body; in leg-only work that is usually the feet or ankles.",
+      "help": "In the hands, at the sides, swung or by a handle is \"hands\", and so are dumbbells held at shoulder height and a bar pressed without resting on the shoulders. Resting on the front of the shoulders (front rack), or a landmine end held at the shoulder, is \"shoulders\". A bar behind the neck rests on the \"back\". Straight-armed overhead for the whole rep is \"overhead\". A load on the lap in a seated calf raise is \"thighs\". A band goes where it presses or pulls on the body; in leg-only work that is usually the feet or ankles. A band whose ends you hold at the shoulders (a band thruster) is \"hands\": \"shoulders\" is a load resting on them.",
       "usual": "The hold the movement word gives for this implement, else the hands for an implement held in the hands.",
       "options": [
         {
@@ -1502,7 +1502,7 @@
       "select": "one",
       "when": {"all":[{"fact":"exercise"},{"fact":"load-holdable"},{"q":"changes","has":"count"}]},
       "text": "How many of them, in total?",
-      "help": "The usual count is one per working hand for a one-hand implement (two dumbbells in a two-arm curl, one in a one-arm curl) and one for a two-hand implement or anything held on the trunk. If your total is the usual one, the answer changes nothing.",
+      "help": "The usual count is one per working hand for a one-hand implement (two dumbbells in a two-arm curl, one in a one-arm curl) and one for a two-hand implement or anything held on the trunk. When the legs also work one side at a time (a lunge with a one-arm press), the usual count is two: answer 1 if you hold one dumbbell. If your total is the usual one, the answer changes nothing.",
       "usual": "The usual count.",
       "options": [
         {"id":"usual","label":"The usual count","exclusive":true},
@@ -1774,7 +1774,7 @@
       "select": "one",
       "when": {"all":[{"fact":"exercise"},{"any":[{"q":"changes","has":"sides"},{"fact":"motion-from-scratch"}]}]},
       "text": "How do the two sides work?",
-      "help": "Doing every rep on one side and then switching is different from alternating sides rep by rep. Reciprocal means both sides move at once in opposite directions: walking, flutter kicks, alternating rope waves. A stretch or roll that works one limb and then the other is \"one side, then the other\".",
+      "help": "Doing every rep on one side and then switching is different from alternating sides rep by rep. Reciprocal means both sides move at once in opposite directions: walking, flutter kicks, alternating rope waves. A stretch or roll that works one limb and then the other is \"one side, then the other\". Legs that pedal are reciprocal even when the trunk turns to each side in turn (bicycle crunch); a trunk turn alone has no sides.",
       "importHelp": "Import mode: from the name and fields only. \"Alternating\" means the sides take turns only when nothing else in the name alternates (\"alternating front and lateral raise\" alternates two raises).",
       "usual": "What the movement word says, else both sides together.",
       "options": [
@@ -1839,7 +1839,7 @@
       "select": "one",
       "when": {"all":[{"fact":"exercise"},{"q":"changes","has":"hand"}]},
       "text": "Which way do the palms face?",
-      "help": "Overhand is palms down or away; underhand palms up or toward you; neutral palms facing each other. A turn during the rep (Zottman, Arnold press) is \"turns\".",
+      "help": "Overhand is palms down or away; underhand palms up or toward you; neutral palms facing each other. A turn during the rep (Zottman, Arnold press) is \"turns\". A grip the implement forces still counts: parallel handles (farmer or rickshaw handles) or a rope attachment are \"neutral\". Only a trap bar's neutral grip is left out, by the encoder.",
       "usual": "What the movement word says, else underhand for a curl and overhand for everything else.",
       "importHelp": "Import mode: \"reverse grip\" in a name means the grip opposite the movement word's usual one: overhand on a curl, underhand elsewhere.",
       "options": [
@@ -2034,7 +2034,7 @@
       "select": "many",
       "when": {"all":[{"fact":"exercise"},{"q":"changes","has":"line"}]},
       "text": "Where does the load pull from, compared with the usual way?",
-      "help": "Usual anchors: low for curls, raises, upright rows, shrugs, kickbacks and hip work; high for pushdowns, pulldowns, face pulls, kneeling crunches and woodchops; middle for rows, flys, crossovers, rotations and chest presses; from the side for a Pallof press. Answer \"high\" or \"low\" only when yours differs. \"Low row\" or \"low pulley\" in a name is a machine, not a line.",
+      "help": "Usual anchors: low for curls, raises, upright rows, shrugs, kickbacks and hip work; high for pushdowns, pulldowns, face pulls, kneeling crunches and woodchops; middle for rows, flys, crossovers, rotations and chest presses; from the side for a Pallof press. Answer \"high\" or \"low\" only when yours differs; an anchor on the floor (a sled on the ground, a band under the feet) is low. \"Low row\" or \"low pulley\" in a name is a machine, not a line. A bar lowered to the neck or throat (JM press, guillotine press) and a rope that passes twice in each jump (double under) are lines too.",
       "importHelp": "Import mode: only from the name, through the import lexicon.",
       "usual": "The line the movement word implies.",
       "options": [
@@ -2043,6 +2043,12 @@
         {"id":"lo","label":"Anchored lower than usual (low-to-high)","value":"lo"},
         {"id":"side","label":"Pulls from one side: you stand side-on to the anchor","value":"side"},
         {"id":"behind","label":"The load or body passes behind the head or trunk (behind-the-neck press, rear pull-up)","value":"behind"},
+        {
+          "id": "neck",
+          "label": "The load comes down to the neck, throat or chin instead of the chest (JM press, guillotine press)",
+          "value": "neck"
+        },
+        {"id":"double","label":"A rope passes under the feet twice in each jump (double under)","value":"double"},
         {"id":"unknown","label":"I don't know","value":"?","exclusive":true}
       ]
     },
