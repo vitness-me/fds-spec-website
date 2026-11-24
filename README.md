@@ -114,11 +114,15 @@ the exceptions — those are hand-written.
 |---|---|
 | [`@vitness/fds-transformer`](./packages/fds-transformer) | CLI and library that maps a source catalog onto FDS, optionally enriches it, and validates the result against schemas it bundles — offline. [Docs](https://spec.vitness.me/docs/tools/transformer). |
 | [`@vitness/fds-skill`](./packages/fds-skill) | The knowledge base an AI assistant loads to answer questions about FDS and produce documents that validate. |
-| [`@vitness/fds-encoder`](./packages/fds-encoder) | CLI and library for the draft structural descriptors FXI, FXE and FXM: ask the question flow, build, validate, compare, match, review and upgrade. |
 
 The transformer and the skill are published from tags, by workflow, from
-`main` — see [`RELEASE.md`](./RELEASE.md). The encoder implements a draft and
-has no publish workflow yet.
+`main` — see [`RELEASE.md`](./RELEASE.md).
+
+[`packages/fds-encoder`](./packages/fds-encoder) is the reference encoder for
+the draft structural descriptors FXI, FXE and FXM: ask the question flow, build,
+validate, compare, match, review and upgrade. It implements a draft, is marked
+private and is not published to npm; its README says how to run it from this
+repository.
 
 ## Development
 

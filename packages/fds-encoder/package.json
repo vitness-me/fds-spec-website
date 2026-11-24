@@ -1,6 +1,7 @@
 {
   "name": "@vitness/fds-encoder",
   "version": "0.1.0",
+  "private": true,
   "description": "Encode exercises and equipment as FDS structural descriptors (FXI, FXE, FXM): ask, build, validate, compare, match, review and upgrade",
   "type": "module",
   "main": "./dist/index.js",
@@ -48,10 +49,6 @@
   },
   "engines": {
     "node": ">=20.0.0"
-  },
-  "publishConfig": {
-    "access": "public",
-    "registry": "https://registry.npmjs.org"
   },
   "dependencies": {
     "commander": "^13.0.0"

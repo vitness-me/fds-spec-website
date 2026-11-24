@@ -8,14 +8,21 @@ Encode exercises and equipment as the FDS structural descriptors, and compare an
 
 FXI is a descriptor, not an identity. The same answers always build the same string, and the same two strings always compare the same way. Two catalogues that describe the same exercise in different words can still write the same string; when they do not, the match protocol offers a short list for a person to confirm.
 
-> **Draft.** The descriptors are a draft of the Fitness Data Standard, not yet adopted by an RFC. Codes, questions and field names may change. This package implements the rules revision of the descriptor registries it was built from: `fds-encoder questions` prints it.
+> **Draft.** The descriptors are a draft of the Fitness Data Standard, proposed in RFC-010 and not yet accepted. Codes, questions and field names may change. This package implements the rules revision of the descriptor registries it was built from: `fds-encoder questions` prints it.
 
 The specification: [overview](https://spec.vitness.me/docs/descriptors/overview), [FXI](https://spec.vitness.me/docs/descriptors/fxi), [FXE](https://spec.vitness.me/docs/descriptors/fxe), [FXM](https://spec.vitness.me/docs/descriptors/fxm), [the question flow](https://spec.vitness.me/docs/descriptors/question-flow), and [compare, match and versioning](https://spec.vitness.me/docs/descriptors/compare-and-match).
 
 ## Install
 
+The package is not published to npm. Run it from a checkout of this repository (Node 20 or later):
+
 ```bash
-npm install -g @vitness/fds-encoder
+git clone https://github.com/vitness-me/fds-spec-website.git
+cd fds-spec-website/packages/fds-encoder
+npm ci
+npm run build
+npm link            # puts fds-encoder on your PATH; or run node dist/bin/fds-encoder.js
+fds-encoder questions
 ```
 
 ## Commands
