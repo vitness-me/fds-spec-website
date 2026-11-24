@@ -1,9 +1,12 @@
 {
   "tier": "builder",
   "rules": "0.9",
-  "description": "Self-test fixture: written for a rules revision that is not the registries', with one wrong expectation and a words file that does not exist.",
+  "description": "Self-test fixture: written for a rules revision that is not the registries', with one wrong expectation, an error vector whose fix leaves a second reason, an error vector with no fix, a fix on a vector that expects strings, and a words file that does not exist.",
   "words": "missing-words.json",
   "vectors": [
-    { "id": "wrong-fxi", "entry": { "id": "x", "answers": { "subject": "equipment", "eq.kind": "imp", "eq.form.imp": "band.loop", "eq.details": "usual" } }, "expect": { "fxi": null, "fxe": "FXE=1.0S/k:imp/f:band" } }
+    { "id": "wrong-fxi", "entry": { "id": "x", "answers": { "subject": "equipment", "eq.kind": "imp", "eq.form.imp": "band.loop", "eq.details": "usual" } }, "expect": { "fxi": null, "fxe": "FXE=1.0S/k:imp/f:band" } },
+    { "id": "error-two-reasons", "entry": { "id": "y", "answers": { "subject": "usual", "movement": "other", "changes": ["usual"], "motion.phases": "1", "p1.kind": "usual", "p1.joints": ["hip", "kn"], "p1.hip": ["ext"], "p1.kn": ["ext"], "p1.short": ["usual"], "p1.also": "usual", "orientation": "upright", "load": "bodyweight" } }, "expect": { "error": true }, "fix": { "answers": { "orientation": "standing" } } },
+    { "id": "error-no-fix", "entry": { "id": "z", "answers": { "subject": "usual", "movement": "teleport" } }, "expect": { "error": true } },
+    { "id": "fix-on-success", "entry": { "id": "w", "answers": { "subject": "equipment", "eq.kind": "imp", "eq.form.imp": "band.loop", "eq.details": "usual" } }, "expect": { "fxi": null, "fxe": "FXE=1.0S/k:imp/f:band.loop" }, "fix": { "answers": {} } }
   ]
 }

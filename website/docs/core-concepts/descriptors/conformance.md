@@ -103,7 +103,7 @@ A vector expects:
 - `fxeFull`, the full FXE with its build details, only when the answers gave them;
 - beside an FXI, `fxiProvenance` and `fxiGap`, which the record carries and which never change the strings;
 
-or `{"error": true}`, for answers the flow does not accept. The message is the implementation's own; only the refusal is tested.
+or `{"error": true}`, for answers the flow does not accept. The message is the implementation's own; only the refusal is tested. An error vector also gives `fix`, the one change (to `answers`, or to the entry itself) that makes the entry build: every other question is answered, so the vector fails for the reason it states and no other. An adapter may ignore `fix`; the reference run checks that each one does make its entry build.
 
 The strings must match byte for byte. The three [worked examples](./question-flow.md#worked-examples) are vectors here, as published.
 
@@ -140,7 +140,7 @@ The ranking is the one in [the match protocol](./compare-and-match.md#match-prot
 
 The files are plain JSON. To test an implementation, write an adapter that reads each tier file, runs every vector through the implementation, and compares the result with `expect` as JSON values: the order of an object's keys does not matter, the order of a list does.
 
-The reference encoder, [`@vitness/fds-encoder`](https://github.com/vitness-me/fds-spec-website/tree/main/packages/fds-encoder), is run against every vector on each change to this repository, and must pass every tier at 100%. The same run checks the suite itself: that each tier file names the current rules revision, that every issue code and reason it defines is expected by some vector, and that its reasons are exactly the ones the reference can return.
+The reference encoder, [`@vitness/fds-encoder`](https://github.com/vitness-me/fds-spec-website/tree/main/packages/fds-encoder), is run against every vector on each change to this repository, and must pass every tier at 100%. The same run checks the suite itself: that each tier file names the current rules revision, that every issue code and reason it defines is expected by some vector, that its reasons are exactly the ones the reference can return, and that every builder error vector's `fix` makes its entry build.
 
 ## Measured, not certified
 

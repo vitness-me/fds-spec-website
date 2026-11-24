@@ -30,6 +30,9 @@
  *     same for confirm reasons, and its reasons are exactly the reference's.
  *   - Every compare vector for FXI or FXE also runs with its sides swapped,
  *     expecting the inverse relation, so a pair cannot pass one way only.
+ *   - Every builder error vector gives `fix`, the one change that makes its
+ *     entry build, and with it applied the entry does build: the vector fails
+ *     for the reason it states and no other.
  *
  * It needs the built encoder (`npm --prefix packages/fds-encoder run build`).
  *
@@ -177,6 +180,31 @@ function runBuilder(file) {
       actual = { error: true };
     }
     record('builder', v.id, v.expect, actual);
+    if (v.expect.error === true) checkFix(v, flow, mode);
+    else if (v.fix !== undefined) fail(`builder-fix-unexpected:${v.id}`, `builder ${v.id}: "fix" belongs to an error vector, and this one expects strings.`);
+  }
+}
+
+/**
+ * An error vector names the one change that makes its entry build, so it fails for the reason it states and no other:
+ * a vector that also leaves a question unanswered would pass for an implementation that accepts what it claims to refuse.
+ */
+function checkFix(v, flow, mode) {
+  if (v.fix === undefined) {
+    fail(`builder-fix-missing:${v.id}`, `builder ${v.id}: an error vector gives "fix", the one change that makes the entry build. Add it, answering every other question.`);
+    return;
+  }
+  const fixed = { ...v.entry, ...v.fix, answers: { ...v.entry.answers, ...(v.fix.answers ?? {}) } };
+  try {
+    enc.build(fixed, flow);
+    enc.rowMeta(fixed, mode);
+  } catch (e) {
+    if (!(e instanceof enc.AnswerError)) throw e;
+    fail(
+      `builder-fix:${v.id}`,
+      `builder ${v.id}: with "fix" applied the entry still does not build, so the vector fails for more than one reason:\n    ${e.problems.join('\n    ')}\n` +
+        '    Answer every question but the one the vector breaks.'
+    );
   }
 }
 

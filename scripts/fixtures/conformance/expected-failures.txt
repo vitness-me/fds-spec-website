@@ -17,6 +17,9 @@ syntax-code-untested:never-expected
 
 # builder
 builder:wrong-fxi
+builder-fix:error-two-reasons
+builder-fix-missing:error-no-fix
+builder-fix-unexpected:fix-on-success
 
 # compare: a backwards relation fails both ways round
 compare:backwards
