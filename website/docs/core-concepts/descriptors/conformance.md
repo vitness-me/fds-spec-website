@@ -30,10 +30,10 @@ Conformance says that an implementation computes what the specification says. It
 <!-- fds:generated conformance#tiers -->
 | Tier | Vectors | File | Data it reads |
 |---|---|---|---|
-| `syntax` | 133 | [`syntax.json`](https://github.com/vitness-me/fds-spec-website/blob/main/specification/descriptors/conformance/syntax.json) | [`fxm-vocabulary.json`](https://github.com/vitness-me/fds-spec-website/blob/main/specification/descriptors/conformance/fxm-vocabulary.json) |
+| `syntax` | 137 | [`syntax.json`](https://github.com/vitness-me/fds-spec-website/blob/main/specification/descriptors/conformance/syntax.json) | [`fxm-vocabulary.json`](https://github.com/vitness-me/fds-spec-website/blob/main/specification/descriptors/conformance/fxm-vocabulary.json) |
 | `builder` | 24 | [`builder.json`](https://github.com/vitness-me/fds-spec-website/blob/main/specification/descriptors/conformance/builder.json) | [`words.json`](https://github.com/vitness-me/fds-spec-website/blob/main/specification/descriptors/conformance/words.json) |
-| `compare` | 53 | [`compare.json`](https://github.com/vitness-me/fds-spec-website/blob/main/specification/descriptors/conformance/compare.json) | [`fxm-vocabulary.json`](https://github.com/vitness-me/fds-spec-website/blob/main/specification/descriptors/conformance/fxm-vocabulary.json) |
-| `resolver` | 38 | [`resolver.json`](https://github.com/vitness-me/fds-spec-website/blob/main/specification/descriptors/conformance/resolver.json) | (none) |
+| `compare` | 55 | [`compare.json`](https://github.com/vitness-me/fds-spec-website/blob/main/specification/descriptors/conformance/compare.json) | [`fxm-vocabulary.json`](https://github.com/vitness-me/fds-spec-website/blob/main/specification/descriptors/conformance/fxm-vocabulary.json) |
+| `resolver` | 39 | [`resolver.json`](https://github.com/vitness-me/fds-spec-website/blob/main/specification/descriptors/conformance/resolver.json) | (none) |
 <!-- /fds:generated -->
 
 Every tier file names the rules revision its vectors were written for, in `rules`. A vector set is valid for that rules revision only: when the registries move to a new one, the vectors are reviewed against it before `rules` changes.
@@ -127,7 +127,7 @@ An `fxm` vector expects the [grade](./fxm.md#compare) over the anatomical leaves
 
 ### Resolver
 
-Each vector gives a `query` row, a `library` of rows, and optionally `top`, the length of the confirm list (3 when absent). A row is `{id, fxi, fxiProvenance?, fxiGap?, name?, fxe?}`. The vector expects one of:
+Each vector gives a `query` row, a `library` of rows, and optionally `top`, the length of the confirm list (3 when absent). A row is `{id, fxi, fxiProvenance?, mode?, fxiGap?, name?, fxe?}`. The vector expects one of:
 
 - `{"kind": "auto", "id": …}`, the library entry linked without asking;
 - `{"kind": "confirm", "reason": …, "candidates": […]}`, the reason auto-match was refused and the ranked list. Each candidate says how it entered the list: `{"via": "fxi", "relation": …}`, `{"via": "near", "layer": …}` with the one standard layer that differs, or `{"via": "name"}`;
@@ -142,6 +142,8 @@ The ranking is the one in [the match protocol](./compare-and-match.md#match-prot
 | `several-identical` | More than one library entry is identical to the query. |
 | `query-gap` | The query carries a gap marker. |
 | `entry-gap` | The identical library entry carries a gap marker. |
+| `query-import` | The query is an import-mode row. |
+| `entry-import` | The identical library entry is an import-mode row. |
 | `query-not-owner` | The query has neither owner nor owner-assisted provenance. |
 | `entry-not-owner` | The identical library entry has neither owner nor owner-assisted provenance. |
 <!-- /fds:generated -->
