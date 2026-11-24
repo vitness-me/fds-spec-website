@@ -44,7 +44,7 @@ export async function descriptorOptionsFrom(flags: DescriptorFlags): Promise<Des
     const rows = rowsOf(await readJson(flags.resolveLibrary));
     if (rows === undefined) throw new Error(`${flags.resolveLibrary}: a library is a JSON list of {id, fxi, fxiProvenance, fxiGap, name?, fxe?}, or an object with that list under "entries".`);
     options.resolve = {
-      library: (rows as unknown as MatchRow[]).filter((r) => typeof r.fxi === 'string'),
+      library: (rows as unknown as MatchRow[]).filter((r) => r.fxi !== undefined && r.fxi !== null),
       system: flags.resolveSystem ?? basename(flags.resolveLibrary).replace(/\.json$/i, ''),
     };
   }

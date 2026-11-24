@@ -90,6 +90,16 @@ describe('propose', () => {
     expect(() => new Transformer({ descriptors: { propose: { answersFrom: 'x', provenance: 'owner' as never } } })).toThrow(/Owner provenance comes only from the owner/);
   });
 
+  it('takes the gap marker from the collision answer "differs" when there is no "gap"', async () => {
+    const [squat] = await run({ propose: { answersFrom: 'fxiAnswers' } }, withAnswers({ answers: squatAnswers, differs: 'paused at the bottom' }));
+    expect(descriptorsOf(squat!)!.fxiGap).toBe('paused at the bottom');
+  });
+
+  it('the kept answers record cites the dataset that built it, not the one the source cited', async () => {
+    const [squat] = await run({ propose: { answersFrom: 'fxiAnswers' } }, withAnswers({ answers: squatAnswers, words: { name: 'some-other-dataset', version: '7' } }));
+    expect(squat!.descriptors!.built!.record.words).toBeUndefined();
+  });
+
   it('reads a bare answers object as well as an answers record', async () => {
     const [squat] = await run({ propose: { answersFrom: 'fxiAnswers' } }, withAnswers(squatAnswers));
     expect(descriptorsOf(squat!)!.fxi).toBe(SQUAT);
@@ -140,8 +150,8 @@ describe('resolve', () => {
   it('an owner FXI mapped from the source links automatically to the one identical owner entry, in xrefs', async () => {
     const mapping = await config();
     mapping.mappings.fxi = { from: 'ownFxi' };
-    mapping.mappings.fxiProvenance = { from: null, default: 'owner' };
-    const input = sources().map((s, i) => (i === 0 ? { ...s, ownFxi: SQUAT } : s));
+    mapping.mappings.fxiProvenance = { from: 'ownProvenance' };
+    const input = sources().map((s, i) => (i === 0 ? { ...s, ownFxi: SQUAT, ownProvenance: 'owner' } : s));
     const [squat, other] = await run({ resolve: { library, system: 'gym-library' } }, input, mapping);
     expect(squat!.success).toBe(true);
     expect(descriptorsOf(squat!)!.xrefs).toEqual([{ system: 'gym-library', id: 'lib:back-squat', link: 'auto' }]);
@@ -150,12 +160,39 @@ describe('resolve', () => {
     expect(other!.descriptors).toBeUndefined();
   });
 
-  it('a gap marker refuses the link', async () => {
+  it('owner provenance from a mapping default is written as import, with a warning, and never links', async () => {
     const mapping = await config();
     mapping.mappings.fxi = { from: 'ownFxi' };
     mapping.mappings.fxiProvenance = { from: null, default: 'owner' };
+    const input = sources().map((s, i) => (i === 0 ? { ...s, ownFxi: SQUAT } : s));
+    const [squat] = await run({ resolve: { library, system: 'gym-library' } }, input, mapping);
+    expect(descriptorsOf(squat!)).toEqual({ fxi: SQUAT, fxiProvenance: 'import' });
+    expect(squat!.descriptors!.match).toMatchObject({ kind: 'confirm', why: 'the query has no owner provenance' });
+    expect(squat!.descriptors!.warnings!.join()).toMatch(/did not come from the source record, so it is written as "import"/);
+    expect(squat!.provenance!.fxiProvenance).toEqual({ origin: 'transform', transform: ['fds-encoder:resolve'] });
+  });
+
+  it('a library row whose provenance contradicts its mode is refused', () => {
+    const bad = [{ id: 'lib:x', fxi: SQUAT, fxiProvenance: 'owner', mode: 'import' }];
+    expect(() => new Transformer({ descriptors: { resolve: { library: bad, system: 'gym-library' } } })).toThrow(/row 0 \(lib:x\): fxiProvenance "owner" contradicts mode "import"/);
+  });
+
+  it('an import-mode library row never links', async () => {
+    const mapping = await config();
+    mapping.mappings.fxi = { from: 'ownFxi' };
+    mapping.mappings.fxiProvenance = { from: 'ownProvenance' };
+    const input = sources().map((s, i) => (i === 0 ? { ...s, ownFxi: SQUAT, ownProvenance: 'owner' } : s));
+    const imported = [{ id: 'lib:back-squat', fxi: SQUAT, fxiProvenance: 'import', mode: 'import', fxiGap: null }];
+    const [squat] = await run({ resolve: { library: imported, system: 'gym-library' } }, input, mapping);
+    expect(squat!.descriptors!.match).toMatchObject({ kind: 'confirm', why: 'the library entry is an import-mode row' });
+  });
+
+  it('a gap marker refuses the link', async () => {
+    const mapping = await config();
+    mapping.mappings.fxi = { from: 'ownFxi' };
+    mapping.mappings.fxiProvenance = { from: 'ownProvenance' };
     mapping.mappings.fxiGap = { from: 'gap' };
-    const input = sources().map((s, i) => (i === 0 ? { ...s, ownFxi: SQUAT, gap: 'paused at the bottom' } : s));
+    const input = sources().map((s, i) => (i === 0 ? { ...s, ownFxi: SQUAT, ownProvenance: 'owner', gap: 'paused at the bottom' } : s));
     const [squat] = await run({ resolve: { library, system: 'gym-library' } }, input, mapping);
     expect(descriptorsOf(squat!)!.xrefs).toBeUndefined();
     expect(squat!.descriptors!.match).toMatchObject({ kind: 'confirm', why: 'the query carries a gap marker' });

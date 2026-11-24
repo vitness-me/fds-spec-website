@@ -7,7 +7,7 @@
  * validates only once the RFC's schemas are published.
  */
 
-import { AnswerError, build, createFlow, DEFAULT_FLOW, FXI_RULES, match } from '@vitness/fds-encoder';
+import { AnswerError, build, builtFrom, checkMatchRow, createFlow, DEFAULT_FLOW, FXI_RULES, match, OWNER_PROVENANCES, rowMeta } from '@vitness/fds-encoder';
 import type { Answers, Entry, Flow, MatchResult, MatchRow, WordSet } from '@vitness/fds-encoder';
 import type { RecordProvenance } from '../core/types.js';
 import { getMappingPathValue } from '../core/paths.js';
@@ -28,7 +28,10 @@ export interface DescriptorProposeOptions {
 }
 
 export interface DescriptorResolveOptions {
-  /** The library to match against: rows `{id, fxi, fxiProvenance?, fxiGap?, name?, fxe?}` */
+  /**
+   * The library to match against: rows `{id, fxi, fxiProvenance?, mode?, fxiGap?, name?, fxe?}`. A row unfit for
+   * matching, such as one whose provenance contradicts its mode, is refused when the steps are created.
+   */
   library: readonly MatchRow[];
   /** The library's name, written as the `system` of each link */
   system: string;
@@ -57,6 +60,8 @@ export interface DescriptorOutcome {
   problems?: string[];
   /** The match against the library. Only `auto` writes a link; `confirm` is for a person to settle. */
   match?: MatchResult;
+  /** What a step changed on the record that the mapping did not ask for, and why */
+  warnings?: string[];
 }
 
 const isObject = (v: unknown): v is Record<string, unknown> => typeof v === 'object' && v !== null && !Array.isArray(v);
@@ -76,6 +81,11 @@ export class DescriptorSteps {
     if (options.resolve !== undefined && options.resolve.system.trim() === '') {
       throw new Error('descriptors.resolve.system names the library each link points into; it is empty.');
     }
+    const unfit = (options.resolve?.library ?? []).flatMap((row, n) => {
+      const problems = checkMatchRow(row);
+      return problems.length === 0 ? [] : [`row ${n} (${String((row as { id?: unknown }).id)}): ${problems.join(' | ')}`];
+    });
+    if (unfit.length > 0) throw new Error(`descriptors.resolve.library has rows unfit for matching:\n  ${unfit.join('\n  ')}`);
     const words = options.propose?.words;
     this.flow = words === undefined ? DEFAULT_FLOW : createFlow(words);
   }
@@ -118,9 +128,7 @@ export class DescriptorSteps {
     const record: Entry = { ...carried, id, answers, provenance: who, ...(who === 'import' ? { mode: 'import' as const } : {}) };
     try {
       const built = build(record, this.flow);
-      const { name, version } = this.flow.words;
-      const cites = typeof answers.movement === 'string' && this.flow.wordById.has(answers.movement);
-      const gap = typeof record.gap === 'string' && record.gap.trim() !== '' ? record.gap : null;
+      const gap = rowMeta(record, 'owner').fxiGap;
       // Equipment answers build no FXI: the record gets its FXE only.
       const fields: Record<string, unknown> = built.fxi === null
         ? { fxe: built.fxe }
@@ -132,7 +140,7 @@ export class DescriptorSteps {
       outcome.proposed = who;
       outcome.built = {
         rules: FXI_RULES,
-        record: { ...record, ...(cites && record.words === undefined ? { words: { name, version } } : {}) },
+        record: builtFrom(record, this.flow),
         ...(built.fxeFull === undefined ? {} : { fxeFull: built.fxeFull }),
       };
     } catch (error) {
@@ -150,12 +158,21 @@ export class DescriptorSteps {
     outcome: DescriptorOutcome
   ): boolean {
     if (typeof mapped.fxi !== 'string') return false;
+    // Owner provenance is the source's claim or nothing: a mapping default cannot make a record the owner's.
+    if (OWNER_PROVENANCES.includes(mapped.fxiProvenance as never) && provenance.fxiProvenance?.origin !== 'source') {
+      (outcome.warnings ??= []).push(
+        `fxiProvenance "${String(mapped.fxiProvenance)}" did not come from the source record, so it is written as "import": ` +
+          'owner provenance comes only from the owner, mapped from a source field.'
+      );
+      mapped.fxiProvenance = 'import';
+      provenance.fxiProvenance = { origin: 'transform', transform: ['fds-encoder:resolve'] };
+    }
     const canonical = mapped.canonical as Record<string, unknown> | undefined;
     const query: MatchRow = {
       id,
       fxi: mapped.fxi,
       fxiProvenance: typeof mapped.fxiProvenance === 'string' ? mapped.fxiProvenance : undefined,
-      fxiGap: typeof mapped.fxiGap === 'string' ? mapped.fxiGap : null,
+      fxiGap: mapped.fxiGap as MatchRow['fxiGap'],
       name: typeof canonical?.name === 'string' ? canonical.name : null,
       fxe: typeof mapped.fxe === 'string' ? mapped.fxe : null,
     };

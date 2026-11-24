@@ -15,7 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `owner`), at the record's top-level `fxi`, `fxe`, `fxiProvenance` and
   `fxiGap`. `--resolve-library` matches each record's FXI against a library
   by the match protocol and links only a unique identical owner entry, in
-  `xrefs`. `descriptors.report.json` lists every match to confirm, for a
+  `xrefs`; owner provenance counts only when mapped from the source record,
+  never from a mapping default. `descriptors.report.json` lists every match to confirm, for a
   person, and the answers record each proposal was built from. These fields
   are defined by the descriptor RFC; until its schemas are published,
   output from either step does not validate against the current ones. `--words` gives the movement-word
