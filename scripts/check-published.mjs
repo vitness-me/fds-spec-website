@@ -200,7 +200,9 @@ for (const [path, { sha256 }] of Object.entries(schemas)) {
 // its name promises. Neither half needs the network on the PR path, and together
 // they say the thing a mock never could.
 const REGISTRY_DIR = 'specification/registries';
-const registryFiles = (await readdir(join(ROOT, REGISTRY_DIR)))
+// Recursive: `descriptors/` is served the same way as the top level, and a
+// subdirectory read past is a published set nothing checks.
+const registryFiles = (await readdir(join(ROOT, REGISTRY_DIR), { recursive: true }))
   .filter((name) => name.endsWith('.json'))
   .sort();
 
@@ -222,7 +224,7 @@ for (const file of registryFiles) {
   // deserialises. Checking both against the same rule would check neither —
   // and the array shape is the one a consumer's code indexes into.
   const isCatalog = file.endsWith('.registry.example.json');
-  const name = file.replace(/\.registry(\.example)?\.json$/, '');
+  const name = file.split('/').pop().replace(/\.registry(\.example)?\.json$/, '');
 
   try {
     const { response, body } = await get(url);
