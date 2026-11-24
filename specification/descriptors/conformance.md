@@ -26,7 +26,7 @@ Conformance says that an implementation computes what the specification says. It
 | `syntax` | 133 | [`syntax.json`](https://github.com/vitness-me/fds-spec-website/blob/main/specification/descriptors/conformance/syntax.json) | [`fxm-vocabulary.json`](https://github.com/vitness-me/fds-spec-website/blob/main/specification/descriptors/conformance/fxm-vocabulary.json) |
 | `builder` | 24 | [`builder.json`](https://github.com/vitness-me/fds-spec-website/blob/main/specification/descriptors/conformance/builder.json) | [`words.json`](https://github.com/vitness-me/fds-spec-website/blob/main/specification/descriptors/conformance/words.json) |
 | `compare` | 53 | [`compare.json`](https://github.com/vitness-me/fds-spec-website/blob/main/specification/descriptors/conformance/compare.json) | [`fxm-vocabulary.json`](https://github.com/vitness-me/fds-spec-website/blob/main/specification/descriptors/conformance/fxm-vocabulary.json) |
-| `resolver` | 31 | [`resolver.json`](https://github.com/vitness-me/fds-spec-website/blob/main/specification/descriptors/conformance/resolver.json) | (none) |
+| `resolver` | 38 | [`resolver.json`](https://github.com/vitness-me/fds-spec-website/blob/main/specification/descriptors/conformance/resolver.json) | (none) |
 <!-- /fds:generated -->
 
 Every tier file names the rules revision its vectors were written for, in `rules`. A vector set is valid for that rules revision only: when the registries move to a new one, the vectors are reviewed against it before `rules` changes.
