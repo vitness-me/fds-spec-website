@@ -39,6 +39,7 @@ import { readFile, readdir } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { PAGE_DIR, REGISTRY_DIR, changedRegions, loadDescriptors, refreshRegions, regionRenderers, regionsIn } from './lib/descriptors.mjs';
+import { assertRecordedFailures } from './lib/self-test.mjs';
 
 const REPO = join(dirname(fileURLToPath(import.meta.url)), '..');
 const SELF_TEST = process.argv.includes('--self-test');
@@ -59,7 +60,15 @@ const { registries, files, flow } = data;
 /** How each known registry is read. A registry without an entry here fails. */
 const KNOWN = { fxi: checkFxi, fxe: checkFxe };
 
-const valuesOf = (registry, name) => new Set((registry?.vocabularies?.[name]?.entries ?? []).map((e) => e.value));
+/** The values a vocabulary lists, built once per registry and vocabulary. Callers must not mutate the set. */
+const valueSets = new WeakMap();
+function valuesOf(registry, name) {
+  if (!registry) return new Set();
+  if (!valueSets.has(registry)) valueSets.set(registry, new Map());
+  const sets = valueSets.get(registry);
+  if (!sets.has(name)) sets.set(name, new Set((registry.vocabularies?.[name]?.entries ?? []).map((e) => e.value)));
+  return sets.get(name);
+}
 
 for (const [name, registry] of Object.entries(registries)) {
   const file = `${REGISTRY_DIR}/${files[name]}`;
@@ -88,7 +97,7 @@ for (const [name, registry] of Object.entries(registries)) {
       for (const other of entry.conflictsWith ?? []) ref('a conflicting code', other);
     }
   }
-  KNOWN[name]?.(registry, file);
+  KNOWN[name](registry, file);
 }
 
 function checkFxi(fxi, file) {
@@ -104,8 +113,8 @@ function checkFxi(fxi, file) {
   }
   const fxe = registries.fxe;
   for (const t of fxi.vocabularies.equipmentTokens?.entries ?? []) {
-    const parsed = parseFxe(t.fxe, fxe);
-    if (parsed.problems.length) fail(`alias:${t.value}`, `${file} equipmentTokens: "${t.value}" aliases ${t.fxe}, which is not a valid standard FXE: ${parsed.problems.join('; ')}.`);
+    const errors = parseFxe(t.fxe, fxe);
+    if (errors.length) fail(`alias:${t.value}`, `${file} equipmentTokens: "${t.value}" aliases ${t.fxe}, which is not a valid standard FXE: ${errors.join('; ')}.`);
   }
   const layers = fxi.layers?.map((l) => l.layer) ?? [];
   for (const [vname, v] of Object.entries(fxi.vocabularies)) {
@@ -117,10 +126,10 @@ function checkFxi(fxi, file) {
 
 function checkFxe(fxe, file) {
   const kinds = new Map((fxe.vocabularies.kinds?.entries ?? []).map((k) => [k.value, k]));
+  const compliance = new Set([...valuesOf(fxe, 'compliance'), ...valuesOf(fxe, 'constraints')]);
   for (const f of fxe.vocabularies.forms?.entries ?? []) {
     if (!kinds.has(f.kind)) fail(`form-kind:${f.value}`, `${file} forms: "${f.value}" claims kind "${f.kind}", which kinds does not list.`);
     if (f.implies?.r !== undefined && !valuesOf(fxe, 'drives').has(f.implies.r)) fail(`implies:${f.value}:r`, `${file} forms: "${f.value}" implies drive "${f.implies.r}", which drives does not list.`);
-    const compliance = new Set([...valuesOf(fxe, 'compliance'), ...valuesOf(fxe, 'constraints')]);
     if (f.implies?.c !== undefined && !compliance.has(f.implies.c)) fail(`implies:${f.value}:c`, `${file} forms: "${f.value}" implies "${f.implies.c}", which neither compliance nor constraints lists.`);
   }
   const fxiPoints = new Set([...valuesOf(registries.fxi, 'bodyPoints'), ...valuesOf(registries.fxi, 'holdOnlyPoints')]);
@@ -132,8 +141,8 @@ function checkFxe(fxe, file) {
     for (const o of p.orientations ?? []) if (!orientations.has(o)) fail(`orient:${p.value}:${o}`, `${file} postures: "${p.value}" fits orientation "${o}", which the FXI registry does not list.`);
   }
   for (const t of fxe.vocabularies.cardioMachineTypes?.entries ?? []) {
-    const parsed = parseFxe(`FXE=${fxe.syntax}S/k:erg/c:${t.c}/l:${t.l}/s:${t.s}/m:${t.m}`, fxe);
-    if (parsed.problems.length) fail(`cardio:${t.value}`, `${file} cardioMachineTypes: "${t.value}" writes an invalid FXE: ${parsed.problems.join('; ')}.`);
+    const errors = parseFxe(`FXE=${fxe.syntax}S/k:erg/c:${t.c}/l:${t.l}/s:${t.s}/m:${t.m}`, fxe);
+    if (errors.length) fail(`cardio:${t.value}`, `${file} cardioMachineTypes: "${t.value}" writes an invalid FXE: ${errors.join('; ')}.`);
     if (!fxiPoints.has(t.hold)) fail(`cardio-hold:${t.value}`, `${file} cardioMachineTypes: "${t.value}" holds at "${t.hold}", which the FXI registry does not list.`);
   }
 }
@@ -161,39 +170,39 @@ function fxeValues(fxe, kind, layer, standard) {
 
 /** Header, layer membership and order, and codes of an FXE. Not full canonicalisation. */
 function parseFxe(text, fxe) {
-  const out = { problems: [] };
-  if (!fxe) return { problems: ['no FXE registry'] };
+  if (!fxe) return ['no FXE registry'];
+  const problems = [];
   const head = /^FXE=(\d+\.\d+)([SN])\/(.*)$/.exec(text);
-  if (!head) return { problems: [`"${text}" does not start FXE=<major>.<revision><S|N>/`] };
-  if (head[1] !== fxe.syntax) out.problems.push(`header FXE=${head[1]}, the registry is FXE=${fxe.syntax}`);
+  if (!head) return [`"${text}" does not start FXE=<major>.<revision><S|N>/`];
+  if (head[1] !== fxe.syntax) problems.push(`header FXE=${head[1]}, the registry is FXE=${fxe.syntax}`);
   const kinds = new Map((fxe.vocabularies.kinds?.entries ?? []).map((k) => [k.value, k]));
   let extended = false;
   for (const config of head[3].split(';')) {
     const parts = config.split('/').map((p) => p.split(':'));
     const [k, kind] = parts[0] ?? [];
-    if (k !== 'k') { out.problems.push(`a configuration starts with k:, not "${parts[0]?.join(':')}"`); continue; }
-    if (kind === UNKNOWN) { if (parts.length > 1) out.problems.push('k:? takes no other layer'); continue; }
+    if (k !== 'k') { problems.push(`a configuration starts with k:, not "${parts[0]?.join(':')}"`); continue; }
+    if (kind === UNKNOWN) { if (parts.length > 1) problems.push('k:? takes no other layer'); continue; }
     const entry = kinds.get(kind);
-    if (!entry) { out.problems.push(`"${kind}" is not a kind`); continue; }
+    if (!entry) { problems.push(`"${kind}" is not a kind`); continue; }
     const order = [...entry.standard, ...entry.extended];
     const written = parts.slice(1).map(([l]) => l);
-    for (const l of entry.standard) if (!written.includes(l)) out.problems.push(`k:${kind} always writes ${l}`);
+    for (const l of entry.standard) if (!written.includes(l)) problems.push(`k:${kind} always writes ${l}`);
     let last = -1;
     for (const [layer, value] of parts.slice(1)) {
       const at = order.indexOf(layer);
-      if (at < 0) { out.problems.push(`layer ${layer} does not apply to k:${kind}`); continue; }
-      if (at < last) out.problems.push(`layer ${layer} is out of order`);
+      if (at < 0) { problems.push(`layer ${layer} does not apply to k:${kind}`); continue; }
+      if (at < last) problems.push(`layer ${layer} is out of order`);
       last = at;
       const standard = entry.standard.includes(layer);
       if (!standard) extended = true;
       const allowed = fxeValues(fxe, kind, layer, standard);
       for (const code of String(value).split('+')) {
-        if (code !== UNKNOWN && !allowed.has(code)) out.problems.push(`"${code}" is not a ${layer} code for k:${kind}`);
+        if (code !== UNKNOWN && !allowed.has(code)) problems.push(`"${code}" is not a ${layer} code for k:${kind}`);
       }
     }
   }
-  if ((head[2] === 'N') !== extended) out.problems.push(`flag ${head[2]}, but ${extended ? 'an extended layer is' : 'no extended layer is'} written`);
-  return out;
+  if ((head[2] === 'N') !== extended) problems.push(`flag ${head[2]}, but ${extended ? 'an extended layer is' : 'no extended layer is'} written`);
+  return problems;
 }
 
 /** Header, layer order and codes of an FXI. Not full canonicalisation. */
@@ -208,6 +217,7 @@ function parseFxi(text, fxi) {
   const points = new Set([...v('bodyPoints'), ...v('holdOnlyPoints')]);
   const joints = new Map((fxi.vocabularies.joints?.entries ?? []).map((j) => [j.value, j]));
   const prefixes = [...v('phasePrefixes')].filter(Boolean);
+  const grips = new Set([...v('handOrientations'), ...v('gripWidths'), ...v('stances')]);
   const known = (set, code, what) => { if (code !== UNKNOWN && !set.has(code)) problems.push(`"${code}" is not ${what}`); };
   const CODES = {
     o: (x) => x.split('>').forEach((c) => c !== GENERIC && known(v('orientations'), c, 'an orientation')),
@@ -228,7 +238,7 @@ function parseFxi(text, fxi) {
       known(v('symmetry'), c, 'a symmetry code');
       if (scope !== undefined) known(v('symmetryScopes'), scope, 'a symmetry scope');
     }),
-    g: (x) => x !== GENERIC && x.split('>').forEach((ph) => ph.split('+').forEach((c) => known(new Set([...v('handOrientations'), ...v('gripWidths'), ...v('stances')]), c, 'a grip or stance code'))),
+    g: (x) => x !== GENERIC && x.split('>').forEach((ph) => ph.split('+').forEach((c) => known(grips, c, 'a grip or stance code'))),
     r: (x) => x !== GENERIC && x.split('+').forEach((c) => known(v('ranges'), c, 'a range code')),
     h: (x) => x !== GENERIC && x.split('+').forEach((c) => known(v('heldPostures'), c, 'a held posture')),
     p: (x) => x !== GENERIC && x.split('+').forEach((c) => known(v('lines'), c, 'a line of pull')),
@@ -314,8 +324,8 @@ function parseFxm(text, syntax) {
     if (q.repeatsPerPhase) for (let n = 2; n <= (flow.maxPhases ?? 1); n++) asked.add(q.id.replace(/^p1/, `p${n}`));
   }
   for (const f of facts) if (!usedFacts.has(f)) fail(`unused-fact:${f}`, `${where}: fact "${f}" is defined and no condition uses it.`);
+  const changes = flow.questions.find((q) => q.id === 'changes');
   for (const [option, opens] of Object.entries(flow.changeOpens ?? {})) {
-    const changes = flow.questions.find((q) => q.id === 'changes');
     if (!changes?.options.some((o) => o.id === option)) fail(`opens-option:${option}`, `${where}: changeOpens names "${option}", which is not a changes option.`);
     for (const id of opens) if (!asked.has(id)) fail(`opens:${option}:${id}`, `${where}: changes option "${option}" opens "${id}", which is not a question.`);
   }
@@ -349,7 +359,7 @@ for (const file of pages) {
       // A form written to explain the grammar, with placeholders or an ellipsis, is not a string.
       if (/[<…]/.test(s) || /^(FXI|FXE|FXM)=\d+\/$/.test(s) || body === '') continue;
       if (/^FX[IEM]=\d+\.\d+[SN]?\/?$/.test(s)) continue; // a bare header, named in prose
-      const errors = kind === 'FXI' ? parseFxi(s, registries.fxi) : kind === 'FXE' ? parseFxe(s, registries.fxe).problems : parseFxm(s, registries.fxi.syntax);
+      const errors = kind === 'FXI' ? parseFxi(s, registries.fxi) : kind === 'FXE' ? parseFxe(s, registries.fxe) : parseFxm(s, registries.fxi.syntax);
       quoted += 1;
       if (errors.length) fail(`string:${file}:${s}`, `${path}:${i + 1}: ${s}\n    ${errors.join('\n    ')}`);
     }
@@ -358,24 +368,7 @@ for (const file of pages) {
 
 // ── result ───────────────────────────────────────────────────────────────────
 
-if (SELF_TEST) {
-  const expected = (await readFile(join(FIXTURES, 'expected-failures.txt'), 'utf8'))
-    .split('\n')
-    .map((l) => l.trim())
-    .filter((l) => l && !l.startsWith('#'))
-    .sort();
-  const actual = [...new Set(problems.map((p) => p.key))].sort();
-  const missing = expected.filter((k) => !actual.includes(k));
-  const extra = actual.filter((k) => !expected.includes(k));
-  if (missing.length || extra.length) {
-    console.error('self-test: the check did not fail in exactly the recorded way.');
-    for (const k of missing) console.error(`  expected, not reported: ${k}`);
-    for (const k of extra) console.error(`  reported, not expected: ${k}`);
-    process.exit(1);
-  }
-  console.log(`  ok    self-test: ${actual.length} recorded failures reproduced`);
-  process.exit(0);
-}
+if (SELF_TEST) await assertRecordedFailures(join(FIXTURES, 'expected-failures.txt'), problems.map((p) => p.key));
 
 if (problems.length) {
   console.error(`\n${problems.length} problem(s):\n`);

@@ -31,8 +31,9 @@ export async function loadDescriptors(root) {
   const files = {};
   for (const file of (await readdir(join(root, REGISTRY_DIR))).sort()) {
     const doc = JSON.parse(await readFile(join(root, REGISTRY_DIR, file), 'utf8'));
-    registries[doc.registry ?? file] = doc;
-    files[doc.registry ?? file] = file;
+    const name = doc.registry ?? file;
+    registries[name] = doc;
+    files[name] = file;
   }
   const flow = JSON.parse(await readFile(join(root, FLOW_FILE), 'utf8'));
   return { registries, files, flow };
@@ -148,7 +149,7 @@ function formsTable(vocabulary, kinds) {
 // ── the question flow ────────────────────────────────────────────────────────
 
 /** A condition in plain English. Question ids and option ids stay in code. */
-export function describeCondition(c, facts) {
+function describeCondition(c, facts) {
   if ('fact' in c) {
     const text = mixed(facts[c.fact] ?? c.fact).replace(/\.$/, '');
     return text[0].toLowerCase() + text.slice(1);

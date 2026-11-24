@@ -41,11 +41,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
-const RFC_DIR = join(ROOT, 'specification/rfc');
 const INTEGRITY = join(ROOT, 'specification/schemas/.integrity.json');
-const RFC_PAGES = join(ROOT, 'website/docs/specifications');
-const DESCRIPTOR_DIR = join(ROOT, 'specification/descriptors');
-const DESCRIPTOR_PAGES = join(ROOT, 'website/docs/descriptors');
 const SIDEBARS = join(ROOT, 'website/sidebars.ts');
 
 /**
@@ -84,32 +80,29 @@ const NO_PAGE_NEEDED = new Set(['mapping', 'provenance']);
  */
 const DRIFT_EXEMPT = new Set();
 
-const isRfc = (name) => name.startsWith('rfc-') && name.endsWith('.md');
-
-const rfcSources = (await readdir(RFC_DIR)).filter(isRfc).sort();
-const rfcPages = new Set((await readdir(RFC_PAGES)).filter(isRfc));
-
 /**
- * The structural descriptor pages are discovered the way RFCs are: every
- * markdown file in the directory is a published page. Nothing else lives
- * there except the question flow's JSON, which the pages render.
+ * Directories whose every matching file is a published page of the same name
+ * under `website/docs/<docs>/`. The structural descriptor directory holds only
+ * pages and the JSON they render, so every markdown file in it is a page.
  */
-const isPage = (name) => name.endsWith('.md');
-const descriptorSources = (await readdir(DESCRIPTOR_DIR).catch(() => [])).filter(isPage).sort();
-const descriptorPages = new Set((await readdir(DESCRIPTOR_PAGES).catch(() => [])).filter(isPage));
+const MIRRORED_DIRS = [
+  { source: 'specification/rfc', docs: 'specifications', isPage: (name) => name.startsWith('rfc-') && name.endsWith('.md'), what: 'source RFC' },
+  { source: 'specification/descriptors', docs: 'descriptors', isPage: (name) => name.endsWith('.md'), what: 'source in specification/descriptors/' },
+];
+for (const dir of MIRRORED_DIRS) {
+  dir.sources = (await readdir(join(ROOT, dir.source))).filter(dir.isPage).sort();
+  dir.pages = (await readdir(join(ROOT, 'website/docs', dir.docs))).filter(dir.isPage);
+}
 
 /** Everything this check compares, as {source, page, docId}. */
 const PAIRS = [
-  ...rfcSources.map((name) => ({
-    source: `specification/rfc/${name}`,
-    page: `website/docs/specifications/${name}`,
-    docId: `specifications/${name.replace(/\.md$/, '')}`,
-  })),
-  ...descriptorSources.map((name) => ({
-    source: `specification/descriptors/${name}`,
-    page: `website/docs/descriptors/${name}`,
-    docId: `descriptors/${name.replace(/\.md$/, '')}`,
-  })),
+  ...MIRRORED_DIRS.flatMap(({ source, docs, sources }) =>
+    sources.map((name) => ({
+      source: `${source}/${name}`,
+      page: `website/docs/${docs}/${name}`,
+      docId: `${docs}/${name.replace(/\.md$/, '')}`,
+    }))
+  ),
   ...DOC_PAIRS.map(([source, docId]) => ({
     source,
     page: `website/docs/${docId}.md`,
@@ -186,24 +179,16 @@ for (const path of Object.keys(published)) {
 
 // A page that outlives its source leaves readers a document the standard no
 // longer contains.
-const knownRfcPages = new Set(rfcSources);
-const orphans = [...rfcPages].filter((name) => !knownRfcPages.has(name)).sort();
-if (orphans.length) {
-  problems.push(
-    `${orphans.length} page(s) in website/docs/specifications/ with no source RFC:\n` +
-      orphans.map((name) => `    ${name}`).join('\n') +
-      '\n    Either the source was deleted or renamed, or the page never had one.'
-  );
-}
-
-const knownDescriptorPages = new Set(descriptorSources);
-const descriptorOrphans = [...descriptorPages].filter((name) => !knownDescriptorPages.has(name)).sort();
-if (descriptorOrphans.length) {
-  problems.push(
-    `${descriptorOrphans.length} page(s) in website/docs/descriptors/ with no source in specification/descriptors/:\n` +
-      descriptorOrphans.map((name) => `    ${name}`).join('\n') +
-      '\n    Either the source was deleted or renamed, or the page never had one.'
-  );
+for (const { docs, sources, pages, what } of MIRRORED_DIRS) {
+  const known = new Set(sources);
+  const orphans = pages.filter((name) => !known.has(name)).sort();
+  if (orphans.length) {
+    problems.push(
+      `${orphans.length} page(s) in website/docs/${docs}/ with no ${what}:\n` +
+        orphans.map((name) => `    ${name}`).join('\n') +
+        '\n    Either the source was deleted or renamed, or the page never had one.'
+    );
+  }
 }
 
 if (problems.length) {
