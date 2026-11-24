@@ -32,4 +32,6 @@ export default defineConfig({
   // disabled, from the installed artifact.
   splitting: false,
   shims: true,
+  // `@vitness/fds-encoder` is not a dependency: tsconfig.json's `paths` points it at ../fds-encoder/src, and esbuild
+  // bundles that source, so the descriptor steps ship with the transformer and need nothing installed.
 });

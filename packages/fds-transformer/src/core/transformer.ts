@@ -33,9 +33,15 @@ import { ConfigLoader } from '../config/config-loader.js';
 import { checkpointKey } from '../ai/checkpoint-manager.js';
 import { assertUniqueIdentities } from './identity-collisions.js';
 import { getMappingPathValue, isBeneath } from './paths.js';
+import { DescriptorSteps, type DescriptorOptions } from '../descriptors/descriptor-steps.js';
 
 export interface TransformerOptions extends TransformOptions {
   config?: MappingConfig | string;
+  /**
+   * Optional descriptor steps: propose an FXI and FXE from answers the source carries, and resolve each record's FXI
+   * against a library. Off unless given; a run without them is unchanged.
+   */
+  descriptors?: DescriptorOptions;
 }
 
 /**
@@ -87,11 +93,13 @@ export class Transformer {
   private registryManager: RegistryManager;
   private schemaManager: SchemaManager;
   private enrichmentEngine: EnrichmentEngine | null = null;
+  private descriptorSteps: DescriptorSteps | null;
   private initialized = false;
 
   constructor(options: TransformerOptions = {}) {
     // Config will be loaded during init
     this.config = options.config as MappingConfig || {} as MappingConfig;
+    this.descriptorSteps = options.descriptors ? new DescriptorSteps(options.descriptors) : null;
     this.mappingEngine = new MappingEngine();
     this.registryManager = new RegistryManager();
     this.schemaManager = new SchemaManager();
@@ -200,7 +208,7 @@ export class Transformer {
         enriched = Object.keys(enrichmentResult.data || {});
       }
 
-      return await this.finishResult(mapped, provenance, enriched);
+      return await this.finishResult(source, mapped, provenance, enriched);
     } catch (error) {
       return {
         success: false,
@@ -470,7 +478,7 @@ export class Transformer {
         }
       }
 
-      results[index] = await this.finishResult(mapped, provenance, enriched);
+      results[index] = await this.finishResult(source, mapped, provenance, enriched);
     }
 
     // Calculate stats
@@ -534,15 +542,18 @@ export class Transformer {
   }
 
   /**
-   * Validate a transformed record and assemble its result. A record whose
-   * `validation.rejectDefaults` path holds a mapping default fails, whatever
-   * `validation.enabled` and `strict` say.
+   * Run the descriptor steps, if any, then validate a transformed record and
+   * assemble its result. A record whose `validation.rejectDefaults` path holds
+   * a mapping default fails, whatever `validation.enabled` and `strict` say.
    */
   private async finishResult(
+    source: Record<string, unknown>,
     mapped: Record<string, unknown>,
     provenance: RecordProvenance,
     enriched: string[]
   ): Promise<TransformResult> {
+    const descriptors = this.descriptorSteps?.apply(source, mapped, provenance);
+
     let validation = { valid: true, errors: [] as ValidationError[] };
     if (this.config.validation?.enabled !== false) {
       validation = await this.schemaManager.validate(
@@ -565,6 +576,7 @@ export class Transformer {
       provenance,
       errors: [...validation.errors, ...rejected],
       enriched,
+      ...(descriptors ? { descriptors } : {}),
       __validation: validation,
     };
   }

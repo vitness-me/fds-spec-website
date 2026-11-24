@@ -457,6 +457,8 @@ export interface TransformResult {
   errors?: ValidationError[];
   warnings?: string[];
   enriched?: string[];
+  /** What the descriptor steps did for this record, when the run has any */
+  descriptors?: import('../descriptors/descriptor-steps.js').DescriptorOutcome;
   __validation?: ValidationResult;
 }
 

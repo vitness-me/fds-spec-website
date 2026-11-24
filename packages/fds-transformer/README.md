@@ -337,6 +337,22 @@ Keys are sorted and nothing depends on when the run happened, so the same input 
 }
 ```
 
+## Structural descriptors (draft)
+
+Two optional steps link a conversion to the draft FXI and FXE descriptors. Both are off unless asked for, and a run without them is unchanged. The descriptors are not yet in any published entity schema, so the fields are written under `extensions.descriptors`, an open object, and the documents still validate.
+
+- **Propose.** `--fxi-answers <path>` reads an answers record (`{answers, gap?, notes?}`, or a bare answers object) at that path in each source record, builds its FXI and FXE with `@vitness/fds-encoder`, and writes `fxi`, `fxe`, `fxiProvenance`, `fxiGap`, the rules revision and the answers record itself, so the strings can be rebuilt later with `fds-encoder upgrade`. Proposals are marked `import` (read from another catalogue: candidate search only), or `agent` with `--fxi-provenance agent`; never `owner`. An FXI the mapping already wrote is never replaced. `--words <file or URL>` gives the movement-word dataset the answers' words come from.
+- **Resolve.** `--resolve-library <file>` matches each record's FXI against a library of `{id, fxi, fxiProvenance, fxiGap, name?, fxe?}` rows by the match protocol. Only a unique identical entry, with owner provenance on both sides and no gap marker on either, is linked: it is added to `extensions.descriptors.xrefs` as `{system, id, link: "auto"}`, where `system` is `--resolve-system` or the library's file name. An import or agent proposal therefore never links on its own.
+
+Every record a step acted on is listed in `descriptors.report.json` beside the output: what was proposed, answers that did not build, and each match to confirm, with its ranked candidates and the reason it was not linked. Those are for a person to settle.
+
+```bash
+fds-transformer transform -i exercises.json -c mapping.json -o ./out \
+  --fxi-answers fxiAnswers --resolve-library gym-library.json
+```
+
+In code, pass `descriptors: { propose, resolve }` to `new Transformer(...)`; each `TransformResult` carries the outcome as `descriptors`.
+
 ## Environment Variables
 
 | Variable | Description |
@@ -479,6 +495,7 @@ pnpm dev
 ## Related Packages
 
 - `@vitness/fds-skill` - AI skill and knowledge base for FDS
+- `@vitness/fds-encoder` - CLI and library for the draft FXI, FXE and FXM descriptors; the descriptor steps above are built from it
 
 ## License
 

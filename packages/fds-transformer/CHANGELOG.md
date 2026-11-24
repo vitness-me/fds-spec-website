@@ -9,6 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Optional descriptor steps for the draft FXI and FXE.** `--fxi-answers`
+  proposes an FXI and FXE for each record from an answers record in its
+  source, marked `import` (or `agent` with `--fxi-provenance agent`, never
+  `owner`), and keeps the answers beside the strings. `--resolve-library`
+  matches each record's FXI against a library by the match protocol and
+  links only a unique identical owner entry, in
+  `extensions.descriptors.xrefs`; every match to confirm is listed in
+  `descriptors.report.json` for a person. `--words` gives the movement-word
+  dataset. Programmatically, `TransformerOptions.descriptors`. Off unless
+  asked for. The encoder's code is bundled from `@vitness/fds-encoder`.
 - **`provider: "claude-code"` enriches through the local `claude` CLI on a
   Claude subscription.** It sends the same request schema as `openrouter`
   (as `--json-schema`) and keeps gap-only scoping, constrained values and

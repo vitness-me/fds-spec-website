@@ -24,6 +24,12 @@ import {
   serializeProvenanceSidecar,
 } from '../core/provenance.js';
 import type { CostEstimate, EnrichmentProgress, RecordProvenance, TierName } from '../core/types.js';
+import {
+  DESCRIPTOR_REPORT_FILENAME,
+  descriptorOptionsFrom,
+  descriptorReport,
+} from '../descriptors/cli-options.js';
+import type { DescriptorOptions } from '../descriptors/descriptor-steps.js';
 
 const program = new Command();
 
@@ -342,6 +348,11 @@ program
     'Log verbosity (error|warn|info|debug)',
     'info'
   )
+  .option('--fxi-answers <path>', 'Draft descriptors: propose an FXI and FXE for each record from the answers record at this source path')
+  .option('--fxi-provenance <who>', 'Who answered the proposals: import (read from the source catalogue; candidate search only) or agent')
+  .option('--words <file|url>', 'The movement-word dataset the answers\' movement words come from')
+  .option('--resolve-library <file>', 'Draft descriptors: match each record\'s FXI against this library; only a unique identical owner match is linked, in xrefs')
+  .option('--resolve-system <name>', 'The library\'s name in each link (default: the library file name)')
   .action(async (options) => {
     // Set log level
     if (
@@ -414,8 +425,14 @@ program
         };
       }
 
+      // Optional descriptor steps; a run without the flags is unchanged
+      const descriptors: DescriptorOptions | undefined = await descriptorOptionsFrom(options);
+      if (descriptors?.propose?.provenance === 'import') {
+        log('info', 'Descriptor proposals read from the source are import mode: candidate search only, never linked without a person.');
+      }
+
       // Create transformer
-      const transformer = new Transformer({ config });
+      const transformer = new Transformer({ config, ...(descriptors ? { descriptors } : {}) });
       await transformer.init();
 
       // Handle --clear-checkpoint
@@ -525,6 +542,7 @@ program
         if (!options.dryRun) {
           await writeOutput(fs, result.results, config, outputDir, options);
         }
+        if (descriptors) await writeDescriptorReport(fs, result.results, outputDir, options);
       } else {
         log('debug', 'Using legacy single-item processing');
 
@@ -560,6 +578,7 @@ program
         if (!options.dryRun) {
           await writeOutput(fs, result.results, config, outputDir, options);
         }
+        if (descriptors) await writeDescriptorReport(fs, result.results, outputDir, options);
       }
 
       if (producedNothing) {
@@ -575,6 +594,29 @@ program
       process.exit(1);
     }
   });
+
+/**
+ * Summarise what the descriptor steps did, and write the report a person settles confirm matches from
+ */
+async function writeDescriptorReport(
+  fs: typeof import('fs/promises'),
+  results: Array<{ descriptors?: import('../descriptors/descriptor-steps.js').DescriptorOutcome }>,
+  outputDir: string,
+  options: { output?: string; dryRun?: boolean }
+): Promise<void> {
+  const report = descriptorReport(results);
+  const { proposed, notBuilt, auto, confirm, absent } = report.summary;
+  log('info', `Descriptors: ${proposed} proposed, ${notBuilt} not built; ${auto} linked, ${confirm} to confirm, ${absent} with no library entry`);
+  for (const r of report.records.filter((x) => x.problems).slice(0, 10)) {
+    log('warn', `  ${r.id}: the answers do not build: ${r.problems!.join('; ')}`);
+  }
+  if (options.dryRun) return;
+  const dir = options.output || outputDir;
+  await fs.mkdir(dir, { recursive: true });
+  const path = `${dir}/${DESCRIPTOR_REPORT_FILENAME}`;
+  await fs.writeFile(path, `${JSON.stringify(report, null, 2)}\n`);
+  log('info', `Wrote the descriptor report, with every match to confirm, to ${path}`);
+}
 
 /**
  * Write output files
