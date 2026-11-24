@@ -1,0 +1,2717 @@
+{
+  "flow": "fxi-owner-questions",
+  "status": "draft",
+  "rules": "1.3",
+  "description": "The owner question flow: closed questions whose answers build an FXI and an FXE. Questions are asked in this order, each only when its `when` condition holds. Options carry the code they write in `value`; `usual` keeps the published default; `unknown` writes `?`.",
+  "facts": {
+    "exercise": "The subject is an exercise (the usual answer to \"subject\").",
+    "equipment": "The subject is a piece of equipment on its own.",
+    "template": "The movement is one of the published movement words.",
+    "motion-from-scratch": "The movement is \"other\", or the owner said the joint movement differs from the movement word.",
+    "posture-has-usual": "The movement word fixes a posture.",
+    "load-has-usual": "The movement word fixes the load (body weight, a cable, a machine, a named implement).",
+    "load-holdable": "The first load is a free implement, a cable, a Smith machine or a landmine.",
+    "hold-has-usual": "The rules give a usual hold point for that implement in this movement.",
+    "load-band": "A band is one of the loads.",
+    "load-machine": "The load is a strength machine.",
+    "load-cardio": "The load is a cardio machine.",
+    "machine-has-usual": "The movement word fixes which machine is used.",
+    "cardio-has-usual": "The movement word fixes which cardio machine is used.",
+    "hold2-has-usual": "The rules give a usual hold point for the second implement in this movement.",
+    "machine-direction-has-usual": "The movement word names a multi-joint machine, so its direction is known.",
+    "contact-has-usual": "The movement word names the machine, or the rules give a default contact for the guided motion.",
+    "eq-contact-has-usual": "The rules give a default contact for the guided motion of the equipment.",
+    "eq2-contact-has-usual": "The rules give a default contact for the guided motion of the second setup.",
+    "single-phase-template": "The movement word has one phase with joint actions, so its kind can change on its own.",
+    "stance-recorded": "The body position at the start is standing, standing bent over, either or unknown; or the feet push a machine's foot plate (leg press).",
+    "word-asks": "The chosen movement word carries closed questions of its own in the movement-word dataset."
+  },
+  "changeOpens": {
+    "motion": ["motion.phases"],
+    "kind": ["motion.kind"],
+    "posture": ["orientation"],
+    "end-posture": ["orientation.end"],
+    "moving-end": ["end"],
+    "footwork": ["footwork"],
+    "support": ["support"],
+    "equipment": ["load"],
+    "hold": ["hold1"],
+    "count": ["count1"],
+    "extra": ["imp2"],
+    "machine": ["mac.motion","erg.type"],
+    "sides": ["symmetry"],
+    "hand": ["grip.hand"],
+    "width": ["grip.width"],
+    "stance": ["stance"],
+    "depth": ["range.depth"],
+    "start": ["range.start"],
+    "held": ["held"],
+    "line": ["line"],
+    "accessory": ["accessory"]
+  },
+  "maxPhases": 5,
+  "questions": [
+    {
+      "id": "subject",
+      "layer": "FXI or FXE",
+      "select": "one",
+      "text": "Are you describing an exercise, or a piece of equipment on its own?",
+      "help": "An exercise gets an FXI and the FXE of its main equipment. Equipment on its own gets a registry FXE.",
+      "usual": "An exercise.",
+      "options": [{"id":"usual","label":"An exercise (the usual case)","exclusive":true},{"id":"equipment","label":"A piece of equipment on its own"}]
+    },
+    {
+      "id": "movement",
+      "layer": "FXI m, and the defaults of every other layer",
+      "select": "one",
+      "when": {"fact":"exercise"},
+      "text": "Which movement is it?",
+      "help": "Pick the movement word that matches the exercise as you would name it with nothing added. Variations come next. Pick \"other\" only when no word fits. The movement words themselves are not part of the notation: the encoder loads them from a movement-word dataset.",
+      "usual": null,
+      "options": [
+        {"id":"other","label":"Something else: describe the joint movement step by step"},
+        {"id":"unknown","label":"I do not know how it is done","value":"?","exclusive":true}
+      ],
+      "fromDataset": "movement-words"
+    },
+    {
+      "id": "word.*",
+      "fromDataset": "movement-words",
+      "layer": "FXI layers the movement word fixes",
+      "select": "one",
+      "when": {"all":[{"fact":"exercise"},{"fact":"word-asks"}]},
+      "text": "The movement word's own closed questions, if it has any.",
+      "help": "Some movement words carry one or two closed questions of their own (is the knee straight or bent; which limbs lift). Each option patches the layers the word fixes. The questions, their options and their patches come with the movement-word dataset.",
+      "usual": "The option the movement word means when nothing else is said, where the dataset gives one.",
+      "options": []
+    },
+    {
+      "id": "changes",
+      "layer": "selects which layers differ from their defaults",
+      "select": "many",
+      "when": {"fact":"exercise"},
+      "text": "What, if anything, is different from the usual way of doing this movement?",
+      "help": "The usual way is what the movement word means with nothing added: \"squat\" is both feet, no held posture, full range. Pick every way your exercise, as you actually run it, differs, whether or not its name says so. Each pick opens one question. For \"other\" or \"unknown\" movements, body position, equipment and sides are asked anyway.",
+      "importHelp": "Import mode: body differences (motion, position, footwork, support, equipment) may come from the description; sides, grip, stance, range, held posture and line of pull come only from the name, the alternate name and the fields (the source rule).",
+      "usual": "Nothing differs.",
+      "options": [
+        {"id":"usual","label":"Nothing: it is done the usual way for this movement","exclusive":true},
+        {"id":"motion","label":"The joint movement itself (rebuild it joint by joint)"},
+        {"id":"kind","label":"The kind of motion: explosive with flight, continuous, a hold, a static or dynamic stretch"},
+        {"id":"posture","label":"The body position (standing, seated, lying, kneeling, hanging)"},
+        {"id":"end-posture","label":"The rep ends in a different body position from its start (get-up)"},
+        {"id":"moving-end","label":"Which end of the body moves (trunk or both ends, as in a sit-up or V-up)"},
+        {"id":"footwork","label":"The footwork: stepping, split stance, travelling"},
+        {"id":"support","label":"What the body rests on, beyond the floor"},
+        {"id":"equipment","label":"The equipment that loads the muscles"},
+        {"id":"hold","label":"Where the implement is held"},
+        {"id":"count","label":"How many implements"},
+        {"id":"extra","label":"A second implement"},
+        {"id":"machine","label":"Which machine (strength or cardio)"},
+        {"id":"sides","label":"How the sides work: one side then the other, alternating, reciprocal"},
+        {"id":"hand","label":"Hand orientation: overhand, underhand, neutral, mixed, or a turn during the rep"},
+        {"id":"width","label":"Grip width"},
+        {"id":"stance","label":"Stance width"},
+        {"id":"depth","label":"Range: partial, deeper than usual, or from a deficit"},
+        {"id":"start","label":"Where each rep starts: the floor, the hang, pins or blocks"},
+        {"id":"held","label":"A held posture of limbs that do not work: hands behind the head, arms crossed, free leg forward"},
+        {"id":"line","label":"The line of pull: cable or band anchored high or low, from the side, or the load passing behind the head"},
+        {"id":"accessory","label":"An accessory that helps without loading: a strap, towel or rope pulling a limb, or a partner"}
+      ]
+    },
+    {
+      "id": "motion.kind",
+      "layer": "FXI m (prefix)",
+      "select": "one",
+      "when": {"all":[{"fact":"exercise"},{"fact":"template"},{"not":{"fact":"motion-from-scratch"}},{"q":"changes","has":"kind"}]},
+      "text": "What kind of motion is it?",
+      "help": "Only for movement words with one phase. Changing the kind keeps the joints the movement word gives.",
+      "usual": "The kind the movement word gives.",
+      "options": [
+        {"id":"usual","label":"As the movement word says (the usual way)","exclusive":true},
+        {
+          "id": "normal",
+          "label": "A normal moving rep: the joints move through range against the load",
+          "value": "",
+          "when": {"fact":"single-phase-template"},
+          "whenNot": "the movement word has several phases or no joint actions to change; pick \"the joint movement itself\" in changes instead"
+        },
+        {
+          "id": "ballistic",
+          "label": "Ends in flight or release: the body leaves the ground or the implement leaves the hands (jump, hop, throw, slam, clap)",
+          "value": "^",
+          "when": {"fact":"single-phase-template"},
+          "whenNot": "the movement word has several phases or no joint actions to change; pick \"the joint movement itself\" in changes instead"
+        },
+        {
+          "id": "cyclic",
+          "label": "Continuous cycles with no rep boundary, counted by time or distance (running, rowing, circles)",
+          "value": "~",
+          "when": {"fact":"single-phase-template"},
+          "whenNot": "the movement word has several phases or no joint actions to change; pick \"the joint movement itself\" in changes instead"
+        },
+        {
+          "id": "hold",
+          "label": "Held still under effort for the whole set (plank, wall sit); the joints answer is what the muscles push toward",
+          "value": "=",
+          "when": {"fact":"single-phase-template"},
+          "whenNot": "the movement word has several phases or no joint actions to change; pick \"the joint movement itself\" in changes instead"
+        },
+        {
+          "id": "static-stretch",
+          "label": "A static stretch: joints taken to end range and held",
+          "value": "%",
+          "when": {"fact":"single-phase-template"},
+          "whenNot": "the movement word has several phases or no joint actions to change; pick \"the joint movement itself\" in changes instead"
+        },
+        {
+          "id": "dynamic-stretch",
+          "label": "A dynamic stretch: taken to end range and released, again and again (leg swings, pass-throughs)",
+          "value": "&",
+          "when": {"fact":"single-phase-template"},
+          "whenNot": "the movement word has several phases or no joint actions to change; pick \"the joint movement itself\" in changes instead"
+        }
+      ]
+    },
+    {
+      "id": "motion.phases",
+      "layer": "FXI m (phases \">\")",
+      "select": "one",
+      "when": {"all":[{"fact":"exercise"},{"fact":"motion-from-scratch"}]},
+      "text": "How many separate movements does one rep have?",
+      "help": "Ask one closed question for each pair of movements: does the second start before the first ends? Yes: one phase (a thruster: the press starts while you still rise). No: two phases (squat, stand, then press; a push-up then a shoulder-blade push). Never count the lowering or return.",
+      "importHelp": "Import mode, text silent: two movement words in one name are two phases in name order, unless the name is a one-phase word (thruster).",
+      "usual": null,
+      "options": [
+        {"id":"1","label":"One"},
+        {"id":"2","label":"Two"},
+        {"id":"3","label":"Three"},
+        {"id":"4","label":"Four"},
+        {"id":"5","label":"Five"},
+        {"id":"unknown","label":"I don't know","value":"?","exclusive":true}
+      ]
+    },
+    {
+      "id": "p1.kind",
+      "layer": "FXI m (prefix)",
+      "select": "one",
+      "when": {"all":[{"fact":"motion-from-scratch"},{"q":"motion.phases","atLeast":1}]},
+      "text": "What kind of movement is phase 1?",
+      "help": "Pick how the joints move. \"Explosive\" or \"fast\" alone is a normal rep: ballistic needs flight or release.",
+      "usual": "A normal moving rep.",
+      "options": [
+        {"id":"usual","label":"A normal moving rep (the usual way)","exclusive":true},
+        {
+          "id": "ballistic",
+          "label": "Ends in flight or release: the body leaves the ground or the implement leaves the hands (jump, hop, throw, slam, clap)",
+          "value": "^"
+        },
+        {"id":"cyclic","label":"Continuous cycles with no rep boundary, counted by time or distance (running, rowing, circles)","value":"~"},
+        {
+          "id": "hold",
+          "label": "Held still under effort for the whole set (plank, wall sit); the joints answer is what the muscles push toward",
+          "value": "="
+        },
+        {"id":"balance","label":"A balance hold with no direction (single-leg stand)","value":"=0"},
+        {"id":"static-stretch","label":"A static stretch: joints taken to end range and held","value":"%"},
+        {
+          "id": "dynamic-stretch",
+          "label": "A dynamic stretch: taken to end range and released, again and again (leg swings, pass-throughs)",
+          "value": "&"
+        },
+        {"id":"unknown","label":"I don't know","value":"?","exclusive":true}
+      ],
+      "repeatsPerPhase": true
+    },
+    {
+      "id": "p1.joints",
+      "layer": "FXI m (joints)",
+      "select": "many",
+      "when": {
+        "all": [{"all":[{"fact":"motion-from-scratch"},{"q":"motion.phases","atLeast":1}]},{"not":{"q":"p1.kind","is":["balance","unknown"]}}]
+      },
+      "text": "Which joints move in phase 1?",
+      "help": "Count a joint only when the working muscles move it through a clear range (about 30° or more) as part of what the exercise trains. Never count a joint held still on purpose: the knee in a Romanian deadlift or hip thrust, the elbow in a fly or lateral raise, the spine unless bending or twisting the trunk is the exercise, the ankle unless the exercise rises onto the toes or pushes off.",
+      "usual": null,
+      "options": [
+        {"id":"nk","label":"Neck"},
+        {"id":"sp","label":"Trunk (spine)"},
+        {"id":"sc","label":"Shoulder blades, moving on their own"},
+        {"id":"sh","label":"Shoulder (judge by the path of the hands relative to the trunk)"},
+        {"id":"el","label":"Elbow"},
+        {"id":"fa","label":"Forearm turning against resistance"},
+        {"id":"wr","label":"Wrist"},
+        {"id":"hip","label":"Hip"},
+        {"id":"kn","label":"Knee"},
+        {"id":"ank","label":"Ankle"},
+        {"id":"unknown","label":"Some joints move, I don't know which","value":"?","exclusive":true}
+      ],
+      "repeatsPerPhase": true
+    },
+    {
+      "id": "p1.nk",
+      "layer": "FXI m (joint actions)",
+      "select": "many",
+      "when": {
+        "all": [
+          {
+            "all": [{"all":[{"fact":"motion-from-scratch"},{"q":"motion.phases","atLeast":1}]},{"not":{"q":"p1.kind","is":["balance","unknown"]}}]
+          },
+          {"q":"p1.joints","has":"nk"}
+        ]
+      },
+      "text": "Phase 1: which way does the neck move?",
+      "help": "For a moving rep, answer for the working direction: the way the joint moves while the working muscles shorten against the load. Never the lowering or the return. For a hold, answer what the muscles push toward. For a stretch, the direction the joint is taken.",
+      "usual": null,
+      "options": [
+        {"id":"flex","label":"Chin toward the chest","value":"nk.flex"},
+        {"id":"ext","label":"Head tips back","value":"nk.ext"},
+        {"id":"lflex","label":"Ear toward the shoulder","value":"nk.lflex"},
+        {"id":"rot","label":"Head turns","value":"nk.rot"},
+        {"id":"circ","label":"Circles","value":"nk.circ"},
+        {"id":"unknown","label":"It moves, direction not known","value":"?","exclusive":true}
+      ],
+      "repeatsPerPhase": true
+    },
+    {
+      "id": "p1.sp",
+      "layer": "FXI m (joint actions)",
+      "select": "many",
+      "when": {
+        "all": [
+          {
+            "all": [{"all":[{"fact":"motion-from-scratch"},{"q":"motion.phases","atLeast":1}]},{"not":{"q":"p1.kind","is":["balance","unknown"]}}]
+          },
+          {"q":"p1.joints","has":"sp"}
+        ]
+      },
+      "text": "Phase 1: which way does the trunk move?",
+      "help": "For a moving rep, answer for the working direction: the way the joint moves while the working muscles shorten against the load. Never the lowering or the return. For a hold, answer what the muscles push toward. For a stretch, the direction the joint is taken.",
+      "usual": null,
+      "options": [
+        {"id":"flex","label":"Curls forward, ribs toward the pelvis (crunch)","value":"sp.flex"},
+        {"id":"ext","label":"Straightens or arches back (back extension)","value":"sp.ext"},
+        {"id":"lflex","label":"Bends sideways (side bend)","value":"sp.lflex"},
+        {"id":"rot","label":"Twists, shoulders against the hips (woodchop)","value":"sp.rot"},
+        {"id":"circ","label":"Circles","value":"sp.circ"},
+        {"id":"unknown","label":"It moves, direction not known","value":"?","exclusive":true}
+      ],
+      "repeatsPerPhase": true
+    },
+    {
+      "id": "p1.sc",
+      "layer": "FXI m (joint actions)",
+      "select": "many",
+      "when": {
+        "all": [
+          {
+            "all": [{"all":[{"fact":"motion-from-scratch"},{"q":"motion.phases","atLeast":1}]},{"not":{"q":"p1.kind","is":["balance","unknown"]}}]
+          },
+          {"q":"p1.joints","has":"sc"}
+        ]
+      },
+      "text": "Phase 1: which way does the shoulder blades, moving on their own move?",
+      "help": "For a moving rep, answer for the working direction: the way the joint moves while the working muscles shorten against the load. Never the lowering or the return. For a hold, answer what the muscles push toward. For a stretch, the direction the joint is taken.",
+      "usual": null,
+      "options": [
+        {"id":"elev","label":"Shrug up","value":"sc.elev"},
+        {"id":"dep","label":"Pulled down","value":"sc.dep"},
+        {"id":"pro","label":"Spread apart around the ribs (scapular push-up)","value":"sc.pro"},
+        {"id":"ret","label":"Squeezed together","value":"sc.ret"},
+        {"id":"unknown","label":"It moves, direction not known","value":"?","exclusive":true}
+      ],
+      "repeatsPerPhase": true
+    },
+    {
+      "id": "p1.sh",
+      "layer": "FXI m (joint actions)",
+      "select": "many",
+      "when": {
+        "all": [
+          {
+            "all": [{"all":[{"fact":"motion-from-scratch"},{"q":"motion.phases","atLeast":1}]},{"not":{"q":"p1.kind","is":["balance","unknown"]}}]
+          },
+          {"q":"p1.joints","has":"sh"}
+        ]
+      },
+      "text": "Phase 1: which way does the shoulder move?",
+      "help": "For a moving rep, answer for the working direction: the way the joint moves while the working muscles shorten against the load. Never the lowering or the return. For a hold, answer what the muscles push toward. For a stretch, the direction the joint is taken.",
+      "usual": null,
+      "options": [
+        {
+          "id": "away-square",
+          "label": "Away from the chest, square to the trunk; or sweeping together in front at chest height (bench press, push-up, chest press, fly)",
+          "value": "sh.hadd"
+        },
+        {
+          "id": "away-headward",
+          "label": "Away from the chest toward the head end (incline press, feet-up push-up, incline fly)",
+          "value": "sh.flex+sh.hadd"
+        },
+        {"id":"up-overhead","label":"Forward and up, or up past the head (front raise, overhead press, pike push-up)","value":"sh.flex"},
+        {
+          "id": "away-footward",
+          "label": "Away from the chest toward the feet end (decline press, hands-up push-up, high-to-low fly)",
+          "value": "sh.ext+sh.hadd"
+        },
+        {"id":"down-along","label":"Down along the trunk toward the feet (dip, straight-arm press-down)","value":"sh.ext"},
+        {"id":"row-close","label":"Toward the trunk from in front, elbows close (row)","value":"sh.ext"},
+        {
+          "id": "row-wide",
+          "label": "Toward the trunk from in front, elbows wide at shoulder height (rear-delt row, face pull)",
+          "value": "sh.habd"
+        },
+        {"id":"apart","label":"Apart sideways at chest height, arms nearly straight (reverse fly, pull-apart)","value":"sh.habd"},
+        {
+          "id": "pull-front",
+          "label": "Down from overhead in front of the face (chin-up; any pull-up or pulldown with an underhand, neutral or close grip; straight-arm pulldown)",
+          "value": "sh.ext"
+        },
+        {
+          "id": "pull-side",
+          "label": "Down from overhead out at the sides (pull-up or pulldown with an overhand grip at medium or wide width)",
+          "value": "sh.add"
+        },
+        {"id":"up-side","label":"Up out to the side (lateral raise, upright row)","value":"sh.abd"},
+        {"id":"rot-in","label":"Rotates in: forearm turns toward the belly, elbow bent","value":"sh.ir"},
+        {"id":"rot-out","label":"Rotates out: forearm turns away, elbow bent","value":"sh.er"},
+        {"id":"circ","label":"Circles","value":"sh.circ"},
+        {"id":"unknown","label":"It moves, direction not known","value":"?","exclusive":true}
+      ],
+      "repeatsPerPhase": true
+    },
+    {
+      "id": "p1.el",
+      "layer": "FXI m (joint actions)",
+      "select": "many",
+      "when": {
+        "all": [
+          {
+            "all": [{"all":[{"fact":"motion-from-scratch"},{"q":"motion.phases","atLeast":1}]},{"not":{"q":"p1.kind","is":["balance","unknown"]}}]
+          },
+          {"q":"p1.joints","has":"el"}
+        ]
+      },
+      "text": "Phase 1: which way does the elbow move?",
+      "help": "For a moving rep, answer for the working direction: the way the joint moves while the working muscles shorten against the load. Never the lowering or the return. For a hold, answer what the muscles push toward. For a stretch, the direction the joint is taken.",
+      "usual": null,
+      "options": [
+        {"id":"flex","label":"Bends (curl)","value":"el.flex"},
+        {"id":"ext","label":"Straightens (press, triceps extension)","value":"el.ext"},
+        {"id":"unknown","label":"It moves, direction not known","value":"?","exclusive":true}
+      ],
+      "repeatsPerPhase": true
+    },
+    {
+      "id": "p1.fa",
+      "layer": "FXI m (joint actions)",
+      "select": "many",
+      "when": {
+        "all": [
+          {
+            "all": [{"all":[{"fact":"motion-from-scratch"},{"q":"motion.phases","atLeast":1}]},{"not":{"q":"p1.kind","is":["balance","unknown"]}}]
+          },
+          {"q":"p1.joints","has":"fa"}
+        ]
+      },
+      "text": "Phase 1: which way does the forearm turning against resistance move?",
+      "help": "For a moving rep, answer for the working direction: the way the joint moves while the working muscles shorten against the load. Never the lowering or the return. For a hold, answer what the muscles push toward. For a stretch, the direction the joint is taken.",
+      "usual": null,
+      "options": [
+        {"id":"pron","label":"Palm turns down","value":"fa.pron"},
+        {"id":"sup","label":"Palm turns up","value":"fa.sup"},
+        {"id":"unknown","label":"It moves, direction not known","value":"?","exclusive":true}
+      ],
+      "repeatsPerPhase": true
+    },
+    {
+      "id": "p1.wr",
+      "layer": "FXI m (joint actions)",
+      "select": "many",
+      "when": {
+        "all": [
+          {
+            "all": [{"all":[{"fact":"motion-from-scratch"},{"q":"motion.phases","atLeast":1}]},{"not":{"q":"p1.kind","is":["balance","unknown"]}}]
+          },
+          {"q":"p1.joints","has":"wr"}
+        ]
+      },
+      "text": "Phase 1: which way does the wrist move?",
+      "help": "For a moving rep, answer for the working direction: the way the joint moves while the working muscles shorten against the load. Never the lowering or the return. For a hold, answer what the muscles push toward. For a stretch, the direction the joint is taken.",
+      "usual": null,
+      "options": [
+        {"id":"flex","label":"Palm toward the forearm (wrist curl)","value":"wr.flex"},
+        {"id":"ext","label":"Back of the hand toward the forearm","value":"wr.ext"},
+        {"id":"rdev","label":"Thumb side toward the forearm","value":"wr.rdev"},
+        {"id":"udev","label":"Little-finger side toward the forearm","value":"wr.udev"},
+        {"id":"circ","label":"Circles","value":"wr.circ"},
+        {"id":"unknown","label":"It moves, direction not known","value":"?","exclusive":true}
+      ],
+      "repeatsPerPhase": true
+    },
+    {
+      "id": "p1.hip",
+      "layer": "FXI m (joint actions)",
+      "select": "many",
+      "when": {
+        "all": [
+          {
+            "all": [{"all":[{"fact":"motion-from-scratch"},{"q":"motion.phases","atLeast":1}]},{"not":{"q":"p1.kind","is":["balance","unknown"]}}]
+          },
+          {"q":"p1.joints","has":"hip"}
+        ]
+      },
+      "text": "Phase 1: which way does the hip move?",
+      "help": "For a moving rep, answer for the working direction: the way the joint moves while the working muscles shorten against the load. Never the lowering or the return. For a hold, answer what the muscles push toward. For a stretch, the direction the joint is taken.",
+      "usual": null,
+      "options": [
+        {"id":"flex","label":"Thigh toward the trunk, or trunk toward the thigh","value":"hip.flex"},
+        {"id":"ext","label":"Thigh away from the trunk (standing up from a squat)","value":"hip.ext"},
+        {"id":"abd","label":"Leg out to the side","value":"hip.abd"},
+        {"id":"add","label":"Leg in toward the other leg","value":"hip.add"},
+        {"id":"ir","label":"Knee turns in","value":"hip.ir"},
+        {"id":"er","label":"Knee turns out","value":"hip.er"},
+        {"id":"circ","label":"Circles","value":"hip.circ"},
+        {"id":"unknown","label":"It moves, direction not known","value":"?","exclusive":true}
+      ],
+      "repeatsPerPhase": true
+    },
+    {
+      "id": "p1.kn",
+      "layer": "FXI m (joint actions)",
+      "select": "many",
+      "when": {
+        "all": [
+          {
+            "all": [{"all":[{"fact":"motion-from-scratch"},{"q":"motion.phases","atLeast":1}]},{"not":{"q":"p1.kind","is":["balance","unknown"]}}]
+          },
+          {"q":"p1.joints","has":"kn"}
+        ]
+      },
+      "text": "Phase 1: which way does the knee move?",
+      "help": "For a moving rep, answer for the working direction: the way the joint moves while the working muscles shorten against the load. Never the lowering or the return. For a hold, answer what the muscles push toward. For a stretch, the direction the joint is taken.",
+      "usual": null,
+      "options": [
+        {"id":"flex","label":"Bends against resistance (leg curl)","value":"kn.flex"},
+        {"id":"ext","label":"Straightens (standing up from a squat)","value":"kn.ext"},
+        {"id":"unknown","label":"It moves, direction not known","value":"?","exclusive":true}
+      ],
+      "repeatsPerPhase": true
+    },
+    {
+      "id": "p1.ank",
+      "layer": "FXI m (joint actions)",
+      "select": "many",
+      "when": {
+        "all": [
+          {
+            "all": [{"all":[{"fact":"motion-from-scratch"},{"q":"motion.phases","atLeast":1}]},{"not":{"q":"p1.kind","is":["balance","unknown"]}}]
+          },
+          {"q":"p1.joints","has":"ank"}
+        ]
+      },
+      "text": "Phase 1: which way does the ankle move?",
+      "help": "For a moving rep, answer for the working direction: the way the joint moves while the working muscles shorten against the load. Never the lowering or the return. For a hold, answer what the muscles push toward. For a stretch, the direction the joint is taken.",
+      "usual": null,
+      "options": [
+        {"id":"pf","label":"Rises onto the toes or pushes off","value":"ank.pf"},
+        {"id":"df","label":"Toes pulled toward the shin","value":"ank.df"},
+        {"id":"inv","label":"Sole turns in","value":"ank.inv"},
+        {"id":"ev","label":"Sole turns out","value":"ank.ev"},
+        {"id":"circ","label":"Circles","value":"ank.circ"},
+        {"id":"unknown","label":"It moves, direction not known","value":"?","exclusive":true}
+      ],
+      "repeatsPerPhase": true
+    },
+    {
+      "id": "p1.short",
+      "layer": "FXI m (short drive \"-\")",
+      "select": "many",
+      "when": {"all":[{"all":[{"fact":"motion-from-scratch"},{"q":"motion.phases","atLeast":1}]},{"q":"p1.kind","is":"usual"}]},
+      "text": "In phase 1, does any joint move through only a short range on purpose?",
+      "help": "Only the dip-and-drive of a push press or jerk, or the short stand-up after a power receive. Partial range for the whole exercise is a separate question.",
+      "usual": "No: every joint moves through its full range.",
+      "options": [
+        {"id":"usual","label":"No (the usual way)","exclusive":true},
+        {"id":"nk","label":"Neck","when":{"q":"p1.joints","has":"nk"},"whenNot":"that joint does not move in phase 1"},
+        {"id":"sp","label":"Trunk (spine)","when":{"q":"p1.joints","has":"sp"},"whenNot":"that joint does not move in phase 1"},
+        {
+          "id": "sc",
+          "label": "Shoulder blades, moving on their own",
+          "when": {"q":"p1.joints","has":"sc"},
+          "whenNot": "that joint does not move in phase 1"
+        },
+        {
+          "id": "sh",
+          "label": "Shoulder (judge by the path of the hands relative to the trunk)",
+          "when": {"q":"p1.joints","has":"sh"},
+          "whenNot": "that joint does not move in phase 1"
+        },
+        {"id":"el","label":"Elbow","when":{"q":"p1.joints","has":"el"},"whenNot":"that joint does not move in phase 1"},
+        {
+          "id": "fa",
+          "label": "Forearm turning against resistance",
+          "when": {"q":"p1.joints","has":"fa"},
+          "whenNot": "that joint does not move in phase 1"
+        },
+        {"id":"wr","label":"Wrist","when":{"q":"p1.joints","has":"wr"},"whenNot":"that joint does not move in phase 1"},
+        {"id":"hip","label":"Hip","when":{"q":"p1.joints","has":"hip"},"whenNot":"that joint does not move in phase 1"},
+        {"id":"kn","label":"Knee","when":{"q":"p1.joints","has":"kn"},"whenNot":"that joint does not move in phase 1"},
+        {"id":"ank","label":"Ankle","when":{"q":"p1.joints","has":"ank"},"whenNot":"that joint does not move in phase 1"}
+      ],
+      "repeatsPerPhase": true
+    },
+    {
+      "id": "p1.also",
+      "layer": "FXI m (simultaneous parts \"|\")",
+      "select": "one",
+      "when": {"all":[{"all":[{"fact":"motion-from-scratch"},{"q":"motion.phases","atLeast":1}]},{"not":{"q":"p1.kind","is":"unknown"}}]},
+      "text": "In phase 1, does another part of the body do something of a different kind at the same time, or move the opposite way?",
+      "help": "Example: the arms hold the sled handles still while the legs walk, or the trunk holds a plank while a leg lifts. Also answer yes when two limbs are taken in opposite directions at once (runner's stretch: the back hip into extension, the front hip into flexion). Two limbs doing the same thing are one part.",
+      "usual": "No.",
+      "options": [{"id":"usual","label":"No (the usual way)","exclusive":true},{"id":"yes","label":"Yes"}],
+      "repeatsPerPhase": true
+    },
+    {
+      "id": "p1b.kind",
+      "layer": "FXI m (prefix)",
+      "select": "one",
+      "when": {"all":[{"all":[{"fact":"motion-from-scratch"},{"q":"motion.phases","atLeast":1}]},{"q":"p1.also","is":"yes"}]},
+      "text": "What kind of movement is the second part of phase 1?",
+      "help": "Pick how the joints move. \"Explosive\" or \"fast\" alone is a normal rep: ballistic needs flight or release.",
+      "usual": "A normal moving rep.",
+      "options": [
+        {"id":"usual","label":"A normal moving rep (the usual way)","exclusive":true},
+        {
+          "id": "ballistic",
+          "label": "Ends in flight or release: the body leaves the ground or the implement leaves the hands (jump, hop, throw, slam, clap)",
+          "value": "^"
+        },
+        {"id":"cyclic","label":"Continuous cycles with no rep boundary, counted by time or distance (running, rowing, circles)","value":"~"},
+        {
+          "id": "hold",
+          "label": "Held still under effort for the whole set (plank, wall sit); the joints answer is what the muscles push toward",
+          "value": "="
+        },
+        {"id":"balance","label":"A balance hold with no direction (single-leg stand)","value":"=0"},
+        {"id":"static-stretch","label":"A static stretch: joints taken to end range and held","value":"%"},
+        {
+          "id": "dynamic-stretch",
+          "label": "A dynamic stretch: taken to end range and released, again and again (leg swings, pass-throughs)",
+          "value": "&"
+        },
+        {"id":"unknown","label":"I don't know","value":"?","exclusive":true}
+      ],
+      "repeatsPerPhase": true
+    },
+    {
+      "id": "p1b.joints",
+      "layer": "FXI m (joints)",
+      "select": "many",
+      "when": {
+        "all": [
+          {"all":[{"all":[{"fact":"motion-from-scratch"},{"q":"motion.phases","atLeast":1}]},{"q":"p1.also","is":"yes"}]},
+          {"not":{"q":"p1b.kind","is":["balance","unknown"]}}
+        ]
+      },
+      "text": "Which joints move in the second part of phase 1?",
+      "help": "Count a joint only when the working muscles move it through a clear range (about 30° or more) as part of what the exercise trains. Never count a joint held still on purpose: the knee in a Romanian deadlift or hip thrust, the elbow in a fly or lateral raise, the spine unless bending or twisting the trunk is the exercise, the ankle unless the exercise rises onto the toes or pushes off.",
+      "usual": null,
+      "options": [
+        {"id":"nk","label":"Neck"},
+        {"id":"sp","label":"Trunk (spine)"},
+        {"id":"sc","label":"Shoulder blades, moving on their own"},
+        {"id":"sh","label":"Shoulder (judge by the path of the hands relative to the trunk)"},
+        {"id":"el","label":"Elbow"},
+        {"id":"fa","label":"Forearm turning against resistance"},
+        {"id":"wr","label":"Wrist"},
+        {"id":"hip","label":"Hip"},
+        {"id":"kn","label":"Knee"},
+        {"id":"ank","label":"Ankle"},
+        {"id":"unknown","label":"Some joints move, I don't know which","value":"?","exclusive":true}
+      ],
+      "repeatsPerPhase": true
+    },
+    {
+      "id": "p1b.nk",
+      "layer": "FXI m (joint actions)",
+      "select": "many",
+      "when": {
+        "all": [
+          {
+            "all": [
+              {"all":[{"all":[{"fact":"motion-from-scratch"},{"q":"motion.phases","atLeast":1}]},{"q":"p1.also","is":"yes"}]},
+              {"not":{"q":"p1b.kind","is":["balance","unknown"]}}
+            ]
+          },
+          {"q":"p1b.joints","has":"nk"}
+        ]
+      },
+      "text": "The second part of phase 1: which way does the neck move?",
+      "help": "For a moving rep, answer for the working direction: the way the joint moves while the working muscles shorten against the load. Never the lowering or the return. For a hold, answer what the muscles push toward. For a stretch, the direction the joint is taken.",
+      "usual": null,
+      "options": [
+        {"id":"flex","label":"Chin toward the chest","value":"nk.flex"},
+        {"id":"ext","label":"Head tips back","value":"nk.ext"},
+        {"id":"lflex","label":"Ear toward the shoulder","value":"nk.lflex"},
+        {"id":"rot","label":"Head turns","value":"nk.rot"},
+        {"id":"circ","label":"Circles","value":"nk.circ"},
+        {"id":"unknown","label":"It moves, direction not known","value":"?","exclusive":true}
+      ],
+      "repeatsPerPhase": true
+    },
+    {
+      "id": "p1b.sp",
+      "layer": "FXI m (joint actions)",
+      "select": "many",
+      "when": {
+        "all": [
+          {
+            "all": [
+              {"all":[{"all":[{"fact":"motion-from-scratch"},{"q":"motion.phases","atLeast":1}]},{"q":"p1.also","is":"yes"}]},
+              {"not":{"q":"p1b.kind","is":["balance","unknown"]}}
+            ]
+          },
+          {"q":"p1b.joints","has":"sp"}
+        ]
+      },
+      "text": "The second part of phase 1: which way does the trunk move?",
+      "help": "For a moving rep, answer for the working direction: the way the joint moves while the working muscles shorten against the load. Never the lowering or the return. For a hold, answer what the muscles push toward. For a stretch, the direction the joint is taken.",
+      "usual": null,
+      "options": [
+        {"id":"flex","label":"Curls forward, ribs toward the pelvis (crunch)","value":"sp.flex"},
+        {"id":"ext","label":"Straightens or arches back (back extension)","value":"sp.ext"},
+        {"id":"lflex","label":"Bends sideways (side bend)","value":"sp.lflex"},
+        {"id":"rot","label":"Twists, shoulders against the hips (woodchop)","value":"sp.rot"},
+        {"id":"circ","label":"Circles","value":"sp.circ"},
+        {"id":"unknown","label":"It moves, direction not known","value":"?","exclusive":true}
+      ],
+      "repeatsPerPhase": true
+    },
+    {
+      "id": "p1b.sc",
+      "layer": "FXI m (joint actions)",
+      "select": "many",
+      "when": {
+        "all": [
+          {
+            "all": [
+              {"all":[{"all":[{"fact":"motion-from-scratch"},{"q":"motion.phases","atLeast":1}]},{"q":"p1.also","is":"yes"}]},
+              {"not":{"q":"p1b.kind","is":["balance","unknown"]}}
+            ]
+          },
+          {"q":"p1b.joints","has":"sc"}
+        ]
+      },
+      "text": "The second part of phase 1: which way does the shoulder blades, moving on their own move?",
+      "help": "For a moving rep, answer for the working direction: the way the joint moves while the working muscles shorten against the load. Never the lowering or the return. For a hold, answer what the muscles push toward. For a stretch, the direction the joint is taken.",
+      "usual": null,
+      "options": [
+        {"id":"elev","label":"Shrug up","value":"sc.elev"},
+        {"id":"dep","label":"Pulled down","value":"sc.dep"},
+        {"id":"pro","label":"Spread apart around the ribs (scapular push-up)","value":"sc.pro"},
+        {"id":"ret","label":"Squeezed together","value":"sc.ret"},
+        {"id":"unknown","label":"It moves, direction not known","value":"?","exclusive":true}
+      ],
+      "repeatsPerPhase": true
+    },
+    {
+      "id": "p1b.sh",
+      "layer": "FXI m (joint actions)",
+      "select": "many",
+      "when": {
+        "all": [
+          {
+            "all": [
+              {"all":[{"all":[{"fact":"motion-from-scratch"},{"q":"motion.phases","atLeast":1}]},{"q":"p1.also","is":"yes"}]},
+              {"not":{"q":"p1b.kind","is":["balance","unknown"]}}
+            ]
+          },
+          {"q":"p1b.joints","has":"sh"}
+        ]
+      },
+      "text": "The second part of phase 1: which way does the shoulder move?",
+      "help": "For a moving rep, answer for the working direction: the way the joint moves while the working muscles shorten against the load. Never the lowering or the return. For a hold, answer what the muscles push toward. For a stretch, the direction the joint is taken.",
+      "usual": null,
+      "options": [
+        {
+          "id": "away-square",
+          "label": "Away from the chest, square to the trunk; or sweeping together in front at chest height (bench press, push-up, chest press, fly)",
+          "value": "sh.hadd"
+        },
+        {
+          "id": "away-headward",
+          "label": "Away from the chest toward the head end (incline press, feet-up push-up, incline fly)",
+          "value": "sh.flex+sh.hadd"
+        },
+        {"id":"up-overhead","label":"Forward and up, or up past the head (front raise, overhead press, pike push-up)","value":"sh.flex"},
+        {
+          "id": "away-footward",
+          "label": "Away from the chest toward the feet end (decline press, hands-up push-up, high-to-low fly)",
+          "value": "sh.ext+sh.hadd"
+        },
+        {"id":"down-along","label":"Down along the trunk toward the feet (dip, straight-arm press-down)","value":"sh.ext"},
+        {"id":"row-close","label":"Toward the trunk from in front, elbows close (row)","value":"sh.ext"},
+        {
+          "id": "row-wide",
+          "label": "Toward the trunk from in front, elbows wide at shoulder height (rear-delt row, face pull)",
+          "value": "sh.habd"
+        },
+        {"id":"apart","label":"Apart sideways at chest height, arms nearly straight (reverse fly, pull-apart)","value":"sh.habd"},
+        {
+          "id": "pull-front",
+          "label": "Down from overhead in front of the face (chin-up; any pull-up or pulldown with an underhand, neutral or close grip; straight-arm pulldown)",
+          "value": "sh.ext"
+        },
+        {
+          "id": "pull-side",
+          "label": "Down from overhead out at the sides (pull-up or pulldown with an overhand grip at medium or wide width)",
+          "value": "sh.add"
+        },
+        {"id":"up-side","label":"Up out to the side (lateral raise, upright row)","value":"sh.abd"},
+        {"id":"rot-in","label":"Rotates in: forearm turns toward the belly, elbow bent","value":"sh.ir"},
+        {"id":"rot-out","label":"Rotates out: forearm turns away, elbow bent","value":"sh.er"},
+        {"id":"circ","label":"Circles","value":"sh.circ"},
+        {"id":"unknown","label":"It moves, direction not known","value":"?","exclusive":true}
+      ],
+      "repeatsPerPhase": true
+    },
+    {
+      "id": "p1b.el",
+      "layer": "FXI m (joint actions)",
+      "select": "many",
+      "when": {
+        "all": [
+          {
+            "all": [
+              {"all":[{"all":[{"fact":"motion-from-scratch"},{"q":"motion.phases","atLeast":1}]},{"q":"p1.also","is":"yes"}]},
+              {"not":{"q":"p1b.kind","is":["balance","unknown"]}}
+            ]
+          },
+          {"q":"p1b.joints","has":"el"}
+        ]
+      },
+      "text": "The second part of phase 1: which way does the elbow move?",
+      "help": "For a moving rep, answer for the working direction: the way the joint moves while the working muscles shorten against the load. Never the lowering or the return. For a hold, answer what the muscles push toward. For a stretch, the direction the joint is taken.",
+      "usual": null,
+      "options": [
+        {"id":"flex","label":"Bends (curl)","value":"el.flex"},
+        {"id":"ext","label":"Straightens (press, triceps extension)","value":"el.ext"},
+        {"id":"unknown","label":"It moves, direction not known","value":"?","exclusive":true}
+      ],
+      "repeatsPerPhase": true
+    },
+    {
+      "id": "p1b.fa",
+      "layer": "FXI m (joint actions)",
+      "select": "many",
+      "when": {
+        "all": [
+          {
+            "all": [
+              {"all":[{"all":[{"fact":"motion-from-scratch"},{"q":"motion.phases","atLeast":1}]},{"q":"p1.also","is":"yes"}]},
+              {"not":{"q":"p1b.kind","is":["balance","unknown"]}}
+            ]
+          },
+          {"q":"p1b.joints","has":"fa"}
+        ]
+      },
+      "text": "The second part of phase 1: which way does the forearm turning against resistance move?",
+      "help": "For a moving rep, answer for the working direction: the way the joint moves while the working muscles shorten against the load. Never the lowering or the return. For a hold, answer what the muscles push toward. For a stretch, the direction the joint is taken.",
+      "usual": null,
+      "options": [
+        {"id":"pron","label":"Palm turns down","value":"fa.pron"},
+        {"id":"sup","label":"Palm turns up","value":"fa.sup"},
+        {"id":"unknown","label":"It moves, direction not known","value":"?","exclusive":true}
+      ],
+      "repeatsPerPhase": true
+    },
+    {
+      "id": "p1b.wr",
+      "layer": "FXI m (joint actions)",
+      "select": "many",
+      "when": {
+        "all": [
+          {
+            "all": [
+              {"all":[{"all":[{"fact":"motion-from-scratch"},{"q":"motion.phases","atLeast":1}]},{"q":"p1.also","is":"yes"}]},
+              {"not":{"q":"p1b.kind","is":["balance","unknown"]}}
+            ]
+          },
+          {"q":"p1b.joints","has":"wr"}
+        ]
+      },
+      "text": "The second part of phase 1: which way does the wrist move?",
+      "help": "For a moving rep, answer for the working direction: the way the joint moves while the working muscles shorten against the load. Never the lowering or the return. For a hold, answer what the muscles push toward. For a stretch, the direction the joint is taken.",
+      "usual": null,
+      "options": [
+        {"id":"flex","label":"Palm toward the forearm (wrist curl)","value":"wr.flex"},
+        {"id":"ext","label":"Back of the hand toward the forearm","value":"wr.ext"},
+        {"id":"rdev","label":"Thumb side toward the forearm","value":"wr.rdev"},
+        {"id":"udev","label":"Little-finger side toward the forearm","value":"wr.udev"},
+        {"id":"circ","label":"Circles","value":"wr.circ"},
+        {"id":"unknown","label":"It moves, direction not known","value":"?","exclusive":true}
+      ],
+      "repeatsPerPhase": true
+    },
+    {
+      "id": "p1b.hip",
+      "layer": "FXI m (joint actions)",
+      "select": "many",
+      "when": {
+        "all": [
+          {
+            "all": [
+              {"all":[{"all":[{"fact":"motion-from-scratch"},{"q":"motion.phases","atLeast":1}]},{"q":"p1.also","is":"yes"}]},
+              {"not":{"q":"p1b.kind","is":["balance","unknown"]}}
+            ]
+          },
+          {"q":"p1b.joints","has":"hip"}
+        ]
+      },
+      "text": "The second part of phase 1: which way does the hip move?",
+      "help": "For a moving rep, answer for the working direction: the way the joint moves while the working muscles shorten against the load. Never the lowering or the return. For a hold, answer what the muscles push toward. For a stretch, the direction the joint is taken.",
+      "usual": null,
+      "options": [
+        {"id":"flex","label":"Thigh toward the trunk, or trunk toward the thigh","value":"hip.flex"},
+        {"id":"ext","label":"Thigh away from the trunk (standing up from a squat)","value":"hip.ext"},
+        {"id":"abd","label":"Leg out to the side","value":"hip.abd"},
+        {"id":"add","label":"Leg in toward the other leg","value":"hip.add"},
+        {"id":"ir","label":"Knee turns in","value":"hip.ir"},
+        {"id":"er","label":"Knee turns out","value":"hip.er"},
+        {"id":"circ","label":"Circles","value":"hip.circ"},
+        {"id":"unknown","label":"It moves, direction not known","value":"?","exclusive":true}
+      ],
+      "repeatsPerPhase": true
+    },
+    {
+      "id": "p1b.kn",
+      "layer": "FXI m (joint actions)",
+      "select": "many",
+      "when": {
+        "all": [
+          {
+            "all": [
+              {"all":[{"all":[{"fact":"motion-from-scratch"},{"q":"motion.phases","atLeast":1}]},{"q":"p1.also","is":"yes"}]},
+              {"not":{"q":"p1b.kind","is":["balance","unknown"]}}
+            ]
+          },
+          {"q":"p1b.joints","has":"kn"}
+        ]
+      },
+      "text": "The second part of phase 1: which way does the knee move?",
+      "help": "For a moving rep, answer for the working direction: the way the joint moves while the working muscles shorten against the load. Never the lowering or the return. For a hold, answer what the muscles push toward. For a stretch, the direction the joint is taken.",
+      "usual": null,
+      "options": [
+        {"id":"flex","label":"Bends against resistance (leg curl)","value":"kn.flex"},
+        {"id":"ext","label":"Straightens (standing up from a squat)","value":"kn.ext"},
+        {"id":"unknown","label":"It moves, direction not known","value":"?","exclusive":true}
+      ],
+      "repeatsPerPhase": true
+    },
+    {
+      "id": "p1b.ank",
+      "layer": "FXI m (joint actions)",
+      "select": "many",
+      "when": {
+        "all": [
+          {
+            "all": [
+              {"all":[{"all":[{"fact":"motion-from-scratch"},{"q":"motion.phases","atLeast":1}]},{"q":"p1.also","is":"yes"}]},
+              {"not":{"q":"p1b.kind","is":["balance","unknown"]}}
+            ]
+          },
+          {"q":"p1b.joints","has":"ank"}
+        ]
+      },
+      "text": "The second part of phase 1: which way does the ankle move?",
+      "help": "For a moving rep, answer for the working direction: the way the joint moves while the working muscles shorten against the load. Never the lowering or the return. For a hold, answer what the muscles push toward. For a stretch, the direction the joint is taken.",
+      "usual": null,
+      "options": [
+        {"id":"pf","label":"Rises onto the toes or pushes off","value":"ank.pf"},
+        {"id":"df","label":"Toes pulled toward the shin","value":"ank.df"},
+        {"id":"inv","label":"Sole turns in","value":"ank.inv"},
+        {"id":"ev","label":"Sole turns out","value":"ank.ev"},
+        {"id":"circ","label":"Circles","value":"ank.circ"},
+        {"id":"unknown","label":"It moves, direction not known","value":"?","exclusive":true}
+      ],
+      "repeatsPerPhase": true
+    },
+    {
+      "id": "p1b.short",
+      "layer": "FXI m (short drive \"-\")",
+      "select": "many",
+      "when": {
+        "all": [
+          {"all":[{"all":[{"fact":"motion-from-scratch"},{"q":"motion.phases","atLeast":1}]},{"q":"p1.also","is":"yes"}]},
+          {"q":"p1b.kind","is":"usual"}
+        ]
+      },
+      "text": "In the second part of phase 1, does any joint move through only a short range on purpose?",
+      "help": "Only the dip-and-drive of a push press or jerk, or the short stand-up after a power receive. Partial range for the whole exercise is a separate question.",
+      "usual": "No: every joint moves through its full range.",
+      "options": [
+        {"id":"usual","label":"No (the usual way)","exclusive":true},
+        {"id":"nk","label":"Neck","when":{"q":"p1b.joints","has":"nk"},"whenNot":"that joint does not move in the second part of phase 1"},
+        {
+          "id": "sp",
+          "label": "Trunk (spine)",
+          "when": {"q":"p1b.joints","has":"sp"},
+          "whenNot": "that joint does not move in the second part of phase 1"
+        },
+        {
+          "id": "sc",
+          "label": "Shoulder blades, moving on their own",
+          "when": {"q":"p1b.joints","has":"sc"},
+          "whenNot": "that joint does not move in the second part of phase 1"
+        },
+        {
+          "id": "sh",
+          "label": "Shoulder (judge by the path of the hands relative to the trunk)",
+          "when": {"q":"p1b.joints","has":"sh"},
+          "whenNot": "that joint does not move in the second part of phase 1"
+        },
+        {"id":"el","label":"Elbow","when":{"q":"p1b.joints","has":"el"},"whenNot":"that joint does not move in the second part of phase 1"},
+        {
+          "id": "fa",
+          "label": "Forearm turning against resistance",
+          "when": {"q":"p1b.joints","has":"fa"},
+          "whenNot": "that joint does not move in the second part of phase 1"
+        },
+        {"id":"wr","label":"Wrist","when":{"q":"p1b.joints","has":"wr"},"whenNot":"that joint does not move in the second part of phase 1"},
+        {"id":"hip","label":"Hip","when":{"q":"p1b.joints","has":"hip"},"whenNot":"that joint does not move in the second part of phase 1"},
+        {"id":"kn","label":"Knee","when":{"q":"p1b.joints","has":"kn"},"whenNot":"that joint does not move in the second part of phase 1"},
+        {
+          "id": "ank",
+          "label": "Ankle",
+          "when": {"q":"p1b.joints","has":"ank"},
+          "whenNot": "that joint does not move in the second part of phase 1"
+        }
+      ],
+      "repeatsPerPhase": true
+    },
+    {
+      "id": "orientation",
+      "layer": "FXI o",
+      "select": "one",
+      "when": {"all":[{"fact":"exercise"},{"any":[{"not":{"fact":"posture-has-usual"}},{"q":"changes","has":"posture"}]}]},
+      "text": "What is the body position at the start of the rep?",
+      "help": "Flat means within about 15° of horizontal; incline and decline 15–60°. Hinged forward and held there (bent-over row) is \"standing, bent\". On hands and knees, in a plank or a push-up is \"prone\". On a machine, use your body position.",
+      "usual": "The position the movement word fixes.",
+      "options": [
+        {
+          "id": "usual",
+          "label": "The usual position for this movement",
+          "exclusive": true,
+          "when": {"fact":"posture-has-usual"},
+          "whenNot": "no movement word with a fixed position was chosen"
+        },
+        {"id":"standing","label":"On the feet, trunk within about 30° of vertical.","value":"standing"},
+        {
+          "id": "standing.bent",
+          "label": "On the feet, trunk hinged forward more than about 30° and held there (bent-over row).",
+          "value": "standing.bent"
+        },
+        {"id":"seated","label":"Sitting, trunk more than 60° from horizontal.","value":"seated"},
+        {
+          "id": "seated.bent",
+          "label": "Sitting, trunk hinged forward over the thighs and held there (seated bent-over raise).",
+          "value": "seated.bent"
+        },
+        {"id":"kneeling","label":"On both knees, trunk upright. On hands and knees is `prone`.","value":"kneeling"},
+        {"id":"kneeling.half","label":"On one knee, the other foot forward.","value":"kneeling.half"},
+        {"id":"supine","label":"Face up, trunk within 15° of horizontal.","value":"supine"},
+        {"id":"supine.incline","label":"Face up, head higher than hips, trunk 15–60° from horizontal.","value":"supine.incline"},
+        {"id":"supine.decline","label":"Face up, head lower than hips, trunk 15–60° from horizontal.","value":"supine.decline"},
+        {"id":"prone","label":"Face down, trunk within 15° of horizontal: lying, plank, push-up, on hands and knees.","value":"prone"},
+        {"id":"prone.incline","label":"Face down, head higher than hips, 15–60° (hands raised).","value":"prone.incline"},
+        {"id":"prone.decline","label":"Face down, head lower than hips, 15–60° (feet raised).","value":"prone.decline"},
+        {
+          "id": "prone.pike",
+          "label": "Face down, hips highest, hands and feet down, trunk more than 60° head-down (pike).",
+          "value": "prone.pike"
+        },
+        {"id":"side-lying","label":"On one side: lying, or a side plank.","value":"side-lying"},
+        {
+          "id": "hanging",
+          "label": "Held up by the hands or arms, feet off the floor: hanging from a bar, propped on dip bars.",
+          "value": "hanging"
+        },
+        {"id":"inverted","label":"Upside down, trunk within 30° of vertical, head lowest: handstand, headstand.","value":"inverted"},
+        {"id":"either","label":"Either way on purpose (\"seated or standing\")","value":"*"},
+        {"id":"unknown","label":"I don't know","value":"?","exclusive":true}
+      ]
+    },
+    {
+      "id": "orientation.end",
+      "layer": "FXI o (start>end)",
+      "select": "one",
+      "when": {"all":[{"fact":"exercise"},{"q":"changes","has":"end-posture"}]},
+      "text": "In what position does the rep end?",
+      "help": "Only when the rep ends somewhere else, like a get-up. A rep that goes down and comes back (burpee) ends where it started.",
+      "usual": "Where it started.",
+      "options": [
+        {"id":"usual","label":"Where it started (the usual way)","exclusive":true},
+        {"id":"standing","label":"On the feet, trunk within about 30° of vertical.","value":"standing"},
+        {
+          "id": "standing.bent",
+          "label": "On the feet, trunk hinged forward more than about 30° and held there (bent-over row).",
+          "value": "standing.bent"
+        },
+        {"id":"seated","label":"Sitting, trunk more than 60° from horizontal.","value":"seated"},
+        {
+          "id": "seated.bent",
+          "label": "Sitting, trunk hinged forward over the thighs and held there (seated bent-over raise).",
+          "value": "seated.bent"
+        },
+        {"id":"kneeling","label":"On both knees, trunk upright. On hands and knees is `prone`.","value":"kneeling"},
+        {"id":"kneeling.half","label":"On one knee, the other foot forward.","value":"kneeling.half"},
+        {"id":"supine","label":"Face up, trunk within 15° of horizontal.","value":"supine"},
+        {"id":"supine.incline","label":"Face up, head higher than hips, trunk 15–60° from horizontal.","value":"supine.incline"},
+        {"id":"supine.decline","label":"Face up, head lower than hips, trunk 15–60° from horizontal.","value":"supine.decline"},
+        {"id":"prone","label":"Face down, trunk within 15° of horizontal: lying, plank, push-up, on hands and knees.","value":"prone"},
+        {"id":"prone.incline","label":"Face down, head higher than hips, 15–60° (hands raised).","value":"prone.incline"},
+        {"id":"prone.decline","label":"Face down, head lower than hips, 15–60° (feet raised).","value":"prone.decline"},
+        {
+          "id": "prone.pike",
+          "label": "Face down, hips highest, hands and feet down, trunk more than 60° head-down (pike).",
+          "value": "prone.pike"
+        },
+        {"id":"side-lying","label":"On one side: lying, or a side plank.","value":"side-lying"},
+        {
+          "id": "hanging",
+          "label": "Held up by the hands or arms, feet off the floor: hanging from a bar, propped on dip bars.",
+          "value": "hanging"
+        },
+        {"id":"inverted","label":"Upside down, trunk within 30° of vertical, head lowest: handstand, headstand.","value":"inverted"},
+        {"id":"unknown","label":"I don't know","value":"?","exclusive":true}
+      ]
+    },
+    {
+      "id": "end",
+      "layer": "FXI k",
+      "select": "one",
+      "when": {"all":[{"fact":"exercise"},{"q":"changes","has":"moving-end"}]},
+      "text": "Which end of the body moves?",
+      "help": "Usually the limbs move. In a sit-up, crunch, bridge or back extension the trunk moves and the legs stay put. In a V-up both ends move toward each other.",
+      "usual": "What the movement word says, else the limbs.",
+      "options": [
+        {"id":"usual","label":"The usual end for this movement","exclusive":true},
+        {"id":"limbs","label":"The limbs move","value":"limbs"},
+        {"id":"trunk","label":"The trunk moves; the legs stay put","value":"trunk"},
+        {"id":"both","label":"Both ends move toward each other","value":"both"},
+        {"id":"unknown","label":"I don't know","value":"?","exclusive":true}
+      ]
+    },
+    {
+      "id": "footwork",
+      "layer": "FXI f",
+      "select": "one",
+      "when": {"all":[{"fact":"exercise"},{"q":"changes","has":"footwork"}]},
+      "text": "What do the feet do?",
+      "help": "A step returns each rep; travel keeps going. \"In place\" or on a cardio machine is planted.",
+      "usual": "What the movement word says, else feet planted level.",
+      "options": [
+        {"id":"usual","label":"The usual footwork for this movement","exclusive":true},
+        {"id":"level","label":"Planted level, side by side","value":"level"},
+        {"id":"split","label":"Planted in a split stance, one foot in front","value":"split"},
+        {"id":"step.fwd","label":"Each rep steps forward and returns","value":"step.fwd"},
+        {"id":"step.back","label":"Each rep steps back and returns","value":"step.back"},
+        {"id":"step.side","label":"Each rep steps to the side and returns","value":"step.side"},
+        {"id":"step.cross","label":"Each rep steps back and across (curtsy) and returns","value":"step.cross"},
+        {"id":"travel.fwd","label":"Travels forward","value":"travel.fwd"},
+        {"id":"travel.back","label":"Travels backward","value":"travel.back"},
+        {"id":"travel.side","label":"Travels sideways","value":"travel.side"},
+        {"id":"level>split","label":"Starts level and lands in a split (split jerk)","value":"level>split"},
+        {"id":"unknown","label":"I don't know","value":"?","exclusive":true}
+      ]
+    },
+    {
+      "id": "support",
+      "layer": "FXI s",
+      "select": "one",
+      "when": {"all":[{"fact":"exercise"},{"q":"changes","has":"support"}]},
+      "text": "What does the body rest on, hang from or brace against?",
+      "help": "Only what bears weight or braces a limb, beyond the floor your position implies. Not a mat, not the seat you sit on, not a machine's own seat or pads, not a hand rail used only for balance.",
+      "usual": "What the movement word says.",
+      "options": [
+        {"id":"usual","label":"The usual support for this movement","exclusive":true},
+        {"id":"none","label":"Only the floor, the way the body position implies"},
+        {"id":"custom","label":"Something else: I will name it"},
+        {"id":"unknown","label":"I don't know","value":"?","exclusive":true}
+      ]
+    },
+    {
+      "id": "sup1.surface",
+      "layer": "FXI s (surface)",
+      "select": "one",
+      "when": {"all":[{"fact":"exercise"},{"q":"support","is":"custom"}]},
+      "text": "What is the support?",
+      "help": "Different surfaces under different body points are separate supports: feet on a ball, hands on the floor.",
+      "usual": null,
+      "options": [
+        {"id":"bb","label":"Barbell.","value":"bb"},
+        {"id":"ez","label":"EZ curl bar.","value":"ez"},
+        {"id":"tb","label":"Trap or hex bar.","value":"tb"},
+        {"id":"axle","label":"Axle bar.","value":"axle"},
+        {"id":"camber","label":"Cambered bar.","value":"camber"},
+        {"id":"db","label":"Dumbbell.","value":"db"},
+        {"id":"kb","label":"Kettlebell.","value":"kb"},
+        {"id":"circus","label":"Circus dumbbell.","value":"circus"},
+        {"id":"mb","label":"Medicine ball.","value":"mb"},
+        {"id":"slam","label":"Slam ball.","value":"slam"},
+        {"id":"bag","label":"Sandbag.","value":"bag"},
+        {"id":"hbag","label":"Heavy bag.","value":"hbag"},
+        {"id":"plate","label":"Weight plate.","value":"plate"},
+        {"id":"chain","label":"Chain.","value":"chain"},
+        {"id":"rope","label":"Battle rope.","value":"rope"},
+        {"id":"jrope","label":"Jump rope.","value":"jrope"},
+        {"id":"band","label":"Any resistance band, tube, superband or miniband.","value":"band"},
+        {"id":"sled","label":"Ground sled or prowler.","value":"sled"},
+        {"id":"tire","label":"Tyre.","value":"tire"},
+        {"id":"hammer","label":"Sledgehammer.","value":"hammer"},
+        {"id":"stone","label":"Atlas stone.","value":"stone"},
+        {"id":"log","label":"Log.","value":"log"},
+        {"id":"keg","label":"Keg.","value":"keg"},
+        {"id":"yoke","label":"Yoke.","value":"yoke"},
+        {"id":"frame","label":"Farmer handles or carry frame (rickshaw).","value":"frame"},
+        {"id":"car","label":"Car.","value":"car"},
+        {"id":"vest","label":"Weight vest.","value":"vest"},
+        {"id":"ankwt","label":"Ankle weight.","value":"ankwt"},
+        {"id":"club","label":"Club or mace.","value":"club"},
+        {"id":"dowel","label":"Dowel, broomstick or PVC pipe: sets the hands, adds no load.","value":"dowel"},
+        {"id":"wheel","label":"Ab wheel.","value":"wheel"},
+        {"id":"wroller","label":"Wrist roller.","value":"wroller"},
+        {"id":"harness","label":"Head harness.","value":"harness"},
+        {"id":"cable","label":"Cable column or crossover station (not a lat pulldown or seated row machine).","value":"cable"},
+        {"id":"smith","label":"Smith machine.","value":"smith"},
+        {"id":"landmine","label":"Landmine, or a barbell end wedged in a corner.","value":"landmine"},
+        {
+          "id": "mach",
+          "label": "Any dedicated strength machine (including lat pulldown and seated cable row machines). The row’s FXE names which.",
+          "value": "mach"
+        },
+        {
+          "id": "erg",
+          "label": "Any cardio machine: treadmill, bike, rower, elliptical, stair machine, ski erg. The row’s FXE names which.",
+          "value": "erg"
+        },
+        {"id":"floor","label":"The floor or a mat.","value":"floor"},
+        {"id":"wall","label":"A wall.","value":"wall"},
+        {"id":"bench","label":"A bench.","value":"bench"},
+        {"id":"box","label":"A box, step or platform.","value":"box"},
+        {"id":"chair","label":"A chair.","value":"chair"},
+        {"id":"block","label":"Lifting blocks.","value":"block"},
+        {"id":"rack","label":"Power rack or squat stand.","value":"rack"},
+        {"id":"ball","label":"Stability ball.","value":"ball"},
+        {"id":"dome","label":"BOSU, side up not stated.","value":"dome"},
+        {"id":"dome.up","label":"BOSU dome side up.","value":"dome.up"},
+        {"id":"dome.down","label":"BOSU flat side up (dome on the floor).","value":"dome.down"},
+        {"id":"board","label":"Balance board.","value":"board"},
+        {"id":"roller","label":"Foam roller.","value":"roller"},
+        {"id":"slider","label":"Slider.","value":"slider"},
+        {"id":"strap","label":"Suspension straps.","value":"strap"},
+        {"id":"ring","label":"Gymnastic rings.","value":"ring"},
+        {"id":"crope","label":"Climbing rope.","value":"crope"},
+        {"id":"bar","label":"Fixed bar: pull-up bar, or a racked bar used as a handhold.","value":"bar"},
+        {"id":"bars","label":"Parallel dip bars.","value":"bars"},
+        {"id":"pbars","label":"Parallettes.","value":"pbars"},
+        {"id":"preacher","label":"Preacher bench pad.","value":"preacher"},
+        {"id":"hyper","label":"Back-extension bench (Roman chair for back or side raises).","value":"hyper"},
+        {"id":"ghd","label":"Glute-ham developer.","value":"ghd"},
+        {"id":"vkr","label":"Captain’s chair / knee-raise station.","value":"vkr"},
+        {"id":"pole","label":"A vertical pole or post gripped by the hands (human flag).","value":"pole"},
+        {"id":"mball","label":"Massage or lacrosse ball.","value":"mball"},
+        {"id":"unknown","label":"Something not named","value":"?","exclusive":true}
+      ]
+    },
+    {
+      "id": "sup1.points",
+      "layer": "FXI s (points)",
+      "select": "many",
+      "when": {"all":[{"fact":"exercise"},{"q":"support","is":"custom"}]},
+      "text": "Which body points bear weight on it?",
+      "help": "Leave out the points your body position already implies (standing implies the feet; lying face up, the back). When the trunk rests on nothing (plank, push-up), list every point.",
+      "usual": "Only the points the body position implies.",
+      "options": [
+        {"id":"usual","label":"Only the points the position implies (the usual way)","exclusive":true},
+        {"id":"hands","label":"The hands, or one hand.","value":"hands"},
+        {"id":"forearms","label":"The forearms, elbows bent (elbow plank).","value":"forearms"},
+        {"id":"elbows","label":"The crook of the elbows (Zercher).","value":"elbows"},
+        {"id":"arms","label":"The upper arms (preacher pad).","value":"arms"},
+        {"id":"shoulders","label":"On the front of the shoulders and collarbones (front rack), or on one shoulder.","value":"shoulders"},
+        {"id":"chest","label":"Against the chest (goblet, bear hug).","value":"chest"},
+        {"id":"back","label":"Across the upper back (back squat).","value":"back"},
+        {"id":"hips","label":"Across the front of the hips (hip thrust).","value":"hips"},
+        {"id":"waist","label":"Hung from a belt at the waist.","value":"waist"},
+        {"id":"seat","label":"The buttocks (sitting down onto a box or bench).","value":"seat"},
+        {"id":"thighs","label":"On or around the thighs.","value":"thighs"},
+        {"id":"knees","label":"At or around the knees.","value":"knees"},
+        {"id":"shins","label":"The shins.","value":"shins"},
+        {"id":"calves","label":"The calves (the back of the lower leg).","value":"calves"},
+        {"id":"ankles","label":"At or just above the ankles (strap, cuff, machine pad on the lower leg).","value":"ankles"},
+        {"id":"feet","label":"The feet, or one foot.","value":"feet"},
+        {"id":"head","label":"The head or forehead.","value":"head"},
+        {"id":"unknown","label":"A point I don't know","value":"?"}
+      ]
+    },
+    {
+      "id": "sup.more",
+      "layer": "FXI s (items)",
+      "select": "one",
+      "when": {"all":[{"fact":"exercise"},{"q":"support","is":"custom"}]},
+      "text": "Is there a second support?",
+      "help": "Example: feet on a ball and hands on the floor.",
+      "usual": "No.",
+      "options": [{"id":"usual","label":"No (the usual way)","exclusive":true},{"id":"yes","label":"Yes"}]
+    },
+    {
+      "id": "sup2.surface",
+      "layer": "FXI s (surface)",
+      "select": "one",
+      "when": {"all":[{"fact":"exercise"},{"q":"support","is":"custom"},{"q":"sup.more","is":"yes"}]},
+      "text": "What is the second support?",
+      "help": "Different surfaces under different body points are separate supports: feet on a ball, hands on the floor.",
+      "usual": null,
+      "options": [
+        {"id":"bb","label":"Barbell.","value":"bb"},
+        {"id":"ez","label":"EZ curl bar.","value":"ez"},
+        {"id":"tb","label":"Trap or hex bar.","value":"tb"},
+        {"id":"axle","label":"Axle bar.","value":"axle"},
+        {"id":"camber","label":"Cambered bar.","value":"camber"},
+        {"id":"db","label":"Dumbbell.","value":"db"},
+        {"id":"kb","label":"Kettlebell.","value":"kb"},
+        {"id":"circus","label":"Circus dumbbell.","value":"circus"},
+        {"id":"mb","label":"Medicine ball.","value":"mb"},
+        {"id":"slam","label":"Slam ball.","value":"slam"},
+        {"id":"bag","label":"Sandbag.","value":"bag"},
+        {"id":"hbag","label":"Heavy bag.","value":"hbag"},
+        {"id":"plate","label":"Weight plate.","value":"plate"},
+        {"id":"chain","label":"Chain.","value":"chain"},
+        {"id":"rope","label":"Battle rope.","value":"rope"},
+        {"id":"jrope","label":"Jump rope.","value":"jrope"},
+        {"id":"band","label":"Any resistance band, tube, superband or miniband.","value":"band"},
+        {"id":"sled","label":"Ground sled or prowler.","value":"sled"},
+        {"id":"tire","label":"Tyre.","value":"tire"},
+        {"id":"hammer","label":"Sledgehammer.","value":"hammer"},
+        {"id":"stone","label":"Atlas stone.","value":"stone"},
+        {"id":"log","label":"Log.","value":"log"},
+        {"id":"keg","label":"Keg.","value":"keg"},
+        {"id":"yoke","label":"Yoke.","value":"yoke"},
+        {"id":"frame","label":"Farmer handles or carry frame (rickshaw).","value":"frame"},
+        {"id":"car","label":"Car.","value":"car"},
+        {"id":"vest","label":"Weight vest.","value":"vest"},
+        {"id":"ankwt","label":"Ankle weight.","value":"ankwt"},
+        {"id":"club","label":"Club or mace.","value":"club"},
+        {"id":"dowel","label":"Dowel, broomstick or PVC pipe: sets the hands, adds no load.","value":"dowel"},
+        {"id":"wheel","label":"Ab wheel.","value":"wheel"},
+        {"id":"wroller","label":"Wrist roller.","value":"wroller"},
+        {"id":"harness","label":"Head harness.","value":"harness"},
+        {"id":"cable","label":"Cable column or crossover station (not a lat pulldown or seated row machine).","value":"cable"},
+        {"id":"smith","label":"Smith machine.","value":"smith"},
+        {"id":"landmine","label":"Landmine, or a barbell end wedged in a corner.","value":"landmine"},
+        {
+          "id": "mach",
+          "label": "Any dedicated strength machine (including lat pulldown and seated cable row machines). The row’s FXE names which.",
+          "value": "mach"
+        },
+        {
+          "id": "erg",
+          "label": "Any cardio machine: treadmill, bike, rower, elliptical, stair machine, ski erg. The row’s FXE names which.",
+          "value": "erg"
+        },
+        {"id":"floor","label":"The floor or a mat.","value":"floor"},
+        {"id":"wall","label":"A wall.","value":"wall"},
+        {"id":"bench","label":"A bench.","value":"bench"},
+        {"id":"box","label":"A box, step or platform.","value":"box"},
+        {"id":"chair","label":"A chair.","value":"chair"},
+        {"id":"block","label":"Lifting blocks.","value":"block"},
+        {"id":"rack","label":"Power rack or squat stand.","value":"rack"},
+        {"id":"ball","label":"Stability ball.","value":"ball"},
+        {"id":"dome","label":"BOSU, side up not stated.","value":"dome"},
+        {"id":"dome.up","label":"BOSU dome side up.","value":"dome.up"},
+        {"id":"dome.down","label":"BOSU flat side up (dome on the floor).","value":"dome.down"},
+        {"id":"board","label":"Balance board.","value":"board"},
+        {"id":"roller","label":"Foam roller.","value":"roller"},
+        {"id":"slider","label":"Slider.","value":"slider"},
+        {"id":"strap","label":"Suspension straps.","value":"strap"},
+        {"id":"ring","label":"Gymnastic rings.","value":"ring"},
+        {"id":"crope","label":"Climbing rope.","value":"crope"},
+        {"id":"bar","label":"Fixed bar: pull-up bar, or a racked bar used as a handhold.","value":"bar"},
+        {"id":"bars","label":"Parallel dip bars.","value":"bars"},
+        {"id":"pbars","label":"Parallettes.","value":"pbars"},
+        {"id":"preacher","label":"Preacher bench pad.","value":"preacher"},
+        {"id":"hyper","label":"Back-extension bench (Roman chair for back or side raises).","value":"hyper"},
+        {"id":"ghd","label":"Glute-ham developer.","value":"ghd"},
+        {"id":"vkr","label":"Captain’s chair / knee-raise station.","value":"vkr"},
+        {"id":"pole","label":"A vertical pole or post gripped by the hands (human flag).","value":"pole"},
+        {"id":"mball","label":"Massage or lacrosse ball.","value":"mball"},
+        {"id":"unknown","label":"Something not named","value":"?","exclusive":true}
+      ]
+    },
+    {
+      "id": "sup2.points",
+      "layer": "FXI s (points)",
+      "select": "many",
+      "when": {"all":[{"fact":"exercise"},{"q":"support","is":"custom"},{"q":"sup.more","is":"yes"}]},
+      "text": "Which body points bear weight on it?",
+      "help": "Leave out the points your body position already implies (standing implies the feet; lying face up, the back). When the trunk rests on nothing (plank, push-up), list every point.",
+      "usual": "Only the points the body position implies.",
+      "options": [
+        {"id":"usual","label":"Only the points the position implies (the usual way)","exclusive":true},
+        {"id":"hands","label":"The hands, or one hand.","value":"hands"},
+        {"id":"forearms","label":"The forearms, elbows bent (elbow plank).","value":"forearms"},
+        {"id":"elbows","label":"The crook of the elbows (Zercher).","value":"elbows"},
+        {"id":"arms","label":"The upper arms (preacher pad).","value":"arms"},
+        {"id":"shoulders","label":"On the front of the shoulders and collarbones (front rack), or on one shoulder.","value":"shoulders"},
+        {"id":"chest","label":"Against the chest (goblet, bear hug).","value":"chest"},
+        {"id":"back","label":"Across the upper back (back squat).","value":"back"},
+        {"id":"hips","label":"Across the front of the hips (hip thrust).","value":"hips"},
+        {"id":"waist","label":"Hung from a belt at the waist.","value":"waist"},
+        {"id":"seat","label":"The buttocks (sitting down onto a box or bench).","value":"seat"},
+        {"id":"thighs","label":"On or around the thighs.","value":"thighs"},
+        {"id":"knees","label":"At or around the knees.","value":"knees"},
+        {"id":"shins","label":"The shins.","value":"shins"},
+        {"id":"calves","label":"The calves (the back of the lower leg).","value":"calves"},
+        {"id":"ankles","label":"At or just above the ankles (strap, cuff, machine pad on the lower leg).","value":"ankles"},
+        {"id":"feet","label":"The feet, or one foot.","value":"feet"},
+        {"id":"head","label":"The head or forehead.","value":"head"},
+        {"id":"unknown","label":"A point I don't know","value":"?"}
+      ]
+    },
+    {
+      "id": "load",
+      "layer": "FXI l, and the row FXE",
+      "select": "one",
+      "when": {"all":[{"fact":"exercise"},{"any":[{"not":{"fact":"load-has-usual"}},{"q":"changes","has":"equipment"}]}]},
+      "text": "What loads the working muscles?",
+      "help": "Not supports: a bench, box or bar you hang from goes under support. A weighted vest or belt is an implement. A lat pulldown and a seated cable row with its own seat are strength machines.",
+      "usual": "The load the movement word names.",
+      "options": [
+        {
+          "id": "usual",
+          "label": "The usual load for this movement",
+          "exclusive": true,
+          "when": {"fact":"load-has-usual"},
+          "whenNot": "the movement word fixes no load"
+        },
+        {"id":"bodyweight","label":"Body weight only","value":"bw"},
+        {"id":"implement","label":"A free implement: barbell, dumbbell, kettlebell, band, ball, plate…"},
+        {"id":"cable","label":"A cable column or crossover","value":"cable"},
+        {"id":"smith","label":"A Smith machine","value":"smith"},
+        {"id":"landmine","label":"A landmine","value":"landmine"},
+        {"id":"machine","label":"A strength machine built for one movement","value":"mach"},
+        {"id":"cardio","label":"A cardio machine","value":"erg"},
+        {"id":"unknown","label":"I don't know","value":"?","exclusive":true}
+      ]
+    },
+    {
+      "id": "imp1",
+      "layer": "FXI l (token) and the row FXE",
+      "select": "one",
+      "when": {"all":[{"fact":"exercise"},{"q":"load","is":"implement"}]},
+      "text": "Which implement?",
+      "help": "The kind of object, not its weight. Any resistance band, tube, superband or miniband is \"band\".",
+      "usual": null,
+      "options": [
+        {"id":"bb","label":"Barbell.","value":"bb"},
+        {"id":"ez","label":"EZ curl bar.","value":"ez"},
+        {"id":"tb","label":"Trap or hex bar.","value":"tb"},
+        {"id":"axle","label":"Axle bar.","value":"axle"},
+        {"id":"camber","label":"Cambered bar.","value":"camber"},
+        {"id":"db","label":"Dumbbell.","value":"db"},
+        {"id":"kb","label":"Kettlebell.","value":"kb"},
+        {"id":"circus","label":"Circus dumbbell.","value":"circus"},
+        {"id":"mb","label":"Medicine ball.","value":"mb"},
+        {"id":"slam","label":"Slam ball.","value":"slam"},
+        {"id":"bag","label":"Sandbag.","value":"bag"},
+        {"id":"hbag","label":"Heavy bag.","value":"hbag"},
+        {"id":"plate","label":"Weight plate.","value":"plate"},
+        {"id":"chain","label":"Chain.","value":"chain"},
+        {"id":"rope","label":"Battle rope.","value":"rope"},
+        {"id":"jrope","label":"Jump rope.","value":"jrope"},
+        {"id":"band","label":"Any resistance band, tube, superband or miniband.","value":"band"},
+        {"id":"sled","label":"Ground sled or prowler.","value":"sled"},
+        {"id":"tire","label":"Tyre.","value":"tire"},
+        {"id":"hammer","label":"Sledgehammer.","value":"hammer"},
+        {"id":"stone","label":"Atlas stone.","value":"stone"},
+        {"id":"log","label":"Log.","value":"log"},
+        {"id":"keg","label":"Keg.","value":"keg"},
+        {"id":"yoke","label":"Yoke.","value":"yoke"},
+        {"id":"frame","label":"Farmer handles or carry frame (rickshaw).","value":"frame"},
+        {"id":"car","label":"Car.","value":"car"},
+        {"id":"vest","label":"Weight vest.","value":"vest"},
+        {"id":"ankwt","label":"Ankle weight.","value":"ankwt"},
+        {"id":"club","label":"Club or mace.","value":"club"},
+        {"id":"dowel","label":"Dowel, broomstick or PVC pipe: sets the hands, adds no load.","value":"dowel"},
+        {"id":"wheel","label":"Ab wheel.","value":"wheel"},
+        {"id":"wroller","label":"Wrist roller.","value":"wroller"},
+        {"id":"harness","label":"Head harness.","value":"harness"},
+        {"id":"unknown","label":"A free weight of a kind I don't know","value":"?","exclusive":true}
+      ]
+    },
+    {
+      "id": "hold1",
+      "layer": "FXI l (hold point)",
+      "select": "one",
+      "when": {
+        "all": [
+          {"fact":"exercise"},
+          {"fact":"load-holdable"},
+          {
+            "any": [{"not":{"fact":"hold-has-usual"}},{"q":"changes","has":"hold"},{"q":"load","is":["implement","cable","smith","landmine"]}]
+          }
+        ]
+      },
+      "text": "Where is it held?",
+      "help": "In the hands, at the sides, swung or by a handle is \"hands\", and so are dumbbells held at shoulder height and a bar pressed without resting on the shoulders. Resting on the front of the shoulders (front rack), or a landmine end held at the shoulder, is \"shoulders\". A bar behind the neck rests on the \"back\". Straight-armed overhead for the whole rep is \"overhead\". A load on the lap in a seated calf raise is \"thighs\". A band goes where it presses or pulls on the body; in leg-only work that is usually the feet or ankles.",
+      "usual": "The hold the movement word gives for this implement, else the hands for an implement held in the hands.",
+      "options": [
+        {
+          "id": "usual",
+          "label": "The usual place for this movement",
+          "exclusive": true,
+          "when": {"fact":"hold-has-usual"},
+          "whenNot": "the rules give no usual hold for this implement here"
+        },
+        {"id":"hands","label":"The hands, or one hand.","value":"hands"},
+        {"id":"forearms","label":"The forearms, elbows bent (elbow plank).","value":"forearms"},
+        {"id":"elbows","label":"The crook of the elbows (Zercher).","value":"elbows"},
+        {"id":"arms","label":"The upper arms (preacher pad).","value":"arms"},
+        {"id":"shoulders","label":"On the front of the shoulders and collarbones (front rack), or on one shoulder.","value":"shoulders"},
+        {"id":"chest","label":"Against the chest (goblet, bear hug).","value":"chest"},
+        {"id":"back","label":"Across the upper back (back squat).","value":"back"},
+        {"id":"hips","label":"Across the front of the hips (hip thrust).","value":"hips"},
+        {"id":"waist","label":"Hung from a belt at the waist.","value":"waist"},
+        {"id":"seat","label":"The buttocks (sitting down onto a box or bench).","value":"seat"},
+        {"id":"thighs","label":"On or around the thighs.","value":"thighs"},
+        {"id":"knees","label":"At or around the knees.","value":"knees"},
+        {"id":"shins","label":"The shins.","value":"shins"},
+        {"id":"calves","label":"The calves (the back of the lower leg).","value":"calves"},
+        {"id":"ankles","label":"At or just above the ankles (strap, cuff, machine pad on the lower leg).","value":"ankles"},
+        {"id":"feet","label":"The feet, or one foot.","value":"feet"},
+        {"id":"head","label":"The head or forehead.","value":"head"},
+        {"id":"overhead","label":"Held in the hands with the arms straight overhead for the whole rep.","value":"overhead"},
+        {"id":"assist","label":"The implement takes part of the body weight (assist band, assisted machine).","value":"assist"},
+        {"id":"unknown","label":"I don't know","value":"?","exclusive":true}
+      ]
+    },
+    {
+      "id": "count1",
+      "layer": "FXI l (count \"*n\")",
+      "select": "one",
+      "when": {"all":[{"fact":"exercise"},{"fact":"load-holdable"},{"q":"changes","has":"count"}]},
+      "text": "How many of them, in total?",
+      "help": "The usual count is one per working hand for a one-hand implement (two dumbbells in a two-arm curl, one in a one-arm curl) and one for a two-hand implement or anything held on the trunk. If your total is the usual one, the answer changes nothing.",
+      "usual": "The usual count.",
+      "options": [
+        {"id":"usual","label":"The usual count","exclusive":true},
+        {"id":"1","label":"1","value":"1"},
+        {"id":"2","label":"2","value":"2"},
+        {"id":"3","label":"3","value":"3"},
+        {"id":"4","label":"4","value":"4"}
+      ]
+    },
+    {
+      "id": "imp2",
+      "layer": "FXI l (second item)",
+      "select": "one",
+      "when": {"all":[{"fact":"exercise"},{"q":"changes","has":"extra"}]},
+      "text": "What is the second implement?",
+      "help": "Example: a weight vest on top of dumbbells, or a plate on a dip belt with body weight.",
+      "usual": null,
+      "options": [
+        {"id":"bb","label":"Barbell.","value":"bb"},
+        {"id":"ez","label":"EZ curl bar.","value":"ez"},
+        {"id":"tb","label":"Trap or hex bar.","value":"tb"},
+        {"id":"axle","label":"Axle bar.","value":"axle"},
+        {"id":"camber","label":"Cambered bar.","value":"camber"},
+        {"id":"db","label":"Dumbbell.","value":"db"},
+        {"id":"kb","label":"Kettlebell.","value":"kb"},
+        {"id":"circus","label":"Circus dumbbell.","value":"circus"},
+        {"id":"mb","label":"Medicine ball.","value":"mb"},
+        {"id":"slam","label":"Slam ball.","value":"slam"},
+        {"id":"bag","label":"Sandbag.","value":"bag"},
+        {"id":"hbag","label":"Heavy bag.","value":"hbag"},
+        {"id":"plate","label":"Weight plate.","value":"plate"},
+        {"id":"chain","label":"Chain.","value":"chain"},
+        {"id":"rope","label":"Battle rope.","value":"rope"},
+        {"id":"jrope","label":"Jump rope.","value":"jrope"},
+        {"id":"band","label":"Any resistance band, tube, superband or miniband.","value":"band"},
+        {"id":"sled","label":"Ground sled or prowler.","value":"sled"},
+        {"id":"tire","label":"Tyre.","value":"tire"},
+        {"id":"hammer","label":"Sledgehammer.","value":"hammer"},
+        {"id":"stone","label":"Atlas stone.","value":"stone"},
+        {"id":"log","label":"Log.","value":"log"},
+        {"id":"keg","label":"Keg.","value":"keg"},
+        {"id":"yoke","label":"Yoke.","value":"yoke"},
+        {"id":"frame","label":"Farmer handles or carry frame (rickshaw).","value":"frame"},
+        {"id":"car","label":"Car.","value":"car"},
+        {"id":"vest","label":"Weight vest.","value":"vest"},
+        {"id":"ankwt","label":"Ankle weight.","value":"ankwt"},
+        {"id":"club","label":"Club or mace.","value":"club"},
+        {"id":"dowel","label":"Dowel, broomstick or PVC pipe: sets the hands, adds no load.","value":"dowel"},
+        {"id":"wheel","label":"Ab wheel.","value":"wheel"},
+        {"id":"wroller","label":"Wrist roller.","value":"wroller"},
+        {"id":"harness","label":"Head harness.","value":"harness"},
+        {"id":"cable","label":"Cable","value":"cable"},
+        {"id":"unknown","label":"A free weight of a kind I don't know","value":"?","exclusive":true}
+      ]
+    },
+    {
+      "id": "hold2",
+      "layer": "FXI l (hold point)",
+      "select": "one",
+      "when": {"all":[{"fact":"exercise"},{"q":"changes","has":"extra"}]},
+      "text": "Where is the second implement held?",
+      "help": "Same rules as the first implement.",
+      "usual": "The usual place for that implement in this movement.",
+      "options": [
+        {
+          "id": "usual",
+          "label": "The usual place for this movement",
+          "exclusive": true,
+          "when": {"fact":"hold2-has-usual"},
+          "whenNot": "the rules give no usual hold for this implement here"
+        },
+        {"id":"hands","label":"The hands, or one hand.","value":"hands"},
+        {"id":"forearms","label":"The forearms, elbows bent (elbow plank).","value":"forearms"},
+        {"id":"elbows","label":"The crook of the elbows (Zercher).","value":"elbows"},
+        {"id":"arms","label":"The upper arms (preacher pad).","value":"arms"},
+        {"id":"shoulders","label":"On the front of the shoulders and collarbones (front rack), or on one shoulder.","value":"shoulders"},
+        {"id":"chest","label":"Against the chest (goblet, bear hug).","value":"chest"},
+        {"id":"back","label":"Across the upper back (back squat).","value":"back"},
+        {"id":"hips","label":"Across the front of the hips (hip thrust).","value":"hips"},
+        {"id":"waist","label":"Hung from a belt at the waist.","value":"waist"},
+        {"id":"seat","label":"The buttocks (sitting down onto a box or bench).","value":"seat"},
+        {"id":"thighs","label":"On or around the thighs.","value":"thighs"},
+        {"id":"knees","label":"At or around the knees.","value":"knees"},
+        {"id":"shins","label":"The shins.","value":"shins"},
+        {"id":"calves","label":"The calves (the back of the lower leg).","value":"calves"},
+        {"id":"ankles","label":"At or just above the ankles (strap, cuff, machine pad on the lower leg).","value":"ankles"},
+        {"id":"feet","label":"The feet, or one foot.","value":"feet"},
+        {"id":"head","label":"The head or forehead.","value":"head"},
+        {"id":"overhead","label":"Held in the hands with the arms straight overhead for the whole rep.","value":"overhead"},
+        {"id":"assist","label":"The implement takes part of the body weight (assist band, assisted machine).","value":"assist"},
+        {"id":"unknown","label":"I don't know","value":"?","exclusive":true}
+      ]
+    },
+    {
+      "id": "band.type",
+      "layer": "FXE f (band child)",
+      "select": "one",
+      "when": {"all":[{"fact":"exercise"},{"fact":"load-band"}]},
+      "text": "Which kind of band?",
+      "help": "Name the kind only when you know it. The FXI is the same for every band; only the row's FXE changes.",
+      "usual": "A band of a type not stated.",
+      "options": [
+        {"id":"usual","label":"Not stated (the usual way)","exclusive":true},
+        {"id":"loop","label":"Long loop band: superband, power band","value":"band.loop"},
+        {"id":"mini","label":"Short loop band around the legs: miniband","value":"band.mini"},
+        {"id":"tube","label":"Tube with handles","value":"band.tube"}
+      ]
+    },
+    {
+      "id": "mac.motion",
+      "layer": "FXE m (mac)",
+      "select": "one",
+      "when": {"all":[{"fact":"exercise"},{"fact":"load-machine"},{"any":[{"not":{"fact":"machine-has-usual"}},{"q":"changes","has":"machine"}]}]},
+      "text": "What does the machine guide?",
+      "help": "Answer for the machine as it is built, not the exercise done on it. A calf raise done on a leg press uses a leg press: answer \"pushes away\". A pivot that lines up with one joint is a single-joint machine.",
+      "usual": "The machine the movement word names.",
+      "options": [
+        {
+          "id": "usual",
+          "label": "The machine built for this movement (the usual way)",
+          "exclusive": true,
+          "when": {"fact":"machine-has-usual"},
+          "whenNot": "the movement word names no machine"
+        },
+        {"id":"push","label":"It pushes away: a multi-joint press or squat machine","group":"Multi-joint"},
+        {"id":"pull","label":"It pulls toward you: a multi-joint row, pulldown or deadlift machine","group":"Multi-joint"},
+        {"id":"assist","label":"It helps lift the body: an assisted pull-up or dip machine","group":"Multi-joint"},
+        {"id":"kn.flex","label":"Knee bends (leg curl)","value":"kn.flex","group":"Pivots at one joint"},
+        {"id":"kn.ext","label":"Knee straightens (leg extension)","value":"kn.ext","group":"Pivots at one joint"},
+        {"id":"el.flex","label":"Elbow bends (curl machine)","value":"el.flex","group":"Pivots at one joint"},
+        {"id":"el.ext","label":"Elbow straightens (triceps machine)","value":"el.ext","group":"Pivots at one joint"},
+        {"id":"sh.hadd","label":"Arms sweep together in front (pec deck)","value":"sh.hadd","group":"Pivots at one joint"},
+        {"id":"sh.habd","label":"Arms sweep apart (rear-delt machine)","value":"sh.habd","group":"Pivots at one joint"},
+        {"id":"sh.abd","label":"Arms raise out to the sides (lateral raise machine)","value":"sh.abd","group":"Pivots at one joint"},
+        {"id":"sh.ext","label":"Arms pull down from in front (pullover machine)","value":"sh.ext","group":"Pivots at one joint"},
+        {"id":"sh.flex","label":"Arms raise forward","value":"sh.flex","group":"Pivots at one joint"},
+        {"id":"sh.add","label":"Arms pull down from the sides","value":"sh.add","group":"Pivots at one joint"},
+        {"id":"sh.ir","label":"Shoulder rotates in","value":"sh.ir","group":"Pivots at one joint"},
+        {"id":"sh.er","label":"Shoulder rotates out","value":"sh.er","group":"Pivots at one joint"},
+        {"id":"sc.elev","label":"Shrug","value":"sc.elev","group":"Pivots at one joint"},
+        {"id":"hip.flex","label":"Hip bends (leg-raise or knee-raise machine)","value":"hip.flex","group":"Pivots at one joint"},
+        {"id":"hip.ext","label":"Hip extends (glute kickback, hip thrust, reverse hyper)","value":"hip.ext","group":"Pivots at one joint"},
+        {"id":"hip.abd","label":"Legs push apart (abductor)","value":"hip.abd","group":"Pivots at one joint"},
+        {"id":"hip.add","label":"Legs squeeze together (adductor)","value":"hip.add","group":"Pivots at one joint"},
+        {"id":"sp.flex","label":"Trunk curls (ab crunch machine)","value":"sp.flex","group":"Pivots at one joint"},
+        {"id":"sp.ext","label":"Trunk extends (back extension machine)","value":"sp.ext","group":"Pivots at one joint"},
+        {"id":"sp.rot","label":"Trunk twists (rotary torso)","value":"sp.rot","group":"Pivots at one joint"},
+        {"id":"sp.lflex","label":"Trunk bends sideways","value":"sp.lflex","group":"Pivots at one joint"},
+        {"id":"ank.pf","label":"Rise onto the toes (calf raise machine)","value":"ank.pf","group":"Pivots at one joint"},
+        {"id":"ank.df","label":"Toes pull up (tibialis machine)","value":"ank.df","group":"Pivots at one joint"},
+        {"id":"nk.flex","label":"Neck flexes","value":"nk.flex","group":"Pivots at one joint"},
+        {"id":"nk.ext","label":"Neck extends","value":"nk.ext","group":"Pivots at one joint"},
+        {"id":"nk.lflex","label":"Neck bends sideways","value":"nk.lflex","group":"Pivots at one joint"},
+        {"id":"wr.flex","label":"Wrist curls","value":"wr.flex","group":"Pivots at one joint"},
+        {"id":"wr.ext","label":"Wrist extends","value":"wr.ext","group":"Pivots at one joint"},
+        {"id":"unknown","label":"I don't know","value":"?","exclusive":true}
+      ]
+    },
+    {
+      "id": "mac.direction",
+      "layer": "FXE m (mac direction)",
+      "select": "one",
+      "when": {
+        "all": [
+          {
+            "all": [{"fact":"exercise"},{"fact":"load-machine"},{"any":[{"not":{"fact":"machine-has-usual"}},{"q":"changes","has":"machine"}]}]
+          },
+          {"q":"mac.motion","is":["push","pull","assist"]}
+        ]
+      },
+      "text": "Which way does the handle, pad or plate move, relative to your trunk, while you work?",
+      "help": "Up is toward the head, down toward the feet, forward is away from the front of the trunk.",
+      "usual": "The direction of the machine the movement word names.",
+      "options": [
+        {
+          "id": "usual",
+          "label": "The usual direction for this movement",
+          "exclusive": true,
+          "when": {"fact":"machine-direction-has-usual"},
+          "whenNot": "the movement word gives no machine direction"
+        },
+        {"id":"up","label":"Toward the head: shoulder press, hack squat, belt squat, deadlift machine.","value":"up"},
+        {"id":"down","label":"Toward the feet: pulldown, seated dip.","value":"down"},
+        {"id":"fwd","label":"Away from the front of the trunk: chest press, leg press.","value":"fwd"},
+        {"id":"back","label":"Toward the front of the trunk: row.","value":"back"},
+        {"id":"fwdup","label":"Forward and up: incline press.","value":"fwdup"},
+        {"id":"fwddown","label":"Forward and down: decline press.","value":"fwddown"},
+        {"id":"backdown","label":"Back and down: high row.","value":"backdown"},
+        {"id":"unknown","label":"I don't know","value":"?","exclusive":true}
+      ]
+    },
+    {
+      "id": "mac.contact",
+      "layer": "FXE l (mac) and the FXI hold point of mach",
+      "select": "one",
+      "when": {"all":[{"fact":"exercise"},{"fact":"load-machine"},{"any":[{"not":{"fact":"machine-has-usual"}},{"q":"changes","has":"machine"}]}]},
+      "text": "Where does the moving part of the machine meet your body?",
+      "help": "The part you push or pull: handles, a foot plate, a pad on the lower leg. On an assisted pull-up or dip machine, answer where the assist pad or platform meets you (knee or foot): that goes in the FXE. The FXI always writes an assisted machine as mach@assist.",
+      "usual": "The FXE default for that guided motion (FXE machine defaults), or the machine the movement word names.",
+      "options": [
+        {
+          "id": "usual",
+          "label": "The usual place for this motion",
+          "exclusive": true,
+          "when": {"fact":"contact-has-usual"},
+          "whenNot": "the rules give no usual contact for that guided motion"
+        },
+        {"id":"hand","label":"Handles or a bar in the hands.","value":"hand"},
+        {"id":"foot","label":"A foot plate or pedals.","value":"foot"},
+        {"id":"ankle","label":"A pad on the lower leg.","value":"ankle"},
+        {"id":"thigh","label":"A pad on the thigh.","value":"thigh"},
+        {"id":"knee","label":"A pad or platform at the knees.","value":"knee"},
+        {"id":"arm","label":"A pad on the upper arm or elbow.","value":"arm"},
+        {"id":"chest","label":"A pad on the chest.","value":"chest"},
+        {"id":"back","label":"A pad on the back.","value":"back"},
+        {"id":"shoulder","label":"Pads on the shoulders.","value":"shoulder"},
+        {"id":"hip","label":"A pad or belt at the hips.","value":"hip"},
+        {"id":"head","label":"A pad on the head.","value":"head"},
+        {"id":"seat","label":"A moving seat.","value":"seat"},
+        {"id":"unknown","label":"I don't know","value":"?","exclusive":true}
+      ]
+    },
+    {
+      "id": "mac.chest",
+      "layer": "FXE s (mac posture)",
+      "select": "one",
+      "when": {"all":[{"fact":"exercise"},{"fact":"load-machine"},{"any":[{"not":{"fact":"machine-has-usual"}},{"q":"changes","has":"machine"}]}]},
+      "text": "Does a pad support your chest while you work?",
+      "help": "A chest pad on a row machine or a donkey calf raise. The rest of the machine posture is read from your body position.",
+      "usual": "No chest pad, unless the movement word names a machine that has one (row machine).",
+      "options": [{"id":"usual","label":"The usual way for this movement","exclusive":true},{"id":"yes","label":"Yes"},{"id":"no","label":"No"}]
+    },
+    {
+      "id": "erg.type",
+      "layer": "FXE k:erg layers, and the FXI hold point of erg",
+      "select": "one",
+      "when": {"all":[{"fact":"exercise"},{"fact":"load-cardio"},{"any":[{"not":{"fact":"cardio-has-usual"}},{"q":"changes","has":"machine"}]}]},
+      "text": "Which cardio machine?",
+      "help": "Pick the type. If you only know it is a stationary bike or a stair machine, pick the \"not known\" entry.",
+      "usual": "The machine the movement word names.",
+      "options": [
+        {
+          "id": "usual",
+          "label": "The usual machine for this movement",
+          "exclusive": true,
+          "when": {"fact":"cardio-has-usual"},
+          "whenNot": "the movement word names no cardio machine"
+        },
+        {"id":"treadmill","label":"Treadmill","value":"treadmill"},
+        {"id":"stepmill","label":"Stepmill (revolving stairs)","value":"stepmill"},
+        {"id":"stepper","label":"Stair stepper (pedals)","value":"stepper"},
+        {"id":"stair","label":"Stair machine, stepper or stepmill not known","value":"stair"},
+        {"id":"bike-upright","label":"Upright or spin bike","value":"bike-upright"},
+        {"id":"bike-recumbent","label":"Recumbent bike","value":"bike-recumbent"},
+        {"id":"bike","label":"Stationary bike, upright or recumbent not known","value":"bike"},
+        {"id":"air-bike","label":"Air bike (moving arms)","value":"air-bike"},
+        {"id":"elliptical","label":"Elliptical","value":"elliptical"},
+        {"id":"rower","label":"Rower","value":"rower"},
+        {"id":"ski","label":"Ski erg","value":"ski"},
+        {"id":"ube","label":"Upper-body ergometer (hand cranks, seated)","value":"ube"},
+        {"id":"vertical-climber","label":"Vertical climber","value":"vertical-climber"},
+        {"id":"ladder-climber","label":"Ladder climber","value":"ladder-climber"},
+        {"id":"unknown","label":"A cardio machine of a type I don't know","value":"?","exclusive":true}
+      ]
+    },
+    {
+      "id": "symmetry",
+      "layer": "FXI x",
+      "select": "one",
+      "when": {"all":[{"fact":"exercise"},{"any":[{"q":"changes","has":"sides"},{"fact":"motion-from-scratch"}]}]},
+      "text": "How do the two sides work?",
+      "help": "Doing every rep on one side and then switching is different from alternating sides rep by rep. Reciprocal means both sides move at once in opposite directions: walking, flutter kicks, alternating rope waves. A stretch or roll that works one limb and then the other is \"one side, then the other\".",
+      "importHelp": "Import mode: from the name and fields only. \"Alternating\" means the sides take turns only when nothing else in the name alternates (\"alternating front and lateral raise\" alternates two raises).",
+      "usual": "What the movement word says, else both sides together.",
+      "options": [
+        {"id":"usual","label":"The usual way for this movement","exclusive":true},
+        {"id":"b","label":"Both sides together, or the movement has no sides","value":"b"},
+        {"id":"u","label":"One side does every rep, then the other side","value":"u"},
+        {"id":"a","label":"The sides take turns rep by rep","value":"a"},
+        {"id":"rc","label":"Both sides move at once in opposite directions","value":"rc"},
+        {"id":"split","label":"The arms and the legs follow different patterns (suitcase carry)"},
+        {"id":"unknown","label":"I don't know","value":"?","exclusive":true}
+      ]
+    },
+    {
+      "id": "symmetry.scope",
+      "layer": "FXI x (scope)",
+      "select": "one",
+      "when": {"all":[{"fact":"exercise"},{"q":"symmetry","is":["u","a","rc"]}]},
+      "text": "Does that pattern apply to the arms only, the legs only, or every working limb?",
+      "help": "A single-arm kettlebell swing is the arms only: the legs still work together.",
+      "usual": "Every working limb.",
+      "options": [
+        {"id":"usual","label":"Every working limb (the usual way)","exclusive":true},
+        {"id":"arms","label":"The arms only","value":"arms"},
+        {"id":"legs","label":"The legs only","value":"legs"}
+      ]
+    },
+    {
+      "id": "symmetry.arms",
+      "layer": "FXI x (scoped item)",
+      "select": "one",
+      "when": {"all":[{"fact":"exercise"},{"q":"symmetry","is":"split"}]},
+      "text": "How do the arms work?",
+      "help": "A suitcase carry: the legs are reciprocal, the arms one side then the other.",
+      "usual": "Both sides together.",
+      "options": [
+        {"id":"usual","label":"Both together (the usual way)","exclusive":true},
+        {"id":"b","label":"Both together","value":"b"},
+        {"id":"u","label":"One side, then the other","value":"u"},
+        {"id":"a","label":"Taking turns rep by rep","value":"a"},
+        {"id":"rc","label":"At once, in opposite directions","value":"rc"}
+      ]
+    },
+    {
+      "id": "symmetry.legs",
+      "layer": "FXI x (scoped item)",
+      "select": "one",
+      "when": {"all":[{"fact":"exercise"},{"q":"symmetry","is":"split"}]},
+      "text": "How do the legs work?",
+      "help": "A suitcase carry: the legs are reciprocal, the arms one side then the other.",
+      "usual": "Both sides together.",
+      "options": [
+        {"id":"usual","label":"Both together (the usual way)","exclusive":true},
+        {"id":"b","label":"Both together","value":"b"},
+        {"id":"u","label":"One side, then the other","value":"u"},
+        {"id":"a","label":"Taking turns rep by rep","value":"a"},
+        {"id":"rc","label":"At once, in opposite directions","value":"rc"}
+      ]
+    },
+    {
+      "id": "grip.hand",
+      "layer": "FXI g (hand)",
+      "select": "one",
+      "when": {"all":[{"fact":"exercise"},{"q":"changes","has":"hand"}]},
+      "text": "Which way do the palms face?",
+      "help": "Overhand is palms down or away; underhand palms up or toward you; neutral palms facing each other. A turn during the rep (Zottman, Arnold press) is \"turns\".",
+      "usual": "What the movement word says, else underhand for a curl and overhand for everything else.",
+      "importHelp": "Import mode: \"reverse grip\" in a name means the grip opposite the movement word's usual one: overhand on a curl, underhand elsewhere.",
+      "options": [
+        {"id":"usual","label":"The usual way for this movement","exclusive":true},
+        {"id":"pr","label":"Overhand","value":"pr"},
+        {"id":"su","label":"Underhand","value":"su"},
+        {"id":"ne","label":"Neutral","value":"ne"},
+        {"id":"mx","label":"Mixed: one over, one under","value":"mx"},
+        {"id":"turn","label":"The palms turn during the rep"},
+        {"id":"unknown","label":"I don't know","value":"?","exclusive":true}
+      ]
+    },
+    {
+      "id": "grip.start",
+      "layer": "FXI g (hand, by phase)",
+      "select": "one",
+      "when": {"all":[{"fact":"exercise"},{"q":"changes","has":"hand"},{"q":"grip.hand","is":"turn"}]},
+      "text": "Which way do the palms face at the start?",
+      "help": "A Zottman curl starts underhand and ends overhand.",
+      "usual": null,
+      "options": [
+        {"id":"pr","label":"Overhand","value":"pr"},
+        {"id":"su","label":"Underhand","value":"su"},
+        {"id":"ne","label":"Neutral","value":"ne"},
+        {"id":"mx","label":"Mixed","value":"mx"}
+      ]
+    },
+    {
+      "id": "grip.end",
+      "layer": "FXI g (hand, by phase)",
+      "select": "one",
+      "when": {"all":[{"fact":"exercise"},{"q":"changes","has":"hand"},{"q":"grip.hand","is":"turn"}]},
+      "text": "Which way do they face at the end of the working movement?",
+      "help": "A Zottman curl starts underhand and ends overhand.",
+      "usual": null,
+      "options": [
+        {"id":"pr","label":"Overhand","value":"pr"},
+        {"id":"su","label":"Underhand","value":"su"},
+        {"id":"ne","label":"Neutral","value":"ne"},
+        {"id":"mx","label":"Mixed","value":"mx"}
+      ]
+    },
+    {
+      "id": "grip.width",
+      "layer": "FXI g (width)",
+      "select": "one",
+      "when": {"all":[{"fact":"exercise"},{"q":"changes","has":"width"}]},
+      "text": "How far apart are the hands?",
+      "help": "On an implement or on a support: a diamond push-up has the hands touching.",
+      "usual": "What the movement word says, else about shoulder width.",
+      "options": [
+        {"id":"usual","label":"The usual width for this movement","exclusive":true},
+        {"id":"touching","label":"Touching or overlapping","value":"w-t"},
+        {"id":"narrow","label":"Inside shoulder width","value":"w-n"},
+        {"id":"medium","label":"About shoulder width","value":"w-m"},
+        {"id":"wide","label":"Well outside shoulder width","value":"w-w"},
+        {"id":"unknown","label":"I don't know","value":"?","exclusive":true}
+      ]
+    },
+    {
+      "id": "stance",
+      "layer": "FXI g (stance)",
+      "select": "one",
+      "when": {"all":[{"fact":"exercise"},{"q":"changes","has":"stance"}]},
+      "text": "How far apart are the feet?",
+      "help": "Only for standing exercises, and for the feet on a machine's foot plate (leg press). A split stance is footwork, not stance.",
+      "usual": "What the movement word says, else about hip width.",
+      "options": [
+        {"id":"usual","label":"The usual stance for this movement","exclusive":true},
+        {
+          "id": "narrow",
+          "label": "Feet together or closer than hip width",
+          "value": "st-n",
+          "when": {"fact":"stance-recorded"},
+          "whenNot": "stance is recorded only for standing exercises and foot-plate machines"
+        },
+        {
+          "id": "medium",
+          "label": "About hip width",
+          "value": "st-m",
+          "when": {"fact":"stance-recorded"},
+          "whenNot": "stance is recorded only for standing exercises and foot-plate machines"
+        },
+        {
+          "id": "wide",
+          "label": "Wide (sumo)",
+          "value": "st-w",
+          "when": {"fact":"stance-recorded"},
+          "whenNot": "stance is recorded only for standing exercises and foot-plate machines"
+        },
+        {
+          "id": "unknown",
+          "label": "I don't know",
+          "value": "?",
+          "exclusive": true,
+          "when": {"fact":"stance-recorded"},
+          "whenNot": "stance is recorded only for standing exercises and foot-plate machines"
+        }
+      ]
+    },
+    {
+      "id": "range.depth",
+      "layer": "FXI r (range)",
+      "select": "one",
+      "when": {"all":[{"fact":"exercise"},{"q":"changes","has":"depth"}]},
+      "text": "How much of the range does each rep use?",
+      "help": "Box or step height, and small angle changes, are prescription and never count. A box you sit down to is a support.",
+      "usual": "What the movement word says, else the full usual range.",
+      "options": [
+        {"id":"usual","label":"The usual range for this movement","exclusive":true},
+        {"id":"full","label":"The full usual range","value":""},
+        {"id":"partial","label":"Part of the range on purpose: half, quarter, pulses","value":"partial"},
+        {"id":"deep","label":"Deeper than usual: full depth, ass to grass","value":"deep"},
+        {"id":"deficit","label":"Deeper than usual by standing on something (deficit)","value":"deficit"},
+        {"id":"unknown","label":"I don't know","value":"?","exclusive":true}
+      ]
+    },
+    {
+      "id": "range.start",
+      "layer": "FXI r (start)",
+      "select": "one",
+      "when": {"all":[{"fact":"exercise"},{"q":"changes","has":"start"}]},
+      "text": "Where does each rep start?",
+      "help": "Only when it is not the movement's usual start. A deadlift usually starts from the floor; a Romanian deadlift and a row from the top; a bell clean or snatch from a swing (a dead clean starts from the floor).",
+      "usual": "The movement's usual start.",
+      "options": [
+        {"id":"usual","label":"The usual start for this movement","exclusive":true},
+        {"id":"from-floor","label":"From the floor, load at rest each rep","value":"from-floor"},
+        {
+          "id": "from-top",
+          "label": "From a hang above the knee: standing with the load held, lowered without setting it down",
+          "value": "from-top"
+        },
+        {"id":"from-top.knee","label":"From a hang at or below the knee","value":"from-top.knee"},
+        {"id":"from-pins","label":"From pins, blocks or a rack above the floor","value":"from-pins"},
+        {"id":"from-drop","label":"From a drop: step off a box and land first (depth jump)","value":"from-drop"},
+        {"id":"unknown","label":"I don't know","value":"?","exclusive":true}
+      ]
+    },
+    {
+      "id": "held",
+      "layer": "FXI h",
+      "select": "many",
+      "when": {"all":[{"fact":"exercise"},{"q":"changes","has":"held"}]},
+      "text": "What do the limbs that do not work hold?",
+      "help": "Pick every held posture your exercise is done with, whether or not its name says so. A coaching cue (\"keep your chest up\") is not a held posture. Hands behind the head with nothing loaded there is \"hands behind the head\", not the line of pull.",
+      "importHelp": "Import mode: only from the name, through the import lexicon: prisoner, pistol, arms crossed, \"arms extended\" or \"straight arm\" (arms forward), \"bent arm\" or 90 degree (elbows bent), \"behind head\" with nothing loaded behind the head.",
+      "usual": "What the movement word says, else no held posture.",
+      "options": [
+        {"id":"usual","label":"The usual way for this movement","exclusive":true},
+        {
+          "id": "none",
+          "label": "No held posture: the non-working limbs do what the movement word implies (default, never written).",
+          "value": "none",
+          "exclusive": true
+        },
+        {"id":"arms.oh","label":"Arms held straight overhead, nothing in the hands.","value":"arms.oh"},
+        {
+          "id": "arms.fwd",
+          "label": "Arms held straight and reaching forward from the shoulders, nothing in the hands (\"arms extended\", \"straight arm\").",
+          "value": "arms.fwd"
+        },
+        {"id":"arms.side","label":"Arms held out to the sides.","value":"arms.side"},
+        {"id":"arms.cross","label":"Arms crossed on the chest.","value":"arms.cross"},
+        {"id":"hands.head","label":"Hands behind or on the head (prisoner).","value":"hands.head"},
+        {"id":"el.bent","label":"Working elbows held bent at about 90° (\"bent arm\", \"90 degree\").","value":"el.bent"},
+        {"id":"ua.oh","label":"Upper arms held up beside the head while the elbows work (overhead triceps extension).","value":"ua.oh"},
+        {
+          "id": "ua.side",
+          "label": "Upper arms held out from the sides, elbows flared, while the elbows work (inner biceps curl, Tate press).",
+          "value": "ua.side"
+        },
+        {"id":"leg.fwd","label":"Free leg held straight in front.","value":"leg.fwd"},
+        {"id":"leg.back","label":"Free leg held behind.","value":"leg.back"},
+        {"id":"legs.l","label":"Legs held straight at about 90° hip flexion.","value":"legs.l"},
+        {
+          "id": "kn.bent",
+          "label": "Knees held bent while the hips or arms work (hanging knee raise; inverted row with the feet flat on the floor).",
+          "value": "kn.bent"
+        },
+        {
+          "id": "trunk.fwd",
+          "label": "Trunk held leaning forward where the orientation does not already say so (chest dip).",
+          "value": "trunk.fwd"
+        },
+        {"id":"unknown","label":"I don't know","value":"?","exclusive":true}
+      ]
+    },
+    {
+      "id": "line",
+      "layer": "FXI p",
+      "select": "many",
+      "when": {"all":[{"fact":"exercise"},{"q":"changes","has":"line"}]},
+      "text": "Where does the load pull from, compared with the usual way?",
+      "help": "Usual anchors: low for curls, raises, upright rows, shrugs, kickbacks and hip work; high for pushdowns, pulldowns, face pulls, kneeling crunches and woodchops; middle for rows, flys, crossovers, rotations and chest presses; from the side for a Pallof press. Answer \"high\" or \"low\" only when yours differs. \"Low row\" or \"low pulley\" in a name is a machine, not a line.",
+      "importHelp": "Import mode: only from the name, through the import lexicon.",
+      "usual": "The line the movement word implies.",
+      "options": [
+        {"id":"usual","label":"The usual line for this movement","exclusive":true},
+        {"id":"hi","label":"Anchored higher than usual (high-to-low)","value":"hi"},
+        {"id":"lo","label":"Anchored lower than usual (low-to-high)","value":"lo"},
+        {"id":"side","label":"Pulls from one side: you stand side-on to the anchor","value":"side"},
+        {"id":"behind","label":"The load or body passes behind the head or trunk (behind-the-neck press, rear pull-up)","value":"behind"},
+        {"id":"unknown","label":"I don't know","value":"?","exclusive":true}
+      ]
+    },
+    {
+      "id": "accessory",
+      "layer": "FXI a (extended)",
+      "select": "many",
+      "when": {"all":[{"fact":"exercise"},{"q":"changes","has":"accessory"}]},
+      "text": "What helps the exercise without loading it?",
+      "help": "A strap, belt, towel or rope used to pull or hold a limb (a stretching strap), or a partner who holds, resists or assists. A handle on a cable is not an accessory.",
+      "usual": "What the movement word says, else no accessory.",
+      "options": [
+        {"id":"usual","label":"The usual way for this movement","exclusive":true},
+        {"id":"none","label":"No accessory (default, never written).","value":"none","exclusive":true},
+        {"id":"strap","label":"A strap, belt, towel or rope used to pull or hold a limb (stretching strap).","value":"strap"},
+        {"id":"partner","label":"A partner who holds, resists or assists.","value":"partner"}
+      ]
+    },
+    {
+      "id": "eq.kind",
+      "layer": "FXE k",
+      "select": "one",
+      "when": {"fact":"equipment"},
+      "text": "What kind of equipment is it?",
+      "help": "A machine built for one movement is a strength machine. A cable column, Smith machine or landmine serves many movements: a station.",
+      "usual": null,
+      "options": [
+        {"id":"none","label":"No equipment: body weight","value":"none"},
+        {"id":"imp","label":"An object moved, held or worn","value":"imp"},
+        {"id":"sup","label":"A surface or frame the body rests on, hangs from or pushes against","value":"sup"},
+        {"id":"acc","label":"A handle, strap, belt, mat, towel or marker","value":"acc"},
+        {"id":"stn","label":"A cable column, Smith machine or landmine","value":"stn"},
+        {"id":"mac","label":"A strength machine built for one movement","value":"mac"},
+        {"id":"erg","label":"A cardio machine","value":"erg"},
+        {"id":"unknown","label":"I don't know","value":"?","exclusive":true}
+      ]
+    },
+    {
+      "id": "eq.form.imp",
+      "layer": "FXE f",
+      "select": "one",
+      "when": {"all":[{"fact":"equipment"},{"q":"eq.kind","is":"imp"}]},
+      "text": "Which one is it?",
+      "help": "Pick a child (superband, miniband) only when you know it. Otherwise pick the general entry.",
+      "usual": null,
+      "options": [
+        {"id":"bar.straight","label":"Barbell, Olympic or standard.","value":"bar.straight"},
+        {"id":"bar.ez","label":"EZ curl bar.","value":"bar.ez"},
+        {"id":"bar.trap","label":"Trap or hex bar.","value":"bar.trap"},
+        {"id":"bar.axle","label":"Thick axle bar.","value":"bar.axle"},
+        {"id":"bar.camber","label":"Cambered bar.","value":"bar.camber"},
+        {"id":"bell.dumb","label":"Dumbbell.","value":"bell.dumb"},
+        {"id":"bell.kettle","label":"Kettlebell.","value":"bell.kettle"},
+        {"id":"bell.circus","label":"Circus dumbbell.","value":"bell.circus"},
+        {"id":"ball.med","label":"Medicine ball.","value":"ball.med"},
+        {"id":"ball.slam","label":"Slam ball.","value":"ball.slam"},
+        {"id":"bag.sand","label":"Sandbag.","value":"bag.sand"},
+        {"id":"bag.heavy","label":"Hanging heavy bag.","value":"bag.heavy"},
+        {"id":"plate","label":"A weight plate held or worn on its own.","value":"plate"},
+        {"id":"chain","label":"Lifting chain.","value":"chain"},
+        {"id":"rope.battle","label":"Battle rope.","value":"rope.battle"},
+        {"id":"rope.jump","label":"Skipping rope.","value":"rope.jump"},
+        {"id":"band","label":"Elastic band or tube, type not stated.","value":"band"},
+        {"id":"band.loop","label":"Long loop band: superband, power band.","value":"band.loop"},
+        {"id":"band.mini","label":"Short loop band worn around the legs: miniband.","value":"band.mini"},
+        {"id":"band.tube","label":"Tube band with handles.","value":"band.tube"},
+        {"id":"sled","label":"Ground sled or prowler, pushed or dragged.","value":"sled"},
+        {"id":"tire","label":"Large tyre.","value":"tire"},
+        {"id":"hammer","label":"Sledgehammer.","value":"hammer"},
+        {"id":"stone","label":"Atlas stone.","value":"stone"},
+        {"id":"log","label":"Strongman log.","value":"log"},
+        {"id":"keg","label":"Keg.","value":"keg"},
+        {"id":"yoke","label":"Strongman yoke.","value":"yoke"},
+        {"id":"frame.carry","label":"Farmer handles or a carry frame (rickshaw).","value":"frame.carry"},
+        {"id":"car","label":"A car, lifted or pushed.","value":"car"},
+        {"id":"wear.vest","label":"Weight vest.","value":"wear.vest"},
+        {"id":"wear.ankle","label":"Ankle weight.","value":"wear.ankle"},
+        {"id":"club","label":"Indian club or mace.","value":"club"},
+        {"id":"stick","label":"Dowel, broomstick or PVC pipe.","value":"stick"},
+        {"id":"wheel","label":"Ab wheel.","value":"wheel"},
+        {"id":"roller.wrist","label":"Wrist roller.","value":"roller.wrist"},
+        {"id":"harness.head","label":"Head harness with a hanging load.","value":"harness.head"},
+        {"id":"unknown","label":"I don't know","value":"?","exclusive":true}
+      ]
+    },
+    {
+      "id": "eq.form.sup",
+      "layer": "FXE f",
+      "select": "one",
+      "when": {"all":[{"fact":"equipment"},{"q":"eq.kind","is":"sup"}]},
+      "text": "Which one is it?",
+      "help": "Pick a child (superband, miniband) only when you know it. Otherwise pick the general entry.",
+      "usual": null,
+      "options": [
+        {"id":"floor","label":"The floor, or a mat on it.","value":"floor"},
+        {"id":"wall","label":"A wall.","value":"wall"},
+        {"id":"bench","label":"A bench, flat or adjustable.","value":"bench"},
+        {"id":"box","label":"A box, step or platform.","value":"box"},
+        {"id":"chair","label":"A chair.","value":"chair"},
+        {"id":"block","label":"Lifting blocks a bar starts from.","value":"block"},
+        {"id":"rack","label":"Power rack or squat stand, with its pins.","value":"rack"},
+        {"id":"ball.stab","label":"Stability, Swiss or exercise ball.","value":"ball.stab"},
+        {"id":"dome","label":"BOSU, either side up.","value":"dome"},
+        {"id":"board.bal","label":"Balance or wobble board.","value":"board.bal"},
+        {"id":"roller.foam","label":"Foam roller.","value":"roller.foam"},
+        {"id":"slider","label":"Slider disc.","value":"slider"},
+        {"id":"strap.susp","label":"Suspension trainer.","value":"strap.susp"},
+        {"id":"ring","label":"Gymnastic rings.","value":"ring"},
+        {"id":"rope.climb","label":"Climbing rope.","value":"rope.climb"},
+        {"id":"bar.fixed","label":"Fixed overhead bar: pull-up bar.","value":"bar.fixed"},
+        {"id":"bar.parallel","label":"Parallel dip bars.","value":"bar.parallel"},
+        {"id":"bar.parallette","label":"Floor parallettes.","value":"bar.parallette"},
+        {"id":"pad.preacher","label":"Preacher bench.","value":"pad.preacher"},
+        {
+          "id": "pad.hyper",
+          "label": "Back-extension bench, 45° or 90° (also called a Roman chair for back or side raises).",
+          "value": "pad.hyper"
+        },
+        {"id":"pad.ghd","label":"Glute-ham developer.","value":"pad.ghd"},
+        {"id":"station.vkr","label":"Vertical knee-raise station (captain’s chair).","value":"station.vkr"},
+        {"id":"pole","label":"A vertical pole, post or rack upright gripped by the hands.","value":"pole"},
+        {"id":"ball.massage","label":"Massage or lacrosse ball rolled under the body.","value":"ball.massage"},
+        {"id":"unknown","label":"I don't know","value":"?","exclusive":true}
+      ]
+    },
+    {
+      "id": "eq.form.acc",
+      "layer": "FXE f",
+      "select": "one",
+      "when": {"all":[{"fact":"equipment"},{"q":"eq.kind","is":"acc"}]},
+      "text": "Which one is it?",
+      "help": "Pick a child (superband, miniband) only when you know it. Otherwise pick the general entry.",
+      "usual": null,
+      "options": [
+        {"id":"handle","label":"Single D-handle.","value":"handle"},
+        {"id":"handle.bar","label":"Straight or cambered cable bar.","value":"handle.bar"},
+        {"id":"handle.v","label":"V-bar or close-grip handle.","value":"handle.v"},
+        {"id":"handle.rope","label":"Triceps rope.","value":"handle.rope"},
+        {"id":"strap.ankle","label":"Ankle cuff.","value":"strap.ankle"},
+        {"id":"belt.dip","label":"Dip belt.","value":"belt.dip"},
+        {"id":"belt.lift","label":"Lifting belt.","value":"belt.lift"},
+        {"id":"strap.lift","label":"Lifting straps.","value":"strap.lift"},
+        {
+          "id": "strap.stretch",
+          "label": "Stretching strap: a strap, belt or loop band used to pull a limb in a stretch.",
+          "value": "strap.stretch"
+        },
+        {"id":"towel","label":"A towel used as a handle.","value":"towel"},
+        {"id":"marker","label":"Cone, hurdle or floor marker.","value":"marker"},
+        {"id":"board.press","label":"Board laid on the chest for partial presses.","value":"board.press"},
+        {"id":"mat","label":"Floor mat.","value":"mat"},
+        {"id":"unknown","label":"I don't know","value":"?","exclusive":true}
+      ]
+    },
+    {
+      "id": "eq.form.stn",
+      "layer": "FXE f",
+      "select": "one",
+      "when": {"all":[{"fact":"equipment"},{"q":"eq.kind","is":"stn"}]},
+      "text": "Which one is it?",
+      "help": "Pick a child (superband, miniband) only when you know it. Otherwise pick the general entry.",
+      "usual": null,
+      "options": [
+        {"id":"cable","label":"Cable column, crossover or functional trainer: a pulley set per exercise.","value":"cable"},
+        {"id":"smith","label":"Smith machine: a bar on fixed rails.","value":"smith"},
+        {"id":"landmine","label":"Landmine: one end of a barbell in a floor pivot (also a corner T-bar row).","value":"landmine"},
+        {"id":"unknown","label":"I don't know","value":"?","exclusive":true}
+      ]
+    },
+    {
+      "id": "eq.mac.motion",
+      "layer": "FXE m (mac)",
+      "select": "one",
+      "when": {"all":[{"fact":"equipment"},{"q":"eq.kind","is":"mac"}]},
+      "text": "What does the machine guide?",
+      "help": "Answer for the machine as it is built, not the exercise done on it. A calf raise done on a leg press uses a leg press: answer \"pushes away\". A pivot that lines up with one joint is a single-joint machine.",
+      "usual": null,
+      "options": [
+        {"id":"push","label":"It pushes away: a multi-joint press or squat machine","group":"Multi-joint"},
+        {"id":"pull","label":"It pulls toward you: a multi-joint row, pulldown or deadlift machine","group":"Multi-joint"},
+        {"id":"assist","label":"It helps lift the body: an assisted pull-up or dip machine","group":"Multi-joint"},
+        {"id":"kn.flex","label":"Knee bends (leg curl)","value":"kn.flex","group":"Pivots at one joint"},
+        {"id":"kn.ext","label":"Knee straightens (leg extension)","value":"kn.ext","group":"Pivots at one joint"},
+        {"id":"el.flex","label":"Elbow bends (curl machine)","value":"el.flex","group":"Pivots at one joint"},
+        {"id":"el.ext","label":"Elbow straightens (triceps machine)","value":"el.ext","group":"Pivots at one joint"},
+        {"id":"sh.hadd","label":"Arms sweep together in front (pec deck)","value":"sh.hadd","group":"Pivots at one joint"},
+        {"id":"sh.habd","label":"Arms sweep apart (rear-delt machine)","value":"sh.habd","group":"Pivots at one joint"},
+        {"id":"sh.abd","label":"Arms raise out to the sides (lateral raise machine)","value":"sh.abd","group":"Pivots at one joint"},
+        {"id":"sh.ext","label":"Arms pull down from in front (pullover machine)","value":"sh.ext","group":"Pivots at one joint"},
+        {"id":"sh.flex","label":"Arms raise forward","value":"sh.flex","group":"Pivots at one joint"},
+        {"id":"sh.add","label":"Arms pull down from the sides","value":"sh.add","group":"Pivots at one joint"},
+        {"id":"sh.ir","label":"Shoulder rotates in","value":"sh.ir","group":"Pivots at one joint"},
+        {"id":"sh.er","label":"Shoulder rotates out","value":"sh.er","group":"Pivots at one joint"},
+        {"id":"sc.elev","label":"Shrug","value":"sc.elev","group":"Pivots at one joint"},
+        {"id":"hip.flex","label":"Hip bends (leg-raise or knee-raise machine)","value":"hip.flex","group":"Pivots at one joint"},
+        {"id":"hip.ext","label":"Hip extends (glute kickback, hip thrust, reverse hyper)","value":"hip.ext","group":"Pivots at one joint"},
+        {"id":"hip.abd","label":"Legs push apart (abductor)","value":"hip.abd","group":"Pivots at one joint"},
+        {"id":"hip.add","label":"Legs squeeze together (adductor)","value":"hip.add","group":"Pivots at one joint"},
+        {"id":"sp.flex","label":"Trunk curls (ab crunch machine)","value":"sp.flex","group":"Pivots at one joint"},
+        {"id":"sp.ext","label":"Trunk extends (back extension machine)","value":"sp.ext","group":"Pivots at one joint"},
+        {"id":"sp.rot","label":"Trunk twists (rotary torso)","value":"sp.rot","group":"Pivots at one joint"},
+        {"id":"sp.lflex","label":"Trunk bends sideways","value":"sp.lflex","group":"Pivots at one joint"},
+        {"id":"ank.pf","label":"Rise onto the toes (calf raise machine)","value":"ank.pf","group":"Pivots at one joint"},
+        {"id":"ank.df","label":"Toes pull up (tibialis machine)","value":"ank.df","group":"Pivots at one joint"},
+        {"id":"nk.flex","label":"Neck flexes","value":"nk.flex","group":"Pivots at one joint"},
+        {"id":"nk.ext","label":"Neck extends","value":"nk.ext","group":"Pivots at one joint"},
+        {"id":"nk.lflex","label":"Neck bends sideways","value":"nk.lflex","group":"Pivots at one joint"},
+        {"id":"wr.flex","label":"Wrist curls","value":"wr.flex","group":"Pivots at one joint"},
+        {"id":"wr.ext","label":"Wrist extends","value":"wr.ext","group":"Pivots at one joint"},
+        {"id":"unknown","label":"I don't know","value":"?","exclusive":true}
+      ]
+    },
+    {
+      "id": "eq.mac.direction",
+      "layer": "FXE m (mac direction)",
+      "select": "one",
+      "when": {"all":[{"all":[{"fact":"equipment"},{"q":"eq.kind","is":"mac"}]},{"q":"eq.mac.motion","is":["push","pull","assist"]}]},
+      "text": "Which way does the handle, pad or plate move, relative to your trunk, while you work?",
+      "help": "Up is toward the head, down toward the feet, forward is away from the front of the trunk.",
+      "usual": null,
+      "options": [
+        {"id":"up","label":"Toward the head: shoulder press, hack squat, belt squat, deadlift machine.","value":"up"},
+        {"id":"down","label":"Toward the feet: pulldown, seated dip.","value":"down"},
+        {"id":"fwd","label":"Away from the front of the trunk: chest press, leg press.","value":"fwd"},
+        {"id":"back","label":"Toward the front of the trunk: row.","value":"back"},
+        {"id":"fwdup","label":"Forward and up: incline press.","value":"fwdup"},
+        {"id":"fwddown","label":"Forward and down: decline press.","value":"fwddown"},
+        {"id":"backdown","label":"Back and down: high row.","value":"backdown"},
+        {"id":"unknown","label":"I don't know","value":"?","exclusive":true}
+      ]
+    },
+    {
+      "id": "eq.mac.contact",
+      "layer": "FXE l (mac)",
+      "select": "many",
+      "max": 2,
+      "when": {"all":[{"fact":"equipment"},{"q":"eq.kind","is":"mac"}]},
+      "text": "Where does the moving part of the machine meet your body?",
+      "help": "Pick two only when both move the load (an air bike moves with the hands and the feet).",
+      "usual": "The FXE default for that guided motion (FXE machine defaults), or the machine the movement word names.",
+      "options": [
+        {
+          "id": "usual",
+          "label": "The usual place for this motion",
+          "exclusive": true,
+          "when": {"fact":"eq-contact-has-usual"},
+          "whenNot": "the rules give no usual contact for that guided motion"
+        },
+        {"id":"hand","label":"Handles or a bar in the hands.","value":"hand"},
+        {"id":"foot","label":"A foot plate or pedals.","value":"foot"},
+        {"id":"ankle","label":"A pad on the lower leg.","value":"ankle"},
+        {"id":"thigh","label":"A pad on the thigh.","value":"thigh"},
+        {"id":"knee","label":"A pad or platform at the knees.","value":"knee"},
+        {"id":"arm","label":"A pad on the upper arm or elbow.","value":"arm"},
+        {"id":"chest","label":"A pad on the chest.","value":"chest"},
+        {"id":"back","label":"A pad on the back.","value":"back"},
+        {"id":"shoulder","label":"Pads on the shoulders.","value":"shoulder"},
+        {"id":"hip","label":"A pad or belt at the hips.","value":"hip"},
+        {"id":"head","label":"A pad on the head.","value":"head"},
+        {"id":"seat","label":"A moving seat.","value":"seat"},
+        {"id":"unknown","label":"I don't know","value":"?","exclusive":true}
+      ]
+    },
+    {
+      "id": "eq.mac.posture",
+      "layer": "FXE s (mac)",
+      "select": "one",
+      "when": {"all":[{"fact":"equipment"},{"q":"eq.kind","is":"mac"}]},
+      "text": "What position does the machine put the user in?",
+      "help": "Every leg press is \"recline\"; hack, pendulum and belt squats are \"stand\"; a dedicated row machine is \"seat.chest\".",
+      "usual": "The FXE default for that guided motion (FXE machine defaults).",
+      "options": [
+        {"id":"usual","label":"The usual position for this motion","exclusive":true},
+        {"id":"seat","label":"Seated.","value":"seat"},
+        {"id":"seat.chest","label":"Seated, chest against a pad.","value":"seat.chest"},
+        {"id":"stand","label":"Standing.","value":"stand"},
+        {"id":"stand.chest","label":"Standing or bent over, trunk on a pad.","value":"stand.chest"},
+        {"id":"prone","label":"Lying face down, flat or inclined.","value":"prone"},
+        {"id":"supine","label":"Lying face up.","value":"supine"},
+        {"id":"recline","label":"Lying back on an inclined back pad (leg press).","value":"recline"},
+        {"id":"kneel","label":"Kneeling.","value":"kneel"},
+        {"id":"hang","label":"Held up by the hands or forearms.","value":"hang"},
+        {"id":"side","label":"Side-lying.","value":"side"},
+        {"id":"unknown","label":"I don't know","value":"?","exclusive":true}
+      ]
+    },
+    {
+      "id": "eq.erg.type",
+      "layer": "FXE k:erg layers",
+      "select": "one",
+      "when": {"all":[{"fact":"equipment"},{"q":"eq.kind","is":"erg"}]},
+      "text": "Which cardio machine?",
+      "help": "If you only know it is a stationary bike or a stair machine, pick the \"not known\" entry.",
+      "usual": null,
+      "options": [
+        {"id":"treadmill","label":"Treadmill","value":"treadmill"},
+        {"id":"stepmill","label":"Stepmill (revolving stairs)","value":"stepmill"},
+        {"id":"stepper","label":"Stair stepper (pedals)","value":"stepper"},
+        {"id":"stair","label":"Stair machine, stepper or stepmill not known","value":"stair"},
+        {"id":"bike-upright","label":"Upright or spin bike","value":"bike-upright"},
+        {"id":"bike-recumbent","label":"Recumbent bike","value":"bike-recumbent"},
+        {"id":"bike","label":"Stationary bike, upright or recumbent not known","value":"bike"},
+        {"id":"air-bike","label":"Air bike (moving arms)","value":"air-bike"},
+        {"id":"elliptical","label":"Elliptical","value":"elliptical"},
+        {"id":"rower","label":"Rower","value":"rower"},
+        {"id":"ski","label":"Ski erg","value":"ski"},
+        {"id":"ube","label":"Upper-body ergometer (hand cranks, seated)","value":"ube"},
+        {"id":"vertical-climber","label":"Vertical climber","value":"vertical-climber"},
+        {"id":"ladder-climber","label":"Ladder climber","value":"ladder-climber"},
+        {"id":"unknown","label":"A cardio machine of a type I don't know","value":"?","exclusive":true}
+      ]
+    },
+    {
+      "id": "eq.details",
+      "layer": "FXE extended layers",
+      "select": "one",
+      "when": {"all":[{"fact":"equipment"},{"q":"eq.kind","is":["imp","sup","stn","mac","erg"]}]},
+      "text": "Do you want to record how it is built (drive, track, angle, design)?",
+      "help": "These details go only in the equipment registry record. Exercise rows never carry them.",
+      "usual": "No build details.",
+      "options": [{"id":"usual","label":"No (the usual way)","exclusive":true},{"id":"yes","label":"Yes"}]
+    },
+    {
+      "id": "eq.drive",
+      "layer": "FXE r",
+      "select": "one",
+      "when": {"all":[{"all":[{"fact":"equipment"},{"q":"eq.details","is":"yes"}]},{"q":"eq.kind","is":["imp","stn","mac","erg"]}]},
+      "text": "What resists the movement?",
+      "help": "Leave it as usual if you are not sure. A form that implies its drive (a dumbbell is free weight) never needs it.",
+      "usual": "Not stated.",
+      "options": [
+        {"id":"usual","label":"Not stated (the usual way)","exclusive":true},
+        {"id":"grav","label":"Free weight under gravity.","value":"grav"},
+        {"id":"stack","label":"Selectorised weight stack.","value":"stack"},
+        {"id":"plate","label":"Plate-loaded.","value":"plate"},
+        {"id":"elastic","label":"Elastic.","value":"elastic"},
+        {"id":"air","label":"Air fan.","value":"air"},
+        {"id":"mag","label":"Magnetic brake.","value":"mag"},
+        {"id":"water","label":"Water tank.","value":"water"},
+        {"id":"motor","label":"Motor.","value":"motor"},
+        {"id":"friction","label":"Friction.","value":"friction"},
+        {"id":"hydraulic","label":"Hydraulic.","value":"hydraulic"},
+        {"id":"flywheel","label":"Flywheel (isoinertial).","value":"flywheel"},
+        {"id":"none","label":"No resistance of its own.","value":"none"}
+      ]
+    },
+    {
+      "id": "eq.constraint",
+      "layer": "FXE c (mac, stn)",
+      "select": "one",
+      "when": {"all":[{"all":[{"fact":"equipment"},{"q":"eq.details","is":"yes"}]},{"q":"eq.kind","is":["stn","mac"]}]},
+      "text": "How is the moving part guided?",
+      "help": "\"Lever\" or \"leverage\" in a machine name means a lever on one pivot. \"Sled\" means a straight track.",
+      "usual": "Not stated.",
+      "options": [
+        {"id":"usual","label":"Not stated (the usual way)","exclusive":true},
+        {"id":"line","label":"A straight track (sled, rails).","value":"line"},
+        {"id":"arc","label":"A lever on one pivot.","value":"arc"},
+        {"id":"link","label":"A linkage of several pivots.","value":"link"},
+        {"id":"cable","label":"A cable over pulleys.","value":"cable"},
+        {"id":"pivot","label":"One end in a floor pivot.","value":"pivot"}
+      ]
+    },
+    {
+      "id": "eq.compliance",
+      "layer": "FXE c (imp, sup)",
+      "select": "one",
+      "when": {"all":[{"all":[{"fact":"equipment"},{"q":"eq.details","is":"yes"}]},{"q":"eq.kind","is":["imp","sup"]}]},
+      "text": "Does it move under the body?",
+      "help": "A stability ball tilts, an ab wheel rolls. A form that implies it never needs it.",
+      "usual": "Not stated.",
+      "options": [
+        {"id":"usual","label":"Not stated (the usual way)","exclusive":true},
+        {"id":"tilt","label":"Tilts under the body.","value":"tilt"},
+        {"id":"roll","label":"Rolls.","value":"roll"},
+        {"id":"slide","label":"Slides.","value":"slide"},
+        {"id":"swing","label":"Hangs and swings.","value":"swing"}
+      ]
+    },
+    {
+      "id": "eq.angle",
+      "layer": "FXE g",
+      "select": "one",
+      "when": {"all":[{"all":[{"fact":"equipment"},{"q":"eq.details","is":"yes"}]},{"q":"eq.kind","is":["mac"]}]},
+      "text": "At what angle is the track or lever set?",
+      "help": "Only fixed geometry: a 45° leg press is inclined.",
+      "usual": "Not stated.",
+      "options": [
+        {"id":"usual","label":"Not stated (the usual way)","exclusive":true},
+        {"id":"incl","label":"Inclined (45° leg press).","value":"incl"},
+        {"id":"horiz","label":"Horizontal.","value":"horiz"},
+        {"id":"vert","label":"Vertical.","value":"vert"}
+      ]
+    },
+    {
+      "id": "eq.attrs",
+      "layer": "FXE a",
+      "select": "many",
+      "when": {"all":[{"all":[{"fact":"equipment"},{"q":"eq.details","is":"yes"}]},{"q":"eq.kind","is":["stn","mac"]}]},
+      "text": "Which design features does it have?",
+      "help": "Pick every one that applies.",
+      "usual": "None stated.",
+      "options": [
+        {"id":"usual","label":"None stated (the usual way)","exclusive":true},
+        {"id":"iso","label":"Independent arms (iso-lateral).","value":"iso"},
+        {"id":"conv","label":"Converging path.","value":"conv"},
+        {"id":"cb","label":"Counterbalanced (Smith).","value":"cb"},
+        {"id":"dual","label":"Two stacks.","value":"dual"}
+      ]
+    },
+    {
+      "id": "eq.more",
+      "layer": "FXE combination (\";\")",
+      "select": "one",
+      "when": {"all":[{"fact":"equipment"},{"q":"eq.kind","is":"mac"}]},
+      "text": "Can the machine be set up as a second machine (multi-hip, pec deck with rear-delt arms, pulldown with low row)?",
+      "help": "Answer the machine questions once more for the second setup.",
+      "usual": "No.",
+      "options": [{"id":"usual","label":"No (the usual way)","exclusive":true},{"id":"yes","label":"Yes"}]
+    },
+    {
+      "id": "eq2.mac.motion",
+      "layer": "FXE m (mac)",
+      "select": "one",
+      "when": {"all":[{"fact":"equipment"},{"q":"eq.kind","is":"mac"},{"q":"eq.more","is":"yes"}]},
+      "text": "What does the machine guide?",
+      "help": "Answer for the machine as it is built, not the exercise done on it. A calf raise done on a leg press uses a leg press: answer \"pushes away\". A pivot that lines up with one joint is a single-joint machine.",
+      "usual": null,
+      "options": [
+        {"id":"push","label":"It pushes away: a multi-joint press or squat machine","group":"Multi-joint"},
+        {"id":"pull","label":"It pulls toward you: a multi-joint row, pulldown or deadlift machine","group":"Multi-joint"},
+        {"id":"assist","label":"It helps lift the body: an assisted pull-up or dip machine","group":"Multi-joint"},
+        {"id":"kn.flex","label":"Knee bends (leg curl)","value":"kn.flex","group":"Pivots at one joint"},
+        {"id":"kn.ext","label":"Knee straightens (leg extension)","value":"kn.ext","group":"Pivots at one joint"},
+        {"id":"el.flex","label":"Elbow bends (curl machine)","value":"el.flex","group":"Pivots at one joint"},
+        {"id":"el.ext","label":"Elbow straightens (triceps machine)","value":"el.ext","group":"Pivots at one joint"},
+        {"id":"sh.hadd","label":"Arms sweep together in front (pec deck)","value":"sh.hadd","group":"Pivots at one joint"},
+        {"id":"sh.habd","label":"Arms sweep apart (rear-delt machine)","value":"sh.habd","group":"Pivots at one joint"},
+        {"id":"sh.abd","label":"Arms raise out to the sides (lateral raise machine)","value":"sh.abd","group":"Pivots at one joint"},
+        {"id":"sh.ext","label":"Arms pull down from in front (pullover machine)","value":"sh.ext","group":"Pivots at one joint"},
+        {"id":"sh.flex","label":"Arms raise forward","value":"sh.flex","group":"Pivots at one joint"},
+        {"id":"sh.add","label":"Arms pull down from the sides","value":"sh.add","group":"Pivots at one joint"},
+        {"id":"sh.ir","label":"Shoulder rotates in","value":"sh.ir","group":"Pivots at one joint"},
+        {"id":"sh.er","label":"Shoulder rotates out","value":"sh.er","group":"Pivots at one joint"},
+        {"id":"sc.elev","label":"Shrug","value":"sc.elev","group":"Pivots at one joint"},
+        {"id":"hip.flex","label":"Hip bends (leg-raise or knee-raise machine)","value":"hip.flex","group":"Pivots at one joint"},
+        {"id":"hip.ext","label":"Hip extends (glute kickback, hip thrust, reverse hyper)","value":"hip.ext","group":"Pivots at one joint"},
+        {"id":"hip.abd","label":"Legs push apart (abductor)","value":"hip.abd","group":"Pivots at one joint"},
+        {"id":"hip.add","label":"Legs squeeze together (adductor)","value":"hip.add","group":"Pivots at one joint"},
+        {"id":"sp.flex","label":"Trunk curls (ab crunch machine)","value":"sp.flex","group":"Pivots at one joint"},
+        {"id":"sp.ext","label":"Trunk extends (back extension machine)","value":"sp.ext","group":"Pivots at one joint"},
+        {"id":"sp.rot","label":"Trunk twists (rotary torso)","value":"sp.rot","group":"Pivots at one joint"},
+        {"id":"sp.lflex","label":"Trunk bends sideways","value":"sp.lflex","group":"Pivots at one joint"},
+        {"id":"ank.pf","label":"Rise onto the toes (calf raise machine)","value":"ank.pf","group":"Pivots at one joint"},
+        {"id":"ank.df","label":"Toes pull up (tibialis machine)","value":"ank.df","group":"Pivots at one joint"},
+        {"id":"nk.flex","label":"Neck flexes","value":"nk.flex","group":"Pivots at one joint"},
+        {"id":"nk.ext","label":"Neck extends","value":"nk.ext","group":"Pivots at one joint"},
+        {"id":"nk.lflex","label":"Neck bends sideways","value":"nk.lflex","group":"Pivots at one joint"},
+        {"id":"wr.flex","label":"Wrist curls","value":"wr.flex","group":"Pivots at one joint"},
+        {"id":"wr.ext","label":"Wrist extends","value":"wr.ext","group":"Pivots at one joint"},
+        {"id":"unknown","label":"I don't know","value":"?","exclusive":true}
+      ]
+    },
+    {
+      "id": "eq2.mac.direction",
+      "layer": "FXE m (mac direction)",
+      "select": "one",
+      "when": {
+        "all": [
+          {"all":[{"fact":"equipment"},{"q":"eq.kind","is":"mac"},{"q":"eq.more","is":"yes"}]},
+          {"q":"eq2.mac.motion","is":["push","pull","assist"]}
+        ]
+      },
+      "text": "Which way does the handle, pad or plate move, relative to your trunk, while you work?",
+      "help": "Up is toward the head, down toward the feet, forward is away from the front of the trunk.",
+      "usual": null,
+      "options": [
+        {"id":"up","label":"Toward the head: shoulder press, hack squat, belt squat, deadlift machine.","value":"up"},
+        {"id":"down","label":"Toward the feet: pulldown, seated dip.","value":"down"},
+        {"id":"fwd","label":"Away from the front of the trunk: chest press, leg press.","value":"fwd"},
+        {"id":"back","label":"Toward the front of the trunk: row.","value":"back"},
+        {"id":"fwdup","label":"Forward and up: incline press.","value":"fwdup"},
+        {"id":"fwddown","label":"Forward and down: decline press.","value":"fwddown"},
+        {"id":"backdown","label":"Back and down: high row.","value":"backdown"},
+        {"id":"unknown","label":"I don't know","value":"?","exclusive":true}
+      ]
+    },
+    {
+      "id": "eq2.mac.contact",
+      "layer": "FXE l (mac)",
+      "select": "many",
+      "max": 2,
+      "when": {"all":[{"fact":"equipment"},{"q":"eq.kind","is":"mac"},{"q":"eq.more","is":"yes"}]},
+      "text": "Where does the moving part of the machine meet your body?",
+      "help": "Pick two only when both move the load (an air bike moves with the hands and the feet).",
+      "usual": "The FXE default for that guided motion (FXE machine defaults), or the machine the movement word names.",
+      "options": [
+        {
+          "id": "usual",
+          "label": "The usual place for this motion",
+          "exclusive": true,
+          "when": {"fact":"eq2-contact-has-usual"},
+          "whenNot": "the rules give no usual contact for that guided motion"
+        },
+        {"id":"hand","label":"Handles or a bar in the hands.","value":"hand"},
+        {"id":"foot","label":"A foot plate or pedals.","value":"foot"},
+        {"id":"ankle","label":"A pad on the lower leg.","value":"ankle"},
+        {"id":"thigh","label":"A pad on the thigh.","value":"thigh"},
+        {"id":"knee","label":"A pad or platform at the knees.","value":"knee"},
+        {"id":"arm","label":"A pad on the upper arm or elbow.","value":"arm"},
+        {"id":"chest","label":"A pad on the chest.","value":"chest"},
+        {"id":"back","label":"A pad on the back.","value":"back"},
+        {"id":"shoulder","label":"Pads on the shoulders.","value":"shoulder"},
+        {"id":"hip","label":"A pad or belt at the hips.","value":"hip"},
+        {"id":"head","label":"A pad on the head.","value":"head"},
+        {"id":"seat","label":"A moving seat.","value":"seat"},
+        {"id":"unknown","label":"I don't know","value":"?","exclusive":true}
+      ]
+    },
+    {
+      "id": "eq2.mac.posture",
+      "layer": "FXE s (mac)",
+      "select": "one",
+      "when": {"all":[{"fact":"equipment"},{"q":"eq.kind","is":"mac"},{"q":"eq.more","is":"yes"}]},
+      "text": "What position does the machine put the user in?",
+      "help": "Every leg press is \"recline\"; hack, pendulum and belt squats are \"stand\"; a dedicated row machine is \"seat.chest\".",
+      "usual": "The FXE default for that guided motion (FXE machine defaults).",
+      "options": [
+        {"id":"usual","label":"The usual position for this motion","exclusive":true},
+        {"id":"seat","label":"Seated.","value":"seat"},
+        {"id":"seat.chest","label":"Seated, chest against a pad.","value":"seat.chest"},
+        {"id":"stand","label":"Standing.","value":"stand"},
+        {"id":"stand.chest","label":"Standing or bent over, trunk on a pad.","value":"stand.chest"},
+        {"id":"prone","label":"Lying face down, flat or inclined.","value":"prone"},
+        {"id":"supine","label":"Lying face up.","value":"supine"},
+        {"id":"recline","label":"Lying back on an inclined back pad (leg press).","value":"recline"},
+        {"id":"kneel","label":"Kneeling.","value":"kneel"},
+        {"id":"hang","label":"Held up by the hands or forearms.","value":"hang"},
+        {"id":"side","label":"Side-lying.","value":"side"},
+        {"id":"unknown","label":"I don't know","value":"?","exclusive":true}
+      ]
+    },
+    {
+      "id": "eq2.details",
+      "layer": "FXE extended layers",
+      "select": "one",
+      "when": {
+        "all": [
+          {"all":[{"fact":"equipment"},{"q":"eq.kind","is":"mac"},{"q":"eq.more","is":"yes"}]},
+          {"q":"eq.kind","is":["imp","sup","stn","mac","erg"]}
+        ]
+      },
+      "text": "Do you want to record how it is built (drive, track, angle, design)?",
+      "help": "These details go only in the equipment registry record. Exercise rows never carry them.",
+      "usual": "No build details.",
+      "options": [{"id":"usual","label":"No (the usual way)","exclusive":true},{"id":"yes","label":"Yes"}]
+    },
+    {
+      "id": "eq2.drive",
+      "layer": "FXE r",
+      "select": "one",
+      "when": {
+        "all": [
+          {"all":[{"all":[{"fact":"equipment"},{"q":"eq.kind","is":"mac"},{"q":"eq.more","is":"yes"}]},{"q":"eq2.details","is":"yes"}]},
+          {"q":"eq.kind","is":["imp","stn","mac","erg"]}
+        ]
+      },
+      "text": "What resists the movement?",
+      "help": "Leave it as usual if you are not sure. A form that implies its drive (a dumbbell is free weight) never needs it.",
+      "usual": "Not stated.",
+      "options": [
+        {"id":"usual","label":"Not stated (the usual way)","exclusive":true},
+        {"id":"grav","label":"Free weight under gravity.","value":"grav"},
+        {"id":"stack","label":"Selectorised weight stack.","value":"stack"},
+        {"id":"plate","label":"Plate-loaded.","value":"plate"},
+        {"id":"elastic","label":"Elastic.","value":"elastic"},
+        {"id":"air","label":"Air fan.","value":"air"},
+        {"id":"mag","label":"Magnetic brake.","value":"mag"},
+        {"id":"water","label":"Water tank.","value":"water"},
+        {"id":"motor","label":"Motor.","value":"motor"},
+        {"id":"friction","label":"Friction.","value":"friction"},
+        {"id":"hydraulic","label":"Hydraulic.","value":"hydraulic"},
+        {"id":"flywheel","label":"Flywheel (isoinertial).","value":"flywheel"},
+        {"id":"none","label":"No resistance of its own.","value":"none"}
+      ]
+    },
+    {
+      "id": "eq2.constraint",
+      "layer": "FXE c (mac, stn)",
+      "select": "one",
+      "when": {
+        "all": [
+          {"all":[{"all":[{"fact":"equipment"},{"q":"eq.kind","is":"mac"},{"q":"eq.more","is":"yes"}]},{"q":"eq2.details","is":"yes"}]},
+          {"q":"eq.kind","is":["stn","mac"]}
+        ]
+      },
+      "text": "How is the moving part guided?",
+      "help": "\"Lever\" or \"leverage\" in a machine name means a lever on one pivot. \"Sled\" means a straight track.",
+      "usual": "Not stated.",
+      "options": [
+        {"id":"usual","label":"Not stated (the usual way)","exclusive":true},
+        {"id":"line","label":"A straight track (sled, rails).","value":"line"},
+        {"id":"arc","label":"A lever on one pivot.","value":"arc"},
+        {"id":"link","label":"A linkage of several pivots.","value":"link"},
+        {"id":"cable","label":"A cable over pulleys.","value":"cable"},
+        {"id":"pivot","label":"One end in a floor pivot.","value":"pivot"}
+      ]
+    },
+    {
+      "id": "eq2.compliance",
+      "layer": "FXE c (imp, sup)",
+      "select": "one",
+      "when": {
+        "all": [
+          {"all":[{"all":[{"fact":"equipment"},{"q":"eq.kind","is":"mac"},{"q":"eq.more","is":"yes"}]},{"q":"eq2.details","is":"yes"}]},
+          {"q":"eq.kind","is":["imp","sup"]}
+        ]
+      },
+      "text": "Does it move under the body?",
+      "help": "A stability ball tilts, an ab wheel rolls. A form that implies it never needs it.",
+      "usual": "Not stated.",
+      "options": [
+        {"id":"usual","label":"Not stated (the usual way)","exclusive":true},
+        {"id":"tilt","label":"Tilts under the body.","value":"tilt"},
+        {"id":"roll","label":"Rolls.","value":"roll"},
+        {"id":"slide","label":"Slides.","value":"slide"},
+        {"id":"swing","label":"Hangs and swings.","value":"swing"}
+      ]
+    },
+    {
+      "id": "eq2.angle",
+      "layer": "FXE g",
+      "select": "one",
+      "when": {
+        "all": [
+          {"all":[{"all":[{"fact":"equipment"},{"q":"eq.kind","is":"mac"},{"q":"eq.more","is":"yes"}]},{"q":"eq2.details","is":"yes"}]},
+          {"q":"eq.kind","is":["mac"]}
+        ]
+      },
+      "text": "At what angle is the track or lever set?",
+      "help": "Only fixed geometry: a 45° leg press is inclined.",
+      "usual": "Not stated.",
+      "options": [
+        {"id":"usual","label":"Not stated (the usual way)","exclusive":true},
+        {"id":"incl","label":"Inclined (45° leg press).","value":"incl"},
+        {"id":"horiz","label":"Horizontal.","value":"horiz"},
+        {"id":"vert","label":"Vertical.","value":"vert"}
+      ]
+    },
+    {
+      "id": "eq2.attrs",
+      "layer": "FXE a",
+      "select": "many",
+      "when": {
+        "all": [
+          {"all":[{"all":[{"fact":"equipment"},{"q":"eq.kind","is":"mac"},{"q":"eq.more","is":"yes"}]},{"q":"eq2.details","is":"yes"}]},
+          {"q":"eq.kind","is":["stn","mac"]}
+        ]
+      },
+      "text": "Which design features does it have?",
+      "help": "Pick every one that applies.",
+      "usual": "None stated.",
+      "options": [
+        {"id":"usual","label":"None stated (the usual way)","exclusive":true},
+        {"id":"iso","label":"Independent arms (iso-lateral).","value":"iso"},
+        {"id":"conv","label":"Converging path.","value":"conv"},
+        {"id":"cb","label":"Counterbalanced (Smith).","value":"cb"},
+        {"id":"dual","label":"Two stacks.","value":"dual"}
+      ]
+    }
+  ]
+}

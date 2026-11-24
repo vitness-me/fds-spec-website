@@ -27,6 +27,19 @@ The contrast is `blocks[].mode` and `schedule.model`, which are **not** here. Th
 
 `intensity-zone.registry.json` defines the systems and their zone labels — that "Z4" in the Coggan seven-zone model means the same thing in two applications. It carries `boundsBasis` (what the boundaries are a percentage *of*) and never the boundary values themselves, because those are personal. See RFC-006 §5.1.
 
+## Descriptor vocabularies — closed, draft
+
+`descriptors/` holds the alphabets of the structural descriptors: every code an FXI or FXE string may contain, by layer. They are described on the descriptor pages (`specification/descriptors/`), which render their tables from these files. Both are **drafts** pending the descriptor RFC.
+
+| File | Governs | Policy |
+|---|---|---|
+| `descriptors/fxi.registry.json` | the codes of an FXI string (exercises) | closed |
+| `descriptors/fxe.registry.json` | the codes of an FXE string (equipment) | closed |
+
+These are the opposite of open. A descriptor is compared code by code, so an unknown code makes the string invalid rather than mislabelled. They grow by rules revision, and a revision may only refine: add a code, or split one into children. Each file names its `rules` revision and the `syntax` revision its strings carry in their header.
+
+They are classifier vocabularies only. Movement words, muscle lists and equipment catalogues are provider data and are not here. `npm run check:descriptors` checks them, not `check:registries`.
+
 ## Entity registry examples — illustrative
 
 | File | Shows |
