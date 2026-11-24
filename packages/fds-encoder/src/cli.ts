@@ -247,7 +247,7 @@ export async function run(argv: readonly string[], io: Io, version = '0.0.0'): P
   program.command('validate')
     .description('validate FXI, FXE and FXM strings and print their canonical forms, or check a rows file')
     .argument('[strings...]', 'FXI, FXE or FXM strings')
-    .option('--rows <file>', 'a rows file: {id, fxi, fxe?, confidence, notes, fxiProvenance?, fxiGap?}, or muscle rows {id, slug, name, class, fxm}')
+    .option('--rows <file>', 'a rows file: {id, fxi, fxe?, confidence, notes, fxiProvenance?, fxiGap?}, or muscle rows {id, slug, name, class, fxm}. confidence (high, medium or low) is a field of this encoder\'s rows, not of FDS')
     .option('--muscles <file|url>', 'a provider\'s FXM vocabulary {muscles, groups}; without one, FXM keys are checked for format only')
     .option('--write <file>', 'with --rows, write the canonical rows')
     .action(async (strings: string[], o: { rows?: string; muscles?: string; write?: string }) => {
