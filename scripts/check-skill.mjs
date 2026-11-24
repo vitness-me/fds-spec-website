@@ -122,12 +122,12 @@
  * ── Declaring a name that is not FDS ─────────────────────────────────────────
  *
  * A knowledge base about transformation necessarily names things that are not
- * FDS: the source format's `mediaUrl`, the transformer's `fuzzyMatch`, and the
+ * FDS: the source format's `videoUrl`, the transformer's `fuzzyMatch`, and the
  * counter-examples `isCircuit` and `emomInterval` that exist in the text
  * precisely because they do *not* exist in the schema. Those are declared where
  * they are used, so a reviewer sees the claim next to the text making it:
  *
- *   <!-- fds:not-a-field mediaUrl, bodyPart — source database fields, not FDS -->
+ *   <!-- fds:not-a-field videoUrl, region — source database fields, not FDS -->
  *
  *   ```json fds:not-a-field — a transformer mapping config, not an FDS document
  *
@@ -194,7 +194,7 @@ const NOT_COVERAGE = new Set([METHOD, 'CHANGELOG.md']);
  * opt out whole, `files` JSON files that do. Asserted rather than logged: a
  * number in a log still grows quietly.
  */
-const EXPECTED = { names: 25, blocks: 9, files: 1 };
+const EXPECTED = { names: 26, blocks: 9, files: 1 };
 
 /**
  * `package.json` is an npm manifest. `files`, `keywords` and `exports` are npm's

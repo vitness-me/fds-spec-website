@@ -3,16 +3,19 @@
     "schemaVersion": "1.1.0",
     "exerciseId": "550e8400-e29b-41d4-a716-446655440001",
     "canonical": {
-      "name": "3/4 Crunch",
-      "slug": "three-quarter-crunch",
-      "description": "A crunch that stops short of full range at the top, so the abdominals stay loaded for the whole set. Lie on your back with knees bent and curl the shoulders off the floor.",
-      "aliases": ["three-quarter crunch", "partial crunch"]
+      "name": "Dead Bug",
+      "slug": "dead-bug",
+      "description": "Lying on your back with arms pointing at the ceiling and hips and knees bent, lower one arm and the opposite leg toward the floor while the lower back stays pressed down, then return and switch sides.",
+      "aliases": [
+        "dead bug crawl",
+        "supine opposite arm and leg lower"
+      ]
     },
     "classification": {
       "exerciseType": "strength",
       "movement": "core-anti-extension",
       "mechanics": "isolation",
-      "force": "pull",
+      "force": "static",
       "level": "beginner"
     },
     "targets": {
@@ -43,7 +46,7 @@
     "media": [
       {
         "type": "video",
-        "uri": "https://media.example.org/exercises/three-quarter-crunch.mp4"
+        "uri": "https://media.example.org/exercises/dead-bug.mp4"
       }
     ],
     "metadata": {
@@ -54,7 +57,7 @@
       "externalRefs": [
         {
           "system": "example-catalog",
-          "id": "vx-0001"
+          "id": "gym-101"
         }
       ]
     }
@@ -63,10 +66,13 @@
     "schemaVersion": "1.1.0",
     "exerciseId": "550e8400-e29b-41d4-a716-446655440002",
     "canonical": {
-      "name": "Barbell Bench Press",
-      "slug": "barbell-bench-press",
-      "description": "A fundamental compound pushing exercise that primarily targets the pectoralis major while engaging the anterior deltoids and triceps. The barbell bench press is essential for building upper body pushing strength and chest development.",
-      "aliases": ["bench press", "flat bench press", "barbell press"]
+      "name": "Barbell Floor Press",
+      "slug": "barbell-floor-press",
+      "description": "Lying on the floor under a barbell, press it from the point where the upper arms touch the floor to straight arms. The floor shortens the range, so the lockout does more of the work.",
+      "aliases": [
+        "floor press",
+        "barbell press from the floor"
+      ]
     },
     "classification": {
       "exerciseType": "strength",
@@ -85,12 +91,6 @@
         }
       ],
       "secondary": [
-        {
-          "id": "c3d4e5f6-3333-4000-8000-000000000040",
-          "name": "Anterior Deltoid",
-          "slug": "anterior-deltoid",
-          "categoryId": "a1b2c3d4-1111-4000-8000-000000000008"
-        },
         {
           "id": "c3d4e5f6-3333-4000-8000-000000000003",
           "name": "Triceps",
@@ -130,7 +130,7 @@
     "media": [
       {
         "type": "video",
-        "uri": "https://media.example.org/exercises/barbell-bench-press.mp4"
+        "uri": "https://media.example.org/exercises/barbell-floor-press.mp4"
       }
     ],
     "metadata": {
@@ -141,7 +141,7 @@
       "externalRefs": [
         {
           "system": "example-catalog",
-          "id": "vx-0002"
+          "id": "gym-102"
         }
       ]
     }
@@ -150,17 +150,21 @@
     "schemaVersion": "1.1.0",
     "exerciseId": "550e8400-e29b-41d4-a716-446655440003",
     "canonical": {
-      "name": "Seated Cable Row",
-      "slug": "seated-cable-row",
-      "description": "Seated at a low cable with the feet braced, pull a handle to the lower ribs and return under control. Works the upper back and lats with the elbows travelling close to the body.",
-      "aliases": ["cable row", "low cable row"]
+      "name": "Half-Kneeling One-Arm Cable Pulldown",
+      "slug": "half-kneeling-one-arm-cable-pulldown",
+      "description": "Kneeling on one knee beside a high cable, pull a single handle down to the side of the chest with one arm, keeping the trunk upright, then let it rise under control.",
+      "aliases": [
+        "one-arm kneeling pulldown",
+        "single-arm cable pulldown"
+      ]
     },
     "classification": {
       "exerciseType": "strength",
-      "movement": "pull-horizontal",
+      "movement": "pull-vertical",
       "mechanics": "compound",
       "force": "pull",
-      "level": "beginner"
+      "level": "beginner",
+      "unilateral": true
     },
     "targets": {
       "primary": [
@@ -204,7 +208,7 @@
     "media": [
       {
         "type": "video",
-        "uri": "https://media.example.org/exercises/seated-cable-row.mp4"
+        "uri": "https://media.example.org/exercises/half-kneeling-one-arm-cable-pulldown.mp4"
       }
     ],
     "metadata": {
@@ -215,7 +219,7 @@
       "externalRefs": [
         {
           "system": "example-catalog",
-          "id": "vx-0003"
+          "id": "gym-103"
         }
       ]
     }

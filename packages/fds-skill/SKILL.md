@@ -454,12 +454,12 @@ What type of exercise?
 ```json fds:not-a-field — the source database's own field names, which is the whole point of showing them
 // Source
 {
-  "id": "vx-0001",
-  "name": "3/4 crunch",
-  "bodyPart": "core",
-  "equipment": "body weight",
-  "target": "abs",
-  "mediaUrl": "https://example.com/media/three-quarter-crunch.mp4"
+  "code": "gym-101",
+  "name": "dead bug",
+  "region": "trunk",
+  "equipment": "none",
+  "primaryMuscle": "abdominals",
+  "videoUrl": "https://example.com/media/dead-bug.mp4"
 }
 ```
 
@@ -469,16 +469,16 @@ What type of exercise?
   "schemaVersion": "1.1.0",
   "exerciseId": "550e8400-e29b-41d4-a716-446655440001",
   "canonical": {
-    "name": "3/4 Crunch",
-    "slug": "three-quarter-crunch",
-    "description": "A crunch that stops short of full range at the top, so the abdominals stay loaded for the whole set.",
-    "aliases": ["three-quarter crunch", "partial crunch"]
+    "name": "Dead Bug",
+    "slug": "dead-bug",
+    "description": "Lying on your back with arms pointing at the ceiling and hips and knees bent, lower one arm and the opposite leg toward the floor while the lower back stays pressed down, then return and switch sides.",
+    "aliases": ["dead bug crawl", "supine opposite arm and leg lower"]
   },
   "classification": {
     "exerciseType": "strength",
     "movement": "core-anti-extension",
     "mechanics": "isolation",
-    "force": "pull",
+    "force": "static",
     "level": "beginner"
   },
   "targets": {
@@ -501,7 +501,7 @@ What type of exercise?
   },
   "media": [{
     "type": "video",
-    "uri": "https://example.com/media/three-quarter-crunch.mp4"
+    "uri": "https://example.com/media/dead-bug.mp4"
   }],
   "metadata": {
     "createdAt": "2026-01-25T00:00:00Z",
@@ -510,7 +510,7 @@ What type of exercise?
     "source": "example-catalog-import",
     "externalRefs": [{
       "system": "example-catalog",
-      "id": "vx-0001"
+      "id": "gym-101"
     }]
   }
 }

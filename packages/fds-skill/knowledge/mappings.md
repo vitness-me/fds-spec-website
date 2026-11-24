@@ -1,33 +1,33 @@
 # FDS Mapping Strategies
 
-<!-- fds:not-a-field bodyPart, mediaUrl, target, category, subcategory, difficulty — field names belonging to the *source* databases this guide maps from; naming them is the point of a mapping table -->
+<!-- fds:not-a-field code, region, primaryMuscle, videoUrl, category, subcategory, difficulty — field names belonging to the *source* databases this guide maps from; naming them is the point of a mapping table -->
 
 ## Common Source Formats
 
-### Format 1: Simple Exercise Database
+### Format 1: A Gym's Exercise List
 ```json fds:not-a-field — a source database record, shown so a reader can see what they are mapping from
 {
-  "id": "vx-0001",
-  "name": "3/4 crunch",
-  "bodyPart": "core",
-  "equipment": "body weight",
-  "target": "abs",
-  "mediaUrl": "https://example.com/media/three-quarter-crunch.mp4"
+  "code": "gym-101",
+  "name": "dead bug",
+  "region": "trunk",
+  "equipment": "none",
+  "primaryMuscle": "abdominals",
+  "videoUrl": "https://example.com/media/dead-bug.mp4"
 }
 ```
 
 **Mapping Strategy:**
 | Source Field | FDS Field | Transform |
 |--------------|-----------|-----------|
-| `id` | `metadata.externalRefs[0].id` | Keep as external ref |
+| `code` | `metadata.externalRefs[0].id` | Keep as external ref |
 | - | `exerciseId` | Generate UUIDv4 |
 | `name` | `canonical.name` | `titleCase` |
 | `name` | `canonical.slug` | `slugify` |
 | - | `canonical.description` | AI enrichment |
-| `bodyPart` | Context for AI | Used in classification |
+| `region` | Context for AI | Used in classification |
 | `equipment` | `equipment.required[0]` | Registry lookup |
-| `target` | `targets.primary[0]` | Registry lookup + AI |
-| `mediaUrl` | `media[0]` | `toMediaArray` |
+| `primaryMuscle` | `targets.primary[0]` | Registry lookup + AI |
+| `videoUrl` | `media[0]` | `toMediaArray` |
 | - | `classification.*` | AI enrichment |
 | - | `metrics.primary` | AI enrichment |
 
@@ -83,13 +83,13 @@ Converts a string to a URL-safe slug.
 **Edge Cases:**
 - Numbers: `"21s Bicep Curl"` → `"21s-bicep-curl"`
 - Special chars: `"Push-Up (Incline)"` → `"push-up-incline"`
-- Fractions: `"3/4 Crunch"` → `"three-quarter-crunch"` (needs special handling)
+- Fractions: `"1/4 Squat"` → `"quarter-squat"` (needs special handling)
 
 ### titleCase
 Converts to title case for display names.
 
-**Input:** `"barbell bench press"`  
-**Output:** `"Barbell Bench Press"`
+**Input:** `"barbell floor press"`  
+**Output:** `"Barbell Floor Press"`
 
 **Rules:**
 1. Capitalize first letter of each word
@@ -136,12 +136,12 @@ Converts URL(s) to FDS media array format.
 }
 ```
 
-**Input:** `"https://old-media.example.com/three-quarter-crunch.mp4"`  
+**Input:** `"https://old-media.example.com/dead-bug.mp4"`  
 **Output:**
 ```json
 [{
   "type": "video",
-  "uri": "https://media.example.com/three-quarter-crunch.mp4"
+  "uri": "https://media.example.com/dead-bug.mp4"
 }]
 ```
 
@@ -157,7 +157,7 @@ Generates or formats UUIDs with optional prefix.
 ```
 
 **If source has ID:**
-- Input: `"vx-0001"` → Output: `"ex-vx-0001-{uuid}"` or preserve + add external ref
+- Input: `"gym-101"` → Output: `"ex-gym-101-{uuid}"` or preserve + add external ref
 
 **If generate:**
 - Output: `"ex-{generated-uuid-v4}"`
@@ -203,7 +203,7 @@ Auto-generates metadata fields.
       "enrichment": {
         "enabled": true,
         "prompt": "exercise_description",
-        "context": ["name", "bodyPart", "target", "equipment"]
+        "context": ["name", "region", "primaryMuscle", "equipment"]
       }
     },
     "classification": {
@@ -211,11 +211,11 @@ Auto-generates metadata fields.
       "enrichment": {
         "enabled": true,
         "prompt": "exercise_classification",
-        "context": ["name", "bodyPart", "target", "equipment"]
+        "context": ["name", "region", "primaryMuscle", "equipment"]
       }
     },
     "targets.primary": {
-      "from": "target",
+      "from": "primaryMuscle",
       "transform": "registryLookup",
       "options": { "registry": "muscles", "fuzzyMatch": true }
     },
@@ -233,7 +233,7 @@ Auto-generates metadata fields.
       }
     },
     "media": {
-      "from": "mediaUrl",
+      "from": "videoUrl",
       "transform": "toMediaArray",
       "options": { "type": "image" }
     },
@@ -279,7 +279,7 @@ FDS uses nested structures. Use dot notation:
 ```json
 {
   "targets.primary": {
-    "from": "target",
+    "from": "primaryMuscle",
     "transform": ["registryLookup", "toArray"]
   }
 }

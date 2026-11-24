@@ -1,6 +1,6 @@
 # FDS AI Enrichment Guide
 
-<!-- fds:not-a-field bodyPart, mediaUrl, target — field names belonging to the *source* database this guide enriches from -->
+<!-- fds:not-a-field region, primaryMuscle, videoUrl — field names belonging to the *source* database this guide enriches from -->
 
 ## Overview
 
@@ -16,11 +16,11 @@ AI enrichment fills gaps when source data lacks fields required by FDS. This gui
 | `name` | `canonical.slug` | Transform (slugify) |
 | - | `canonical.description` | **AI Enrich** |
 | - | `canonical.aliases` | **AI Enrich** |
-| `bodyPart` + `target` | `classification.*` | **AI Enrich** (5 fields) |
-| `target` | `targets.primary` | Registry lookup + AI fallback |
+| `region` + `primaryMuscle` | `classification.*` | **AI Enrich** (5 fields) |
+| `primaryMuscle` | `targets.primary` | Registry lookup + AI fallback |
 | `equipment` | `equipment.required` | Registry lookup + AI fallback |
 | - | `metrics.primary` | **AI Enrich** |
-| `mediaUrl` | `media` | Transform (toMediaArray) |
+| `videoUrl` | `media` | Transform (toMediaArray) |
 | - | `metadata.*` | Auto-generate |
 
 ---
@@ -33,7 +33,7 @@ AI enrichment fills gaps when source data lacks fields required by FDS. This gui
 
 **Context needed:**
 - `name` (required)
-- `bodyPart` or `target` (helpful)
+- `region` or `primaryMuscle` (helpful)
 - `equipment` (helpful)
 - `classification` if already determined (helpful)
 
@@ -78,8 +78,8 @@ AI enrichment fills gaps when source data lacks fields required by FDS. This gui
 
 **Context needed:**
 - `name` (required)
-- `bodyPart` (very helpful)
-- `target` muscle (very helpful)
+- `region` (very helpful)
+- `primaryMuscle` (very helpful)
 - `equipment` (helpful)
 
 **Output format:**
@@ -188,8 +188,8 @@ Plyometric?
 
 **Context needed:**
 - `name` (required)
-- `bodyPart` (helpful)
-- Source `target` value (required - this is what failed lookup)
+- `region` (helpful)
+- Source `primaryMuscle` value (required - this is what failed lookup)
 
 **Task:** Map the source muscle name to the closest FDS muscle
 
@@ -229,8 +229,8 @@ Your responses must be:
 Classify this exercise according to FDS release 1.5.0 (exercise schema 1.1.0):
 
 Exercise: {{name}}
-Body Part: {{bodyPart}}
-Target Muscle: {{target}}
+Body Region: {{region}}
+Primary Muscle: {{primaryMuscle}}
 Equipment: {{equipment}}
 
 Required fields (use EXACT enum values):
@@ -256,7 +256,7 @@ Respond with JSON only:
 Write a concise description for this exercise:
 
 Exercise: {{name}}
-Target: {{target}}
+Primary Muscle: {{primaryMuscle}}
 Equipment: {{equipment}}
 Type: {{exerciseType}}
 Movement: {{movement}}

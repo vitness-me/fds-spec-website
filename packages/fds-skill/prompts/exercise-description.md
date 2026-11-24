@@ -21,8 +21,8 @@ Always respond with valid JSON matching the expected schema.
 Write a description for this exercise:
 
 Exercise: {{name}}
-{{#if bodyPart}}Body Part: {{bodyPart}}{{/if}}
-{{#if target}}Target Muscle: {{target}}{{/if}}
+{{#if region}}Body Region: {{region}}{{/if}}
+{{#if primaryMuscle}}Primary Muscle: {{primaryMuscle}}{{/if}}
 {{#if equipment}}Equipment: {{equipment}}{{/if}}
 {{#if classification}}
 Classification:

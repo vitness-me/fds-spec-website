@@ -1,100 +1,94 @@
 {
-  "$comment": "fds:not-a-field — Example source schema: a simple exercise catalogue format. It is the input side of a mapping, so none of its field names are FDS.",
+  "$comment": "fds:not-a-field — Example source schema: a gym's own exercise list, written for this repository. It is the input side of a mapping, so none of its field names are FDS.",
   "schema": {
     "type": "array",
     "items": {
       "type": "object",
       "properties": {
-        "id": {
+        "code": {
           "type": "string",
-          "description": "Unique identifier in the source catalogue"
+          "description": "The gym's own code for the exercise"
         },
         "name": {
           "type": "string",
-          "description": "Exercise name"
+          "description": "Exercise name, as the gym writes it"
         },
-        "bodyPart": {
+        "region": {
           "type": "string",
-          "description": "General body region",
+          "description": "Where on the body the work is",
           "enum": [
-            "legs",
-            "back",
-            "chest",
-            "shoulders",
-            "arms",
-            "core",
-            "full body"
+            "lower body",
+            "upper body",
+            "trunk",
+            "whole body"
           ]
         },
         "equipment": {
           "type": "string",
-          "description": "Equipment needed",
+          "description": "What the exercise is done with",
           "enum": [
-            "body weight",
+            "none",
             "barbell",
             "dumbbell",
             "kettlebell",
             "cable",
             "machine",
-            "band",
-            "other"
+            "band"
           ]
         },
-        "target": {
+        "primaryMuscle": {
           "type": "string",
-          "description": "Primary target muscle",
+          "description": "The muscle the gym lists first",
           "enum": [
-            "quads",
-            "hamstrings",
+            "quadriceps",
             "glutes",
-            "calves",
-            "lats",
-            "pectorals",
-            "delts",
-            "biceps",
+            "hamstrings",
+            "chest",
+            "latissimus dorsi",
+            "shoulders",
             "triceps",
-            "abs"
+            "biceps",
+            "abdominals"
           ]
         },
-        "mediaUrl": {
+        "videoUrl": {
           "type": "string",
-          "description": "URL of a demonstration video"
+          "description": "A demonstration video"
         }
       },
       "required": [
-        "id",
+        "code",
         "name",
-        "bodyPart",
+        "region",
         "equipment",
-        "target",
-        "mediaUrl"
+        "primaryMuscle"
       ]
     }
   },
   "examples": [
     {
-      "id": "vx-0001",
-      "name": "3/4 crunch",
-      "bodyPart": "core",
-      "equipment": "body weight",
-      "target": "abs",
-      "mediaUrl": "https://example.com/media/three-quarter-crunch.mp4"
+      "code": "gym-101",
+      "name": "dead bug",
+      "region": "trunk",
+      "equipment": "none",
+      "primaryMuscle": "abdominals",
+      "videoUrl": "https://example.com/media/dead-bug.mp4"
     },
     {
-      "id": "vx-0002",
-      "name": "barbell bench press",
-      "bodyPart": "chest",
+      "code": "gym-102",
+      "name": "barbell floor press",
+      "region": "upper body",
       "equipment": "barbell",
-      "target": "pectorals",
-      "mediaUrl": "https://example.com/media/barbell-bench-press.mp4"
+      "primaryMuscle": "chest",
+      "videoUrl": "https://example.com/media/barbell-floor-press.mp4"
     },
     {
-      "id": "vx-0003",
-      "name": "seated cable row",
-      "bodyPart": "back",
+      "code": "gym-103",
+      "name": "half-kneeling one-arm cable pulldown",
+      "region": "upper body",
       "equipment": "cable",
-      "target": "lats",
-      "mediaUrl": "https://example.com/media/seated-cable-row.mp4"
+      "primaryMuscle": "latissimus dorsi",
+      "videoUrl": "https://example.com/media/half-kneeling-one-arm-cable-pulldown.mp4"
     }
   ]
 }

@@ -23,8 +23,8 @@ Always respond with valid JSON matching the expected schema. Be precise and cons
 Classify this exercise according to FDS release 1.5.0 (exercise schema 1.1.0):
 
 Exercise: {{name}}
-{{#if bodyPart}}Body Part: {{bodyPart}}{{/if}}
-{{#if target}}Target Muscle: {{target}}{{/if}}
+{{#if region}}Body Region: {{region}}{{/if}}
+{{#if primaryMuscle}}Primary Muscle: {{primaryMuscle}}{{/if}}
 {{#if equipment}}Equipment: {{equipment}}{{/if}}
 {{#if description}}Description: {{description}}{{/if}}
 

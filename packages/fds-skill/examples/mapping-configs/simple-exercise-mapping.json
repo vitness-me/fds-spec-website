@@ -40,7 +40,7 @@
       "enrichment": {
         "enabled": true,
         "prompt": "exercise_description",
-        "context": ["name", "bodyPart", "target", "equipment"],
+        "context": ["name", "region", "primaryMuscle", "equipment"],
         "when": "missing"
       }
     },
@@ -59,12 +59,12 @@
       "enrichment": {
         "enabled": true,
         "prompt": "exercise_classification",
-        "context": ["name", "bodyPart", "target", "equipment"],
+        "context": ["name", "region", "primaryMuscle", "equipment"],
         "fields": ["exerciseType", "movement", "mechanics", "force", "level"]
       }
     },
     "targets.primary": {
-      "from": "target",
+      "from": "primaryMuscle",
       "transform": "registryLookup",
       "options": {
         "registry": "muscles",
@@ -92,7 +92,7 @@
       }
     },
     "media": {
-      "from": "mediaUrl",
+      "from": "videoUrl",
       "transform": "toMediaArray",
       "options": {
         "type": "video",
@@ -123,7 +123,7 @@
       "default": "example-catalog-import"
     },
     "metadata.externalRefs": {
-      "from": "id",
+      "from": "code",
       "transform": "template",
       "options": {
         "template": [
