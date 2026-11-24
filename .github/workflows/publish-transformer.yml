@@ -48,6 +48,12 @@ jobs:
           # stayed constant while the resolved tree underneath it moved.
           cache-dependency-path: packages/fds-transformer/package-lock.json
 
+      # The transformer bundles the current release and defaults to it, so it
+      # ships only once that release is frozen and dated.
+      - name: The current release is frozen and dated
+        working-directory: .
+        run: node scripts/check-release-state.mjs
+
       - name: Install dependencies
         run: npm ci
 

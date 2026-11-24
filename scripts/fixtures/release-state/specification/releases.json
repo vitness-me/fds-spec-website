@@ -1,0 +1,11 @@
+{
+  "$comment": "Self-test fixture: release 2.0.0 is current, names one frozen and one unfrozen schema, and its changelog entry is undated.",
+  "currentRelease": "2.0.0",
+  "releases": {
+    "2.0.0": { "entities": { "exercise": "2.0.0", "muscle": "1.0.0" }, "libraries": {} }
+  },
+  "schemas": {
+    "exercise": { "kind": "entity", "current": "2.0.0", "versions": { "2.0.0": { "status": "current", "path": "exercises/v2.0.0/exercise.schema.json", "frozen": false } } },
+    "muscle": { "kind": "entity", "current": "1.0.0", "versions": { "1.0.0": { "status": "current", "path": "muscle/v1.0.0/muscle.schema.json", "frozen": true } } }
+  }
+}

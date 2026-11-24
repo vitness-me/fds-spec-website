@@ -131,6 +131,12 @@ jobs:
           cache: npm
           cache-dependency-path: website/package-lock.json
 
+      # A release is served as current only once it is frozen and dated, which
+      # the change that accepts its RFC does. A tree that prepares a release
+      # ahead of acceptance stops here and the site keeps what it serves.
+      - name: The current release is frozen and dated
+        run: node scripts/check-release-state.mjs
+
       - name: Install dependencies
         working-directory: ./website
         run: npm ci

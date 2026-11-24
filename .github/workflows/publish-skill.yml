@@ -68,6 +68,11 @@ jobs:
       - name: Verify every version claim matches the release manifest
         run: npm run check:versions
 
+      # The skill documents the current release, so it ships only once that
+      # release is frozen and dated.
+      - name: The current release is frozen and dated
+        run: node scripts/check-release-state.mjs
+
   publish:
     name: Publish to npm
     needs: gates

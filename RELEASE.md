@@ -388,6 +388,15 @@ rule the next section is about.)
 Unfreezing is possible and is sometimes right — before the release is merged. It
 is never right after deployment.
 
+**A release prepared ahead of its RFC.** When the schemas a release moves come
+from an RFC still in review, the release can be prepared on its branch with the
+new versions unfrozen and its changelog heading marked proposed instead of
+dated. The change that accepts the RFC freezes them, rebuilds, and dates the
+heading, in one merge. Until then the deploy and both publish workflows stop at
+`node scripts/check-release-state.mjs`, which refuses a current release that
+names an unfrozen schema or has an undated changelog entry, so a merge ahead of
+acceptance publishes nothing. CI runs only its self-test.
+
 ### 6. Make the documents catch up
 
 Cutting a release deliberately breaks every document that states a version fact,

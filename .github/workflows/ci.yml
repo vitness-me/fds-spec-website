@@ -246,6 +246,13 @@ jobs:
       - name: Verify the publish-credential rules can fail
         run: npm run check:publish-auth
 
+      # Only the self-test runs here. A branch may prepare a release before its
+      # RFC is accepted, and such a branch fails the real check by design; the
+      # deploy and publish workflows run it before anything leaves the
+      # repository.
+      - name: Verify the release-state guard can fail
+        run: npm run check:release-state
+
       - name: Install Ajv CLI
         run: npm install --no-save ajv@8 ajv-cli@5 ajv-formats@3
 

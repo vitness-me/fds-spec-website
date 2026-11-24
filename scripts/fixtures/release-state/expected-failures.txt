@@ -1,0 +1,8 @@
+# Every failure scripts/check-release-state.mjs --self-test must report over this
+# fixture tree, by key, and nothing else.
+
+# exercise 2.0.0 is named by the current release and not frozen; muscle 1.0.0 is frozen
+unfrozen:exercise@2.0.0
+
+# the entry that introduces release 2.0.0 says "proposed" instead of a date
+undated
