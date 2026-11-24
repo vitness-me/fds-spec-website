@@ -63,7 +63,13 @@ if run_job transformer; then
 
   # Runs here rather than in the schemas job because it packs the transformer,
   # and packing runs `prepack`, which needs the dependencies the job above just
-  # installed. It covers both packages: the skill needs neither.
+  # installed. It packs every package under packages/, so each other package's
+  # locked dependencies are installed first, as the workflow does.
+  for dir in packages/*/; do
+    if [[ -f "${dir}package-lock.json" && ! -d "${dir}node_modules" ]]; then
+      try "npm ci ${dir%/}" npm --prefix "$dir" ci --no-fund --no-audit
+    fi
+  done
   try "packages contain what they claim" npm run check:packages
 fi
 

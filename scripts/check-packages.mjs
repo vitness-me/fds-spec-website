@@ -94,7 +94,7 @@
  * extracted tree instead, so the shipped files run against the same dependency
  * tree CI tested and publishing installs.
  *
- *   node scripts/check-packages.mjs             both packages
+ *   node scripts/check-packages.mjs             every package under packages/
  *   node scripts/check-packages.mjs transformer just one
  *   node scripts/check-packages.mjs --self-test prove the rules can fail
  */
@@ -115,7 +115,15 @@ import { join, posix } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { loadManifest, manifestProblems, ROOT } from './lib/releases.mjs';
 
-const PACKAGES = ['fds-transformer', 'fds-skill'];
+/**
+ * Every package is a directory under `packages/` with a manifest — read from disk, so a new package is packed and
+ * checked from its first commit. This was a hand-kept list of two names, and a third package added beside them was
+ * invisible to every rule here.
+ */
+const PACKAGES = readdirSync(join(ROOT, 'packages'), { withFileTypes: true })
+  .filter((entry) => entry.isDirectory() && existsSync(join(ROOT, 'packages', entry.name, 'package.json')))
+  .map((entry) => entry.name)
+  .sort();
 
 /** Extensions Node will load as a module. Anything else is not an entry point. */
 const LOADABLE = new Set(['.js', '.mjs', '.cjs', '.node']);
