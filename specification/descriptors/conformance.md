@@ -23,10 +23,10 @@ Conformance says that an implementation computes what the specification says. It
 <!-- fds:generated conformance#tiers -->
 | Tier | Vectors | File | Data it reads |
 |---|---|---|---|
-| `syntax` | 137 | [`syntax.json`](https://github.com/vitness-me/fds-spec-website/blob/main/specification/descriptors/conformance/syntax.json) | [`fxm-vocabulary.json`](https://github.com/vitness-me/fds-spec-website/blob/main/specification/descriptors/conformance/fxm-vocabulary.json) |
-| `builder` | 24 | [`builder.json`](https://github.com/vitness-me/fds-spec-website/blob/main/specification/descriptors/conformance/builder.json) | [`words.json`](https://github.com/vitness-me/fds-spec-website/blob/main/specification/descriptors/conformance/words.json) |
-| `compare` | 55 | [`compare.json`](https://github.com/vitness-me/fds-spec-website/blob/main/specification/descriptors/conformance/compare.json) | [`fxm-vocabulary.json`](https://github.com/vitness-me/fds-spec-website/blob/main/specification/descriptors/conformance/fxm-vocabulary.json) |
-| `resolver` | 39 | [`resolver.json`](https://github.com/vitness-me/fds-spec-website/blob/main/specification/descriptors/conformance/resolver.json) | (none) |
+| `syntax` | 143 | [`syntax.json`](https://github.com/vitness-me/fds-spec-website/blob/main/specification/descriptors/conformance/syntax.json) | [`fxm-vocabulary.json`](https://github.com/vitness-me/fds-spec-website/blob/main/specification/descriptors/conformance/fxm-vocabulary.json) |
+| `builder` | 28 | [`builder.json`](https://github.com/vitness-me/fds-spec-website/blob/main/specification/descriptors/conformance/builder.json) | [`words.json`](https://github.com/vitness-me/fds-spec-website/blob/main/specification/descriptors/conformance/words.json) |
+| `compare` | 62 | [`compare.json`](https://github.com/vitness-me/fds-spec-website/blob/main/specification/descriptors/conformance/compare.json) | [`fxm-vocabulary.json`](https://github.com/vitness-me/fds-spec-website/blob/main/specification/descriptors/conformance/fxm-vocabulary.json) |
+| `resolver` | 43 | [`resolver.json`](https://github.com/vitness-me/fds-spec-website/blob/main/specification/descriptors/conformance/resolver.json) | (none) |
 <!-- /fds:generated -->
 
 Every tier file names the rules revision its vectors were written for, in `rules`. A vector set is valid for that rules revision only: when the registries move to a new one, the vectors are reviewed against it before `rules` changes.
@@ -139,6 +139,7 @@ The ranking is the one in [the match protocol](./compare-and-match.md#match-prot
 | `entry-import` | The identical library entry is an import-mode row. |
 | `query-not-owner` | The query has neither owner nor owner-assisted provenance. |
 | `entry-not-owner` | The identical library entry has neither owner nor owner-assisted provenance. |
+| `fxe-differs` | Both the query and the identical library entry carry an FXE, and the two do not compare identical. |
 <!-- /fds:generated -->
 
 ## Running the vectors

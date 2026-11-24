@@ -1,6 +1,6 @@
 {
   "tier": "syntax",
-  "rules": "1.3",
+  "rules": "1.4",
   "description": "Parse, validate and canonicalise FXI, FXE and FXM strings. A valid vector expects the canonical string (and, where given, the standard projection). An invalid vector expects exactly the set of issue codes listed: the vectors are written so that each breaks one rule, and list a second code only where breaking that rule necessarily breaks another. A vector marked \"vocabulary\" is checked against fxm-vocabulary.json; every other FXM vector checks the format alone.",
   "vocabulary": "fxm-vocabulary.json",
   "codes": {
@@ -145,6 +145,12 @@
     {"id": "fxi-unknown-held", "kind": "fxi", "input": "FXI=1.0S/m:sh.abd/o:standing/l:db@hands/h:arms.up", "expect": {"valid": false, "issues": ["unknown-code"]}, "note": "Not a held posture."},
     {"id": "fxi-default-combined", "kind": "fxi", "input": "FXI=1.0S/m:sh.abd/o:standing/l:db@hands/h:none+el.bent", "expect": {"valid": false, "issues": ["conflict"]}, "note": "A default code cannot be combined with others."},
     {"id": "fxi-never-with", "kind": "fxi", "input": "FXI=1.0S/m:el.ext/o:standing/l:cable@hands/p:hi+lo", "expect": {"valid": false, "issues": ["conflict"]}, "note": "Two codes the table marks \"never with\"."},
+    {"id": "fxi-child-action", "kind": "fxi", "input": "FXI=1.0S/m:el.flex+sh.ext.oh/o:seated/l:mach@hands/g:ne", "expect": {"valid": true, "canonical": "FXI=1.0S/m:el.flex+sh.ext.oh/o:seated/l:mach@hands/g:ne"}, "note": "sh.ext.oh, shoulder extension from overhead, is a joint action: a child of sh.ext."},
+    {"id": "fxi-child-beside-parent", "kind": "fxi", "input": "FXI=1.0S/m:sh.ext.oh+sh.ext/o:standing/l:bw", "expect": {"valid": true, "canonical": "FXI=1.0S/m:sh.ext+sh.ext.oh/o:standing/l:bw"}, "note": "A child action beside its parent is not an opposite pair; the items are sorted."},
+    {"id": "fxi-opposite-child-action", "kind": "fxi", "input": "FXI=1.0S/m:sh.ext.oh+sh.flex/o:standing/l:bw", "expect": {"valid": false, "issues": ["opposite-actions"]}, "note": "A child action counts as its parent in the opposite check: sh.ext.oh is opposite sh.flex."},
+    {"id": "fxi-line-neck", "kind": "fxi", "input": "FXI=1.0S/m:el.ext+sh.hadd/o:supine/s:bench/l:bb@hands/g:w-n/p:neck", "expect": {"valid": true, "canonical": "FXI=1.0S/m:el.ext+sh.hadd/o:supine/s:bench/l:bb@hands/g:w-n/p:neck"}, "note": "p:neck, a load lowered to the neck or throat, is a line code."},
+    {"id": "fxi-line-double", "kind": "fxi", "input": "FXI=1.0S/m:~ank.pf/o:standing/l:jrope@hands/p:double", "expect": {"valid": true, "canonical": "FXI=1.0S/m:~ank.pf/o:standing/l:jrope@hands/p:double"}, "note": "p:double, a rope that passes twice in each jump, is a line code."},
+    {"id": "fxi-held-push-part", "kind": "fxi", "input": "FXI=1.0S/m:hip.flex+sp.flex|=kn.flex/o:supine/k:trunk/l:bw", "expect": {"valid": true, "canonical": "FXI=1.0S/m:=kn.flex|hip.flex+sp.flex/o:supine/k:trunk/l:bw"}, "note": "A held push of limbs that do not move is a = part beside the moving part; the parts are sorted."},
     {"id": "fxe-already-canonical", "kind": "fxe", "input": "FXE=1.0S/k:imp/f:bar.straight", "expect": {"valid": true, "canonical": "FXE=1.0S/k:imp/f:bar.straight"}, "note": "A canonical string is its own canonical form."},
     {"id": "fxe-layer-order", "kind": "fxe", "input": "FXE=1.0S/m:pull.back/s:seat/l:hand/k:mac", "expect": {"valid": true, "canonical": "FXE=1.0S/k:mac/l:hand/s:seat/m:pull.back"}, "note": "Kind first, then the standard layers of that kind in order."},
     {"id": "fxe-missing-standard-layers", "kind": "fxe", "input": "FXE=1.0S/k:mac/l:hand", "expect": {"valid": true, "canonical": "FXE=1.0S/k:mac/l:hand/s:?/m:?"}, "note": "A standard layer left out is written as ?."},
