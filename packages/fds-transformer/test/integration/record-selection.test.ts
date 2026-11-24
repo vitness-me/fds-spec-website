@@ -11,10 +11,10 @@ import { ClaudeStub, structured, flagValue } from '../support/claude-stub.js';
 const NAMESPACE = 'e56e0365-0000-4000-8000-000000000001';
 
 const sources = (): Record<string, unknown>[] => [
-  { v6Id: 'v6-1', name: 'back squat' },
-  { v6Id: 'v6-2', name: 'bench press' },
-  { v6Id: 'v6-3', name: 'deadlift' },
-  { v6Id: 'v6-4', name: 'push up' },
+  { code: 'gym-1', name: 'back squat' },
+  { code: 'gym-2', name: 'bench press' },
+  { code: 'gym-3', name: 'deadlift' },
+  { code: 'gym-4', name: 'push up' },
 ];
 
 const config = (enrichment: EnrichmentConfig = { enabled: false }): MappingConfig => ({
@@ -24,7 +24,7 @@ const config = (enrichment: EnrichmentConfig = { enabled: false }): MappingConfi
     exerciseId: {
       from: null,
       transform: 'uuidv5',
-      options: { namespace: NAMESPACE, name: 'exercises_v6/Exercises/{{v6Id}}' },
+      options: { namespace: NAMESPACE, name: 'example-catalog/exercises/{{code}}' },
     },
     'canonical.name': { from: 'name', transform: 'titleCase' },
     'canonical.slug': { from: 'name', transform: 'slugify' },

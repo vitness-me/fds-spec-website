@@ -46,7 +46,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **`uuidv5` derives ids from the input.** `options.namespace` is the namespace
   UUID and `options.name` a template over the source record
-  (`exercises_v6/Exercises/{{v6Id}}`). The same input always gives the same id.
+  (`example-catalog/exercises/{{code}}`). The same input always gives the same id.
   An unfilled or unreadable placeholder, a template with no placeholder, or an
   object for a name throws rather than giving many records one id.
 - **Config `plugins` are loaded.** They were declared and never read. A string

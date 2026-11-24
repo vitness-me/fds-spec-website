@@ -21,7 +21,7 @@ export const uuid: TransformFunction = (): string => {
  *
  * Options:
  * - `namespace` (required): the namespace UUID.
- * - `name`: a template such as `exercises_v6/Exercises/{{v6Id}}`. `{{value}}`
+ * - `name`: a template such as `example-catalog/exercises/{{code}}`. `{{value}}`
  *   is the mapped value; any other placeholder is a dotted path into the
  *   source record. Without a template the mapped value is the name.
  *

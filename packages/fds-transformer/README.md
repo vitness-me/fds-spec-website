@@ -113,7 +113,7 @@ Create a `mapping.json` file to define how source fields map to FDS:
 | `slugify` | Convert to URL-safe slug |
 | `titleCase` | Convert to Title Case |
 | `uuid` | Generate a random UUIDv4 (a rerun gives new ids) |
-| `uuidv5` | Derive a UUIDv5 from `options.namespace` and an `options.name` template such as `exercises_v6/Exercises/{{v6Id}}`; the same input always gives the same id |
+| `uuidv5` | Derive a UUIDv5 from `options.namespace` and an `options.name` template such as `example-catalog/exercises/{{code}}`; the same input always gives the same id |
 | `toArray` | Ensure value is array |
 | `toMediaArray` | Convert URLs to FDS media format |
 | `registryLookup` | Find in registry with fuzzy matching |

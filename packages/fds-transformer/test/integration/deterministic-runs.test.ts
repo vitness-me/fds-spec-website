@@ -29,9 +29,9 @@ const NAMESPACE = 'e56e0365-0000-4000-8000-000000000001';
 const CLOCK = '2026-01-01T00:00:00.000Z';
 
 const sources = (): Record<string, unknown>[] => [
-  { v6Id: 'v6-1', name: 'back squat', createdAt: '2020-05-17T21:03:21+00:00' },
-  { v6Id: 'v6-2', name: 'bench press' },
-  { v6Id: 'v6-3', name: 'deadlift', createdAt: '2021-02-03T04:05:06Z' },
+  { code: 'gym-1', name: 'back squat', createdAt: '2020-05-17T21:03:21+00:00' },
+  { code: 'gym-2', name: 'bench press' },
+  { code: 'gym-3', name: 'deadlift', createdAt: '2021-02-03T04:05:06Z' },
 ];
 
 const mappingConfig = (overrides: Partial<MappingConfig> = {}): MappingConfig => ({
@@ -41,7 +41,7 @@ const mappingConfig = (overrides: Partial<MappingConfig> = {}): MappingConfig =>
     exerciseId: {
       from: null,
       transform: 'uuidv5',
-      options: { namespace: NAMESPACE, name: 'exercises_v6/Exercises/{{v6Id}}' },
+      options: { namespace: NAMESPACE, name: 'example-catalog/exercises/{{code}}' },
     },
     'canonical.name': { from: 'name', transform: 'titleCase' },
     'canonical.slug': { from: 'name', transform: 'slugify' },
@@ -112,9 +112,9 @@ describe('a rerun', () => {
 
 describe('slug collisions', () => {
   const colliding = () => [
-    { v6Id: 'v6-1', name: 'back squat' },
-    { v6Id: 'v6-2', name: 'bench press' },
-    { v6Id: 'v6-3', name: 'Back Squat' },
+    { code: 'gym-1', name: 'back squat' },
+    { code: 'gym-2', name: 'bench press' },
+    { code: 'gym-3', name: 'Back Squat' },
   ];
   const message = /canonical.slug "back-squat" from source records #1, #3/;
 
@@ -143,8 +143,8 @@ describe('slug collisions', () => {
   it('fail the run for a repeated exerciseId too', async () => {
     // uuidv5 gives two records one id when their names match
     const repeated = [
-      { v6Id: 'v6-1', name: 'back squat' },
-      { v6Id: 'v6-1', name: 'front squat' },
+      { code: 'gym-1', name: 'back squat' },
+      { code: 'gym-1', name: 'front squat' },
     ];
     await expect(
       new Transformer({ config: mappingConfig() }).transformAll(repeated)
@@ -184,12 +184,12 @@ describe('config plugins', () => {
       `export default (options) => ({ name: 'prefix', version: '1.0.0',
          transforms: { add: (value) => options.prefix + value } });`
     );
-    const config = mappingConfig({ plugins: [{ name: path, options: { prefix: 'v6:' } }] });
-    config.mappings['canonical.name'] = { from: 'v6Id', transform: 'prefix:add' };
+    const config = mappingConfig({ plugins: [{ name: path, options: { prefix: 'gym:' } }] });
+    config.mappings['canonical.name'] = { from: 'code', transform: 'prefix:add' };
 
     const [result] = await new Transformer({ config }).transformAll(sources().slice(0, 1));
 
-    expect((result.data as any).canonical.name).toBe('v6:v6-1');
+    expect((result.data as any).canonical.name).toBe('gym:gym-1');
   });
 
   it('resolve a relative path against the config file', async () => {

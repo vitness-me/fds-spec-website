@@ -95,10 +95,10 @@ describe('uuidv5', () => {
   });
 
   it('gives the same id on every call for the same input', () => {
-    const options = { namespace: DNS_NAMESPACE, name: 'exercises_v6/Exercises/{{v6Id}}' };
-    const first = uuidv5(null, options, contextFor({ v6Id: 'abc' }));
-    const second = uuidv5(null, options, contextFor({ v6Id: 'abc' }));
-    const other = uuidv5(null, options, contextFor({ v6Id: 'abd' }));
+    const options = { namespace: DNS_NAMESPACE, name: 'example-catalog/exercises/{{code}}' };
+    const first = uuidv5(null, options, contextFor({ code: 'abc' }));
+    const second = uuidv5(null, options, contextFor({ code: 'abc' }));
+    const other = uuidv5(null, options, contextFor({ code: 'abd' }));
 
     expect(first).toBe(second);
     expect(other).not.toBe(first);
@@ -110,15 +110,15 @@ describe('uuidv5', () => {
     expect(() =>
       uuidv5(
         null,
-        { namespace: DNS_NAMESPACE, name: 'exercises_v6/Exercises/{{v6Id}}' },
-        contextFor({ v6Id: '' })
+        { namespace: DNS_NAMESPACE, name: 'example-catalog/exercises/{{code}}' },
+        contextFor({ code: '' })
       )
-    ).toThrow(/v6Id/);
+    ).toThrow(/code/);
   });
 
   it('refuses a placeholder it cannot read', () => {
     // Left as literal text, it would give every record the same id.
-    for (const name of ['x/{{ id }}', 'x/{{v6-id}}', 'x/{{ids[0]}}', 'x/{{id}}/{{ id }}']) {
+    for (const name of ['x/{{ id }}', 'x/{{gym-code}}', 'x/{{ids[0]}}', 'x/{{id}}/{{ id }}']) {
       expect(() =>
         uuidv5(null, { namespace: DNS_NAMESPACE, name }, contextFor({ id: 'a' }))
       ).toThrow(/placeholder that is not/);

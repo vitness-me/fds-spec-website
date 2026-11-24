@@ -111,7 +111,7 @@ Izvodi UUIDv5 iz prostora imena i imena. Isti ulaz uvek daje isti id.
     "transform": "uuidv5",
     "options": {
       "namespace": "3a9a7a4e-5b1c-4f55-9a3e-6f2d1c0b8e71",
-      "name": "exercises_v6/Exercises/{{v6Id}}"
+      "name": "example-catalog/exercises/{{code}}"
     }
   }
 }
