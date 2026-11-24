@@ -3,7 +3,7 @@
 // `identical` is returned only for byte-equal canonical strings with no `?` or `*`.
 import { EQUIPMENT_TOKENS, FORMS, FXE_STANDARD, FXI_LAYERS, FXI_LAYER_ORDER, GENERIC, RANGE_PARENT, UNKNOWN } from './alphabet.js';
 import type { FxeKind, FxiLayer } from './alphabet.js';
-import { parseFxe, parseFxi, PHASE_PREFIX } from './syntax.js';
+import { parseFxe, parseFxi, PHASE_PREFIX, sortUnique, usualCount } from './syntax.js';
 import type { FxeConfig } from './syntax.js';
 
 export type LayerRelation = 'equal' | 'narrower' | 'broader' | 'open' | 'contradicts';
@@ -131,9 +131,25 @@ function unifyLoad(a: string, b: string): boolean {
   const item = (x: string, y: string): boolean => {
     const [tx, cx, hx] = parts(x);
     const [ty, cy, hy] = parts(y);
-    return relOrUnknown(tx, ty) && cx === cy && eqOrUnknown(hx, hy);
+    return relOrUnknown(tx, ty) && eqOrUnknown(cx, cy) && eqOrUnknown(hx, hy);
   };
   return matchAll(a.split('+'), b.split('+'), item);
+}
+
+/**
+ * A load value with every implement count written out. A count left out is the implement's usual count under the
+ * string's own symmetry and motion, or `?` when an unknown part leaves that count open.
+ */
+function withCounts(l: string, x: string | undefined, m: string): string {
+  if (l === UNKNOWN || l === GENERIC) return l;
+  return sortUnique(l.split('+').map((item) => {
+    if (item === 'bw') return item;
+    const at = item.indexOf('@');
+    const head = item.slice(0, at);
+    const hold = item.slice(at + 1);
+    if (head.includes('*')) return item;
+    return `${head}*${usualCount(head, hold, x, m) ?? UNKNOWN}@${hold}`;
+  })).join('+');
 }
 
 const UNIFIERS: Record<FxiLayer, (a: string, b: string) => boolean> = {
@@ -164,7 +180,8 @@ const INVALID: CompareResult = { relation: 'invalid', layers: {}, contradicting:
 
 /**
  * Compares two FXIs. A standard layer left out of a string takes its published default, which is a value:
- * it contradicts every other known value. Only `?` (and `*`) is open.
+ * it contradicts every other known value. Only `?` (and `*`) is open. An implement count left out is compared as
+ * its usual count under that string's own symmetry and motion; when that count is unknowable it is open.
  */
 export function compareFxi(a: string, b: string): CompareResult {
   const A = parseFxi(a);
@@ -182,7 +199,8 @@ export function compareFxi(a: string, b: string): CompareResult {
       else if (vb !== undefined) extraB = true;
       continue;
     }
-    layers[k] = relate(va ?? DEFAULT, vb ?? DEFAULT, UNIFIERS[k]);
+    if (k === 'l') layers[k] = relate(withCounts(va!, A.layers.x, A.layers.m!), withCounts(vb!, B.layers.x, B.layers.m!), UNIFIERS[k]);
+    else layers[k] = relate(va ?? DEFAULT, vb ?? DEFAULT, UNIFIERS[k]);
   }
   const complete = !Object.values(A.layers).some((v) => v !== undefined && incomplete(v));
   return combine(layers, extraA, extraB, A.canonical === B.canonical && complete);

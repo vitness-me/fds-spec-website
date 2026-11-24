@@ -35,6 +35,12 @@ describe('provenance and the gap marker travel with the FXI', () => {
     expect(rowMeta(e({}), 'import')).toEqual({ mode: 'import', fxiProvenance: 'import', fxiGap: null });
     expect(rowMeta(e({ provenance: 'agent', gap: 'the bell passes under the leg' }), 'owner')).toEqual({ mode: 'owner', fxiProvenance: 'agent', fxiGap: 'the bell passes under the leg' });
     expect(rowMeta(e({ differs: 'slower lowering on purpose' }), 'owner').fxiGap).toBe('slower lowering on purpose');
+    for (const blank of ['', ' ', '\t\n']) {
+      expect(rowMeta(e({ gap: blank }), 'owner').fxiGap).toBe('unspecified');
+      expect(rowMeta(e({ differs: blank }), 'owner').fxiGap).toBe('unspecified');
+    }
+    expect(rowMeta(e({ gap: ' ', differs: 'slower lowering on purpose' }), 'owner').fxiGap).toBe('slower lowering on purpose');
+    expect(rowMeta(e({ gap: null }), 'owner').fxiGap).toBeNull();
     expect(() => rowMeta(e({ provenance: 'owner' }), 'import')).toThrow(AnswerError);
     expect(() => rowMeta(e({ provenance: 'import' }), 'owner')).toThrow(AnswerError);
   });
@@ -63,5 +69,14 @@ describe('auto-match', () => {
     expect(match(row('q', PUSH_UP_OPEN), library)).toEqual({ kind: 'confirm', candidates: [{ id: 'lib:push-up', via: 'fxi', relation: 'refined-by' }, { id: 'lib:knee-push-up', via: 'fxi', relation: 'refined-by' }], why: 'no identical entry' });
     expect(match(row('q', 'FXI=1.0S/m:el.flex/o:standing/l:db@hands'), library)).toEqual({ kind: 'confirm', candidates: [{ id: 'lib:push-up', via: 'name' }, { id: 'lib:knee-push-up', via: 'name' }], why: 'no identical entry' });
     expect(match(row('q', PUSH_UP), [])).toEqual({ kind: 'absent' });
+  });
+});
+
+describe('a blank gap note on a row still marks a gap', () => {
+  test('an empty or whitespace fxiGap canonicalises to the unspecified marker', () => {
+    for (const fxiGap of ['', '  ']) {
+      const c = checkRow({ id: 'r', fxi: PUSH_UP, fxe: 'FXE=1.0S/k:none', confidence: 'high', fxiProvenance: 'owner', fxiGap });
+      expect(c.row.fxiGap).toBe('unspecified');
+    }
   });
 });

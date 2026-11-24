@@ -4,6 +4,8 @@ import { issueText, parseFxe, parseFxi } from './syntax.js';
 
 /** Who answered for an FXI. Only `owner` and `owner-assisted` allow auto-match. */
 export type Provenance = 'owner' | 'owner-assisted' | 'agent' | 'import';
+/** The gap marker of a row or entry whose gap note is present but blank. */
+export const UNSPECIFIED_GAP = 'unspecified';
 export const PROVENANCES: readonly Provenance[] = ['owner', 'owner-assisted', 'agent', 'import'];
 export const OWNER_PROVENANCES: readonly Provenance[] = ['owner', 'owner-assisted'];
 
@@ -68,7 +70,7 @@ export function checkRow(row: Row): RowCheck {
   const warnings = problems.length === 0 && hasFxi && typeof out.fxe === 'string' ? crossCheck(out.fxi as string, out.fxe) : [];
   const canonical: Record<string, unknown> = { id: out.id, fxi: hasFxi ? out.fxi : null, ...(out.fxe === undefined ? {} : { fxe: out.fxe }), confidence: out.confidence, notes: out.notes ?? null };
   if (out.fxiProvenance !== undefined) canonical.fxiProvenance = out.fxiProvenance;
-  if (out.fxiGap !== undefined) canonical.fxiGap = out.fxiGap === '' ? null : out.fxiGap;
+  if (out.fxiGap !== undefined) canonical.fxiGap = typeof out.fxiGap === 'string' && out.fxiGap.trim() === '' ? UNSPECIFIED_GAP : out.fxiGap;
   for (const [k, v] of Object.entries(out)) if (!(k in canonical)) canonical[k] = v;
   return { problems, warnings, changed, row: canonical };
 }

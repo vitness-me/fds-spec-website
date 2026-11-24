@@ -8,7 +8,7 @@ export type { FxeConfig, Issue, ParsedFxe, ParsedFxi } from './syntax.js';
 export { compare, compareFxe, compareFxi } from './compare.js';
 export type { CompareResult, LayerRelation, Relation } from './compare.js';
 export { crossCheck, mainEquipment } from './crosscheck.js';
-export { checkRow, OWNER_PROVENANCES, PROVENANCES, rowsOf } from './rows.js';
+export { checkRow, OWNER_PROVENANCES, PROVENANCES, rowsOf, UNSPECIFIED_GAP } from './rows.js';
 export type { Provenance, Row, RowCheck } from './rows.js';
 export { autoMatchRefusal, checkMatchRow, match, nameSimilarity } from './match.js';
 export type { Candidate, MatchOptions, MatchResult, MatchRow } from './match.js';

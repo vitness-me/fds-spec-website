@@ -7,7 +7,7 @@ import {
 import { feetImplied, mainEquipment } from './crosscheck.js';
 import { CHANGE_OPENS, DEFAULT_FLOW, JOINT_IDS, PHASE_KINDS } from './flow.js';
 import type { Cond, FactId, Flow, FlowQuestion } from './flow.js';
-import { PROVENANCES } from './rows.js';
+import { PROVENANCES, UNSPECIFIED_GAP } from './rows.js';
 import type { Provenance } from './rows.js';
 import { issueText, motionJoints, parseFxe, parseFxi, PHASE_PREFIX, standardFxe } from './syntax.js';
 import { patchedLayers } from './words.js';
@@ -41,7 +41,8 @@ export interface RowMeta { readonly mode: 'owner' | 'import'; readonly fxiProven
 
 /**
  * The mode, provenance and gap marker of an entry. Provenance defaults to the mode: `owner` in owner mode, `import` in
- * import mode. Import mode always has provenance `import`. The gap marker is `gap`, else the collision answer `differs`.
+ * import mode. Import mode always has provenance `import`. The gap marker is `gap`, else the collision answer `differs`;
+ * a note that is present but blank is the marker {@link UNSPECIFIED_GAP}, so the row still refuses auto-match.
  */
 export function rowMeta(e: Entry, defaultMode: 'owner' | 'import'): RowMeta {
   const mode = e.mode ?? defaultMode;
@@ -49,7 +50,8 @@ export function rowMeta(e: Entry, defaultMode: 'owner' | 'import'): RowMeta {
   if (!PROVENANCES.includes(p)) throw AnswerError.of(e.id, [`provenance: "${String(p)}" is not one of ${PROVENANCES.join(', ')}.`]);
   if ((mode === 'import') !== (p === 'import')) throw AnswerError.of(e.id, [`provenance: import mode has provenance "import", and only import mode has it; this entry is ${mode} mode with "${p}".`]);
   const text = (v: unknown): string | null => (typeof v === 'string' && v.trim() !== '' ? v : null);
-  return { mode, fxiProvenance: p, fxiGap: text(e.gap) ?? text(e.differs) };
+  const blank = typeof e.gap === 'string' || typeof e.differs === 'string' ? UNSPECIFIED_GAP : null;
+  return { mode, fxiProvenance: p, fxiGap: text(e.gap) ?? text(e.differs) ?? blank };
 }
 /**
  * The answers record to keep beside built strings: `words` cites the movement-word dataset of `flow` when the movement

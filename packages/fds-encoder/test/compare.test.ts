@@ -69,6 +69,35 @@ describe('FXI compare', () => {
   });
 });
 
+describe('FXI compare: implement counts', () => {
+  const CURL = 'FXI=1.0S/m:el.flex/o:standing';
+  const HINGE = 'FXI=1.0S/m:hip.ext/o:standing';
+  test('a count kept for an unknown symmetry equals the usual count the other side leaves out', () => {
+    const r = compare(`${CURL}/l:db*2@hands/x:?`, `${CURL}/l:db@hands`);
+    expect(r.relation).toBe('refined-by');
+    expect(r.layers.l).toBe('equal');
+    expect(compare(`${CURL}/l:db@hands`, `${CURL}/l:db*2@hands/x:?`).relation).toBe('refines');
+    expect(compare(`${CURL}/l:db*1@hands/x:?`, `${CURL}/l:db@hands`).contradicting).toEqual(['l']);
+  });
+  test('one arm at a time usually holds one implement', () => {
+    const r = compare(`${HINGE}/l:db*1@hands/x:?`, `${HINGE}/l:db@hands/x:u@arms`);
+    expect(r.relation).toBe('refined-by');
+    expect(r.layers.l).toBe('equal');
+    expect(compare(`${HINGE}/l:db*2@hands/x:?`, `${HINGE}/l:db@hands/x:u@arms`).contradicting).toEqual(['l']);
+  });
+  test('the usual count under a plain u follows the side\'s own motion', () => {
+    const known = `${CURL}/l:db@hands/x:u`;
+    const open = 'FXI=1.0S/m:el.?/o:standing/l:db@hands/x:u';
+    expect(compare(`${CURL}/l:db*2@hands/x:u`, known).contradicting).toEqual(['l']);
+    const r = compare(`${CURL}/l:db*2@hands/x:u`, open);
+    expect(r.relation).not.toBe('contradicting');
+    expect(r.layers.l).toBe('narrower');
+    expect(r.layers.m).toBe('narrower');
+    expect(compare(`${CURL}/l:db@hands/x:u`, open).relation).toBe('refines');
+    expect(compare(`${HINGE}/l:db*1@hands/x:u`, `${HINGE}/l:db@hands/x:u`).contradicting).toEqual(['l']);
+  });
+});
+
 describe('FXE compare', () => {
   test('parent form is compatible', () => expect(compare('FXE=1.0S/k:imp/f:band', 'FXE=1.0S/k:imp/f:band.loop').relation).toBe('refined-by'));
   test('generic machine vs named machine', () => expect(compare('FXE=1.0S/k:mac/l:?/s:?/m:?', 'FXE=1.0S/k:mac/l:ankle/s:seat/m:kn.flex').relation).toBe('refined-by'));
