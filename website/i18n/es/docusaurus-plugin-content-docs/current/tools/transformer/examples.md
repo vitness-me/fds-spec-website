@@ -17,14 +17,14 @@ Transformar un conjunto de datos simple de ejercicios sin enriquecimiento con IA
 ```json title="exercises.json" fds:ignore input data in a platform’s own format, before any transformation
 [
   {
-    "id": "0001",
+    "id": "gym-201",
     "name": "barbell bench press",
-    "target": "pectorals",
+    "target": "chest",
     "equipment": "barbell",
     "difficulty": "intermediate"
   },
   {
-    "id": "0002", 
+    "id": "gym-202",
     "name": "back squat",
     "target": "quadriceps",
     "equipment": "barbell",

@@ -94,10 +94,10 @@ const transformer = new Transformer({
 
 // Transform single item
 const result = await transformer.transform({
-  id: '0001',
+  id: 'gym-201',
   name: 'Barbell Bench Press',
   equipment: 'barbell',
-  target: 'pectorals',
+  target: 'chest',
 });
 
 console.log(result.data);
