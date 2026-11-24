@@ -35,3 +35,6 @@ string:page.md:FXI=1.0S/m:hip.flex/o:standing/l:bb@shoulders
 string:page.md:FXE=1.0N/k:imp/f:bar.straight
 string:page.md:FXM=1.0/Gluteus
 string:page.md:FXM=1.0/gluteus-maximus
+string:rfc-999-fixture.md:FXI=1.0S/m:hip.zz/o:standing/l:bb@back
+string:exercises/v9.9.9/exercise.example.fixture.json:FXI=1.0S/m:hip.ext/o:sitting/l:bb@back
+string:exercises/v9.9.9/exercise.example.fixture.json:FXM=1.0/Gluteus

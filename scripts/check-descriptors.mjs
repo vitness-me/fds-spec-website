@@ -25,8 +25,12 @@
  *   4. Every FXI, FXE and FXM string quoted on a descriptor page — in prose,
  *      tables or code — has the current header, its layers in canonical order,
  *      and only codes the registries define. A worked example cannot quote a
- *      code the vocabulary dropped. FXM has no registry, so its header is
- *      checked against the one its own page's format block writes.
+ *      code the vocabulary dropped. The same holds wherever else the standard
+ *      writes one: an RFC under `specification/rfc/`, and a string value in a
+ *      published `*.example*.json`. The schemas check only a descriptor's
+ *      header, so an example could otherwise carry a code no registry has and
+ *      still validate. FXM has no registry, so its header is checked against
+ *      the one its own page's format block writes.
  *
  * What it does not prove: that a quoted string is *canonical* in every respect,
  * or that a worked example's answers build its result. Those need the full
@@ -37,7 +41,7 @@
  */
 
 import { readFile, readdir } from 'node:fs/promises';
-import { dirname, join } from 'node:path';
+import { dirname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { PAGE_DIR, REGISTRY_DIR, changedRegions, loadDescriptors, refreshRegions, regionRenderers, regionsIn } from './lib/descriptors.mjs';
 import { assertRecordedFailures } from './lib/self-test.mjs';
@@ -359,6 +363,11 @@ for (const file of pages) {
         '    Run `npm run build:descriptors` and commit what it writes.'
     );
   }
+  checkQuoted(text, file, path);
+}
+
+/** Every descriptor string quoted in `text`, checked against the registries; `file` keys the failure. */
+function checkQuoted(text, file, path) {
   const lines = text.split('\n');
   lines.forEach((line, i) => {
     // A string ends at whitespace, a backtick, a quote or a table bar; trailing sentence punctuation is not part of it.
@@ -373,6 +382,23 @@ for (const file of pages) {
       if (errors.length) fail(`string:${file}:${s}`, `${path}:${i + 1}: ${s}\n    ${errors.join('\n    ')}`);
     }
   });
+}
+
+// The RFCs, and the examples published beside the schemas. Neither renders a region, so only rule 4 applies.
+const RFC_DIR = 'specification/rfc';
+const SCHEMA_DIR = 'specification/schemas';
+const listed = async (dir, recursive) =>
+  (await readdir(join(ROOT, dir), { recursive, withFileTypes: true }).catch(() => []))
+    .filter((e) => e.isFile())
+    .map((e) => relative(join(ROOT, dir), join(e.parentPath ?? e.path, e.name)).split('\\').join('/'))
+    .sort();
+for (const file of (await listed(RFC_DIR, false)).filter((f) => f.endsWith('.md'))) {
+  const path = `${RFC_DIR}/${file}`;
+  checkQuoted(await readFile(join(ROOT, path), 'utf8'), file, path);
+}
+for (const file of (await listed(SCHEMA_DIR, true)).filter((f) => /\.example[^/]*\.json$/.test(f))) {
+  const path = `${SCHEMA_DIR}/${file}`;
+  checkQuoted(await readFile(join(ROOT, path), 'utf8'), file, path);
 }
 
 // ── result ───────────────────────────────────────────────────────────────────
