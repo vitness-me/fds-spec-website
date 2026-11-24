@@ -29,9 +29,26 @@ export type Candidate =
   | { readonly id: string; readonly via: 'near'; readonly layer: FxiLayer }
   | { readonly id: string; readonly via: 'name' };
 
+/** Why a match went to confirm rather than auto. Stable codes; `why` says the same in words. */
+export type ConfirmReason =
+  | 'no-identical' | 'several-identical' | 'query-gap' | 'entry-gap' | 'query-import' | 'entry-import' | 'query-not-owner' | 'entry-not-owner'
+  | 'fxe-differs';
+
+export const CONFIRM_REASONS: Readonly<Record<ConfirmReason, string>> = {
+  'no-identical': 'no identical entry',
+  'several-identical': 'several library entries are identical',
+  'query-gap': 'the query carries a gap marker',
+  'entry-gap': 'the library entry carries a gap marker',
+  'query-import': 'the query is an import',
+  'entry-import': 'the library entry is an import',
+  'query-not-owner': 'the query has no owner provenance',
+  'entry-not-owner': 'the library entry has no owner provenance',
+  'fxe-differs': 'the FXEs are not identical',
+};
+
 export type MatchResult =
   | { readonly kind: 'auto'; readonly id: string }
-  | { readonly kind: 'confirm'; readonly candidates: readonly Candidate[]; readonly why: string }
+  | { readonly kind: 'confirm'; readonly candidates: readonly Candidate[]; readonly reason: ConfirmReason; readonly why: string }
   | { readonly kind: 'absent' };
 
 export interface MatchOptions {
@@ -47,16 +64,19 @@ const ownerMade = (r: MatchRow): boolean => OWNER_PROVENANCES.includes(r.fxiProv
  * Why two rows with identical FXIs may not be matched automatically, or undefined when they may. A gap marker, import
  * mode or missing owner provenance on either side refuses, and so do FXEs on both rows that do not compare identical.
  */
-export function autoMatchRefusal(query: MatchRow, candidate: MatchRow): string | undefined {
-  if (hasGap(query)) return 'the query carries a gap marker';
-  if (hasGap(candidate)) return 'the library entry carries a gap marker';
-  if (query.mode === 'import') return 'the query is an import';
-  if (candidate.mode === 'import') return 'the library entry is an import';
-  if (!ownerMade(query)) return 'the query has no owner provenance';
-  if (!ownerMade(candidate)) return 'the library entry has no owner provenance';
-  if (hasFxe(query) && hasFxe(candidate) && compare(query.fxe, candidate.fxe).relation !== 'identical') return 'the FXEs are not identical';
+export function autoMatchRefusal(query: MatchRow, candidate: MatchRow): ConfirmReason | undefined {
+  if (hasGap(query)) return 'query-gap';
+  if (hasGap(candidate)) return 'entry-gap';
+  if (query.mode === 'import') return 'query-import';
+  if (candidate.mode === 'import') return 'entry-import';
+  if (!ownerMade(query)) return 'query-not-owner';
+  if (!ownerMade(candidate)) return 'entry-not-owner';
+  if (hasFxe(query) && hasFxe(candidate) && compare(query.fxe, candidate.fxe).relation !== 'identical') return 'fxe-differs';
   return undefined;
 }
+
+const confirm = (candidates: readonly Candidate[], reason: ConfirmReason): MatchResult =>
+  ({ kind: 'confirm', candidates, reason, why: CONFIRM_REASONS[reason] });
 
 /**
  * Problems that make a row unfit for matching: no id, an FXI that is not a string, an unknown mode or provenance, a
@@ -172,8 +192,8 @@ export function match(query: MatchRow, library: readonly MatchRow[], options: Ma
   }
 
   const identical = fxiFound.filter(({ s }) => s.fxi.relation === 'identical');
-  if (identical.length > 1) return { kind: 'confirm', candidates: list, why: 'several library entries are identical' };
-  if (identical.length === 0) return { kind: 'confirm', candidates: list, why: 'no identical entry' };
+  if (identical.length > 1) return confirm(list, 'several-identical');
+  if (identical.length === 0) return confirm(list, 'no-identical');
   const refusal = autoMatchRefusal(query, identical[0]!.s.row);
-  return refusal === undefined ? { kind: 'auto', id: identical[0]!.s.row.id } : { kind: 'confirm', candidates: list, why: refusal };
+  return refusal === undefined ? { kind: 'auto', id: identical[0]!.s.row.id } : confirm(list, refusal);
 }

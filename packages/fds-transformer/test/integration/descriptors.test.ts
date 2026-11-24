@@ -142,6 +142,7 @@ describe('resolve', () => {
     expect(descriptorsOf(squat!)!.xrefs).toBeUndefined();
     expect(squat!.descriptors!.match).toEqual({
       kind: 'confirm',
+      reason: 'query-not-owner',
       why: 'the query has no owner provenance',
       candidates: [{ id: 'lib:back-squat', via: 'fxi', relation: 'identical' }, { id: 'lib:front-squat', via: 'near', layer: 'l' }],
     });

@@ -52,7 +52,7 @@ A row is linked automatically only when exactly one library entry is `identical`
 fds-encoder match queries.json --library library.json
 ```
 
-Each row is `{id, fxi, fxiProvenance?, mode?, fxiGap?, name?, fxe?}`; the output is `{id, use?, match}` per row, where `use` is `candidate search only` for an import row. A row whose provenance contradicts its mode (import mode has provenance `import`, and only import mode has it) is refused, and nothing is matched.
+Each row is `{id, fxi, fxiProvenance?, mode?, fxiGap?, name?, fxe?}`; the output is `{id, use?, match}` per row, where `use` is `candidate search only` for an import row. A row whose provenance contradicts its mode (import mode has provenance `import`, and only import mode has it) is refused, and nothing is matched. A `confirm` match carries `reason`, a stable code (`no-identical`, `several-identical`, `query-gap`, `entry-gap`, `query-import`, `entry-import`, `query-not-owner`, `entry-not-owner`), and `why`, the same in words.
 
 ### Build and upgrade
 

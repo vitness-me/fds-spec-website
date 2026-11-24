@@ -39,7 +39,7 @@ describe('auto-match', () => {
     expect(candidates(gap)[0]).toEqual({ id: 'lib:back', via: 'fxi', relation: 'identical' });
     expect(match(row('q', BACK_SQUAT), [row('lib:back', BACK_SQUAT, { fxiGap: 'tempo' })])).toMatchObject({ kind: 'confirm', why: 'the library entry carries a gap marker' });
     expect(match(query(), library)).toMatchObject({ kind: 'confirm', why: 'the query has no owner provenance' });
-    expect(autoMatchRefusal(row('q', BACK_SQUAT), row('l', BACK_SQUAT, { fxiProvenance: 'import' }))).toMatch(/provenance/);
+    expect(autoMatchRefusal(row('q', BACK_SQUAT), row('l', BACK_SQUAT, { fxiProvenance: 'import' }))).toBe('entry-not-owner');
   });
   test('the gap check fails closed: any marker but absent, null or false refuses auto-match', () => {
     const library = [row('lib:back', BACK_SQUAT)];
@@ -65,12 +65,12 @@ describe('auto-match requires identical FXEs when both rows carry one', () => {
   const ROW_MACHINE = 'FXE=1.0S/k:mac/l:hand/s:seat/m:pull.back';
   test('two identical FXIs whose FXEs differ go to confirm, the identical entry first', () => {
     const r = match(row('q', BACK_SQUAT, { fxe: PULLDOWN_MACHINE }), [row('lib:row', BACK_SQUAT, { fxe: ROW_MACHINE }), row('lib:front', FRONT_SQUAT)]);
-    expect(r).toMatchObject({ kind: 'confirm', why: 'the FXEs are not identical' });
+    expect(r).toMatchObject({ kind: 'confirm', reason: 'fxe-differs', why: 'the FXEs are not identical' });
     expect(candidates(r)[0]).toEqual({ id: 'lib:row', via: 'fxi', relation: 'identical' });
   });
   test('an FXE that only refines the other, or holds ?, is not identical', () => {
-    expect(autoMatchRefusal(row('q', BACK_SQUAT, { fxe: BAR }), row('l', BACK_SQUAT, { fxe: ANY_IMPLEMENT }))).toBe('the FXEs are not identical');
-    expect(autoMatchRefusal(row('q', BACK_SQUAT, { fxe: ANY_IMPLEMENT }), row('l', BACK_SQUAT, { fxe: ANY_IMPLEMENT }))).toBe('the FXEs are not identical');
+    expect(autoMatchRefusal(row('q', BACK_SQUAT, { fxe: BAR }), row('l', BACK_SQUAT, { fxe: ANY_IMPLEMENT }))).toBe('fxe-differs');
+    expect(autoMatchRefusal(row('q', BACK_SQUAT, { fxe: ANY_IMPLEMENT }), row('l', BACK_SQUAT, { fxe: ANY_IMPLEMENT }))).toBe('fxe-differs');
   });
   test('identical FXEs, or an FXE on one side only, leave auto-match to the FXI', () => {
     expect(match(row('q', BACK_SQUAT, { fxe: BAR }), [row('lib:back', BACK_SQUAT, { fxe: BAR })])).toEqual({ kind: 'auto', id: 'lib:back' });
@@ -79,7 +79,7 @@ describe('auto-match requires identical FXEs when both rows carry one', () => {
     expect(match(row('q', BACK_SQUAT, { fxe: ' ' }), [row('lib:back', BACK_SQUAT, { fxe: BAR })])).toEqual({ kind: 'auto', id: 'lib:back' });
   });
   test('the other refusals still come first', () => {
-    expect(autoMatchRefusal(row('q', BACK_SQUAT, { fxe: BAR, fxiGap: 'tempo' }), row('l', BACK_SQUAT, { fxe: EZ_BAR }))).toBe('the query carries a gap marker');
+    expect(autoMatchRefusal(row('q', BACK_SQUAT, { fxe: BAR, fxiGap: 'tempo' }), row('l', BACK_SQUAT, { fxe: EZ_BAR }))).toBe('query-gap');
   });
 });
 
@@ -144,6 +144,7 @@ describe('confirm list', () => {
     const r = match(query({ name: 'Barbell back squat' }), library);
     expect(r).toEqual({
       kind: 'confirm',
+      reason: 'no-identical',
       why: 'no identical entry',
       candidates: [{ id: 'back', via: 'name' }, { id: 'prisoner', via: 'name' }, { id: 'curl', via: 'name' }],
     });
@@ -157,7 +158,7 @@ describe('confirm list', () => {
   });
   test('absent only when the library is empty', () => {
     expect(match(query(), [])).toEqual({ kind: 'absent' });
-    expect(match(query(), [row('curl', CURL)])).toEqual({ kind: 'confirm', why: 'no identical entry', candidates: [{ id: 'curl', via: 'name' }] });
+    expect(match(query(), [row('curl', CURL)])).toEqual({ kind: 'confirm', reason: 'no-identical', why: 'no identical entry', candidates: [{ id: 'curl', via: 'name' }] });
   });
   test('top sets the list length; a bare number still works', () => {
     const library = [row('a', SQUAT_LOAD_OPEN), row('b', FRONT_SQUAT), row('c', CURL), row('d', CURL)];

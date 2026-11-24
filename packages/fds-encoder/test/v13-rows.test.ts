@@ -59,15 +59,15 @@ describe('auto-match', () => {
   });
   test('no owner provenance on either side refuses auto-match', () => {
     for (const p of ['agent', 'import', undefined]) {
-      expect(autoMatchRefusal(row('q', PUSH_UP, { fxiProvenance: p }), library[0]!)).toMatch(/provenance/);
-      expect(autoMatchRefusal(row('q', PUSH_UP), row('l', PUSH_UP, { fxiProvenance: p }))).toMatch(/provenance/);
+      expect(autoMatchRefusal(row('q', PUSH_UP, { fxiProvenance: p }), library[0]!)).toBe('query-not-owner');
+      expect(autoMatchRefusal(row('q', PUSH_UP), row('l', PUSH_UP, { fxiProvenance: p }))).toBe('entry-not-owner');
     }
-    expect(match(row('q', PUSH_UP, { fxiProvenance: 'agent' }), library)).toEqual({ kind: 'confirm', candidates: [{ id: 'lib:push-up', via: 'fxi', relation: 'identical' }, { id: 'lib:knee-push-up', via: 'near', layer: 's' }], why: 'the query has no owner provenance' });
+    expect(match(row('q', PUSH_UP, { fxiProvenance: 'agent' }), library)).toEqual({ kind: 'confirm', candidates: [{ id: 'lib:push-up', via: 'fxi', relation: 'identical' }, { id: 'lib:knee-push-up', via: 'near', layer: 's' }], reason: 'query-not-owner', why: 'the query has no owner provenance' });
   });
   test('several identical keys, or only compatible ones, go to confirm; nothing compatible fills from names; an empty library is absent', () => {
     expect(match(row('q', PUSH_UP), [...library, row('lib:push-up-2', PUSH_UP)]).kind).toBe('confirm');
-    expect(match(row('q', PUSH_UP_OPEN), library)).toEqual({ kind: 'confirm', candidates: [{ id: 'lib:push-up', via: 'fxi', relation: 'refined-by' }, { id: 'lib:knee-push-up', via: 'fxi', relation: 'refined-by' }], why: 'no identical entry' });
-    expect(match(row('q', 'FXI=1.0S/m:el.flex/o:standing/l:db@hands'), library)).toEqual({ kind: 'confirm', candidates: [{ id: 'lib:push-up', via: 'name' }, { id: 'lib:knee-push-up', via: 'name' }], why: 'no identical entry' });
+    expect(match(row('q', PUSH_UP_OPEN), library)).toEqual({ kind: 'confirm', candidates: [{ id: 'lib:push-up', via: 'fxi', relation: 'refined-by' }, { id: 'lib:knee-push-up', via: 'fxi', relation: 'refined-by' }], reason: 'no-identical', why: 'no identical entry' });
+    expect(match(row('q', 'FXI=1.0S/m:el.flex/o:standing/l:db@hands'), library)).toEqual({ kind: 'confirm', candidates: [{ id: 'lib:push-up', via: 'name' }, { id: 'lib:knee-push-up', via: 'name' }], reason: 'no-identical', why: 'no identical entry' });
     expect(match(row('q', PUSH_UP), [])).toEqual({ kind: 'absent' });
   });
 });

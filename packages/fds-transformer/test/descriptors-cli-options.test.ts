@@ -39,7 +39,7 @@ describe('descriptor flags', () => {
 describe('descriptor report', () => {
   it('counts each outcome and lists every record a step acted on', () => {
     const report = descriptorReport([
-      { descriptors: { id: 'a', proposed: 'import', match: { kind: 'confirm', why: 'no identical entry', candidates: [] } } },
+      { descriptors: { id: 'a', proposed: 'import', match: { kind: 'confirm', reason: 'no-identical', why: 'no identical entry', candidates: [] } } },
       { descriptors: { id: 'b', problems: ['orientation: no answer.'] } },
       { descriptors: { id: 'c', match: { kind: 'auto', id: 'lib:c' } } },
       {},

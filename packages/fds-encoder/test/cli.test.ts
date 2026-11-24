@@ -157,7 +157,7 @@ describe('match', () => {
     const r = await cli(['match', rows, '--library', library]);
     expect(JSON.parse(r.out)).toEqual([
       { id: 'q1', match: { kind: 'auto', id: 'lib:squat' } },
-      { id: 'q2', use: 'candidate search only', match: { kind: 'confirm', why: 'the query has no owner provenance', candidates: [{ id: 'lib:squat', via: 'fxi', relation: 'identical' }, { id: 'lib:front', via: 'near', layer: 'l' }] } },
+      { id: 'q2', use: 'candidate search only', match: { kind: 'confirm', reason: 'query-not-owner', why: 'the query has no owner provenance', candidates: [{ id: 'lib:squat', via: 'fxi', relation: 'identical' }, { id: 'lib:front', via: 'near', layer: 'l' }] } },
     ]);
     expect(r.err).toContain('candidate search only');
   });

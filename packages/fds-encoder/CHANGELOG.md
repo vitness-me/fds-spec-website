@@ -25,6 +25,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Import mode is candidate search only**, in the help text and the output.
 - **FXM validates its format alone**, and a provider's muscle vocabulary
   with `--muscles`. No muscle list ships.
+- **A confirm result names its reason as a stable code.** `match` returns
+  `reason` (`no-identical`, `several-identical`, `query-gap`, `entry-gap`,
+  `query-import`, `entry-import`, `query-not-owner`, `entry-not-owner` or
+  `fxe-differs`) beside the `why` text, so the
+  resolver conformance vectors can check it across implementations.
 - **Rules revision 1.4.** A joint action may have a parent: `sh.ext` covers
   its child `sh.ext.oh` in compare (under any prefix, beside other actions
   and in a held part), a child counts as its parent in the opposite-action
@@ -33,6 +38,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   switch on a pull-up or pulldown word writes `sh.ext.oh`. The line question
   offers `neck` and `double`.
 - **Auto-match also requires identical FXEs when both rows carry one.**
-  Otherwise the match goes to confirm with the reason "the FXEs are not
-  identical". A row without an FXE leaves auto-match to the FXI, and the
+  Otherwise the match goes to confirm with the reason `fxe-differs` ("the
+  FXEs are not identical"). A row without an FXE leaves auto-match to the FXI, and the
   gap, import and provenance refusals keep their priority.
