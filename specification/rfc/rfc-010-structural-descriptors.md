@@ -163,7 +163,7 @@ They answer different questions. The record-level `fxe` names the exercise's **m
 
 An absent `fxiProvenance` is unknown, and is treated like `agent`: it never qualifies a record for auto-match.
 
-`fxiGap` is the owner's plain-text note that the notation misses something that separates this exercise from others. `null`, or no `fxiGap` at all, states that there is none; the schema does not accept an empty string, so write `null`. Any note present is a gap marker, a note of only whitespace included: it blocks auto-match (§7.1), and it is the evidence a later rules revision draws on. A resolver that meets a value the schema does not allow treats it as a gap marker, so an unexpected value never enables an auto-match. Prescription is never a gap: a pause, a tempo or a load belongs to RFC-006, not to the exercise.
+`fxiGap` is the owner's plain-text note that the notation misses something that separates this exercise from others. `null`, or no `fxiGap` at all, states that there is none; the schema does not accept an empty string, so write `null`. Any note present is a gap marker, a note of only whitespace included: it blocks auto-match (§7.1), and it is the evidence a later rules revision draws on. A resolver treats every `fxiGap` other than absent, `null` or `false` as a gap marker, an empty string included, so an unexpected value never enables an auto-match. Prescription is never a gap: a pause, a tempo or a load belongs to RFC-006, not to the exercise.
 
 Neither field means anything without an FXI, and the schema rejects either one on a record that has no `fxi`.
 
@@ -512,10 +512,11 @@ The conformance vectors pin the behaviour of the reference encoder: each expecte
 - RFC-003 — Muscle Data Model
 - The descriptor pages: [Overview](../descriptors/overview.md), [FXI](../descriptors/fxi.md), [Question flow](../descriptors/question-flow.md), [FXE](../descriptors/fxe.md), [FXM](../descriptors/fxm.md), [Compare, match and versioning](../descriptors/compare-and-match.md), [Conformance](../descriptors/conformance.md)
 - JSON Schema Draft 2020-12
+- Foundational Model of Anatomy (FMA), the ontology FXM anchors every muscle and part to, and whose labels its tokens derive from (§4.4)
 
 ### 15.2. Informative References
 
-- Foundational Model of Anatomy (FMA) and UBERON, the anatomy ontologies FXM anchors to
+- UBERON, the anatomy ontology FXM carries as a cross-reference
 - RFC-006 — Prescription Primitives, which owns everything a descriptor leaves out
 
 ### 15.3. Implementation
