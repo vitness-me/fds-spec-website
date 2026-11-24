@@ -121,10 +121,25 @@ function buildAll(entries: readonly Entry[], mode: Mode, flow: Flow, io: Io): { 
   return { out, built, failed };
 }
 
-function validateString(s: string, vocabulary: FxmVocabulary | undefined): { ok: boolean; text: string } {
+function parseAny(s: string, vocabulary?: FxmVocabulary): { ok: boolean; canonical: string; issues: readonly { message: string }[] } {
   const t = s.trim();
-  const p = t.startsWith('FXM=') ? parseFxm(t, vocabulary) : t.startsWith('FXE=') ? parseFxe(t) : parseFxi(t);
-  return p.ok ? { ok: true, text: `ok   ${p.canonical}` } : { ok: false, text: `bad  ${s}\n     ${p.issues.map((i) => i.message).join('\n     ')}` };
+  return t.startsWith('FXM=') ? parseFxm(t, vocabulary) : t.startsWith('FXE=') ? parseFxe(t) : parseFxi(t);
+}
+
+/** `ok` and the canonical form, saying so when the input was not already canonical; or `bad` and every issue. */
+function validateString(s: string, vocabulary: FxmVocabulary | undefined): { ok: boolean; text: string } {
+  const p = parseAny(s, vocabulary);
+  if (!p.ok) return { ok: false, text: `bad  ${s}\n     ${p.issues.map((i) => i.message).join('\n     ')}` };
+  return { ok: true, text: p.canonical === s.trim() ? `ok   ${p.canonical}` : `ok   ${p.canonical}\n     canonicalised from ${s}: write the canonical form` };
+}
+
+/** Why `compare` called two strings invalid: each string's issues, or the mismatch of kinds. */
+function invalidReasons(a: string, b: string): string[] {
+  const out = [['a', a], ['b', b]].flatMap(([name, s]) => {
+    const p = parseAny(s!);
+    return p.ok ? [] : [`${name}: ${p.issues.map((i) => i.message).join(' ')}`];
+  });
+  return out.length > 0 ? out : ['compare takes two FXIs or two FXEs; these are of different kinds'];
 }
 
 async function validateRows(file: string, vocabulary: FxmVocabulary | undefined, writeTo: string | undefined, io: Io): Promise<number> {
@@ -251,8 +266,8 @@ export async function run(argv: readonly string[], io: Io, version = '0.0.0'): P
     .argument('<a>').argument('<b>')
     .action((a: string, b: string) => {
       const r = compare(a, b);
+      if (r.relation === 'invalid') { io.out(`invalid\n  ${invalidReasons(a, b).join('\n  ')}`); code = 1; return; }
       io.out(`${r.relation} ${JSON.stringify(r.layers)}`);
-      code = r.relation === 'invalid' ? 1 : 0;
     });
 
   program.command('match')

@@ -34,9 +34,19 @@ const squatBy = (movement: 'squat' | 'other') => (movement === 'squat'
 describe('validate', () => {
   test('prints the canonical form of FXI, FXE and FXM strings, and fails on a bad one', async () => {
     const r = await cli(['validate', 'FXI=1.0/l:bb@back/o:standing/m:kn.ext+hip.ext', 'FXE=1.0/k:mac/l:foot', 'FXM=1.0S/any-muscle', 'FXI=1/m:x']);
-    expect(r.out.split('\n').slice(0, 3)).toEqual([`ok   ${SQUAT}`, 'ok   FXE=1.0S/k:mac/l:foot/s:?/m:?', 'ok   FXM=1.0/any-muscle']);
+    expect(r.out.split('\n').slice(0, 6)).toEqual([
+      `ok   ${SQUAT}`, '     canonicalised from FXI=1.0/l:bb@back/o:standing/m:kn.ext+hip.ext: write the canonical form',
+      'ok   FXE=1.0S/k:mac/l:foot/s:?/m:?', '     canonicalised from FXE=1.0/k:mac/l:foot: write the canonical form',
+      'ok   FXM=1.0/any-muscle', '     canonicalised from FXM=1.0S/any-muscle: write the canonical form',
+    ]);
     expect(r.out).toContain('bad  FXI=1/m:x');
     expect(r.code).toBe(1);
+  });
+
+  test('a string already canonical is printed once, with no note', async () => {
+    const r = await cli(['validate', SQUAT]);
+    expect(r.out).toBe(`ok   ${SQUAT}`);
+    expect(r.code).toBe(0);
   });
 
   test('checks an FXM against a provider vocabulary only when one is given', async () => {
@@ -63,6 +73,14 @@ describe('compare', () => {
     const r = await cli(['compare', SQUAT, 'FXI=1.0S/m:hip.ext+kn.ext/o:*/l:bb@back']);
     expect(r.out).toMatch(/^refines \{"m":"equal","o":"narrower"/);
     expect((await cli(['compare', SQUAT, 'FXE=1.0S/k:none'])).code).toBe(1);
+  });
+
+  test('an invalid comparison says why', async () => {
+    const bad = await cli(['compare', SQUAT, 'FXI=1.0S/m:hip.ext/o:standing/l:db']);
+    expect(bad.out).toBe('invalid\n  b: Every implement needs a hold point; write @? if it is unknown.');
+    expect(bad.code).toBe(1);
+    const kinds = await cli(['compare', SQUAT, 'FXE=1.0S/k:none']);
+    expect(kinds.out).toBe('invalid\n  compare takes two FXIs or two FXEs; these are of different kinds');
   });
 });
 
