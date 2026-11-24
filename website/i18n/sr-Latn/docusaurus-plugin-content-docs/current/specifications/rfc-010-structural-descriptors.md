@@ -86,7 +86,7 @@ FXI ne identifikuje vežbu. Dva vlasnika koja opisuju istu vežbu ne pišu uvek 
 
 ## 4. Deskriptori
 
-Stranice deskriptora su normativni tekst za sintaksu, kanonski oblik, pravila slojeva, kodove i poređenje. Ovaj RFC ih usvaja onakve kakve su u reviziji pravila koju registri imenuju, i ne iskazuje ih ponovo.
+Stranice deskriptora su normativni tekst za sintaksu, kanonski oblik, pravila slojeva, kodove i poređenje. Ovaj RFC ih usvaja onakve kakve su u reviziji pravila 1.3, vrednosti `rules` registara deskriptora i toka pitanja, i ne iskazuje ih ponovo.
 
 | Deskriptor | Stranica | Primer |
 |---|---|---|
@@ -260,7 +260,8 @@ Vektori usaglašenosti kažu da li implementacija izračunava ono što ova speci
 ### 9.1. Metod
 
 - **Enkoderi.** Dva enkodera, oba softverski agenti, nezavisno su kodirala biblioteku i upite, bez uvida u izlaz onog drugog. Radila su u režimu vlasnika, kao zamene za vlasnike kataloga, pa su njihovi redovi nosili vlasničko poreklo i mogli su automatski da se podudare: brojke automatskog podudaranja u nastavku simuliraju vlasnike koji kodiraju sopstvene kataloge. Kalibracija u kojoj kodiraju ljudi je na čekanju (§9.4).
-- **Upiti.** 624 bodovana upita u šest delova, nijedan sa nazivom zajedničkim sa bibliotekom sa kojom je upoređivan: redovi napisani na francuskom, na italijanskom i na portugalskom; stvarni redovi koji nisu na engleskom iz kataloga trećih strana; teretanski žargon; i preimenovane vežbe. Za 496 njihova vežba postoji u biblioteci, a za 128 ne postoji. **Stvarni delovi** su poslednja tri, 174 upita.
+- **Upiti.** 624 bodovana upita u šest delova, nijedan sa nazivom zajedničkim sa bibliotekom sa kojom je upoređivan: redovi napisani na francuskom, na italijanskom i na portugalskom; stvarni redovi koji nisu na engleskom iz kataloga trećih strana; teretanski žargon; i preimenovane vežbe. Za 496 njihova vežba postoji u biblioteci, a za 128 ne postoji. **Stvarni delovi** su poslednja tri, 174 upita: 136 u biblioteci i 38 odsutnih.
+- **Kada.** Test je izvršen 2026-11-24, po reviziji pravila 1.3.
 - **Izvršavanja.** Unakrsno po enkoderima: upiti koje je izgradio jedan enkoder upoređivani su sa bibliotekom koju je izgradio drugi, i obrnuto. Svaka brojka je srednja vrednost dva izvršavanja.
 - **Razrešivač.** Protokol podudaranja iz §7, onako kako ga implementira referentni enkoder, fiksiran pre nego što su upiti kodirani.
 - **Mere.** *Odziv u prva 3* je udeo upita čija vežba postoji u biblioteci, a čiji je pravi zapis povezan automatski ili naveden među prva tri na listi za potvrdu; njegov imenilac su upiti čija vežba postoji u biblioteci. *Pogrešna automatska podudaranja* su udeo svih bodovanih upita, bez obzira na to da li im vežba postoji u biblioteci, koji su automatski povezani sa pogrešnim zapisom; odsutan upit povezan sa bilo čim je pogrešan.

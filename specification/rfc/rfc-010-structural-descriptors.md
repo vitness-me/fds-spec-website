@@ -79,7 +79,7 @@ FXI does not identify an exercise. Two owners who describe the same exercise do 
 
 ## 4. The Descriptors
 
-The descriptor pages are the normative text for the syntax, the canonical form, the layer rules, the codes and compare. This RFC adopts them as they stand at the rules revision the registries name, and does not restate them.
+The descriptor pages are the normative text for the syntax, the canonical form, the layer rules, the codes and compare. This RFC adopts them as they stand at rules revision 1.3, the `rules` value of the descriptor registries and the question flow, and does not restate them.
 
 | Descriptor | Page | Example |
 |---|---|---|
@@ -253,7 +253,8 @@ The conformance vectors say whether an implementation computes what this specifi
 ### 9.1. Method
 
 - **Encoders.** Two encoders, both software agents, encoded the library and the queries independently, without seeing each other's output. They worked in owner mode as stand-ins for the catalogues' owners, so their rows carried owner provenance and could auto-match: the auto-match figures below simulate owners encoding their own catalogues. A calibration with people encoding is pending (§9.4).
-- **Queries.** 624 scored queries in six parts, none sharing a name with the library it was matched against: rows authored in French, in Italian and in Portuguese; real non-English rows from third-party catalogues; gym jargon; and renamed exercises. 496 have their exercise in the library and 128 do not. The **real parts** are the last three, 174 queries.
+- **Queries.** 624 scored queries in six parts, none sharing a name with the library it was matched against: rows authored in French, in Italian and in Portuguese; real non-English rows from third-party catalogues; gym jargon; and renamed exercises. 496 have their exercise in the library and 128 do not. The **real parts** are the last three, 174 queries: 136 in the library and 38 absent.
+- **When.** The test ran on 2026-11-24, under rules revision 1.3.
 - **Runs.** Cross-encoder: the queries one encoder built were matched against the library the other built, and the other way round. Each figure is the mean of the two runs.
 - **Resolver.** The match protocol of §7, as the reference encoder implements it, fixed before the queries were encoded.
 - **Measures.** *Top-3 recall* is the share of in-library queries whose right record is linked automatically or listed in the top three of the confirm list; its denominator is the in-library queries. *Wrong auto-matches* is the share of all scored queries, in the library or not, that were linked automatically to a wrong record; an absent query linked to anything is wrong.

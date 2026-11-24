@@ -86,7 +86,7 @@ FXI no identifica un ejercicio. Dos propietarios que describen el mismo ejercici
 
 ## 4. Los descriptores
 
-Las páginas de descriptores son el texto normativo de la sintaxis, la forma canónica, las reglas de capa, los códigos y la comparación. Este RFC las adopta tal como están en la revisión de reglas que nombran los registros, y no las reformula.
+Las páginas de descriptores son el texto normativo de la sintaxis, la forma canónica, las reglas de capa, los códigos y la comparación. Este RFC las adopta tal como están en la revisión de reglas 1.3, el valor `rules` de los registros de descriptores y del flujo de preguntas, y no las reformula.
 
 | Descriptor | Página | Ejemplo |
 |---|---|---|
@@ -260,7 +260,8 @@ Los vectores de conformidad dicen si una implementación calcula lo que dice est
 ### 9.1. Método
 
 - **Codificadores.** Dos codificadores, ambos agentes de software, codificaron la biblioteca y las consultas de forma independiente, sin ver la salida del otro. Trabajaron en modo propietario en sustitución de los propietarios de los catálogos, así que sus filas llevaban procedencia de propietario y podían coincidir automáticamente: las cifras de coincidencia automática de abajo simulan a propietarios que codifican sus propios catálogos. Queda pendiente una calibración con personas que codifiquen (§9.4).
-- **Consultas.** 624 consultas puntuadas en seis partes, ninguna de las cuales comparte un nombre con la biblioteca contra la que se buscó su coincidencia: filas redactadas en francés, en italiano y en portugués; filas reales no inglesas de catálogos de terceros; jerga de gimnasio; y ejercicios renombrados. 496 tienen su ejercicio en la biblioteca y 128 no. Las **partes reales** son las tres últimas, 174 consultas.
+- **Consultas.** 624 consultas puntuadas en seis partes, ninguna de las cuales comparte un nombre con la biblioteca contra la que se buscó su coincidencia: filas redactadas en francés, en italiano y en portugués; filas reales no inglesas de catálogos de terceros; jerga de gimnasio; y ejercicios renombrados. 496 tienen su ejercicio en la biblioteca y 128 no. Las **partes reales** son las tres últimas, 174 consultas: 136 en la biblioteca y 38 ausentes.
+- **Cuándo.** La prueba se realizó el 2026-11-24, con la revisión de reglas 1.3.
 - **Ejecuciones.** Entre codificadores: las consultas que construyó un codificador se compararon contra la biblioteca que construyó el otro, y a la inversa. Cada cifra es la media de las dos ejecuciones.
 - **Resolvedor.** El protocolo de coincidencia del §7, tal como lo implementa el codificador de referencia, fijado antes de codificar las consultas.
 - **Medidas.** La *exhaustividad top-3* (recall) es la proporción de consultas de la biblioteca cuyo registro correcto se enlaza automáticamente o aparece entre los tres primeros de la lista de confirmación; su denominador son las consultas de la biblioteca. Las *coincidencias automáticas erróneas* son la proporción de todas las consultas puntuadas, estén o no en la biblioteca, que se enlazaron automáticamente con un registro equivocado; una consulta ausente enlazada con cualquier cosa es errónea.
