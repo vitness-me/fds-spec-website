@@ -30,7 +30,7 @@ Every muscle and every part is anchored to an open anatomy ontology, so the key 
 2. **UBERON is the cross-reference.** Where UBERON has a term for the same structure, it is carried too (`UBERON:<id>`).
 3. **A missing term is a listed gap, never a guess.** Where an ontology has no term for the structure (UBERON often has a whole muscle but not its heads), the entry records that gap in words, naming what the ontology has instead. An anchor is never borrowed from a broader or narrower structure.
 
-**Tokens follow the anchor.** A muscle token is the FMA name, lowercased and hyphenated, without the word "muscle". A part token is the qualifier FMA gives the part or head (`clavicular`, `long`).
+**Tokens follow the anchor.** A muscle token is derived from the preferred label of its FMA term: lowercase it, remove the words "muscle group", or else the word "muscle", and join the remaining words with single hyphens (`Latissimus dorsi` is `latissimus-dorsi`, `Erector spinae muscle group` is `erector-spinae`). A part token is the qualifier in the FMA label of the part or head, the word before "part of" or "head of" (`Clavicular part of deltoid` is `clavicular`, `Long head of biceps brachii` is `long`). Two providers that anchor a structure to the same FMA term therefore write the same key for it, and a reader can resolve a muscle or part key from FMA without the provider's vocabulary. A group token is not derived: it is the provider's own (see [groups](#groups-are-member-sets)).
 
 **Parts exist only where they train differently.** A muscle with parts is exactly the union of its parts: there is no tissue in the whole muscle that no part covers.
 
@@ -45,7 +45,7 @@ A group is defined by **the FXM keys of its members**, never by its name. Member
 - A group has at least one member, every member is a valid canonical key in the same vocabulary, and no group contains itself through other groups.
 - A group may also carry an ontology anchor, where an ontology has a term for exactly that set.
 
-Two providers can name a group differently and still agree on what it means, because the comparison is over leaves, not names.
+Two providers can name a group differently and still agree on what it means, because the comparison is over leaves, not names. A `g:` key is resolved only through the vocabulary of the provider that defined it, and a key does not say which provider that is.
 
 ## Compare
 
