@@ -2,8 +2,9 @@
  * Descriptor steps: propose an FXI and FXE for each record from answers its source carries, and resolve each record's
  * FXI against a library by the match protocol. Both are off unless `TransformerOptions.descriptors` names them.
  *
- * The descriptors are a draft of the standard, and no published entity schema has fields for them yet, so they are
- * written under an open object (`extensions.descriptors` unless `target` says otherwise).
+ * The fields are written where the descriptor RFC defines them: `fxi`, `fxe`, `fxiProvenance`, `fxiGap` and `xrefs` at
+ * the top level of the record. The published entity schemas do not have them yet, so a document carrying them
+ * validates only once the RFC's schemas are published.
  */
 
 import { AnswerError, build, createFlow, FXI_RULES, match } from '@vitness/fds-encoder';
@@ -38,8 +39,6 @@ export interface DescriptorResolveOptions {
 export interface DescriptorOptions {
   propose?: DescriptorProposeOptions;
   resolve?: DescriptorResolveOptions;
-  /** Where the descriptor fields are written in each document (default `extensions.descriptors`) */
-  target?: string;
 }
 
 /** What the descriptor steps did for one record. */
@@ -48,19 +47,22 @@ export interface DescriptorOutcome {
   id: string;
   /** A proposal was written, with this provenance */
   proposed?: ProposalProvenance;
+  /**
+   * The answers record the proposal was built from, the rules revision it was built under, and the full equipment
+   * record when it has build details. None of these has a field on the record; keep them beside it so
+   * `fds-encoder upgrade` can rebuild the strings.
+   */
+  built?: { rules: string; record: Entry; fxeFull?: string };
   /** The proposal's answers did not build; nothing was written */
   problems?: string[];
   /** The match against the library. Only `auto` writes a link; `confirm` is for a person to settle. */
   match?: MatchResult;
 }
 
-export const DEFAULT_DESCRIPTOR_TARGET = 'extensions.descriptors';
-
 const isObject = (v: unknown): v is Record<string, unknown> => typeof v === 'object' && v !== null && !Array.isArray(v);
 
 /** Runs the descriptor steps a transformer was given, on each mapped record. */
 export class DescriptorSteps {
-  private readonly target: string;
   private readonly flow: Flow;
 
   constructor(private readonly options: DescriptorOptions) {
@@ -74,7 +76,6 @@ export class DescriptorSteps {
     if (options.resolve !== undefined && options.resolve.system.trim() === '') {
       throw new Error('descriptors.resolve.system names the library each link points into; it is empty.');
     }
-    this.target = options.target ?? DEFAULT_DESCRIPTOR_TARGET;
     this.flow = createFlow(options.propose?.words);
   }
 
@@ -107,7 +108,7 @@ export class DescriptorSteps {
     const raw = getMappingPathValue(source, options.answersFrom);
     if (!isObject(raw)) return false;
     // A string already mapped from the source — the owner's own, or an earlier run's — is never replaced.
-    if (typeof getMappingPathValue(mapped, `${this.target}.fxi`) === 'string') return false;
+    if (typeof mapped.fxi === 'string') return false;
 
     const answers = (isObject(raw.answers) ? raw.answers : raw) as Answers;
     const who: ProposalProvenance = options.provenance ?? 'import';
@@ -119,20 +120,20 @@ export class DescriptorSteps {
       const { name, version } = this.flow.words;
       const cites = typeof answers.movement === 'string' && this.flow.wordById.has(answers.movement);
       const gap = typeof record.gap === 'string' && record.gap.trim() !== '' ? record.gap : null;
-      const fields: Record<string, unknown> = {
-        fxi: built.fxi,
-        fxe: built.fxe,
-        ...(built.fxeFull === undefined ? {} : { fxeFull: built.fxeFull }),
-        ...(built.fxi === null ? {} : { fxiProvenance: record.provenance, fxiGap: gap }),
-        rules: FXI_RULES,
-        record: { ...record, ...(cites && record.words === undefined ? { words: { name, version } } : {}) },
-      };
-      const at = ensureObject(mapped, this.target);
+      // Equipment answers build no FXI: the record gets its FXE only.
+      const fields: Record<string, unknown> = built.fxi === null
+        ? { fxe: built.fxe }
+        : { fxi: built.fxi, fxe: built.fxe, fxiProvenance: record.provenance, fxiGap: gap };
       for (const [field, value] of Object.entries(fields)) {
-        at[field] = value;
-        provenance[`${this.target}.${field}`] = { origin: 'source', from: options.answersFrom, transform: ['fds-encoder:build'] };
+        mapped[field] = value;
+        provenance[field] = { origin: 'source', from: options.answersFrom, transform: ['fds-encoder:build'] };
       }
       outcome.proposed = who;
+      outcome.built = {
+        rules: FXI_RULES,
+        record: { ...record, ...(cites && record.words === undefined ? { words: { name, version } } : {}) },
+        ...(built.fxeFull === undefined ? {} : { fxeFull: built.fxeFull }),
+      };
     } catch (error) {
       if (!(error instanceof AnswerError)) throw error;
       outcome.problems = [...error.problems];
@@ -147,8 +148,8 @@ export class DescriptorSteps {
     provenance: RecordProvenance,
     outcome: DescriptorOutcome
   ): boolean {
-    const at = getMappingPathValue(mapped, this.target);
-    if (!isObject(at) || typeof at.fxi !== 'string') return false;
+    const at = mapped;
+    if (typeof at.fxi !== 'string') return false;
     const canonical = mapped.canonical as Record<string, unknown> | undefined;
     const query: MatchRow = {
       id,
@@ -165,7 +166,7 @@ export class DescriptorSteps {
       const link = { system: options.system, id: result.id, link: 'auto' };
       if (!xrefs.some((x) => isObject(x) && x.system === link.system && x.id === link.id)) xrefs.push(link);
       at.xrefs = xrefs;
-      provenance[`${this.target}.xrefs`] = { origin: 'transform', transform: ['fds-encoder:match'] };
+      provenance.xrefs = { origin: 'transform', transform: ['fds-encoder:match'] };
     }
     return true;
   }
@@ -176,14 +177,4 @@ function stableId(mapped: Record<string, unknown>): string {
   const canonical = mapped.canonical as Record<string, unknown> | undefined;
   const id = mapped.exerciseId ?? mapped.id ?? canonical?.slug;
   return typeof id === 'string' ? id : '(no id)';
-}
-
-/** The object at a dot path, created where missing */
-function ensureObject(root: Record<string, unknown>, path: string): Record<string, unknown> {
-  let current = root;
-  for (const part of path.split('.')) {
-    if (!isObject(current[part])) current[part] = {};
-    current = current[part] as Record<string, unknown>;
-  }
-  return current;
 }

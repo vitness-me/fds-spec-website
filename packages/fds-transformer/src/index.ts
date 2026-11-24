@@ -50,7 +50,6 @@ export * from './transforms/builtin/index.js';
 export { ConfigLoader } from './config/config-loader.js';
 
 // Descriptor steps (draft FXI and FXE)
-export { DEFAULT_DESCRIPTOR_TARGET } from './descriptors/descriptor-steps.js';
 export type {
   DescriptorOptions,
   DescriptorOutcome,

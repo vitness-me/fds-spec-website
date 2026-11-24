@@ -1,6 +1,8 @@
 /**
  * The descriptor steps: proposing an FXI and FXE from answers a source carries, and resolving each record's FXI
- * against a library. Runs the round-trip fixture, which validates against the bundled schema with no network.
+ * against a library. Runs the round-trip fixture with no network. The fields go at the top level of the record, where
+ * the descriptor RFC defines them; the published schemas do not have them yet, so these runs turn validation off,
+ * except the one that shows the current schema refusing them.
  */
 
 import { readFileSync } from 'fs';
@@ -24,8 +26,9 @@ const squatAnswers = {
 const withAnswers = (answers: unknown = { answers: squatAnswers, notes: 'from the source' }): Record<string, unknown>[] =>
   sources().map((s, i) => (i === 0 ? { ...s, fxiAnswers: answers } : s));
 
-async function config(): Promise<MappingConfig> {
-  return ConfigLoader.load(`${FIXTURE}mapping.config.json`);
+async function config(validate = false): Promise<MappingConfig> {
+  const mapping = await ConfigLoader.load(`${FIXTURE}mapping.config.json`);
+  return validate ? mapping : { ...mapping, validation: { ...mapping.validation, enabled: false } };
 }
 
 async function run(descriptors: DescriptorOptions | undefined, input = withAnswers(), mapping?: MappingConfig): Promise<TransformResult[]> {
@@ -33,7 +36,13 @@ async function run(descriptors: DescriptorOptions | undefined, input = withAnswe
   return transformer.transformAll(input);
 }
 
-const descriptorsOf = (r: TransformResult) => ((r.data as Record<string, any>).extensions ?? {}).descriptors;
+const FIELDS = ['fxi', 'fxe', 'fxiProvenance', 'fxiGap', 'xrefs'];
+/** The descriptor fields at the top level of a record, or undefined when it has none. */
+const descriptorsOf = (r: TransformResult): Record<string, any> | undefined => {
+  const data = r.data as Record<string, unknown>;
+  const found = Object.fromEntries(FIELDS.filter((f) => f in data).map((f) => [f, data[f]]));
+  return Object.keys(found).length > 0 ? found : undefined;
+};
 
 beforeEach(() => {
   vi.stubGlobal('fetch', () => {
@@ -45,8 +54,8 @@ afterEach(() => {
 });
 
 describe('without descriptor steps', () => {
-  it('a run is unchanged: no descriptor fields and no outcome', async () => {
-    const results = await run(undefined);
+  it('a run is unchanged: no descriptor fields, no outcome, and it validates', async () => {
+    const results = await run(undefined, withAnswers(), await config(true));
     expect(results.every((r) => r.success)).toBe(true);
     expect(results.map(descriptorsOf)).toEqual([undefined, undefined, undefined]);
     expect(results.some((r) => 'descriptors' in r)).toBe(false);
@@ -54,32 +63,36 @@ describe('without descriptor steps', () => {
 });
 
 describe('propose', () => {
-  it('builds the strings from the source answers, keeps the answers record beside them, and still validates', async () => {
+  it('writes the strings at the top level of the record, and the answers record into the outcome', async () => {
     const [squat, ...rest] = await run({ propose: { answersFrom: 'fxiAnswers' } });
     expect(squat!.success).toBe(true);
-    expect(squat!.errors).toEqual([]);
-    expect(descriptorsOf(squat!)).toMatchObject({
-      fxi: SQUAT,
-      fxe: 'FXE=1.0S/k:imp/f:bar.straight',
-      fxiProvenance: 'import',
-      fxiGap: null,
-      record: { answers: squatAnswers, notes: 'from the source', provenance: 'import', mode: 'import' },
+    expect(descriptorsOf(squat!)).toEqual({ fxi: SQUAT, fxe: 'FXE=1.0S/k:imp/f:bar.straight', fxiProvenance: 'import', fxiGap: null });
+    expect((squat!.data as Record<string, unknown>).extensions).toBeUndefined();
+    expect(squat!.descriptors).toMatchObject({
+      id: (squat!.data as Record<string, unknown>).exerciseId,
+      proposed: 'import',
+      built: { record: { answers: squatAnswers, notes: 'from the source', provenance: 'import', mode: 'import' } },
     });
-    expect(squat!.descriptors).toEqual({ id: (squat!.data as Record<string, unknown>).exerciseId, proposed: 'import' });
-    expect(squat!.provenance!['extensions.descriptors.fxi']).toEqual({ origin: 'source', from: 'fxiAnswers', transform: ['fds-encoder:build'] });
+    expect(squat!.provenance!.fxi).toEqual({ origin: 'source', from: 'fxiAnswers', transform: ['fds-encoder:build'] });
     expect(rest.map(descriptorsOf)).toEqual([undefined, undefined]);
+  });
+
+  it('the published exercise schema does not have the fields yet: with the step on, validation refuses them', async () => {
+    const [squat] = await run({ propose: { answersFrom: 'fxiAnswers' } }, withAnswers(), await config(true));
+    expect(squat!.errors!.map((e) => e.message).join()).toMatch(/additional propert/i);
   });
 
   it('marks an agent proposal as agent, and never accepts an owner provenance', async () => {
     const [squat] = await run({ propose: { answersFrom: 'fxiAnswers', provenance: 'agent' } });
-    expect(descriptorsOf(squat!)).toMatchObject({ fxiProvenance: 'agent', record: { provenance: 'agent' } });
-    expect(descriptorsOf(squat!).record.mode).toBeUndefined();
+    expect(descriptorsOf(squat!)).toMatchObject({ fxiProvenance: 'agent' });
+    expect(squat!.descriptors!.built!.record).toMatchObject({ provenance: 'agent' });
+    expect(squat!.descriptors!.built!.record.mode).toBeUndefined();
     expect(() => new Transformer({ descriptors: { propose: { answersFrom: 'x', provenance: 'owner' as never } } })).toThrow(/Owner provenance comes only from the owner/);
   });
 
   it('reads a bare answers object as well as an answers record', async () => {
     const [squat] = await run({ propose: { answersFrom: 'fxiAnswers' } }, withAnswers(squatAnswers));
-    expect(descriptorsOf(squat!).fxi).toBe(SQUAT);
+    expect(descriptorsOf(squat!)!.fxi).toBe(SQUAT);
   });
 
   it('answers that do not build write nothing, and say why', async () => {
@@ -91,7 +104,7 @@ describe('propose', () => {
 
   it('never replaces an FXI the mapping already wrote', async () => {
     const mapping = await config();
-    mapping.mappings['extensions.descriptors.fxi'] = { from: 'ownFxi' };
+    mapping.mappings.fxi = { from: 'ownFxi' };
     const input = withAnswers().map((s, i) => (i === 0 ? { ...s, ownFxi: 'FXI=1.0S/m:hip.ext+kn.ext/o:standing/l:bb@shoulders' } : s));
     const [squat] = await run({ propose: { answersFrom: 'fxiAnswers' } }, input, mapping);
     expect(descriptorsOf(squat!)).toEqual({ fxi: 'FXI=1.0S/m:hip.ext+kn.ext/o:standing/l:bb@shoulders' });
@@ -102,8 +115,9 @@ describe('the batch path', () => {
   it('runs the same steps', async () => {
     const transformer = new Transformer({ config: await config(), descriptors: { propose: { answersFrom: 'fxiAnswers' } } });
     const { results } = await transformer.transformAllBatch(withAnswers());
-    expect(descriptorsOf(results[0]!).fxi).toBe(SQUAT);
+    expect(descriptorsOf(results[0]!)!.fxi).toBe(SQUAT);
     expect(results[0]!.descriptors!.proposed).toBe('import');
+    expect(descriptorsOf(results[0]!)!.fxiProvenance).toBe('import');
   });
 });
 
@@ -115,7 +129,7 @@ describe('resolve', () => {
 
   it('an import proposal never links: the identical entry is offered to a person to confirm', async () => {
     const [squat] = await run({ propose: { answersFrom: 'fxiAnswers' }, resolve: { library, system: 'gym-library' } });
-    expect(descriptorsOf(squat!).xrefs).toBeUndefined();
+    expect(descriptorsOf(squat!)!.xrefs).toBeUndefined();
     expect(squat!.descriptors!.match).toEqual({
       kind: 'confirm',
       why: 'the query has no owner provenance',
@@ -125,25 +139,25 @@ describe('resolve', () => {
 
   it('an owner FXI mapped from the source links automatically to the one identical owner entry, in xrefs', async () => {
     const mapping = await config();
-    mapping.mappings['extensions.descriptors.fxi'] = { from: 'ownFxi' };
-    mapping.mappings['extensions.descriptors.fxiProvenance'] = { from: null, default: 'owner' };
+    mapping.mappings.fxi = { from: 'ownFxi' };
+    mapping.mappings.fxiProvenance = { from: null, default: 'owner' };
     const input = sources().map((s, i) => (i === 0 ? { ...s, ownFxi: SQUAT } : s));
     const [squat, other] = await run({ resolve: { library, system: 'gym-library' } }, input, mapping);
     expect(squat!.success).toBe(true);
-    expect(descriptorsOf(squat!).xrefs).toEqual([{ system: 'gym-library', id: 'lib:back-squat', link: 'auto' }]);
+    expect(descriptorsOf(squat!)!.xrefs).toEqual([{ system: 'gym-library', id: 'lib:back-squat', link: 'auto' }]);
     expect(squat!.descriptors!.match).toEqual({ kind: 'auto', id: 'lib:back-squat' });
-    expect(squat!.provenance!['extensions.descriptors.xrefs']).toEqual({ origin: 'transform', transform: ['fds-encoder:match'] });
+    expect(squat!.provenance!.xrefs).toEqual({ origin: 'transform', transform: ['fds-encoder:match'] });
     expect(other!.descriptors).toBeUndefined();
   });
 
   it('a gap marker refuses the link', async () => {
     const mapping = await config();
-    mapping.mappings['extensions.descriptors.fxi'] = { from: 'ownFxi' };
-    mapping.mappings['extensions.descriptors.fxiProvenance'] = { from: null, default: 'owner' };
-    mapping.mappings['extensions.descriptors.fxiGap'] = { from: 'gap' };
+    mapping.mappings.fxi = { from: 'ownFxi' };
+    mapping.mappings.fxiProvenance = { from: null, default: 'owner' };
+    mapping.mappings.fxiGap = { from: 'gap' };
     const input = sources().map((s, i) => (i === 0 ? { ...s, ownFxi: SQUAT, gap: 'paused at the bottom' } : s));
     const [squat] = await run({ resolve: { library, system: 'gym-library' } }, input, mapping);
-    expect(descriptorsOf(squat!).xrefs).toBeUndefined();
+    expect(descriptorsOf(squat!)!.xrefs).toBeUndefined();
     expect(squat!.descriptors!.match).toMatchObject({ kind: 'confirm', why: 'the query carries a gap marker' });
   });
 
