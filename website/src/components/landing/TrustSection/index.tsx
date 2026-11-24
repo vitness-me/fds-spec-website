@@ -111,8 +111,8 @@ export default function TrustSection(): JSX.Element {
             </span>
           </div>
           <div className={styles.stat}>
-            {/* fds:count rfcs=8 */}
-            <span className={styles.statNum}>8</span>
+            {/* fds:count rfcs=9 */}
+            <span className={styles.statNum}>9</span>
             <span className={styles.statLabel}>
               <Translate id="landing.trust.stat.rfcs">
                 public RFCs behind the design

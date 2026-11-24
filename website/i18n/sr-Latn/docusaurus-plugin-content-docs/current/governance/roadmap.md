@@ -32,6 +32,10 @@ RFC-009 zato čeka na model saglasnosti i privatnosti, a ne na dizajn šeme. Še
 
 Dve odluke su već utvrđene. Zapis će nositi **zamrznuti snimak preskripcije prema kojoj je izveden**, jer plan izmenjen naknadno ne sme prepisivati istoriju. A njegov subjekt biće **neprozirna opciona referenca**, a ne entitet User ili Profile — FDS ne modeluje nijednu osobu, a dodavanje osobe da bi se rešilo beleženje uvuklo bi identitet u svaki referentni dokument.
 
+### RFC-010 — Strukturni deskriptori (nacrt)
+
+FXI, FXE i FXM: kratki nizovi iz zatvorenih vokabulara koji opisuju kako se vežba izvodi, šta je komad opreme i na koji se mišić misli, tako da dva kataloga mogu da porede zapise bez zajedničkog naziva. Nacrt dodaje opciona polja na exercise, equipment i muscle i definiše protokol podudaranja koji automatski povezuje samo uz jedinstven identičan deskriptor, a inače traži od osobe da potvrdi. Ostaje eksperimentalan dok novi test sa disjunktnim nazivima ne ispuni njegov prag za izdanje, koji prva merenja još ne ispunjavaju.
+
 ### Registri i usaglašenost
 
 Registri preporučenih vrednosti objavljeni su i pod proverom. Skupovi testova usaglašenosti — korpus prema kome proizvođač podataka može da se validira da bi tvrdio podršku — prirodan su sledeći korak sada kada je matrica pokrivenosti potpuna.

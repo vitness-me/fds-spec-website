@@ -8,7 +8,7 @@ sidebar_position: 3
 # Question Flow: Building FXI and FXE
 
 :::caution Draft
-Not normative until the RFC that adopts the structural descriptors is accepted: RFC (pending). See [the overview](./overview.md).
+Not normative until [RFC-010](/docs/specifications/rfc-010-structural-descriptors), which adopts the structural descriptors, is accepted. RFC-010 is a draft. See [the overview](./overview.md).
 :::
 
 Nobody needs to write FXI notation. An owner answers closed questions about one exercise, or one piece of equipment, and the answers build the strings. This page is the whole flow, written out so that a person can walk it by hand and two implementations build byte-identical strings from the same answers.
@@ -97,7 +97,7 @@ The count applies to the first implement. Write `*n` from `count1` only when `n`
 
 A producer keeps, for each exercise or piece of equipment, the answers that built its strings, so they can be [rebuilt](./compare-and-match.md#versioning) under a later rules revision:
 
-```json fds:ignore an answers record, whose exchange format the descriptor RFC (pending) defines; it is not an FDS entity document
+```json fds:ignore an answers record in the working shape this page describes, which RFC-010 leaves open; it is not an FDS entity document
 {
   "id": "barbell-back-squat",
   "answers": {

@@ -64,7 +64,7 @@ const sidebars: SidebarsConfig = {
           type: 'category',
           label: 'Structural Descriptors (draft)',
           collapsed: true,
-          // Draft pages pending the descriptor RFC. Linked to the overview for the
+          // Draft pages adopted by the draft RFC-010. Linked to the overview for the
           // same breadcrumb reason as Specifications (RFCs) below.
           link: {type: 'doc', id: 'core-concepts/descriptors/overview'},
           items: [
@@ -96,6 +96,7 @@ const sidebars: SidebarsConfig = {
         'specifications/rfc-006-prescription-primitives',
         'specifications/rfc-007-workout-data-model',
         'specifications/rfc-008-program-data-model',
+        'specifications/rfc-010-structural-descriptors',
       ],
     },
     {

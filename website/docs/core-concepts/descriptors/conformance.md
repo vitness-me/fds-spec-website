@@ -8,10 +8,12 @@ sidebar_position: 7
 # Conformance
 
 :::caution Draft
-Not normative until the RFC that adopts the structural descriptors is accepted: RFC (pending). See [the overview](./overview.md).
+Not normative until [RFC-010](/docs/specifications/rfc-010-structural-descriptors), which adopts the structural descriptors, is accepted. RFC-010 is a draft. See [the overview](./overview.md).
 :::
 
 An implementation of FXI, FXE and FXM conforms when it passes, at 100%, every published test vector in each tier its role uses. The vectors are data: each one is an input and an expected output, so any implementation, in any language, runs the same files through a small adapter of its own.
+
+Which tiers an implementation must pass is set by [RFC-010's conformance section](/docs/specifications/rfc-010-structural-descriptors#conformance):
 
 | An implementation that | Passes the tiers |
 |---|---|
@@ -164,13 +166,13 @@ The tiers above have one right answer per vector. Two things that matter as much
 
 Neither is a threshold an implementation or a catalogue must reach. They say how far the descriptors can be relied on, so that an adopter can decide how much of the confirm step to keep.
 
-:::note Pending
-The first reports are not yet published. They follow the re-test of the current rules revision.
+:::note
+The first measurements, from the name-disjoint re-test of the current rules revision, are published in [RFC-010 §9](/docs/specifications/rfc-010-structural-descriptors#9-evidence) with their method. The data they were measured on is not published. Person-encoded calibration and adopter outcomes are still pending.
 :::
-
-<!-- TODO (pending the re-test): the encoder agreement and adopter outcome reports, each with its method, sample and date. -->
 
 | Report | Result |
 |---|---|
-| Encoder agreement | Pending: not yet measured for this rules revision. |
+| Encoder agreement | Measured: [RFC-010 §9.3](/docs/specifications/rfc-010-structural-descriptors#93-separation-and-agreement). |
+| Name-disjoint re-test | Measured: [RFC-010 §9.2](/docs/specifications/rfc-010-structural-descriptors#92-name-disjoint-re-test), by the method of §9.1. |
+| Person-encoded calibration | Pending: owners against encoders, not yet measured. |
 | Adopter outcomes | Pending: not yet measured for this rules revision. |

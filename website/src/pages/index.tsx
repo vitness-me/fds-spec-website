@@ -76,7 +76,7 @@ function CTASection() {
   // Defined ahead of the roadmap paragraph so its <Translate> can sit on one
   // line with its message — the fds:count marker above that paragraph is
   // checked against the two lines that follow it, and the sentence carrying
-  // "Eight" has to be one of them.
+  // "Nine" has to be one of them.
   const roadmapLink = (
     <Link to="/docs/governance/roadmap">
       <Translate id="landing.cta.roadmapLink">roadmap</Translate>
@@ -105,9 +105,9 @@ function CTASection() {
             <Translate id="landing.cta.githubButton">GitHub Repository</Translate>
           </Link>
         </div>
-        {/* fds:count rfcs=8 */}
+        {/* fds:count rfcs=9 */}
         <p className={styles.ctaRoadmap}>
-          <Translate id="landing.cta.roadmap" values={{roadmapLink}}>{'Eight RFCs are published: the exercise catalog and its registries, prescription primitives, workouts and programs. What comes next — and what is deliberately left out — is on the {roadmapLink}.'}</Translate>
+          <Translate id="landing.cta.roadmap" values={{roadmapLink}}>{'Nine RFCs are published: the exercise catalog and its registries, prescription primitives, workouts, programs and, in draft, structural descriptors. What comes next — and what is deliberately left out — is on the {roadmapLink}.'}</Translate>
         </p>
         <div className={styles.earlyAdopters}>
           <p className={styles.earlyAdoptersText}>

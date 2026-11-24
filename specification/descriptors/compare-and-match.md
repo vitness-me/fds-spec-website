@@ -1,7 +1,7 @@
 # Compare, Match and Versioning
 
-:::caution Draft
-Not normative until the RFC that adopts the structural descriptors is accepted: RFC (pending). See [the overview](./overview.md).
+:::caution Draft / experimental
+Not normative until [RFC-010](https://github.com/vitness-me/fds-spec-website/blob/main/specification/rfc/rfc-010-structural-descriptors.md), which adopts the structural descriptors, is accepted. RFC-010 is a draft. See [the overview](./overview.md).
 :::
 
 ## Compare
@@ -74,8 +74,8 @@ The confirm list is filled in three steps, each record taking the first place it
 
 Import-mode FXIs are for candidate search only: the protocol never auto-matches them, and this standard makes no accuracy claim for them.
 
-:::note Pending
-The shape of `xrefs` is the RFC's to define. How name similarity is scored is an implementation's choice; the conformance vectors rank by name only where any reasonable score agrees.
+:::note
+The shape of `xrefs` is defined in [RFC-010](https://github.com/vitness-me/fds-spec-website/blob/main/specification/rfc/rfc-010-structural-descriptors.md) §5.4. How name similarity is scored is an implementation's choice; the conformance vectors rank by name only where any reasonable score agrees.
 :::
 
 ## Versioning

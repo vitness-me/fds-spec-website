@@ -14,8 +14,8 @@ The pages in this section are byte-for-byte copies of the sources in the
 repository's `specification/rfc/` directory. CI compares every page against
 its source on every change, so what you read here is what the standard says.
 
-<!-- fds:count rfcs=8 -->
-Eight RFCs are published:
+<!-- fds:count rfcs=9 -->
+Nine RFCs are published:
 
 <!-- fds:covers rfcs -->
 | RFC | Specifies |
@@ -28,6 +28,7 @@ Eight RFCs are published:
 | [RFC-006 — Prescription primitives](/docs/specifications/rfc-006-prescription-primitives) | The prescription definition library: load, reps, rest and tempo as reusable pieces. Its schema root validates nothing by design. |
 | [RFC-007 — Workout data model](/docs/specifications/rfc-007-workout-data-model) | The workout entity: how a training session is structured. |
 | [RFC-008 — Training program data model](/docs/specifications/rfc-008-program-data-model) | The program entity: multi-week plans that point at sessions rather than restating them. |
+| [RFC-010 — Structural descriptors](/docs/specifications/rfc-010-structural-descriptors) | Draft. FXI, FXE and FXM: descriptors that let two catalogues compare exercises, equipment and muscles without a shared name, and the match protocol that links them. |
 
 Each RFC names the schema version that implements it. For which entity
 versions the current release publishes, see the

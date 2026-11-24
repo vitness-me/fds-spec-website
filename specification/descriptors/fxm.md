@@ -1,7 +1,7 @@
 # FXM: Muscle Key
 
-:::caution Draft
-Not normative until the RFC that adopts the structural descriptors is accepted: RFC (pending). See [the overview](./overview.md).
+:::caution Draft / experimental
+Not normative until [RFC-010](https://github.com/vitness-me/fds-spec-website/blob/main/specification/rfc/rfc-010-structural-descriptors.md), which adopts the structural descriptors, is accepted. RFC-010 is a draft. See [the overview](./overview.md).
 :::
 
 An FXM names a muscle, a part of one, or a group of muscles, so that two catalogues that call the same muscle different things, in different languages, can tell that they mean the same tissue.
@@ -64,4 +64,4 @@ Comparing keys from two vocabularies requires both vocabularies, since a group's
 
 An FXM is valid when its header is `FXM=1.0/`, its body is one of the three forms above, and the vocabulary it is checked against has that muscle, that part of that muscle, or that group. Validation is always against a named vocabulary: the format can be checked alone, the existence of a token cannot.
 
-<!-- TODO (pending the RFC): where a provider publishes its FXM vocabulary, and the entry shape, are for the RFC to fix. -->
+<!-- Open in RFC-010 §12: where a provider publishes its FXM vocabulary, and the entry shape. The reference encoder's `--muscles` input is the working shape. -->

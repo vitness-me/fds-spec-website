@@ -32,6 +32,10 @@ RFC-009 therefore waits on a consent and privacy model rather than on schema des
 
 Two decisions are already fixed. A log will carry a **frozen snapshot of the prescription it was performed against**, because a plan edited afterwards must not rewrite history. And its subject will be an **opaque optional reference**, not a User or Profile entity — FDS models no person, and adding one to solve logging would drag identity into every reference document.
 
+### RFC-010 — Structural Descriptors (draft)
+
+FXI, FXE and FXM: short strings from closed vocabularies that describe how an exercise is done, what a piece of equipment is and which muscle is meant, so that two catalogues can compare records without a shared name. The draft adds optional fields to exercise, equipment and muscle and defines a match protocol that links automatically only on a unique identical descriptor, and otherwise asks a person to confirm. It stays experimental until a fresh name-disjoint test meets its release gate, which the first measurements do not yet meet.
+
 ### Registries and conformance
 
 The recommended-value registries are published and gated. Conformance test suites — a corpus a producer can validate against to claim support — are the natural next step now that the coverage matrix is complete.

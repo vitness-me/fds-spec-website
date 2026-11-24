@@ -32,6 +32,10 @@ RFC-009, por lo tanto, espera a un modelo de consentimiento y privacidad, no al 
 
 Dos decisiones ya están fijadas. Un registro de lo ejecutado llevará una **instantánea congelada de la prescripción contra la que se ejecutó**, porque un plan editado después no debe reescribir la historia. Y su titular será una **referencia opcional opaca**, no una entidad User ni Profile — FDS no modela a ninguna persona, y agregar una para resolver el registro de eventos arrastraría la identidad a cada documento de referencia.
 
+### RFC-010 — Descriptores estructurales (borrador)
+
+FXI, FXE y FXM: cadenas cortas de vocabularios cerrados que describen cómo se hace un ejercicio, qué es una pieza de equipamiento y a qué músculo se refiere, para que dos catálogos puedan comparar registros sin un nombre compartido. El borrador agrega campos opcionales a exercise, equipment y muscle y define un protocolo de coincidencia que enlaza automáticamente solo ante un descriptor idéntico y único, y en otro caso pide a una persona que confirme. Sigue siendo experimental hasta que una prueba nueva con nombres disjuntos cumpla su umbral de lanzamiento, que las primeras mediciones todavía no cumplen.
+
 ### Registros y conformidad
 
 Los registros de valores recomendados están publicados y verificados. Las suites de pruebas de conformidad — un corpus contra el cual un productor puede validar para declarar conformidad — son el siguiente paso natural ahora que la matriz de cobertura está completa.
