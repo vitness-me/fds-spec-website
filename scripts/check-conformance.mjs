@@ -42,12 +42,12 @@ import { readFile, readdir } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { isDeepStrictEqual } from 'node:util';
-import { REGISTRY_DIR, loadDescriptors } from './lib/descriptors.mjs';
+import { CONFORMANCE_DIR as VECTOR_DIR, CONFORMANCE_TIERS as TIERS, REGISTRY_DIR, loadDescriptors } from './lib/descriptors.mjs';
+import { assertRecordedFailures } from './lib/self-test.mjs';
 
 const REPO = join(dirname(fileURLToPath(import.meta.url)), '..');
 const SELF_TEST = process.argv.includes('--self-test');
 const FIXTURES = join(REPO, 'scripts/fixtures/conformance');
-export const VECTOR_DIR = 'specification/descriptors/conformance';
 const DIR = join(SELF_TEST ? FIXTURES : REPO, VECTOR_DIR);
 const ENCODER = join(REPO, 'packages/fds-encoder/dist/index.js');
 
@@ -66,7 +66,6 @@ const show = (value) => JSON.stringify(value);
 
 // ── load ─────────────────────────────────────────────────────────────────────
 
-const TIERS = ['syntax', 'builder', 'compare', 'resolver'];
 const files = {};
 for (const name of (await readdir(DIR)).filter((f) => f.endsWith('.json')).sort()) {
   files[name] = JSON.parse(await readFile(join(DIR, name), 'utf8'));
@@ -105,15 +104,14 @@ function data(tierFile, field) {
 const { registries, files: registryFiles } = await loadDescriptors(REPO);
 for (const [tier, name] of Object.entries(tierFiles)) {
   const rules = files[name].rules;
-  for (const [registry, doc] of Object.entries(registries)) {
-    if (doc.rules !== rules) {
-      fail(
-        `rules:${tier}`,
-        `${VECTOR_DIR}/${name}: written for rules ${rules}, but ${REGISTRY_DIR}/${registryFiles[registry]} is rules ${doc.rules}.\n` +
-          '    Review every vector against the new rules revision, then update "rules".'
-      );
-      break;
-    }
+  const stale = Object.entries(registries).find(([, doc]) => doc.rules !== rules);
+  if (stale) {
+    const [registry, doc] = stale;
+    fail(
+      `rules:${tier}`,
+      `${VECTOR_DIR}/${name}: written for rules ${rules}, but ${REGISTRY_DIR}/${registryFiles[registry]} is rules ${doc.rules}.\n` +
+        '    Review every vector against the new rules revision, then update "rules".'
+    );
   }
   if (rules !== enc.FXI_RULES) fail(`rules-encoder:${tier}`, `${VECTOR_DIR}/${name}: written for rules ${rules}, but the built encoder implements ${enc.FXI_RULES}.\n    If the vectors and registries are current, rebuild the encoder: npm --prefix packages/fds-encoder run build`);
   const seen = new Set();
@@ -236,24 +234,7 @@ for (const tier of TIERS) if (tierFiles[tier]) RUN[tier](tierFiles[tier]);
 
 // ── result ───────────────────────────────────────────────────────────────────
 
-if (SELF_TEST) {
-  const expected = (await readFile(join(FIXTURES, 'expected-failures.txt'), 'utf8'))
-    .split('\n')
-    .map((l) => l.trim())
-    .filter((l) => l && !l.startsWith('#'))
-    .sort();
-  const actual = [...new Set(problems.map((p) => p.key))].sort();
-  const missing = expected.filter((k) => !actual.includes(k));
-  const extra = actual.filter((k) => !expected.includes(k));
-  if (missing.length || extra.length) {
-    console.error('self-test: the check did not fail in exactly the recorded way.');
-    for (const k of missing) console.error(`  expected, not reported: ${k}`);
-    for (const k of extra) console.error(`  reported, not expected: ${k}`);
-    process.exit(1);
-  }
-  console.log(`  ok    self-test: ${actual.length} recorded failures reproduced`);
-  process.exit(0);
-}
+if (SELF_TEST) await assertRecordedFailures(join(FIXTURES, 'expected-failures.txt'), problems.map((p) => p.key));
 
 const summary = TIERS.map((t) => {
   const c = counts[t] ?? { run: 0, passed: 0 };

@@ -25,6 +25,8 @@ export const FLOW_FILE = 'specification/descriptors/question-flow.json';
 export const PAGE_DIR = 'specification/descriptors';
 export const SITE_DIR = 'website/docs/core-concepts/descriptors';
 export const CONFORMANCE_DIR = 'specification/descriptors/conformance';
+/** The conformance tiers, in the order a reader meets them. */
+export const CONFORMANCE_TIERS = ['syntax', 'builder', 'compare', 'resolver'];
 
 /** Every registry file, keyed by its `registry` field, plus the flow. */
 export async function loadDescriptors(root) {
@@ -214,10 +216,9 @@ const GITHUB = 'https://github.com/vitness-me/fds-spec-website/blob/main';
 
 /** The conformance tier files, in the order a reader meets them, and the tables they define. */
 function conformanceTables(conformance) {
-  const order = ['syntax', 'builder', 'compare', 'resolver'];
   const tiers = Object.entries(conformance)
     .filter(([, doc]) => doc.tier !== undefined)
-    .sort(([, a], [, b]) => order.indexOf(a.tier) - order.indexOf(b.tier));
+    .sort(([, a], [, b]) => CONFORMANCE_TIERS.indexOf(a.tier) - CONFORMANCE_TIERS.indexOf(b.tier));
   const out = {};
   if (tiers.length === 0) return out;
   out['conformance#tiers'] = () =>
