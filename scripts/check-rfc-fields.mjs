@@ -70,15 +70,19 @@
  *   node scripts/check-rfc-fields.mjs
  */
 
-import { readFile } from 'node:fs/promises';
+import { readFile, readdir } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { CONFORMANCE_DIR, CONFORMANCE_TIERS, REGISTRY_DIR } from './lib/descriptors.mjs';
 import { globalVocabulary, vocabularyOf } from './lib/vocabulary.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 
 /**
- * RFCs that specify a schema of their own. All of them.
+ * RFCs paired with the schemas they specify: `source` for an RFC that
+ * specifies a schema of its own, `adds` for one that adds fields to schemas
+ * other RFCs specify, as pairs of the new version's source and the previous
+ * version's.
  *
  * RFC-001..005 predated this check and carried 60 measured gaps between them —
  * every one a field the schema defined that the RFC only ever showed inside a
@@ -117,6 +121,18 @@ const PAIRS = [
   {
     rfc: 'specification/rfc/rfc-008-program-data-model.md',
     source: 'specification/schema-sources/program/v1.0.0/program.schema.json',
+  },
+  // RFC-010 specifies no schema of its own: it adds fields to three entities and
+  // to `common`. What it must document is what each new version adds over the
+  // one before, which is read from the two sources rather than listed here.
+  {
+    rfc: 'specification/rfc/rfc-010-structural-descriptors.md',
+    adds: [
+      ['specification/schema-sources/common/v1.1.0/common.schema.json', 'specification/schema-sources/common/v1.0.0/common.schema.json'],
+      ['specification/schema-sources/exercises/v1.2.0/exercise.schema.json', 'specification/schema-sources/exercises/v1.1.0/exercise.schema.json'],
+      ['specification/schema-sources/equipment/v1.2.0/equipment.schema.json', 'specification/schema-sources/equipment/v1.1.0/equipment.schema.json'],
+      ['specification/schema-sources/muscle/v1.1.0/muscle.schema.json', 'specification/schema-sources/muscle/v1.0.0/muscle.schema.json'],
+    ],
   },
 ];
 
@@ -266,8 +282,64 @@ function shapeOf(text) {
 
 const GLOBAL = await globalVocabulary();
 const problems = [];
+const readJson = async (path) => JSON.parse(await readFile(join(ROOT, path), 'utf8'));
 
-for (const { rfc, source } of PAIRS) {
+/**
+ * The descriptors' own terms, which RFC-010 writes in code style beside the
+ * fields: the registries' fields, layer letters and codes, the conformance
+ * tiers, and the relations and grades the compare vectors expect. Read from
+ * those files, so a term they drop is no longer accepted here.
+ */
+async function descriptorTerms() {
+  const terms = new Set(CONFORMANCE_TIERS);
+  for (const file of await readdir(join(ROOT, REGISTRY_DIR))) {
+    const registry = await readJson(`${REGISTRY_DIR}/${file}`);
+    for (const key of Object.keys(registry)) terms.add(key);
+    for (const entry of registry.layers ?? []) terms.add(entry.layer);
+    for (const vocabulary of Object.values(registry.vocabularies ?? {})) for (const entry of vocabulary.entries ?? []) terms.add(entry.value);
+  }
+  for (const vector of (await readJson(`${CONFORMANCE_DIR}/compare.json`)).vectors) {
+    for (const value of [vector.expect.relation, vector.expect.grade, ...Object.values(vector.expect.layers ?? {})]) if (value) terms.add(value);
+  }
+  return terms;
+}
+
+/**
+ * An RFC that adds fields to schemas other RFCs specify. Forward: every name a
+ * new version authors that the version before it did not is in the RFC.
+ * Backward, as for any RFC: every bare identifier it writes exists somewhere in
+ * the standard or is one of the descriptors' own terms. Placement is not run: it reads one schema's shapes, and these
+ * RFCs document fields on several.
+ */
+const TERMS = await descriptorTerms();
+for (const { rfc, adds } of PAIRS.filter((pair) => pair.adds)) {
+  const doc = await readFile(join(ROOT, rfc), 'utf8');
+  const spans = new Set([...doc.replace(/^```[\s\S]*?^```/gm, '').matchAll(/`([^`\n]+)`/g)].map((m) => m[1].trim()));
+  const mentioned = new Set([...spans].flatMap((span) => span.match(/[A-Za-z][A-Za-z0-9_]*/g) ?? []));
+  const added = new Set();
+  for (const [source, since] of adds) {
+    const before = vocabularyOf(await readJson(since));
+    for (const name of vocabularyOf(await readJson(source))) if (!before.has(name)) added.add(name);
+  }
+  const undocumented = [...added].filter((name) => !mentioned.has(name)).sort();
+  if (undocumented.length) {
+    problems.push(`${rfc}\n    does not document ${undocumented.length} name(s) its schema versions add:\n      ${undocumented.join(', ')}`);
+  }
+  const invented = [...new Set([...spans].filter((span) => IDENTIFIER.test(span)))]
+    .filter((token) => !GLOBAL.has(token) && !PROSE.has(token) && !TERMS.has(token))
+    .sort();
+  if (invented.length) {
+    problems.push(
+      `${rfc}\n    writes ${invented.length} identifier(s) no schema or descriptor registry defines:\n      ${invented.join(', ')}\n` +
+        '      Either the schema is missing them, or they belong in the PROSE allowlist.'
+    );
+  }
+  if (!undocumented.length && !invented.length) {
+    console.log(`  ok    ${rfc} — ${added.size} names its schema versions add, both directions`);
+  }
+}
+
+for (const { rfc, source } of PAIRS.filter((pair) => pair.source)) {
   const schema = JSON.parse(await readFile(join(ROOT, source), 'utf8'));
   const publishedPath = publishedOf(source);
   const publishedText = await readFile(join(ROOT, publishedPath), 'utf8').catch(() => null);
