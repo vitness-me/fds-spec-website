@@ -60,7 +60,13 @@ const sidebars: SidebarsConfig = {
         'core-concepts/metrics',
         'core-concepts/extensions',
         'core-concepts/discovery',
-        'core-concepts/structural-keys',
+        {
+          type: 'category',
+          label: 'Structural Keys',
+          collapsed: false,
+          link: {type: 'doc', id: 'core-concepts/structural-keys'},
+          items: ['core-concepts/structural-keys/exercise-key'],
+        },
       ],
     },
     {

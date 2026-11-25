@@ -23,6 +23,10 @@
     "message": "Specifications (RFCs)",
     "description": "The label for category 'Specifications (RFCs)' in sidebar 'mainSidebar'"
   },
+  "sidebar.mainSidebar.category.Structural Keys": {
+    "message": "Structural Keys",
+    "description": "The label for category 'Structural Keys' in sidebar 'mainSidebar'"
+  },
   "sidebar.mainSidebar.category.Tools": {
     "message": "Tools",
     "description": "The label for category 'Tools' in sidebar 'mainSidebar'"

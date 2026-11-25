@@ -23,6 +23,10 @@
     "message": "Specifikacije (RFC)",
     "description": "The label for category 'Specifications (RFCs)' in sidebar 'mainSidebar'"
   },
+  "sidebar.mainSidebar.category.Structural Keys": {
+    "message": "Strukturni ključevi",
+    "description": "The label for category 'Structural Keys' in sidebar 'mainSidebar'"
+  },
   "sidebar.mainSidebar.category.Tools": {
     "message": "Alati",
     "description": "The label for category 'Tools' in sidebar 'mainSidebar'"
