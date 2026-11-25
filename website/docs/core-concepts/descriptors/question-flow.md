@@ -385,7 +385,7 @@ Ask one closed question for each pair of movements: does the second start before
 - **Usual:** A normal moving rep.
 - **Repeated** for every phase: see [the phase questions](#the-phase-questions).
 
-Pick how the joints move. "Explosive" or "fast" alone is a normal rep: ballistic needs flight or release. A slam is ballistic even when the implement stays in the hands (a battle rope slam).
+Pick how the joints move. "Explosive" or "fast" alone is a normal rep: ballistic needs flight or release. A slam is ballistic only when the implement leaves the hands: a battle rope slam is a normal rep.
 
 | Option | Means | Writes | Note |
 |---|---|---|---|
@@ -660,7 +660,7 @@ Example: the arms hold the sled handles still while the legs walk, or the trunk 
 - **Usual:** A normal moving rep.
 - **Repeated** for every phase: see [the phase questions](#the-phase-questions).
 
-Pick how the joints move. "Explosive" or "fast" alone is a normal rep: ballistic needs flight or release. A slam is ballistic even when the implement stays in the hands (a battle rope slam).
+Pick how the joints move. "Explosive" or "fast" alone is a normal rep: ballistic needs flight or release. A slam is ballistic only when the implement leaves the hands: a battle rope slam is a normal rep.
 
 | Option | Means | Writes | Note |
 |---|---|---|---|

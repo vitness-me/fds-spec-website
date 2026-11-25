@@ -197,7 +197,7 @@
       "select": "one",
       "when": {"all":[{"fact":"motion-from-scratch"},{"q":"motion.phases","atLeast":1}]},
       "text": "What kind of movement is phase 1?",
-      "help": "Pick how the joints move. \"Explosive\" or \"fast\" alone is a normal rep: ballistic needs flight or release. A slam is ballistic even when the implement stays in the hands (a battle rope slam).",
+      "help": "Pick how the joints move. \"Explosive\" or \"fast\" alone is a normal rep: ballistic needs flight or release. A slam is ballistic only when the implement leaves the hands: a battle rope slam is a normal rep.",
       "usual": "A normal moving rep.",
       "options": [
         {"id":"usual","label":"A normal moving rep (the usual way)","exclusive":true},
@@ -578,7 +578,7 @@
       "select": "one",
       "when": {"all":[{"all":[{"fact":"motion-from-scratch"},{"q":"motion.phases","atLeast":1}]},{"q":"p1.also","is":"yes"}]},
       "text": "What kind of movement is the second part of phase 1?",
-      "help": "Pick how the joints move. \"Explosive\" or \"fast\" alone is a normal rep: ballistic needs flight or release. A slam is ballistic even when the implement stays in the hands (a battle rope slam).",
+      "help": "Pick how the joints move. \"Explosive\" or \"fast\" alone is a normal rep: ballistic needs flight or release. A slam is ballistic only when the implement leaves the hands: a battle rope slam is a normal rep.",
       "usual": "A normal moving rep.",
       "options": [
         {"id":"usual","label":"A normal moving rep (the usual way)","exclusive":true},

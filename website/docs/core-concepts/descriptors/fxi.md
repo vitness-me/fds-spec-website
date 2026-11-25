@@ -120,7 +120,7 @@ Every FXI has exactly one canonical spelling, and only the canonical spelling is
 1. Write the header `FXI=1.0` and the flag (step 9).
 2. Write the layers in the order `m o k f s l x g r h p a`, each once.
 3. Drop every layer at its default: `k:limbs`, `f:level`, `x:b`, `h:none`, `p:usual`, `a:none`, and a support that is only `floor`.
-4. Inside a value, sort the items joined by `+`, the parts joined by `|` and the body points joined by `,` in code-unit order, with `?` and `*` after every letter. Keep `>` sequences in rep order; in `o`, `f` and `g`, collapse a code repeated in a row (`standing>standing` is `standing`).
+4. Inside a value, sort the items joined by `+`, the parts joined by `|` and the body points joined by `,` in code-unit order, with `?` and `*` after every letter. In `m`, drop an action written beside its child in the same part: `el.flex+sh.ext+sh.ext.oh` is `el.flex+sh.ext.oh`. Keep `>` sequences in rep order; in `o`, `f` and `g`, collapse a code repeated in a row (`standing>standing` is `standing`).
 5. In `s`, drop the body points the start orientation implies (the orientation table lists them), a bare `floor`, and a bare `bench`, `box`, `chair` or `floor` under a seated body.
 6. In `l`, drop `bw` when an implement is also written, and drop every count equal to the usual count ([counts](#load-l)): `l:db*1@hands/x:u` is `l:db@hands/x:u`.
 7. In `x`, drop a scope the motion already implies (a lunge's `u@legs` is `u`), and drop `x` entirely for a motion that is only trunk or neck rotation or side bend.
@@ -177,7 +177,7 @@ Write the joint actions of the working phase. For a moving exercise write the **
 | Down from overhead out at the sides (a pull-up or pulldown with an overhand grip at medium or wide width) | `sh.add` |
 | Up out to the side (lateral raise; upright row with `el.flex`) | `sh.abd` |
 
-`sh.ext.oh` is a child of `sh.ext`: write it whenever the hands start above the head and come down in front. A pulldown and a row then never share a motion, whatever the grip. `sh.ext` alone is not wrong for a pull from overhead, only less specific: compare reads it as covering both paths. On a pull-up or pulldown, the grip decides between the two rows that start overhead: an underhand, neutral or close grip (`su`, `ne`, `w-n`, `w-t`) pulls in front of the face, `sh.ext.oh`.
+`sh.ext.oh` is a child of `sh.ext`: write it whenever the hands start above the head and come down in front. A pulldown and a row then never share a motion, whatever the grip. `sh.ext` alone is not wrong for a pull from overhead, only less specific: compare reads it as covering both paths. Written beside its child in one part, the parent says nothing more, and the canonical form drops it. On a pull-up or pulldown, the grip decides between the two rows that start overhead: an underhand, neutral or close grip (`su`, `ne`, `w-n`, `w-t`) pulls in front of the face, `sh.ext.oh`.
 
 **Phases (`>`).** One phase per distinct movement, in rep order. For each pair of movements ask: does the second start before the first ends? Yes: one phase (a thruster, where the press starts while the body still rises). No: two phases (a squat, then a press). One joint may move in opposite directions in different phases, never in one part. A phase you cannot work out is `?`.
 
@@ -194,7 +194,7 @@ Write the joint actions of the working phase. For a moving exercise write the **
 | `&` | Dynamic stretch: the same directions, taken to end range and released repeatedly (swings, pass-throughs). |
 <!-- /fds:generated -->
 
-"Explosive" or "fast" alone is not flight: `^` needs the body to leave the ground or the implement to leave the hands. A slam is ballistic even when the implement stays in the hands (a battle rope slam). An action done in the air is the next phase. Cyclic phases and Olympic lifts never take `^`. `~0` is rolling on a roller or ball with no joint direction; `=0` is a balance or pressure hold.
+"Explosive" or "fast" alone is not flight: `^` needs the body to leave the ground or the implement to leave the hands. A slam is ballistic only when the implement leaves the hands; a battle rope slam, where the rope never leaves them, takes no `^`. An action done in the air is the next phase. Cyclic phases and Olympic lifts never take `^`. `~0` is rolling on a roller or ball with no joint direction; `=0` is a balance or pressure hold.
 
 **Short drive (`-`).** After an action that moves through a short range on purpose: the dip-and-drive of a push press (`hip.ext-+kn.ext-`), the short stand-up after a power receive.
 
