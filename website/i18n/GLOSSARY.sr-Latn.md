@@ -212,3 +212,16 @@ polja šema, komande i identifikatori se ne prevode.
 | taxonomy | taksonomija | |
 | semantic versioning | semantičko verzionisanje | |
 | Standards Track | Standards Track | ime RFC procesa; bez prevođenja |
+| structural descriptor | strukturni deskriptor | FXI, FXE i FXM; skraćenice se ne prevode |
+| compare / match | poređenje / podudaranje | „automatsko podudaranje“ za *auto-match* |
+| provenance / gap marker | poreklo / marker nedostatka | |
+| rules revision | revizija pravila | |
+| implement | rekvizit | |
+| hold point / body point | mesto držanja / tačka tela | |
+| joint action / phase | zglobna akcija / faza | |
+| short drive | kratki impuls | |
+| load interface / guided motion | interfejs opterećenja / vođeni pokret | FXE slojevi sprave |
+| drive / compliance / track | pogon / popustljivost / putanja | prošireni FXE slojevi |
+| cable column | stub sa sajlom | |
+| overhand / underhand | nathvat / pothvat | |
+| tier (conformance) | nivo | |

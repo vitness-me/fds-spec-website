@@ -197,3 +197,16 @@ En las cadenas de la interfaz se usan comillas inglesas ("…"); las angulares
 | wearable | wearable | «dispositivos wearables» |
 | Standards Track | Standards Track | nombre del proceso RFC; sin traducir |
 | RFC 2119 en plural | DEBEN / DEBERÍAN | la concordancia flexiona la palabra clave, nunca la modalidad |
+| structural descriptor | descriptor estructural | FXI, FXE y FXM; las siglas no se traducen |
+| compare / match | comparación / coincidencia | «coincidencia automática» para *auto-match* |
+| provenance / gap marker | procedencia / marcador de laguna | |
+| rules revision | revisión de reglas | |
+| implement | implemento | |
+| hold point / body point | punto de sujeción / punto corporal | |
+| moving end | extremo móvil | |
+| short drive | impulso corto | |
+| body layer / name layer | capa corporal / capa de nombre | |
+| load interface / guided motion | interfaz de carga / movimiento guiado | capas FXE de una máquina |
+| drive / compliance / track | accionamiento / movilidad / recorrido | capas FXE extendidas |
+| cable column / foot plate | columna de poleas / plataforma para los pies | |
+| tier (conformance) | nivel | |
