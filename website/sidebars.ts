@@ -60,6 +60,7 @@ const sidebars: SidebarsConfig = {
         'core-concepts/metrics',
         'core-concepts/extensions',
         'core-concepts/discovery',
+        'core-concepts/structural-keys',
       ],
     },
     {

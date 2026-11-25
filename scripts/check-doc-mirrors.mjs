@@ -58,6 +58,7 @@ const DOC_PAIRS = [
   ['specification/metrics-guide.md', 'core-concepts/metrics'],
   ['specification/i18n-and-slugs.md', 'core-concepts/internationalization'],
   ['specification/extension-registry.md', 'core-concepts/extensions'],
+  ['specification/structural-keys.md', 'core-concepts/structural-keys'],
   ['specification/governance/CHANGELOG.md', 'governance/changelog'],
   ['specification/governance/CONTRIBUTING.md', 'governance/contributing'],
   ['specification/governance/GOVERNANCE.md', 'governance/index'],
