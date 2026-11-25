@@ -2,7 +2,7 @@
 
 The exercise key is the structural key of an exercise. It sits in the `fxi` field and records how the body moves, the position it starts in, what it is supported on and what it moves with. This page shows how a key is put together, what every layer and code means, and how two keys compare.
 
-The codes on this page are those of rules 1.4 of the format. A later rules revision may add codes or split one into more specific children, but it never changes what an existing code means, so every key written today stays valid.
+The codes on this page are those of rules 1.4 of the format. A later rules revision may add codes or split one into more specific children, but it never changes what an existing code means, so every key written today stays valid. Rules revisions keep the header `FXI=1.0`.
 
 ## Anatomy of the key
 
@@ -50,7 +50,7 @@ A walking lunge with a dumbbell in each hand has this key:
 | Part | Text | What it says |
 |---|---|---|
 | Key type | `FXI` | This is an exercise key. |
-| Version | `1.0` | Major version 1, syntax revision 0. |
+| Version | `1.0` | Major version 1, syntax revision 0. Rules revisions don't change it. |
 | Flag | `S` | Every layer in the key is standard. |
 | Motion | `m:hip.ext+kn.ext` | The hips and the knees extend together. |
 | Orientation | `o:standing` | The rep starts standing. |
@@ -82,11 +82,11 @@ Each layer records one dimension of the exercise.
 
 Rules for every key:
 
-- A key MUST carry `m`, `o` and `l`. When the motion, the orientation or the load isn't known, write `?` as its value: `o:?`.
-- Layers MUST appear in the order of the table: `m o k f s l x g r h p a`.
+- A key must carry `m`, `o` and `l`. When the motion, the orientation or the load isn't known, write `?` as its value: `o:?`.
+- Layers must appear in the order of the table: `m o k f s l x g r h p a`.
 - A layer at its default is left out. Writing a default code (`x:b`, `f:level`, `h:none`) says nothing more, and the written form drops it.
 - **A default is a value.** A key without `x` says both sides work together. That is a different exercise from one with `x:u`, not a less specific one. Only `?` leaves a dimension open.
-- Items joined by `+` are written in sorted order, so one exercise always has one written form.
+- Items joined by `+`, and points after `@`, are written in sorted order (`floor@feet,hands`), and in the motion a joint action written beside its own child is dropped. So one exercise always has one written form.
 - The accessory layer `a` is the one extended layer. A key that carries it has the flag `N` (`FXI=1.0N/…`); every other key has the flag `S`.
 
 The layers below are listed in key order. For each one: its codes, then its rules.
@@ -118,7 +118,7 @@ The motion is built from joint actions, written `joint.action`.
 | `sc.pro` `sc.ret` | Shoulder blades spread around the ribs; squeezed together |
 | `sh.flex` | Arm forward and up: front raise, overhead press |
 | `sh.ext` | Arm down and back from in front: row, dip |
-| `sh.ext.oh` | Arms down in front of the face from overhead: chin-up, close-grip pulldown, pullover. A child of `sh.ext` |
+| `sh.ext.oh` | Arms down in front of the face from overhead: chin-up, close-grip pulldown, pullover. A child of `sh.ext`: `el.flex+sh.ext+sh.ext.oh` is written `el.flex+sh.ext.oh` |
 | `sh.abd` `sh.add` | Arm out to the side and up (lateral raise); down to the side from out wide (wide pull-up) |
 | `sh.hadd` `sh.habd` | Arm across the front at chest height (press, fly); back and out at chest height (reverse fly) |
 | `sh.ir` `sh.er` | Forearm turning in toward the belly, elbow bent; turning out |
@@ -126,7 +126,7 @@ The motion is built from joint actions, written `joint.action`.
 | `fa.pron` `fa.sup` | Palm turning down; palm turning up |
 | `wr.flex` `wr.ext` | Palm toward the forearm; back of the hand toward the forearm |
 | `wr.rdev` `wr.udev` | Thumb side toward the forearm; little-finger side toward the forearm |
-| `hip.flex` `hip.ext` | Thigh toward the trunk; thigh away from the trunk, as in standing up |
+| `hip.flex` `hip.ext` | Thigh toward the trunk, or the trunk toward the thigh (sit-up); thigh away from the trunk, as in standing up |
 | `hip.abd` `hip.add` | Leg out to the side; leg in toward the other leg |
 | `hip.ir` `hip.er` | Knee turning in; knee turning out |
 | `kn.flex` `kn.ext` | Knee bending against resistance (leg curl); straightening (standing up from a squat) |
@@ -139,7 +139,8 @@ Rules:
 
 - Write the direction the joints move while the working muscles shorten against the load: the lift, never the lowering, the return or a pause.
 - Count a joint when the working muscles move it through a clear range, about 30° or more, as part of what the exercise trains. A joint held still on purpose is left out: the knee in a Romanian deadlift or a swing, the elbow in a fly or a lateral raise.
-- Write the spine only when the trunk movement is the exercise (crunch, back extension, twist), the scapula only when the shoulder blade moves on its own (shrug), and the ankle only when the body rises onto the toes or pushes off the ground (calf raise, jump, run).
+- Write the spine only when the trunk movement is the exercise (crunch, back extension, twist), the scapula only when the shoulder blade moves on its own (shrug), the wrist and the neck only in wrist and neck exercises, shoulder rotation only in rotation exercises, and the ankle only when the body rises onto the toes or pushes off the ground (calf raise, jump, run).
+- A palm turn during a curl or press is grip (`g`), not `fa.pron` or `fa.sup`. Forearm rotation is written only when turning against resistance is the work.
 - The shoulder action follows the path of the hands relative to the trunk:
 
   | The hands move | Action |
@@ -151,14 +152,15 @@ Rules:
   | Down along the trunk toward the feet: dip | `sh.ext` |
   | Toward the trunk from in front, elbows close: row | `sh.ext` |
   | Toward the trunk from in front, elbows wide at shoulder height: face pull | `sh.habd` |
-  | Down from overhead in front of the face: chin-up, close or neutral pulldown | `sh.ext.oh` |
-  | Down from overhead out at the sides: overhand pull-up or pulldown | `sh.add` |
+  | Down from overhead in front of the face: chin-up, any pull-up or pulldown with an underhand, neutral or close grip; straight-arm pulldown, pullover, slam | `sh.ext.oh` |
+  | Down from overhead out at the sides: pull-up or pulldown with an overhand grip at medium or wide width | `sh.add` |
   | Up out to the side: lateral raise | `sh.abd` |
 
 - One phase per distinct movement, in rep order, joined by `>`. If the second movement starts before the first ends, the two are one phase (a thruster). If not, they are two (a squat, then a press).
 - Two opposite actions, such as `el.flex` and `el.ext`, never share one part. One joint may move in opposite directions in different phases.
 - A prefix before a part sets its kind: held, cyclic, ballistic, static stretch or dynamic stretch. No prefix is a normal moving phase. The prefixes are listed under [Symbols](#symbols).
-- A held part under moving limbs is a part of its own, joined to them with `|`: a plank with a leg raise is `=sp.flex|hip.ext`.
+- A held part under moving limbs is a part of its own, joined to them with `|`: a plank with a leg raise is `=sp.flex|hip.ext`. So is a held push of a limb that doesn't move, when the exercise is built on it: a Janda sit-up pulls the heels down through the whole rep, `=kn.flex|hip.flex+sp.flex`.
+- In a stretch, `|` also joins two limbs taken in opposite directions: a runner's stretch is `%hip.ext|%hip.flex`.
 - In a stretch, write a held joint when it decides which muscle is stretched: the knee in a calf stretch, `kn.ext` straight or `kn.flex` bent.
 
 ### Orientation (`o`)
@@ -187,7 +189,8 @@ Rules:
 - Write the orientation at the start of the first phase.
 - A forward hinge held for the whole set is `standing.bent`. A hinge where the trunk moves, as in a deadlift or a swing, starts `standing`.
 - Orientation follows the trunk: on hands and knees is `prone`, and `kneeling` means the trunk is upright.
-- On a machine, write the body's position: a seated leg extension is `seated`, a lying leg curl `prone`.
+- Sitting on the floor leaning back 30–60° (V-sit, Russian twist) is `supine.incline`.
+- On a machine, write the body's position: a seated leg extension is `seated`, a lying leg curl `prone`, a leg press `supine.incline`.
 - When the rep ends in a different orientation from its start, write both: a get-up from lying is `o:supine>standing`. A rep that goes down and comes back, like a burpee, is just its start.
 
 ### Moving end (`k`)
@@ -256,7 +259,8 @@ Rules:
 
 - Write each surface that bears the body's weight, or that a limb is braced on, beyond what the orientation implies. After the surface, write `@` and the points on it, leaving out the points the orientation implies.
 - Never write a bare floor, a mat, the seat or bench under a seated body, or a machine's own seat and pads. An unstable seat (`ball`, `dome`, `board`, `roller`) is written.
-- When the trunk rests on nothing, as in a plank or a push-up, list every point that bears weight: `s:floor@feet,forearms`.
+- When the trunk rests on nothing, as in a plank or a push-up, list every point that bears weight: `s:floor@feet,forearms`. A face-up body hanging from its hands keeps `floor@feet` too: an inverted row is `s:bar@hands+floor@feet`.
+- The feet are never written under a seated body, or under a face-up body lying on a bench, ball or roller.
 - Surfaces under different points are separate items: feet on a ball and hands on the floor is `s:ball@feet+floor@hands`.
 - A box, step, bench or platform under raised hands or feet is `box`, unless the exercise names the surface.
 - Equipment that only loads the body goes in `l`, never in `s`.
@@ -337,7 +341,7 @@ Rules:
 - `bw` means no implement. It stands alone and takes no hold point: a weighted dip is `l:plate@waist`, not `bw` beside a plate.
 - A strength machine is `mach` and a cardio machine `erg`, with its child token when the machine is known. The equipment key of the record's equipment says which machine.
 - A band is held where it presses or pulls on the body. Where it is anchored is not written.
-- Leave the count out when it is the usual one, and write `*n` only when it differs. A one-hand implement (`db`, `kb`, `plate`, `club`) is one per working hand; every other implement is one. One kettlebell held in both hands is `kb*1@hands`.
+- Leave the count out when it is the usual one, and write `*n` only when it differs. A one-hand implement (`db`, `kb`, `plate`, `club`) is one per working hand; every other implement is one. At the chest, back, hips or waist any implement is one: a goblet squat with one dumbbell is `l:db@chest`. One kettlebell held in both hands is `kb*1@hands`.
 - Write `?` for the part you don't know: `?@chest` when the implement isn't known, `kb@?` when the hold point isn't, `l:?` when not even that much is.
 
 ### Sides (`x`)
@@ -356,6 +360,7 @@ Rules:
 - Add a scope only when the motion doesn't already imply it. A lunge's legs are implied, so it is `x:u`, not `x:u@legs`.
 - When the arms and the legs follow different patterns, write one item per scope: a one-arm carry is `x:rc@legs+u@arms`.
 - Movements that only rotate or side-bend the trunk or neck don't take `x`.
+- A stretch, roll or hold done on one limb, then the other, is `x:u`.
 
 ### Grip and stance (`g`)
 
@@ -433,6 +438,7 @@ Rules:
 Rules:
 
 - Write `p` only when the line differs from the movement's usual one. A high-to-low cable fly is `p:hi`; a low-to-high fly is `p:lo`.
+- The usual anchor is low for a curl, raise, upright row, shrug or kickback; high for a pushdown, pulldown or face pull; in the middle for a row, fly or chest press; and from the side for a Pallof press.
 
 ### Accessory (`a`)
 
@@ -456,9 +462,9 @@ Everything in a key that isn't a code is a symbol.
 | `/` | Separates layers | `o:standing/l:bw` |
 | `:` | Separates a layer letter from its value | `o:standing` |
 | `.` | Joins a joint to its action, or a code to a more specific child | `el.flex`, `standing.bent`, `erg.row` |
-| `+` | Joins items that go together: actions in one phase, surfaces, implements, grip elements | `m:hip.ext+kn.ext` |
+| `+` | Joins items that go together: actions in one phase, surfaces, implements, grip elements, range codes, sides items, held codes | `m:hip.ext+kn.ext` |
 | `>` | A sequence in rep order: phases, start and end orientation, footwork or grip changes | `g:su>pr` |
-| `\|` | Two parts of one phase at the same time | `m:=sp.flex\|hip.ext` |
+| `\|` | Two parts of one phase at the same time: parts of different kinds, or two limbs taken in opposite directions in a stretch | `m:=sp.flex\|hip.ext`, `m:%hip.ext\|%hip.flex` |
 | `@` | Where: the points on a surface, the hold point of an implement, the scope of a sides code | `l:db@hands` |
 | `,` | Several body points on one surface | `s:floor@feet,hands` |
 | `*n` | Implement count, written only when it differs from the usual count | `l:kb*1@hands` |
@@ -471,8 +477,8 @@ The motion prefixes go before a part of `m` and set its kind.
 | Prefix | Kind | Example |
 |---|---|---|
 | none | A normal moving phase | `m:el.flex` |
-| `^` | Ballistic: the phase ends with the body in flight or the implement released | `m:^ank.pf+hip.ext+kn.ext`, a jump squat |
-| `~` | Cyclic: continuous cycles with no rep boundary; write the driving half of one cycle | `m:~hip.flex`, mountain climbers |
+| `^` | Ballistic: the phase ends with the body in flight or the implement released. Only real flight or release: Olympic lifts and cyclic phases never take it. An action done in the air is the next phase | `m:^ank.pf+hip.ext+kn.ext`, a jump squat; `m:^el.ext+sh.hadd>sh.hadd`, a clap push-up |
+| `~` | Cyclic: continuous cycles with no rep boundary; write the driving half of one cycle. `~0` is rolling on a foam roller, with no direction | `m:~hip.flex`, mountain climbers |
 | `=` | Held under effort for the whole set; write what the muscles push toward. `=0` is a balance hold with no direction | `m:=sp.flex`, a plank |
 | `%` | Static stretch: the directions the joints are taken to, held at end range | `m:%ank.df+kn.ext`, a calf stretch |
 | `&` | Dynamic stretch: taken to end range and released, again and again | `m:&hip.flex`, a forward leg swing |
@@ -569,7 +575,7 @@ Standing, one kettlebell held in both hands, swung from between the legs to ches
 
 ## Keys in records
 
-These excerpts show the shape planned for the next release; the schema change that adds the fields lands in a later step.
+These excerpts show the shape planned for the next release; a future schema version adds these fields.
 
 An exercise record carries its key in `fxi`. Each muscle and equipment reference carries the referenced record's key beside its `id` and `name`:
 
@@ -625,10 +631,10 @@ Comparison goes layer by layer. A layer left out takes its default, which is a v
 
 When each key leaves open something the other states, neither is more specific, and the two may still describe the same exercise.
 
-A same key is a strong match, and anything else gives a short list for a person to confirm. See [Using keys](../structural-keys.md#using-keys) for how to keep confirmed links.
+An identical key is a strong match, and anything else gives a short list for a person to confirm. See [Using keys](../structural-keys.md#using-keys) for how to keep confirmed links.
 
 ## Building keys
 
-You can write a key by hand by following this page, or generate one with the Encoder (Tools → Encoder, to come).
+You can write a key by hand by following this page, or generate one with the FDS Encoder (under Tools, to come).
 
 <!-- TODO: link the Encoder page under Tools once it exists. -->

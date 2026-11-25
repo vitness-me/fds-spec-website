@@ -65,7 +65,7 @@ const sidebars: SidebarsConfig = {
           label: 'Structural Keys',
           collapsed: false,
           link: {type: 'doc', id: 'core-concepts/structural-keys'},
-          items: ['core-concepts/structural-keys/exercise-key'],
+          items: ['core-concepts/structural-keys/exercise-key', 'core-concepts/structural-keys/equipment-key', 'core-concepts/structural-keys/muscle-key'],
         },
       ],
     },

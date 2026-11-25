@@ -1,0 +1,645 @@
+# Equipment Key
+
+The equipment key is the structural key of a piece of equipment. It sits in the `fxe` field and records what kind of equipment it is and its form: for a free object or a surface, which one it is; for a machine, where it meets the body, the position it puts the body in and the motion it guides. This page shows how a key is put together, what every layer and code means, and how two keys compare.
+
+The codes on this page are those of rules 1.4 of the format. A later rules revision may add codes or split one into more specific children, but it never changes what an existing code means, so every key written today stays valid.
+
+## Anatomy of the key
+
+A plate-loaded leg press, with the sled on a 45° track, has this key:
+
+<figure className="key-anatomy">
+  <div className="key-anatomy__key">
+    <span className="key-anatomy__part">
+      <code><span className="ka-code">FXE</span><span className="ka-sym">=</span><span className="ka-code">1.0</span><span className="ka-flag">N</span></code>
+      <span className="key-anatomy__label">header</span>
+    </span>
+    <span className="key-anatomy__slash"><code><span className="ka-sym">/</span></code></span>
+    <span className="key-anatomy__part">
+      <code><span className="ka-letter">k</span><span className="ka-sym">:</span><span className="ka-code">mac</span></code>
+      <span className="key-anatomy__label">kind</span>
+    </span>
+    <span className="key-anatomy__slash"><code><span className="ka-sym">/</span></code></span>
+    <span className="key-anatomy__part">
+      <code><span className="ka-letter">l</span><span className="ka-sym">:</span><span className="ka-code">foot</span></code>
+      <span className="key-anatomy__label">load interface</span>
+    </span>
+    <span className="key-anatomy__slash"><code><span className="ka-sym">/</span></code></span>
+    <span className="key-anatomy__part">
+      <code><span className="ka-letter">s</span><span className="ka-sym">:</span><span className="ka-code">recline</span></code>
+      <span className="key-anatomy__label">posture</span>
+    </span>
+    <span className="key-anatomy__slash"><code><span className="ka-sym">/</span></code></span>
+    <span className="key-anatomy__part">
+      <code><span className="ka-letter">m</span><span className="ka-sym">:</span><span className="ka-code">push</span><span className="ka-sym">.</span><span className="ka-code">fwd</span></code>
+      <span className="key-anatomy__label">motion</span>
+    </span>
+    <span className="key-anatomy__slash"><code><span className="ka-sym">/</span></code></span>
+    <span className="key-anatomy__part">
+      <code><span className="ka-letter">r</span><span className="ka-sym">:</span><span className="ka-code">plate</span></code>
+      <span className="key-anatomy__label">drive</span>
+    </span>
+    <span className="key-anatomy__slash"><code><span className="ka-sym">/</span></code></span>
+    <span className="key-anatomy__part">
+      <code><span className="ka-letter">c</span><span className="ka-sym">:</span><span className="ka-code">line</span></code>
+      <span className="key-anatomy__label">constraint</span>
+    </span>
+    <span className="key-anatomy__slash"><code><span className="ka-sym">/</span></code></span>
+    <span className="key-anatomy__part">
+      <code><span className="ka-letter">g</span><span className="ka-sym">:</span><span className="ka-code">incl</span></code>
+      <span className="key-anatomy__label">guide angle</span>
+    </span>
+  </div>
+  <figcaption>
+    <span className="ka-letter">Layer letter</span> · <span className="ka-code">code</span> · <span className="ka-sym">symbol</span> · <span className="ka-flag">flag</span>
+  </figcaption>
+</figure>
+
+`FXE=1.0N/k:mac/l:foot/s:recline/m:push.fwd/r:plate/c:line/g:incl`
+
+| Part | Text | What it says |
+|---|---|---|
+| Key type | `FXE` | This is an equipment key. |
+| Version | `1.0` | Major version 1, syntax revision 0. |
+| Flag | `N` | The key carries at least one extended layer. |
+| Kind | `k:mac` | A dedicated machine, built for one movement. |
+| Load interface | `l:foot` | The moving part meets the body at a foot plate. |
+| Posture | `s:recline` | The user lies back on an inclined back pad. |
+| Motion | `m:push.fwd` | The foot plate is pushed away from the front of the trunk. |
+| Drive | `r:plate` | The resistance is loaded plates. |
+| Constraint | `c:line` | The moving part runs on a straight track. |
+| Guide angle | `g:incl` | The track is inclined. |
+
+The first four layers are the standard form of the key, `FXE=1.0S/k:mac/l:foot/s:recline/m:push.fwd`. It says what any 45° leg press says; a seated leg press, with an upright seat, is `s:seat`. The last three are extended layers: build details of this machine that an exercise done on it doesn't depend on. The `fxe` field holds only the standard form (see [Keys in records](#keys-in-records)).
+
+Layers are separated by `/`. Each layer is its letter, a `:` and a value made of codes and symbols.
+
+## Dimensions and layers
+
+The kind decides which layers a key has. Each layer records one dimension of the equipment.
+
+| Letter | Layer | Dimension it records | Kinds | Standard or extended |
+|---|---|---|---|---|
+| `k` | Kind | What sort of equipment it is | All | Standard, always first |
+| `f` | Form | Which object, surface, accessory or station it is | `imp` `sup` `acc` `stn` | Standard |
+| `c` | Track | The path a cardio machine's moving parts follow | `erg` | Standard |
+| `l` | Load interface | Where the moving part meets the body | `mac` `erg` | Standard |
+| `s` | Posture | The position the machine puts the body in | `mac` `erg` | Standard |
+| `m` | Motion | The motion a machine guides, or the cycle a cardio machine repeats | `mac` `erg` | Standard |
+| `r` | Drive | What makes the resistance | `imp` `stn` `mac` `erg` | Extended |
+| `c` | Constraint or compliance | How a machine's moving part is guided, or how an object or surface gives under the body | `imp` `sup` `stn` `mac` | Extended |
+| `g` | Guide angle | The angle of a machine's track | `mac` | Extended |
+| `a` | Design | Design features of a machine or station | `stn` `mac` | Extended |
+
+The letter `c` has two meanings. On a cardio machine it is the track, a standard layer. On every other kind it is the extended constraint or compliance layer. A cardio machine has no extended `c`.
+
+Rules for every key:
+
+- The first layer is always `k`. `k:none` and `k:?` take no other layer.
+- A kind's standard layers are written in the order of the table: `f` for `imp`, `sup`, `acc` and `stn`; `l s m` for `mac`; `c l s m` for `erg`. When one isn't known, write `?` as its value: `s:?`.
+- A layer left out reads `?`. The defaults below are what to write when the description is silent.
+- Extended layers follow the standard ones, in the order `r c g a`, and only when stated. A key that carries one has the flag `N` (`FXE=1.0N/…`); every other key has the flag `S`.
+- A value the form already implies is dropped: a dumbbell is driven by gravity, so `r:grav` is never written for it. The form tables list what each form implies.
+- Items joined by `+` are written in sorted order, so one piece of equipment always has one written form.
+
+What belongs in the key:
+
+- **Fixed geometry is equipment. Anything set per use belongs to the exercise.** Pulley height, bench angle, where a band is anchored, the handle attached, the grip, one limb or two, and seat height are all in the [exercise key](./exercise-key.md).
+- **Write the equipment, not the exercise done on it.** A calf raise done on a leg press uses a leg press, and the key is the leg press's.
+- **A named machine wins.** When an exercise names the machine it is done on, that machine is the equipment, whatever the exercise does on it.
+- **"Machine" alone means the machine built for the movement.** A description that says only "machine" means the machine built for the exercise's main movement: a machine leg curl is done on a leg curl machine. With no exercise to go by, "machine" is `FXE=1.0S/k:mac/l:?/s:?/m:?`.
+
+The layers below are listed in key order. For each one: its codes, then its rules.
+
+### Kind (`k`)
+
+| Code | Meaning | Standard layers | Extended layers |
+|---|---|---|---|
+| `none` | No equipment: the body is the whole load | — | — |
+| `imp` | Implement: a free object moved, held or worn | `f` | `r` `c` |
+| `sup` | Support: a surface or frame the body rests on, hangs from or pushes against. It doesn't carry the load | `f` | `c` |
+| `acc` | Accessory: a handle, strap, belt, mat, towel or marker. It never defines the exercise | `f` | — |
+| `stn` | Station: a guide or anchor used for many movements: cable column, Smith machine, landmine | `f` | `r` `c` `a` |
+| `mac` | Dedicated machine: a guided mechanism with fixed body contacts, built for one movement | `l` `s` `m` | `r` `c` `g` `a` |
+| `erg` | Cardio machine: repeats whole cycles | `c` `l` `s` `m` | `r` |
+
+Rules:
+
+- A way of loading is not equipment. "Weighted" with no form named is `FXE=1.0S/k:imp/f:?`. "Assisted" with no implement, or "other", is `FXE=1.0S/k:?`.
+- A cable column is a station. A seated cable row with its own seat, and a lat pulldown machine, are dedicated machines.
+
+### Form (`f`)
+
+The form is a code from the list for the key's kind. The last column is the code an [exercise key](./exercise-key.md) uses for the same equipment, where it has one.
+
+**Implements (`imp`)**
+
+| Code | Meaning | Implies | Exercise key code |
+|---|---|---|---|
+| `bar.straight` | Barbell, Olympic or standard | `r:grav` | `bb` |
+| `bar.ez` | EZ curl bar | `r:grav` | `ez` |
+| `bar.trap` | Trap or hex bar | `r:grav` | `tb` |
+| `bar.axle` | Thick axle bar | `r:grav` | `axle` |
+| `bar.camber` | Cambered bar | `r:grav` | `camber` |
+| `bell.dumb` | Dumbbell | `r:grav` | `db` |
+| `bell.kettle` | Kettlebell | `r:grav` | `kb` |
+| `bell.circus` | Circus dumbbell | `r:grav` | `circus` |
+| `ball.med` | Medicine ball | `r:grav` | `mb` |
+| `ball.slam` | Slam ball | `r:grav` | `slam` |
+| `bag.sand` | Sandbag | `r:grav` | `bag` |
+| `bag.heavy` | Hanging heavy bag | `r:grav` `c:swing` | `hbag` |
+| `plate` | A weight plate held or worn on its own | `r:grav` | `plate` |
+| `chain` | Lifting chain | `r:grav` | `chain` |
+| `rope.battle` | Battle rope | `r:grav` | `rope` |
+| `rope.jump` | Jump rope | `r:none` | `jrope` |
+| `band` | Elastic band or tube, type not stated | `r:elastic` | `band` |
+| `band.loop` | Long loop band. A child of `band` | `r:elastic` | `band` |
+| `band.mini` | Short loop band worn around the legs. A child of `band` | `r:elastic` | `band` |
+| `band.tube` | Tube band with handles. A child of `band` | `r:elastic` | `band` |
+| `sled` | Ground sled or prowler, pushed or dragged | `r:friction` | `sled` |
+| `tire` | Large tyre | `r:grav` | `tire` |
+| `hammer` | Sledgehammer | `r:grav` | `hammer` |
+| `stone` | Atlas stone | `r:grav` | `stone` |
+| `log` | Strongman log | `r:grav` | `log` |
+| `keg` | Keg | `r:grav` | `keg` |
+| `yoke` | Strongman yoke | `r:grav` | `yoke` |
+| `frame.carry` | Farmer handles or a carry frame | `r:grav` | `frame` |
+| `car` | A car, lifted or pushed | `r:grav` | `car` |
+| `wear.vest` | Weight vest | `r:grav` | `vest` |
+| `wear.ankle` | Ankle weight | `r:grav` | `ankwt` |
+| `club` | Club or mace | `r:grav` | `club` |
+| `stick` | Dowel, broomstick or PVC pipe | `r:none` | `dowel` |
+| `wheel` | Ab wheel | `r:none` `c:roll` | `wheel` |
+| `roller.wrist` | Wrist roller | `r:grav` | `wroller` |
+| `harness.head` | Head harness with a hanging load | `r:grav` | `harness` |
+
+**Supports (`sup`)**
+
+| Code | Meaning | Implies | Exercise key code |
+|---|---|---|---|
+| `floor` | The floor, or a mat on it | — | `floor` |
+| `wall` | A wall | — | `wall` |
+| `bench` | A bench, flat or adjustable | — | `bench` |
+| `box` | A box, step or platform | — | `box` |
+| `chair` | A chair | — | `chair` |
+| `block` | Lifting blocks a bar starts from | — | `block` |
+| `rack` | Power rack or squat stand, with its pins | — | `rack` |
+| `ball.stab` | Stability ball | `c:tilt` | `ball` |
+| `dome` | BOSU, either side up | `c:tilt` | `dome`, `dome.up`, `dome.down` |
+| `board.bal` | Balance or wobble board | `c:tilt` | `board` |
+| `roller.foam` | Foam roller | `c:roll` | `roller` |
+| `slider` | Slider disc | `c:slide` | `slider` |
+| `strap.susp` | Suspension trainer | `c:swing` | `strap` |
+| `ring` | Gymnastic rings | `c:swing` | `ring` |
+| `rope.climb` | Climbing rope | `c:swing` | `crope` |
+| `bar.fixed` | Fixed overhead bar: pull-up bar | — | `bar` |
+| `bar.parallel` | Parallel dip bars | — | `bars` |
+| `bar.parallette` | Floor parallettes | — | `pbars` |
+| `pad.preacher` | Preacher bench | — | `preacher` |
+| `pad.hyper` | Back-extension bench, 45° or 90°, also used for side raises | — | `hyper` |
+| `pad.ghd` | Glute-ham developer | — | `ghd` |
+| `station.vkr` | Knee-raise station | — | `vkr` |
+| `pole` | A vertical pole, post or rack upright gripped by the hands | — | `pole` |
+| `ball.massage` | Massage or lacrosse ball rolled under the body | — | `mball` |
+
+**Accessories (`acc`)**
+
+| Code | Meaning |
+|---|---|
+| `handle` | Single D-handle |
+| `handle.bar` | Straight or cambered cable bar |
+| `handle.v` | V-bar or close-grip handle |
+| `handle.rope` | Triceps rope |
+| `strap.ankle` | Ankle cuff |
+| `belt.dip` | Dip belt |
+| `belt.lift` | Lifting belt |
+| `strap.lift` | Lifting straps |
+| `strap.stretch` | Stretching strap: a strap, belt or loop band used to pull a limb in a stretch |
+| `towel` | A towel used as a handle |
+| `marker` | Cone, hurdle or floor marker |
+| `board.press` | Board laid on the chest for partial presses |
+| `mat` | Floor mat |
+
+**Stations (`stn`)**
+
+| Code | Meaning | Implies | Exercise key code |
+|---|---|---|---|
+| `cable` | Cable column, crossover or functional trainer: a pulley set per exercise | `r:stack` `c:cable` | `cable` |
+| `smith` | Smith machine: a bar on fixed rails | `r:plate` `c:line` | `smith` |
+| `landmine` | Landmine: one end of a barbell in a floor pivot | `r:grav` `c:pivot` | `landmine` |
+
+Rules:
+
+- A general word takes the general code: "band" is `band`. Write a child only when the equipment names it: a long loop band is `band.loop`.
+- A stretching strap is `FXE=1.0S/k:acc/f:strap.stretch`. An exercise key for a stretch done with it carries `a:strap`.
+- Which side of a BOSU is up is set per use, so it is written in the exercise key, not here.
+
+### Track (`c`)
+
+The track is written only for a cardio machine.
+
+| Code | Meaning |
+|---|---|
+| `belt` | A moving belt or revolving stairs |
+| `link` | Linked pedals (stepper) |
+| `loop` | A closed loop: cranks, elliptical |
+| `rail` | A seat on a rail (rower) |
+| `cable` | A cable pulled from above (ski machine) |
+| `line` | A straight track (vertical climber) |
+
+Each type of cardio machine writes its four standard layers like this:
+
+| Machine | `c` | `l` | `s` | `m` |
+|---|---|---|---|---|
+| Treadmill | `belt` | `foot` | `stand` | `gait` |
+| Stepmill (revolving stairs) | `belt` | `foot` | `stand` | `step` |
+| Stair stepper (pedals) | `link` | `foot` | `stand` | `step` |
+| Stair machine, stepper or stepmill not known | `?` | `foot` | `stand` | `step` |
+| Upright or spin bike | `loop` | `foot` | `seat` | `cycle` |
+| Recumbent bike | `loop` | `foot` | `recline` | `cycle` |
+| Stationary bike, upright or recumbent not known | `loop` | `foot` | `?` | `cycle` |
+| Air bike, with moving arms | `loop` | `foot+hand` | `seat` | `cycle` |
+| Elliptical | `loop` | `foot+hand` | `stand` | `glide` |
+| Rowing machine | `rail` | `hand` | `seat` | `row` |
+| Ski machine | `cable` | `hand` | `stand` | `pole` |
+| Arm crank, seated | `loop` | `hand` | `seat` | `cycle` |
+| Vertical climber | `line` | `foot+hand` | `stand` | `climb` |
+| Ladder climber | `belt` | `foot+hand` | `stand` | `climb` |
+
+Rules:
+
+- A cardio machine of unknown type is `FXE=1.0S/k:erg/c:?/l:?/s:?/m:?`.
+
+### Load interface (`l`)
+
+The load interface is written for a dedicated machine and a cardio machine. The last column is the hold point an exercise key writes for the machine.
+
+| Code | Meaning | Exercise hold point |
+|---|---|---|
+| `hand` | Handles or a bar in the hands | `@hands`, `@overhead` |
+| `foot` | A foot plate or pedals | `@feet` |
+| `ankle` | A pad on the lower leg | `@shins`, `@calves`, `@ankles` |
+| `thigh` | A pad on the thigh | `@thighs` |
+| `knee` | A pad or platform at the knees | `@knees` |
+| `arm` | A pad on the upper arm or elbow | `@forearms`, `@elbows`, `@arms` |
+| `chest` | A pad on the chest | `@chest` |
+| `back` | A pad on the back | `@back` |
+| `shoulder` | Pads on the shoulders | `@shoulders` |
+| `hip` | A pad or belt at the hips | `@hips`, `@waist` |
+| `head` | A pad on the head | `@head` |
+| `seat` | A moving seat | `@seat` |
+
+Rules:
+
+- Join two interfaces with `+` only when both move the load: an elliptical is `l:foot+hand`.
+- When nothing says otherwise, a machine's motion sets its interface:
+
+  | Motion | Interface |
+  |---|---|
+  | `kn.flex`, `kn.ext`, `hip.flex` | `ankle` |
+  | `el.*`, `sc.elev`, `sh.habd`, and every `push.*` or `pull.*` worked with the hands | `hand` |
+  | `sh.hadd`, `sh.abd`, `sh.flex`, `sh.ext` | `arm` |
+  | `hip.add`, `hip.abd` | `thigh` |
+  | `sp.flex`, `sp.rot` | `chest` |
+  | `sp.ext` | `back` |
+  | `assist.up` | `knee`, or `foot` when the user stands on a platform |
+
+- Some machines set their own: a leg press is `foot`; a hack squat, pendulum squat or V-squat `shoulder`; a belt squat `hip`; a calf raise machine `thigh` seated, `shoulder` standing and `hip` for a donkey calf raise, with the trunk on a pad; a glute kickback `foot`; a hip thrust machine `hip`; a reverse hyper `ankle`; a tibialis raise `foot`.
+
+### Posture (`s`)
+
+The posture is written for a dedicated machine and a cardio machine. The last column is the start orientation an exercise key on the machine may have.
+
+| Code | Meaning | Exercise orientation |
+|---|---|---|
+| `seat` | Seated | `seated`, `seated.bent` |
+| `seat.chest` | Seated, chest against a pad | `seated`, `seated.bent` |
+| `stand` | Standing | `standing`, `standing.bent` |
+| `stand.chest` | Standing or bent over, trunk on a pad | `standing`, `standing.bent`, `prone.incline` |
+| `prone` | Lying face down, flat or inclined | `prone`, `prone.incline`, `prone.decline` |
+| `supine` | Lying face up | `supine`, `supine.incline`, `supine.decline` |
+| `recline` | Lying back on an inclined back pad | `supine`, `supine.incline`, `seated` |
+| `kneel` | Kneeling | `kneeling`, `kneeling.half` |
+| `hang` | Held up by the hands or forearms | `hanging` |
+| `side` | Side-lying | `side-lying` |
+
+Rules:
+
+- Write the position the machine puts the user in.
+- Some machines fix it. Every leg press with a reclined back pad is `recline`, and one with an upright seat is `seat`. A hack squat, pendulum squat, V-squat and belt squat are `stand`. A dedicated row machine is `seat.chest`, except a seated cable row with a foot plate, which is `seat`. A reverse-fly machine is `seat.chest`. A chest-supported T-bar row is `prone`. An assisted pull-up or dip machine is `hang`. A hip thrust machine is `supine` and a reverse hyper `prone`. A donkey calf raise machine is `stand.chest`. A glute kickback machine is `stand`, or `kneel` when the description says the user kneels. A tibialis raise machine is `seat`.
+- When nothing says otherwise: `seat.chest` for `sh.habd`; `seat` for `kn.ext`, `el.*`, the other `sh.*` motions, `sp.flex`, `sp.rot`, `hip.add`, `hip.abd`, `hip.flex`, every `push.*` worked with the hands, `pull.down` and `pull.backdown`; `stand` for `sc.elev`, `hip.ext` and `pull.up`. Otherwise write `s:?`: a leg curl or calf raise machine with no posture stated is `s:?`.
+
+### Motion (`m`)
+
+On a dedicated machine, the motion is what the machine's moving part guides, relative to the trunk.
+
+A machine whose pivot lines up with one joint writes that joint action, in the codes of the exercise key's [motion layer](./exercise-key.md#motion-m): `kn.flex`, `kn.ext`, `el.flex`, `el.ext`, `sh.flex`, `sh.ext`, `sh.abd`, `sh.add`, `sh.hadd`, `sh.habd`, `sh.ir`, `sh.er`, `sc.elev`, `hip.flex`, `hip.ext`, `hip.abd`, `hip.add`, `sp.flex`, `sp.ext`, `sp.rot`, `sp.lflex`, `ank.pf`, `ank.df`, `nk.flex`, `nk.ext`, `nk.lflex`, `wr.flex` or `wr.ext`.
+
+A machine that moves several joints writes a verb, `.` and the direction the load interface moves.
+
+| Verb | Meaning |
+|---|---|
+| `push` | The moving part is pushed away |
+| `pull` | The moving part is pulled toward the user |
+| `assist` | The moving part helps lift the body |
+
+| Direction | Meaning |
+|---|---|
+| `up` | Toward the head: shoulder press, hack squat, belt squat, deadlift machine |
+| `down` | Toward the feet: pulldown, seated dip |
+| `fwd` | Away from the front of the trunk: chest press, leg press |
+| `back` | Toward the front of the trunk: row |
+| `fwdup` | Forward and up: incline press |
+| `fwddown` | Forward and down: decline press |
+| `backdown` | Back and down: high row |
+
+On a cardio machine, the motion is the cycle it repeats.
+
+| Code | Meaning |
+|---|---|
+| `gait` | Walking or running on a belt |
+| `cycle` | Pedalling or hand cranking |
+| `step` | Stepping |
+| `row` | Rowing |
+| `pole` | A double-pole pull (ski machine) |
+| `glide` | Elliptical glide |
+| `climb` | Climbing with hands and feet |
+
+Rules:
+
+- Single-joint machines: a leg curl is `kn.flex`, a leg extension `kn.ext`, a biceps or preacher curl machine `el.flex`, a triceps extension machine `el.ext`, a pec deck `sh.hadd`, a reverse-fly machine `sh.habd`, a lateral raise machine `sh.abd`, a pullover machine `sh.ext`, a shrug machine `sc.elev`, an adductor `hip.add`, an abductor `hip.abd`, a leg or knee-raise crunch machine `hip.flex`, a glute kickback, hip thrust or reverse hyper `hip.ext`, an ab crunch machine `sp.flex`, a back extension machine `sp.ext`, a rotary torso `sp.rot`, a calf raise machine `ank.pf`, a tibialis raise `ank.df`, a neck machine `nk.flex`, `nk.ext` or `nk.lflex` by the direction the head moves, and a wrist curl machine `wr.flex`.
+- Multi-joint machines: a shoulder press, hack squat or belt squat is `push.up`; a deadlift machine `pull.up`; a pulldown `pull.down`; a seated dip `push.down`; a chest press and a leg press `push.fwd`; a row `pull.back`; an incline press `push.fwdup`; a decline press `push.fwddown`; a high row `pull.backdown`; an assisted pull-up or dip `assist.up`.
+- A leg press and a hack squat move the same joints. The interface, the posture and the direction tell them apart.
+- A strength machine of unknown type is `FXE=1.0S/k:mac/l:?/s:?/m:?`.
+
+### Extended layers (`r`, `c`, `g`, `a`)
+
+Drive (`r`):
+
+| Code | Meaning |
+|---|---|
+| `grav` | Free weight under gravity |
+| `stack` | Selectorised weight stack |
+| `plate` | Plate-loaded |
+| `elastic` | Elastic |
+| `air` | Air fan |
+| `mag` | Magnetic brake |
+| `water` | Water tank |
+| `motor` | Motor |
+| `friction` | Friction |
+| `hydraulic` | Hydraulic |
+| `flywheel` | Flywheel |
+| `none` | No resistance of its own |
+
+Constraint (`c`, for `stn` and `mac`):
+
+| Code | Meaning |
+|---|---|
+| `line` | A straight track: a sled or rails |
+| `arc` | A lever on one pivot |
+| `link` | A linkage of several pivots |
+| `cable` | A cable over pulleys |
+| `pivot` | One end in a floor pivot |
+
+Compliance (`c`, for `imp` and `sup`):
+
+| Code | Meaning |
+|---|---|
+| `tilt` | Tilts under the body |
+| `roll` | Rolls |
+| `slide` | Slides |
+| `swing` | Hangs and swings |
+
+Guide angle (`g`, for `mac`):
+
+| Code | Meaning |
+|---|---|
+| `incl` | Inclined |
+| `horiz` | Horizontal |
+| `vert` | Vertical |
+
+Design (`a`, for `stn` and `mac`):
+
+| Code | Meaning |
+|---|---|
+| `iso` | Independent arms |
+| `conv` | Converging path |
+| `cb` | Counterbalanced |
+| `dual` | Two weight stacks |
+
+Rules:
+
+- Write an extended layer only when it is stated. Nothing an exercise records depends on it.
+- A lever machine is `c:arc` with `r:plate`. A sled machine is `c:line` with `r:plate`. A pendulum squat is `c:arc`.
+- Design codes join with `+`: `a:conv+iso`.
+
+## Symbols
+
+Everything in a key that isn't a code is a symbol.
+
+| Symbol | Meaning | Example |
+|---|---|---|
+| `/` | Separates layers | `k:imp/f:bell.dumb` |
+| `:` | Separates a layer letter from its value | `k:imp` |
+| `.` | Joins a code to a more specific child, or a machine verb to its direction | `band.loop`, `push.fwd` |
+| `+` | Joins items that go together: two load interfaces, design codes | `l:foot+hand` |
+| `;` | Joins the configurations of a combination machine | `…/m:sh.hadd;k:mac/…` |
+| `?` | Unknown. Matches anything and never contradicts | `k:?`, `f:?`, `s:?` |
+
+A combination machine, one frame with several configurations, joins the key of each configuration with `;` after a single header, in sorted order. A multi-hip machine, a 4-way neck machine, a pec deck with rear-delt arms, an assisted pull-up and dip machine, and a lat pulldown with a low row are combination machines. A combination may join machine and station configurations. An exercise done on it refers to the configuration it uses.
+
+## Worked examples
+
+Each example starts from a plain description and decides one layer at a time.
+
+### Dumbbell
+
+A free weight held in one hand.
+
+| Layer | Decision | Written |
+|---|---|---|
+| `k` | A free object moved by the body | `k:imp` |
+| `f` | A dumbbell. Its gravity drive is implied, so `r` isn't written | `f:bell.dumb` |
+
+`FXE=1.0S/k:imp/f:bell.dumb`
+
+### Long loop band
+
+A long elastic loop, as used for assisted pull-ups and banded squats.
+
+| Layer | Decision | Written |
+|---|---|---|
+| `k` | A free object | `k:imp` |
+| `f` | The type is named, so the child code. A band whose type isn't stated is `band` | `f:band.loop` |
+
+`FXE=1.0S/k:imp/f:band.loop`
+
+### Cable column
+
+A weight stack with a pulley that slides up and down a post, used with a handle chosen per exercise.
+
+| Layer | Decision | Written |
+|---|---|---|
+| `k` | A station used for many movements | `k:stn` |
+| `f` | A cable column. Pulley height and the handle are set per use, so the exercise key records them | `f:cable` |
+
+`FXE=1.0S/k:stn/f:cable`
+
+### Lat pulldown machine
+
+Seated, thighs under a pad, a bar pulled down from overhead.
+
+| Layer | Decision | Written |
+|---|---|---|
+| `k` | A machine built for one movement, not the cable column | `k:mac` |
+| `l` | The bar is in the hands | `l:hand` |
+| `s` | Seated. The thigh pad holds the body down; it isn't the posture | `s:seat` |
+| `m` | Several joints move, and the bar comes toward the feet | `m:pull.down` |
+
+`FXE=1.0S/k:mac/l:hand/s:seat/m:pull.down`
+
+### Lying leg curl machine
+
+Face down on a bench, a pad behind the lower legs, plate-loaded on a lever.
+
+| Layer | Decision | Written |
+|---|---|---|
+| `k` | A dedicated machine | `k:mac` |
+| `l` | The pad is on the lower leg | `l:ankle` |
+| `s` | Lying face down | `s:prone` |
+| `m` | The pivot lines up with the knee, which bends | `m:kn.flex` |
+| `r` `c` | Plate-loaded, on a lever: extended layers | `r:plate/c:arc` |
+
+`FXE=1.0N/k:mac/l:ankle/s:prone/m:kn.flex/r:plate/c:arc`
+
+That is the full key. Its standard form, the one `fxe` holds, is `FXE=1.0S/k:mac/l:ankle/s:prone/m:kn.flex`.
+
+A seated leg curl machine is `FXE=1.0S/k:mac/l:ankle/s:seat/m:kn.flex`. Only the posture differs, and that is enough to make it different equipment.
+
+### Rowing machine
+
+A seat on a rail, a handle on a chain pulled toward the trunk.
+
+| Layer | Decision | Written |
+|---|---|---|
+| `k` | A cardio machine | `k:erg` |
+| `c` | The seat slides on a rail | `c:rail` |
+| `l` | The moving part that meets the body is the handle, in the hands. The foot stretcher stays put | `l:hand` |
+| `s` | Seated | `s:seat` |
+| `m` | Rowing | `m:row` |
+
+`FXE=1.0S/k:erg/c:rail/l:hand/s:seat/m:row`
+
+### Pec deck with rear-delt arms
+
+One machine with two configurations: arm pads pressed together in front, or handles pulled back with the chest against the pad.
+
+| Configuration | Decision | Written |
+|---|---|---|
+| Pec deck | Arm pads, seated, the arms come together in front | `k:mac/l:arm/s:seat/m:sh.hadd` |
+| Reverse fly | Handles, chest on the pad, the arms move back and out | `k:mac/l:hand/s:seat.chest/m:sh.habd` |
+
+`FXE=1.0S/k:mac/l:arm/s:seat/m:sh.hadd;k:mac/l:hand/s:seat.chest/m:sh.habd`
+
+## Keys in records
+
+These excerpts show the shape planned for the next release; a future schema version adds these fields.
+
+The `fxe` field always holds the standard form of the key: the extended layers dropped and the flag `S`. That holds on the equipment record and on every reference to it. An owner that keeps the full key, extended layers included, stores it in its own `attributes` or `extensions`.
+
+To get the standard form from a full key, drop the extended layers `r`, `c`, `g` and `a`, and write the flag `S`. On a cardio machine `c` is the track, a standard layer, so it stays.
+
+| Full key | Standard form |
+|---|---|
+| `FXE=1.0N/k:mac/l:foot/s:recline/m:push.fwd/r:plate/c:line/g:incl` | `FXE=1.0S/k:mac/l:foot/s:recline/m:push.fwd` |
+| `FXE=1.0N/k:mac/l:ankle/s:prone/m:kn.flex/r:plate/c:arc` | `FXE=1.0S/k:mac/l:ankle/s:prone/m:kn.flex` |
+
+An equipment record carries the standard form in `fxe`. This owner also keeps the full key, in an attribute it names `fxeFull`; FDS doesn't define that name:
+
+```json fds:ignore planned record shape; fxe is not in a published schema yet
+{
+  "schemaVersion": "1.1.0",
+  "id": "eq.legPress45",
+  "fxe": "FXE=1.0S/k:mac/l:foot/s:recline/m:push.fwd",
+  "canonical": { "name": "45° Leg Press", "slug": "45-leg-press" },
+  "attributes": {
+    "fxeFull": "FXE=1.0N/k:mac/l:foot/s:recline/m:push.fwd/r:plate/c:line/g:incl"
+  },
+  "metadata": {
+    "createdAt": "2026-01-01T00:00:00Z",
+    "updatedAt": "2026-01-01T00:00:00Z",
+    "status": "active"
+  }
+}
+```
+
+An exercise's equipment reference carries the same standard form beside its `id` and `name`. The exercise's own key names the machine with `mach@feet`:
+
+```json fds:ignore planned record shape; fxi and fxe are not in a published schema yet
+{
+  "exerciseId": "ex.legPress",
+  "fxi": "FXI=1.0S/m:hip.ext+kn.ext/o:supine.incline/l:mach@feet",
+  "canonical": { "name": "Leg Press", "slug": "leg-press" },
+  "equipment": {
+    "required": [
+      { "id": "eq.legPress45", "name": "45° Leg Press", "fxe": "FXE=1.0S/k:mac/l:foot/s:recline/m:push.fwd" }
+    ]
+  }
+}
+```
+
+### Equipment in an exercise key
+
+The [load](./exercise-key.md#load-l) and [support](./exercise-key.md#support-s) layers of an exercise key name equipment with short codes. Each code is a short name for an equipment key: `db` is `FXE=1.0S/k:imp/f:bell.dumb`, `bench` is `FXE=1.0S/k:sup/f:bench`, `cable` is `FXE=1.0S/k:stn/f:cable`. The form tables above give the code for each form, and the exercise key page lists the full key for each load code.
+
+Machines are the exception. An exercise key writes any strength machine as `mach`, and any cardio machine as `erg`, or its cycle code such as `erg.row` when the machine is known. `mach` stands for `FXE=1.0S/k:mac/l:?/s:?/m:?` and `erg` for `FXE=1.0S/k:erg/c:?/l:?/s:?/m:?`. A cycle code fills in only the cycle: `erg.row`, a rowing machine, stands for `FXE=1.0S/k:erg/c:?/l:?/s:?/m:row`. The equipment reference's `fxe` says which machine. The same holds for detail the short codes don't carry: a band's type is in the equipment key, and the exercise key says only `band`.
+
+Because both keys describe the same equipment, an exercise key and the key of its main equipment can be checked against each other. The main equipment is the first of these the exercise key has:
+
+1. a strength or cardio machine in `l`: `mach`, `erg` or a cycle code;
+2. a station in `l`: `cable`, `smith` or `landmine`;
+3. an implement in `l`. With several, the one that comes first in the code order of the exercise key's [load table](./exercise-key.md#load-l): `l:band@hands+db@hands` gives `db`, because `db` comes before `band` in that table;
+4. an implement of unknown type, such as `?@chest`, which gives `FXE=1.0S/k:imp/f:?`;
+5. a support in `s` other than the floor, the first in the code order of the [support table](./exercise-key.md#support-s);
+6. `FXE=1.0S/k:none` for `l:bw`;
+7. when nothing else applies, `FXE=1.0S/k:?`.
+
+A checker warns when:
+
+- the equipment key contradicts the key the exercise's main load code stands for: an exercise loaded with `db` and an equipment key for a kettlebell;
+- a machine's posture doesn't fit the exercise's start orientation, by the posture table: `s:recline` and `o:standing`;
+- a machine's load interface doesn't fit the hold point of `mach` or `erg`, by the load interface table: `l:foot` and `mach@hands`;
+- a single-joint machine's motion, or a child of it, isn't in the exercise's motion: a shrug done on a standing calf raise machine, whose motion is `m:ank.pf`. The checker always warns. A person accepts the use when the exercise names that machine;
+- `k:none` appears without `l:bw`;
+- a cardio code doesn't fit the machine's cycle: the rowing machine code `erg.row` with an equipment key whose cycle is `m:gait`, a treadmill.
+
+The two keys never record the same fact twice. Grip, sides, range, footwork, pulley height, bench angle, the hold point and the count belong to the exercise key. What the equipment is, its fixed geometry and how it is built belong to the equipment key.
+
+## Comparing two equipment keys
+
+Comparison goes layer by layer. `?` matches any value, and a parent code covers its children. A standard layer left out reads `?`. An extended layer is weighed only when both keys carry it; when only one key does, it makes that key more specific.
+
+- **Same**: the two keys are written identically and contain no `?`.
+- **More specific**: no layer contradicts, and one key states something the other leaves open, names a child where the other names its parent, or carries an extended layer the other leaves out.
+- **Different**: at least one layer can't match.
+
+| Key A | Key B | Result |
+|---|---|---|
+| `FXE=1.0S/k:imp/f:bell.dumb` | `FXE=1.0S/k:imp/f:bell.dumb` | Same |
+| `FXE=1.0S/k:imp/f:band.loop` | `FXE=1.0S/k:imp/f:band` | A is more specific: `band.loop` is a child of `band` |
+| `FXE=1.0S/k:mac/l:hand/s:seat/m:pull.down` | `FXE=1.0S/k:mac/l:?/s:?/m:?` | A is more specific: it states the layers B leaves open |
+| `FXE=1.0N/k:mac/l:ankle/s:prone/m:kn.flex/r:plate/c:arc` | `FXE=1.0S/k:mac/l:ankle/s:prone/m:kn.flex` | A is more specific: it carries extended layers B leaves out |
+| `FXE=1.0S/k:mac/l:ankle/s:seat/m:kn.flex` | `FXE=1.0S/k:mac/l:ankle/s:prone/m:kn.flex` | Different: the postures differ |
+| `FXE=1.0N/k:mac/l:ankle/s:prone/m:kn.flex/r:plate/c:arc` | `FXE=1.0N/k:mac/l:ankle/s:prone/m:kn.flex/r:stack` | Different: both carry a drive, and the drives differ |
+| `FXE=1.0S/k:stn/f:cable` | `FXE=1.0S/k:mac/l:hand/s:seat/m:pull.down` | Different: a station and a dedicated machine |
+| `FXE=1.0S/k:imp/f:band.mini` | `FXE=1.0S/k:imp/f:band.loop` | Different: two children of `band` |
+
+When each key leaves open something the other states, neither is more specific, and the two may still describe the same equipment: `FXE=1.0S/k:mac/l:hand/s:?/m:pull.back` and `FXE=1.0S/k:mac/l:?/s:seat.chest/m:pull.back`. A combination machine and one of its configurations compare the same way: neither is more specific, and nothing contradicts.
+
+An identical key is a strong match, and anything else gives a short list for a person to confirm. See [Using keys](../structural-keys.md#using-keys) for how to keep confirmed links.
+
+## Building keys
+
+You can write a key by hand by following this page, or generate one with the FDS Encoder (under Tools, to come).
+
+<!-- TODO: link the Encoder page under Tools once it exists. -->

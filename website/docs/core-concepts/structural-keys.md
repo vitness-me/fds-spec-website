@@ -57,9 +57,9 @@ To link two catalogs, compare the keys of their records and collect the candidat
 
 ## Where to go next
 
-<!-- TODO: turn these into links once the pages exist: ./structural-keys/equipment-key, ./structural-keys/muscle-key, and the Encoder page under Tools. -->
+<!-- TODO: link the Encoder page under Tools once it exists. -->
 
 - [Exercise key](./structural-keys/exercise-key.md): how `fxi` is built, its dimensions and codes.
-- Equipment key: how `fxe` is built.
-- Muscle key: how `fxm` is built.
+- [Equipment key](./structural-keys/equipment-key.md): how `fxe` is built.
+- [Muscle key](./structural-keys/muscle-key.md): how `fxm` is built.
 - Tools → Encoder: generate keys for your own records.

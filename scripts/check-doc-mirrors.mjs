@@ -60,6 +60,8 @@ const DOC_PAIRS = [
   ['specification/extension-registry.md', 'core-concepts/extensions'],
   ['specification/structural-keys.md', 'core-concepts/structural-keys'],
   ['specification/structural-keys/exercise-key.md', 'core-concepts/structural-keys/exercise-key'],
+  ['specification/structural-keys/equipment-key.md', 'core-concepts/structural-keys/equipment-key'],
+  ['specification/structural-keys/muscle-key.md', 'core-concepts/structural-keys/muscle-key'],
   ['specification/governance/CHANGELOG.md', 'governance/changelog'],
   ['specification/governance/CONTRIBUTING.md', 'governance/contributing'],
   ['specification/governance/GOVERNANCE.md', 'governance/index'],
