@@ -43,7 +43,7 @@ The long head of biceps brachii has this key:
 | Part | Text | What it says |
 |---|---|---|
 | Key type | `FXM` | This is a muscle key. |
-| Version | `1.0` | Major version 1, syntax revision 0. |
+| Version | `1.0` | Major version 1, revision 0. |
 | Muscle | `biceps-brachii` | The muscle, by its anatomical term. |
 | Part | `long` | The long head of that muscle. |
 
@@ -216,11 +216,10 @@ A catalog lists "Lats".
 
 ## Keys in records
 
-These excerpts show the shape planned for the next release; a future schema version adds these fields.
 
 A muscle record carries its key in `fxm`, and so does every muscle reference, such as the target muscles of an exercise:
 
-```json fds:ignore planned record shape; fxm is not in a published schema yet
+```json fds:ignore muscle record excerpt showing the fxm field
 {
   "schemaVersion": "1.0.0",
   "id": "mus.bicepsBrachiiLongHead",
@@ -245,10 +244,10 @@ A muscle record carries its key in `fxm`, and so does every muscle reference, su
 
 An exercise refers to its target muscles by `id` and `name`, and each reference carries the muscle's key in `fxm` beside them:
 
-```json fds:ignore planned record shape; fxi and fxm are not in a published schema yet
+```json fds:ignore exercise record excerpt showing the fxi and fxm fields
 {
   "exerciseId": "ex.romanianDeadlift",
-  "fxi": "FXI=1.0S/m:hip.ext/o:standing/l:bb@hands",
+  "fxi": "FXI=1.0S/m:hip.ext/o:standing/l:bar.straight@hands",
   "canonical": { "name": "Romanian Deadlift", "slug": "romanian-deadlift" },
   "targets": {
     "primary": [
@@ -286,6 +285,6 @@ Keys that are the same are a strong match, and anything else gives a short list 
 
 ## Building keys
 
-You can write a key by hand by following this page, or generate one with the FDS Encoder (under Tools, to come).
+You can write a key by hand by following this page, or generate one with the FDS Encoder.
 
 <!-- TODO: link the Encoder page under Tools once it exists. -->

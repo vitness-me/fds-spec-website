@@ -57,7 +57,7 @@ A walking lunge with a dumbbell in each hand has this key:
 | Footwork | `f:travel.fwd` | Each step travels forward and does not come back. |
 | Load | `l:bell.dumb@hands` | Dumbbells, held in the hands. |
 | Sides | `x:a` | The legs take turns, rep by rep. |
-| Layers left out | `k s g r h p` | Each is at its default: the limb end moves, the floor supports the feet, the usual grip and stance, full range, no held posture, the usual line of pull. |
+| Layers left out | `k s g r h p a` | Each is at its default: the limb end moves, the floor supports the feet, the usual grip and stance, full range, no held posture, the usual line of pull, no accessory. |
 
 Layers are separated by `/`. Each layer is its letter, a `:` and a value made of codes and symbols.
 
@@ -598,7 +598,7 @@ Keys that share codes form families, and nobody has to declare them. Search for 
 
 `bell.*` means any code that starts with `bell.`. Layers combine: `m` is `hip.ext+kn.ext` and `l` holds `bar.straight@back` finds back squats and lunges with a barbell on the back.
 
-A search is the same operation as comparing for "more specific". Write the search as a key, with `?` in every layer it leaves open:
+An "is" search is the same operation as comparing for "more specific": write it as a key, with `?` in every layer it leaves open. A "holds" search looks for a code, or a child of it, anywhere in the layer, and isn't a compare. For example:
 
 `FXI=1.0S/m:hip.ext+kn.ext/o:?/k:?/f:?/s:?/l:?/x:?/g:?/r:?/h:?/p:?`
 
@@ -606,6 +606,6 @@ Every exercise the first search finds is more specific than this key. The barbel
 
 ## Building keys
 
-You can write a key by hand by following this page, or generate one with the FDS Encoder (under Tools, to come).
+You can write a key by hand by following this page, or generate one with the FDS Encoder.
 
 <!-- TODO: link the Encoder page under Tools once it exists. -->

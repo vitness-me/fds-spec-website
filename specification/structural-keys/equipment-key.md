@@ -549,7 +549,7 @@ One machine with two configurations: arm pads pressed together in front, or hand
 
 An equipment record carries its whole key in `fxe`, extended layers and the flag `N` included. A reference to the equipment, in an exercise, a workout or a prescription, carries the same `fxe` value beside its `id` and `name`.
 
-Comparing reads the standard part of each key: the key without the extended layers `r`, `c`, `g` and `a`, with the flag `S`. On a cardio machine `c` is the track, a standard layer, so it stays. An extended layer counts only when both keys carry it (see [Comparing two equipment keys](#comparing-two-equipment-keys)).
+An extended layer counts in a comparison only when both keys carry it (see [Comparing two equipment keys](#comparing-two-equipment-keys)). Otherwise comparing reads the standard part of each key: the key without the extended layers `r`, `c`, `g` and `a`, with the flag `S`. On a cardio machine `c` is the track, a standard layer, so it stays.
 
 | Key | Standard part |
 |---|---|
@@ -647,15 +647,15 @@ Equipment keys that share codes form families, and nobody has to declare them. S
 | `k` is `imp` and `f` is a `bar.*` code | Every barbell: straight, EZ, trap, axle and cambered. Without the kind, `bar.*` also finds the fixed bar, dip bars and parallettes |
 | `f` is `band` | Every band, through its children `band.loop`, `band.mini` and `band.tube`. A parent code finds its children |
 | `m` is `pull.down` | Every pulldown machine |
-| `m` is `kn.flex` | Lying and seated leg curl machines |
+| `m` is `kn.flex` | Lying, seated and standing leg curl machines |
 | `k` is `mac` and `l` is `foot` | Machines pushed with the feet: leg presses, glute kickbacks, tibialis raises |
 
-`bell.*` means any code that starts with `bell.`. A search is the same operation as comparing for "more specific": every pulldown machine is more specific than `FXE=1.0S/k:mac/l:?/s:?/m:pull.down`.
+`bell.*` means any code that starts with `bell.`. An "is" search is the same operation as comparing for "more specific": every single-purpose pulldown machine is more specific than `FXE=1.0S/k:mac/l:?/s:?/m:pull.down`. A combination machine that also rows comes back as compatible instead. A "holds" search looks for a code, or a child of it, anywhere in the layer.
 
 An exercise key uses the same codes, so the same searches find exercises: `l` holds `mac` finds every exercise done on a strength machine (see [Finding related exercises](./exercise-key.md#finding-related-exercises)).
 
 ## Building keys
 
-You can write a key by hand by following this page, or generate one with the FDS Encoder (under Tools, to come).
+You can write a key by hand by following this page, or generate one with the FDS Encoder.
 
 <!-- TODO: link the Encoder page under Tools once it exists. -->
