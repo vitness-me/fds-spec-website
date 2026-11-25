@@ -23,8 +23,9 @@ unos dobije datum. Do tada su nove verzije zabeležene kao nezamrznute.
   i FXM za mišić: nizovi iz zatvorenih vokabulara kojima dva kataloga porede
   zapise bez zajedničkog naziva. RFC usvaja stranice deskriptora po reviziji
   pravila 1.4, definiše protokol podudaranja i objavljuje merenja prema kojima
-  su deskriptori testirani, uključujući i to da kapija izdanja, uslov za
-  prihvatanje RFC-a, još nije dostignuta.
+  su deskriptori testirani. Treći, nov test sa disjunktnim nazivima po
+  reviziji pravila 1.4 dostiže kapiju izdanja na svim bodovanim upitima;
+  upiti iz stvarnih kataloga navode se uz njega i ne podležu kapiji.
 - **Revizija pravila 1.4**, koja precizira 1.3 prema §8.1 RFC-010. Dodaje
   zglobnu akciju `sh.ext.oh`, ekstenziju ramena iznad glave, dete akcije
   `sh.ext`, koju `sh.ext` pokriva pri poređenju i koja zamenjuje `sh.ext` kada
@@ -34,7 +35,12 @@ unos dobije datum. Do tada su nove verzije zabeležene kao nezamrznute.
   zasnovana na njemu, deo `=`. Nijedan kod iz 1.3 ne menja značenje i svaki
   string iz 1.3 ostaje važeći. String iz 1.3 napisan za povlačenje iznad glave
   precizira njegov string iz 1.4 umesto da mu bude identičan, pa ga nadogradnja
-  ponovo gradi iz sačuvanih odgovora.
+  ponovo gradi iz sačuvanih odgovora. Napisana pored svog deteta u istom delu,
+  roditeljska akcija ne kaže ništa više, i kanonski oblik je izostavlja.
+- **Slam sa battle rope konopcem ne dobija `^`.** Konopac nikada ne napušta
+  šake, a `^` znači let ili otpuštanje. Reč pokreta koja je po 1.3 za njega
+  pisala `^` gradila je string koji protivreči njegovom stringu iz 1.4, pa ga
+  biblioteka ponovo gradi iz sačuvanih odgovora.
 - Na vežbi: `fxi`, `fxe` (standardni FXE njene glavne opreme), `fxiProvenance`,
   `fxiGap` i `xrefs`, sva opciona, na najvišem nivou zapisa. Svaka referenca na
   opremu unutar vežbe može da nosi `fxe`, a svaka referenca na mišić `fxm`.

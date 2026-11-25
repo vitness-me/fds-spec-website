@@ -167,12 +167,12 @@ Gornji nivoi imaju jedan tačan odgovor po vektoru. Dve stvari koje su jednako b
 Nijedno od ovoga nije prag koji implementacija ili katalog mora da dostigne. Oni govore koliko se na deskriptore može osloniti, kako bi usvajač mogao da odluči koliko koraka potvrde da zadrži.
 
 :::note
-Prva merenja izvršena su po reviziji pravila 1.3, u ponovljenom testu sa disjunktnim nazivima, i objavljena su u [RFC-010 §9](/docs/specifications/rfc-010-structural-descriptors#9-evidence) sa svojim metodom. Podaci na kojima su izmerena nisu objavljeni. Kalibracija u kojoj kodiraju ljudi i ishodi usvajača još su na čekanju.
+Merenja su izvršena po reviziji pravila 1.3, u ponovljenom testu sa disjunktnim nazivima, i po reviziji pravila 1.4, u trećem, novom testu. Oba su objavljena u [RFC-010 §9](/docs/specifications/rfc-010-structural-descriptors#9-evidence) sa svojim metodom. Podaci na kojima su izmerena nisu objavljeni. Kalibracija u kojoj kodiraju ljudi i ishodi usvajača još su na čekanju.
 :::
 
 | Izveštaj | Rezultat |
 |---|---|
 | Slaganje enkodera | Izmereno: [RFC-010 §9.3](/docs/specifications/rfc-010-structural-descriptors#93-separation-and-agreement). |
-| Ponovljeni test sa disjunktnim nazivima | Izmereno: [RFC-010 §9.2](/docs/specifications/rfc-010-structural-descriptors#92-name-disjoint-re-test), metodom iz §9.1. |
+| Testovi sa disjunktnim nazivima | Izmereno: [RFC-010 §9.2](/docs/specifications/rfc-010-structural-descriptors#92-name-disjoint-tests), metodom iz §9.1. |
 | Kalibracija u kojoj kodiraju ljudi | Na čekanju: vlasnici naspram enkodera, još nije izmereno. |
 | Ishodi usvajača | Na čekanju: još nije izmereno za ovu reviziju pravila. |

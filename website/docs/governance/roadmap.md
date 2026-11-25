@@ -34,7 +34,7 @@ Two decisions are already fixed. A log will carry a **frozen snapshot of the pre
 
 ### RFC-010 — Structural Descriptors (draft)
 
-FXI, FXE and FXM: short strings from closed vocabularies that describe how an exercise is done, what a piece of equipment is and which muscle is meant, so that two catalogues can compare records without a shared name. The draft adds optional fields to exercise, equipment and muscle and defines a match protocol that links automatically only on a unique identical descriptor, and otherwise asks a person to confirm. It is accepted only when a fresh name-disjoint test meets its release gate, which the first measurements do not yet meet.
+FXI, FXE and FXM: short strings from closed vocabularies that describe how an exercise is done, what a piece of equipment is and which muscle is meant, so that two catalogues can compare records without a shared name. The draft adds optional fields to exercise, equipment and muscle and defines a match protocol that links automatically only on a unique identical descriptor, and otherwise asks a person to confirm. A fresh name-disjoint test under rules revision 1.4 meets its release gate, so the draft now waits only on review before it is accepted.
 
 ### Registries and conformance
 

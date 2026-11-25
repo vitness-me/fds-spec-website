@@ -160,12 +160,12 @@ The tiers above have one right answer per vector. Two things that matter as much
 Neither is a threshold an implementation or a catalogue must reach. They say how far the descriptors can be relied on, so that an adopter can decide how much of the confirm step to keep.
 
 :::note
-The first measurements were taken under rules revision 1.3, in the name-disjoint re-test, and are published in [RFC-010 §9](/docs/specifications/rfc-010-structural-descriptors#9-evidence) with their method. The data they were measured on is not published. Person-encoded calibration and adopter outcomes are still pending.
+Measurements were taken under rules revision 1.3, in the name-disjoint re-test, and under rules revision 1.4, in a third, fresh test. Both are published in [RFC-010 §9](/docs/specifications/rfc-010-structural-descriptors#9-evidence) with their method. The data they were measured on is not published. Person-encoded calibration and adopter outcomes are still pending.
 :::
 
 | Report | Result |
 |---|---|
 | Encoder agreement | Measured: [RFC-010 §9.3](/docs/specifications/rfc-010-structural-descriptors#93-separation-and-agreement). |
-| Name-disjoint re-test | Measured: [RFC-010 §9.2](/docs/specifications/rfc-010-structural-descriptors#92-name-disjoint-re-test), by the method of §9.1. |
+| Name-disjoint tests | Measured: [RFC-010 §9.2](/docs/specifications/rfc-010-structural-descriptors#92-name-disjoint-tests), by the method of §9.1. |
 | Person-encoded calibration | Pending: owners against encoders, not yet measured. |
 | Adopter outcomes | Pending: not yet measured for this rules revision. |

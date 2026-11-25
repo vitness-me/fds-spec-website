@@ -17,7 +17,7 @@ keywords: [fxi, fxe, fxm, structural descriptor, match protocol, xrefs, provenan
 
 Ova specifikacija dodaje tri strukturna deskriptora u Fitness Data Standard: **FXI** za vežbu, **FXE** za komad opreme i **FXM** za mišić. Deskriptor je kratak string, sastavljen iz zatvorenih vokabulara, koji kaže kako se vežba izvodi, šta je komad opreme ili koje tkivo označava ključ mišića, bez upotrebe naziva na bilo kom jeziku. Dva kataloga koja istu vežbu opisuju različitim rečima mogu da uporede svoje deskriptore i pronađu jedan drugog.
 
-Definiše gde deskriptori stoje na entitetima vežbe, opreme i mišića, polja koja putuju uz njih (ko je odgovorio, šta notacija propušta i veze koje je potvrdila osoba ili razrešivač), protokol podudaranja koji razrešivač prati i način na koji se deskriptori verzionišu. Objavljuje merenja na kojima su deskriptori do sada testirani i navodi koja od njih još ne dostižu prag koji ovaj RFC postavlja za sopstveno prihvatanje.
+Definiše gde deskriptori stoje na entitetima vežbe, opreme i mišića, polja koja putuju uz njih (ko je odgovorio, šta notacija propušta i veze koje je potvrdila osoba ili razrešivač), protokol podudaranja koji razrešivač prati i način na koji se deskriptori verzionišu. Objavljuje merenja na kojima su deskriptori do sada testirani i navodi kako se ona čitaju u odnosu na prag koji ovaj RFC postavlja za sopstveno prihvatanje.
 
 Ovaj RFC prolazi isti put od nacrta do prihvatanja kao i svaki drugi RFC; §12 navodi uslove za njegovo prihvatanje, među njima i kapiju izdanja iz §9.5. Svako polje koje ovaj RFC dodaje je opciono, nijedno postojeće polje ne menja značenje, a izmena šeme je sporedna verzija.
 
@@ -258,15 +258,19 @@ Vektori usaglašenosti kažu da li implementacija izračunava ono što ova speci
 ### 9.1. Metod
 
 - **Enkoderi.** Dva enkodera, oba softverski agenti, nezavisno su kodirala biblioteku i upite, bez uvida u izlaz onog drugog. Radila su u režimu vlasnika, kao zamene za vlasnike kataloga, pa su njihovi redovi nosili vlasničko poreklo i mogli su automatski da se podudare: brojke automatskog podudaranja u nastavku simuliraju vlasnike koji kodiraju sopstvene kataloge. Kalibracija u kojoj kodiraju ljudi je na čekanju (§9.4).
-- **Upiti.** 624 bodovana upita u šest delova, nijedan sa nazivom zajedničkim sa bibliotekom sa kojom je upoređivan: redovi napisani na francuskom, na italijanskom i na portugalskom; stvarni redovi koji nisu na engleskom iz kataloga trećih strana; teretanski žargon; i preimenovane vežbe. Za 496 njihova vežba postoji u biblioteci, a za 128 ne postoji. **Stvarni delovi** su poslednja tri, 174 upita: 136 u biblioteci i 38 odsutnih.
-- **Kada.** Test je izvršen 2026-11-24, po reviziji pravila 1.3.
+- **Upiti.** Upiti svakog testa podeljeni su u delove, nijedan sa nazivom zajedničkim sa bibliotekom sa kojom se upoređuje: redovi napisani na drugim jezicima, stvarni redovi koji nisu na engleskom iz kataloga trećih strana, teretanski žargon i preimenovane vežbe. **Stvarni delovi** su poslednja tri. Za većinu upita vežba postoji u biblioteci. Za odsutan upit svaki tačan odgovor uklanja se iz biblioteke samo za taj upit, a zadržava se bliska varijanta. Brojevi za svaki test navedeni su uz njega (§9.2).
+- **Biblioteka.** Istih 774 reda u svakom testu.
 - **Izvršavanja.** Unakrsno po enkoderima: upiti koje je izgradio jedan enkoder upoređivani su sa bibliotekom koju je izgradio drugi, i obrnuto. Svaka brojka je srednja vrednost dva izvršavanja.
 - **Razrešivač.** Protokol podudaranja iz §7, onako kako ga implementira referentni enkoder, fiksiran pre nego što su upiti kodirani.
 - **Mere.** *Odziv u prva 3* je udeo upita čija vežba postoji u biblioteci, a čiji je pravi zapis povezan automatski ili naveden među prva tri na listi za potvrdu; njegov imenilac su upiti čija vežba postoji u biblioteci. *Pogrešna automatska podudaranja* su udeo svih bodovanih upita, bez obzira na to da li im vežba postoji u biblioteci, koji su automatski povezani sa pogrešnim zapisom; odsutan upit povezan sa bilo čim je pogrešan.
 - **Intervali.** Uglaste zagrade daju 95% Vilsonove intervale (Wilson score). Za srednju vrednost dva izvršavanja, interval koristi objedinjenu stopu i imenilac jednog izvršavanja.
 - **Podaci.** Upiti, biblioteke i kodirani redovi ostaju kod provajdera koji je sproveo test, jer sadrže tekst kataloga trećih strana. Metod i program za bodovanje opisani su ovde kako bi test mogao da se ponovi na drugom skupu.
 
-### 9.2. Ponovljeni test sa disjunktnim nazivima {#92-name-disjoint-re-test}
+### 9.2. Testovi sa disjunktnim nazivima {#92-name-disjoint-tests}
+
+#### Ponovljeni test po reviziji pravila 1.3 {#re-test-under-rules-revision-13}
+
+624 bodovana upita u šest delova: redovi napisani na francuskom, na italijanskom i na portugalskom, stvarni redovi koji nisu na engleskom, teretanski žargon i preimenovane vežbe. Za 496 njihova vežba postoji u biblioteci, a za 128 ne postoji. Stvarni delovi sadrže 174 upita: 136 u biblioteci i 38 odsutnih. Test je izvršen 2026-11-24, po reviziji pravila 1.3, pre nego što je §7.1 zahtevao identične FXE.
 
 | Mera | Svi delovi (624) | Samo stvarni delovi (174) |
 |---|---|---|
@@ -274,6 +278,52 @@ Vektori usaglašenosti kažu da li implementacija izračunava ono što ova speci
 | Pogrešna automatska podudaranja | 2,1% [1,2–3,5] | 3,4% [1,6–7,3] |
 
 Na istom skupu, podudaranje po nazivu uz prevođenje dostiglo je odziv u prva 3 od 88,3% kada je ispod fiksnog praga sličnosti odgovaralo da je rezultat odsutan, i 93,3% kada je uvek nudilo listu, uz 1,1% pogrešnih automatskih podudaranja.
+
+#### Treći test po reviziji pravila 1.4 {#third-test-under-rules-revision-14}
+
+Nov skup: nijedan upit niti nebodovani red za popunu iz ranijih testova nije ponovo upotrebljen. Izvršen je 2026-11-24, po reviziji pravila 1.4, sa zamrznutom kopijom alata za kodiranje i podudaranje i sa uslovom 5 iz §7.1 na snazi. Razrešivač i pravila bodovanja zapisani su pre nego što je izračunat ijedan rezultat. Referentna istina je sud jednog čitaoca o svakom upitu, prema pisanom testu o tome šta dva reda čini istom vežbom, a drugi, nezavisni čitalac naslepo je proverio uzorak. Oba čitaoca su softverski agenti; nijedna osoba nije proverila referentnu istinu.
+
+| Deo | Bodovano | U biblioteci | Odsutno |
+|---|---|---|---|
+| Napisano na holandskom | 150 | 120 | 30 |
+| Napisano na poljskom | 150 | 120 | 30 |
+| Napisano na turskom | 150 | 120 | 30 |
+| Stvarni redovi koji nisu na engleskom (nemački, španski, francuski, portugalski, turski, poljski, holandski) | 138 | 111 | 27 |
+| Teretanski žargon | 2 | 2 | 0 |
+| Preimenovane vežbe | 5 | 4 | 1 |
+| **Svi** | **595** | **477** | **118** |
+
+Stvarni delovi sadrže 145 upita: 117 u biblioteci i 28 odsutnih. Još 81 stvarni red umešan je u ulaz enkodera i nigde nije bodovan.
+
+| Mera | Svi upiti (595) | Samo stvarni delovi (145) |
+|---|---|---|
+| Odziv u prva 3 | 98,8% [97,4–99,5] | 97,4% [92,7–99,1] |
+| Pogrešna automatska podudaranja | 1,4% [0,7–2,7] | 1,7% [0,5–5,4] |
+
+- **Upiti svakog enkodera prema njegovoj sopstvenoj biblioteci.** Na svim upitima: pogrešna automatska podudaranja 1,3% [0,7–2,6] i 1,8% [1,0–3,3], odziv u prva 3 98,7% [97,3–99,4] i 99,0% [97,6–99,6]. Na stvarnim delovima: pogrešna automatska podudaranja 1,4% [0,4–4,9] i 2,1% [0,7–5,9], odziv u prva 3 96,6% [91,5–98,7] i 98,3% [94,0–99,5].
+- **Nazivi uz prevođenje.** Na svim upitima, odziv u prva 3 od 83,2% sa pragom sličnosti i 93,3% bez njega, uz 0,8% pogrešnih automatskih podudaranja. Na stvarnim delovima 66,7% i 82,1%, uz 1,4% pogrešnih automatskih podudaranja. Na poljskom delu, koji je preveo gotovo svaki naziv, deskriptori su dostigli odziv u prva 3 od 100% uz 0,7% pogrešnih automatskih podudaranja; nazivi uz prevođenje dostigli su 80,8% i 92,5%.
+- **Drugo mišljenje.** Od 290 proverenih parova, 268 je bilo odlučeno; drugi čitalac se složio u 95,1% [91,9–97,1] njih.
+- **Greške.** U dva unakrsna izvršavanja po enkoderima, 17 pogrešnih automatskih podudaranja i 8 promašaja prva 3, na 21 upitu, pročitanih jedan po jedan:
+
+  | Uzrok | Pogrešno automatsko podudaranje | Promašaj prva 3 |
+  |---|---|---|
+  | Dva enkodera su istu informaciju kodirala različito | 7 | 1 |
+  | Red biblioteke koji se sudara izgleda kao tačan odgovor koji je referentna istina propustila | 8 | 0 |
+  | Tačan odgovor rangiran je četvrti ili niže na listi za potvrdu | 0 | 6 |
+  | Notacija nema kod za razliku | 2 | 0 |
+  | Detalj naveden samo na jednoj strani | 0 | 1 |
+
+  14 od 17 pogrešnih automatskih podudaranja su odsutni upiti: test uklanja tačan odgovor, a drugi red biblioteke sa istim ključem preuzima vezu.
+
+**Slabosti.**
+
+- **Ponovna upotreba.** 128 od 145 stvarnih upita su red na drugom jeziku vežbe koju je raniji test koristio kao upit, uglavnom prevedeni sa istog izvornog teksta. Preostalih 17 dostižu odziv u prva 3 od 90,0% [66,0–97,7] bez ijednog pogrešnog automatskog podudaranja, što je premalo za čitanje.
+- **Novi stvarni skup je iscrpljen.** Od još 81 vežbe trećih strana pročitane u celosti, 14 je dalo upit. Još jedan nov stvarni skup ove veličine nije dostupan.
+- **Nazivi zadržani na engleskom.** Holandski autor zadržao je engleski teretanski naziv u otprilike polovini redova, a turski u otprilike trećini, pa su ta dva dela slabiji testovi disjunktnosti naziva od poljskog.
+- **Udeo napisanih redova.** 450 od 595 upita su napisani redovi, a napisani redovi su čistiji od stvarnih. Prolaz na svim upitima oslanja se na njih.
+- **Referentna istina.** 8 od 17 pogrešnih automatskih podudaranja povezuje odsutan upit sa redom biblioteke koji, kada se pročita, izgleda kao tačan odgovor koji je referentna istina propustila. To čitanje je izvršeno posle rezultata, pa ih ne menja: kada bi važilo, pogrešna automatska podudaranja bila bi 0,8% na svim upitima i 1,0% na stvarnim delovima.
+- **Rangiranje liste za potvrdu.** Četiri od šest promašaja rangiranja su veslanja u sedu sa V-drškom, sva u istom unakrsnom izvršavanju. Veslanje piše `sh.ext`, koji pokriva povlačenje iznad glave `sh.ext.oh`, pa dva povlačenja naniže sa V-drškom preciziraju njegov pokret i ulaze na listu ispred tačnog odgovora, pored veslanja sa podignutog sedišta sa identičnim ključem. Tačan odgovor, čiji string u biblioteci izostavlja usku širinu hvata koju upit navodi, rangiran je četvrti. Još ništa ne razdvaja horizontalno povlačenje od povlačenja iznad glave kada jedna strana piše samo `sh.ext`.
+- **Verzija alata.** Alat je zamrznut pre dve kasnije ispravke u 1.4: kanonskog oblika koji izostavlja roditelja napisanog pored svog deteta, i slama sa battle rope konopcem, koji ne dobija `^`. Nijedan string iz testa nije napisao roditelja pored deteta. Nekoliko je napisalo `^` za slam sa battle rope konopcem; nijedan od njih nije među greškama.
 
 ### 9.3. Razdvajanje i slaganje {#93-separation-and-agreement}
 
@@ -286,14 +336,16 @@ Na istom skupu, podudaranje po nazivu uz prevođenje dostiglo je odziv u prva 3 
 
 ### 9.5. Kapija izdanja
 
-RFC-010 se prihvata tek kada test sproveden onako kako ga opisuje §9.1, na novom skupu upita sa disjunktnim nazivima koji nijedan raniji test nije koristio, sa unakrsnim izvršavanjima po enkoderima, ispuni oba uslova, i na svim delovima i na stvarnim delovima:
+RFC-010 se prihvata tek kada test sproveden onako kako ga opisuje §9.1, na novom skupu upita sa disjunktnim nazivima koji nijedan raniji test nije koristio, sa unakrsnim izvršavanjima po enkoderima, ispuni oba uslova na svim bodovanim upitima:
 
 - pogrešna automatska podudaranja **najviše 2%**;
 - odziv u prva 3 **najmanje 98%**.
 
 Kapija se očitava na tačkastoj proceni. Intervali se navode uz nju, kako bi čitalac video koliko bi rezultat mogao da se pomeri.
 
-**Kapija još nije dostignuta.** Pogrešna automatska podudaranja su iznad nje na svim delovima (2,1%), a obe mere je promašuju na stvarnim delovima (3,4% i 96,3%). Odziv u prva 3 na svim delovima (98,4%) je dostiže. Ove brojke izmerene su po reviziji pravila 1.3, pre nego što je §7.1 zahtevao identične FXE; test koji odlučuje o kapiji sprovodi se po reviziji pravila 1.4.
+Stvarni delovi navode se sa svojim 95% Vilsonovim intervalima i ne podležu kapiji: oko 117 stvarnih upita u biblioteci ne može da očita prag od 98% ni u jednom smeru, a slobodno dostupni stvarni podaci koji bi bili potrebni za veći skup su iscrpljeni.
+
+**Treći test dostiže kapiju** (§9.2): na svih 595 bodovanih upita, pogrešna automatska podudaranja su 1,4% [0,7–2,7], a odziv u prva 3 je 98,8% [97,4–99,5]. Oba intervala obuhvataju prag, pa test prolazi kapiju a da je ne potvrđuje. Na stvarnim delovima, koji se navode i ne podležu kapiji, pogrešna automatska podudaranja su 1,7% [0,5–5,4], a odziv u prva 3 je 97,4% [92,7–99,1]. Ponovljeni test po reviziji pravila 1.3 promašio je kapiju, sa 2,1% pogrešnih automatskih podudaranja na svim delovima.
 
 ## 10. Smernice za implementaciju
 
@@ -328,9 +380,11 @@ Unos `xrefs` na primljenom zapisu je tvrdnja pošiljaoca, bilo da je `auto` ili 
 
 **Uslovi za prihvatanje.** RFC-010 ostaje nacrt dok svaki od ovih uslova ne bude ispunjen:
 
-1. **Automatsko podudaranje zahteva i podudaranje opreme.** Kada oba zapisa nose FXE, automatsko podudaranje zahteva da budu `identical`. Ispunjeno: §7.1, uslov 5. Brojke iz §9 izmerene su bez toga.
+1. **Automatsko podudaranje zahteva i podudaranje opreme.** Kada oba zapisa nose FXE, automatsko podudaranje zahteva da budu `identical`. Ispunjeno: §7.1, uslov 5. Ponovljeni test iz §9.2 izmeren je bez toga, a treći test sa tim.
 2. **Jedna revizija pravila zatvara zabeležene nedostatke notacije.** Markeri nedostatka i protivrečnosti zabeleženi do sada razrešavaju se u jednoj reviziji pravila, prema pravilima preciziranja iz §8.1. Ispunjeno: revizija pravila 1.4 (§4).
-3. **Novi test sa disjunktnim nazivima prolazi kapiju izdanja** iz §9.5, na upitima koje nijedan raniji test nije koristio, po reviziji pravila 1.4. Još nije ispunjeno.
+3. **Novi test sa disjunktnim nazivima prolazi kapiju izdanja** iz §9.5, na upitima koje nijedan raniji test nije koristio, po reviziji pravila 1.4. Ispunjeno: treći test iz §9.2.
+
+Svi uslovi su ispunjeni. Prihvatanje sada čeka samo period razmatranja iz Procesa odlučivanja u Upravljanju i odluku urednika.
 
 **Pripremljeno.** `exerciseRef` nosi `fxi`, a reference unutar treninga, programa i biblioteke preskripcije nose `fxe` i `fxm`, počev od sledeće verzije svake od tih šema (§5.5).
 

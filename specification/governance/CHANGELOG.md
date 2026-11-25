@@ -17,8 +17,10 @@ gains its date. The new versions are recorded unfrozen until then.
   piece of equipment and FXM for a muscle: strings from closed vocabularies that
   let two catalogues compare records without a shared name. The RFC adopts the
   descriptor pages at rules revision 1.4, defines the match protocol, and
-  publishes the measurements the descriptors were tested against, including
-  that the release gate, a condition for accepting the RFC, is not yet met.
+  publishes the measurements the descriptors were tested against. A third,
+  fresh name-disjoint test under rules revision 1.4 meets the release gate on
+  all scored queries; the real-catalogue queries are reported beside it and
+  not gated.
 - **Rules revision 1.4**, which refines 1.3 under RFC-010 §8.1. It adds the
   joint action `sh.ext.oh`, shoulder extension from overhead, a child of
   `sh.ext` that `sh.ext` covers in compare and that replaces `sh.ext` when
@@ -28,7 +30,12 @@ gains its date. The new versions are recorded unfrozen until then.
   exercise is built on it, is a `=` part. No 1.3 code changes meaning and
   every 1.3 string stays valid. A 1.3 string written for a pull from overhead
   is refined by its 1.4 string rather than identical to it, so an upgrade
-  rebuilds it from its stored answers.
+  rebuilds it from its stored answers. Written beside its child in one part,
+  a parent action says nothing more, and the canonical form drops it.
+- **A battle rope slam takes no `^`.** The rope never leaves the hands, and
+  `^` means flight or release. A movement word that wrote `^` for it under
+  1.3 built a string that contradicts its 1.4 string, so a library rebuilds
+  it from its stored answers.
 - On an exercise: `fxi`, `fxe` (the standard FXE of its main equipment),
   `fxiProvenance`, `fxiGap` and `xrefs`, all optional, at the top level of the
   record. Each equipment reference inside an exercise may carry `fxe`, and each

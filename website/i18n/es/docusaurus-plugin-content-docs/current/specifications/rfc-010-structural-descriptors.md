@@ -17,7 +17,7 @@ keywords: [fxi, fxe, fxm, structural descriptor, match protocol, xrefs, provenan
 
 Esta especificación agrega tres descriptores estructurales al Fitness Data Standard: **FXI** para un ejercicio, **FXE** para una pieza de equipamiento y **FXM** para un músculo. Un descriptor es una cadena corta, construida a partir de vocabularios cerrados, que dice cómo se hace un ejercicio, qué es una pieza de equipamiento o a qué tejido se refiere una clave de músculo, sin usar un nombre en ningún idioma. Dos catálogos que describen el mismo ejercicio con palabras distintas pueden comparar sus descriptores y encontrarse.
 
-Define dónde se ubican los descriptores en las entidades de ejercicio, equipamiento y músculo, los campos que viajan junto a ellos (quién respondió, qué no recoge la notación y los enlaces que confirmó una persona o un resolvedor), el protocolo de coincidencia que sigue un resolvedor y cómo se versionan los descriptores. Publica las mediciones con las que se han probado los descriptores hasta ahora, e indica cuáles de ellas todavía no alcanzan el umbral que este RFC fija para su propia aceptación.
+Define dónde se ubican los descriptores en las entidades de ejercicio, equipamiento y músculo, los campos que viajan junto a ellos (quién respondió, qué no recoge la notación y los enlaces que confirmó una persona o un resolvedor), el protocolo de coincidencia que sigue un resolvedor y cómo se versionan los descriptores. Publica las mediciones con las que se han probado los descriptores hasta ahora, e indica cómo se leen frente al umbral que este RFC fija para su propia aceptación.
 
 Este RFC sigue el mismo camino de Borrador a Aceptado que cualquier otro RFC; el §12 enumera las condiciones para aceptarlo, entre ellas el umbral de lanzamiento del §9.5. Todo campo que agrega este RFC es opcional, ningún campo existente cambia de significado y el cambio de esquema es una versión menor.
 
@@ -258,15 +258,19 @@ Los vectores de conformidad dicen si una implementación calcula lo que dice est
 ### 9.1. Método
 
 - **Codificadores.** Dos codificadores, ambos agentes de software, codificaron la biblioteca y las consultas de forma independiente, sin ver la salida del otro. Trabajaron en modo propietario en sustitución de los propietarios de los catálogos, así que sus filas llevaban procedencia de propietario y podían coincidir automáticamente: las cifras de coincidencia automática de abajo simulan a propietarios que codifican sus propios catálogos. Queda pendiente una calibración con personas que codifiquen (§9.4).
-- **Consultas.** 624 consultas puntuadas en seis partes, ninguna de las cuales comparte un nombre con la biblioteca contra la que se buscó su coincidencia: filas redactadas en francés, en italiano y en portugués; filas reales no inglesas de catálogos de terceros; jerga de gimnasio; y ejercicios renombrados. 496 tienen su ejercicio en la biblioteca y 128 no. Las **partes reales** son las tres últimas, 174 consultas: 136 en la biblioteca y 38 ausentes.
-- **Cuándo.** La prueba se realizó el 2026-11-24, con la revisión de reglas 1.3.
+- **Consultas.** Las consultas de cada prueba se dividen en partes, ninguna de las cuales comparte un nombre con la biblioteca contra la que se busca su coincidencia: filas redactadas en otros idiomas, filas reales no inglesas de catálogos de terceros, jerga de gimnasio y ejercicios renombrados. Las **partes reales** son las tres últimas. La mayoría de las consultas tienen su ejercicio en la biblioteca. Para una consulta ausente, cada respuesta correcta se retira de la biblioteca solo para esa consulta, y se conserva una variante cercana. Las cifras de cada prueba se dan con ella (§9.2).
+- **Biblioteca.** Las mismas 774 filas en todas las pruebas.
 - **Ejecuciones.** Entre codificadores: las consultas que construyó un codificador se compararon contra la biblioteca que construyó el otro, y a la inversa. Cada cifra es la media de las dos ejecuciones.
 - **Resolvedor.** El protocolo de coincidencia del §7, tal como lo implementa el codificador de referencia, fijado antes de codificar las consultas.
 - **Medidas.** La *exhaustividad top-3* (recall) es la proporción de consultas de la biblioteca cuyo registro correcto se enlaza automáticamente o aparece entre los tres primeros de la lista de confirmación; su denominador son las consultas de la biblioteca. Las *coincidencias automáticas erróneas* son la proporción de todas las consultas puntuadas, estén o no en la biblioteca, que se enlazaron automáticamente con un registro equivocado; una consulta ausente enlazada con cualquier cosa es errónea.
 - **Intervalos.** Los corchetes dan intervalos de puntuación de Wilson al 95%. Para la media de las dos ejecuciones, el intervalo usa la tasa combinada y el denominador de una sola ejecución.
 - **Datos.** Las consultas, las bibliotecas y las filas codificadas se quedan con el proveedor que realizó la prueba, porque contienen texto de catálogos de terceros. El método y el puntuador se describen aquí para que la prueba pueda repetirse con otro conjunto.
 
-### 9.2. Nueva prueba con nombres disjuntos {#92-name-disjoint-re-test}
+### 9.2. Pruebas con nombres disjuntos {#92-name-disjoint-tests}
+
+#### Nueva prueba con la revisión de reglas 1.3 {#re-test-under-rules-revision-13}
+
+624 consultas puntuadas en seis partes: filas redactadas en francés, en italiano y en portugués, filas reales no inglesas, jerga de gimnasio y ejercicios renombrados. 496 tienen su ejercicio en la biblioteca y 128 no. Las partes reales reúnen 174 consultas: 136 en la biblioteca y 38 ausentes. La prueba se realizó el 2026-11-24, con la revisión de reglas 1.3, antes de que el §7.1 exigiera FXE idénticos.
 
 | Medida | Todas las partes (624) | Solo partes reales (174) |
 |---|---|---|
@@ -274,6 +278,52 @@ Los vectores de conformidad dicen si una implementación calcula lo que dice est
 | Coincidencias automáticas erróneas | 2.1% [1.2–3.5] | 3.4% [1.6–7.3] |
 
 Sobre el mismo conjunto, la coincidencia por nombre con traducción alcanzó una exhaustividad top-3 del 88.3% cuando respondía ausente por debajo de un umbral de similitud fijo, y del 93.3% cuando siempre ofrecía una lista, con un 1.1% de coincidencias automáticas erróneas.
+
+#### Tercera prueba con la revisión de reglas 1.4 {#third-test-under-rules-revision-14}
+
+Un conjunto nuevo: no se vuelve a usar ninguna consulta ni ninguna fila de relleno sin puntuar de las pruebas anteriores. Se realizó el 2026-11-24, con la revisión de reglas 1.4, con una copia congelada de la herramienta de codificación y coincidencia y con la condición 5 del §7.1 en vigor. El resolvedor y las reglas de puntuación se dejaron por escrito antes de calcular ningún resultado. La verdad de referencia es el juicio de un lector sobre cada consulta, según una prueba escrita de qué hace que dos filas sean el mismo ejercicio, y un segundo lector independiente revisó a ciegas una muestra. Ambos lectores son agentes de software; ninguna persona ha revisado la verdad de referencia.
+
+| Parte | Puntuadas | En la biblioteca | Ausentes |
+|---|---|---|---|
+| Redactadas en neerlandés | 150 | 120 | 30 |
+| Redactadas en polaco | 150 | 120 | 30 |
+| Redactadas en turco | 150 | 120 | 30 |
+| Filas reales no inglesas (alemán, español, francés, portugués, turco, polaco, neerlandés) | 138 | 111 | 27 |
+| Jerga de gimnasio | 2 | 2 | 0 |
+| Ejercicios renombrados | 5 | 4 | 1 |
+| **Todas** | **595** | **477** | **118** |
+
+Las partes reales reúnen 145 consultas: 117 en la biblioteca y 28 ausentes. Otras 81 filas reales se mezclaron en la entrada de los codificadores y no se puntuaron en ninguna parte.
+
+| Medida | Todas las consultas (595) | Solo partes reales (145) |
+|---|---|---|
+| Exhaustividad top-3 | 98.8% [97.4–99.5] | 97.4% [92.7–99.1] |
+| Coincidencias automáticas erróneas | 1.4% [0.7–2.7] | 1.7% [0.5–5.4] |
+
+- **Las consultas de cada codificador contra su propia biblioteca.** En todas las consultas: coincidencias automáticas erróneas del 1.3% [0.7–2.6] y del 1.8% [1.0–3.3], exhaustividad top-3 del 98.7% [97.3–99.4] y del 99.0% [97.6–99.6]. En las partes reales: coincidencias automáticas erróneas del 1.4% [0.4–4.9] y del 2.1% [0.7–5.9], exhaustividad top-3 del 96.6% [91.5–98.7] y del 98.3% [94.0–99.5].
+- **Nombres con traducción.** En todas las consultas, exhaustividad top-3 del 83.2% con el umbral de similitud y del 93.3% sin él, con un 0.8% de coincidencias automáticas erróneas. En las partes reales, del 66.7% y del 82.1%, con un 1.4% de coincidencias automáticas erróneas. En la parte polaca, que tradujo casi todos los nombres, los descriptores alcanzaron una exhaustividad top-3 del 100% con un 0.7% de coincidencias automáticas erróneas; los nombres con traducción alcanzaron el 80.8% y el 92.5%.
+- **Segunda opinión.** De 290 pares revisados, 268 se habían decidido; el segundo lector coincidió en el 95.1% [91.9–97.1] de ellos.
+- **Fallos.** En las dos ejecuciones entre codificadores, 17 coincidencias automáticas erróneas y 8 fallos de top-3, en 21 consultas, leídos uno por uno:
+
+  | Causa | Coincidencia automática errónea | Fallo de top-3 |
+  |---|---|---|
+  | Los dos codificadores codificaron la misma información de forma distinta | 7 | 1 |
+  | La fila de la biblioteca que colisiona parece una respuesta correcta que la verdad de referencia pasó por alto | 8 | 0 |
+  | Una respuesta correcta quedó cuarta o más abajo en la lista de confirmación | 0 | 6 |
+  | La notación no tiene código para la diferencia | 2 | 0 |
+  | Un detalle indicado solo en un lado | 0 | 1 |
+
+  14 de las 17 coincidencias automáticas erróneas son consultas ausentes: la prueba retira la respuesta correcta, y otra fila de la biblioteca con la misma clave se lleva el enlace.
+
+**Debilidades.**
+
+- **Reutilización.** 128 de las 145 consultas reales son la fila en otro idioma de un ejercicio que una prueba anterior usó como consulta, en su mayoría traducidas del mismo texto de origen. Las 17 que no lo son alcanzan una exhaustividad top-3 del 90.0% [66.0–97.7] sin ninguna coincidencia automática errónea, demasiado pocas para leerlas.
+- **El conjunto real nuevo está agotado.** De otros 81 ejercicios de terceros leídos por completo, 14 dieron una consulta. No hay disponible otro conjunto real nuevo de este tamaño.
+- **Nombres que se quedaron en inglés.** El autor neerlandés mantuvo el nombre de gimnasio en inglés en aproximadamente la mitad de las filas y el autor turco en aproximadamente un tercio, así que esas dos partes son pruebas de nombres disjuntos más débiles que la polaca.
+- **Peso de lo redactado.** 450 de las 595 consultas son redactadas, y las filas redactadas son más limpias que las reales. El aprobado sobre todas las consultas se apoya en ellas.
+- **Verdad de referencia.** 8 de las 17 coincidencias automáticas erróneas enlazan una consulta ausente con una fila de la biblioteca que, al leerla, parece una respuesta correcta que la verdad de referencia pasó por alto. Esa lectura se hizo después de los resultados, así que no los cambia: si se sostuviera, las coincidencias automáticas erróneas serían del 0.8% en todas las consultas y del 1.0% en las partes reales.
+- **La clasificación de la lista de confirmación.** Cuatro de los seis fallos de clasificación son remos sentados con barra en V, todos en una misma ejecución entre codificadores. El remo escribe `sh.ext`, que cubre el tirón desde arriba de la cabeza `sh.ext.oh`, así que dos jalones con barra en V precisan su movimiento y entran en la lista por delante de la respuesta correcta, junto a un remo desde un asiento elevado con una clave idéntica. La respuesta correcta, cuya cadena de biblioteca omite el ancho de agarre estrecho que indica la consulta, queda cuarta. Todavía nada separa un tirón horizontal de un tirón desde arriba de la cabeza cuando un lado escribe solo `sh.ext`.
+- **Versión de la herramienta.** La herramienta se congeló antes de dos correcciones posteriores de la 1.4: la forma canónica que descarta un padre escrito junto a su hijo, y el slam con cuerda de batalla, que no lleva `^`. Ninguna cadena de la prueba escribió un padre junto a su hijo. Unas pocas escribieron `^` para un slam con cuerda de batalla; ninguna de ellas está entre los fallos.
 
 ### 9.3. Separación y concordancia {#93-separation-and-agreement}
 
@@ -286,14 +336,16 @@ Sobre el mismo conjunto, la coincidencia por nombre con traducción alcanzó una
 
 ### 9.5. El umbral de lanzamiento
 
-RFC-010 se acepta solo cuando una prueba realizada como describe el §9.1, sobre un conjunto nuevo de consultas con nombres disjuntos que ninguna de las pruebas anteriores usó, con ejecuciones entre codificadores, cumple ambas condiciones, en todas las partes y en las partes reales:
+RFC-010 se acepta solo cuando una prueba realizada como describe el §9.1, sobre un conjunto nuevo de consultas con nombres disjuntos que ninguna de las pruebas anteriores usó, con ejecuciones entre codificadores, cumple ambas condiciones sobre todas las consultas puntuadas:
 
 - coincidencias automáticas erróneas **como máximo del 2%**;
 - exhaustividad top-3 **de al menos el 98%**.
 
 El umbral se lee sobre la estimación puntual. Los intervalos se informan junto a ella, para que un lector pueda ver cuánto podría moverse el resultado.
 
-**El umbral todavía no se cumple.** Las coincidencias automáticas erróneas lo superan en todas las partes (2.1%), y ambas medidas no lo alcanzan en las partes reales (3.4% y 96.3%). La exhaustividad top-3 en todas las partes (98.4%) lo cumple. Estas cifras se midieron con la revisión de reglas 1.3, antes de que el §7.1 exigiera FXE idénticos; la prueba que decide el umbral se realiza con la revisión de reglas 1.4.
+Las partes reales se informan con sus intervalos de Wilson al 95% y no se someten al umbral: unas 117 consultas reales en la biblioteca no pueden leer un umbral del 98% en ningún sentido, y los datos reales de libre acceso que necesitaría un conjunto mayor están agotados.
+
+**La tercera prueba cumple el umbral** (§9.2): sobre las 595 consultas puntuadas, las coincidencias automáticas erróneas son del 1.4% [0.7–2.7] y la exhaustividad top-3 es del 98.8% [97.4–99.5]. Ambos intervalos abarcan el umbral, así que la prueba lo supera sin confirmarlo. En las partes reales, informadas y no sometidas al umbral, las coincidencias automáticas erróneas son del 1.7% [0.5–5.4] y la exhaustividad top-3 es del 97.4% [92.7–99.1]. La nueva prueba con la revisión de reglas 1.3 no había alcanzado el umbral, con un 2.1% de coincidencias automáticas erróneas en todas las partes.
 
 ## 10. Guía de implementación
 
@@ -328,9 +380,11 @@ Una entrada de `xrefs` en un registro recibido es una afirmación del remitente,
 
 **Condiciones para la aceptación.** RFC-010 sigue siendo un borrador hasta que se cumpla cada una de estas:
 
-1. **La coincidencia automática también exige que coincida el equipamiento.** Cuando ambos registros llevan un FXE, la coincidencia automática exige que sean `identical`. Cumplida: §7.1, condición 5. Las cifras del §9 se midieron sin ello.
+1. **La coincidencia automática también exige que coincida el equipamiento.** Cuando ambos registros llevan un FXE, la coincidencia automática exige que sean `identical`. Cumplida: §7.1, condición 5. La nueva prueba del §9.2 se midió sin ello; la tercera prueba, con ello.
 2. **Una revisión de reglas cierra las lagunas de notación registradas.** Los marcadores de laguna y las contradicciones registrados hasta ahora se resuelven en una única revisión de reglas, bajo las reglas de precisión del §8.1. Cumplida: revisión de reglas 1.4 (§4).
-3. **Una prueba nueva con nombres disjuntos supera el umbral de lanzamiento** del §9.5, sobre consultas que ninguna de las pruebas anteriores usó, con la revisión de reglas 1.4. Todavía no cumplida.
+3. **Una prueba nueva con nombres disjuntos supera el umbral de lanzamiento** del §9.5, sobre consultas que ninguna de las pruebas anteriores usó, con la revisión de reglas 1.4. Cumplida: la tercera prueba del §9.2.
+
+Se cumplen todas las condiciones. La aceptación ahora solo espera el periodo de revisión del Proceso de decisión de la Gobernanza y la decisión de los editores.
 
 **Previsto.** `exerciseRef` lleva `fxi`, y las referencias dentro de workout, program y la biblioteca de prescripción llevan `fxe` y `fxm`, a partir de la próxima versión de cada uno de esos esquemas (§5.5).
 

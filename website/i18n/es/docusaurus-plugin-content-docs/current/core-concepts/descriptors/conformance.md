@@ -167,12 +167,12 @@ Los niveles anteriores tienen una única respuesta correcta por vector. Dos cosa
 Ninguna de las dos es un umbral que deba alcanzar una implementación o un catálogo. Dicen hasta qué punto se puede confiar en los descriptores, para que un adoptante pueda decidir cuánto del paso de confirmación conservar.
 
 :::note
-Las primeras mediciones se tomaron con la revisión de reglas 1.3, en la nueva prueba con nombres disjuntos, y se publican en el [RFC-010 §9](/docs/specifications/rfc-010-structural-descriptors#9-evidence) con su método. Los datos con los que se midieron no se publican. La calibración con codificación por personas y los resultados de los adoptantes siguen pendientes.
+Se tomaron mediciones con la revisión de reglas 1.3, en la nueva prueba con nombres disjuntos, y con la revisión de reglas 1.4, en una tercera prueba nueva. Ambas se publican en el [RFC-010 §9](/docs/specifications/rfc-010-structural-descriptors#9-evidence) con su método. Los datos con los que se midieron no se publican. La calibración con codificación por personas y los resultados de los adoptantes siguen pendientes.
 :::
 
 | Informe | Resultado |
 |---|---|
 | Concordancia entre codificadores | Medida: [RFC-010 §9.3](/docs/specifications/rfc-010-structural-descriptors#93-separation-and-agreement). |
-| Nueva prueba con nombres disjuntos | Medida: [RFC-010 §9.2](/docs/specifications/rfc-010-structural-descriptors#92-name-disjoint-re-test), con el método del §9.1. |
+| Pruebas con nombres disjuntos | Medidas: [RFC-010 §9.2](/docs/specifications/rfc-010-structural-descriptors#92-name-disjoint-tests), con el método del §9.1. |
 | Calibración con codificación por personas | Pendiente: propietarios frente a codificadores, aún no medida. |
 | Resultados de los adoptantes | Pendiente: aún no medidos para esta revisión de reglas. |

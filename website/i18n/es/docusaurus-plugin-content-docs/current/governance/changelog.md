@@ -24,8 +24,10 @@ reciba su fecha. Hasta entonces, las nuevas versiones se registran sin congelar.
   cerrados que permiten a dos catálogos comparar registros sin un nombre
   compartido. El RFC adopta las páginas de descriptores en la revisión de
   reglas 1.4, define el protocolo de coincidencia y publica las mediciones con
-  las que se probaron los descriptores, incluido que todavía no se cumple el
-  umbral de lanzamiento, una condición para aceptar el RFC.
+  las que se probaron los descriptores. Una tercera prueba nueva con nombres
+  disjuntos, con la revisión de reglas 1.4, cumple el umbral de lanzamiento
+  sobre todas las consultas puntuadas; las consultas de catálogos reales se
+  informan junto a ella y no se someten al umbral.
 - **Revisión de reglas 1.4**, que precisa la 1.3 según el §8.1 del RFC-010.
   Agrega la acción articular `sh.ext.oh`, extensión de hombro desde arriba de
   la cabeza, hija de `sh.ext`, que `sh.ext` cubre en la comparación y que
@@ -37,7 +39,14 @@ reciba su fecha. Hasta entonces, las nuevas versiones se registran sin congelar.
   significado y toda cadena de la 1.3 sigue siendo válida. Una cadena de la 1.3
   escrita para un tirón desde arriba de la cabeza queda precisada por su cadena
   de la 1.4 en lugar de ser idéntica a ella, por lo que una actualización la
-  reconstruye a partir de sus respuestas almacenadas.
+  reconstruye a partir de sus respuestas almacenadas. Escrita junto a su hija
+  en una misma parte, una acción padre no dice nada más, y la forma canónica
+  la descarta.
+- **Un slam con cuerda de batalla no lleva `^`.** La cuerda nunca sale de las
+  manos, y `^` significa vuelo o liberación. Una palabra de movimiento que
+  escribía `^` para él con la 1.3 construía una cadena que contradice su
+  cadena de la 1.4, por lo que una biblioteca la reconstruye a partir de sus
+  respuestas almacenadas.
 - En un ejercicio: `fxi`, `fxe` (el FXE estándar de su equipamiento principal),
   `fxiProvenance`, `fxiGap` y `xrefs`, todos opcionales, en el nivel superior
   del registro. Cada referencia a equipamiento dentro de un ejercicio puede

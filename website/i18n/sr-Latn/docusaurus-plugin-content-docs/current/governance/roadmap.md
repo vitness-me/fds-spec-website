@@ -34,7 +34,7 @@ Dve odluke su već utvrđene. Zapis će nositi **zamrznuti snimak preskripcije p
 
 ### RFC-010 — Strukturni deskriptori (nacrt)
 
-FXI, FXE i FXM: kratki nizovi iz zatvorenih vokabulara koji opisuju kako se vežba izvodi, šta je komad opreme i na koji se mišić misli, tako da dva kataloga mogu da porede zapise bez zajedničkog naziva. Nacrt dodaje opciona polja na exercise, equipment i muscle i definiše protokol podudaranja koji automatski povezuje samo uz jedinstven identičan deskriptor, a inače traži od osobe da potvrdi. Prihvata se tek kada novi test sa disjunktnim nazivima ispuni njegov prag za izdanje, koji prva merenja još ne ispunjavaju.
+FXI, FXE i FXM: kratki nizovi iz zatvorenih vokabulara koji opisuju kako se vežba izvodi, šta je komad opreme i na koji se mišić misli, tako da dva kataloga mogu da porede zapise bez zajedničkog naziva. Nacrt dodaje opciona polja na exercise, equipment i muscle i definiše protokol podudaranja koji automatski povezuje samo uz jedinstven identičan deskriptor, a inače traži od osobe da potvrdi. Novi test sa disjunktnim nazivima po reviziji pravila 1.4 ispunjava njegov prag za izdanje, pa nacrt sada čeka samo razmatranje pre prihvatanja.
 
 ### Registri i usaglašenost
 
