@@ -553,13 +553,15 @@ The rowing machine below shows all three: its key writes `l:hands` and `s:seated
 | Implement (`imp`) | The form `f`: `bar.straight` | `FXI=1.0S/m:hip.ext+kn.ext/o:standing/l:bar.straight@back`<br />`FXE=1.0S/k:imp/f:bar.straight` |
 | Support (`sup`) | The form `f`: `bench` | `FXI=1.0S/m:el.ext+sh.ext/o:seated/s:bench@hands/l:none`<br />`FXE=1.0S/k:sup/f:bench` |
 | Station (`stn`) | The form `f`: `cable` | `FXI=1.0S/m:el.ext/o:standing/l:cable@hands`<br />`FXE=1.0S/k:stn/f:cable` |
-| Accessory (`acc`) | The form `f`, in the accessory layer `a`: `strap.stretch` | `FXI=1.0N/m:%ank.df+kn.ext/o:seated/l:none/x:u/a:strap.stretch`<br />`FXE=1.0S/k:acc/f:strap.stretch` |
+| Accessory (`acc`) | The form `f`, in the accessory layer `a` only: `strap.stretch`. An accessory is never the main equipment | `a:strap.stretch` ↔ `FXE=1.0S/k:acc/f:strap.stretch` |
 | Strength machine (`mac`) | The kind `k`: `mac` | `FXI=1.0S/m:el.flex+sh.add/o:seated/l:mac@hands`<br />`FXE=1.0S/k:mac/l:hands/s:seated/m:pull.down` |
 | Cardio machine (`erg`) | The kind `k`: `erg`; or the kind, `.` and the motion `m`: `erg.row` | `FXI=1.0S/m:~el.flex+hip.ext+kn.ext+sh.ext/o:seated/l:erg.row@hands`<br />`FXE=1.0S/k:erg/c:rail/l:hands/s:seated/m:row` |
 
 A form code stands for one equipment key: `bar.straight` is `FXE=1.0S/k:imp/f:bar.straight`. The form codes are listed in the [form tables](#form-f). A kind code stands for every key of that kind, with the other layers open: `mac` is `FXE=1.0S/k:mac/l:?/s:?/m:?`. `erg.row` is `FXE=1.0S/k:erg/c:?/l:?/s:?/m:row`: any cardio machine whose motion is `row`. The cardio motions are listed under [Motion](#motion-m).
 
 Every form code may be written in an exercise key, children included: `band.loop` is a long loop band, and `band` covers it. The record's `fxe` names the exact equipment, and is the code's key or more specific than it. The rowing machine above is more specific than `erg.row`.
+
+An accessory is never the exercise's [main equipment](#checking-an-exercise-against-its-equipment). The accessory code in the exercise key's `a` layer is the equipment key's accessory code: `a:strap.stretch` is `FXE=1.0S/k:acc/f:strap.stretch`. A strap stretch, `FXI=1.0N/m:%ank.df+kn.ext/o:seated/l:none/x:u/a:strap.stretch`, has `l:none`, so its main equipment is `FXE=1.0S/k:none`.
 
 A support code is written only in `s`, and an accessory code only in `a`. Every other code except `none` may be written in `l` or in `s`. The exercise key adds where the equipment is held or touched (`@`) and, in `l`, how many there are (`*n`): see the exercise key's [load](./exercise-key.md#load-l).
 
