@@ -260,7 +260,7 @@ Rules:
 - Write each surface that bears the body's weight, or that a limb is braced on, beyond what the orientation implies. After the surface, write `@` and the points on it, leaving out the points the orientation implies.
 - Never write a bare floor, a mat, the seat or bench under a seated body, or a machine's own seat and pads. An unstable seat (`ball`, `dome`, `board`, `roller`) is written.
 - When the trunk rests on nothing, as in a plank or a push-up, list every point that bears weight: `s:floor@feet,forearms`. A face-up body hanging from its hands keeps `floor@feet` too: an inverted row is `s:bar@hands+floor@feet`.
-- The feet are never written under a seated body, or under a face-up body lying on a bench, ball or roller.
+- Feet on the floor are never written under a seated body, or under a face-up body lying on a bench, ball or roller. Feet on anything else are written: a seated exercise with the feet on a ball keeps `ball@feet`.
 - Surfaces under different points are separate items: feet on a ball and hands on the floor is `s:ball@feet+floor@hands`.
 - A box, step, bench or platform under raised hands or feet is `box`, unless the exercise names the surface.
 - Equipment that only loads the body goes in `l`, never in `s`.
@@ -309,7 +309,7 @@ Load uses the load tokens and hold points. Each load token stands for one equipm
 | `smith` | Smith machine | `FXE=1.0S/k:stn/f:smith` |
 | `landmine` | Landmine | `FXE=1.0S/k:stn/f:landmine` |
 | `mach` | Any strength machine, including lat pulldown and seated row machines | `FXE=1.0S/k:mac/l:?/s:?/m:?` |
-| `erg` | Any cardio machine; covers the six below | `FXE=1.0S/k:erg/c:?/l:?/s:?/m:?` |
+| `erg` | Any cardio machine; covers the cycle codes below | `FXE=1.0S/k:erg/c:?/l:?/s:?/m:?` |
 | `erg.gait` | Treadmill | `FXE=1.0S/k:erg/c:?/l:?/s:?/m:gait` |
 | `erg.step` | Stair stepper or stepmill | `FXE=1.0S/k:erg/c:?/l:?/s:?/m:step` |
 | `erg.cycle` | Bike, air bike or arm crank | `FXE=1.0S/k:erg/c:?/l:?/s:?/m:cycle` |
@@ -438,7 +438,7 @@ Rules:
 Rules:
 
 - Write `p` only when the line differs from the movement's usual one. A high-to-low cable fly is `p:hi`; a low-to-high fly is `p:lo`.
-- The usual anchor is low for a curl, raise, upright row, shrug or kickback; high for a pushdown, pulldown or face pull; in the middle for a row, fly or chest press; and from the side for a Pallof press.
+- The usual anchor is low for a curl, raise, upright row, shrug, kickback, pull-through or hip exercise; high for a pushdown, pulldown, straight-arm pulldown, face pull, kneeling crunch or woodchop; in the middle for a row, fly, crossover, chest press, rotation or overhead extension; and from the side for a Pallof press.
 
 ### Accessory (`a`)
 

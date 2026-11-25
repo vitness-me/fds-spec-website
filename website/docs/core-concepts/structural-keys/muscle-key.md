@@ -140,7 +140,7 @@ Because the group code is the owner's word, two owners can use one group code fo
 
 The rule never asks you to guess.
 
-- **A part with no term takes the smallest structure that contains it.** FMA names the long head of biceps brachii but not an "upper biceps" or an "inner chest". Use the smallest structure FMA names that contains the one you mean. The inner chest is `FXM=1.0/pectoralis-major.sternocostal` and the lower chest `FXM=1.0/pectoralis-major.abdominal`. An upper biceps spans both heads, so it is `FXM=1.0/biceps-brachii`. Each key is true, if less specific. Never use a narrower structure than the evidence supports.
+- **A part with no term takes the smallest structure that contains it.** FMA names the long head of biceps brachii but not an "upper biceps" or a "lower chest". Use the smallest structure FMA names that contains the one you mean. The lower chest is `FXM=1.0/pectoralis-major.abdominal`. An upper biceps spans both heads, so it is `FXM=1.0/biceps-brachii`. Each key is true, if less specific. Never use a narrower structure than the evidence supports.
 - **A body area is not a muscle.** "Core", "arms" or "full body" spans muscles with different jobs. Such a name is a category for grouping records, not a muscle, and it carries no key. When you do mean a set of muscles that work together, define a group and list its members.
 - **A name that isn't anatomy carries no key.** A muscle list sometimes holds entries like "cardio", "Olympic lifts" or "other". Leave `fxm` out of those records.
 

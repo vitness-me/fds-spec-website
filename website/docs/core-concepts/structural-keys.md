@@ -29,7 +29,7 @@ FDS publishes how keys are built and the code lists they draw on. It does not pu
 
 ## What keys make possible
 
-- **Matching across catalogs.** You compare keys instead of names. Comparing two keys tells you they are the same, that one is more specific than the other, or that they are different.
+- **Matching across catalogs.** You compare keys instead of names. Comparing two keys tells you they are the same, that one is more specific than the other, or that they are different. The key pages describe the finer cases.
 - **Interoperability.** Two platforms can link their catalogs without first agreeing on names or adopting a shared list.
 - **History that survives a move.** When someone changes apps, the new app can look up each logged exercise in its own catalog by key, so their history stays usable.
 
