@@ -95,7 +95,7 @@ The count applies to the first implement. Write `*n` from `count1` only when `n`
 
 ## The answers record
 
-A producer keeps, for each exercise or piece of equipment, the answers that built its strings, so they can be [rebuilt](./compare-and-match.md#versioning) under a later rules revision:
+A producer keeps, for each exercise or piece of equipment, the answers that built its strings, so they can be [rebuilt](./compare-and-match.md#provenance-match-and-versioning) under a later rules revision:
 
 ```json fds:ignore an answers record in the working shape this page describes, which RFC-010 leaves open; it is not an FDS entity document
 {

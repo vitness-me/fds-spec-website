@@ -54,7 +54,7 @@ FXI=1.0N/…/p:<line>/a:<accessory>
 - `1` is the major version and `0` the syntax revision; both are always written. A string that starts `FXI=1/` is a pre-release draft and is invalid.
 - The letter after the revision is the flag. `S`: every written layer is standard. `N`: the string also carries an extended layer. The only extended layer is the accessory `a`.
 - `m`, `o` and `l` are always written. Every other layer is written only when it differs from its default.
-- The rules revision (see [versioning](./compare-and-match.md#versioning)) is not written in the string. A string is read under the latest rules revision of its major, which is safe because a rules revision may only refine.
+- The rules revision (see [versioning](./compare-and-match.md#provenance-match-and-versioning)) is not written in the string. A string is read under the latest rules revision of its major, which is safe because a rules revision may only refine.
 
 <!-- fds:generated fxi#layers -->
 | Layer | Kind | Read from | Meaning |
@@ -140,7 +140,7 @@ Every implement carries a hold point (`@?` when unknown); a layer with no value,
 - `k` is written only for the movement words listed under [moving end](#moving-end-k).
 - **Body weight.** Write `l:bw` when the record or name says body weight, when the name names no implement and the movement word is a bodyweight word, or when only support equipment is named. Otherwise, when nothing names an implement, write `l:?`.
 
-Reading name layers from the name alone is what makes two catalogues agree: a variant that matters is almost always in the name, because the name is how a catalogue tells its own variants apart. Import-mode strings are for candidate search only (see [the match protocol](./compare-and-match.md#match-protocol)).
+Reading name layers from the name alone is what makes two catalogues agree: a variant that matters is almost always in the name, because the name is how a catalogue tells its own variants apart. Import-mode strings are for candidate search only (see [the match protocol](./compare-and-match.md#provenance-match-and-versioning)).
 
 The import lexicon, which maps name words to codes, is catalogue data in the same way movement words are, and is not part of this page.
 

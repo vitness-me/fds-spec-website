@@ -128,7 +128,7 @@ Each vector gives a `query` row, a `library` of rows, and optionally `top`, the 
 - `{"kind": "confirm", "reason": …, "candidates": […]}`, the reason auto-match was refused and the ranked list. Each candidate says how it entered the list: `{"via": "fxi", "relation": …}`, `{"via": "near", "layer": …}` with the one standard layer that differs, or `{"via": "name"}`;
 - `{"kind": "absent"}`, only when the library is empty.
 
-The ranking is the one in [the match protocol](./compare-and-match.md#match-protocol). No vector has two refusal reasons at once, so the order in which an implementation checks them is not tested. The reasons:
+The ranking is the one in [the match protocol](./compare-and-match.md#provenance-match-and-versioning). No vector has two refusal reasons at once, so the order in which an implementation checks them is not tested. The reasons:
 
 <!-- fds:generated conformance#reasons -->
 | Reason | Means |
@@ -160,7 +160,7 @@ The tiers above have one right answer per vector. Two things that matter as much
 Neither is a threshold an implementation or a catalogue must reach. They say how far the descriptors can be relied on, so that an adopter can decide how much of the confirm step to keep.
 
 :::note
-The first measurements, from the name-disjoint re-test of the current rules revision, are published in [RFC-010 §9](/docs/specifications/rfc-010-structural-descriptors#9-evidence) with their method. The data they were measured on is not published. Person-encoded calibration and adopter outcomes are still pending.
+The first measurements were taken under rules revision 1.3, in the name-disjoint re-test, and are published in [RFC-010 §9](/docs/specifications/rfc-010-structural-descriptors#9-evidence) with their method. The data they were measured on is not published. Person-encoded calibration and adopter outcomes are still pending.
 :::
 
 | Report | Result |
