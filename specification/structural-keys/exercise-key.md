@@ -72,7 +72,7 @@ Each layer records one dimension of the exercise.
 | `k` | Moving end | Which end of the body moves in trunk work | No | The limb end moves |
 | `f` | Footwork | Stepping, a split stance or travelling | No | Feet planted level |
 | `s` | Support | Surfaces that bear the body's weight, and the body points on them | No | The floor, as the orientation implies |
-| `l` | Load | Each implement that loads the working muscles, and where it is held; or body weight | Yes | — |
+| `l` | Load | The equipment that loads the working muscles, and where it is held; or body weight | Yes | — |
 | `x` | Sides | Whether the limbs work together, one side at a time, in turns or in opposite directions | No | Both together |
 | `g` | Grip and stance | Hand orientation, grip width and stance width | No | The usual hand orientation, medium width, medium stance |
 | `r` | Range and start | Partial or extra range, and a start position other than the usual one | No | Full range from the usual start |
@@ -223,7 +223,7 @@ Rules:
 
 ### Support (`s`)
 
-Support names each surface with an equipment code from the supports in the equipment key's [form tables](./equipment-key.md#form-f): `floor`, `bench`, `box`, `ball.stab`, `bar.fixed` and the rest (see [Equipment in an exercise key](#equipment-in-an-exercise-key)). After the surface come the body points listed under [load](#load-l). Any load code except `none` may also be written in `s`.
+Support names each surface with its [equipment code](#equipment-in-an-exercise-key): a support from the equipment key's [form tables](./equipment-key.md#form-f), such as `floor`, `bench`, `box` or `bar.fixed`, or any load code except `none`. After the surface come the body points listed under [load](#load-l).
 
 Rules:
 
@@ -238,20 +238,7 @@ Rules:
 
 ### Load (`l`)
 
-Load names each implement with an equipment code: an implement or station from the equipment key's [form tables](./equipment-key.md#form-f), such as `bar.straight`, `bell.dumb`, `band` or `cable`, or one of the codes below. After each code come `@` and a hold point.
-
-| Code | Equipment |
-|---|---|
-| `none` | No implement: body weight only |
-| `mac` | Any strength machine, including lat pulldown and seated row machines |
-| `erg` | Any cardio machine; covers the codes below |
-| `erg.gait` | Treadmill |
-| `erg.step` | Stair stepper or stepmill |
-| `erg.cycle` | Bike, air bike or arm crank |
-| `erg.row` | Rowing machine |
-| `erg.pole` | Ski machine |
-| `erg.glide` | Elliptical |
-| `erg.climb` | Climbing machine |
+Load names the equipment that loads the working muscles by its [equipment code](#equipment-in-an-exercise-key), or writes `none` for body weight. After each code come `@` and a hold point.
 
 | Hold point or body point | Meaning |
 |---|---|
@@ -272,11 +259,12 @@ Load names each implement with an equipment code: an implement or station from t
 
 Rules:
 
-- List every implement that loads the working muscles, each with `@` and where it is held: `l:bar.straight@back`.
-- `none` means no implement. It stands alone and takes no hold point: a weighted dip is `l:plate@waist`, not `none` beside a plate.
-- A strength machine is `mac` and a cardio machine `erg`, or its child code when the machine is known. The record's equipment key says which machine.
+- List every piece of equipment that loads the working muscles, each with `@` and where it is held: `l:bar.straight@back`.
+- `none` means no equipment. It stands alone and takes no hold point: a weighted dip is `l:plate@waist`, not `none` beside a plate.
+- A strength machine is `mac`. A cardio machine is `erg`, or `erg.` and its motion when that is known: `erg.row`. The record's [equipment key](./equipment-key.md#keys-in-records) says which machine.
+- A support code is never written in `l`.
 - A band is `band`, whatever its type; the type is in the equipment key. It is held where it presses or pulls on the body. Where it is anchored is not written.
-- Leave the count out when it is the usual one, and write `*n` only when it differs. A one-hand implement (`bell.dumb`, `bell.kettle`, `plate`, `club`) is one per working hand; every other implement is one. At the chest, back, hips or waist any implement is one: a goblet squat with one dumbbell is `l:bell.dumb@chest`. One kettlebell held in both hands is `bell.kettle*1@hands`.
+- Leave the count out when it is the usual one, and write `*n` only when it differs. A one-hand implement (`bell.dumb`, `bell.kettle`, `plate`, `club`) is one per working hand; every other code is one. At the chest, back, hips or waist any implement is one: a goblet squat with one dumbbell is `l:bell.dumb@chest`. One kettlebell held in both hands is `bell.kettle*1@hands`.
 - Write `?` for the part you don't know: `?@chest` when the implement isn't known, `bell.kettle@?` when the hold point isn't, `l:?` when not even that much is.
 
 ### Sides (`x`)
@@ -386,7 +374,8 @@ Rules:
 Rules:
 
 - An accessory never loads the working muscles and never bears weight. Load goes in `l`, support in `s`.
-- `a` is the extended layer: a key that carries it has the flag `N`, and comparison weighs it only when both keys carry it.
+- `a` is the extended layer: a key that carries it has the flag `N`. It is compared only when both keys carry it; when only one does, that key is more specific.
+- The strap itself is equipment, the accessory `FXE=1.0S/k:acc/f:strap.stretch` (see the equipment key's [form tables](./equipment-key.md#form-f)). It has no code in an exercise key.
 
 ## Symbols
 
@@ -400,9 +389,9 @@ Everything in a key that isn't a code is a symbol.
 | `+` | Joins items that go together: actions in one phase, surfaces, implements, grip elements, range codes, sides items, held codes | `m:hip.ext+kn.ext` |
 | `>` | A sequence in rep order: phases, start and end orientation, footwork or grip changes | `g:su>pr` |
 | `\|` | Two parts of one phase at the same time: parts of different kinds, or two limbs taken in opposite directions in a stretch | `m:=sp.flex\|hip.ext`, `m:%hip.ext\|%hip.flex` |
-| `@` | Where: the points on a surface, the hold point of an implement, the scope of a sides code | `l:bell.dumb@hands` |
+| `@` | Where: the points on a surface, the hold point of the equipment, the scope of a sides code | `l:bell.dumb@hands` |
 | `,` | Several body points on one surface | `s:floor@feet,hands` |
-| `*n` | Implement count, written only when it differs from the usual count | `l:bell.kettle*1@hands` |
+| `*n` | Equipment count, written only when it differs from the usual count | `l:bell.kettle*1@hands` |
 | `*` | A whole layer generic on purpose: the exercise may be done either way | `o:*` |
 | `?` | Unknown. Matches anything and never contradicts | `o:?`, `bell.kettle@?`, `sh.?` |
 | `-` | After an action: a short-range drive on purpose | `m:el.ext+hip.ext-+kn.ext-+sh.flex` |
@@ -418,24 +407,141 @@ The motion prefixes go before a part of `m` and set its kind.
 | `%` | Static stretch: the directions the joints are taken to, held at end range | `m:%ank.df+kn.ext`, a calf stretch |
 | `&` | Dynamic stretch: taken to end range and released, again and again | `m:&hip.flex`, a forward leg swing |
 
-`?` may stand for a whole layer, an implement, a hold point, a surface, a body point, a joint's direction or a whole phase. An open-ended "and possibly more" (`+?`) is not allowed: write the actions you know, or `?` for the whole phase.
+`?` may stand for a whole layer, a piece of equipment, a hold point, a surface, a body point, a joint's direction or a whole phase. An open-ended "and possibly more" (`+?`) is not allowed: write the actions you know, or `?` for the whole phase.
 
 ## Equipment in an exercise key
 
-The load (`l`) and support (`s`) layers name equipment with the equipment key's own codes. One code means one thing in both keys, so an exercise key leads straight to the key of its equipment.
+An exercise key names its equipment in its load (`l`) and support (`s`) layers, with codes from the [equipment key](./equipment-key.md#equipment-keys-in-exercise-keys). Each code is taken from one part of the equipment key, so an exercise key leads straight to the key of its equipment.
 
-| In the exercise key | Equipment key |
-|---|---|
-| `bell.dumb` | `FXE=1.0S/k:imp/f:bell.dumb` |
-| `bench` | `FXE=1.0S/k:sup/f:bench` |
-| `cable` | `FXE=1.0S/k:stn/f:cable` |
-| `none` | `FXE=1.0S/k:none` |
-| `mac` | `FXE=1.0S/k:mac/l:?/s:?/m:?` |
-| `erg.row` | `FXE=1.0S/k:erg/c:?/l:?/s:?/m:row` |
+<figure className="key-anatomy">
+  <div className="key-pair">
+    <div>
+      <div className="key-pair__title">Standing dumbbell curl</div>
+      <div className="key-anatomy__key">
+        <span className="key-anatomy__part">
+          <code><span className="ka-code">FXI</span><span className="ka-sym">=</span><span className="ka-code">1.0</span><span className="ka-flag">S</span></code>
+          <span className="key-anatomy__label">header</span>
+        </span>
+        <span className="key-anatomy__slash"><code><span className="ka-sym">/</span></code></span>
+        <span className="key-anatomy__part">
+          <code><span className="ka-letter">m</span><span className="ka-sym">:</span><span className="ka-code">el</span><span className="ka-sym">.</span><span className="ka-code">flex</span></code>
+          <span className="key-anatomy__label">motion</span>
+        </span>
+        <span className="key-anatomy__slash"><code><span className="ka-sym">/</span></code></span>
+        <span className="key-anatomy__part">
+          <code><span className="ka-letter">o</span><span className="ka-sym">:</span><span className="ka-code">standing</span></code>
+          <span className="key-anatomy__label">orientation</span>
+        </span>
+        <span className="key-anatomy__slash"><code><span className="ka-sym">/</span></code></span>
+        <span className="key-anatomy__part">
+          <code><span className="ka-letter">l</span><span className="ka-sym">:</span><span className="ka-shared"><span className="ka-code">bell</span><span className="ka-sym">.</span><span className="ka-code">dumb</span></span><span className="ka-sym">@</span><span className="ka-code">hands</span></code>
+          <span className="key-anatomy__label">load</span>
+        </span>
+      </div>
+    </div>
+    <div>
+      <div className="key-pair__title">Dumbbell</div>
+      <div className="key-anatomy__key">
+        <span className="key-anatomy__part">
+          <code><span className="ka-code">FXE</span><span className="ka-sym">=</span><span className="ka-code">1.0</span><span className="ka-flag">S</span></code>
+          <span className="key-anatomy__label">header</span>
+        </span>
+        <span className="key-anatomy__slash"><code><span className="ka-sym">/</span></code></span>
+        <span className="key-anatomy__part">
+          <code><span className="ka-letter">k</span><span className="ka-sym">:</span><span className="ka-code">imp</span></code>
+          <span className="key-anatomy__label">kind</span>
+        </span>
+        <span className="key-anatomy__slash"><code><span className="ka-sym">/</span></code></span>
+        <span className="key-anatomy__part">
+          <code><span className="ka-letter">f</span><span className="ka-sym">:</span><span className="ka-shared"><span className="ka-code">bell</span><span className="ka-sym">.</span><span className="ka-code">dumb</span></span></code>
+          <span className="key-anatomy__label">form</span>
+        </span>
+      </div>
+    </div>
+  </div>
+  <div className="key-pair">
+    <div>
+      <div className="key-pair__title">Rowing</div>
+      <div className="key-anatomy__key">
+        <span className="key-anatomy__part">
+          <code><span className="ka-code">FXI</span><span className="ka-sym">=</span><span className="ka-code">1.0</span><span className="ka-flag">S</span></code>
+          <span className="key-anatomy__label">header</span>
+        </span>
+        <span className="key-anatomy__slash"><code><span className="ka-sym">/</span></code></span>
+        <span className="key-anatomy__part">
+          <code><span className="ka-letter">m</span><span className="ka-sym">:~</span><span className="ka-code">el</span><span className="ka-sym">.</span><span className="ka-code">flex</span><span className="ka-sym">+</span><span className="ka-code">hip</span><span className="ka-sym">.</span><span className="ka-code">ext</span><span className="ka-sym">+</span><span className="ka-code">kn</span><span className="ka-sym">.</span><span className="ka-code">ext</span><span className="ka-sym">+</span><span className="ka-code">sh</span><span className="ka-sym">.</span><span className="ka-code">ext</span></code>
+          <span className="key-anatomy__label">motion</span>
+        </span>
+        <span className="key-anatomy__slash"><code><span className="ka-sym">/</span></code></span>
+        <span className="key-anatomy__part">
+          <code><span className="ka-letter">o</span><span className="ka-sym">:</span><span className="ka-code">seated</span></code>
+          <span className="key-anatomy__label">orientation</span>
+        </span>
+        <span className="key-anatomy__slash"><code><span className="ka-sym">/</span></code></span>
+        <span className="key-anatomy__part">
+          <code><span className="ka-letter">l</span><span className="ka-sym">:</span><span className="ka-shared"><span className="ka-code">erg</span></span><span className="ka-sym">.</span><span className="ka-shared"><span className="ka-code">row</span></span><span className="ka-sym">@</span><span className="ka-code">hands</span></code>
+          <span className="key-anatomy__label">load</span>
+        </span>
+      </div>
+    </div>
+    <div>
+      <div className="key-pair__title">Rowing machine</div>
+      <div className="key-anatomy__key">
+        <span className="key-anatomy__part">
+          <code><span className="ka-code">FXE</span><span className="ka-sym">=</span><span className="ka-code">1.0</span><span className="ka-flag">S</span></code>
+          <span className="key-anatomy__label">header</span>
+        </span>
+        <span className="key-anatomy__slash"><code><span className="ka-sym">/</span></code></span>
+        <span className="key-anatomy__part">
+          <code><span className="ka-letter">k</span><span className="ka-sym">:</span><span className="ka-shared"><span className="ka-code">erg</span></span></code>
+          <span className="key-anatomy__label">kind</span>
+        </span>
+        <span className="key-anatomy__slash"><code><span className="ka-sym">/</span></code></span>
+        <span className="key-anatomy__part">
+          <code><span className="ka-letter">c</span><span className="ka-sym">:</span><span className="ka-code">rail</span></code>
+          <span className="key-anatomy__label">track</span>
+        </span>
+        <span className="key-anatomy__slash"><code><span className="ka-sym">/</span></code></span>
+        <span className="key-anatomy__part">
+          <code><span className="ka-letter">l</span><span className="ka-sym">:</span><span className="ka-code">hand</span></code>
+          <span className="key-anatomy__label">load interface</span>
+        </span>
+        <span className="key-anatomy__slash"><code><span className="ka-sym">/</span></code></span>
+        <span className="key-anatomy__part">
+          <code><span className="ka-letter">s</span><span className="ka-sym">:</span><span className="ka-code">seat</span></code>
+          <span className="key-anatomy__label">posture</span>
+        </span>
+        <span className="key-anatomy__slash"><code><span className="ka-sym">/</span></code></span>
+        <span className="key-anatomy__part">
+          <code><span className="ka-letter">m</span><span className="ka-sym">:</span><span className="ka-shared"><span className="ka-code">row</span></span></code>
+          <span className="key-anatomy__label">motion</span>
+        </span>
+      </div>
+    </div>
+  </div>
+  <figcaption>
+    Each exercise key on the left, the key of its equipment on the right. <span className="ka-shared">Outlined</span>: the code the two share.
+  </figcaption>
+</figure>
 
-A form code such as `bell.dumb` or `bench` is the equipment with that form. A machine is written by its kind, `mac` or `erg`, and the record's equipment key says which machine it is.
+| Kind | The exercise code is | An exercise key, and the key of its equipment |
+|---|---|---|
+| No equipment (`none`) | The kind: `none` | `FXI=1.0S/m:hip.ext+kn.ext/o:standing/l:none`<br />`FXE=1.0S/k:none` |
+| Implement (`imp`) | The form `f`: `bar.straight` | `FXI=1.0S/m:hip.ext+kn.ext/o:standing/l:bar.straight@back`<br />`FXE=1.0S/k:imp/f:bar.straight` |
+| Support (`sup`) | The form `f`: `bench` | `FXI=1.0S/m:el.ext+sh.ext/o:seated/s:bench@hands/l:none`<br />`FXE=1.0S/k:sup/f:bench` |
+| Station (`stn`) | The form `f`: `cable` | `FXI=1.0S/m:el.ext/o:standing/l:cable@hands`<br />`FXE=1.0S/k:stn/f:cable` |
+| Strength machine (`mac`) | The kind `k`: `mac` | `FXI=1.0S/m:el.flex+sh.add/o:seated/l:mac@hands`<br />`FXE=1.0S/k:mac/l:hand/s:seat/m:pull.down` |
+| Cardio machine (`erg`) | The kind `k`: `erg`; or the kind, `.` and the motion `m`: `erg.row` | `FXI=1.0S/m:~el.flex+hip.ext+kn.ext+sh.ext/o:seated/l:erg.row@hands`<br />`FXE=1.0S/k:erg/c:rail/l:hand/s:seat/m:row` |
 
-A standing dumbbell curl is `FXI=1.0S/m:el.flex/o:standing/l:bell.dumb@hands`. Its load code is `bell.dumb`, so its equipment key is `FXE=1.0S/k:imp/f:bell.dumb`.
+A form code stands for one equipment key: `bar.straight` is `FXE=1.0S/k:imp/f:bar.straight`. The form codes are listed in the equipment key's [form tables](./equipment-key.md#form-f). A kind code stands for every key of that kind, with the other layers open: `mac` is `FXE=1.0S/k:mac/l:?/s:?/m:?`. `erg.row` is `FXE=1.0S/k:erg/c:?/l:?/s:?/m:row`: any cardio machine whose motion is `row`. The cardio motions are listed under the equipment key's [motion](./equipment-key.md#motion-m).
+
+The record's `fxe` names the exact equipment, and is the code's key or more specific than it. The rowing machine above is more specific than `erg.row`. A long loop band, `f:band.loop`, is more specific than `band`, because an exercise key writes `band` for every band. An accessory (`acc`) has no code in an exercise key.
+
+A support code is written only in `s`. Every other code except `none` may be written in `l` or in `s`. The exercise key adds where the equipment is held or touched (`@`) and, in `l`, how many there are (`*n`): see [Load](#load-l).
+
+The two keys never record the same fact twice. Grip, sides, range, footwork, pulley height, bench angle, the hold point and the count belong to the exercise key. What the equipment is, its fixed geometry and how it is built belong to the equipment key.
+
+[Checking an exercise against its equipment](./equipment-key.md#checking-an-exercise-against-its-equipment) shows how the two keys are checked against each other.
 
 ## Worked examples
 
@@ -454,6 +560,8 @@ Standing, a dumbbell in each hand, both elbows bend together, palms up.
 | `g` | Palms up is the usual grip when every action is `el.flex` | — |
 
 `FXI=1.0S/m:el.flex/o:standing/l:bell.dumb@hands`
+
+Its equipment is the [dumbbell](./equipment-key.md#dumbbell), `FXE=1.0S/k:imp/f:bell.dumb`.
 
 ### Barbell back squat
 
@@ -482,6 +590,8 @@ Seated at a pulldown machine, an overhand grip at about shoulder width, the bar 
 
 `FXI=1.0S/m:el.flex+sh.add/o:seated/l:mac@hands`
 
+Its equipment is the [lat pulldown machine](./equipment-key.md#lat-pulldown-machine), `FXE=1.0S/k:mac/l:hand/s:seat/m:pull.down`.
+
 A close neutral-grip pulldown brings the hands down in front of the face instead, so the shoulder action and the grip both change:
 
 `FXI=1.0S/m:el.flex+sh.ext.oh/o:seated/l:mac@hands/g:ne+w-n`
@@ -495,7 +605,7 @@ Face down on the forearms and toes, body straight, held for time.
 | `m` | A hold. The trunk muscles push against the hips sagging, which is the direction of trunk flexion | `m:=sp.flex` |
 | `o` | Face down, trunk horizontal | `o:prone` |
 | `s` | The trunk rests on nothing, so every point that bears weight is listed | `s:floor@feet,forearms` |
-| `l` | No implement | `l:none` |
+| `l` | No equipment | `l:none` |
 
 `FXI=1.0S/m:=sp.flex/o:prone/s:floor@feet,forearms/l:none`
 
@@ -527,7 +637,7 @@ Standing, one kettlebell held in both hands, swung from between the legs to ches
 
 ## Keys in records
 
-An exercise record carries its key in `fxi`. Each muscle reference carries the muscle's `fxm` and its category's `fxmg`, beside its `id`, `name` and `categoryId`. Each equipment reference carries the same `fxe` value as the equipment record, beside its `id` and `name`:
+An exercise record carries its key in `fxi`. Each muscle reference carries the muscle's `fxm` and its category's `fxmg`, beside its `id`, `name` and `categoryId`. Each equipment reference carries the same `fxe` value as the [equipment record](./equipment-key.md#keys-in-records), beside its `id` and `name`:
 
 ```json fds:ignore exercise record excerpt showing the fxi, fxm, fxmg and fxe fields
 {
@@ -597,7 +707,7 @@ Keys that share codes form families, and nobody has to declare them. Search for 
 | `l` holds `erg` | Every cardio machine exercise, through the children `erg.row`, `erg.gait` and the rest |
 | `m` holds `hip.flex` | The category `FXMG=1.0/a:hip.flex`, and through it the muscles that flex the hip: psoas major, iliacus and rectus femoris |
 
-`bell.*` means any code that starts with `bell.`. Layers combine: `m` is `hip.ext+kn.ext` and `l` holds `bar.straight@back` finds back squats and lunges with a barbell on the back.
+`bell.*` means any code that starts with `bell.`. Layers combine: `m` is `hip.ext+kn.ext` and `l` holds `bar.straight@back` finds back squats and lunges with a barbell on the back. Equipment keys form families the same way (see [Finding related items](./equipment-key.md#finding-related-items) on the equipment key page).
 
 An "is" search is the same operation as comparing for "more specific": write it as a key, with `?` in every layer it leaves open. A "holds" search looks for a code, or a child of it, anywhere in the layer, and isn't a compare. For example:
 

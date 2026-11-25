@@ -68,7 +68,7 @@ A plate-loaded leg press, with the sled on a 45° track, has this key:
 | Key type | `FXE` | This is an equipment key. |
 | Version | `1.0` | Major version 1, revision 0. |
 | Flag | `N` | The key carries at least one extended layer. |
-| Kind | `k:mac` | A dedicated machine, built for one movement. |
+| Kind | `k:mac` | A strength machine, built for one movement. |
 | Load interface | `l:foot` | The moving part meets the body at a foot plate. |
 | Posture | `s:recline` | The user lies back on an inclined back pad. |
 | Motion | `m:push.fwd` | The foot plate is pushed away from the front of the trunk. |
@@ -110,7 +110,7 @@ Rules for every key:
 
 What belongs in the key:
 
-- **Fixed geometry is equipment. Anything set per use belongs to the exercise.** Pulley height, bench angle, where a band is anchored, the handle attached, the grip, one limb or two, and seat height are all in the [exercise key](./exercise-key.md).
+- **Fixed geometry is equipment. Anything set per use belongs to the exercise.** Pulley height, bench angle, where a band is anchored, the handle attached, the grip, one limb or two, and seat height are all in the [exercise key](./exercise-key.md#dimensions-and-layers).
 - **Write the equipment, not the exercise done on it.** A calf raise done on a leg press uses a leg press, and the key is the leg press's.
 - **A named machine wins.** When an exercise names the machine it is done on, that machine is the equipment, whatever the exercise does on it.
 - **"Machine" alone means the machine built for the movement.** A description that says only "machine" means the machine built for the exercise's main movement: a machine leg curl is done on a leg curl machine. With no exercise to go by, "machine" is `FXE=1.0S/k:mac/l:?/s:?/m:?`.
@@ -126,17 +126,17 @@ The layers below are listed in key order. For each one: its codes, then its rule
 | `sup` | Support: a surface or frame the body rests on, hangs from or pushes against. It doesn't carry the load | `f` | `c` |
 | `acc` | Accessory: a handle, strap, belt, mat, towel or marker. It never defines the exercise | `f` | — |
 | `stn` | Station: a guide or anchor used for many movements: cable column, Smith machine, landmine | `f` | `r` `c` `a` |
-| `mac` | Dedicated machine: a guided mechanism with fixed body contacts, built for one movement | `l` `s` `m` | `r` `c` `g` `a` |
+| `mac` | Strength machine: a guided mechanism with fixed body contacts, built for one movement | `l` `s` `m` | `r` `c` `g` `a` |
 | `erg` | Cardio machine: repeats whole cycles | `c` `l` `s` `m` | `r` |
 
 Rules:
 
 - A way of loading is not equipment. "Weighted" with no form named is `FXE=1.0S/k:imp/f:?`. "Assisted" with no implement, or "other", is `FXE=1.0S/k:?`.
-- A cable column is a station. A seated cable row with its own seat, and a lat pulldown machine, are dedicated machines.
+- A cable column is a station. A seated cable row with its own seat, and a lat pulldown machine, are strength machines.
 
 ### Form (`f`)
 
-The form is a code from the list for the key's kind. An [exercise key](./exercise-key.md#equipment-in-an-exercise-key) names its load and its supports with these same codes. It writes `band` for any band and doesn't name accessories.
+The form is a code from the list for the key's kind. An exercise key names an implement, a support or a station with the same code (see [Equipment keys in exercise keys](#equipment-keys-in-exercise-keys)).
 
 **Implements (`imp`)**
 
@@ -239,7 +239,7 @@ The form is a code from the list for the key's kind. An [exercise key](./exercis
 Rules:
 
 - A general word takes the general code: "band" is `band`. Write a child only when the equipment names it: a long loop band is `band.loop`.
-- A stretching strap is `FXE=1.0S/k:acc/f:strap.stretch`. An exercise key for a stretch done with it carries `a:strap`.
+- A stretching strap is `FXE=1.0S/k:acc/f:strap.stretch`. An exercise key for a stretch done with it carries [`a:strap`](./exercise-key.md#accessory-a).
 - A BOSU whose side isn't stated is `dome`. Write `dome.up` or `dome.down` when the side is named.
 
 ### Track (`c`)
@@ -280,7 +280,7 @@ Rules:
 
 ### Load interface (`l`)
 
-The load interface is written for a dedicated machine and a cardio machine. The last column is the hold point an exercise key writes for the machine.
+The load interface is written for a strength machine and a cardio machine. The last column is the [hold point](./exercise-key.md#load-l) an exercise key writes for the machine.
 
 | Code | Meaning | Exercise hold point |
 |---|---|---|
@@ -316,7 +316,7 @@ Rules:
 
 ### Posture (`s`)
 
-The posture is written for a dedicated machine and a cardio machine. The last column is the start orientation an exercise key on the machine may have.
+The posture is written for a strength machine and a cardio machine. The last column is the start [orientation](./exercise-key.md#orientation-o) an exercise key on the machine may have.
 
 | Code | Meaning | Exercise orientation |
 |---|---|---|
@@ -339,7 +339,7 @@ Rules:
 
 ### Motion (`m`)
 
-On a dedicated machine, the motion is what the machine's moving part guides, relative to the trunk.
+On a strength machine, the motion is what the machine's moving part guides, relative to the trunk.
 
 A machine whose pivot lines up with one joint writes that joint action, in the codes of the exercise key's [motion layer](./exercise-key.md#motion-m): `kn.flex`, `kn.ext`, `el.flex`, `el.ext`, `sh.flex`, `sh.ext`, `sh.abd`, `sh.add`, `sh.hadd`, `sh.habd`, `sh.ir`, `sh.er`, `sc.elev`, `hip.flex`, `hip.ext`, `hip.abd`, `hip.add`, `sp.flex`, `sp.ext`, `sp.rot`, `sp.lflex`, `ank.pf`, `ank.df`, `nk.flex`, `nk.ext`, `nk.lflex`, `wr.flex` or `wr.ext`.
 
@@ -361,7 +361,7 @@ A machine that moves several joints writes a verb, `.` and the direction the loa
 | `fwddown` | Forward and down: decline press |
 | `backdown` | Back and down: high row |
 
-On a cardio machine, the motion is the cycle it repeats.
+On a cardio machine, the motion is the cycle it repeats. An exercise key may name a cardio machine by it: `erg.row` is a cardio machine whose `m` is `row` (see [Equipment keys in exercise keys](#equipment-keys-in-exercise-keys)).
 
 | Code | Meaning |
 |---|---|
@@ -458,6 +458,159 @@ Everything in a key that isn't a code is a symbol.
 
 A combination machine, one frame with several configurations, joins the key of each configuration with `;` after a single header, in sorted order. A multi-hip machine, a 4-way neck machine, a pec deck with rear-delt arms, an assisted pull-up and dip machine, and a lat pulldown with a low row are combination machines. A combination may join machine and station configurations. An exercise done on it refers to the configuration it uses.
 
+## Equipment keys in exercise keys
+
+An [exercise key](./exercise-key.md#equipment-in-an-exercise-key) names its equipment in its load (`l`) and support (`s`) layers, with codes from the equipment key. Each code is taken from one part of the equipment key, so an exercise key leads straight to the key of its equipment.
+
+<figure className="key-anatomy">
+  <div className="key-pair">
+    <div>
+      <div className="key-pair__title">Standing dumbbell curl</div>
+      <div className="key-anatomy__key">
+        <span className="key-anatomy__part">
+          <code><span className="ka-code">FXI</span><span className="ka-sym">=</span><span className="ka-code">1.0</span><span className="ka-flag">S</span></code>
+          <span className="key-anatomy__label">header</span>
+        </span>
+        <span className="key-anatomy__slash"><code><span className="ka-sym">/</span></code></span>
+        <span className="key-anatomy__part">
+          <code><span className="ka-letter">m</span><span className="ka-sym">:</span><span className="ka-code">el</span><span className="ka-sym">.</span><span className="ka-code">flex</span></code>
+          <span className="key-anatomy__label">motion</span>
+        </span>
+        <span className="key-anatomy__slash"><code><span className="ka-sym">/</span></code></span>
+        <span className="key-anatomy__part">
+          <code><span className="ka-letter">o</span><span className="ka-sym">:</span><span className="ka-code">standing</span></code>
+          <span className="key-anatomy__label">orientation</span>
+        </span>
+        <span className="key-anatomy__slash"><code><span className="ka-sym">/</span></code></span>
+        <span className="key-anatomy__part">
+          <code><span className="ka-letter">l</span><span className="ka-sym">:</span><span className="ka-shared"><span className="ka-code">bell</span><span className="ka-sym">.</span><span className="ka-code">dumb</span></span><span className="ka-sym">@</span><span className="ka-code">hands</span></code>
+          <span className="key-anatomy__label">load</span>
+        </span>
+      </div>
+    </div>
+    <div>
+      <div className="key-pair__title">Dumbbell</div>
+      <div className="key-anatomy__key">
+        <span className="key-anatomy__part">
+          <code><span className="ka-code">FXE</span><span className="ka-sym">=</span><span className="ka-code">1.0</span><span className="ka-flag">S</span></code>
+          <span className="key-anatomy__label">header</span>
+        </span>
+        <span className="key-anatomy__slash"><code><span className="ka-sym">/</span></code></span>
+        <span className="key-anatomy__part">
+          <code><span className="ka-letter">k</span><span className="ka-sym">:</span><span className="ka-code">imp</span></code>
+          <span className="key-anatomy__label">kind</span>
+        </span>
+        <span className="key-anatomy__slash"><code><span className="ka-sym">/</span></code></span>
+        <span className="key-anatomy__part">
+          <code><span className="ka-letter">f</span><span className="ka-sym">:</span><span className="ka-shared"><span className="ka-code">bell</span><span className="ka-sym">.</span><span className="ka-code">dumb</span></span></code>
+          <span className="key-anatomy__label">form</span>
+        </span>
+      </div>
+    </div>
+  </div>
+  <div className="key-pair">
+    <div>
+      <div className="key-pair__title">Rowing</div>
+      <div className="key-anatomy__key">
+        <span className="key-anatomy__part">
+          <code><span className="ka-code">FXI</span><span className="ka-sym">=</span><span className="ka-code">1.0</span><span className="ka-flag">S</span></code>
+          <span className="key-anatomy__label">header</span>
+        </span>
+        <span className="key-anatomy__slash"><code><span className="ka-sym">/</span></code></span>
+        <span className="key-anatomy__part">
+          <code><span className="ka-letter">m</span><span className="ka-sym">:~</span><span className="ka-code">el</span><span className="ka-sym">.</span><span className="ka-code">flex</span><span className="ka-sym">+</span><span className="ka-code">hip</span><span className="ka-sym">.</span><span className="ka-code">ext</span><span className="ka-sym">+</span><span className="ka-code">kn</span><span className="ka-sym">.</span><span className="ka-code">ext</span><span className="ka-sym">+</span><span className="ka-code">sh</span><span className="ka-sym">.</span><span className="ka-code">ext</span></code>
+          <span className="key-anatomy__label">motion</span>
+        </span>
+        <span className="key-anatomy__slash"><code><span className="ka-sym">/</span></code></span>
+        <span className="key-anatomy__part">
+          <code><span className="ka-letter">o</span><span className="ka-sym">:</span><span className="ka-code">seated</span></code>
+          <span className="key-anatomy__label">orientation</span>
+        </span>
+        <span className="key-anatomy__slash"><code><span className="ka-sym">/</span></code></span>
+        <span className="key-anatomy__part">
+          <code><span className="ka-letter">l</span><span className="ka-sym">:</span><span className="ka-shared"><span className="ka-code">erg</span></span><span className="ka-sym">.</span><span className="ka-shared"><span className="ka-code">row</span></span><span className="ka-sym">@</span><span className="ka-code">hands</span></code>
+          <span className="key-anatomy__label">load</span>
+        </span>
+      </div>
+    </div>
+    <div>
+      <div className="key-pair__title">Rowing machine</div>
+      <div className="key-anatomy__key">
+        <span className="key-anatomy__part">
+          <code><span className="ka-code">FXE</span><span className="ka-sym">=</span><span className="ka-code">1.0</span><span className="ka-flag">S</span></code>
+          <span className="key-anatomy__label">header</span>
+        </span>
+        <span className="key-anatomy__slash"><code><span className="ka-sym">/</span></code></span>
+        <span className="key-anatomy__part">
+          <code><span className="ka-letter">k</span><span className="ka-sym">:</span><span className="ka-shared"><span className="ka-code">erg</span></span></code>
+          <span className="key-anatomy__label">kind</span>
+        </span>
+        <span className="key-anatomy__slash"><code><span className="ka-sym">/</span></code></span>
+        <span className="key-anatomy__part">
+          <code><span className="ka-letter">c</span><span className="ka-sym">:</span><span className="ka-code">rail</span></code>
+          <span className="key-anatomy__label">track</span>
+        </span>
+        <span className="key-anatomy__slash"><code><span className="ka-sym">/</span></code></span>
+        <span className="key-anatomy__part">
+          <code><span className="ka-letter">l</span><span className="ka-sym">:</span><span className="ka-code">hand</span></code>
+          <span className="key-anatomy__label">load interface</span>
+        </span>
+        <span className="key-anatomy__slash"><code><span className="ka-sym">/</span></code></span>
+        <span className="key-anatomy__part">
+          <code><span className="ka-letter">s</span><span className="ka-sym">:</span><span className="ka-code">seat</span></code>
+          <span className="key-anatomy__label">posture</span>
+        </span>
+        <span className="key-anatomy__slash"><code><span className="ka-sym">/</span></code></span>
+        <span className="key-anatomy__part">
+          <code><span className="ka-letter">m</span><span className="ka-sym">:</span><span className="ka-shared"><span className="ka-code">row</span></span></code>
+          <span className="key-anatomy__label">motion</span>
+        </span>
+      </div>
+    </div>
+  </div>
+  <figcaption>
+    Each exercise key on the left, the key of its equipment on the right. <span className="ka-shared">Outlined</span>: the code the two share.
+  </figcaption>
+</figure>
+
+| Kind | The exercise code is | An exercise key, and the key of its equipment |
+|---|---|---|
+| No equipment (`none`) | The kind: `none` | `FXI=1.0S/m:hip.ext+kn.ext/o:standing/l:none`<br />`FXE=1.0S/k:none` |
+| Implement (`imp`) | The form `f`: `bar.straight` | `FXI=1.0S/m:hip.ext+kn.ext/o:standing/l:bar.straight@back`<br />`FXE=1.0S/k:imp/f:bar.straight` |
+| Support (`sup`) | The form `f`: `bench` | `FXI=1.0S/m:el.ext+sh.ext/o:seated/s:bench@hands/l:none`<br />`FXE=1.0S/k:sup/f:bench` |
+| Station (`stn`) | The form `f`: `cable` | `FXI=1.0S/m:el.ext/o:standing/l:cable@hands`<br />`FXE=1.0S/k:stn/f:cable` |
+| Strength machine (`mac`) | The kind `k`: `mac` | `FXI=1.0S/m:el.flex+sh.add/o:seated/l:mac@hands`<br />`FXE=1.0S/k:mac/l:hand/s:seat/m:pull.down` |
+| Cardio machine (`erg`) | The kind `k`: `erg`; or the kind, `.` and the motion `m`: `erg.row` | `FXI=1.0S/m:~el.flex+hip.ext+kn.ext+sh.ext/o:seated/l:erg.row@hands`<br />`FXE=1.0S/k:erg/c:rail/l:hand/s:seat/m:row` |
+
+A form code stands for one equipment key: `bar.straight` is `FXE=1.0S/k:imp/f:bar.straight`. The form codes are listed in the [form tables](#form-f). A kind code stands for every key of that kind, with the other layers open: `mac` is `FXE=1.0S/k:mac/l:?/s:?/m:?`. `erg.row` is `FXE=1.0S/k:erg/c:?/l:?/s:?/m:row`: any cardio machine whose motion is `row`. The cardio motions are listed under [Motion](#motion-m).
+
+The record's `fxe` names the exact equipment, and is the code's key or more specific than it. The rowing machine above is more specific than `erg.row`. A long loop band, `f:band.loop`, is more specific than `band`, because an exercise key writes `band` for every band. An accessory (`acc`) has no code in an exercise key.
+
+A support code is written only in `s`. Every other code except `none` may be written in `l` or in `s`. The exercise key adds where the equipment is held or touched (`@`) and, in `l`, how many there are (`*n`): see the exercise key's [load](./exercise-key.md#load-l).
+
+The two keys never record the same fact twice. Grip, sides, range, footwork, pulley height, bench angle, the hold point and the count belong to the exercise key. What the equipment is, its fixed geometry and how it is built belong to the equipment key.
+
+### Checking an exercise against its equipment
+
+An exercise key and the key of its main equipment can be checked against each other. The main equipment is the first of these the exercise key has:
+
+1. a strength or cardio machine in `l`: `mac`, `erg` or a child of `erg`;
+2. a station in `l`: `cable`, `smith` or `landmine`;
+3. an implement in `l`. With several, the one listed first in the [implements table](#form-f): `l:band@hands+bell.dumb@hands` gives `bell.dumb`;
+4. an implement of unknown type, such as `?@chest`, which gives `FXE=1.0S/k:imp/f:?`;
+5. a support in `s` other than the floor, the one listed first in the supports table;
+6. `FXE=1.0S/k:none` for `l:none`;
+7. when nothing else applies, `FXE=1.0S/k:?`.
+
+A checker warns when:
+
+- the equipment key contradicts the key of the exercise's main equipment code: an exercise loaded with `bell.dumb` and an equipment key for a kettlebell;
+- a machine's posture doesn't fit the exercise's start orientation, by the [posture table](#posture-s): `s:recline` and `o:standing`;
+- a machine's load interface doesn't fit the hold point of `mac` or `erg`, by the [load interface table](#load-interface-l): `l:foot` and `mac@hands`;
+- a single-joint machine's motion, or a child of it, isn't in the exercise's motion: a shrug done on a standing calf raise machine, whose motion is `m:ank.pf`. The checker always warns. A person accepts the use when the exercise names that machine;
+- `k:none` appears without `l:none`;
+- a cardio code doesn't fit the machine's motion: `erg.row` with an equipment key whose motion is `m:gait`, a treadmill.
+
 ## Worked examples
 
 Each example starts from a plain description and decides one layer at a time.
@@ -472,6 +625,8 @@ A free weight held in one hand.
 | `f` | A dumbbell. Its gravity drive is implied, so `r` isn't written | `f:bell.dumb` |
 
 `FXE=1.0S/k:imp/f:bell.dumb`
+
+A [standing dumbbell curl](./exercise-key.md#standing-dumbbell-curl) names it `bell.dumb`: `FXI=1.0S/m:el.flex/o:standing/l:bell.dumb@hands`.
 
 ### Long loop band
 
@@ -508,13 +663,15 @@ Seated, thighs under a pad, a bar pulled down from overhead.
 
 `FXE=1.0S/k:mac/l:hand/s:seat/m:pull.down`
 
+A [lat pulldown](./exercise-key.md#lat-pulldown) names it `mac`: `FXI=1.0S/m:el.flex+sh.add/o:seated/l:mac@hands`.
+
 ### Lying leg curl machine
 
 Face down on a bench, a pad behind the lower legs, plate-loaded on a lever.
 
 | Layer | Decision | Written |
 |---|---|---|
-| `k` | A dedicated machine | `k:mac` |
+| `k` | A strength machine | `k:mac` |
 | `l` | The pad is on the lower leg | `l:ankle` |
 | `s` | Lying face down | `s:prone` |
 | `m` | The pivot lines up with the knee, which bends | `m:kn.flex` |
@@ -553,7 +710,7 @@ One machine with two configurations: arm pads pressed together in front, or hand
 
 ## Keys in records
 
-An equipment record carries its whole key in `fxe`, extended layers and the flag `N` included. A reference to the equipment, in an exercise, a workout or a prescription, carries the same `fxe` value beside its `id` and `name`.
+An equipment record carries its whole key in `fxe`, extended layers and the flag `N` included. A reference to the equipment, in an [exercise](./exercise-key.md#keys-in-records), a workout or a prescription, carries the same `fxe` value beside its `id` and `name`.
 
 An extended layer counts in a comparison only when both keys carry it (see [Comparing two equipment keys](#comparing-two-equipment-keys)). Otherwise comparing reads the standard part of each key: the key without the extended layers `r`, `c`, `g` and `a`, with the flag `S`. On a cardio machine `c` is the track, a standard layer, so it stays.
 
@@ -579,7 +736,7 @@ An equipment record:
 }
 ```
 
-An exercise done on it. The equipment reference carries the same `fxe`, and the exercise's own key names the machine with `mac@feet`:
+An exercise done on it. The equipment reference carries the same `fxe`, and the exercise's own key names the machine with [`mac`](#equipment-keys-in-exercise-keys), held at the feet:
 
 ```json fds:ignore exercise record excerpt showing the fxi and fxe fields
 {
@@ -593,29 +750,6 @@ An exercise done on it. The equipment reference carries the same `fxe`, and the 
   }
 }
 ```
-
-### Checking an exercise against its equipment
-
-An exercise key names its equipment with the codes on this page (see [Equipment in an exercise key](./exercise-key.md#equipment-in-an-exercise-key)), so an exercise key and the key of its main equipment can be checked against each other. The main equipment is the first of these the exercise key has:
-
-1. a strength or cardio machine in `l`: `mac`, `erg` or a child of `erg`;
-2. a station in `l`: `cable`, `smith` or `landmine`;
-3. an implement in `l`. With several, the one listed first in the [implements table](#form-f): `l:band@hands+bell.dumb@hands` gives `bell.dumb`;
-4. an implement of unknown type, such as `?@chest`, which gives `FXE=1.0S/k:imp/f:?`;
-5. a support in `s` other than the floor, the one listed first in the supports table;
-6. `FXE=1.0S/k:none` for `l:none`;
-7. when nothing else applies, `FXE=1.0S/k:?`.
-
-A checker warns when:
-
-- the equipment key contradicts the key of the exercise's main equipment code: an exercise loaded with `bell.dumb` and an equipment key for a kettlebell;
-- a machine's posture doesn't fit the exercise's start orientation, by the posture table: `s:recline` and `o:standing`;
-- a machine's load interface doesn't fit the hold point of `mac` or `erg`, by the load interface table: `l:foot` and `mac@hands`;
-- a single-joint machine's motion, or a child of it, isn't in the exercise's motion: a shrug done on a standing calf raise machine, whose motion is `m:ank.pf`. The checker always warns. A person accepts the use when the exercise names that machine;
-- `k:none` appears without `l:none`;
-- a cardio code doesn't fit the machine's cycle: `erg.row` with an equipment key whose cycle is `m:gait`, a treadmill.
-
-The two keys never record the same fact twice. Grip, sides, range, footwork, pulley height, bench angle, the hold point and the count belong to the exercise key. What the equipment is, its fixed geometry and how it is built belong to the equipment key.
 
 ## Comparing two equipment keys
 
@@ -633,7 +767,7 @@ Comparison goes layer by layer. `?` matches any value, and a parent code covers 
 | `FXE=1.0N/k:mac/l:ankle/s:prone/m:kn.flex/r:plate/c:arc` | `FXE=1.0S/k:mac/l:ankle/s:prone/m:kn.flex` | A is more specific: it carries extended layers B leaves out |
 | `FXE=1.0S/k:mac/l:ankle/s:seat/m:kn.flex` | `FXE=1.0S/k:mac/l:ankle/s:prone/m:kn.flex` | Different: the postures differ |
 | `FXE=1.0N/k:mac/l:ankle/s:prone/m:kn.flex/r:plate/c:arc` | `FXE=1.0N/k:mac/l:ankle/s:prone/m:kn.flex/r:stack` | Different: both carry a drive, and the drives differ |
-| `FXE=1.0S/k:stn/f:cable` | `FXE=1.0S/k:mac/l:hand/s:seat/m:pull.down` | Different: a station and a dedicated machine |
+| `FXE=1.0S/k:stn/f:cable` | `FXE=1.0S/k:mac/l:hand/s:seat/m:pull.down` | Different: a station and a strength machine |
 | `FXE=1.0S/k:imp/f:band.mini` | `FXE=1.0S/k:imp/f:band.loop` | Different: two children of `band` |
 
 When each key leaves open something the other states, neither is more specific, and the two may still describe the same equipment: `FXE=1.0S/k:mac/l:hand/s:?/m:pull.back` and `FXE=1.0S/k:mac/l:?/s:seat.chest/m:pull.back`. A combination machine and one of its configurations compare the same way: neither is more specific, and nothing contradicts.

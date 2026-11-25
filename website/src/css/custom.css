@@ -937,3 +937,37 @@ a[class*='searchResult'][class*='cursor'] {
   text-decoration: underline;
   text-underline-offset: 0.2em;
 }
+
+/* A key pair: an exercise key beside the key of its equipment, the code they
+   share outlined in both. One column on narrow screens. */
+.key-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem 1.5rem;
+  align-items: start;
+}
+
+.key-pair + .key-pair {
+  margin-top: 1.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--ifm-color-emphasis-300);
+}
+
+.key-pair__title {
+  margin-bottom: 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--ifm-color-emphasis-800);
+}
+
+.key-anatomy .ka-shared {
+  outline: 2px solid var(--ifm-color-primary);
+  outline-offset: 1px;
+  border-radius: 2px;
+}
+
+@media (max-width: 768px) {
+  .key-pair {
+    grid-template-columns: 1fr;
+  }
+}
