@@ -34,7 +34,10 @@ Za detaljne informacije o modelu podataka vežbe pogledajte [RFC-001: Model poda
 - `schemaVersion`: string verzije (npr. "1.0.0")
 - `canonical`: standardizovano imenovanje sa slug vrednošću i alijasima
 - `classification`: tip vežbe, mehanika, sila, nivo, kinetički lanac
-- `targets`: primarni i sekundarni ciljani mišići sa nivoima aktivacije
-- `equipment`: obavezna, opciona i alternativna oprema
+- `targets`: primarni i sekundarni ciljani mišići sa nivoima aktivacije; svaka referenca na mišić može da nosi svoj ključ `fxm`
+- `equipment`: obavezna, opciona i alternativna oprema; svaka referenca na opremu može da nosi svoj standardni `fxe`
 - `media`: slike, video-zapisi i dijagrami
 - `metadata`: status, vremenske oznake, autorstvo
+- `fxi`, `fxe`: opcioni strukturni deskriptori (RFC-010): kanonski FXI vežbe i standardni FXE njene glavne opreme
+- `fxiProvenance`, `fxiGap`: ko je odgovorio za FXI, i vlasnikova beleška o tome šta propušta, ili `null`
+- `xrefs`: veze ka istoj vežbi u drugim katalozima, svaka napravljena kao `auto` ili `confirmed`

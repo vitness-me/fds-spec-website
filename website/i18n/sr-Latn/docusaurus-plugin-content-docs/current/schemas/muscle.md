@@ -33,3 +33,4 @@ Za detaljne informacije o modelu podataka mišića pogledajte [RFC-003: Model po
 - `classification`: kategorija mišića, region, lateralnost
 - `heatmap`: podaci za vizualizaciju sa regionima i vrednostima intenziteta
 - `metadata`: status, vremenske oznake, autorstvo
+- `fxm`: opcioni FXM ključ mišića (RFC-010)

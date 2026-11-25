@@ -34,7 +34,10 @@ Para información detallada sobre el modelo de datos de ejercicio, véase [RFC-0
 - `schemaVersion`: cadena de versión (p. ej., "1.0.0")
 - `canonical`: nomenclatura estandarizada con slug y alias
 - `classification`: tipo de ejercicio, mecánica, fuerza, nivel, cadena cinética
-- `targets`: músculos objetivo primarios y secundarios con niveles de activación
-- `equipment`: equipamiento obligatorio, opcional y alternativo
+- `targets`: músculos objetivo primarios y secundarios con niveles de activación; cada referencia a un músculo puede llevar su clave `fxm`
+- `equipment`: equipamiento obligatorio, opcional y alternativo; cada referencia a un equipamiento puede llevar su `fxe` estándar
 - `media`: imágenes, videos y diagramas
 - `metadata`: estado, marcas de tiempo, autoría
+- `fxi`, `fxe`: descriptores estructurales opcionales (RFC-010): el FXI canónico del ejercicio y el FXE estándar de su equipamiento principal
+- `fxiProvenance`, `fxiGap`: quién respondió por el FXI, y la nota del propietario sobre lo que no recoge, o `null`
+- `xrefs`: enlaces al mismo ejercicio en otros catálogos, cada uno hecho `auto` o `confirmed`

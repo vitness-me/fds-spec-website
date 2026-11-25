@@ -32,3 +32,4 @@ For detailed information about the equipment data model, see [RFC-002: Equipment
 - `classification`: Equipment type and category
 - `attributes`: Flexible key-value storage for equipment-specific properties
 - `metadata`: Status, timestamps, authorship
+- `fxe`: Optional FXE descriptor of the equipment (RFC-010), standard or with extended build-detail layers

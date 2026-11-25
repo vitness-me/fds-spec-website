@@ -32,3 +32,4 @@ Za detaljne informacije o modelu podataka opreme pogledajte [RFC-002: Model poda
 - `classification`: tip i kategorija opreme
 - `attributes`: fleksibilno skladište ključ–vrednost za svojstva specifična za opremu
 - `metadata`: status, vremenske oznake, autorstvo
+- `fxe`: opcioni FXE deskriptor opreme (RFC-010), standardni ili sa proširenim slojevima detalja konstrukcije

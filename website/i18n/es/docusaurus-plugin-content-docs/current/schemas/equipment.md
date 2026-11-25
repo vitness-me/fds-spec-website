@@ -32,3 +32,4 @@ Para información detallada sobre el modelo de datos de equipamiento, véase [RF
 - `classification`: tipo y categoría del equipamiento
 - `attributes`: almacenamiento flexible de pares clave-valor para propiedades específicas del equipamiento
 - `metadata`: estado, marcas de tiempo, autoría
+- `fxe`: descriptor FXE opcional del equipamiento (RFC-010), estándar o con capas extendidas de detalles de construcción

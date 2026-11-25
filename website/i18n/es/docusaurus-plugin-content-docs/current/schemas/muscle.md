@@ -33,3 +33,4 @@ Para información detallada sobre el modelo de datos de músculo, véase [RFC-00
 - `classification`: categoría del músculo, región, lateralidad
 - `heatmap`: datos de visualización con regiones y valores de intensidad
 - `metadata`: estado, marcas de tiempo, autoría
+- `fxm`: clave FXM opcional del músculo (RFC-010)

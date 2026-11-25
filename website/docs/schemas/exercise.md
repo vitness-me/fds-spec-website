@@ -34,7 +34,10 @@ For detailed information about the exercise data model, see [RFC-001: Exercise D
 - `schemaVersion`: Version string (e.g., "1.0.0")
 - `canonical`: Standardized naming with slug and aliases
 - `classification`: Exercise type, mechanics, force, level, kinetic chain
-- `targets`: Primary and secondary muscle targets with activation levels
-- `equipment`: Required, optional, and alternative equipment
+- `targets`: Primary and secondary muscle targets with activation levels; each muscle reference may carry its `fxm` key
+- `equipment`: Required, optional, and alternative equipment; each equipment reference may carry its standard `fxe`
 - `media`: Images, videos, and diagrams
 - `metadata`: Status, timestamps, authorship
+- `fxi`, `fxe`: Optional structural descriptors (RFC-010): the exercise's canonical FXI, and the standard FXE of its main equipment
+- `fxiProvenance`, `fxiGap`: Who answered for the FXI, and the owner's note of what it misses, or `null`
+- `xrefs`: Links to the same exercise in other catalogues, each made `auto` or `confirmed`
