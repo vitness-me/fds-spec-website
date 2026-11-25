@@ -177,7 +177,7 @@ A catalog lists "Erector spinae" and "Longissimus" as two entries.
 | Step | Decision |
 |---|---|
 | Term | FMA has Erector spinae muscle group, a set of muscles, and Longissimus, a muscle |
-| Erector spinae | A set is a category: `FXMG=1.0/erector-spinae`, in the entry's `fxmg` |
+| Erector spinae | A set is a category: the entry becomes a category record with `FXMG=1.0/erector-spinae` in its `fxmg`. A muscle record never carries `fxmg` |
 | Longissimus | A muscle: `longissimus` |
 
 `FXM=1.0/longissimus`

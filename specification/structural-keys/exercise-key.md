@@ -527,19 +527,19 @@ Standing, one kettlebell held in both hands, swung from between the legs to ches
 
 ## Keys in records
 
-An exercise record carries its key in `fxi`. Each muscle reference carries the muscle's `fxm`, and each equipment reference carries the same `fxe` value as the equipment record, beside its `id` and `name`:
+An exercise record carries its key in `fxi`. Each muscle reference carries the muscle's `fxm` and its category's `fxmg`, beside its `id`, `name` and `categoryId`. Each equipment reference carries the same `fxe` value as the equipment record, beside its `id` and `name`:
 
-```json fds:ignore exercise record excerpt showing the fxi, fxm and fxe fields
+```json fds:ignore exercise record excerpt showing the fxi, fxm, fxmg and fxe fields
 {
   "exerciseId": "ex.dumbbellCurl",
   "fxi": "FXI=1.0S/m:el.flex/o:standing/l:bell.dumb@hands",
   "canonical": { "name": "Dumbbell Curl", "slug": "dumbbell-curl" },
   "targets": {
     "primary": [
-      { "id": "mus.bicepsBrachii", "name": "Biceps Brachii", "categoryId": "cat.arms", "fxm": "FXM=1.0/biceps-brachii" }
+      { "id": "mus.bicepsBrachii", "name": "Biceps Brachii", "categoryId": "cat.upperArmFront", "fxm": "FXM=1.0/biceps-brachii", "fxmg": "FXMG=1.0/arm.anterior" }
     ],
     "secondary": [
-      { "id": "mus.brachialis", "name": "Brachialis", "categoryId": "cat.arms", "fxm": "FXM=1.0/brachialis" }
+      { "id": "mus.brachialis", "name": "Brachialis", "categoryId": "cat.upperArmFront", "fxm": "FXM=1.0/brachialis", "fxmg": "FXMG=1.0/arm.anterior" }
     ]
   },
   "equipment": {
@@ -595,6 +595,7 @@ Keys that share codes form families, and nobody has to declare them. Search for 
 | `o` is `hanging` | The same orientation: pull-ups, hanging leg raises, dead hangs |
 | `m` holds `sh.ext` | Rows and dips, and through its child `sh.ext.oh`, chin-ups, pullovers and close-grip pulldowns. A parent code finds its children |
 | `l` holds `erg` | Every cardio machine exercise, through the children `erg.row`, `erg.gait` and the rest |
+| `m` holds `hip.flex` | The category `FXMG=1.0/a:hip.flex`, and through it the muscles that flex the hip: psoas major, iliacus and rectus femoris |
 
 `bell.*` means any code that starts with `bell.`. Layers combine: `m` is `hip.ext+kn.ext` and `l` holds `bar.straight@back` finds back squats and lunges with a barbell on the back.
 

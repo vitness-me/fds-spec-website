@@ -24,7 +24,7 @@ The adductors have this key:
     <span className="key-anatomy__slash"><code><span className="ka-sym">.</span></code></span>
     <span className="key-anatomy__part">
       <code><span className="ka-code">medial</span></code>
-      <span className="key-anatomy__label">compartment</span>
+      <span className="key-anatomy__label">qualifier</span>
     </span>
   </div>
   <figcaption>
@@ -39,7 +39,7 @@ The adductors have this key:
 | Key type | `FXMG` | This is a muscle category key. |
 | Version | `1.0` | Major version 1, revision 0. |
 | Region | `thigh` | The thigh, by its anatomical term. |
-| Compartment | `medial` | The medial compartment of the thigh, which holds the adductors. |
+| Qualifier | `medial` | A compartment or layer of the region. Here the medial compartment of the thigh, which holds the adductors. |
 
 The header and the body are separated by `/`. The key has no `S` or `N` flag, because nothing in it is extended. A flag written after the version is dropped from the written form.
 
@@ -50,9 +50,9 @@ A key names one of four things.
 | Form | Names | Example |
 |---|---|---|
 | `FXMG=1.0/<set>` | A set or region of muscles that anatomy names | `FXMG=1.0/hamstring`, the hamstrings |
-| `FXMG=1.0/<region>.<qualifier>` | A compartment of a region | `FXMG=1.0/thigh.medial`, the adductors |
+| `FXMG=1.0/<region>.<qualifier>` | A compartment or layer of a region | `FXMG=1.0/thigh.medial`, the adductors |
 | `FXMG=1.0/a:<joint>.<action>` | The prime movers of one joint action | `FXMG=1.0/a:hip.flex`, the hip flexors |
-| `FXMG=1.0/<term>+<term>` | Everything its terms cover | `FXMG=1.0/erector-spinae+quadratus-lumborum`, the lower back |
+| `FXMG=1.0/<term>+<term>` | Everything its terms cover. A term is a category, a muscle or a part, and a union can have one term | `FXMG=1.0/erector-spinae+quadratus-lumborum`, the lower back; `FXMG=1.0/deltoid`, one muscle; `FXMG=1.0/trapezius.ascending`, one part |
 
 Rules for every key:
 
@@ -86,7 +86,7 @@ A category code is the FMA term of the set, rewritten with the muscle key's rule
 
 1. Find the set in FMA: a "Set of …", a "Musculature of …", or a cluster such as Quadriceps femoris. Take its term without its side.
 2. Drop "Set of", "Musculature of" and "musculature", and the words "muscle", "muscles" and "muscle group".
-3. When what is left reads `<qualifier> compartment of <region>` or `<qualifier> of <region>`, write `<region>.<qualifier>`. A second qualifier goes after the first.
+3. When what is left reads `<qualifier> compartment of <region>` or `<qualifier> of <region>`, write `<region>.<qualifier>`. Qualifiers run from the region outward: "superficial muscles of posterior compartment of forearm" is `forearm.posterior.superficial`.
 4. Write it in lowercase, with the words joined by single hyphens.
 
 | FMA term | Key |
@@ -103,13 +103,13 @@ A category code is the FMA term of the set, rewritten with the muscle key's rule
 | Musculature of anterior abdominal wall (FMA:78435) | `FXMG=1.0/anterior-abdominal-wall` |
 | Set of superficial muscles of posterior compartment of forearm (FMA:39104) | `FXMG=1.0/forearm.posterior.superficial` |
 
-The `.` means the same thing in both keys: the named part of the thing before it. In a muscle key it is a part of a muscle, as in `deltoid.acromial`. In a category key it is a compartment of a region, as in `thigh.medial`. The first code tells you which: `deltoid` is a muscle and `thigh` is a region.
+The `.` means the same thing in both keys: the named part of the thing before it. In a muscle key it is a part of a muscle, as in `deltoid.acromial`. In a category key it is a compartment or layer of a region, as in `thigh.medial`. The first code tells you which: `deltoid` is a muscle and `thigh` is a region.
 
 ## Members
 
-Every form has a fixed set of members, and comparison works on them.
+Every code has a set of members, and comparison works on them. The members of an anatomy code are fixed by the anatomy reference, so every owner gets the same list. The members of an action category are each owner's judgement of the prime movers.
 
-- **A set or compartment** has the members FMA lists for its term, written as muscle keys with the side dropped. `FXMG=1.0/hamstring` has `FXM=1.0/biceps-femoris`, `FXM=1.0/semitendinosus` and `FXM=1.0/semimembranosus`.
+- **A set or compartment** has the muscles FMA lists for its term, written as muscle keys with the side dropped. `FXMG=1.0/hamstring` has `FXM=1.0/biceps-femoris`, `FXM=1.0/semitendinosus` and `FXM=1.0/semimembranosus`.
 - **A set can hold sets.** The thigh holds the quadriceps femoris, which holds four muscles. Follow the members down until you reach muscle keys.
 - **A set FMA lists no members for** takes them from Uberon. FMA lists none for the erector spinae, so its members are the three muscles Uberon lists as its parts. The entire musculature, `FXMG=1.0/entire`, holds every muscle.
 - **An action** has the prime movers of that joint action. `FXMG=1.0/a:hip.flex` has `FXM=1.0/psoas-major`, `FXM=1.0/iliacus` and `FXM=1.0/rectus-femoris`. Sartorius and tensor fasciae latae help flex the hip, but they aren't prime movers, so they aren't members. There are 40 action categories, one for each joint action of the exercise key except ankle eversion, `ank.ev`, so `FXMG=1.0/a:ank.ev` isn't a key.
@@ -195,7 +195,7 @@ Each example starts from a catalog entry and decides the key one step at a time.
 |---|---|
 | Term | FMA has no set for the hip flexors. They come from the abdomen, the pelvis and the thigh |
 | Code | The muscles that flex the hip: the exercise key's joint action `hip.flex`, written `a:hip.flex` |
-| Members | The prime movers: `FXM=1.0/iliacus`, `FXM=1.0/psoas-major`, `FXM=1.0/rectus-femoris` |
+| Members | The prime movers: `FXM=1.0/psoas-major`, `FXM=1.0/iliacus`, `FXM=1.0/rectus-femoris` |
 
 `FXMG=1.0/a:hip.flex`
 
@@ -230,7 +230,7 @@ A muscle category record carries its key in `fxmg`. A group such as "Hamstrings"
 }
 ```
 
-An exercise's targets, primary and secondary, always refer to individual muscles, never to a category. Each muscle reference keeps the muscle's `id` and carries its category's `categoryId`, the muscle's key in `fxm`, and the category's key in `fxmg`. An exercise that trains the hamstrings lists the three hamstring muscles:
+An exercise's targets, primary and secondary, always refer to individual muscles, never to a category. Each muscle reference keeps the muscle's `id` and `name`, and carries its category's `categoryId`, the muscle's key in `fxm`, and the category's key in `fxmg`. An exercise that trains the hamstrings lists the three hamstring muscles:
 
 ```json fds:ignore exercise record excerpt showing the fxm and fxmg fields
 {
@@ -270,7 +270,7 @@ Comparison looks at the muscles and parts each key covers once its members are f
 | `FXMG=1.0/triceps-surae` | `FXMG=1.0/pectoral` | Different |
 | `FXMG=1.0/quadriceps-femoris` | `FXMG=1.0/a:hip.flex` | Overlap: both hold rectus femoris |
 
-Three comparisons work from the text alone: identical keys are the same, a compartment is more specific than its region, and a union is more specific than a union that holds all of its terms and more. Everything else needs the members of each code.
+Three comparisons work from the text alone: identical keys are the same, a compartment or layer is more specific than its region, and a union is more specific than a union that holds all of its terms and more. Everything else needs the members of each code.
 
 ### A muscle in a category
 
@@ -292,7 +292,7 @@ Categories are defined by their members, so they find each other, their muscles 
 | A category, `FXMG=1.0/hamstring` | Its muscles: `FXM=1.0/biceps-femoris`, `FXM=1.0/semitendinosus` and `FXM=1.0/semimembranosus` |
 | A category that holds only some parts of a muscle, the middle back | Those parts: `FXM=1.0/trapezius.ascending` and `FXM=1.0/trapezius.transverse`, beside the two rhomboids |
 | A region, `thigh` and `thigh.*` | The thigh and its compartments, just as `biceps-brachii.*` finds the heads of a muscle |
-| An exercise motion, `m:hip.ext+kn.ext` | `FXMG=1.0/a:hip.ext` and `FXMG=1.0/a:kn.ext`, and through them the glutes, the hamstrings and the quadriceps |
+| An exercise motion, `m:hip.ext+kn.ext` | `FXMG=1.0/a:hip.ext` and `FXMG=1.0/a:kn.ext`, and through them gluteus maximus, the hamstrings and the quadriceps |
 | Exercises whose target `fxm` is in `FXMG=1.0/hamstring` | Every exercise that trains the hamstrings, whichever category each catalog files them under |
 
 An exercise key's joint action and a category's action are the same code, so an exercise leads straight to the muscles it trains, as its load code leads to its equipment key.
