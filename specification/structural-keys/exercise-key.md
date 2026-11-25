@@ -78,7 +78,7 @@ Each layer records one dimension of the exercise.
 | `r` | Range and start | Partial or extra range, and a start position other than the usual one | No | Full range from the usual start |
 | `h` | Held posture | What the limbs that don't do the work are held in | No | No held posture |
 | `p` | Line of pull | Where a cable or band pulls from, or the path of the load past the body | No | The line the movement implies |
-| `a` | Accessory | A strap or a partner that helps without loading or supporting the body | No | Not stated |
+| `a` | Accessory | An accessory or a partner that helps without loading or supporting the body | No | Not stated |
 
 Rules for every key:
 
@@ -165,12 +165,16 @@ Rules:
 
 ### Orientation (`o`)
 
+These codes are the body positions of both keys: an [equipment key](./equipment-key.md#posture-s) writes a machine's posture with them.
+
 | Code | Meaning | Points it implies |
 |---|---|---|
 | `standing` | On the feet, trunk within about 30° of vertical | `feet` |
 | `standing.bent` | On the feet, trunk hinged forward more than about 30° and held there (bent-over row) | `feet` |
+| `standing.chest` | On the feet, trunk resting on a pad, upright or bent over (donkey calf raise machine) | `feet`, `chest` |
 | `seated` | Sitting, trunk more than 60° from horizontal | `seat` |
 | `seated.bent` | Sitting, trunk hinged forward over the thighs and held there | `seat` |
+| `seated.chest` | Sitting, chest against a pad that holds the trunk (row machine, rear-delt machine) | `seat`, `chest` |
 | `kneeling` | On both knees, trunk upright | `knees`, `shins` |
 | `kneeling.half` | On one knee, the other foot forward | `knees`, `feet` |
 | `supine` | Face up, trunk within 15° of horizontal | `back` |
@@ -190,7 +194,7 @@ Rules:
 - A forward hinge held for the whole set is `standing.bent`. A hinge where the trunk moves, as in a deadlift or a swing, starts `standing`.
 - Orientation follows the trunk: on hands and knees is `prone`, and `kneeling` means the trunk is upright.
 - Sitting on the floor leaning back 30–60° (V-sit, Russian twist) is `supine.incline`.
-- On a machine, write the body's position: a seated leg extension is `seated`, a lying leg curl `prone`, a leg press `supine.incline`.
+- On a machine, write the body's position: a seated leg extension is `seated`, a lying leg curl `prone`, a leg press `supine.incline`, a row machine with a chest pad `seated.chest`. It is the same code as the machine's posture in its equipment key.
 - When the rep ends in a different orientation from its start, write both: a get-up from lying is `o:supine>standing`. A rep that goes down and comes back, like a burpee, is just its start.
 
 ### Moving end (`k`)
@@ -223,7 +227,7 @@ Rules:
 
 ### Support (`s`)
 
-Support names each surface with its [equipment code](#equipment-in-an-exercise-key): a support from the equipment key's [form tables](./equipment-key.md#form-f), such as `floor`, `bench`, `box` or `bar.fixed`, or any load code except `none`. After the surface come the body points listed under [load](#load-l).
+Support names each surface with its [equipment code](#equipment-in-an-exercise-key): a support from the equipment key's [form tables](./equipment-key.md#form-f), such as `floor`, `bench`, `box` or `bar.fixed`, or any load code except `none`. After the surface come the [body points](#body-points) listed under load.
 
 Rules:
 
@@ -240,30 +244,44 @@ Rules:
 
 Load names the equipment that loads the working muscles by its [equipment code](#equipment-in-an-exercise-key), or writes `none` for body weight. After each code come `@` and a hold point.
 
-| Hold point or body point | Meaning |
+#### Body points
+
+A hold point is one of the body points. The same body points follow `@` in support, and an [equipment key](./equipment-key.md#load-interface-l) writes a machine's load interface with them.
+
+| Body point | Meaning |
 |---|---|
-| `hands` | The hands, or one hand: at the sides, at arm's length, by a handle |
-| `forearms` | The forearms, elbows bent (elbow plank) |
+| `hands` | The hands, or one hand: at the sides, at arm's length, by a handle; a machine's handles or bar |
+| `forearms` | The forearms, elbows bent: an elbow plank, or a machine's forearm pads |
 | `elbows` | The crook of the elbows (Zercher) |
-| `arms` | The upper arms (preacher pad) |
-| `shoulders` | The front of the shoulders (front rack), or one shoulder |
-| `chest` | Against the chest (goblet) |
-| `back` | Across the upper back (back squat) |
-| `hips` | Across the front of the hips (hip thrust) |
-| `waist` | Hung from a belt |
-| `seat` | The buttocks |
-| `thighs` `knees` `shins` `calves` `ankles` `feet` | On or around that part of the leg |
-| `head` | The head or forehead |
-| `overhead` | Held in straight arms overhead for the whole rep. Load only |
-| `assist` | The implement takes part of the body weight: an assist band or an assisted machine. Load only |
+| `arms` | The upper arms: a preacher pad, or a machine's arm pad on the upper arm or elbow |
+| `shoulders` | The shoulders: the front rack or one shoulder, or a machine's shoulder pads |
+| `chest` | The chest: a load held against it (goblet), or a chest pad |
+| `back` | The back: a bar across the upper back (back squat), or a back pad |
+| `hips` | The front of the hips: a load across them (hip thrust), or a machine's hip pad or belt |
+| `waist` | Hung from a belt at the waist |
+| `seat` | The buttocks: sitting down onto a box or bench, or a machine's moving seat |
+| `thighs` | On or around the thighs, or a machine's thigh pad |
+| `knees` | At or around the knees, or a machine's knee pad or platform |
+| `shins` | The shins |
+| `calves` | The calves, the back of the lower leg |
+| `ankles` | At or just above the ankles: a strap, a cuff, or a machine's pad on the lower leg |
+| `feet` | The feet, or one foot: on the floor, a foot plate or pedals |
+| `head` | The head or forehead, or a machine's head pad |
+
+Two hold points are not body points, and are written only in load:
+
+| Hold point | Meaning |
+|---|---|
+| `overhead` | Held in straight arms overhead for the whole rep |
+| `assist` | The implement takes part of the body weight: an assist band or an assisted machine |
 
 Rules:
 
 - List every piece of equipment that loads the working muscles, each with `@` and where it is held: `l:bar.straight@back`.
 - `none` means no equipment. It stands alone and takes no hold point: a weighted dip is `l:plate@waist`, not `none` beside a plate.
-- A strength machine is `mac`. A cardio machine is `erg`, or `erg.` and its motion when that is known: `erg.row`. The record's [equipment key](./equipment-key.md#keys-in-records) says which machine.
+- A strength machine is `mac`. It has no more specific code, because the exercise's own motion already says what the machine guides. A cardio machine is `erg`, or `erg.` and its motion when that is known: `erg.row`. The record's [equipment key](./equipment-key.md#keys-in-records) says which machine.
 - A support code is never written in `l`.
-- A band is `band`, whatever its type; the type is in the equipment key. It is held where it presses or pulls on the body. Where it is anchored is not written.
+- A band whose type isn't named is `band`. A named type takes its child code: a long loop band is `band.loop`. A band is held where it presses or pulls on the body. Where it is anchored is not written.
 - Leave the count out when it is the usual one, and write `*n` only when it differs. A one-hand implement (`bell.dumb`, `bell.kettle`, `plate`, `club`) is one per working hand; every other code is one. At the chest, back, hips or waist any implement is one: a goblet squat with one dumbbell is `l:bell.dumb@chest`. One kettlebell held in both hands is `bell.kettle*1@hands`.
 - Write `?` for the part you don't know: `?@chest` when the implement isn't known, `bell.kettle@?` when the hold point isn't, `l:?` when not even that much is.
 
@@ -365,17 +383,21 @@ Rules:
 
 ### Accessory (`a`)
 
+The accessory codes are the accessory codes of the equipment key, listed in its [form tables](./equipment-key.md#form-f), and `partner`.
+
 | Code | Meaning |
 |---|---|
 | `none` | No accessory (the default) |
-| `strap` | A strap, belt, towel or rope used to pull or hold a limb |
+| `strap.stretch` | A strap, belt, towel, rope or loop band used to pull or hold a limb in a stretch |
 | `partner` | A partner who holds, resists or assists |
+| Any other accessory code | `handle`, `belt.lift`, `strap.lift`, `mat` and the rest |
 
 Rules:
 
 - An accessory never loads the working muscles and never bears weight. Load goes in `l`, support in `s`.
+- An accessory code names the same equipment as its equipment key: `a:strap.stretch` is `FXE=1.0S/k:acc/f:strap.stretch`. A partner is a person, not equipment, and has no equipment key.
+- A handle or bar on a cable is part of the station, not an accessory.
 - `a` is the extended layer: a key that carries it has the flag `N`. It is compared only when both keys carry it; when only one does, that key is more specific.
-- The strap itself is equipment, the accessory `FXE=1.0S/k:acc/f:strap.stretch` (see the equipment key's [form tables](./equipment-key.md#form-f)). It has no code in an exercise key.
 
 ## Symbols
 
@@ -411,7 +433,15 @@ The motion prefixes go before a part of `m` and set its kind.
 
 ## Equipment in an exercise key
 
-An exercise key names its equipment in its load (`l`) and support (`s`) layers, with codes from the [equipment key](./equipment-key.md#equipment-keys-in-exercise-keys). Each code is taken from one part of the equipment key, so an exercise key leads straight to the key of its equipment.
+An exercise key and an [equipment key](./equipment-key.md#equipment-keys-in-exercise-keys) share three lists of codes, so an exercise key leads straight to the key of its equipment, and a machine's key says how the body sits on it in the words an exercise key uses.
+
+| List | In an exercise key | In an equipment key | Listed under |
+|---|---|---|---|
+| Equipment codes | The equipment in load (`l`) and support (`s`), and the accessory (`a`) | Kind (`k`) and form (`f`) | The equipment key's [form tables](./equipment-key.md#form-f) |
+| Body points | After `@` in load and support | A machine's load interface (`l`) | [Body points](#body-points) |
+| Body positions | Orientation (`o`) | A machine's posture (`s`) | [Orientation](#orientation-o) |
+
+The rowing machine below shows all three: the rower is held `@hands` and starts `seated`, and its equipment key writes `l:hands` and `s:seated`.
 
 <figure className="key-anatomy">
   <div className="key-pair">
@@ -474,12 +504,12 @@ An exercise key names its equipment in its load (`l`) and support (`s`) layers, 
         </span>
         <span className="key-anatomy__slash"><code><span className="ka-sym">/</span></code></span>
         <span className="key-anatomy__part">
-          <code><span className="ka-letter">o</span><span className="ka-sym">:</span><span className="ka-code">seated</span></code>
+          <code><span className="ka-letter">o</span><span className="ka-sym">:</span><span className="ka-shared"><span className="ka-code">seated</span></span></code>
           <span className="key-anatomy__label">orientation</span>
         </span>
         <span className="key-anatomy__slash"><code><span className="ka-sym">/</span></code></span>
         <span className="key-anatomy__part">
-          <code><span className="ka-letter">l</span><span className="ka-sym">:</span><span className="ka-shared"><span className="ka-code">erg</span></span><span className="ka-sym">.</span><span className="ka-shared"><span className="ka-code">row</span></span><span className="ka-sym">@</span><span className="ka-code">hands</span></code>
+          <code><span className="ka-letter">l</span><span className="ka-sym">:</span><span className="ka-shared"><span className="ka-code">erg</span></span><span className="ka-sym">.</span><span className="ka-shared"><span className="ka-code">row</span></span><span className="ka-sym">@</span><span className="ka-shared"><span className="ka-code">hands</span></span></code>
           <span className="key-anatomy__label">load</span>
         </span>
       </div>
@@ -503,12 +533,12 @@ An exercise key names its equipment in its load (`l`) and support (`s`) layers, 
         </span>
         <span className="key-anatomy__slash"><code><span className="ka-sym">/</span></code></span>
         <span className="key-anatomy__part">
-          <code><span className="ka-letter">l</span><span className="ka-sym">:</span><span className="ka-code">hand</span></code>
+          <code><span className="ka-letter">l</span><span className="ka-sym">:</span><span className="ka-shared"><span className="ka-code">hands</span></span></code>
           <span className="key-anatomy__label">load interface</span>
         </span>
         <span className="key-anatomy__slash"><code><span className="ka-sym">/</span></code></span>
         <span className="key-anatomy__part">
-          <code><span className="ka-letter">s</span><span className="ka-sym">:</span><span className="ka-code">seat</span></code>
+          <code><span className="ka-letter">s</span><span className="ka-sym">:</span><span className="ka-shared"><span className="ka-code">seated</span></span></code>
           <span className="key-anatomy__label">posture</span>
         </span>
         <span className="key-anatomy__slash"><code><span className="ka-sym">/</span></code></span>
@@ -520,7 +550,7 @@ An exercise key names its equipment in its load (`l`) and support (`s`) layers, 
     </div>
   </div>
   <figcaption>
-    Each exercise key on the left, the key of its equipment on the right. <span className="ka-shared">Outlined</span>: the code the two share.
+    Each exercise key on the left, the key of its equipment on the right. <span className="ka-shared">Outlined</span>: the codes the two share.
   </figcaption>
 </figure>
 
@@ -530,14 +560,23 @@ An exercise key names its equipment in its load (`l`) and support (`s`) layers, 
 | Implement (`imp`) | The form `f`: `bar.straight` | `FXI=1.0S/m:hip.ext+kn.ext/o:standing/l:bar.straight@back`<br />`FXE=1.0S/k:imp/f:bar.straight` |
 | Support (`sup`) | The form `f`: `bench` | `FXI=1.0S/m:el.ext+sh.ext/o:seated/s:bench@hands/l:none`<br />`FXE=1.0S/k:sup/f:bench` |
 | Station (`stn`) | The form `f`: `cable` | `FXI=1.0S/m:el.ext/o:standing/l:cable@hands`<br />`FXE=1.0S/k:stn/f:cable` |
-| Strength machine (`mac`) | The kind `k`: `mac` | `FXI=1.0S/m:el.flex+sh.add/o:seated/l:mac@hands`<br />`FXE=1.0S/k:mac/l:hand/s:seat/m:pull.down` |
-| Cardio machine (`erg`) | The kind `k`: `erg`; or the kind, `.` and the motion `m`: `erg.row` | `FXI=1.0S/m:~el.flex+hip.ext+kn.ext+sh.ext/o:seated/l:erg.row@hands`<br />`FXE=1.0S/k:erg/c:rail/l:hand/s:seat/m:row` |
+| Accessory (`acc`) | The form `f`, in the accessory layer `a`: `strap.stretch` | `FXI=1.0N/m:%ank.df+kn.ext/o:seated/l:none/x:u/a:strap.stretch`<br />`FXE=1.0S/k:acc/f:strap.stretch` |
+| Strength machine (`mac`) | The kind `k`: `mac` | `FXI=1.0S/m:el.flex+sh.add/o:seated/l:mac@hands`<br />`FXE=1.0S/k:mac/l:hands/s:seated/m:pull.down` |
+| Cardio machine (`erg`) | The kind `k`: `erg`; or the kind, `.` and the motion `m`: `erg.row` | `FXI=1.0S/m:~el.flex+hip.ext+kn.ext+sh.ext/o:seated/l:erg.row@hands`<br />`FXE=1.0S/k:erg/c:rail/l:hands/s:seated/m:row` |
 
 A form code stands for one equipment key: `bar.straight` is `FXE=1.0S/k:imp/f:bar.straight`. The form codes are listed in the equipment key's [form tables](./equipment-key.md#form-f). A kind code stands for every key of that kind, with the other layers open: `mac` is `FXE=1.0S/k:mac/l:?/s:?/m:?`. `erg.row` is `FXE=1.0S/k:erg/c:?/l:?/s:?/m:row`: any cardio machine whose motion is `row`. The cardio motions are listed under the equipment key's [motion](./equipment-key.md#motion-m).
 
-The record's `fxe` names the exact equipment, and is the code's key or more specific than it. The rowing machine above is more specific than `erg.row`. A long loop band, `f:band.loop`, is more specific than `band`, because an exercise key writes `band` for every band. An accessory (`acc`) has no code in an exercise key.
+Every form code may be written in an exercise key, children included: `band.loop` is a long loop band, and `band` covers it. The record's `fxe` names the exact equipment, and is the code's key or more specific than it. The rowing machine above is more specific than `erg.row`.
 
-A support code is written only in `s`. Every other code except `none` may be written in `l` or in `s`. The exercise key adds where the equipment is held or touched (`@`) and, in `l`, how many there are (`*n`): see [Load](#load-l).
+A support code is written only in `s`, and an accessory code only in `a`. Every other code except `none` may be written in `l` or in `s`. The exercise key adds where the equipment is held or touched (`@`) and, in `l`, how many there are (`*n`): see [Load](#load-l).
+
+On a machine, the two keys agree: the machine's posture is the exercise's start orientation, and its load interface includes the point where the exercise holds `mac` or `erg` (`@overhead` is in the hands).
+
+The keys differ in three ways, on purpose:
+
+- **A strength machine has no specific code.** A cardio machine can be `erg.row`, because the cycle is the movement. A strength machine is only `mac`, because the exercise's own motion carries what the machine guides.
+- **A layer left out reads differently.** In an exercise key it is at its default, which is a value. In an equipment key it is unknown, `?`.
+- **Each key's layer letters are its own.** Only `m` is motion in both. In an exercise key `l` is load and `s` support; in an equipment key `l` is the load interface and `s` the posture.
 
 The two keys never record the same fact twice. Grip, sides, range, footwork, pulley height, bench angle, the hold point and the count belong to the exercise key. What the equipment is, its fixed geometry and how it is built belong to the equipment key.
 
@@ -590,7 +629,7 @@ Seated at a pulldown machine, an overhand grip at about shoulder width, the bar 
 
 `FXI=1.0S/m:el.flex+sh.add/o:seated/l:mac@hands`
 
-Its equipment is the [lat pulldown machine](./equipment-key.md#lat-pulldown-machine), `FXE=1.0S/k:mac/l:hand/s:seat/m:pull.down`.
+Its equipment is the [lat pulldown machine](./equipment-key.md#lat-pulldown-machine), `FXE=1.0S/k:mac/l:hands/s:seated/m:pull.down`.
 
 A close neutral-grip pulldown brings the hands down in front of the face instead, so the shoulder action and the grip both change:
 
