@@ -5,7 +5,7 @@ sidebar_position: 1
 
 # Structural Keys
 
-A structural key is a short string that describes an exercise, a piece of equipment or a muscle by what it is. It uses fixed codes and no words from any language. Two catalogs that call the same exercise by different names can compare keys and see that they mean the same thing.
+A structural key is a short string that describes an exercise, a piece of equipment or a muscle by what it is. It is written in codes the standard publishes, not in any catalog's own names. Two catalogs that call the same exercise by different names can compare keys and find each other.
 
 ## The problem with names
 
@@ -19,11 +19,11 @@ Matching by name comes down to string similarity, translation and guesswork, and
 
 ## What a structural key is
 
-A key describes the thing itself. It is made of layers, and each layer records one dimension of the thing in codes from lists the standard publishes. The standing dumbbell curl has this key in every catalog, whatever the catalog calls it:
+A key describes the thing itself. It is made of layers, and each layer records one dimension of the thing in codes from lists the standard publishes. An owner describing a standing dumbbell curl writes this key, whatever its catalog calls the exercise:
 
 `FXI=1.0S/m:el.flex/o:standing/l:db@hands`
 
-It reads as elbow flexion, standing, with a dumbbell in the hands. A Spanish catalog and an English one write the same key, because the key contains no names.
+It reads as elbow flexion, standing, with a dumbbell in the hands. A Spanish catalog and an English one can write the same key, because the key doesn't depend on either catalog's names.
 
 FDS publishes how keys are built and the code lists they draw on. It does not publish keys for any exercise, muscle or piece of equipment, because FDS is a standard and not a catalog. Each owner writes the keys for its own records.
 
@@ -31,7 +31,7 @@ FDS publishes how keys are built and the code lists they draw on. It does not pu
 
 - **Matching across catalogs.** You compare keys instead of names. Comparing two keys tells you they are the same, that one is more specific than the other, or that they are different.
 - **Interoperability.** Two platforms can link their catalogs without first agreeing on names or adopting a shared list.
-- **History that survives a move.** When someone changes apps, the new app can find each logged exercise in its own catalog by key, so their history stays usable.
+- **History that survives a move.** When someone changes apps, the new app can look up each logged exercise in its own catalog by key, so their history stays usable.
 
 ## What keys don't do
 
