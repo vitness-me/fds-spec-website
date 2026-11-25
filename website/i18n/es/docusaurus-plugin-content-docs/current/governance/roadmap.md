@@ -34,7 +34,7 @@ Dos decisiones ya están fijadas. Un registro de lo ejecutado llevará una **ins
 
 ### RFC-010 — Descriptores estructurales (borrador)
 
-FXI, FXE y FXM: cadenas cortas de vocabularios cerrados que describen cómo se hace un ejercicio, qué es una pieza de equipamiento y a qué músculo se refiere, para que dos catálogos puedan comparar registros sin un nombre compartido. El borrador agrega campos opcionales a exercise, equipment y muscle y define un protocolo de coincidencia que enlaza automáticamente solo ante un descriptor idéntico y único, y en otro caso pide a una persona que confirme. Sigue siendo experimental hasta que una prueba nueva con nombres disjuntos cumpla su umbral de lanzamiento, que las primeras mediciones todavía no cumplen.
+FXI, FXE y FXM: cadenas cortas de vocabularios cerrados que describen cómo se hace un ejercicio, qué es una pieza de equipamiento y a qué músculo se refiere, para que dos catálogos puedan comparar registros sin un nombre compartido. El borrador agrega campos opcionales a exercise, equipment y muscle y define un protocolo de coincidencia que enlaza automáticamente solo ante un descriptor idéntico y único, y en otro caso pide a una persona que confirme. Se acepta solo cuando una prueba nueva con nombres disjuntos cumpla su umbral de lanzamiento, que las primeras mediciones todavía no cumplen.
 
 ### Registros y conformidad
 

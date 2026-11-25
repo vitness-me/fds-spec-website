@@ -1,7 +1,7 @@
 # Structural Descriptors: FXI, FXE and FXM
 
 :::caution Draft
-These pages describe a draft. Nothing here is normative until [RFC-010](/docs/specifications/rfc-010-structural-descriptors), which adopts the structural descriptors, is accepted. RFC-010 is a draft. [Its §2](/docs/specifications/rfc-010-structural-descriptors#2-terminology) says what may still change while the descriptors are experimental and what acceptance freezes. The vocabularies are versioned by rules revision, separately from the entity schemas. Release 1.6.0, proposed with RFC-010, carries these fields in exercise 1.2.0, equipment 1.2.0 and muscle 1.1.0; it is published when RFC-010 is accepted.
+These pages describe a draft. Nothing here is normative until [RFC-010](/docs/specifications/rfc-010-structural-descriptors), which adopts the structural descriptors, is accepted. RFC-010 is a draft, and [its §12](/docs/specifications/rfc-010-structural-descriptors#12-open-items) lists the conditions for accepting it. The vocabularies are versioned by rules revision, separately from the entity schemas. Release 1.6.0, proposed with RFC-010, carries these fields in exercise 1.2.0, equipment 1.2.0 and muscle 1.1.0; it is published when RFC-010 is accepted.
 :::
 
 A structural descriptor is a short string that says how an exercise is done, what a piece of equipment is, or which muscle is meant, in a closed vocabulary rather than in words. Two catalogues that describe the same exercise in different languages, with different names, can still write the same descriptor, and software can compare the two strings without reading either name.

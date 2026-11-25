@@ -377,7 +377,7 @@ comes from discrete stack positions.
 
 <!-- fds:not-a-field identical, null — `identical` is a compare relation from the descriptor pages, not a schema name; `null` is the JSON literal fxiGap takes -->
 
-Experimental. Every field below is optional, and a record without them means
+Draft. Every field below is optional, and a record without them means
 what it always meant. They sit at the **top level** of the record, never under
 `extensions`.
 
@@ -398,8 +398,9 @@ Rules an assistant must not get wrong:
   confirm otherwise; the confirmed link is stored. Never call it
   identification.
 - **Auto-match** only when exactly one library record is `identical`, neither
-  side has a gap marker, and both are `owner` or `owner-assisted`. Otherwise
-  offer at most three records to confirm.
+  side has a gap marker, both are `owner` or `owner-assisted`, and, when both
+  carry an FXE, the two FXEs are `identical` too. Otherwise offer at most
+  three records to confirm.
 - **Import mode is candidate search only.** A descriptor built from another
   catalogue's row is `import`, never auto-matches, and carries no accuracy
   claim. Software that proposes answers writes `agent`, never `owner`.

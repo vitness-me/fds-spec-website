@@ -11,7 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Documents release 1.6.0 and the draft RFC-010 structural descriptor fields:
   `fxi`, `fxe`, `fxiProvenance`, `fxiGap` and `xrefs` on an exercise, `fxe`
-  on equipment and `fxm` on a muscle, with the match protocol's rules.
+  on equipment and `fxm` on a muscle, with the match protocol's rules,
+  among them that auto-match also needs identical FXEs when both records
+  carry one.
 - Documents release 1.5.0: body-atlas 1.1.0 and the optional `license` and
   `attribution` on a view's asset.
 - The worked examples use a source catalogue written for this package: a

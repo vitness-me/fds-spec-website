@@ -22,10 +22,10 @@ reciba su fecha. Hasta entonces, las nuevas versiones se registran sin congelar.
 - **RFC-010, Descriptores estructurales (borrador).** FXI para un ejercicio, FXE
   para una pieza de equipamiento y FXM para un músculo: cadenas de vocabularios
   cerrados que permiten a dos catálogos comparar registros sin un nombre
-  compartido. El RFC adopta las páginas de descriptores, define el protocolo de
-  coincidencia y publica las mediciones con las que se probaron los
-  descriptores, incluido que todavía no se cumple el umbral para salir del
-  estado experimental.
+  compartido. El RFC adopta las páginas de descriptores en la revisión de
+  reglas 1.4, define el protocolo de coincidencia y publica las mediciones con
+  las que se probaron los descriptores, incluido que todavía no se cumple el
+  umbral de lanzamiento, una condición para aceptar el RFC.
 - En un ejercicio: `fxi`, `fxe` (el FXE estándar de su equipamiento principal),
   `fxiProvenance`, `fxiGap` y `xrefs`, todos opcionales, en el nivel superior
   del registro. Cada referencia a equipamiento dentro de un ejercicio puede

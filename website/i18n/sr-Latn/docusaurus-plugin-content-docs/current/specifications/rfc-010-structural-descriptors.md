@@ -17,9 +17,9 @@ keywords: [fxi, fxe, fxm, structural descriptor, match protocol, xrefs, provenan
 
 Ova specifikacija dodaje tri strukturna deskriptora u Fitness Data Standard: **FXI** za vežbu, **FXE** za komad opreme i **FXM** za mišić. Deskriptor je kratak string, sastavljen iz zatvorenih vokabulara, koji kaže kako se vežba izvodi, šta je komad opreme ili koje tkivo označava ključ mišića, bez upotrebe naziva na bilo kom jeziku. Dva kataloga koja istu vežbu opisuju različitim rečima mogu da uporede svoje deskriptore i pronađu jedan drugog.
 
-Definiše gde deskriptori stoje na entitetima vežbe, opreme i mišića, polja koja putuju uz njih (ko je odgovorio, šta notacija propušta i veze koje je potvrdila osoba ili razrešivač), protokol podudaranja koji razrešivač prati i način na koji se deskriptori verzionišu. Objavljuje merenja na kojima su deskriptori do sada testirani i navodi koja od njih još ne dostižu prag koji ovaj RFC postavlja za izlazak iz eksperimentalnog statusa.
+Definiše gde deskriptori stoje na entitetima vežbe, opreme i mišića, polja koja putuju uz njih (ko je odgovorio, šta notacija propušta i veze koje je potvrdila osoba ili razrešivač), protokol podudaranja koji razrešivač prati i način na koji se deskriptori verzionišu. Objavljuje merenja na kojima su deskriptori do sada testirani i navodi koja od njih još ne dostižu prag koji ovaj RFC postavlja za sopstveno prihvatanje.
 
-Deskriptori su eksperimentalni (§2 kaže šta to dozvoljava da se promeni, a šta ne). Svako polje koje ovaj RFC dodaje je opciono, nijedno postojeće polje ne menja značenje, a izmena šeme je sporedna verzija.
+Ovaj RFC prolazi isti put od nacrta do prihvatanja kao i svaki drugi RFC; §12 navodi uslove za njegovo prihvatanje, među njima i kapiju izdanja iz §9.5. Svako polje koje ovaj RFC dodaje je opciono, nijedno postojeće polje ne menja značenje, a izmena šeme je sporedna verzija.
 
 ## 1. Uvod
 
@@ -66,9 +66,6 @@ Ključne reči MUST, MUST NOT, SHOULD, SHOULD NOT i MAY tumače se kako je opisa
 - **Režim uvoza**: građenje deskriptora iz reda drugog kataloga bez njegovog vlasnika.
 - **Marker nedostatka**: vlasnikova beleška da notacija propušta nešto u vezi sa ovim zapisom.
 - **Veza**: sačuvana tvrdnja da zapis i zapis u drugom katalogu opisuju istu stvar.
-- **Eksperimentalno**: status deskriptora od prihvatanja ovog RFC-a dok novi test ne prođe kapiju izdanja iz §9.5. Dok su eksperimentalni:
-  - **još može da se promeni**: revizija pravila unutar glavne verzije 1 može da doda kodove i precizira tumačenja, isključivo prema §8.1; detalji rangiranja liste za potvrdu (§7.2, redosled unutar njenih koraka i između njih) i vektori usaglašenosti koji ga fiksiraju; uslovi automatskog podudaranja, koji mogu samo da se pooštre, nikada da se ublaže (§12); i otvorena pitanja iz §12;
-  - **zamrznuto prihvatanjem**: imena polja, njihovi tipovi i mesto na kome stoje na svakom entitetu (§5); zaglavlja stringova i značenje svakog objavljenog koda; svaka objavljena podrazumevana vrednost (§8.1); vrednosti porekla i ono što svaka od njih dozvoljava (§5.3, §7.1); i bajtovi verzija šema koje imenuje izdanje 1.6.0 (§8.2). Oni ostaju onakvi kakvi su objavljeni bez obzira na to da li će kapija ikada biti dostignuta; izlazak iz eksperimentalnog statusa ne menja nijedno polje i nijedan string.
 
 ## 3. Tvrdnja
 
@@ -86,7 +83,7 @@ FXI ne identifikuje vežbu. Dva vlasnika koja opisuju istu vežbu ne pišu uvek 
 
 ## 4. Deskriptori
 
-Stranice deskriptora su normativni tekst za sintaksu, kanonski oblik, pravila slojeva, kodove i poređenje. Ovaj RFC ih usvaja onakve kakve su u reviziji pravila 1.3, vrednosti `rules` registara deskriptora i toka pitanja, i ne iskazuje ih ponovo.
+Stranice deskriptora su normativni tekst za sintaksu, kanonski oblik, pravila slojeva, kodove i poređenje. Ovaj RFC ih usvaja onakve kakve su u reviziji pravila 1.4, vrednosti `rules` registara deskriptora i toka pitanja, i ne iskazuje ih ponovo.
 
 | Deskriptor | Stranica | Primer |
 |---|---|---|
@@ -215,7 +212,8 @@ Razrešivač MOŽE da poveže upit sa zapisom iz biblioteke bez pitanja osobe sa
 1. tačno jedan zapis iz biblioteke ima FXI koji se sa FXI upita poredi kao `identical`;
 2. ni upit ni taj zapis ne nose marker nedostatka (§5.3);
 3. oba imaju `fxiProvenance` `owner` ili `owner-assisted`;
-4. nijedan nije izgrađen u režimu uvoza (§7.4). Tamo gde red navodi režim u kome je izgrađen, kao što to čine zapis odgovora ili izlazni red enkodera, red iz režima uvoza nikada se ne podudara automatski, šta god da kaže njegov `fxiProvenance`.
+4. nijedan nije izgrađen u režimu uvoza (§7.4). Tamo gde red navodi režim u kome je izgrađen, kao što to čine zapis odgovora ili izlazni red enkodera, red iz režima uvoza nikada se ne podudara automatski, šta god da kaže njegov `fxiProvenance`;
+5. kada oba nose FXE (§5.2), dva FXE se porede kao `identical` (§6). FXE koji samo precizira drugi, ili sadrži `?`, nije identičan. Zapis bez FXE prepušta ovaj uslov FXI-ju. Dve mašine koje vode različite pokrete, kao što su mašina za povlačenje naniže i mašina za veslanje u sedu, mogu dati isti FXI; nikada se ne podudaraju automatski na osnovu njega.
 
 Veza se čuva u `xrefs` upita sa `link: "auto"`. U svakom drugom slučaju razrešivač NE SME da poveže zapise bez osobe. Tamo gde red navodi svoj režim, razrešivač MORA da odbije red čiji mu `fxiProvenance` protivreči (red iz režima uvoza sa bilo kojim poreklom osim `import`, ili `import` van režima uvoza) umesto da za njega traži podudaranje.
 
@@ -227,7 +225,7 @@ Inače razrešivač nudi listu za potvrdu: najviše tri zapisa iz biblioteke, sv
 2. **Skoro kompatibilni**: zapisi koji protivreče upitu u tačno jednom standardnom sloju, koji lista imenuje. Po sličnosti naziva, zatim po redosledu u biblioteci.
 3. **Kandidati po nazivu**: ostali, po sličnosti naziva, zatim po redosledu u biblioteci.
 
-Veza koju osoba izabere čuva se u `xrefs` upita sa `link: "confirmed"`. Način bodovanja sličnosti naziva je izbor implementacije; vektori usaglašenosti rangiraju po nazivu samo tamo gde se svako razumno bodovanje slaže. Detalji rangiranja još mogu da se promene dok su deskriptori eksperimentalni (§2); tri koraka i dužina liste ne mogu.
+Veza koju osoba izabere čuva se u `xrefs` upita sa `link: "confirmed"`. Način bodovanja sličnosti naziva je izbor implementacije; vektori usaglašenosti rangiraju po nazivu samo tamo gde se svako razumno bodovanje slaže.
 
 ### 7.3. Odsutno
 
@@ -245,6 +243,7 @@ Deskriptor izgrađen u režimu uvoza služi samo za pretragu kandidata. MOŽE da
 - **Samo preciziranje, unutar glavne verzije.** Revizija pravila može da doda kod, da podeli kod na podkodove koje njegov stari kod tada pokriva, da doda sloj koji stariji stringovi čitaju kao `?`, da doda unos u tabelu tamo gde je staro tumačenje bilo `?`, ili da dodeli objavljenu podrazumevanu vrednost sloju čije je odsustvo bilo otvoreno. Nikada ne uklanja kod, nikada ne menja šta kod znači i nikada ne menja postojeću podrazumevanu vrednost. Svaki string važeći pod jednom revizijom pravila ostaje važeći pod sledećom, a dva stringa koja su bila `identical` ostaju `identical`.
 - **Podrazumevane vrednosti su zauvek.** String koji sloj ostavlja na podrazumevanoj vrednosti znači isto pod svakom kasnijom revizijom pravila svoje glavne verzije.
 - **Jedna revizija pravila po izdanju.** Izdanje standarda nosi najviše jednu novu reviziju pravila, a svaka nova odluka u njoj počiva na najmanje dva neuspešna slučaja iz najmanje dva kataloga.
+- **Revizija pravila 1.4.** Ovaj RFC usvaja reviziju pravila 1.4, koja precizira 1.3 prema gornjim pravilima. Dodaje zglobnu akciju `sh.ext.oh`, ekstenziju ramena iznad glave, dete akcije `sh.ext`, koju `sh.ext` pokriva pri poređenju; kodove linije `p:neck`, teret spušten do vrata ili grla, i `p:double`, uže koje prolazi dvaput u svakom skoku; i pravilo sloja po kome je zadržani pritisak udova koji se ne pomeraju, kada je vežba zasnovana na njemu, deo `=`. Nijedan kod iz 1.3 ne menja značenje i svaki string iz 1.3 ostaje važeći. String iz 1.3 napisan za povlačenje iznad glave precizira njegov string iz 1.4 umesto da mu bude identičan, pa ga nadogradnja ponovo gradi iz sačuvanih odgovora.
 - **Odgovori se čuvaju.** Proizvođač podataka TREBALO BI da čuva zapis odgovora za svaki zapis: ID-jeve pitanja i izabrane opcije, reč pokreta i skup podataka reči pokreta iz kog je došla, ako postoji, poreklo i marker nedostatka. Kada revizija pravila precizira tumačenje, nadogradnja ponovo gradi svaki string iz njegovih sačuvanih odgovora umesto da bilo koga ponovo pita. String bez sačuvanih odgovora ostaje važeći onako kako je napisan.
 
 ### 8.2. Šeme
@@ -288,14 +287,14 @@ Na istom skupu, podudaranje po nazivu uz prevođenje dostiglo je odziv u prva 3 
 
 ### 9.5. Kapija izdanja
 
-Deskriptori izlaze iz eksperimentalnog statusa tek kada test sproveden onako kako ga opisuje §9.1, na novom skupu upita sa disjunktnim nazivima koji nijedan raniji test nije koristio, sa unakrsnim izvršavanjima po enkoderima, ispuni oba uslova, i na svim delovima i na stvarnim delovima:
+RFC-010 se prihvata tek kada test sproveden onako kako ga opisuje §9.1, na novom skupu upita sa disjunktnim nazivima koji nijedan raniji test nije koristio, sa unakrsnim izvršavanjima po enkoderima, ispuni oba uslova, i na svim delovima i na stvarnim delovima:
 
 - pogrešna automatska podudaranja **najviše 2%**;
 - odziv u prva 3 **najmanje 98%**.
 
 Kapija se očitava na tačkastoj proceni. Intervali se navode uz nju, kako bi čitalac video koliko bi rezultat mogao da se pomeri.
 
-**Kapija još nije dostignuta.** Pogrešna automatska podudaranja su iznad nje na svim delovima (2,1%), a obe mere je promašuju na stvarnim delovima (3,4% i 96,3%). Odziv u prva 3 na svim delovima (98,4%) je dostiže.
+**Kapija još nije dostignuta.** Pogrešna automatska podudaranja su iznad nje na svim delovima (2,1%), a obe mere je promašuju na stvarnim delovima (3,4% i 96,3%). Odziv u prva 3 na svim delovima (98,4%) je dostiže. Ove brojke izmerene su po reviziji pravila 1.3, pre nego što je §7.1 zahtevao identične FXE; test koji odlučuje o kapiji sprovodi se po reviziji pravila 1.4.
 
 ## 10. Smernice za implementaciju
 
@@ -326,13 +325,13 @@ Deskriptor opisuje vežbu, komad opreme ili mišić. Ne opisuje nijednu osobu, i
 
 Unos `xrefs` na primljenom zapisu je tvrdnja pošiljaoca, bilo da je `auto` ili `confirmed`: pogrešna veza, napravljena greškom ili namerno, inače bi se proširila iz jednog kataloga na svaki katalog koji je kopira. §5.4 zato primljene veze čini nagoveštajima, i samo se veza koju napravi primaočev sopstveni razrešivač ili osoba čuva kao primaočeva.
 
-## 12. Otvorena pitanja
+## 12. Otvorena pitanja {#12-open-items}
 
-**Planirano pre izdanja.** Svako od ovoga mora da bude ispunjeno pre nego što deskriptori izađu iz eksperimentalnog statusa:
+**Uslovi za prihvatanje.** RFC-010 ostaje nacrt dok svaki od ovih uslova ne bude ispunjen:
 
-1. **Automatsko podudaranje će zahtevati i podudaranje opreme.** Kada oba zapisa nose FXE, automatsko podudaranje će dodatno zahtevati da budu `identical`. §7.1 to još ne zahteva. Brojke iz §9 izmerene su bez toga.
-2. **Jedna revizija pravila zatvara zabeležene nedostatke notacije.** Markeri nedostatka i protivrečnosti zabeleženi do sada razrešavaju se u jednoj reviziji pravila, prema pravilima preciziranja iz §8.1.
-3. **Novi test sa disjunktnim nazivima prolazi kapiju izdanja** iz §9.5, na upitima koje nijedan raniji test nije koristio.
+1. **Automatsko podudaranje zahteva i podudaranje opreme.** Kada oba zapisa nose FXE, automatsko podudaranje zahteva da budu `identical`. Ispunjeno: §7.1, uslov 5. Brojke iz §9 izmerene su bez toga.
+2. **Jedna revizija pravila zatvara zabeležene nedostatke notacije.** Markeri nedostatka i protivrečnosti zabeleženi do sada razrešavaju se u jednoj reviziji pravila, prema pravilima preciziranja iz §8.1. Ispunjeno: revizija pravila 1.4 (§8.1).
+3. **Novi test sa disjunktnim nazivima prolazi kapiju izdanja** iz §9.5, na upitima koje nijedan raniji test nije koristio, po reviziji pravila 1.4. Još nije ispunjeno.
 
 **Pripremljeno.** `exerciseRef` nosi `fxi`, a reference unutar treninga, programa i biblioteke preskripcije nose `fxe` i `fxm`, počev od sledeće verzije svake od tih šema (§5.5).
 

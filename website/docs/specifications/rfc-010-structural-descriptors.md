@@ -17,9 +17,9 @@ keywords: [fxi, fxe, fxm, structural descriptor, match protocol, xrefs, provenan
 
 This specification adds three structural descriptors to the Fitness Data Standard: **FXI** for an exercise, **FXE** for a piece of equipment and **FXM** for a muscle. A descriptor is a short string, built from closed vocabularies, that says how an exercise is done, what a piece of equipment is, or which tissue a muscle key means, without using a name in any language. Two catalogues that describe the same exercise in different words can compare their descriptors and find each other.
 
-It defines where the descriptors sit on the exercise, equipment and muscle entities, the fields that travel beside them (who answered, what the notation misses, and the links a person or a resolver confirmed), the match protocol a resolver follows, and how the descriptors are versioned. It publishes the measurements the descriptors have been tested against so far, and states which of them do not yet meet the bar this RFC sets for leaving experimental status.
+It defines where the descriptors sit on the exercise, equipment and muscle entities, the fields that travel beside them (who answered, what the notation misses, and the links a person or a resolver confirmed), the match protocol a resolver follows, and how the descriptors are versioned. It publishes the measurements the descriptors have been tested against so far, and states which of them do not yet meet the bar this RFC sets for its own acceptance.
 
-The descriptors are experimental (§2 says what that allows to change and what it does not). Every field this RFC adds is optional, no existing field changes meaning, and the schema change is a minor version.
+This RFC follows the same Draft to Accepted path as every other RFC; §12 lists the conditions for accepting it, among them the release gate of §9.5. Every field this RFC adds is optional, no existing field changes meaning, and the schema change is a minor version.
 
 ## 1. Introduction
 
@@ -66,9 +66,6 @@ The key words MUST, MUST NOT, SHOULD, SHOULD NOT and MAY are to be interpreted a
 - **Import mode**: building a descriptor from another catalogue's row without its owner.
 - **Gap marker**: the owner's note that the notation misses something about this record.
 - **Link**: a stored statement that a record and a record in another catalogue describe the same thing.
-- **Experimental**: the status of the descriptors from this RFC's acceptance until a fresh test passes the release gate of §9.5. While they are experimental:
-  - **may still change**: a rules revision within major 1 may add codes and refine readings, under §8.1 only; the ranking detail of the confirm list (§7.2, the order within and between its steps) and the conformance vectors that pin it; the auto-match conditions, which may only be tightened, never loosened (§12); and the open items of §12;
-  - **frozen on acceptance**: the field names, their types and where they sit on each entity (§5); the string headers and the meaning of every published code; every published default (§8.1); the provenance values and what each one allows (§5.3, §7.1); and the bytes of the schema versions release 1.6.0 names (§8.2). These stay as published whether or not the gate is ever met; leaving experimental status changes no field and no string.
 
 ## 3. The Claim
 
@@ -86,7 +83,7 @@ FXI does not identify an exercise. Two owners who describe the same exercise do 
 
 ## 4. The Descriptors
 
-The descriptor pages are the normative text for the syntax, the canonical form, the layer rules, the codes and compare. This RFC adopts them as they stand at rules revision 1.3, the `rules` value of the descriptor registries and the question flow, and does not restate them.
+The descriptor pages are the normative text for the syntax, the canonical form, the layer rules, the codes and compare. This RFC adopts them as they stand at rules revision 1.4, the `rules` value of the descriptor registries and the question flow, and does not restate them.
 
 | Descriptor | Page | Example |
 |---|---|---|
@@ -215,7 +212,8 @@ A resolver MAY link the query to a library record without asking a person only w
 1. exactly one library record has an FXI that compares `identical` to the query's;
 2. neither the query nor that record carries a gap marker (§5.3);
 3. both have `fxiProvenance` `owner` or `owner-assisted`;
-4. neither was built in import mode (§7.4). Where a row says the mode it was built in, as an answers record or an encoder's output row does, an import-mode row never auto-matches, whatever its `fxiProvenance` says.
+4. neither was built in import mode (§7.4). Where a row says the mode it was built in, as an answers record or an encoder's output row does, an import-mode row never auto-matches, whatever its `fxiProvenance` says;
+5. when both carry an FXE (§5.2), the two FXEs compare `identical` (§6). An FXE that only refines the other, or holds `?`, is not identical. A record without an FXE leaves this condition to the FXI. Two machines that guide different motions, such as a pulldown machine and a seated row machine, can give the same FXI; they never auto-match on it.
 
 The link is stored in the query's `xrefs` with `link: "auto"`. In every other case a resolver MUST NOT link without a person. Where a row says its mode, a resolver MUST refuse a row whose `fxiProvenance` contradicts it (an import-mode row with any provenance but `import`, or `import` outside import mode) rather than match it.
 
@@ -227,7 +225,7 @@ Otherwise the resolver offers a confirm list: at most three library records, eac
 2. **Near-compatible**: records that contradict the query in exactly one standard layer, which the list names. By name similarity, then library order.
 3. **Name candidates**: the rest, by name similarity, then library order.
 
-A link a person picks is stored in the query's `xrefs` with `link: "confirmed"`. How name similarity is scored is an implementation's choice; the conformance vectors rank by name only where any reasonable score agrees. The ranking detail may still change while the descriptors are experimental (§2); the three steps and the list's length do not.
+A link a person picks is stored in the query's `xrefs` with `link: "confirmed"`. How name similarity is scored is an implementation's choice; the conformance vectors rank by name only where any reasonable score agrees.
 
 ### 7.3. Absent
 
@@ -245,6 +243,7 @@ A descriptor built in import mode is for candidate search only. It MAY place rec
 - **Refinement only, within a major.** A rules revision may add a code, split a code into children that its old code then covers, add a layer that older strings read as `?`, add a table entry where the old reading was `?`, or give a published default to a layer whose absence was open. It never removes a code, never changes what a code means, and never changes an existing default. Every string valid under one rules revision stays valid under the next, and two strings that were `identical` stay `identical`.
 - **Defaults are forever.** A string that leaves a layer at its default means the same thing under every later rules revision of its major.
 - **One rules revision per release.** A release of the standard carries at most one new rules revision, and each new ruling in it rests on at least two failing cases from at least two catalogues.
+- **Rules revision 1.4.** This RFC adopts rules revision 1.4, which refines 1.3 under the rules above. It adds the joint action `sh.ext.oh`, shoulder extension from overhead, a child of `sh.ext` that `sh.ext` covers in compare; the line codes `p:neck`, a load lowered to the neck or throat, and `p:double`, a rope that passes twice in each jump; and the layer rule that a held push of limbs that do not move, when the exercise is built on it, is a `=` part. No 1.3 code changes meaning and every 1.3 string stays valid. A 1.3 string written for a pull from overhead is refined by its 1.4 string rather than identical to it, so an upgrade rebuilds it from its stored answers.
 - **Answers are stored.** A producer SHOULD keep each record's answers record: the question ids and the options chosen, the movement word and the movement-word dataset it came from, if any, the provenance and the gap marker. When a rules revision refines a reading, an upgrade rebuilds every string from its stored answers rather than asking anyone again. A string with no stored answers stays valid as written.
 
 ### 8.2. The schemas
@@ -288,14 +287,14 @@ On the same set, matching by name with translation reached a top-3 recall of 88.
 
 ### 9.5. The release gate
 
-The descriptors leave experimental status only when a test run as §9.1 describes, on a fresh name-disjoint set of queries none of the earlier tests used, with cross-encoder runs, meets both, on all parts and on the real parts:
+RFC-010 is accepted only when a test run as §9.1 describes, on a fresh name-disjoint set of queries none of the earlier tests used, with cross-encoder runs, meets both, on all parts and on the real parts:
 
 - wrong auto-matches **at most 2%**;
 - top-3 recall **at least 98%**.
 
 The gate is read on the point estimate. The intervals are reported beside it, so a reader can see how far the result could move.
 
-**The gate is not yet met.** Wrong auto-matches are above it on all parts (2.1%), and both measures miss it on the real parts (3.4% and 96.3%). Top-3 recall on all parts (98.4%) meets it.
+**The gate is not yet met.** Wrong auto-matches are above it on all parts (2.1%), and both measures miss it on the real parts (3.4% and 96.3%). Top-3 recall on all parts (98.4%) meets it. These figures were measured under rules revision 1.3, before §7.1 required identical FXEs; the test that decides the gate runs under rules revision 1.4.
 
 ## 10. Implementation Guidance
 
@@ -328,11 +327,11 @@ An `xrefs` entry on a received record is the sender's claim, whether `auto` or `
 
 ## 12. Open Items
 
-**Planned before release.** Each of these must land before the descriptors leave experimental status:
+**Conditions for acceptance.** RFC-010 stays a draft until each of these holds:
 
-1. **Auto-match will also require the equipment to match.** When both records carry an FXE, auto-match will additionally require them to be `identical`. §7.1 does not require it yet. The figures of §9 were measured without it.
-2. **One rules revision closes the recorded notation gaps.** The gap markers and contradictions recorded so far are resolved in a single rules revision, under the refinement rules of §8.1.
-3. **A fresh name-disjoint test passes the release gate** of §9.5, on queries none of the earlier tests used.
+1. **Auto-match also requires the equipment to match.** When both records carry an FXE, auto-match requires them to be `identical`. Met: §7.1, condition 5. The figures of §9 were measured without it.
+2. **One rules revision closes the recorded notation gaps.** The gap markers and contradictions recorded so far are resolved in a single rules revision, under the refinement rules of §8.1. Met: rules revision 1.4 (§8.1).
+3. **A fresh name-disjoint test passes the release gate** of §9.5, on queries none of the earlier tests used, under rules revision 1.4. Not yet met.
 
 **Staged.** `exerciseRef` carries `fxi`, and the references inside workout, program and the prescription library carry `fxe` and `fxm`, from the next version of each of those schemas (§5.5).
 

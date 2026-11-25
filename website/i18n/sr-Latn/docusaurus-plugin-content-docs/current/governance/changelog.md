@@ -21,10 +21,10 @@ unos dobije datum. Do tada su nove verzije zabeležene kao nezamrznute.
 ### Dodato
 - **RFC-010, Strukturni deskriptori (nacrt).** FXI za vežbu, FXE za komad opreme
   i FXM za mišić: nizovi iz zatvorenih vokabulara kojima dva kataloga porede
-  zapise bez zajedničkog naziva. RFC usvaja stranice deskriptora, definiše
-  protokol podudaranja i objavljuje merenja prema kojima su deskriptori
-  testirani, uključujući i to da prag za izlazak iz eksperimentalnog statusa još
-  nije dostignut.
+  zapise bez zajedničkog naziva. RFC usvaja stranice deskriptora po reviziji
+  pravila 1.4, definiše protokol podudaranja i objavljuje merenja prema kojima
+  su deskriptori testirani, uključujući i to da kapija izdanja, uslov za
+  prihvatanje RFC-a, još nije dostignuta.
 - Na vežbi: `fxi`, `fxe` (standardni FXE njene glavne opreme), `fxiProvenance`,
   `fxiGap` i `xrefs`, sva opciona, na najvišem nivou zapisa. Svaka referenca na
   opremu unutar vežbe može da nosi `fxe`, a svaka referenca na mišić `fxm`.

@@ -16,9 +16,9 @@ gains its date. The new versions are recorded unfrozen until then.
 - **RFC-010, Structural Descriptors (draft).** FXI for an exercise, FXE for a
   piece of equipment and FXM for a muscle: strings from closed vocabularies that
   let two catalogues compare records without a shared name. The RFC adopts the
-  descriptor pages, defines the match protocol, and publishes the measurements
-  the descriptors were tested against, including that the release gate for
-  leaving experimental status is not yet met.
+  descriptor pages at rules revision 1.4, defines the match protocol, and
+  publishes the measurements the descriptors were tested against, including
+  that the release gate, a condition for accepting the RFC, is not yet met.
 - On an exercise: `fxi`, `fxe` (the standard FXE of its main equipment),
   `fxiProvenance`, `fxiGap` and `xrefs`, all optional, at the top level of the
   record. Each equipment reference inside an exercise may carry `fxe`, and each

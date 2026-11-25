@@ -17,9 +17,9 @@ keywords: [fxi, fxe, fxm, structural descriptor, match protocol, xrefs, provenan
 
 Esta especificación agrega tres descriptores estructurales al Fitness Data Standard: **FXI** para un ejercicio, **FXE** para una pieza de equipamiento y **FXM** para un músculo. Un descriptor es una cadena corta, construida a partir de vocabularios cerrados, que dice cómo se hace un ejercicio, qué es una pieza de equipamiento o a qué tejido se refiere una clave de músculo, sin usar un nombre en ningún idioma. Dos catálogos que describen el mismo ejercicio con palabras distintas pueden comparar sus descriptores y encontrarse.
 
-Define dónde se ubican los descriptores en las entidades de ejercicio, equipamiento y músculo, los campos que viajan junto a ellos (quién respondió, qué no recoge la notación y los enlaces que confirmó una persona o un resolvedor), el protocolo de coincidencia que sigue un resolvedor y cómo se versionan los descriptores. Publica las mediciones con las que se han probado los descriptores hasta ahora, e indica cuáles de ellas todavía no alcanzan el umbral que este RFC fija para salir del estado experimental.
+Define dónde se ubican los descriptores en las entidades de ejercicio, equipamiento y músculo, los campos que viajan junto a ellos (quién respondió, qué no recoge la notación y los enlaces que confirmó una persona o un resolvedor), el protocolo de coincidencia que sigue un resolvedor y cómo se versionan los descriptores. Publica las mediciones con las que se han probado los descriptores hasta ahora, e indica cuáles de ellas todavía no alcanzan el umbral que este RFC fija para su propia aceptación.
 
-Los descriptores son experimentales (el §2 dice qué permite eso cambiar y qué no). Todo campo que agrega este RFC es opcional, ningún campo existente cambia de significado y el cambio de esquema es una versión menor.
+Este RFC sigue el mismo camino de Borrador a Aceptado que cualquier otro RFC; el §12 enumera las condiciones para aceptarlo, entre ellas el umbral de lanzamiento del §9.5. Todo campo que agrega este RFC es opcional, ningún campo existente cambia de significado y el cambio de esquema es una versión menor.
 
 ## 1. Introducción
 
@@ -66,9 +66,6 @@ Las palabras clave DEBE, NO DEBE, DEBERÍA, NO DEBERÍA y PUEDE (MUST, MUST NOT,
 - **Modo de importación**: construir un descriptor a partir de la fila de otro catálogo sin su propietario.
 - **Marcador de laguna**: la nota del propietario de que la notación no recoge algo de este registro.
 - **Enlace**: una afirmación almacenada de que un registro y un registro de otro catálogo describen lo mismo.
-- **Experimental**: el estado de los descriptores desde la aceptación de este RFC hasta que una prueba nueva supere el umbral de lanzamiento del §9.5. Mientras son experimentales:
-  - **puede todavía cambiar**: una revisión de reglas dentro de la versión mayor 1 puede agregar códigos y precisar lecturas, solo bajo el §8.1; el detalle de ordenación de la lista de confirmación (§7.2, el orden dentro de sus pasos y entre ellos) y los vectores de conformidad que lo fijan; las condiciones de coincidencia automática, que solo pueden endurecerse, nunca relajarse (§12); y los puntos abiertos del §12;
-  - **congelado al aceptarse**: los nombres de los campos, sus tipos y dónde se ubican en cada entidad (§5); las cabeceras de las cadenas y el significado de cada código publicado; cada valor predeterminado publicado (§8.1); los valores de procedencia y lo que permite cada uno (§5.3, §7.1); y los bytes de las versiones de esquema que nombra el lanzamiento 1.6.0 (§8.2). Estos se mantienen tal como se publicaron, se alcance o no el umbral algún día; salir del estado experimental no cambia ningún campo ni ninguna cadena.
 
 ## 3. La afirmación
 
@@ -86,7 +83,7 @@ FXI no identifica un ejercicio. Dos propietarios que describen el mismo ejercici
 
 ## 4. Los descriptores
 
-Las páginas de descriptores son el texto normativo de la sintaxis, la forma canónica, las reglas de capa, los códigos y la comparación. Este RFC las adopta tal como están en la revisión de reglas 1.3, el valor `rules` de los registros de descriptores y del flujo de preguntas, y no las reformula.
+Las páginas de descriptores son el texto normativo de la sintaxis, la forma canónica, las reglas de capa, los códigos y la comparación. Este RFC las adopta tal como están en la revisión de reglas 1.4, el valor `rules` de los registros de descriptores y del flujo de preguntas, y no las reformula.
 
 | Descriptor | Página | Ejemplo |
 |---|---|---|
@@ -215,7 +212,8 @@ Un resolvedor PUEDE enlazar la consulta con un registro de la biblioteca sin pre
 1. exactamente un registro de la biblioteca tiene un FXI que se compara como `identical` con el de la consulta;
 2. ni la consulta ni ese registro llevan un marcador de laguna (§5.3);
 3. ambos tienen `fxiProvenance` `owner` u `owner-assisted`;
-4. ninguno se construyó en modo de importación (§7.4). Donde una fila indica el modo en que se construyó, como lo hace un registro de respuestas o una fila de salida de un codificador, una fila en modo de importación nunca coincide automáticamente, diga lo que diga su `fxiProvenance`.
+4. ninguno se construyó en modo de importación (§7.4). Donde una fila indica el modo en que se construyó, como lo hace un registro de respuestas o una fila de salida de un codificador, una fila en modo de importación nunca coincide automáticamente, diga lo que diga su `fxiProvenance`;
+5. cuando ambos llevan un FXE (§5.2), los dos FXE se comparan como `identical` (§6). Un FXE que solo precisa al otro, o que contiene `?`, no es idéntico. Un registro sin FXE deja esta condición al FXI. Dos máquinas que guían movimientos distintos, como una máquina de jalón y una máquina de remo sentado, pueden dar el mismo FXI; nunca coinciden automáticamente por él.
 
 El enlace se almacena en los `xrefs` de la consulta con `link: "auto"`. En cualquier otro caso, un resolvedor NO DEBE enlazar sin una persona. Donde una fila indica su modo, un resolvedor DEBE rechazar una fila cuyo `fxiProvenance` lo contradiga (una fila en modo de importación con cualquier procedencia distinta de `import`, o `import` fuera del modo de importación) en lugar de buscar su coincidencia.
 
@@ -227,7 +225,7 @@ En otro caso, el resolvedor ofrece una lista de confirmación: como máximo tres
 2. **Casi compatibles**: registros que contradicen la consulta en exactamente una capa estándar, que la lista nombra. Por similitud de nombre y luego por orden de la biblioteca.
 3. **Candidatos por nombre**: el resto, por similitud de nombre y luego por orden de la biblioteca.
 
-Un enlace que elige una persona se almacena en los `xrefs` de la consulta con `link: "confirmed"`. Cómo se puntúa la similitud de nombre es decisión de cada implementación; los vectores de conformidad ordenan por nombre solo donde cualquier puntuación razonable coincide. El detalle de ordenación puede todavía cambiar mientras los descriptores son experimentales (§2); los tres pasos y la longitud de la lista no.
+Un enlace que elige una persona se almacena en los `xrefs` de la consulta con `link: "confirmed"`. Cómo se puntúa la similitud de nombre es decisión de cada implementación; los vectores de conformidad ordenan por nombre solo donde cualquier puntuación razonable coincide.
 
 ### 7.3. Ausente
 
@@ -245,6 +243,7 @@ Un descriptor construido en modo de importación sirve solo para buscar candidat
 - **Solo precisión, dentro de una versión mayor.** Una revisión de reglas puede agregar un código, dividir un código en hijos que su código anterior pasa a cubrir, agregar una capa que las cadenas anteriores leen como `?`, agregar una entrada de tabla donde la lectura anterior era `?`, o dar un valor predeterminado publicado a una capa cuya ausencia era abierta. Nunca elimina un código, nunca cambia lo que significa un código y nunca cambia un valor predeterminado existente. Toda cadena válida bajo una revisión de reglas sigue siendo válida bajo la siguiente, y dos cadenas que eran `identical` siguen siendo `identical`.
 - **Los valores predeterminados son para siempre.** Una cadena que deja una capa en su valor predeterminado significa lo mismo bajo cada revisión de reglas posterior de su versión mayor.
 - **Una revisión de reglas por lanzamiento.** Un lanzamiento del estándar lleva como máximo una revisión de reglas nueva, y cada nueva resolución que contiene se apoya en al menos dos casos fallidos de al menos dos catálogos.
+- **Revisión de reglas 1.4.** Este RFC adopta la revisión de reglas 1.4, que precisa la 1.3 bajo las reglas anteriores. Agrega la acción articular `sh.ext.oh`, extensión de hombro desde arriba de la cabeza, hija de `sh.ext`, que `sh.ext` cubre en la comparación; los códigos de línea `p:neck`, una carga que baja hasta el cuello o la garganta, y `p:double`, una cuerda que pasa dos veces en cada salto; y la regla de capa de que un empuje sostenido de extremidades que no se mueven, cuando el ejercicio se basa en él, es una parte `=`. Ningún código de la 1.3 cambia de significado y toda cadena de la 1.3 sigue siendo válida. Una cadena de la 1.3 escrita para un tirón desde arriba de la cabeza queda precisada por su cadena de la 1.4 en lugar de ser idéntica a ella, por lo que una actualización la reconstruye a partir de sus respuestas almacenadas.
 - **Las respuestas se almacenan.** Un productor DEBERÍA conservar el registro de respuestas de cada registro: los identificadores de las preguntas y las opciones elegidas, la palabra de movimiento y el conjunto de datos de palabras de movimiento del que provino, si lo hay, la procedencia y el marcador de laguna. Cuando una revisión de reglas precisa una lectura, una actualización reconstruye cada cadena a partir de sus respuestas almacenadas en lugar de volver a preguntar a nadie. Una cadena sin respuestas almacenadas sigue siendo válida tal como está escrita.
 
 ### 8.2. Los esquemas
@@ -288,14 +287,14 @@ Sobre el mismo conjunto, la coincidencia por nombre con traducción alcanzó una
 
 ### 9.5. El umbral de lanzamiento
 
-Los descriptores salen del estado experimental solo cuando una prueba realizada como describe el §9.1, sobre un conjunto nuevo de consultas con nombres disjuntos que ninguna de las pruebas anteriores usó, con ejecuciones entre codificadores, cumple ambas condiciones, en todas las partes y en las partes reales:
+RFC-010 se acepta solo cuando una prueba realizada como describe el §9.1, sobre un conjunto nuevo de consultas con nombres disjuntos que ninguna de las pruebas anteriores usó, con ejecuciones entre codificadores, cumple ambas condiciones, en todas las partes y en las partes reales:
 
 - coincidencias automáticas erróneas **como máximo del 2%**;
 - exhaustividad top-3 **de al menos el 98%**.
 
 El umbral se lee sobre la estimación puntual. Los intervalos se informan junto a ella, para que un lector pueda ver cuánto podría moverse el resultado.
 
-**El umbral todavía no se cumple.** Las coincidencias automáticas erróneas lo superan en todas las partes (2.1%), y ambas medidas no lo alcanzan en las partes reales (3.4% y 96.3%). La exhaustividad top-3 en todas las partes (98.4%) lo cumple.
+**El umbral todavía no se cumple.** Las coincidencias automáticas erróneas lo superan en todas las partes (2.1%), y ambas medidas no lo alcanzan en las partes reales (3.4% y 96.3%). La exhaustividad top-3 en todas las partes (98.4%) lo cumple. Estas cifras se midieron con la revisión de reglas 1.3, antes de que el §7.1 exigiera FXE idénticos; la prueba que decide el umbral se realiza con la revisión de reglas 1.4.
 
 ## 10. Guía de implementación
 
@@ -326,13 +325,13 @@ Un descriptor describe un ejercicio, una pieza de equipamiento o un músculo. No
 
 Una entrada de `xrefs` en un registro recibido es una afirmación del remitente, sea `auto` o `confirmed`: un enlace erróneo, hecho por error o a propósito, se propagaría de otro modo desde un catálogo a todos los catálogos que lo copian. Por eso el §5.4 hace de los enlaces recibidos indicios, y solo un enlace que hace el resolvedor o una persona del propio receptor se almacena como del receptor.
 
-## 12. Puntos abiertos
+## 12. Puntos abiertos {#12-open-items}
 
-**Planificado antes del lanzamiento.** Cada uno de estos debe completarse antes de que los descriptores salgan del estado experimental:
+**Condiciones para la aceptación.** RFC-010 sigue siendo un borrador hasta que se cumpla cada una de estas:
 
-1. **La coincidencia automática también exigirá que coincida el equipamiento.** Cuando ambos registros lleven un FXE, la coincidencia automática exigirá además que sean `identical`. El §7.1 todavía no lo exige. Las cifras del §9 se midieron sin ello.
-2. **Una revisión de reglas cierra las lagunas de notación registradas.** Los marcadores de laguna y las contradicciones registrados hasta ahora se resuelven en una única revisión de reglas, bajo las reglas de precisión del §8.1.
-3. **Una prueba nueva con nombres disjuntos supera el umbral de lanzamiento** del §9.5, sobre consultas que ninguna de las pruebas anteriores usó.
+1. **La coincidencia automática también exige que coincida el equipamiento.** Cuando ambos registros llevan un FXE, la coincidencia automática exige que sean `identical`. Cumplida: §7.1, condición 5. Las cifras del §9 se midieron sin ello.
+2. **Una revisión de reglas cierra las lagunas de notación registradas.** Los marcadores de laguna y las contradicciones registrados hasta ahora se resuelven en una única revisión de reglas, bajo las reglas de precisión del §8.1. Cumplida: revisión de reglas 1.4 (§8.1).
+3. **Una prueba nueva con nombres disjuntos supera el umbral de lanzamiento** del §9.5, sobre consultas que ninguna de las pruebas anteriores usó, con la revisión de reglas 1.4. Todavía no cumplida.
 
 **Previsto.** `exerciseRef` lleva `fxi`, y las referencias dentro de workout, program y la biblioteca de prescripción llevan `fxe` y `fxm`, a partir de la próxima versión de cada uno de esos esquemas (§5.5).
 
