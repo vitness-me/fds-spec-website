@@ -10,7 +10,7 @@ FXI is a descriptor, not an identity. The same answers always build the same str
 
 > **Draft.** The descriptors are a draft of the Fitness Data Standard, proposed in RFC-010 and not yet accepted. Codes, questions and field names may change. This package implements the rules revision of the descriptor registries it was built from: `fds-encoder questions` prints it.
 
-The specification: [overview](https://spec.vitness.me/docs/descriptors/overview), [FXI](https://spec.vitness.me/docs/descriptors/fxi), [FXE](https://spec.vitness.me/docs/descriptors/fxe), [FXM](https://spec.vitness.me/docs/descriptors/fxm), [the question flow](https://spec.vitness.me/docs/descriptors/question-flow), and [compare, match and versioning](https://spec.vitness.me/docs/descriptors/compare-and-match).
+The specification: [overview](https://spec.vitness.me/docs/core-concepts/descriptors/overview), [FXI](https://spec.vitness.me/docs/core-concepts/descriptors/fxi), [FXE](https://spec.vitness.me/docs/core-concepts/descriptors/fxe), [FXM](https://spec.vitness.me/docs/core-concepts/descriptors/fxm), [the question flow](https://spec.vitness.me/docs/core-concepts/descriptors/question-flow), and [compare, match and versioning](https://spec.vitness.me/docs/core-concepts/descriptors/compare-and-match).
 
 ## Install
 
