@@ -208,7 +208,7 @@ A muscle record carries its key in `fxm`, and so does every muscle reference, su
     "aliases": ["Outer Biceps"]
   },
   "classification": {
-    "categoryId": "cat.arms",
+    "categoryId": "cat.upperArmFront",
     "region": "upper-front",
     "laterality": "bilateral"
   },

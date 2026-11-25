@@ -63,7 +63,7 @@ A walking lunge with a dumbbell in each hand has this key:
 | Footwork | `f:travel.fwd` | Each step travels forward and does not come back. |
 | Load | `l:bell.dumb@hands` | Dumbbells, held in the hands. |
 | Sides | `x:a` | The legs take turns, rep by rep. |
-| Layers left out | `k s g r h p a` | Each is at its default: the limb end moves, the floor supports the feet, the usual grip and stance, full range, no held posture, the usual line of pull, no accessory. |
+| Layers left out | `k s g r h p a` | Each is at its default: the limb end moves, the floor supports the feet, the usual grip and stance, full range, no held posture, the usual line of pull, no accessory stated. |
 
 Layers are separated by `/`. Each layer is its letter, a `:` and a value made of codes and symbols.
 
@@ -91,7 +91,7 @@ Rules for every key:
 - A key must carry `m`, `o` and `l`. When the motion, the orientation or the load isn't known, write `?` as its value: `o:?`.
 - Layers must appear in the order of the table: `m o k f s l x g r h p a`.
 - A layer at its default is left out. Writing a default code (`x:b`, `f:level`, `h:none`) says nothing more, and the written form drops it.
-- **A default is a value.** A key without `x` says both sides work together. That is a different exercise from one with `x:u`, not a less specific one. Only `?` leaves a dimension open.
+- **A default is a value**, except the accessory layer, which, left out, is not stated. A key without `x` says both sides work together. That is a different exercise from one with `x:u`, not a less specific one. Only `?` leaves a dimension open.
 - Items joined by `+`, and points after `@`, are written in sorted order (`floor@feet,hands`), and in the motion a joint action written beside its own child is dropped. So one exercise always has one written form.
 - The accessory layer `a` is the one extended layer. A key that carries it has the flag `N` (`FXI=1.0N/…`); every other key has the flag `S`.
 
@@ -393,10 +393,10 @@ The accessory codes are the accessory codes of the equipment key, listed in its 
 
 | Code | Meaning |
 |---|---|
-| `none` | No accessory (the default) |
+| `none` | No accessory |
 | `strap.stretch` | A strap, belt, towel, rope or loop band used to pull or hold a limb in a stretch |
 | `partner` | A partner who holds, resists or assists |
-| Any other accessory code | `handle`, `belt.lift`, `strap.lift`, `mat` and the rest |
+| Any other accessory code | `belt.lift`, `strap.lift`, `mat` and the rest |
 
 Rules:
 
@@ -447,7 +447,7 @@ An exercise key and an [equipment key](./equipment-key.md#equipment-keys-in-exer
 | Body points | After `@` in load and support | A machine's load interface (`l`) | [Body points](#body-points) |
 | Body positions | Orientation (`o`) | A machine's posture (`s`) | [Orientation](#orientation-o) |
 
-The rowing machine below shows all three: the rower is held `@hands` and starts `seated`, and its equipment key writes `l:hands` and `s:seated`.
+The rowing machine below shows all three: the rowing machine is held `@hands` and starts `seated`, and its equipment key writes `l:hands` and `s:seated`.
 
 <figure className="key-anatomy">
   <div className="key-pair">
@@ -578,12 +578,12 @@ An accessory is never the exercise's [main equipment](./equipment-key.md#checkin
 
 A support code is written only in `s`, and an accessory code only in `a`. Every other code except `none` may be written in `l` or in `s`. The exercise key adds where the equipment is held or touched (`@`) and, in `l`, how many there are (`*n`): see [Load](#load-l).
 
-On a machine, the two keys agree: the machine's posture is the exercise's start orientation, and its load interface includes the point where the exercise holds `mac` or `erg` (`@overhead` is in the hands).
+On a machine, the two keys agree: the machine's posture is the exercise's start orientation, and its load interface includes the point where the exercise holds `mac` or `erg` (`@overhead` is in the hands). The `@assist` hold point isn't checked.
 
 The keys differ in three ways, on purpose:
 
 - **A strength machine has no specific code.** A cardio machine can be `erg.row`, because the cycle is the movement. A strength machine is only `mac`, because the exercise's own motion carries what the machine guides.
-- **A layer left out reads differently.** In an exercise key it is at its default, which is a value. In an equipment key it is unknown, `?`.
+- **A layer left out reads differently.** In an exercise key it is at its default, which is a value, except the accessory layer, which, left out, is not stated. In an equipment key it is unknown, `?`.
 - **Each key's layer letters are its own.** Only `m` is motion in both. In an exercise key `l` is load and `s` support; in an equipment key `l` is the load interface and `s` the posture.
 
 The two keys never record the same fact twice. Grip, sides, range, footwork, pulley height, bench angle, the hold point and the count belong to the exercise key. What the equipment is, its fixed geometry and how it is built belong to the equipment key.

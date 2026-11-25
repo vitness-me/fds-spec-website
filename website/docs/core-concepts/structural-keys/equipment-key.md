@@ -103,14 +103,14 @@ Rules for every key:
 
 - The first layer is always `k`. `k:none` and `k:?` take no other layer.
 - A kind's standard layers are written in the order of the table: `f` for `imp`, `sup`, `acc` and `stn`; `l s m` for `mac`; `c l s m` for `erg`. When one isn't known, write `?` as its value: `s:?`.
-- A layer left out reads `?`, unknown. An exercise key reads a layer left out as its default instead. The defaults below are what to write when the description is silent.
+- A layer left out reads `?`, unknown. An exercise key reads a layer left out as its default instead. The rules below say what to write when the description is silent.
 - Extended layers follow the standard ones, in the order `r c g a`, and only when stated. A key that carries one has the flag `N` (`FXE=1.0N/…`); every other key has the flag `S`.
 - A value the form already implies is dropped: a dumbbell is driven by gravity, so `r:grav` is never written for it. The form tables list what each form implies.
 - Items joined by `+` are written in sorted order, so one piece of equipment always has one written form.
 
 What belongs in the key:
 
-- **Fixed geometry is equipment. Anything set per use belongs to the exercise.** Pulley height, bench angle, where a band is anchored, the handle attached, the grip, one limb or two, and seat height are all in the [exercise key](./exercise-key.md#dimensions-and-layers).
+- **Fixed geometry is equipment. Anything set per use belongs to the exercise.** Pulley height, bench angle, where a band is anchored, the grip, one limb or two, and seat height are all in the [exercise key](./exercise-key.md#dimensions-and-layers), and so is the handle attached, through the grip it gives.
 - **Write the equipment, not the exercise done on it.** A calf raise done on a leg press uses a leg press, and the key is the leg press's.
 - **A named machine wins.** When an exercise names the machine it is done on, that machine is the equipment, whatever the exercise does on it.
 - **"Machine" alone means the machine built for the movement.** A description that says only "machine" means the machine built for the exercise's main movement: a machine leg curl is done on a leg curl machine. With no exercise to go by, "machine" is `FXE=1.0S/k:mac/l:?/s:?/m:?`.
@@ -280,7 +280,7 @@ Rules:
 
 ### Load interface (`l`)
 
-The load interface is written for a strength machine and a cardio machine. It is the body point where the machine's moving part meets the body, written with the [body points](./exercise-key.md#body-points) of the exercise key: `hands` for handles or a bar, `feet` for a foot plate or pedals, `ankles` for a pad on the lower leg. An exercise key on the machine holds `mac` or `erg` at one of these points (`@overhead` is in the hands).
+The load interface is written for a strength machine and a cardio machine. It is the body point where the machine's moving part meets the body, written with the [body points](./exercise-key.md#body-points) of the exercise key: `hands` for handles or a bar, `feet` for a foot plate or pedals, `ankles` for a pad on the lower leg. An exercise key on the machine holds `mac` or `erg` at one of these points (`@overhead` is in the hands). The `@assist` hold point isn't checked.
 
 Rules:
 
@@ -571,12 +571,12 @@ An accessory is never the exercise's [main equipment](#checking-an-exercise-agai
 
 A support code is written only in `s`, and an accessory code only in `a`. Every other code except `none` may be written in `l` or in `s`. The exercise key adds where the equipment is held or touched (`@`) and, in `l`, how many there are (`*n`): see the exercise key's [load](./exercise-key.md#load-l).
 
-On a machine, the two keys agree: the machine's posture is the exercise's start orientation, and its load interface includes the point where the exercise holds `mac` or `erg` (`@overhead` is in the hands).
+On a machine, the two keys agree: the machine's posture is the exercise's start orientation, and its load interface includes the point where the exercise holds `mac` or `erg` (`@overhead` is in the hands). The `@assist` hold point isn't checked.
 
 The keys differ in three ways, on purpose:
 
 - **A strength machine has no specific code.** A cardio machine can be `erg.row`, because the cycle is the movement. A strength machine is only `mac`, because the exercise's own motion carries what the machine guides.
-- **A layer left out reads differently.** In an exercise key it is at its default, which is a value. In an equipment key it is unknown, `?`.
+- **A layer left out reads differently.** In an exercise key it is at its default, which is a value, except the accessory layer, which, left out, is not stated. In an equipment key it is unknown, `?`.
 - **Each key's layer letters are its own.** Only `m` is motion in both. In an exercise key `l` is load and `s` support; in an equipment key `l` is the load interface and `s` the posture.
 
 The two keys never record the same fact twice. Grip, sides, range, footwork, pulley height, bench angle, the hold point and the count belong to the exercise key. What the equipment is, its fixed geometry and how it is built belong to the equipment key.
@@ -597,7 +597,7 @@ A checker warns when:
 
 - the equipment key contradicts the key of the exercise's main equipment code: an exercise loaded with `bell.dumb` and an equipment key for a kettlebell;
 - a machine's [posture](#posture-s) isn't the exercise's start orientation: `s:supine.incline` and `o:standing`;
-- a machine's [load interface](#load-interface-l) doesn't include the hold point of `mac` or `erg`: `l:feet` and `mac@hands`;
+- a machine's [load interface](#load-interface-l) doesn't include the hold point of `mac` or `erg`: `l:feet` and `mac@hands`. The `@assist` hold point isn't checked;
 - a single-joint machine's motion, or a child of it, isn't in the exercise's motion: a shrug done on a standing calf raise machine, whose motion is `m:ank.pf`. The checker always warns. A person accepts the use when the exercise names that machine;
 - `k:none` appears without `l:none`;
 - a cardio code doesn't fit the machine's motion: `erg.row` with an equipment key whose motion is `m:gait`, a treadmill.
@@ -781,7 +781,7 @@ Equipment keys that share codes form families, and nobody has to declare them. S
 | `m` is `kn.flex` | Lying, seated and standing leg curl machines |
 | `k` is `mac` and `l` is `feet` | Machines pushed with the feet: leg presses, glute kickbacks, tibialis raises |
 
-`bell.*` means any code that starts with `bell.`. An "is" search is the same operation as comparing for "more specific": every single-purpose pulldown machine is more specific than `FXE=1.0S/k:mac/l:?/s:?/m:pull.down`. A combination machine that also rows comes back as compatible instead. A "holds" search looks for a code, or a child of it, anywhere in the layer.
+`bell.*` means any code that starts with `bell.`. An "is" search is the same operation as comparing for "more specific": every single-purpose pulldown machine is more specific than `FXE=1.0S/k:mac/l:?/s:?/m:pull.down`. A combination machine that also rows is neither more specific nor different: nothing contradicts. A "holds" search looks for a code, or a child of it, anywhere in the layer.
 
 An exercise key uses the same codes, so the same searches find exercises: `l` holds `mac` finds every exercise done on a strength machine (see [Finding related items](./exercise-key.md#finding-related-items) on the exercise key page).
 
