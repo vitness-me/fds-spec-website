@@ -154,7 +154,8 @@ function readPart(text: string, log: Log): string {
   }
   const pair = oppositePair(bare);
   if (pair !== undefined) log.add('opposite-actions', `${pair[0]} and ${pair[1]} cannot be in one phase; split them with ">".`, text);
-  return prefix + sortUnique(actions.filter((a) => a !== UNKNOWN && a !== `${UNKNOWN}-`)).join('+');
+  const parents = new Set(bare.map((b) => ACTION_PARENT[b]).filter((p) => p !== undefined));
+  return prefix + sortUnique(actions.filter((a) => a !== UNKNOWN && a !== `${UNKNOWN}-` && !parents.has(a.replace(/-$/, '')))).join('+');
 }
 
 /** Two written actions that move one joint in opposite directions, a child action counting as its parent; else undefined. */

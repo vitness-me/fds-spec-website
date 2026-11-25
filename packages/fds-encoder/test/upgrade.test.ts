@@ -1,6 +1,7 @@
 import { describe, expect, test } from 'vitest';
 import { FXI_RULES } from '../src/alphabet.js';
 import { build } from '../src/build.js';
+import { compare } from '../src/compare.js';
 import type { Entry } from '../src/build.js';
 import { createFlow, DEFAULT_FLOW } from '../src/flow.js';
 import { upgrade } from '../src/upgrade.js';
@@ -29,6 +30,21 @@ describe('upgrade rebuilds every string from its stored answers', () => {
     const r = upgrade([stored(narrowPulldown, { fxi: OLDER, rules: '1.2' })], FLOW);
     expect(r.changes).toEqual([{ id: 'close-pulldown', field: 'fxi', before: OLDER, after: CURRENT, fromRules: '1.2' }]);
     expect(r.records[0]).toMatchObject({ fxi: CURRENT, rules: FXI_RULES, fxiProvenance: 'owner', fxiGap: null, record: narrowPulldown });
+  });
+
+  test('a 1.3 row-and-overhead string rebuilds to the child alone, which refines it', () => {
+    const bothPaths: Entry = {
+      id: 'row-and-pulldown',
+      answers: ex('lat-pulldown', ['motion'], {
+        'motion.phases': '1', 'p1.kind': 'usual', 'p1.joints': ['el', 'sh'], 'p1.el': ['flex'], 'p1.sh': ['row-close', 'pull-front'], 'p1.short': ['usual'], 'p1.also': 'usual',
+        symmetry: 'usual',
+      }),
+      words: CITED,
+    };
+    const rules13 = 'FXI=1.0S/m:el.flex+sh.ext/o:seated/l:mach@hands';
+    const r = upgrade([stored(bothPaths, { fxi: rules13, rules: '1.3' })], FLOW);
+    expect(r.changes).toEqual([{ id: 'row-and-pulldown', field: 'fxi', before: rules13, after: 'FXI=1.0S/m:el.flex+sh.ext.oh/o:seated/l:mach@hands', fromRules: '1.3' }]);
+    expect(compare(r.changes[0]!.after!, rules13).relation).toBe('refines');
   });
 
   test('every string that changes is reported, the full equipment record included', () => {

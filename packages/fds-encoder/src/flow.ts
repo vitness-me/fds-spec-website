@@ -150,7 +150,7 @@ function partQuestions(n: number, part: 'a' | 'b'): FlowQuestion[] {
     {
       id: `${p}.kind`, layer: 'FXI m (prefix)', select: 'one', when: partOn,
       text: `What kind of movement is ${which}?`,
-      help: 'Pick how the joints move. "Explosive" or "fast" alone is a normal rep: ballistic needs flight or release. A slam is ballistic even when the implement stays in the hands (a battle rope slam).',
+      help: 'Pick how the joints move. "Explosive" or "fast" alone is a normal rep: ballistic needs flight or release. A slam is ballistic only when the implement leaves the hands: a battle rope slam is a normal rep.',
       usual: 'A normal moving rep.', options: [U('A normal moving rep (the usual way)'), ...PHASE_KINDS.slice(1), UNK()],
     },
     {

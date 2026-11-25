@@ -13,6 +13,12 @@ describe('rules 1.4', () => {
   test('is the rules revision the encoder implements', () => expect(FXI_RULES).toBe('1.4'));
 });
 
+describe('ballistic means flight or release', () => {
+  test('the motion-kind help never calls a held implement ballistic', () => {
+    for (const id of ['p1.kind', 'p2.kind']) expect(question(id)?.help ?? '').not.toMatch(/ballistic even when|stays in the hands/);
+  });
+});
+
 describe('shoulder extension from overhead is a child of shoulder extension', () => {
   const ROW = 'FXI=1.0S/m:el.flex+sh.ext/o:seated/l:mach@hands/g:ne';
   const PULLDOWN = 'FXI=1.0S/m:el.flex+sh.ext.oh/o:seated/l:mach@hands/g:ne';
@@ -39,6 +45,20 @@ describe('shoulder extension from overhead is a child of shoulder extension', ()
   test('shoulder flexion and extension from overhead are opposites in one part; the child beside its parent is not', () => {
     expect(issues('FXI=1.0S/m:sh.ext.oh+sh.flex/o:standing/l:bw')).toContain('opposite-actions');
     expect(issues('FXI=1.0S/m:sh.ext.oh+sh.ext/o:standing/l:bw')).toEqual([]);
+  });
+  test('the canonical form drops a parent written beside its child in the same part', () => {
+    expect(parseFxi('FXI=1.0S/m:sh.ext.oh+sh.ext/o:standing/l:bw').canonical).toBe('FXI=1.0S/m:sh.ext.oh/o:standing/l:bw');
+    expect(parseFxi('FXI=1.0S/m:^sh.ext-+sh.ext.oh+sp.flex/o:standing/l:mb@hands').canonical).toBe('FXI=1.0S/m:^sh.ext.oh+sp.flex/o:standing/l:mb@hands');
+    expect(parseFxi('FXI=1.0S/m:=sh.ext|sh.ext.oh/o:standing/l:bw').canonical).toBe('FXI=1.0S/m:=sh.ext|sh.ext.oh/o:standing/l:bw');
+  });
+  test('a row and a pull from overhead picked together refine the parent, never contradict it', () => {
+    const both = fxi(ex('lat-pulldown', ['motion'], {
+      'motion.phases': '1', 'p1.kind': 'usual', 'p1.joints': ['el', 'sh'], 'p1.el': ['flex'], 'p1.sh': ['row-close', 'pull-front'], 'p1.short': ['usual'], 'p1.also': 'usual',
+      symmetry: 'usual',
+    }));
+    expect(both).toBe('FXI=1.0S/m:el.flex+sh.ext.oh/o:seated/l:mach@hands');
+    expect(relation(both!, 'FXI=1.0S/m:el.flex+sh.ext/o:seated/l:mach@hands')).toBe('refines');
+    expect(relation(both!, 'FXI=1.0S/m:el.flex+sh.ext.oh/o:seated/l:mach@hands')).toBe('identical');
   });
   test('the grip switch on a pull-up or pulldown word writes the child', () => {
     expect(fxi(ex('lat-pulldown', ['hand'], { 'grip.hand': 'ne' }))).toBe(PULLDOWN);

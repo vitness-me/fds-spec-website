@@ -28,7 +28,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Rules revision 1.4.** A joint action may have a parent: `sh.ext` covers
   its child `sh.ext.oh` in compare (under any prefix, beside other actions
   and in a held part), a child counts as its parent in the opposite-action
-  check, and a single-joint machine accepts a child of its motion. A grip
+  check, a single-joint machine accepts a child of its motion, and the
+  canonical form drops a parent written beside its child in one part. A grip
   switch on a pull-up or pulldown word writes `sh.ext.oh`. The line question
   offers `neck` and `double`.
 - **Auto-match also requires identical FXEs when both rows carry one.**

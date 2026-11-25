@@ -25,7 +25,7 @@ const parentOf = (code: string): string | undefined => EQUIPMENT_TOKENS[code]?.p
 /** Equal codes, or one is the other's parent. */
 const related = (x: string, y: string): boolean => x === y || parentOf(y) === x || parentOf(x) === y;
 /** The codes of a value, with motion prefixes and the short-drive suffix stripped. */
-const codes = (v: string): string[] => v.split(/[+@,*>|]/).map((c) => c.replace(/^[~=%&^]/, '').replace(/-$/, ''));
+const codes = (v: string): string[] => v.split(/[+@,*>|]/).map((c) => c.replace(PHASE_PREFIX, '').replace(/-$/, ''));
 /** `a` names a parent code where `b` names one of its children: `a` is the broader description there. */
 function coarser(a: string, b: string): boolean {
   const ca = codes(a);

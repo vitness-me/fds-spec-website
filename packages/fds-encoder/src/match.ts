@@ -1,6 +1,6 @@
 // Match protocol: auto-match only on a unique identical FXI with owner provenance, no gap marker, no import mode on
-// either side and identical FXEs when both rows carry one; otherwise a ranked list of up to three to confirm (FXI candidates, then near-compatible, then by name);
-// "absent" only when the library is empty.
+// either side and identical FXEs when both rows carry one; otherwise a ranked list of up to three to confirm (FXI
+// candidates, then near-compatible, then by name); "absent" only when the library is empty.
 import { FXI_STANDARD_LAYERS } from './alphabet.js';
 import type { FxiLayer } from './alphabet.js';
 import { compare } from './compare.js';
@@ -135,11 +135,11 @@ function nearLayer(c: CompareResult): FxiLayer | undefined {
 
 /**
  * Matches one row against a library. Auto only on a unique identical FXI that `autoMatchRefusal` accepts (which also
- * asks for identical FXEs when both rows carry one). Otherwise the
- * confirm list holds `top` entries, each listed once: FXI candidates (identical, refines or refined-by, compatible; then
- * more standard layers equal, FXE relation, name similarity, library order), then near-compatible entries (exactly one
- * standard layer contradicts; by name similarity, then library order), then the rest by name similarity. Absent only
- * when the library is empty. Rows are taken as given: check rows from outside with `checkMatchRow` first.
+ * asks for identical FXEs when both rows carry one). Otherwise the confirm list holds `top` entries, each listed once:
+ * FXI candidates (identical, refines or refined-by, compatible; then more standard layers equal, FXE relation, name
+ * similarity, library order), then near-compatible entries (exactly one standard layer contradicts; by name
+ * similarity, then library order), then the rest by name similarity. Absent only when the library is empty. Rows are
+ * taken as given: check rows from outside with `checkMatchRow` first.
  */
 export function match(query: MatchRow, library: readonly MatchRow[], options: MatchOptions | number = {}): MatchResult {
   const top = typeof options === 'number' ? options : options.top ?? 3;
