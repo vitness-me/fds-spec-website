@@ -18,12 +18,19 @@
  *   2. the changelog section that introduces the current release carries the
  *      date it shipped in its heading, `(YYYY-MM-DD)`, and
  *   3. every RFC that proposes the current release (its text says
- *      "Release **<version>**") has the status Accepted.
+ *      "Release **<version>**") has the status Accepted, and
+ *   4. once such an RFC is Accepted, no document still calls it a draft: no
+ *      line outside the RFC's own pages that names the RFC (`RFC-010`) or a
+ *      word of its title (`Structural`, `Descriptors`, `FXI`) together with
+ *      "draft", or the Spanish "borrador" or Serbian "nacrt". Fenced code is
+ *      skipped, and so is a line that names a header without a revision
+ *      (`FXI=1/`): its "draft" is the pre-release string format, in every
+ *      locale.
  *
- * The change that accepts the RFC makes all three true in one merge: it sets
+ * The change that accepts the RFC makes all four true in one merge: it sets
  * the RFC's status, flips the new versions' `frozen` flags in
- * `specification/schemas/.integrity.json`, rebuilds the manifest, and dates
- * the changelog heading.
+ * `specification/schemas/.integrity.json`, rebuilds the manifest, dates the
+ * changelog heading, and drops every draft label, translations included.
  *
  * It does not run on pull requests. A branch that prepares a release is
  * expected to fail it, and that is not a defect in the branch: it is the state
@@ -34,7 +41,7 @@
  *   node scripts/check-release-state.mjs --self-test  prove it fails on the fixtures
  */
 
-import { readFile, readdir } from 'node:fs/promises';
+import { readFile, readdir, stat } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { assertRecordedFailures } from './lib/self-test.mjs';
@@ -85,16 +92,72 @@ if (introducing === undefined) {
 
 // An RFC that proposes the release names it the way the changelog does.
 const RFC_DIR = 'specification/rfc';
+const accepted = [];
 for (const file of (await readdir(join(ROOT, RFC_DIR)).catch(() => [])).filter((f) => /^rfc-\d+.*\.md$/.test(f)).sort()) {
   const text = await readFile(join(ROOT, RFC_DIR, file), 'utf8');
   if (!text.includes(`Release **${release}**`)) continue;
   const status = /^\*\*Status\*\*:\s*(.+)$/m.exec(text)?.[1]?.trim();
-  if (status !== 'Accepted') {
+  if (status === 'Accepted') accepted.push({ file, text });
+  else {
     fail(
       `rfc-status:${file}`,
       `${RFC_DIR}/${file}: proposes release ${release}, and its status is "${status ?? '(none)'}".\n` +
         '    A release is published only once the RFC that proposes it is accepted. Set "**Status**: Accepted" in the change that accepts it.'
     );
+  }
+}
+
+// An accepted RFC is not a draft anywhere: not in a page, a translation, a package README or a sidebar label.
+const SCAN_ROOTS = ['README.md', 'specification', 'packages', 'website/docs', 'website/i18n', 'website/src', 'website/sidebars.ts'];
+const SKIP_DIRS = new Set(['node_modules', 'dist', 'build', '.docusaurus', 'coverage', 'test', 'tests', 'fixtures']);
+const SCANNED = /\.(md|mdx|json|ts|tsx)$/;
+const DRAFT = /\bdraft\b|\bborrador|\bnacrt/i;
+const PRE_RELEASE_HEADER = /\b[A-Z]{3}=\d+\//;
+
+async function scannedFiles(rel) {
+  const s = await stat(join(ROOT, rel)).catch(() => null);
+  if (s === null) return [];
+  if (s.isFile()) return SCANNED.test(rel) ? [rel] : [];
+  const out = [];
+  for (const entry of await readdir(join(ROOT, rel), { withFileTypes: true })) {
+    if (entry.isDirectory() && SKIP_DIRS.has(entry.name)) continue;
+    out.push(...(await scannedFiles(`${rel}/${entry.name}`)));
+  }
+  return out;
+}
+
+/** The lines of a file that are not inside a Markdown code fence, with their 1-based numbers. */
+function proseLines(rel, text) {
+  const lines = text.split('\n').map((line, i) => ({ line, n: i + 1 }));
+  if (!/\.mdx?$/.test(rel)) return lines;
+  let fenced = false;
+  return lines.filter(({ line }) => {
+    if (/^\s*(```|~~~)/.test(line)) { fenced = !fenced; return false; }
+    return !fenced;
+  });
+}
+
+if (accepted.length) {
+  const files = (await Promise.all(SCAN_ROOTS.map(scannedFiles))).flat();
+  for (const { file, text } of accepted) {
+    const number = /^rfc-(\d+)/.exec(file)[1];
+    const id = `RFC-${number}`;
+    const title = /^# RFC-\d+:\s*(.+)$/m.exec(text)?.[1] ?? '';
+    const words = [...new Set(title.split(/[^A-Za-z]+/).filter((w) => w.length >= 3 && /^[A-Z]/.test(w)))];
+    // A title word matches as a word stem, so "Descriptors" also finds "descriptor" and "descriptores"; an acronym matches whole.
+    const subject = [id, ...words.map((w) => (w === w.toUpperCase() ? `\\b${w}\\b` : `\\b${w.replace(/s$/, '')}`))];
+    const names = new RegExp(subject.join('|'), 'i');
+    for (const rel of files) {
+      if (rel.split('/').pop().startsWith(`rfc-${number}-`)) continue;
+      for (const { line, n } of proseLines(rel, await readFile(join(ROOT, rel), 'utf8'))) {
+        if (!DRAFT.test(line) || !names.test(line) || PRE_RELEASE_HEADER.test(line)) continue;
+        fail(
+          `draft-label:${rel}:${n}`,
+          `${rel}:${n}: ${id} is Accepted, and this line still calls it a draft:\n      ${line.trim()}\n` +
+            '    Drop the draft label in the change that accepts the RFC, in every locale.'
+        );
+      }
+    }
   }
 }
 

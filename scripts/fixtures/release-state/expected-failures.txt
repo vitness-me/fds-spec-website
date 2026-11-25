@@ -9,3 +9,11 @@ undated
 
 # rfc-099 proposes the current release and is still a draft; rfc-098 proposes an older one
 rfc-status:rfc-099-fixture.md
+
+# rfc-097 proposes the current release and is accepted, and these lines still call it a draft. Not reported: its own
+# page, the admonition title, the pre-release FXW=1/ line, the fenced line, the line about rfc-099, and test directories
+draft-label:website/docs/widgets.md:8
+draft-label:website/i18n/es/docusaurus-plugin-content-docs/current/governance/changelog.md:3
+draft-label:website/i18n/sr-Latn/docusaurus-plugin-content-docs/current/governance/changelog.md:3
+draft-label:website/sidebars.ts:1
+draft-label:packages/widget/README.md:3
