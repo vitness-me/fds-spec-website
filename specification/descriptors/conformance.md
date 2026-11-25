@@ -24,8 +24,8 @@ Conformance says that an implementation computes what the specification says. It
 | Tier | Vectors | File | Data it reads |
 |---|---|---|---|
 | `syntax` | 143 | [`syntax.json`](https://github.com/vitness-me/fds-spec-website/blob/main/specification/descriptors/conformance/syntax.json) | [`fxm-vocabulary.json`](https://github.com/vitness-me/fds-spec-website/blob/main/specification/descriptors/conformance/fxm-vocabulary.json) |
-| `builder` | 28 | [`builder.json`](https://github.com/vitness-me/fds-spec-website/blob/main/specification/descriptors/conformance/builder.json) | [`words.json`](https://github.com/vitness-me/fds-spec-website/blob/main/specification/descriptors/conformance/words.json) |
-| `compare` | 62 | [`compare.json`](https://github.com/vitness-me/fds-spec-website/blob/main/specification/descriptors/conformance/compare.json) | [`fxm-vocabulary.json`](https://github.com/vitness-me/fds-spec-website/blob/main/specification/descriptors/conformance/fxm-vocabulary.json) |
+| `builder` | 29 | [`builder.json`](https://github.com/vitness-me/fds-spec-website/blob/main/specification/descriptors/conformance/builder.json) | [`words.json`](https://github.com/vitness-me/fds-spec-website/blob/main/specification/descriptors/conformance/words.json) |
+| `compare` | 64 | [`compare.json`](https://github.com/vitness-me/fds-spec-website/blob/main/specification/descriptors/conformance/compare.json) | [`fxm-vocabulary.json`](https://github.com/vitness-me/fds-spec-website/blob/main/specification/descriptors/conformance/fxm-vocabulary.json) |
 | `resolver` | 43 | [`resolver.json`](https://github.com/vitness-me/fds-spec-website/blob/main/specification/descriptors/conformance/resolver.json) | (none) |
 <!-- /fds:generated -->
 
