@@ -90,11 +90,11 @@ Las páginas de descriptores son el texto normativo de la sintaxis, la forma can
 
 | Descriptor | Página | Ejemplo |
 |---|---|---|
-| FXI | [FXI](/docs/descriptors/fxi), [Flujo de preguntas](/docs/descriptors/question-flow) | `FXI=1.0S/m:hip.ext+kn.ext/o:standing/l:bb@back` |
-| FXE | [FXE](/docs/descriptors/fxe) | `FXE=1.0S/k:mac/l:hand/s:seat/m:pull.back` |
-| FXM | [FXM](/docs/descriptors/fxm) | `FXM=1.0/latissimus-dorsi` |
+| FXI | [FXI](/docs/core-concepts/descriptors/fxi), [Flujo de preguntas](/docs/core-concepts/descriptors/question-flow) | `FXI=1.0S/m:hip.ext+kn.ext/o:standing/l:bb@back` |
+| FXE | [FXE](/docs/core-concepts/descriptors/fxe) | `FXE=1.0S/k:mac/l:hand/s:seat/m:pull.back` |
+| FXM | [FXM](/docs/core-concepts/descriptors/fxm) | `FXM=1.0/latissimus-dorsi` |
 
-La comparación está en [Comparación, coincidencia y versionado](/docs/descriptors/compare-and-match#compare), y los vectores de prueba en [Conformidad](/docs/descriptors/conformance). Este RFC es la fuente normativa de los campos de registro (§5), entre ellos la procedencia y el marcador de laguna (§5.3), del protocolo de coincidencia (§7) y del versionado (§8); las páginas enlazan aquí para ellos. Los vocabularios son los registros en `specification/registries/descriptors/`.
+La comparación está en [Comparación, coincidencia y versionado](/docs/core-concepts/descriptors/compare-and-match#compare), y los vectores de prueba en [Conformidad](/docs/core-concepts/descriptors/conformance). Este RFC es la fuente normativa de los campos de registro (§5), entre ellos la procedencia y el marcador de laguna (§5.3), del protocolo de coincidencia (§7) y del versionado (§8); las páginas enlazan aquí para ellos. Los vocabularios son los registros en `specification/registries/descriptors/`.
 
 ### 4.1. Reglas que fija este RFC
 
@@ -119,7 +119,7 @@ FXE describe una pieza de equipamiento por su estructura: primero su tipo, luego
 FXM es una clave para un músculo (`FXM=1.0/<muscle>`), una parte de uno (`FXM=1.0/<muscle>.<part>`) o un grupo (`FXM=1.0/g:<group>`).
 
 - **Anclaje.** Cada músculo y cada parte se anclan al Foundational Model of Anatomy (FMA), que es el principal. Donde UBERON tiene un término para la misma estructura, se lleva como referencia cruzada. Donde una ontología no tiene término, la entrada registra la laguna con palabras; nunca se toma prestado un ancla de una estructura más amplia o más restringida.
-- **Los tokens derivan de FMA.** Un token de músculo es la etiqueta preferida de su término FMA, en minúsculas, sin las palabras "muscle group" o, en su defecto, sin la palabra "muscle", y con sus palabras unidas por guiones simples; un token de parte es el calificador en la etiqueta FMA de la parte o cabeza, la palabra anterior a "part of" o "head of". La [página de FXM](/docs/descriptors/fxm#anchoring) da la regla con ejemplos. Un proveedor DEBE derivar sus tokens de músculo y de parte de esta forma. Por lo tanto, dos proveedores que anclan una estructura al mismo término FMA escriben la misma clave, y un lector resuelve una clave de músculo o de parte a partir de FMA sin el vocabulario del proveedor.
+- **Los tokens derivan de FMA.** Un token de músculo es la etiqueta preferida de su término FMA, en minúsculas, sin las palabras "muscle group" o, en su defecto, sin la palabra "muscle", y con sus palabras unidas por guiones simples; un token de parte es el calificador en la etiqueta FMA de la parte o cabeza, la palabra anterior a "part of" o "head of". La [página de FXM](/docs/core-concepts/descriptors/fxm#anchoring) da la regla con ejemplos. Un proveedor DEBE derivar sus tokens de músculo y de parte de esta forma. Por lo tanto, dos proveedores que anclan una estructura al mismo término FMA escriben la misma clave, y un lector resuelve una clave de músculo o de parte a partir de FMA sin el vocabulario del proveedor.
 - **Los grupos son conjuntos de miembros.** Un grupo se define por las claves FXM de sus miembros, nunca por su nombre. Dos claves que cubren las mismas hojas anatómicas significan el mismo tejido, se llamen como se llamen. Un token de grupo es propio del proveedor y no se deriva: una clave `g:` se resuelve solo a través del vocabulario que la define, y nada en la clave dice de quién es ese vocabulario (§12).
 - **Sin lista de músculos.** FDS publica el formato de la clave, las reglas de anclaje y lo que significa un grupo. Qué músculos, partes y grupos existen es vocabulario de un proveedor.
 
@@ -202,7 +202,7 @@ En este lanzamiento `equipmentRef` gana `fxe` y `muscleRef` gana `fxm`, y los ll
 
 ## 6. Comparación
 
-La comparación toma dos FXI, o dos FXE, y devuelve `identical`, `refines`, `refined-by`, `compatible`, `contradicting` o `invalid`, en conjunto y por capa. Las claves FXM se comparan como `identical`, `contains`, `overlaps` o `disjoint`, según las hojas anatómicas que cubre cada una. Las reglas están en [Comparación, coincidencia y versionado](/docs/descriptors/compare-and-match#compare). Una clave FXM `g:` solo se compara teniendo a mano los vocabularios de ambos proveedores, ya que sus hojas provienen del vocabulario que la define. La comparación lee solo las cadenas: nunca un nombre, nunca una palabra de movimiento. No es transitiva, y un consumidor DEBE deduplicar solo ante `identical`.
+La comparación toma dos FXI, o dos FXE, y devuelve `identical`, `refines`, `refined-by`, `compatible`, `contradicting` o `invalid`, en conjunto y por capa. Las claves FXM se comparan como `identical`, `contains`, `overlaps` o `disjoint`, según las hojas anatómicas que cubre cada una. Las reglas están en [Comparación, coincidencia y versionado](/docs/core-concepts/descriptors/compare-and-match#compare). Una clave FXM `g:` solo se compara teniendo a mano los vocabularios de ambos proveedores, ya que sus hojas provienen del vocabulario que la define. La comparación lee solo las cadenas: nunca un nombre, nunca una palabra de movimiento. No es transitiva, y un consumidor DEBE deduplicar solo ante `identical`.
 
 ## 7. Protocolo de coincidencia {#7-match-protocol}
 
@@ -475,7 +475,7 @@ Un registro de equipamiento, con las capas extendidas que solo lleva un registro
 }
 ```
 
-Los registros de respuestas y su forma de intercambio se muestran en la página del [flujo de preguntas](/docs/descriptors/question-flow).
+Los registros de respuestas y su forma de intercambio se muestran en la página del [flujo de preguntas](/docs/core-concepts/descriptors/question-flow).
 
 ## Conformidad {#conformance}
 
@@ -518,7 +518,7 @@ Los vectores de conformidad fijan el comportamiento del codificador de referenci
 - RFC-001 — Modelo de datos de ejercicio
 - RFC-002 — Modelo de datos de equipamiento
 - RFC-003 — Modelo de datos de músculo
-- Las páginas de descriptores: [Visión general](/docs/descriptors/overview), [FXI](/docs/descriptors/fxi), [Flujo de preguntas](/docs/descriptors/question-flow), [FXE](/docs/descriptors/fxe), [FXM](/docs/descriptors/fxm), [Comparación, coincidencia y versionado](/docs/descriptors/compare-and-match), [Conformidad](/docs/descriptors/conformance)
+- Las páginas de descriptores: [Visión general](/docs/core-concepts/descriptors/overview), [FXI](/docs/core-concepts/descriptors/fxi), [Flujo de preguntas](/docs/core-concepts/descriptors/question-flow), [FXE](/docs/core-concepts/descriptors/fxe), [FXM](/docs/core-concepts/descriptors/fxm), [Comparación, coincidencia y versionado](/docs/core-concepts/descriptors/compare-and-match), [Conformidad](/docs/core-concepts/descriptors/conformance)
 - JSON Schema Draft 2020-12
 - Foundational Model of Anatomy (FMA), la ontología a la que FXM ancla cada músculo y cada parte, y de cuyas etiquetas derivan sus tokens (§4.4)
 

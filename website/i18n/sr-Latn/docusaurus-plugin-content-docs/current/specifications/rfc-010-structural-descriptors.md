@@ -90,11 +90,11 @@ Stranice deskriptora su normativni tekst za sintaksu, kanonski oblik, pravila sl
 
 | Deskriptor | Stranica | Primer |
 |---|---|---|
-| FXI | [FXI](/docs/descriptors/fxi), [Tok pitanja](/docs/descriptors/question-flow) | `FXI=1.0S/m:hip.ext+kn.ext/o:standing/l:bb@back` |
-| FXE | [FXE](/docs/descriptors/fxe) | `FXE=1.0S/k:mac/l:hand/s:seat/m:pull.back` |
-| FXM | [FXM](/docs/descriptors/fxm) | `FXM=1.0/latissimus-dorsi` |
+| FXI | [FXI](/docs/core-concepts/descriptors/fxi), [Tok pitanja](/docs/core-concepts/descriptors/question-flow) | `FXI=1.0S/m:hip.ext+kn.ext/o:standing/l:bb@back` |
+| FXE | [FXE](/docs/core-concepts/descriptors/fxe) | `FXE=1.0S/k:mac/l:hand/s:seat/m:pull.back` |
+| FXM | [FXM](/docs/core-concepts/descriptors/fxm) | `FXM=1.0/latissimus-dorsi` |
 
-Poređenje je opisano na stranici [Poređenje, podudaranje i verzionisanje](/docs/descriptors/compare-and-match#compare), a vektori testova na stranici [Usaglašenost](/docs/descriptors/conformance). Ovaj RFC je normativni dom polja zapisa (§5), među njima porekla i markera nedostatka (§5.3), protokola podudaranja (§7) i verzionisanja (§8); stranice za njih upućuju ovde. Vokabulari su registri u `specification/registries/descriptors/`.
+Poređenje je opisano na stranici [Poređenje, podudaranje i verzionisanje](/docs/core-concepts/descriptors/compare-and-match#compare), a vektori testova na stranici [Usaglašenost](/docs/core-concepts/descriptors/conformance). Ovaj RFC je normativni dom polja zapisa (§5), među njima porekla i markera nedostatka (§5.3), protokola podudaranja (§7) i verzionisanja (§8); stranice za njih upućuju ovde. Vokabulari su registri u `specification/registries/descriptors/`.
 
 ### 4.1. Pravila koja ovaj RFC utvrđuje
 
@@ -119,7 +119,7 @@ FXE opisuje komad opreme po njegovoj strukturi: najpre njegovu vrstu, zatim stan
 FXM je ključ za mišić (`FXM=1.0/<muscle>`), deo mišića (`FXM=1.0/<muscle>.<part>`) ili grupu (`FXM=1.0/g:<group>`).
 
 - **Sidrenje.** Svaki mišić i deo usidren je u Foundational Model of Anatomy (FMA), koji je primaran. Tamo gde UBERON ima termin za istu strukturu, on se nosi kao unakrsna referenca. Tamo gde ontologija nema termin, unos beleži prazninu rečima; sidro se nikada ne pozajmljuje od šire ili uže strukture.
-- **Tokeni se izvode iz FMA.** Token mišića je preferirana oznaka njegovog FMA termina, malim slovima, sa uklonjenim rečima „muscle group“, ili inače rečju „muscle“, i sa rečima spojenim pojedinačnim crticama; token dela je kvalifikator u FMA oznaci dela ili glave, reč ispred „part of“ ili „head of“. [Stranica FXM](/docs/descriptors/fxm#anchoring) daje pravilo sa primerima. Provajder MORA da izvede tokene svojih mišića i delova na ovaj način. Dva provajdera koja strukturu usidre u isti FMA termin zato pišu isti ključ, a čitalac razrešava ključ mišića ili dela iz FMA bez provajderovog vokabulara.
+- **Tokeni se izvode iz FMA.** Token mišića je preferirana oznaka njegovog FMA termina, malim slovima, sa uklonjenim rečima „muscle group“, ili inače rečju „muscle“, i sa rečima spojenim pojedinačnim crticama; token dela je kvalifikator u FMA oznaci dela ili glave, reč ispred „part of“ ili „head of“. [Stranica FXM](/docs/core-concepts/descriptors/fxm#anchoring) daje pravilo sa primerima. Provajder MORA da izvede tokene svojih mišića i delova na ovaj način. Dva provajdera koja strukturu usidre u isti FMA termin zato pišu isti ključ, a čitalac razrešava ključ mišića ili dela iz FMA bez provajderovog vokabulara.
 - **Grupe su skupovi članova.** Grupa je definisana FXM ključevima svojih članova, nikada svojim nazivom. Dva ključa koja pokrivaju iste anatomske listove znače isto tkivo, kako god da se zovu. Token grupe je provajderov sopstveni i ne izvodi se: ključ `g:` razrešava se samo kroz vokabular koji ga definiše, a ništa u ključu ne kaže čiji je to vokabular (§12).
 - **Nema liste mišića.** FDS objavljuje format ključa, pravila sidrenja i šta grupa znači. Koji mišići, delovi i grupe postoje stvar je provajderovog vokabulara.
 
@@ -202,7 +202,7 @@ U ovom izdanju `equipmentRef` dobija `fxe`, a `muscleRef` dobija `fxm`, i nose i
 
 ## 6. Poređenje
 
-Poređenje uzima dva FXI, ili dva FXE, i vraća `identical`, `refines`, `refined-by`, `compatible`, `contradicting` ili `invalid`, ukupno i po sloju. FXM ključevi se porede kao `identical`, `contains`, `overlaps` ili `disjoint`, prema anatomskim listovima koje svaki od njih pokriva. Pravila su na stranici [Poređenje, podudaranje i verzionisanje](/docs/descriptors/compare-and-match#compare). FXM ključ `g:` može da se poredi samo kada su pri ruci vokabulari oba provajdera, jer njegovi listovi dolaze iz vokabulara koji ga definiše. Poređenje čita samo stringove: nikada naziv, nikada reč pokreta. Nije tranzitivno, i konzument MORA da deduplikuje samo na osnovu `identical`.
+Poređenje uzima dva FXI, ili dva FXE, i vraća `identical`, `refines`, `refined-by`, `compatible`, `contradicting` ili `invalid`, ukupno i po sloju. FXM ključevi se porede kao `identical`, `contains`, `overlaps` ili `disjoint`, prema anatomskim listovima koje svaki od njih pokriva. Pravila su na stranici [Poređenje, podudaranje i verzionisanje](/docs/core-concepts/descriptors/compare-and-match#compare). FXM ključ `g:` može da se poredi samo kada su pri ruci vokabulari oba provajdera, jer njegovi listovi dolaze iz vokabulara koji ga definiše. Poređenje čita samo stringove: nikada naziv, nikada reč pokreta. Nije tranzitivno, i konzument MORA da deduplikuje samo na osnovu `identical`.
 
 ## 7. Protokol podudaranja {#7-match-protocol}
 
@@ -475,7 +475,7 @@ Zapis opreme, sa proširenim slojevima koje nosi samo zapis opreme, i zapis miš
 }
 ```
 
-Zapisi odgovora i njihov oblik razmene prikazani su na stranici [toka pitanja](/docs/descriptors/question-flow).
+Zapisi odgovora i njihov oblik razmene prikazani su na stranici [toka pitanja](/docs/core-concepts/descriptors/question-flow).
 
 ## Usaglašenost {#conformance}
 
@@ -518,7 +518,7 @@ Vektori usaglašenosti fiksiraju ponašanje referentnog enkodera: svaki očekiva
 - RFC-001 — Model podataka vežbe
 - RFC-002 — Model podataka opreme
 - RFC-003 — Model podataka mišića
-- Stranice deskriptora: [Pregled](/docs/descriptors/overview), [FXI](/docs/descriptors/fxi), [Tok pitanja](/docs/descriptors/question-flow), [FXE](/docs/descriptors/fxe), [FXM](/docs/descriptors/fxm), [Poređenje, podudaranje i verzionisanje](/docs/descriptors/compare-and-match), [Usaglašenost](/docs/descriptors/conformance)
+- Stranice deskriptora: [Pregled](/docs/core-concepts/descriptors/overview), [FXI](/docs/core-concepts/descriptors/fxi), [Tok pitanja](/docs/core-concepts/descriptors/question-flow), [FXE](/docs/core-concepts/descriptors/fxe), [FXM](/docs/core-concepts/descriptors/fxm), [Poređenje, podudaranje i verzionisanje](/docs/core-concepts/descriptors/compare-and-match), [Usaglašenost](/docs/core-concepts/descriptors/conformance)
 - JSON Schema Draft 2020-12
 - Foundational Model of Anatomy (FMA), ontologija u koju FXM sidri svaki mišić i deo i iz čijih se oznaka izvode njegovi tokeni (§4.4)
 

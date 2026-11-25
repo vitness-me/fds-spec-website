@@ -90,11 +90,11 @@ The descriptor pages are the normative text for the syntax, the canonical form, 
 
 | Descriptor | Page | Example |
 |---|---|---|
-| FXI | [FXI](../descriptors/fxi.md), [Question flow](../descriptors/question-flow.md) | `FXI=1.0S/m:hip.ext+kn.ext/o:standing/l:bb@back` |
-| FXE | [FXE](../descriptors/fxe.md) | `FXE=1.0S/k:mac/l:hand/s:seat/m:pull.back` |
-| FXM | [FXM](../descriptors/fxm.md) | `FXM=1.0/latissimus-dorsi` |
+| FXI | [FXI](/docs/core-concepts/descriptors/fxi), [Question flow](/docs/core-concepts/descriptors/question-flow) | `FXI=1.0S/m:hip.ext+kn.ext/o:standing/l:bb@back` |
+| FXE | [FXE](/docs/core-concepts/descriptors/fxe) | `FXE=1.0S/k:mac/l:hand/s:seat/m:pull.back` |
+| FXM | [FXM](/docs/core-concepts/descriptors/fxm) | `FXM=1.0/latissimus-dorsi` |
 
-Compare is on [Compare, match and versioning](../descriptors/compare-and-match.md#compare), and the test vectors on [Conformance](../descriptors/conformance.md). This RFC is the normative home of the record fields (§5), among them provenance and the gap marker (§5.3), of the match protocol (§7) and of versioning (§8); the pages link here for them. The vocabularies are the registries in `specification/registries/descriptors/`.
+Compare is on [Compare, match and versioning](/docs/core-concepts/descriptors/compare-and-match#compare), and the test vectors on [Conformance](/docs/core-concepts/descriptors/conformance). This RFC is the normative home of the record fields (§5), among them provenance and the gap marker (§5.3), of the match protocol (§7) and of versioning (§8); the pages link here for them. The vocabularies are the registries in `specification/registries/descriptors/`.
 
 ### 4.1. Rules this RFC fixes
 
@@ -119,7 +119,7 @@ FXE describes a piece of equipment by its structure: its kind first, then the st
 FXM is a key for a muscle (`FXM=1.0/<muscle>`), a part of one (`FXM=1.0/<muscle>.<part>`), or a group (`FXM=1.0/g:<group>`).
 
 - **Anchoring.** Every muscle and part is anchored to the Foundational Model of Anatomy (FMA), which is primary. Where UBERON has a term for the same structure it is carried as a cross-reference. Where an ontology has no term, the entry records the gap in words; an anchor is never borrowed from a broader or narrower structure.
-- **Tokens derive from FMA.** A muscle token is the preferred label of its FMA term, lowercased, with the words "muscle group", or else the word "muscle", removed, and its words joined by single hyphens; a part token is the qualifier in the FMA label of the part or head, the word before "part of" or "head of". The [FXM page](../descriptors/fxm.md#anchoring) gives the rule with examples. A provider MUST derive its muscle and part tokens this way. Two providers that anchor a structure to the same FMA term therefore write the same key, and a reader resolves a muscle or part key from FMA without the provider's vocabulary.
+- **Tokens derive from FMA.** A muscle token is the preferred label of its FMA term, lowercased, with the words "muscle group", or else the word "muscle", removed, and its words joined by single hyphens; a part token is the qualifier in the FMA label of the part or head, the word before "part of" or "head of". The [FXM page](/docs/core-concepts/descriptors/fxm#anchoring) gives the rule with examples. A provider MUST derive its muscle and part tokens this way. Two providers that anchor a structure to the same FMA term therefore write the same key, and a reader resolves a muscle or part key from FMA without the provider's vocabulary.
 - **Groups are member sets.** A group is defined by the FXM keys of its members, never by its name. Two keys that cover the same anatomical leaves mean the same tissue, whatever they are called. A group token is the provider's own and is not derived: a `g:` key is resolved only through the vocabulary that defines it, and nothing in the key says whose that is (§12).
 - **No muscle list.** FDS publishes the key format, the anchoring rules and what a group means. Which muscles, parts and groups exist is a provider's vocabulary.
 
@@ -202,7 +202,7 @@ In this release `equipmentRef` gains `fxe` and `muscleRef` gains `fxm`, and they
 
 ## 6. Compare
 
-Compare takes two FXIs, or two FXEs, and returns `identical`, `refines`, `refined-by`, `compatible`, `contradicting` or `invalid`, overall and per layer. FXM keys compare as `identical`, `contains`, `overlaps` or `disjoint`, by the anatomical leaves each covers. The rules are on [Compare, match and versioning](../descriptors/compare-and-match.md#compare). An FXM `g:` key compares only with both providers' vocabularies in hand, since its leaves come from the vocabulary that defines it. Compare reads only the strings: never a name, never a movement word. It is not transitive, and a consumer MUST deduplicate only on `identical`.
+Compare takes two FXIs, or two FXEs, and returns `identical`, `refines`, `refined-by`, `compatible`, `contradicting` or `invalid`, overall and per layer. FXM keys compare as `identical`, `contains`, `overlaps` or `disjoint`, by the anatomical leaves each covers. The rules are on [Compare, match and versioning](/docs/core-concepts/descriptors/compare-and-match#compare). An FXM `g:` key compares only with both providers' vocabularies in hand, since its leaves come from the vocabulary that defines it. Compare reads only the strings: never a name, never a movement word. It is not transitive, and a consumer MUST deduplicate only on `identical`.
 
 ## 7. Match Protocol
 
@@ -475,7 +475,7 @@ An equipment record, with the extended layers only an equipment record carries, 
 }
 ```
 
-Answers records and their exchange shape are shown on the [question flow](../descriptors/question-flow.md) page.
+Answers records and their exchange shape are shown on the [question flow](/docs/core-concepts/descriptors/question-flow) page.
 
 ## Conformance
 
@@ -518,7 +518,7 @@ The conformance vectors pin the behaviour of the reference encoder: each expecte
 - RFC-001 — Exercise Data Model
 - RFC-002 — Equipment Data Model
 - RFC-003 — Muscle Data Model
-- The descriptor pages: [Overview](../descriptors/overview.md), [FXI](../descriptors/fxi.md), [Question flow](../descriptors/question-flow.md), [FXE](../descriptors/fxe.md), [FXM](../descriptors/fxm.md), [Compare, match and versioning](../descriptors/compare-and-match.md), [Conformance](../descriptors/conformance.md)
+- The descriptor pages: [Overview](/docs/core-concepts/descriptors/overview), [FXI](/docs/core-concepts/descriptors/fxi), [Question flow](/docs/core-concepts/descriptors/question-flow), [FXE](/docs/core-concepts/descriptors/fxe), [FXM](/docs/core-concepts/descriptors/fxm), [Compare, match and versioning](/docs/core-concepts/descriptors/compare-and-match), [Conformance](/docs/core-concepts/descriptors/conformance)
 - JSON Schema Draft 2020-12
 - Foundational Model of Anatomy (FMA), the ontology FXM anchors every muscle and part to, and whose labels its tokens derive from (§4.4)
 
