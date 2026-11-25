@@ -52,13 +52,14 @@ Each key page shows how to search its layers.
 
 Keys are optional. A record without one is still valid FDS.
 
-## The three keys
+## The four keys
 
 | Model     | Field | What it describes                                        | Example                                    |
 |-----------|-------|----------------------------------------------------------|--------------------------------------------|
 | Exercise  | `fxi` | How the body moves, its position, and what it moves with | `FXI=1.0S/m:el.flex/o:standing/l:bell.dumb@hands`, a standing dumbbell curl |
 | Equipment | `fxe` | What kind of equipment it is and its form                | `FXE=1.0S/k:imp/f:bar.ez`, an EZ bar        |
 | Muscle    | `fxm` | The muscle and, where it has them, its parts             | `FXM=1.0/biceps-brachii.long`, the long head of biceps brachii |
+| Muscle category | `fxmg` | A set of muscles, by anatomy, joint action or a union of both | `FXMG=1.0/hamstring`, the hamstrings |
 
 The same fields also appear wherever a record refers to an exercise, a muscle or a piece of equipment by id and name, so references can be matched the same way.
 
@@ -73,4 +74,5 @@ To link two catalogs, compare the keys of their records and collect the candidat
 - [Exercise key](./structural-keys/exercise-key.md): how `fxi` is built, its dimensions and codes.
 - [Equipment key](./structural-keys/equipment-key.md): how `fxe` is built.
 - [Muscle key](./structural-keys/muscle-key.md): how `fxm` is built.
+- [Muscle category key](./structural-keys/muscle-category-key.md): how `fxmg` is built.
 - Tools → Encoder: generate keys for your own records.
