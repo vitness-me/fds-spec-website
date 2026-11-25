@@ -8,7 +8,7 @@ description: How the exercise structural key (fxi) is composed, layer by layer.
 
 The exercise key is the structural key of an exercise. It sits in the `fxi` field and records how the body moves, the position it starts in, what it is supported on and what it moves with. This page shows how a key is put together, what every layer and code means, and how two keys compare.
 
-The codes on this page are those of rules 1.4 of the format. A later rules revision may add codes or split one into more specific children, but it never changes what an existing code means, so every key written today stays valid. Rules revisions keep the header `FXI=1.0`.
+The header `FXI=1.0` is the key's version, and the code lists come with the FDS release that publishes them. A later release may add codes or split a code into more specific children, but it never changes what a code means, so a key written today stays valid.
 
 ## Anatomy of the key
 
@@ -37,7 +37,7 @@ A walking lunge with a dumbbell in each hand has this key:
     </span>
     <span className="key-anatomy__slash"><code><span className="ka-sym">/</span></code></span>
     <span className="key-anatomy__part">
-      <code><span className="ka-letter">l</span><span className="ka-sym">:</span><span className="ka-code">db</span><span className="ka-sym">@</span><span className="ka-code">hands</span></code>
+      <code><span className="ka-letter">l</span><span className="ka-sym">:</span><span className="ka-code">bell</span><span className="ka-sym">.</span><span className="ka-code">dumb</span><span className="ka-sym">@</span><span className="ka-code">hands</span></code>
       <span className="key-anatomy__label">load</span>
     </span>
     <span className="key-anatomy__slash"><code><span className="ka-sym">/</span></code></span>
@@ -51,17 +51,17 @@ A walking lunge with a dumbbell in each hand has this key:
   </figcaption>
 </figure>
 
-`FXI=1.0S/m:hip.ext+kn.ext/o:standing/f:travel.fwd/l:db@hands/x:a`
+`FXI=1.0S/m:hip.ext+kn.ext/o:standing/f:travel.fwd/l:bell.dumb@hands/x:a`
 
 | Part | Text | What it says |
 |---|---|---|
 | Key type | `FXI` | This is an exercise key. |
-| Version | `1.0` | Major version 1, syntax revision 0. Rules revisions don't change it. |
+| Version | `1.0` | Major version 1, revision 0. |
 | Flag | `S` | Every layer in the key is standard. |
 | Motion | `m:hip.ext+kn.ext` | The hips and the knees extend together. |
 | Orientation | `o:standing` | The rep starts standing. |
 | Footwork | `f:travel.fwd` | Each step travels forward and does not come back. |
-| Load | `l:db@hands` | Dumbbells, held in the hands. |
+| Load | `l:bell.dumb@hands` | Dumbbells, held in the hands. |
 | Sides | `x:a` | The legs take turns, rep by rep. |
 | Layers left out | `k s g r h p` | Each is at its default: the limb end moves, the floor supports the feet, the usual grip and stance, full range, no held posture, the usual line of pull. |
 
@@ -229,100 +229,35 @@ Rules:
 
 ### Support (`s`)
 
-Support uses the support tokens below and the body points listed under [load](#load-l).
-
-| Token | Surface |
-|---|---|
-| `floor` | The floor or a mat |
-| `wall` | A wall |
-| `bench` | A bench |
-| `box` | A box, step or platform |
-| `chair` | A chair |
-| `block` | Lifting blocks |
-| `rack` | Power rack or squat stand |
-| `ball` | Stability ball |
-| `dome` | BOSU, side not stated; covers `dome.up` and `dome.down` |
-| `dome.up` `dome.down` | BOSU dome side up; flat side up |
-| `board` | Balance board |
-| `roller` | Foam roller |
-| `slider` | Slider |
-| `strap` | Suspension straps |
-| `ring` | Gymnastic rings |
-| `crope` | Climbing rope |
-| `bar` | A fixed bar: pull-up bar, or a racked bar used as a handhold |
-| `bars` | Parallel dip bars |
-| `pbars` | Parallettes |
-| `preacher` | Preacher bench pad |
-| `hyper` | Back-extension bench |
-| `ghd` | Glute-ham developer |
-| `vkr` | Knee-raise station |
-| `pole` | A vertical pole or post gripped by the hands |
-| `mball` | Massage or lacrosse ball |
-
-Every load token except `bw` may also be written in `s`.
+Support names each surface with an equipment code from the supports in the equipment key's [form tables](./equipment-key.md#form-f): `floor`, `bench`, `box`, `ball.stab`, `bar.fixed` and the rest (see [Equipment in an exercise key](#equipment-in-an-exercise-key)). After the surface come the body points listed under [load](#load-l). Any load code except `none` may also be written in `s`.
 
 Rules:
 
 - Write each surface that bears the body's weight, or that a limb is braced on, beyond what the orientation implies. After the surface, write `@` and the points on it, leaving out the points the orientation implies.
-- Never write a bare floor, a mat, the seat or bench under a seated body, or a machine's own seat and pads. An unstable seat (`ball`, `dome`, `board`, `roller`) is written.
-- When the trunk rests on nothing, as in a plank or a push-up, list every point that bears weight: `s:floor@feet,forearms`. A face-up body hanging from its hands keeps `floor@feet` too: an inverted row is `s:bar@hands+floor@feet`.
-- Feet on the floor are never written under a seated body, or under a face-up body lying on a bench, ball or roller. Feet on anything else are written: a seated exercise with the feet on a ball keeps `ball@feet`.
-- Surfaces under different points are separate items: feet on a ball and hands on the floor is `s:ball@feet+floor@hands`.
+- Never write a bare floor, a mat, the seat or bench under a seated body, or a machine's own seat and pads. An unstable seat (`ball.stab`, `dome`, `board.bal`, `roller.foam`) is written.
+- When the trunk rests on nothing, as in a plank or a push-up, list every point that bears weight: `s:floor@feet,forearms`. A face-up body hanging from its hands keeps `floor@feet` too: an inverted row is `s:bar.fixed@hands+floor@feet`.
+- Feet on the floor are never written under a seated body, or under a face-up body lying on a bench, ball or roller. Feet on anything else are written: a seated exercise with the feet on a ball keeps `ball.stab@feet`.
+- Surfaces under different points are separate items: feet on a ball and hands on the floor is `s:ball.stab@feet+floor@hands`.
 - A box, step, bench or platform under raised hands or feet is `box`, unless the exercise names the surface.
+- `dome` is a BOSU with the side not stated. Write `dome.up` or `dome.down` when the side is known.
 - Equipment that only loads the body goes in `l`, never in `s`.
 
 ### Load (`l`)
 
-Load uses the load tokens and hold points. Each load token stands for one equipment key, so an exercise key and an equipment key can be checked against each other.
+Load names each implement with an equipment code: an implement or station from the equipment key's [form tables](./equipment-key.md#form-f), such as `bar.straight`, `bell.dumb`, `band` or `cable`, or one of the codes below. After each code come `@` and a hold point.
 
-| Token | Equipment | Equipment key |
-|---|---|---|
-| `bw` | No implement: body weight only | `FXE=1.0S/k:none` |
-| `bb` | Barbell | `FXE=1.0S/k:imp/f:bar.straight` |
-| `ez` | EZ curl bar | `FXE=1.0S/k:imp/f:bar.ez` |
-| `tb` | Trap or hex bar | `FXE=1.0S/k:imp/f:bar.trap` |
-| `axle` | Axle bar | `FXE=1.0S/k:imp/f:bar.axle` |
-| `camber` | Cambered bar | `FXE=1.0S/k:imp/f:bar.camber` |
-| `db` | Dumbbell | `FXE=1.0S/k:imp/f:bell.dumb` |
-| `kb` | Kettlebell | `FXE=1.0S/k:imp/f:bell.kettle` |
-| `circus` | Circus dumbbell | `FXE=1.0S/k:imp/f:bell.circus` |
-| `mb` | Medicine ball | `FXE=1.0S/k:imp/f:ball.med` |
-| `slam` | Slam ball | `FXE=1.0S/k:imp/f:ball.slam` |
-| `bag` | Sandbag | `FXE=1.0S/k:imp/f:bag.sand` |
-| `hbag` | Heavy bag | `FXE=1.0S/k:imp/f:bag.heavy` |
-| `plate` | Weight plate | `FXE=1.0S/k:imp/f:plate` |
-| `chain` | Chain | `FXE=1.0S/k:imp/f:chain` |
-| `rope` | Battle rope | `FXE=1.0S/k:imp/f:rope.battle` |
-| `jrope` | Jump rope | `FXE=1.0S/k:imp/f:rope.jump` |
-| `band` | Any resistance band or tube | `FXE=1.0S/k:imp/f:band` |
-| `sled` | Sled or prowler | `FXE=1.0S/k:imp/f:sled` |
-| `tire` | Tyre | `FXE=1.0S/k:imp/f:tire` |
-| `hammer` | Sledgehammer | `FXE=1.0S/k:imp/f:hammer` |
-| `stone` | Atlas stone | `FXE=1.0S/k:imp/f:stone` |
-| `log` | Log | `FXE=1.0S/k:imp/f:log` |
-| `keg` | Keg | `FXE=1.0S/k:imp/f:keg` |
-| `yoke` | Yoke | `FXE=1.0S/k:imp/f:yoke` |
-| `frame` | Farmer handles or carry frame | `FXE=1.0S/k:imp/f:frame.carry` |
-| `car` | Car | `FXE=1.0S/k:imp/f:car` |
-| `vest` | Weight vest | `FXE=1.0S/k:imp/f:wear.vest` |
-| `ankwt` | Ankle weight | `FXE=1.0S/k:imp/f:wear.ankle` |
-| `club` | Club or mace | `FXE=1.0S/k:imp/f:club` |
-| `dowel` | Dowel or PVC pipe: sets the hands, adds no load | `FXE=1.0S/k:imp/f:stick` |
-| `wheel` | Ab wheel | `FXE=1.0S/k:imp/f:wheel` |
-| `wroller` | Wrist roller | `FXE=1.0S/k:imp/f:roller.wrist` |
-| `harness` | Head harness | `FXE=1.0S/k:imp/f:harness.head` |
-| `cable` | Cable column or crossover station | `FXE=1.0S/k:stn/f:cable` |
-| `smith` | Smith machine | `FXE=1.0S/k:stn/f:smith` |
-| `landmine` | Landmine | `FXE=1.0S/k:stn/f:landmine` |
-| `mach` | Any strength machine, including lat pulldown and seated row machines | `FXE=1.0S/k:mac/l:?/s:?/m:?` |
-| `erg` | Any cardio machine; covers the cycle codes below | `FXE=1.0S/k:erg/c:?/l:?/s:?/m:?` |
-| `erg.gait` | Treadmill | `FXE=1.0S/k:erg/c:?/l:?/s:?/m:gait` |
-| `erg.step` | Stair stepper or stepmill | `FXE=1.0S/k:erg/c:?/l:?/s:?/m:step` |
-| `erg.cycle` | Bike, air bike or arm crank | `FXE=1.0S/k:erg/c:?/l:?/s:?/m:cycle` |
-| `erg.row` | Rowing machine | `FXE=1.0S/k:erg/c:?/l:?/s:?/m:row` |
-| `erg.pole` | Ski machine | `FXE=1.0S/k:erg/c:?/l:?/s:?/m:pole` |
-| `erg.glide` | Elliptical | `FXE=1.0S/k:erg/c:?/l:?/s:?/m:glide` |
-| `erg.climb` | Climbing machine | `FXE=1.0S/k:erg/c:?/l:?/s:?/m:climb` |
+| Code | Equipment |
+|---|---|
+| `none` | No implement: body weight only |
+| `mac` | Any strength machine, including lat pulldown and seated row machines |
+| `erg` | Any cardio machine; covers the codes below |
+| `erg.gait` | Treadmill |
+| `erg.step` | Stair stepper or stepmill |
+| `erg.cycle` | Bike, air bike or arm crank |
+| `erg.row` | Rowing machine |
+| `erg.pole` | Ski machine |
+| `erg.glide` | Elliptical |
+| `erg.climb` | Climbing machine |
 
 | Hold point or body point | Meaning |
 |---|---|
@@ -343,12 +278,12 @@ Load uses the load tokens and hold points. Each load token stands for one equipm
 
 Rules:
 
-- List every implement that loads the working muscles, each with `@` and where it is held: `l:bb@back`.
-- `bw` means no implement. It stands alone and takes no hold point: a weighted dip is `l:plate@waist`, not `bw` beside a plate.
-- A strength machine is `mach` and a cardio machine `erg`, with its child token when the machine is known. The equipment key of the record's equipment says which machine.
-- A band is held where it presses or pulls on the body. Where it is anchored is not written.
-- Leave the count out when it is the usual one, and write `*n` only when it differs. A one-hand implement (`db`, `kb`, `plate`, `club`) is one per working hand; every other implement is one. At the chest, back, hips or waist any implement is one: a goblet squat with one dumbbell is `l:db@chest`. One kettlebell held in both hands is `kb*1@hands`.
-- Write `?` for the part you don't know: `?@chest` when the implement isn't known, `kb@?` when the hold point isn't, `l:?` when not even that much is.
+- List every implement that loads the working muscles, each with `@` and where it is held: `l:bar.straight@back`.
+- `none` means no implement. It stands alone and takes no hold point: a weighted dip is `l:plate@waist`, not `none` beside a plate.
+- A strength machine is `mac` and a cardio machine `erg`, or its child code when the machine is known. The record's equipment key says which machine.
+- A band is `band`, whatever its type; the type is in the equipment key. It is held where it presses or pulls on the body. Where it is anchored is not written.
+- Leave the count out when it is the usual one, and write `*n` only when it differs. A one-hand implement (`bell.dumb`, `bell.kettle`, `plate`, `club`) is one per working hand; every other implement is one. At the chest, back, hips or waist any implement is one: a goblet squat with one dumbbell is `l:bell.dumb@chest`. One kettlebell held in both hands is `bell.kettle*1@hands`.
+- Write `?` for the part you don't know: `?@chest` when the implement isn't known, `bell.kettle@?` when the hold point isn't, `l:?` when not even that much is.
 
 ### Sides (`x`)
 
@@ -465,17 +400,17 @@ Everything in a key that isn't a code is a symbol.
 
 | Symbol | Meaning | Example |
 |---|---|---|
-| `/` | Separates layers | `o:standing/l:bw` |
+| `/` | Separates layers | `o:standing/l:none` |
 | `:` | Separates a layer letter from its value | `o:standing` |
 | `.` | Joins a joint to its action, or a code to a more specific child | `el.flex`, `standing.bent`, `erg.row` |
 | `+` | Joins items that go together: actions in one phase, surfaces, implements, grip elements, range codes, sides items, held codes | `m:hip.ext+kn.ext` |
 | `>` | A sequence in rep order: phases, start and end orientation, footwork or grip changes | `g:su>pr` |
 | `\|` | Two parts of one phase at the same time: parts of different kinds, or two limbs taken in opposite directions in a stretch | `m:=sp.flex\|hip.ext`, `m:%hip.ext\|%hip.flex` |
-| `@` | Where: the points on a surface, the hold point of an implement, the scope of a sides code | `l:db@hands` |
+| `@` | Where: the points on a surface, the hold point of an implement, the scope of a sides code | `l:bell.dumb@hands` |
 | `,` | Several body points on one surface | `s:floor@feet,hands` |
-| `*n` | Implement count, written only when it differs from the usual count | `l:kb*1@hands` |
+| `*n` | Implement count, written only when it differs from the usual count | `l:bell.kettle*1@hands` |
 | `*` | A whole layer generic on purpose: the exercise may be done either way | `o:*` |
-| `?` | Unknown. Matches anything and never contradicts | `o:?`, `kb@?`, `sh.?` |
+| `?` | Unknown. Matches anything and never contradicts | `o:?`, `bell.kettle@?`, `sh.?` |
 | `-` | After an action: a short-range drive on purpose | `m:el.ext+hip.ext-+kn.ext-+sh.flex` |
 
 The motion prefixes go before a part of `m` and set its kind.
@@ -491,6 +426,23 @@ The motion prefixes go before a part of `m` and set its kind.
 
 `?` may stand for a whole layer, an implement, a hold point, a surface, a body point, a joint's direction or a whole phase. An open-ended "and possibly more" (`+?`) is not allowed: write the actions you know, or `?` for the whole phase.
 
+## Equipment in an exercise key
+
+The load (`l`) and support (`s`) layers name equipment with the equipment key's own codes. One code means one thing in both keys, so an exercise key leads straight to the key of its equipment.
+
+| In the exercise key | Equipment key |
+|---|---|
+| `bell.dumb` | `FXE=1.0S/k:imp/f:bell.dumb` |
+| `bench` | `FXE=1.0S/k:sup/f:bench` |
+| `cable` | `FXE=1.0S/k:stn/f:cable` |
+| `none` | `FXE=1.0S/k:none` |
+| `mac` | `FXE=1.0S/k:mac/l:?/s:?/m:?` |
+| `erg.row` | `FXE=1.0S/k:erg/c:?/l:?/s:?/m:row` |
+
+A form code such as `bell.dumb` or `bench` is the equipment with that form. A machine is written by its kind, `mac` or `erg`, and the record's equipment key says which machine it is.
+
+A standing dumbbell curl is `FXI=1.0S/m:el.flex/o:standing/l:bell.dumb@hands`. Its load code is `bell.dumb`, so its equipment key is `FXE=1.0S/k:imp/f:bell.dumb`.
+
 ## Worked examples
 
 Each example starts from a plain description and decides one layer at a time. A layer that isn't listed is at its default.
@@ -503,11 +455,11 @@ Standing, a dumbbell in each hand, both elbows bend together, palms up.
 |---|---|---|
 | `m` | The elbows bend against the load; the shoulders hold still | `m:el.flex` |
 | `o` | Standing | `o:standing` |
-| `l` | Dumbbells in the hands. Two is the usual count for both arms working, so no count | `l:db@hands` |
+| `l` | Dumbbells in the hands. Two is the usual count for both arms working, so no count | `l:bell.dumb@hands` |
 | `x` | Both arms together: the default | — |
 | `g` | Palms up is the usual grip when every action is `el.flex` | — |
 
-`FXI=1.0S/m:el.flex/o:standing/l:db@hands`
+`FXI=1.0S/m:el.flex/o:standing/l:bell.dumb@hands`
 
 ### Barbell back squat
 
@@ -517,10 +469,10 @@ Standing, a barbell across the upper back, hips and knees bend and straighten th
 |---|---|---|
 | `m` | Standing up extends the hips and the knees together. The ankles don't rise onto the toes, so they aren't written | `m:hip.ext+kn.ext` |
 | `o` | Standing | `o:standing` |
-| `l` | A barbell across the upper back | `l:bb@back` |
+| `l` | A barbell across the upper back | `l:bar.straight@back` |
 | `g` `r` | Medium stance and full range: the defaults | — |
 
-`FXI=1.0S/m:hip.ext+kn.ext/o:standing/l:bb@back`
+`FXI=1.0S/m:hip.ext+kn.ext/o:standing/l:bar.straight@back`
 
 ### Lat pulldown
 
@@ -531,14 +483,14 @@ Seated at a pulldown machine, an overhand grip at about shoulder width, the bar 
 | `m` | The elbows bend, and with an overhand grip the arms come down from overhead out at the sides | `m:el.flex+sh.add` |
 | `o` | Seated | `o:seated` |
 | `s` | The machine's seat and thigh pad are never written | — |
-| `l` | A pulldown machine, held in the hands | `l:mach@hands` |
+| `l` | A pulldown machine, held in the hands | `l:mac@hands` |
 | `g` | Overhand at medium width is the usual grip for this motion | — |
 
-`FXI=1.0S/m:el.flex+sh.add/o:seated/l:mach@hands`
+`FXI=1.0S/m:el.flex+sh.add/o:seated/l:mac@hands`
 
 A close neutral-grip pulldown brings the hands down in front of the face instead, so the shoulder action and the grip both change:
 
-`FXI=1.0S/m:el.flex+sh.ext.oh/o:seated/l:mach@hands/g:ne+w-n`
+`FXI=1.0S/m:el.flex+sh.ext.oh/o:seated/l:mac@hands/g:ne+w-n`
 
 ### Plank
 
@@ -549,9 +501,9 @@ Face down on the forearms and toes, body straight, held for time.
 | `m` | A hold. The trunk muscles push against the hips sagging, which is the direction of trunk flexion | `m:=sp.flex` |
 | `o` | Face down, trunk horizontal | `o:prone` |
 | `s` | The trunk rests on nothing, so every point that bears weight is listed | `s:floor@feet,forearms` |
-| `l` | No implement | `l:bw` |
+| `l` | No implement | `l:none` |
 
-`FXI=1.0S/m:=sp.flex/o:prone/s:floor@feet,forearms/l:bw`
+`FXI=1.0S/m:=sp.flex/o:prone/s:floor@feet,forearms/l:none`
 
 ### Walking lunge
 
@@ -562,10 +514,10 @@ Standing, a dumbbell in each hand, stepping forward into a lunge with one leg, t
 | `m` | Rising out of the lunge extends the front hip and knee | `m:hip.ext+kn.ext` |
 | `o` | Standing | `o:standing` |
 | `f` | Each step travels forward and doesn't come back | `f:travel.fwd` |
-| `l` | Dumbbells in the hands. The sides pattern is on the legs, so both hands stay loaded: two, the usual count | `l:db@hands` |
+| `l` | Dumbbells in the hands. The sides pattern is on the legs, so both hands stay loaded: two, the usual count | `l:bell.dumb@hands` |
 | `x` | The legs take turns rep by rep. The motion is legs only, so no scope | `x:a` |
 
-`FXI=1.0S/m:hip.ext+kn.ext/o:standing/f:travel.fwd/l:db@hands/x:a`
+`FXI=1.0S/m:hip.ext+kn.ext/o:standing/f:travel.fwd/l:bell.dumb@hands/x:a`
 
 ### Kettlebell swing
 
@@ -575,20 +527,18 @@ Standing, one kettlebell held in both hands, swung from between the legs to ches
 |---|---|---|
 | `m` | The hips extend. The knees keep a fixed bend and the arms only swing, so neither is written. The bell never leaves the hands, so there is no `^` | `m:hip.ext` |
 | `o` | The trunk moves through the hinge, so the rep starts `standing`, not `standing.bent` | `o:standing` |
-| `l` | A kettlebell is one per working hand as usual; here one bell is shared by both hands | `l:kb*1@hands` |
+| `l` | A kettlebell is one per working hand as usual; here one bell is shared by both hands | `l:bell.kettle*1@hands` |
 
-`FXI=1.0S/m:hip.ext/o:standing/l:kb*1@hands`
+`FXI=1.0S/m:hip.ext/o:standing/l:bell.kettle*1@hands`
 
 ## Keys in records
 
-These excerpts show the shape planned for the next release; a future schema version adds these fields.
+An exercise record carries its key in `fxi`. Each muscle reference carries the muscle's `fxm`, and each equipment reference carries the same `fxe` value as the equipment record, beside its `id` and `name`:
 
-An exercise record carries its key in `fxi`. Each muscle and equipment reference carries the referenced record's key beside its `id` and `name`:
-
-```json fds:ignore planned record shape; fxi, fxm and fxe are not in a published schema yet
+```json fds:ignore exercise record excerpt showing the fxi, fxm and fxe fields
 {
   "exerciseId": "ex.dumbbellCurl",
-  "fxi": "FXI=1.0S/m:el.flex/o:standing/l:db@hands",
+  "fxi": "FXI=1.0S/m:el.flex/o:standing/l:bell.dumb@hands",
   "canonical": { "name": "Dumbbell Curl", "slug": "dumbbell-curl" },
   "targets": {
     "primary": [
@@ -608,13 +558,13 @@ An exercise record carries its key in `fxi`. Each muscle and equipment reference
 
 A workout item refers to the exercise the same way, with `fxi` beside its `id` and `name`:
 
-```json fds:ignore planned record shape; fxi is not in a published schema yet
+```json fds:ignore workout item excerpt showing the fxi field
 {
   "id": "i1",
   "exercise": {
     "id": "ex.dumbbellCurl",
     "name": "Dumbbell Curl",
-    "fxi": "FXI=1.0S/m:el.flex/o:standing/l:db@hands"
+    "fxi": "FXI=1.0S/m:el.flex/o:standing/l:bell.dumb@hands"
   },
   "scheme": { "pattern": "straight", "sets": 3 },
   "reps": { "kind": "fixed", "value": 10 }
@@ -631,13 +581,34 @@ Comparison goes layer by layer. A layer left out takes its default, which is a v
 
 | Key A | Key B | Result |
 |---|---|---|
-| `FXI=1.0S/m:el.flex/o:standing/l:db@hands` | `FXI=1.0S/m:el.flex/o:standing/l:db@hands` | Same |
-| `FXI=1.0S/m:el.flex/o:standing/l:db@hands` | `FXI=1.0S/m:el.flex/o:?/l:db@hands` | A is more specific: it states the orientation B leaves open |
-| `FXI=1.0S/m:hip.ext+kn.ext/o:standing/l:bw` | `FXI=1.0S/m:hip.ext+kn.ext/o:standing/l:bw/h:hands.head` | Different: A's held posture is the default, B's is hands behind the head |
+| `FXI=1.0S/m:el.flex/o:standing/l:bell.dumb@hands` | `FXI=1.0S/m:el.flex/o:standing/l:bell.dumb@hands` | Same |
+| `FXI=1.0S/m:el.flex/o:standing/l:bell.dumb@hands` | `FXI=1.0S/m:el.flex/o:?/l:bell.dumb@hands` | A is more specific: it states the orientation B leaves open |
+| `FXI=1.0S/m:hip.ext+kn.ext/o:standing/l:none` | `FXI=1.0S/m:hip.ext+kn.ext/o:standing/l:none/h:hands.head` | Different: A's held posture is the default, B's is hands behind the head |
 
 When each key leaves open something the other states, neither is more specific, and the two may still describe the same exercise.
 
 An identical key is a strong match, and anything else gives a short list for a person to confirm. See [Using keys](../structural-keys.md#using-keys) for how to keep confirmed links.
+
+## Finding related exercises
+
+Keys that share codes form families, and nobody has to declare them. Search for a value in one layer and you find every exercise that shares it, in any catalog that writes keys.
+
+| Search | Finds |
+|---|---|
+| `m` is `hip.ext+kn.ext` | The same motion: squats, lunges, step-ups and leg presses, whatever the load |
+| `l` holds a `bell.*` code | The same equipment family: exercises loaded with dumbbells, kettlebells or circus dumbbells |
+| `l` holds `mac` | Every exercise done on a strength machine |
+| `o` is `hanging` | The same orientation: pull-ups, hanging leg raises, dead hangs |
+| `m` holds `sh.ext` | Rows and dips, and through its child `sh.ext.oh`, chin-ups, pullovers and close-grip pulldowns. A parent code finds its children |
+| `l` holds `erg` | Every cardio machine exercise, through the children `erg.row`, `erg.gait` and the rest |
+
+`bell.*` means any code that starts with `bell.`. Layers combine: `m` is `hip.ext+kn.ext` and `l` holds `bar.straight@back` finds back squats and lunges with a barbell on the back.
+
+A search is the same operation as comparing for "more specific". Write the search as a key, with `?` in every layer it leaves open:
+
+`FXI=1.0S/m:hip.ext+kn.ext/o:?/k:?/f:?/s:?/l:?/x:?/g:?/r:?/h:?/p:?`
+
+Every exercise the first search finds is more specific than this key. The barbell back squat and the walking lunge above both are.
 
 ## Building keys
 

@@ -16,7 +16,7 @@ Matching by name comes down to string similarity, translation and guesswork, and
 
 A key describes the thing itself. It is made of layers, and each layer records one dimension of the thing in codes from lists the standard publishes. An owner describing a standing dumbbell curl writes this key, whatever its catalog calls the exercise:
 
-`FXI=1.0S/m:el.flex/o:standing/l:db@hands`
+`FXI=1.0S/m:el.flex/o:standing/l:bell.dumb@hands`
 
 It reads as elbow flexion, standing, with a dumbbell in the hands. A Spanish catalog and an English one can write the same key, because the key doesn't depend on either catalog's names.
 
@@ -27,6 +27,17 @@ FDS publishes how keys are built and the code lists they draw on. It does not pu
 - **Matching across catalogs.** You compare keys instead of names. Comparing two keys tells you they are the same, that one is more specific than the other, or that they are different. The key pages describe the finer cases.
 - **Interoperability.** Two platforms can link their catalogs without first agreeing on names or adopting a shared list.
 - **History that survives a move.** When someone changes apps, the new app can look up each logged exercise in its own catalog by key, so their history stays usable.
+
+### Finding related items
+
+Keys that share codes form families, and no relationship has to be declared anywhere. Search for a shared code and you find the whole family:
+
+- **The same motion.** Exercises whose motion is `hip.ext+kn.ext`, the hips and knees extending together, are a family of squats and lunges, whatever each catalog calls them.
+- **The same kind of equipment.** Exercises loaded with any `bell.*` code are dumbbell, kettlebell and circus dumbbell work.
+- **All strength machines.** Equipment keys with `k:mac` are every strength machine. An exercise key names a strength machine `mac`, so the exercises done on them are found the same way.
+- **All parts of one muscle.** `FXM=1.0/biceps-brachii` and the keys that add a part to it, such as `FXM=1.0/biceps-brachii.long`, are the muscle and its heads.
+
+Each key page shows how to search its layers.
 
 ## What keys don't do
 
@@ -40,7 +51,7 @@ Keys are optional. A record without one is still valid FDS.
 
 | Model     | Field | What it describes                                        | Example                                    |
 |-----------|-------|----------------------------------------------------------|--------------------------------------------|
-| Exercise  | `fxi` | How the body moves, its position, and what it moves with | `FXI=1.0S/m:el.flex/o:standing/l:db@hands`, a standing dumbbell curl |
+| Exercise  | `fxi` | How the body moves, its position, and what it moves with | `FXI=1.0S/m:el.flex/o:standing/l:bell.dumb@hands`, a standing dumbbell curl |
 | Equipment | `fxe` | What kind of equipment it is and its form                | `FXE=1.0S/k:imp/f:bar.ez`, an EZ bar        |
 | Muscle    | `fxm` | The muscle and, where it has them, its parts             | `FXM=1.0/biceps-brachii.long`, the long head of biceps brachii |
 
