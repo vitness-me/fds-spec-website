@@ -85,3 +85,4 @@ Notas:
 
 ## Enmiendas
 - Los cambios de gobernanza se proponen mediante PR y requieren la aprobación de los editores.
+- Un lanzamiento que implementa un RFC se publica solo una vez que ese RFC está aceptado. Puede prepararse en una rama mientras el RFC está en revisión, como describe `RELEASE.md`; el cambio que acepta el RFC congela y fecha el lanzamiento, y `scripts/check-release-state.mjs` se niega a publicarlo antes. La regla se aplica a partir del lanzamiento 1.6.0 y del RFC-010; los RFC-001 a RFC-008, cuyos lanzamientos se publicaron antes de ella, conservan el estado que tienen.

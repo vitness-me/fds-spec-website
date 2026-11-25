@@ -116,7 +116,7 @@ FXE describes a piece of equipment by its structure: its kind first, then the st
 FXM is a key for a muscle (`FXM=1.0/<muscle>`), a part of one (`FXM=1.0/<muscle>.<part>`), or a group (`FXM=1.0/g:<group>`).
 
 - **Anchoring.** Every muscle and part is anchored to the Foundational Model of Anatomy (FMA), which is primary. Where UBERON has a term for the same structure it is carried as a cross-reference. Where an ontology has no term, the entry records the gap in words; an anchor is never borrowed from a broader or narrower structure.
-- **Tokens derive from FMA.** A muscle token is the preferred label of its FMA term, lowercased, with the words "muscle group", or else the word "muscle", removed, and its words joined by single hyphens; a part token is the qualifier in the FMA label of the part or head, the word before "part of" or "head of". The [FXM page](/docs/core-concepts/descriptors/fxm#anchoring) gives the rule with examples. A provider MUST derive its muscle and part tokens this way. Two providers that anchor a structure to the same FMA term therefore write the same key, and a reader resolves a muscle or part key from FMA without the provider's vocabulary.
+- **Tokens derive from FMA.** A muscle token is the preferred label of its FMA term, lowercased, with the words "muscle group", or else the word "muscle", removed, and its words joined by single hyphens; a part token is the qualifier in the FMA label of the part or head, the word before "part of" or "head of". The [FXM page](/docs/core-concepts/descriptors/fxm#anchoring) gives the rule with examples. A provider MUST derive its muscle and part tokens this way. Two providers that anchor a structure to the same FMA term therefore write the same key, and a reader resolves a muscle or part key from FMA without the provider's vocabulary. The schema cannot check the derivation: it checks a key's format, never that a token is the one its FMA label gives, and no conformance vector can either. A provider that derives a token wrongly therefore passes every check, and two providers can quietly write different keys for the same muscle, which compare then reads as different muscles.
 - **Groups are member sets.** A group is defined by the FXM keys of its members, never by its name. Two keys that cover the same anatomical leaves mean the same tissue, whatever they are called. A group token is the provider's own and is not derived: a `g:` key is resolved only through the vocabulary that defines it, and nothing in the key says whose that is (§12).
 - **No muscle list.** FDS publishes the key format, the anchoring rules and what a group means. Which muscles, parts and groups exist is a provider's vocabulary.
 
@@ -167,7 +167,7 @@ They answer different questions. The record-level `fxe` names the exercise's **m
 
 An absent `fxiProvenance` is unknown, and is treated like `agent`: it never qualifies a record for auto-match.
 
-`fxiGap` is the owner's plain-text note that the notation misses something that separates this exercise from others. `null`, or no `fxiGap` at all, states that there is none; the schema does not accept an empty string, so write `null`. Any note present is a gap marker, a note of only whitespace included: it blocks auto-match (§7.1), and it is the evidence a later rules revision draws on. A resolver treats every `fxiGap` other than absent, `null` or `false` as a gap marker, an empty string included, so an unexpected value never enables an auto-match. Prescription is never a gap: a pause, a tempo or a load belongs to RFC-006, not to the exercise.
+`fxiGap` is the owner's plain-text note that the notation misses something that separates this exercise from others. `null`, or no `fxiGap` at all, states that there is none; the schema does not accept an empty string, so write `null`. Any note present is a gap marker, a note of only whitespace included: it blocks auto-match (§7.1), and it is the evidence a later rules revision draws on. A resolver treats every `fxiGap` other than absent or `null` as a gap marker, an empty string included, so an unexpected value never enables an auto-match. A record never carries `false`, which the schema does not accept; a resolver that also takes rows that are not FDS records, as the conformance vectors do, reads `false` there as no gap marker and `true` as one. Prescription is never a gap: a pause, a tempo or a load belongs to RFC-006, not to the exercise.
 
 Neither field means anything without an FXI, and the schema rejects either one on a record that has no `fxi`.
 
@@ -213,7 +213,7 @@ A resolver MAY link the query to a library record without asking a person only w
 2. neither the query nor that record carries a gap marker (§5.3);
 3. both have `fxiProvenance` `owner` or `owner-assisted`;
 4. neither was built in import mode (§7.4). Where a row says the mode it was built in, as an answers record or an encoder's output row does, an import-mode row never auto-matches, whatever its `fxiProvenance` says;
-5. when both carry an FXE (§5.2), the two FXEs compare `identical` (§6). An FXE that only refines the other, or holds `?`, is not identical. A record without an FXE leaves this condition to the FXI. Two machines that guide different motions, such as a pulldown machine and a seated row machine, can give the same FXI; they never auto-match on it.
+5. when both carry an FXE (§5.2), the two FXEs compare `identical` (§6). An FXE that only refines the other, or holds `?`, is not identical. A record without an FXE leaves this condition to the FXI. Two machines that differ only where the FXI does not look, such as a seated cable row with a foot plate and a chest-supported row machine, can give the same FXI; they never auto-match on it.
 
 The link is stored in the query's `xrefs` with `link: "auto"`. In every other case a resolver MUST NOT link without a person. Where a row says its mode, a resolver MUST refuse a row whose `fxiProvenance` contradicts it (an import-mode row with any provenance but `import`, or `import` outside import mode) rather than match it.
 
@@ -243,7 +243,6 @@ A descriptor built in import mode is for candidate search only. It MAY place rec
 - **Refinement only, within a major.** A rules revision may add a code, split a code into children that its old code then covers, add a layer that older strings read as `?`, add a table entry where the old reading was `?`, or give a published default to a layer whose absence was open. It never removes a code, never changes what a code means, and never changes an existing default. Every string valid under one rules revision stays valid under the next, and two strings that were `identical` stay `identical`.
 - **Defaults are forever.** A string that leaves a layer at its default means the same thing under every later rules revision of its major.
 - **One rules revision per release.** A release of the standard carries at most one new rules revision, and each new ruling in it rests on at least two failing cases from at least two catalogues.
-- **Rules revision 1.4.** This RFC adopts rules revision 1.4, which refines 1.3 under the rules above. It adds the joint action `sh.ext.oh`, shoulder extension from overhead, a child of `sh.ext` that `sh.ext` covers in compare; the line codes `p:neck`, a load lowered to the neck or throat, and `p:double`, a rope that passes twice in each jump; and the layer rule that a held push of limbs that do not move, when the exercise is built on it, is a `=` part. No 1.3 code changes meaning and every 1.3 string stays valid. A 1.3 string written for a pull from overhead is refined by its 1.4 string rather than identical to it, so an upgrade rebuilds it from its stored answers.
 - **Answers are stored.** A producer SHOULD keep each record's answers record: the question ids and the options chosen, the movement word and the movement-word dataset it came from, if any, the provenance and the gap marker. When a rules revision refines a reading, an upgrade rebuilds every string from its stored answers rather than asking anyone again. A string with no stored answers stays valid as written.
 
 ### 8.2. The schemas
@@ -330,7 +329,7 @@ An `xrefs` entry on a received record is the sender's claim, whether `auto` or `
 **Conditions for acceptance.** RFC-010 stays a draft until each of these holds:
 
 1. **Auto-match also requires the equipment to match.** When both records carry an FXE, auto-match requires them to be `identical`. Met: §7.1, condition 5. The figures of §9 were measured without it.
-2. **One rules revision closes the recorded notation gaps.** The gap markers and contradictions recorded so far are resolved in a single rules revision, under the refinement rules of §8.1. Met: rules revision 1.4 (§8.1).
+2. **One rules revision closes the recorded notation gaps.** The gap markers and contradictions recorded so far are resolved in a single rules revision, under the refinement rules of §8.1. Met: rules revision 1.4 (§4).
 3. **A fresh name-disjoint test passes the release gate** of §9.5, on queries none of the earlier tests used, under rules revision 1.4. Not yet met.
 
 **Staged.** `exerciseRef` carries `fxi`, and the references inside workout, program and the prescription library carry `fxe` and `fxm`, from the next version of each of those schemas (§5.5).
@@ -483,7 +482,7 @@ Answers records and their exchange shape are shown on the [question flow](/docs/
 :::danger MUST
 - **MUST** write every descriptor in canonical form, in the field §5 defines for it: a record-level field at the top level of the record, a reference field on the reference.
 - **MUST** write `fxiProvenance` as it happened, and `import` for every descriptor built in import mode.
-- **MUST** derive FXM muscle and part tokens from their FMA labels (§4.4).
+- **MUST** derive FXM muscle and part tokens from their FMA labels (§4.4). Neither the schema nor the conformance vectors can check this, so a token derived wrongly shows only as two providers' keys that disagree for the same muscle.
 - **MUST NOT** present a descriptor as an identifier, or describe the descriptors as identification (§3).
 - A producer that builds descriptors from answers records **MUST** pass the `syntax` and `builder` tiers of the conformance vectors at 100%.
 :::

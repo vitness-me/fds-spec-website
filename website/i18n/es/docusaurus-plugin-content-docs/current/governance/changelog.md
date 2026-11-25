@@ -26,6 +26,18 @@ reciba su fecha. Hasta entonces, las nuevas versiones se registran sin congelar.
   reglas 1.4, define el protocolo de coincidencia y publica las mediciones con
   las que se probaron los descriptores, incluido que todavía no se cumple el
   umbral de lanzamiento, una condición para aceptar el RFC.
+- **Revisión de reglas 1.4**, que precisa la 1.3 según el §8.1 del RFC-010.
+  Agrega la acción articular `sh.ext.oh`, extensión de hombro desde arriba de
+  la cabeza, hija de `sh.ext`, que `sh.ext` cubre en la comparación y que
+  reemplaza a `sh.ext` cuando ambas se escriben en una misma parte; los códigos
+  de línea `p:neck`, una carga que baja hasta el cuello o la garganta, y
+  `p:double`, una cuerda que pasa dos veces en cada salto; y la regla de capa de
+  que un empuje sostenido de extremidades que no se mueven, cuando el ejercicio
+  se basa en él, es una parte `=`. Ningún código de la 1.3 cambia de
+  significado y toda cadena de la 1.3 sigue siendo válida. Una cadena de la 1.3
+  escrita para un tirón desde arriba de la cabeza queda precisada por su cadena
+  de la 1.4 en lugar de ser idéntica a ella, por lo que una actualización la
+  reconstruye a partir de sus respuestas almacenadas.
 - En un ejercicio: `fxi`, `fxe` (el FXE estándar de su equipamiento principal),
   `fxiProvenance`, `fxiGap` y `xrefs`, todos opcionales, en el nivel superior
   del registro. Cada referencia a equipamiento dentro de un ejercicio puede

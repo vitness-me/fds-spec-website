@@ -85,3 +85,4 @@ Notes:
 
 ## Amendments
 - Governance changes are proposed via PRs and require Editor approval.
+- A release that implements an RFC ships only once that RFC is Accepted. It may be prepared on a branch while the RFC is in review, as `RELEASE.md` describes; the change that accepts the RFC freezes and dates the release, and `scripts/check-release-state.mjs` refuses to publish it before then. The rule applies from release 1.6.0 and RFC-010 on; RFC-001 to RFC-008, whose releases shipped before it, keep the status they have.

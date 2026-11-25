@@ -25,6 +25,16 @@ gains its date. The new versions are recorded unfrozen until then.
   descriptor pages at rules revision 1.4, defines the match protocol, and
   publishes the measurements the descriptors were tested against, including
   that the release gate, a condition for accepting the RFC, is not yet met.
+- **Rules revision 1.4**, which refines 1.3 under RFC-010 §8.1. It adds the
+  joint action `sh.ext.oh`, shoulder extension from overhead, a child of
+  `sh.ext` that `sh.ext` covers in compare and that replaces `sh.ext` when
+  both are written in one part; the line codes `p:neck`, a load lowered to
+  the neck or throat, and `p:double`, a rope that passes twice in each jump;
+  and the layer rule that a held push of limbs that do not move, when the
+  exercise is built on it, is a `=` part. No 1.3 code changes meaning and
+  every 1.3 string stays valid. A 1.3 string written for a pull from overhead
+  is refined by its 1.4 string rather than identical to it, so an upgrade
+  rebuilds it from its stored answers.
 - On an exercise: `fxi`, `fxe` (the standard FXE of its main equipment),
   `fxiProvenance`, `fxiGap` and `xrefs`, all optional, at the top level of the
   record. Each equipment reference inside an exercise may carry `fxe`, and each

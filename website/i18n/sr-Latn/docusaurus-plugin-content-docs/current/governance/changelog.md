@@ -25,6 +25,16 @@ unos dobije datum. Do tada su nove verzije zabeležene kao nezamrznute.
   pravila 1.4, definiše protokol podudaranja i objavljuje merenja prema kojima
   su deskriptori testirani, uključujući i to da kapija izdanja, uslov za
   prihvatanje RFC-a, još nije dostignuta.
+- **Revizija pravila 1.4**, koja precizira 1.3 prema §8.1 RFC-010. Dodaje
+  zglobnu akciju `sh.ext.oh`, ekstenziju ramena iznad glave, dete akcije
+  `sh.ext`, koju `sh.ext` pokriva pri poređenju i koja zamenjuje `sh.ext` kada
+  su obe napisane u istom delu; kodove linije `p:neck`, teret spušten do vrata
+  ili grla, i `p:double`, uže koje prolazi dvaput u svakom skoku; i pravilo
+  sloja po kome je zadržani pritisak udova koji se ne pomeraju, kada je vežba
+  zasnovana na njemu, deo `=`. Nijedan kod iz 1.3 ne menja značenje i svaki
+  string iz 1.3 ostaje važeći. String iz 1.3 napisan za povlačenje iznad glave
+  precizira njegov string iz 1.4 umesto da mu bude identičan, pa ga nadogradnja
+  ponovo gradi iz sačuvanih odgovora.
 - Na vežbi: `fxi`, `fxe` (standardni FXE njene glavne opreme), `fxiProvenance`,
   `fxiGap` i `xrefs`, sva opciona, na najvišem nivou zapisa. Svaka referenca na
   opremu unutar vežbe može da nosi `fxe`, a svaka referenca na mišić `fxm`.

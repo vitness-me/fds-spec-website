@@ -85,3 +85,4 @@ Napomene:
 
 ## Amandmani
 - Izmene upravljanja predlažu se putem PR-ova i zahtevaju odobrenje urednika.
+- Izdanje koje implementira RFC objavljuje se tek kada je taj RFC prihvaćen. Može se pripremiti na grani dok je RFC u razmatranju, kako opisuje `RELEASE.md`; izmena koja prihvata RFC zamrzava i datira izdanje, a `scripts/check-release-state.mjs` odbija da ga objavi pre toga. Pravilo važi od izdanja 1.6.0 i RFC-010; RFC-001 do RFC-008, čija su izdanja objavljena pre njega, zadržavaju status koji imaju.
