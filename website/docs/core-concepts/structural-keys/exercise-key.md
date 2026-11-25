@@ -589,7 +589,7 @@ When each key leaves open something the other states, neither is more specific, 
 
 An identical key is a strong match, and anything else gives a short list for a person to confirm. See [Using keys](../structural-keys.md#using-keys) for how to keep confirmed links.
 
-## Finding related exercises
+## Finding related items
 
 Keys that share codes form families, and nobody has to declare them. Search for a value in one layer and you find every exercise that shares it, in any catalog that writes keys.
 

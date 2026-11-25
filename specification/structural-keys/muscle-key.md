@@ -1,8 +1,10 @@
 # Muscle Key
 
-The muscle key is the structural key of a muscle. It sits in the `fxm` field and names a muscle, a part of a muscle, or a group of muscles, in words taken from standard anatomy. This page shows how a key is put together, where its codes come from, and how two keys compare.
+The muscle key is the structural key of a muscle. It sits in the `fxm` field and names one muscle or one part of a muscle, in words taken from standard anatomy. This page shows how a key is put together, where its codes come from, and how two keys compare.
 
 The muscle key is simpler than the exercise key. It has no layers and no code lists of its own. Its codes come from an anatomy reference, so FDS publishes the rule for deriving them and never a list of muscles. Every key on this page is an illustration.
+
+A set of muscles, such as the hamstrings or the hip flexors, is a muscle category and has a key of its own: see the [muscle category key](./muscle-category-key.md).
 
 This page describes version 1.0 of the muscle key.
 
@@ -43,19 +45,18 @@ The long head of biceps brachii has this key:
 
 The header and the body are separated by `/`. The muscle key has no `S` or `N` flag, because nothing in it is extended. A flag written after the version is dropped from the written form, so `FXM=1.0S/biceps-brachii` is written `FXM=1.0/biceps-brachii`.
 
-## The three forms
+## The two forms
 
-A key names one of three things.
+A key names one of two things.
 
 | Form | Names | Example |
 |---|---|---|
 | `FXM=1.0/<muscle>` | A whole muscle | `FXM=1.0/biceps-brachii`, biceps brachii |
 | `FXM=1.0/<muscle>.<part>` | A part or head of a muscle | `FXM=1.0/deltoid.acromial`, the acromial part of the deltoid, which gyms call the side delt |
-| `FXM=1.0/g:<group>` | A group, defined by its members | `FXM=1.0/g:hamstrings`, the hamstrings |
 
 Rules for every key:
 
-- A key is written starting with `FXM=1.0/`, followed by exactly one of the three forms.
+- A key is written starting with `FXM=1.0/`, followed by exactly one of the two forms.
 - Every code is lowercase: a letter, then letters and digits, in words joined by single hyphens.
 - A key carries no side. Left and right belong to the exercise, in its sides layer `x`. A record for the left biceps and one for the right both carry `FXM=1.0/biceps-brachii`.
 
@@ -74,7 +75,7 @@ The muscle code is the FMA term, rewritten:
 1. Find the muscle in FMA and take its preferred term, for example `Latissimus dorsi`.
 2. Take the term without its side. FMA also has terms such as "Right deltoid", and that muscle is `deltoid`.
 3. Write it in lowercase.
-4. Drop the word "muscle", or the words "muscle group", where the term has them.
+4. Drop the word "muscle" where the term has it.
 5. Join the remaining words with single hyphens: `latissimus-dorsi`.
 
 | FMA term | Muscle code |
@@ -84,9 +85,11 @@ The muscle code is the FMA term, rewritten:
 | Pectoralis major | `pectoralis-major` |
 | Gluteus maximus | `gluteus-maximus` |
 | Semitendinosus | `semitendinosus` |
-| Erector spinae muscle group | `erector-spinae` |
+| Longissimus | `longissimus` |
 
 A muscle's everyday name doesn't change its code. "Lats" is `latissimus-dorsi`, and so is "dorsal ancho" in a Spanish catalog.
+
+An FMA term for a set of muscles isn't a muscle. The Erector spinae muscle group is a category, `FXMG=1.0/erector-spinae`, and its members are muscles: `FXM=1.0/iliocostalis`, `FXM=1.0/longissimus` and `FXM=1.0/spinalis`.
 
 ## Parts
 
@@ -106,43 +109,19 @@ Rules:
 - Write a part only where it trains differently from the rest of the muscle. The upper chest is the clavicular part of pectoralis major, and it is worth its own record. A muscle that trains as one piece gets one record and no parts.
 - The parts of a muscle together make up the whole muscle. `FXM=1.0/biceps-brachii` covers the long head and the short head.
 
-## Groups
-
-A group is a set of muscles that fitness treats as one, such as the hamstrings, the calves or the hip flexors. It is written `g:` and the group code: `FXM=1.0/g:hamstrings`.
-
-A key for a single structure covers only that structure and its parts. So a structure whose members the owner also keys separately is written as a group of them:
-
-- The quadriceps is a group, `FXM=1.0/g:quadriceps`, because its four muscles have keys of their own: `FXM=1.0/rectus-femoris`, `FXM=1.0/vastus-lateralis`, `FXM=1.0/vastus-medialis` and `FXM=1.0/vastus-intermedius`.
-- The erector spinae, when its parts aren't keyed separately, is one muscle: `FXM=1.0/erector-spinae`.
-
-Two owners who split a structure differently write different keys for it. One that keys the parts of the erector spinae separately writes the erector spinae as a group, and that group doesn't compare as `FXM=1.0/erector-spinae`.
-
-Rules:
-
-- A group is defined by its members, the keys of the muscles, parts and other groups it contains. Its name means nothing to a comparison. An owner's hamstrings could have these members:
-
-  `FXM=1.0/biceps-femoris`, `FXM=1.0/semitendinosus`, `FXM=1.0/semimembranosus`
-
-- The group code is the owner's own word, under the same spelling rules as any other code. It isn't derived from anatomy.
-- A group may cite an anatomy term where one exists: FMA has "Set of hamstring muscles" for the hamstrings and "Triceps surae" for the calves. The code stays the owner's word, and the members still define the group.
-- A group has at least one member, and it never contains itself, directly or through another group.
-- FDS has no field for a group's member list. The owner supplies it with its own catalog data: in the muscle record's `attributes` or `extensions`, or in its own documentation.
-
-Because the group code is the owner's word, two owners can use one group code for different sets of muscles. A `g:` key means only what its owner's member list says, and the key doesn't say who the owner is. To compare a group key, you need the member list from the owner that wrote it.
-
 ## When no term exists
 
 The rule never asks you to guess.
 
 - **A part with no term takes the smallest structure that contains it.** FMA names the long head of biceps brachii but not an "upper biceps" or a "lower chest". Use the smallest structure FMA names that contains the one you mean. The lower chest is `FXM=1.0/pectoralis-major.abdominal`. An upper biceps spans both heads, so it is `FXM=1.0/biceps-brachii`. Each key is true, if less specific. Never use a narrower structure than the evidence supports.
-- **A body area is not a muscle.** "Core", "arms" or "full body" spans muscles with different jobs. Such a name is a category for grouping records, not a muscle, and it carries no key. When you do mean a set of muscles that work together, define a group and list its members.
+- **A set of muscles is not a muscle.** "Hamstrings", "core" or "full body" spans several muscles. Such a name is a muscle category and carries a [muscle category key](./muscle-category-key.md) in `fxmg`, not an `fxm`.
 - **A name that isn't anatomy carries no key.** A muscle list sometimes holds entries like "cardio", "Olympic lifts" or "other". Leave `fxm` out of those records.
 
 Keys are optional, so a record without one is still valid FDS.
 
 ## What the schema can't check
 
-The schema checks that a key is well formed: the header, one of the three forms, and lowercase codes joined by hyphens. It can't check that a muscle code was derived correctly from the FMA term, that a part code names a part FMA has, or what a group contains.
+The schema checks that a key is well formed: the header, one of the two forms, and lowercase codes joined by hyphens. It can't check that a muscle code was derived correctly from the FMA term, or that a part code names a part FMA has.
 
 That is the price of publishing a rule instead of a list. Two owners can write different keys for one muscle and both pass the schema. One owner reads FMA and writes `FXM=1.0/deltoid.acromial` for the side delt. Another goes by the gym name and writes `FXM=1.0/deltoid.lateral`. Both keys are well formed, the comparison says they are different, and only a person who checks the FMA term can tell which one follows the rule. Following the derivation is what makes keys from different owners meet.
 
@@ -185,17 +164,17 @@ A catalog lists "Side delts".
 
 `FXM=1.0/deltoid.acromial`
 
-### Hamstrings
+### Erector spinae
 
-A catalog lists "Hamstrings" as one entry.
+A catalog lists "Erector spinae" and "Longissimus" as two entries.
 
 | Step | Decision |
 |---|---|
-| Form | The hamstrings are three muscles that train together, so the entry is a group |
-| Code | The owner's own word: `hamstrings` |
-| Members | `FXM=1.0/biceps-femoris`, `FXM=1.0/semitendinosus`, `FXM=1.0/semimembranosus` |
+| Term | FMA has Erector spinae muscle group, a set of muscles, and Longissimus, a muscle |
+| Erector spinae | A set is a category: `FXMG=1.0/erector-spinae`, in the entry's `fxmg` |
+| Longissimus | A muscle: `longissimus` |
 
-`FXM=1.0/g:hamstrings`
+`FXM=1.0/longissimus`
 
 ### Lats
 
@@ -209,7 +188,6 @@ A catalog lists "Lats".
 `FXM=1.0/latissimus-dorsi`
 
 ## Keys in records
-
 
 A muscle record carries its key in `fxm`, and so does every muscle reference, such as the target muscles of an exercise:
 
@@ -236,19 +214,21 @@ A muscle record carries its key in `fxm`, and so does every muscle reference, su
 }
 ```
 
-An exercise refers to its target muscles by `id` and `name`, and each reference carries the muscle's key in `fxm` beside them:
+An exercise's targets, primary and secondary, always refer to individual muscles, never to a category. Each muscle reference keeps the muscle's `id` and `name`, and carries its category's `categoryId`, the muscle's key in `fxm`, and the category's key in `fxmg`. An exercise that trains the hamstrings lists the three hamstring muscles:
 
-```json fds:ignore exercise record excerpt showing the fxi and fxm fields
+```json fds:ignore exercise record excerpt showing the fxi, fxm and fxmg fields
 {
   "exerciseId": "ex.romanianDeadlift",
   "fxi": "FXI=1.0S/m:hip.ext/o:standing/l:bar.straight@hands",
   "canonical": { "name": "Romanian Deadlift", "slug": "romanian-deadlift" },
   "targets": {
     "primary": [
-      { "id": "mus.hamstrings", "name": "Hamstrings", "categoryId": "cat.legs", "fxm": "FXM=1.0/g:hamstrings" }
+      { "id": "mus.bicepsFemoris", "name": "Biceps Femoris", "categoryId": "cat.hamstrings", "fxm": "FXM=1.0/biceps-femoris", "fxmg": "FXMG=1.0/hamstring" },
+      { "id": "mus.semitendinosus", "name": "Semitendinosus", "categoryId": "cat.hamstrings", "fxm": "FXM=1.0/semitendinosus", "fxmg": "FXMG=1.0/hamstring" },
+      { "id": "mus.semimembranosus", "name": "Semimembranosus", "categoryId": "cat.hamstrings", "fxm": "FXM=1.0/semimembranosus", "fxmg": "FXMG=1.0/hamstring" }
     ],
     "secondary": [
-      { "id": "mus.gluteusMaximus", "name": "Gluteus Maximus", "categoryId": "cat.legs", "fxm": "FXM=1.0/gluteus-maximus" }
+      { "id": "mus.gluteusMaximus", "name": "Gluteus Maximus", "categoryId": "cat.glutes", "fxm": "FXM=1.0/gluteus-maximus", "fxmg": "FXMG=1.0/buttock" }
     ]
   }
 }
@@ -256,26 +236,37 @@ An exercise refers to its target muscles by `id` and `name`, and each reference 
 
 ## Comparing two muscle keys
 
-Comparison looks at the muscles and parts each key covers. A part covers itself. A muscle covers all of its parts. A group covers everything its members cover.
+Comparison looks at the muscles and parts each key covers. A part covers itself, and a muscle covers all of its parts.
 
-- **Same**: two muscle or part keys written identically are the same. Group keys are the same only when their member lists cover the same muscles and parts. A group and a muscle can be the same: a group "shoulders" whose only member is the deltoid is the same as `FXM=1.0/deltoid`.
-- **More specific**: one key covers part of what the other covers, and nothing outside it.
+- **Same**: the two keys are written identically.
+- **More specific**: one key is a part of the muscle the other names.
 - **Different**: the two keys cover no muscle or part in common.
 
 | Key A | Key B | Result |
 |---|---|---|
 | `FXM=1.0/biceps-brachii` | `FXM=1.0/biceps-brachii` | Same |
 | `FXM=1.0/biceps-brachii.long` | `FXM=1.0/biceps-brachii` | A is more specific: the long head is one part of the muscle |
-| `FXM=1.0/semitendinosus` | `FXM=1.0/g:hamstrings` | A is more specific, when B's owner lists semitendinosus as a member |
 | `FXM=1.0/biceps-brachii.long` | `FXM=1.0/biceps-brachii.short` | Different: two heads of one muscle |
 | `FXM=1.0/biceps-brachii` | `FXM=1.0/brachialis` | Different: two muscles |
-| `FXM=1.0/g:quadriceps` | `FXM=1.0/g:hip-flexors` | Overlap, when both owners list rectus femoris as a member |
 
-When two keys share some muscles and each covers one the other doesn't, they overlap: neither is more specific, and they aren't different either. Quadriceps and hip flexors groups usually share rectus femoris.
-
-A comparison that involves a group needs that group's member list from its owner. Keys of muscles and parts compare from the text alone.
+Muscle keys compare from the text alone. To compare a muscle with a category, see [A muscle in a category](./muscle-category-key.md#a-muscle-in-a-category).
 
 Keys that are the same are a strong match, and anything else gives a short list for a person to confirm. See [Using keys](../structural-keys.md#using-keys) for how to keep confirmed links.
+
+## Finding related items
+
+A muscle key leads to its parts, to the categories it belongs to, and to the exercises that train it. No link has to be declared anywhere.
+
+| Search | Finds |
+|---|---|
+| `FXM=1.0/deltoid` and `FXM=1.0/deltoid.*` | The deltoid and its three parts: `clavicular`, `acromial` and `spinal` |
+| `FXM=1.0/biceps-brachii.*` | The long and short heads of biceps brachii |
+| A muscle, `FXM=1.0/rectus-femoris`, in the category index | Every category it is in: `quadriceps-femoris`, `thigh.anterior`, `thigh`, `entire`, `a:hip.flex` and `a:kn.ext` |
+| A part, `FXM=1.0/deltoid.acromial`, in the category index | `shoulder.intrinsic`, `entire`, and `a:sh.abd`, the prime movers of shoulder abduction |
+| An exercise motion, `m:hip.flex` | `FXMG=1.0/a:hip.flex`, whose members are `FXM=1.0/psoas-major`, `FXM=1.0/iliacus` and `FXM=1.0/rectus-femoris` |
+| Exercise targets whose `fxm` is `FXM=1.0/gluteus-maximus` | Every exercise that trains the gluteus maximus, in any catalog |
+
+`deltoid.*` means any key that adds a part to `deltoid`. The category index lists, for each muscle and part, every category whose members hold it. It is built from the categories' members, so the muscle record stores none of it. See [Finding related items](./muscle-category-key.md#finding-related-items) on the muscle category key page. An exercise key's joint action is the code of an action category, so the motion of an exercise leads to the muscles that move it.
 
 ## Building keys
 

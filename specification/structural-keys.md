@@ -1,6 +1,6 @@
 # Structural Keys
 
-A structural key is a short string that describes an exercise, a piece of equipment or a muscle by what it is. It is written in codes the standard publishes, not in any catalog's own names. Two catalogs that call the same exercise by different names can compare keys and find each other.
+A structural key is a short string that describes an exercise, a piece of equipment, a muscle or a muscle category by what it is. It is written in codes the standard publishes, not in any catalog's own names. Two catalogs that call the same exercise by different names can compare keys and find each other.
 
 ## The problem with names
 
@@ -36,6 +36,7 @@ Keys that share codes form families, and no relationship has to be declared anyw
 - **The same kind of equipment.** Exercises loaded with any `bell.*` code are dumbbell, kettlebell and circus dumbbell work.
 - **All strength machines.** Equipment keys with `k:mac` are every strength machine. An exercise key names a strength machine `mac`, so the exercises done on them are found the same way.
 - **All parts of one muscle.** `FXM=1.0/biceps-brachii` and the keys that add a part to it, such as `FXM=1.0/biceps-brachii.long`, are the muscle and its heads.
+- **The muscles of a category.** `FXMG=1.0/hamstring` holds `FXM=1.0/biceps-femoris`, `FXM=1.0/semitendinosus` and `FXM=1.0/semimembranosus`, and an exercise whose motion is `hip.flex` leads to `FXMG=1.0/a:hip.flex`, the muscles that flex the hip.
 
 Each key page shows how to search its layers.
 
@@ -56,7 +57,7 @@ Keys are optional. A record without one is still valid FDS.
 | Muscle    | `fxm` | The muscle and, where it has them, its parts             | `FXM=1.0/biceps-brachii.long`, the long head of biceps brachii |
 | Muscle category | `fxmg` | A set of muscles, by anatomy, joint action or a union of both | `FXMG=1.0/hamstring`, the hamstrings |
 
-The same fields also appear wherever a record refers to an exercise, a muscle or a piece of equipment by id and name, so references can be matched the same way.
+The same fields also appear wherever a record refers to an exercise, a muscle or a piece of equipment by id and name, so references can be matched the same way. A muscle reference carries both: the muscle's `fxm` and its category's `fxmg`.
 
 ## Using keys
 

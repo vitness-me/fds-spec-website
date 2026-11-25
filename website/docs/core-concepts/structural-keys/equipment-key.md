@@ -640,7 +640,7 @@ When each key leaves open something the other states, neither is more specific, 
 
 An identical key is a strong match, and anything else gives a short list for a person to confirm. See [Using keys](../structural-keys.md#using-keys) for how to keep confirmed links.
 
-## Finding related equipment
+## Finding related items
 
 Equipment keys that share codes form families, and nobody has to declare them. Search for a value in one layer and you find every piece of equipment that shares it.
 
@@ -658,7 +658,7 @@ Equipment keys that share codes form families, and nobody has to declare them. S
 
 `bell.*` means any code that starts with `bell.`. An "is" search is the same operation as comparing for "more specific": every single-purpose pulldown machine is more specific than `FXE=1.0S/k:mac/l:?/s:?/m:pull.down`. A combination machine that also rows comes back as compatible instead. A "holds" search looks for a code, or a child of it, anywhere in the layer.
 
-An exercise key uses the same codes, so the same searches find exercises: `l` holds `mac` finds every exercise done on a strength machine (see [Finding related exercises](./exercise-key.md#finding-related-exercises)).
+An exercise key uses the same codes, so the same searches find exercises: `l` holds `mac` finds every exercise done on a strength machine (see [Finding related items](./exercise-key.md#finding-related-items) on the exercise key page).
 
 ## Building keys
 
