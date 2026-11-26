@@ -125,13 +125,16 @@ function codeProblems(pages, known) {
 
 // ── rule 3: every quoted key checks ─────────────────────────────────────────
 
-const KEY = /(FX(?:MG|M|I|E)=[^\s`'"|)<>…\]\\,]+)/g;
+// A key runs to the quote, backtick, space or bracket that closes it. `,`, `>` and `|` are symbols inside a key; a
+// table cell writes `|` as `\|`.
+const KEY = /(FX(?:MG|M|I|E)=[^\s`'")<…\]\\]+)/g;
 function keyProblems(sources) {
   const problems = [];
   let count = 0;
-  for (const [where, body] of Object.entries(sources)) {
+  for (const [where, text] of Object.entries(sources)) {
+    const body = text.replaceAll('\\|', '|');
     for (const m of body.matchAll(KEY)) {
-      const key = m[1].replace(/[.;:]+$/, '');
+      const key = m[1].replace(/[.;:,]+$/, '');
       const next = body[m.index + m[1].length] ?? '';
       // A header alone (`FXI=1.0`), a pattern (`<joint>`, `…`) or a search (`deltoid.*`) is not a key.
       if (!/=\d+\.\d+[SN]?\/./.test(key) || next === '<' || next === '…' || key.endsWith('.*') || DELIBERATELY_WRONG.has(key)) continue;
@@ -180,6 +183,9 @@ if (process.argv.includes('--self-test')) {
   expectFail('codes (layer value)', codeProblems({ 'page.md': '| `l:bar.straight@backside` | x |' }, known).problems);
   expectFail('keys', keyProblems({ 'page.md': 'A key `FXI=1.0S/m:el.bend/o:standing/l:none` here.' }).problems);
   expectFail('keys (muscle)', keyProblems({ 'page.md': '`FXM=1.0/lats`' }).problems);
+  // Each key is valid up to a , > or | and broken after it: a check that stops at the separator passes all three.
+  const separated = '`FXI=1.0S/o:standing/l:none/m:el.flex>el.bend` `FXI=1.0S/m:=sp.flex/o:prone/l:none/s:floor@feet,nope` `FXI=1.0S/o:prone/l:none/m:=sp.flex\\|hip.bend`';
+  if (keyProblems({ 'page.md': separated }).problems.length !== 3) failures.push('keys are checked only up to a , > or |');
   expectFail('links', linkProblems({ ...pages, 'muscle-key.md': '' }));
   if (codeProblems({ 'page.md': '| `m:hip.ext+kn.ext` | `l:bell.dumb@hands` | `x:rc@legs+u@arms` | `bell.*` | `FXMG=1.0/a:hip.flex` |' }, known).problems.length > 0) failures.push('codes rejected valid codes');
   if (failures.length > 0) { console.error(failures.join('\n')); process.exit(1); }
