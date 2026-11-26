@@ -6,13 +6,13 @@ usecase_promise: Say what a machine does in numbers another gym can act on, and 
 usecase_family: foundations
 usecase_audiences: [oem-engineer, platform-lead]
 usecase_sources:
-  - specification/schemas/equipment/v1.1.0/equipment.example.json
-  - specification/schemas/equipment/v1.1.0/equipment.example.stack.json
+  - specification/schemas/equipment/v1.2.0/equipment.example.json
+  - specification/schemas/equipment/v1.2.0/equipment.example.stack.json
 ---
 
 import {SpecExample, BeforeAfter, Panel, Audience, NextSteps, Next} from './_shared/UseCase';
-import barbell from '../../../specification/schemas/equipment/v1.1.0/equipment.example.json';
-import cableStack from '../../../specification/schemas/equipment/v1.1.0/equipment.example.stack.json';
+import barbell from '../../../specification/schemas/equipment/v1.2.0/equipment.example.json';
+import cableStack from '../../../specification/schemas/equipment/v1.2.0/equipment.example.stack.json';
 
 # Model equipment so a prescription stays reproducible
 
@@ -39,7 +39,7 @@ import cableStack from '../../../specification/schemas/equipment/v1.1.0/equipmen
 A barbell is identity, classification, and the localized and vendor-specific detail
 a gym wants — but no loading rule, because a bar takes any plates.
 
-<SpecExample source="specification/schemas/equipment/v1.1.0/equipment.example.json" data={barbell}>
+<SpecExample source="specification/schemas/equipment/v1.2.0/equipment.example.json" data={barbell}>
   A barbell. The `x:gym-management` extension carries inventory and maintenance a
   consumer can ignore; the core stays about the equipment itself.
 </SpecExample>
@@ -47,7 +47,7 @@ a gym wants — but no loading rule, because a bar takes any plates.
 A pin-loaded cable stack is different: its load changes in fixed steps, and that is
 a fact a prescription downstream needs to round to.
 
-<SpecExample source="specification/schemas/equipment/v1.1.0/equipment.example.stack.json" data={cableStack}>
+<SpecExample source="specification/schemas/equipment/v1.2.0/equipment.example.stack.json" data={cableStack}>
   `loading.increment` is 5 kg and `stackBased` is true — the increments are fixed,
   so a consumer knows a prescription must snap to them.
 </SpecExample>

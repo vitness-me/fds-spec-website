@@ -221,7 +221,7 @@ A muscle category record carries its key in `fxmg`. A group such as "Hamstrings"
 
 ```json fds:ignore muscle category record excerpt showing the fxmg field
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "id": "cat.hamstrings",
   "fxmg": "FXMG=1.0/hamstring",
   "canonical": {

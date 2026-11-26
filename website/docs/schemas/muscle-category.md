@@ -10,14 +10,14 @@ The Muscle Category schema defines groupings and categorizations of muscles with
 
 ## Schema Location
 
-**URL:** `https://spec.vitness.me/schemas/muscle/muscle-category/v1.0.0/muscle-category.schema.json`
+**URL:** `https://spec.vitness.me/schemas/muscle/muscle-category/v1.1.0/muscle-category.schema.json`
 
-**Download:** [muscle-category.schema.json](https://spec.vitness.me/schemas/muscle/muscle-category/v1.0.0/muscle-category.schema.json)
+**Download:** [muscle-category.schema.json](https://spec.vitness.me/schemas/muscle/muscle-category/v1.1.0/muscle-category.schema.json)
 
 ## Examples
 
 View the muscle category examples:
-- [Basic Category](https://spec.vitness.me/schemas/muscle/muscle-category/v1.0.0/muscle-category.example.json)
+- [Basic Category](https://spec.vitness.me/schemas/muscle/muscle-category/v1.1.0/muscle-category.example.json)
 
 ## Specification
 
@@ -27,6 +27,7 @@ For detailed information about the muscle category data model, see [RFC-004: Mus
 
 - `id`: UUID identifier
 - `schemaVersion`: Version string (e.g., "1.0.0")
+- `fxmg`: Optional [muscle category key](/docs/core-concepts/structural-keys/muscle-category-key), the category's structural key
 - `canonical`: Standardized naming with slug and aliases
 - `classification`: Category tags and attributes
 - `metadata`: Status, timestamps, authorship

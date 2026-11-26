@@ -193,7 +193,7 @@ A muscle record carries its key in `fxm`, and so does every muscle reference, su
 
 ```json fds:ignore muscle record excerpt showing the fxm field
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "id": "mus.bicepsBrachiiLongHead",
   "fxm": "FXM=1.0/biceps-brachii.long",
   "canonical": {

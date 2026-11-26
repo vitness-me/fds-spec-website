@@ -70,8 +70,9 @@ All compliant exercise data **MUST** include these fields:
 
 ```json
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.2.0",
   "exerciseId": "550e8400-e29b-41d4-a716-446655440000",
+  "fxi": "FXI=1.0S/m:hip.ext+kn.ext/o:standing/l:bar.straight@back",
   "canonical": {
     "name": "Back Squat",
     "slug": "back-squat"
@@ -85,7 +86,7 @@ All compliant exercise data **MUST** include these fields:
   },
   "targets": {
     "primary": [
-      { "id": "mus.quadriceps", "name": "Quadriceps", "categoryId": "cat.legs" }
+      { "id": "mus.quadriceps", "name": "Quadriceps", "categoryId": "cat.legs", "fxmg": "FXMG=1.0/a:hip.flex+buttock+hamstring+quadriceps-femoris+sartorius+tensor-fasciae-latae+thigh.medial+tibialis-anterior+triceps-surae" }
     ]
   },
   "metrics": {
@@ -113,15 +114,18 @@ Four optional fields carry most of what an implementation actually renders.
 
 Note that `constraints.progressions` and `constraints.regressions` are free-text descriptions, while a `relations` entry of type `progression` is a link to another exercise. Both exist because an author often knows *that* a movement is harder before the harder movement is in the catalog.
 
+`fxi` is the exercise's structural key: a string that describes how the body moves, its position and what it moves with, in codes FDS publishes, so two catalogs can find the same exercise whatever they call it. It finds candidates and is not an identifier; `exerciseId` stays the record's identity. The schema checks only its header, `FXI=1.0S/` or `FXI=1.0N/`. See [Exercise key](../core-concepts/structural-keys/exercise-key).
+
 ```json fds:fragment entity=exercise
 {
+  "fxi": "FXI=1.0S/m:hip.ext+kn.ext/o:standing/l:bar.straight@back",
   "equipment": {
     "required": [
-      { "id": "eq.barbell", "name": "Barbell" },
-      { "id": "eq.rack", "name": "Power Rack" }
+      { "id": "eq.barbell", "name": "Barbell", "fxe": "FXE=1.0S/k:imp/f:bar.straight" },
+      { "id": "eq.rack", "name": "Power Rack", "fxe": "FXE=1.0S/k:sup/f:rack" }
     ],
     "optional": [
-      { "id": "eq.belt", "name": "Lifting Belt" }
+      { "id": "eq.belt", "name": "Lifting Belt", "fxe": "FXE=1.0S/k:acc/f:belt.lift" }
     ]
   },
   "constraints": {
@@ -225,17 +229,19 @@ For complex platform-unique data structures:
 
 `targets.primary` lists the muscles the exercise is chosen for and is required; `targets.secondary` lists those meaningfully involved but not the point of the movement. Each entry is a muscle reference — an `id`, a display `name`, and the `categoryId` of the group it belongs to — denormalised so a consumer can render the exercise without resolving the muscle catalog.
 
+A muscle reference may also carry the muscle's structural key in `fxm` and its category's in `fxmg`. See [Muscle key](../core-concepts/structural-keys/muscle-key) and [Muscle category key](../core-concepts/structural-keys/muscle-category-key).
+
 The split matters to anything computing training volume per muscle: counting secondary involvement as primary inflates volume in a way that compounds across a program.
 
 ```json fds:fragment entity=exercise
 {
   "targets": {
     "primary": [
-      { "id": "mus.quadriceps", "name": "Quadriceps", "categoryId": "cat.legs" }
+      { "id": "mus.quadriceps", "name": "Quadriceps", "categoryId": "cat.legs", "fxmg": "FXMG=1.0/a:hip.flex+buttock+hamstring+quadriceps-femoris+sartorius+tensor-fasciae-latae+thigh.medial+tibialis-anterior+triceps-surae" }
     ],
     "secondary": [
-      { "id": "mus.hamstrings", "name": "Hamstrings", "categoryId": "cat.legs" },
-      { "id": "mus.erectorSpinae", "name": "Erector Spinae", "categoryId": "cat.back" }
+      { "id": "mus.hamstrings", "name": "Hamstrings", "categoryId": "cat.legs", "fxmg": "FXMG=1.0/a:hip.flex+buttock+hamstring+quadriceps-femoris+sartorius+tensor-fasciae-latae+thigh.medial+tibialis-anterior+triceps-surae" },
+      { "id": "mus.erectorSpinae", "name": "Erector Spinae", "categoryId": "cat.back", "fxmg": "FXMG=1.0/deltoid.spinal+erector-spinae+latissimus-dorsi+quadratus-lumborum+rhomboid-major+rhomboid-minor+trapezius" }
     ]
   }
 }
@@ -245,15 +251,17 @@ The split matters to anything computing training volume per muscle: counting sec
 
 `equipment.required` is what the movement cannot be performed without; `equipment.optional` is what changes the experience but not the exercise. Each entry denormalises an `id` and a `name` for the same reason target muscles do.
 
+An equipment reference may also carry the equipment's structural key in `fxe`, the same value as the equipment record's. See [Equipment key](../core-concepts/structural-keys/equipment-key).
+
 ```json fds:fragment entity=exercise
 {
   "equipment": {
     "required": [
-      { "id": "eq.barbell", "name": "Barbell" },
-      { "id": "eq.rack", "name": "Power Rack" }
+      { "id": "eq.barbell", "name": "Barbell", "fxe": "FXE=1.0S/k:imp/f:bar.straight" },
+      { "id": "eq.rack", "name": "Power Rack", "fxe": "FXE=1.0S/k:sup/f:rack" }
     ],
     "optional": [
-      { "id": "eq.belt", "name": "Lifting Belt" }
+      { "id": "eq.belt", "name": "Lifting Belt", "fxe": "FXE=1.0S/k:acc/f:belt.lift" }
     ]
   }
 }
@@ -403,9 +411,9 @@ Potential response structure:
 ## 8. JSON Schema Reference
 
 Complete JSON Schema available at:
-- **Exercise**: `/specification/schemas/exercises/v1.1.0/exercise.schema.json`
-- **Equipment**: `/specification/schemas/equipment/v1.1.0/equipment.schema.json`  
-- **Muscle**: `/specification/schemas/muscle/v1.0.0/muscle.schema.json`
+- **Exercise**: `/specification/schemas/exercises/v1.2.0/exercise.schema.json`
+- **Equipment**: `/specification/schemas/equipment/v1.2.0/equipment.schema.json`  
+- **Muscle**: `/specification/schemas/muscle/v1.1.0/muscle.schema.json`
 
 ## 8.1. Validation
 
@@ -413,34 +421,35 @@ Validate with Ajv (Draft 2020-12):
 
 ```
 npx --package=ajv-cli --package=ajv-formats ajv validate --spec=draft2020 -c ajv-formats \
-  -s specification/schemas/exercises/v1.1.0/exercise.schema.json \
-  -d specification/schemas/exercises/v1.1.0/exercise.example.json
+  -s specification/schemas/exercises/v1.2.0/exercise.schema.json \
+  -d specification/schemas/exercises/v1.2.0/exercise.example.json
 
 # Additional examples (optional):
 npx --package=ajv-cli --package=ajv-formats ajv validate --spec=draft2020 -c ajv-formats \
-  -s specification/schemas/exercises/v1.1.0/exercise.schema.json \
-  -d specification/schemas/exercises/v1.1.0/exercise.example.cardio.json
+  -s specification/schemas/exercises/v1.2.0/exercise.schema.json \
+  -d specification/schemas/exercises/v1.2.0/exercise.example.cardio.json
 npx --package=ajv-cli --package=ajv-formats ajv validate --spec=draft2020 -c ajv-formats \
-  -s specification/schemas/exercises/v1.1.0/exercise.schema.json \
-  -d specification/schemas/exercises/v1.1.0/exercise.example.mobility.json
+  -s specification/schemas/exercises/v1.2.0/exercise.schema.json \
+  -d specification/schemas/exercises/v1.2.0/exercise.example.mobility.json
 npx --package=ajv-cli --package=ajv-formats ajv validate --spec=draft2020 -c ajv-formats \
-  -s specification/schemas/exercises/v1.1.0/exercise.schema.json \
-  -d specification/schemas/exercises/v1.1.0/exercise.example.machine.json
+  -s specification/schemas/exercises/v1.2.0/exercise.schema.json \
+  -d specification/schemas/exercises/v1.2.0/exercise.example.machine.json
 npx --package=ajv-cli --package=ajv-formats ajv validate --spec=draft2020 -c ajv-formats \
-  -s specification/schemas/exercises/v1.1.0/exercise.schema.json \
-  -d specification/schemas/exercises/v1.1.0/exercise.example.unilateral.json
+  -s specification/schemas/exercises/v1.2.0/exercise.schema.json \
+  -d specification/schemas/exercises/v1.2.0/exercise.example.unilateral.json
 ```
 
 ## 9. Example Implementation
 
 ### 9.1. Complete Back Squat Export
 
-Based on reference implementation (`/specification/schemas/exercises/v1.1.0/exercise.example.json`):
+Based on reference implementation (`/specification/schemas/exercises/v1.2.0/exercise.example.json`):
 
 ```json
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.2.0",
   "exerciseId": "550e8400-e29b-41d4-a716-446655440000",
+  "fxi": "FXI=1.0S/m:hip.ext+kn.ext/o:standing/l:bar.straight@back",
   "canonical": {
     "name": "Back Squat",
     "slug": "back-squat",
@@ -462,20 +471,20 @@ Based on reference implementation (`/specification/schemas/exercises/v1.1.0/exer
   },
   "targets": {
     "primary": [
-      { "id": "mus.quadriceps", "name": "Quadriceps", "categoryId": "cat.legs" }
+      { "id": "mus.quadriceps", "name": "Quadriceps", "categoryId": "cat.legs", "fxmg": "FXMG=1.0/a:hip.flex+buttock+hamstring+quadriceps-femoris+sartorius+tensor-fasciae-latae+thigh.medial+tibialis-anterior+triceps-surae" }
     ],
     "secondary": [
-      { "id": "mus.hamstrings", "name": "Hamstrings", "categoryId": "cat.legs" },
-      { "id": "mus.erectorSpinae", "name": "Erector Spinae", "categoryId": "cat.back" }
+      { "id": "mus.hamstrings", "name": "Hamstrings", "categoryId": "cat.legs", "fxmg": "FXMG=1.0/a:hip.flex+buttock+hamstring+quadriceps-femoris+sartorius+tensor-fasciae-latae+thigh.medial+tibialis-anterior+triceps-surae" },
+      { "id": "mus.erectorSpinae", "name": "Erector Spinae", "categoryId": "cat.back", "fxmg": "FXMG=1.0/deltoid.spinal+erector-spinae+latissimus-dorsi+quadratus-lumborum+rhomboid-major+rhomboid-minor+trapezius" }
     ]
   },
   "equipment": {
     "required": [
-      { "id": "eq.barbell", "name": "Barbell" },
-      { "id": "eq.rack", "name": "Power Rack" }
+      { "id": "eq.barbell", "name": "Barbell", "fxe": "FXE=1.0S/k:imp/f:bar.straight" },
+      { "id": "eq.rack", "name": "Power Rack", "fxe": "FXE=1.0S/k:sup/f:rack" }
     ],
     "optional": [
-      { "id": "eq.belt", "name": "Lifting Belt" }
+      { "id": "eq.belt", "name": "Lifting Belt", "fxe": "FXE=1.0S/k:acc/f:belt.lift" }
     ]
   },
   "constraints": {

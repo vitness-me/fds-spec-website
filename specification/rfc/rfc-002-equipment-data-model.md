@@ -59,8 +59,9 @@ All compliant equipment data **MUST** include these fields:
 
 ```json fds:document entity=equipment
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.2.0",
   "id": "eq.barbell",
+  "fxe": "FXE=1.0S/k:imp/f:bar.straight",
   "canonical": {
     "name": "Barbell",
     "slug": "barbell"
@@ -80,6 +81,7 @@ Commonly supported optional fields that enhance interoperability:
 
 ```json fds:fragment entity=equipment partial
 {
+  "fxe": "FXE=1.0S/k:imp/f:bar.straight",
   "canonical": {
     "abbreviation": "BB",
     "aliases": ["Olympic Bar"],
@@ -98,6 +100,8 @@ Commonly supported optional fields that enhance interoperability:
   ]
 }
 ```
+
+`fxe` is the equipment's structural key: a string that describes what kind of equipment it is and its form, in codes FDS publishes, so two catalogs can find the same equipment whatever they call it. A record carries the whole key, extended layers and the `N` flag included. It is not an identifier; `id` stays the record's identity. The schema checks only its header, `FXE=1.0S/` or `FXE=1.0N/`. See [Equipment key](../core-concepts/structural-keys/equipment-key).
 
 ### 3.3. Extension Mechanisms
 
@@ -273,7 +277,7 @@ graph LR
 ## 8. JSON Schema Reference
 
 Complete JSON Schema available at:
-- **Equipment**: `/specification/schemas/equipment/v1.1.0/equipment.schema.json`
+- **Equipment**: `/specification/schemas/equipment/v1.2.0/equipment.schema.json`
 
 ## 8.1. Validation
 
@@ -281,20 +285,21 @@ Validate with Ajv (Draft 2020-12):
 
 ```
 npx --package=ajv-cli --package=ajv-formats ajv validate --spec=draft2020 -c ajv-formats \
-  -s specification/schemas/equipment/v1.1.0/equipment.schema.json \
-  -d specification/schemas/equipment/v1.1.0/equipment.example.json
+  -s specification/schemas/equipment/v1.2.0/equipment.schema.json \
+  -d specification/schemas/equipment/v1.2.0/equipment.example.json
 ```
 
 ## 9. Example Implementation
 
 ### 9.1. Complete Barbell Equipment Record
 
-Based on reference implementation (`/specification/schemas/equipment/v1.1.0/equipment.example.json`):
+Based on reference implementation (`/specification/schemas/equipment/v1.2.0/equipment.example.json`):
 
 ```json fds:document entity=equipment
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.2.0",
   "id": "eq.barbell",
+  "fxe": "FXE=1.0S/k:imp/f:bar.straight",
   "canonical": { 
     "name": "Barbell", 
     "slug": "barbell", 

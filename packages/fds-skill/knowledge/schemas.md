@@ -1,13 +1,14 @@
 # FDS Schema Reference
 
-## Exercise Schema (v1.1.0)
+## Exercise Schema (v1.2.0)
 
 ### Top-Level Structure
 
 ```typescript
 interface FDSExercise {
-  schemaVersion: string;           // Required: "1.1.0"
+  schemaVersion: string;           // Required: "1.2.0"
   exerciseId: string;              // Required: UUIDv4
+  fxi?: string;                    // 1.2.0: structural key, "FXI=1.0S/…"; never an identifier
   canonical: Canonical;            // Required
   classification: Classification;  // Required
   targets: Targets;                // Required
@@ -71,6 +72,8 @@ interface MuscleRef {
   slug?: string;           // Optional
   name: string;            // Required
   categoryId: string;      // Required: muscle category UUID
+  fxm?: string;            // 1.2.0: the muscle's structural key, "FXM=1.0/…"
+  fxmg?: string;           // 1.2.0: its category's structural key, "FXMG=1.0/…"
   aliases?: string[];      // Optional
 }
 ```
@@ -87,6 +90,7 @@ interface EquipmentRef {
   id: string;              // Required: UUIDv4
   slug?: string;           // Optional
   name: string;            // Required
+  fxe?: string;            // 1.2.0: the equipment's structural key, "FXE=1.0S/…"
   abbreviation?: string;   // Optional
   categories?: string[];   // Optional
   aliases?: string[];      // Optional
@@ -195,12 +199,13 @@ interface MediaItem {
 
 ---
 
-## Equipment Schema (v1.1.0)
+## Equipment Schema (v1.2.0)
 
 ```typescript
 interface FDSEquipment {
   schemaVersion: string;   // Required
   id: string;              // Required: UUIDv4
+  fxe?: string;          // structural key, "FXE=1.0S/…; extended layers and the N flag allowed"
   canonical: {
     name: string;          // Required
     slug: string;          // Required
@@ -234,12 +239,13 @@ not an instruction it can carry out.
 
 ---
 
-## Muscle Schema (v1.0.0)
+## Muscle Schema (v1.1.0)
 
 ```typescript
 interface FDSMuscle {
   schemaVersion: string;   // Required
   id: string;              // Required: UUIDv4
+  fxm?: string;          // structural key, "FXM=1.0/…"
   canonical: {
     name: string;          // Required
     slug: string;          // Required
@@ -274,12 +280,13 @@ somewhere and a bare list of ids has nowhere to put it.
 
 ---
 
-## Muscle Category Schema (v1.0.0)
+## Muscle Category Schema (v1.1.0)
 
 ```typescript
 interface FDSMuscleCategory {
   schemaVersion: string;   // Required
   id: string;              // Required: UUIDv4
+  fxmg?: string;         // structural key, "FXMG=1.0/…"
   canonical: {
     name: string;          // Required
     slug: string;          // Required
@@ -484,7 +491,7 @@ type Status =
 
 ---
 
-## Prescription Definitions (v1.0.0)
+## Prescription Definitions (v1.1.0)
 
 Not an entity. `prescription.schema.json` has a root of `{"not": {}}` — it validates nothing, by construction. Validate against a definition inside it.
 
@@ -569,7 +576,7 @@ interface ProgressionRule {
 
 `setScheme.pattern` is the one closed union with **no** catch-all. Expanding a pattern requires knowing its semantics, so accepting an unknown one would defer the failure to the point where it does damage.
 
-## Workout Schema (v1.1.0)
+## Workout Schema (v1.2.0)
 
 ```typescript
 interface FDSWorkout {
@@ -620,7 +627,7 @@ type BlockMode = 'sequential' | 'superset' | 'circuit' | 'emom'
 interface BlockItem {
   id: string;
   groupLabel?: string;             // "A1"/"A2" — alternated
-  exercise: ExerciseRef;
+  exercise: ExerciseRef;           // { id, name, slug?, aliases?, fxi? }; fxi from 1.2.0
   alternatives?: ExerciseRef[];    // author-sanctioned substitutions
   sets?: SetPrescription[];        // XOR with `scheme`
   scheme?: SetScheme;              // XOR with `sets`
@@ -661,7 +668,7 @@ interface RepStyle {
 
 Exclude `type: 'warmup'` sets from training-volume calculations; counting them inflates volume in a way that compounds across a program.
 
-## Program Schema (v1.0.0)
+## Program Schema (v1.1.0)
 
 ```typescript
 interface FDSProgram {

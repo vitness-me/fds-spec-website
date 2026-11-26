@@ -226,7 +226,7 @@ Your responses must be:
 ### Classification Prompt
 
 ```
-Classify this exercise according to FDS release 1.5.0 (exercise schema 1.1.0):
+Classify this exercise according to FDS release 1.6.0 (exercise schema 1.2.0):
 
 Exercise: {{name}}
 Body Part: {{bodyPart}}

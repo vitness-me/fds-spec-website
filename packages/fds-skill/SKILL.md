@@ -1,7 +1,7 @@
 # FDS Specification Expert Skill
 
 > **Version:** 2.0.0  
-> **Specification Version:** FDS release 1.5.0  
+> **Specification Version:** FDS release 1.6.0  
 > **Last Updated:** November 2026
 
 ## What this document is
@@ -46,14 +46,14 @@ You validate against a *definition inside it*. The transformer does not carry th
 ### Schema URLs (Production)
 
 ```
-https://spec.vitness.me/schemas/exercises/v1.1.0/exercise.schema.json
-https://spec.vitness.me/schemas/equipment/v1.1.0/equipment.schema.json
-https://spec.vitness.me/schemas/muscle/v1.0.0/muscle.schema.json
-https://spec.vitness.me/schemas/muscle/muscle-category/v1.0.0/muscle-category.schema.json
+https://spec.vitness.me/schemas/exercises/v1.2.0/exercise.schema.json
+https://spec.vitness.me/schemas/equipment/v1.2.0/equipment.schema.json
+https://spec.vitness.me/schemas/muscle/v1.1.0/muscle.schema.json
+https://spec.vitness.me/schemas/muscle/muscle-category/v1.1.0/muscle-category.schema.json
 https://spec.vitness.me/schemas/atlas/v1.1.0/body-atlas.schema.json
-https://spec.vitness.me/schemas/prescription/v1.0.0/prescription.schema.json
-https://spec.vitness.me/schemas/workout/v1.1.0/workout.schema.json
-https://spec.vitness.me/schemas/program/v1.0.0/program.schema.json
+https://spec.vitness.me/schemas/prescription/v1.1.0/prescription.schema.json
+https://spec.vitness.me/schemas/workout/v1.2.0/workout.schema.json
+https://spec.vitness.me/schemas/program/v1.1.0/program.schema.json
 ```
 
 ### Entity versions are not uniform — get this right first
@@ -70,8 +70,9 @@ Release 1.3.0 serves exercise and equipment at 1.1.0 and everything else at 1.0.
 | 1.3.0 | as 1.2.0, plus program 1.0.0 |
 | 1.4.0 | as 1.3.0, but workout moves to 1.1.0 |
 | 1.5.0 | as 1.4.0, but body-atlas moves to 1.1.0 |
+| 1.6.0 | exercise, equipment, workout 1.2.0; muscle, muscle-category, prescription, program 1.1.0; body-atlas 1.1.0 |
 
-A superseded entity version stays published. `workout/v1.0.0/` is still served and still frozen, because releases 1.2.0 and 1.3.0 declare workout at 1.0.0. `atlas/v1.0.0/` likewise, because releases 1.0.0 through 1.4.0 declare body-atlas at 1.0.0.
+A superseded entity version stays published. `workout/v1.0.0/` is still served and still frozen, because releases 1.2.0 and 1.3.0 declare workout at 1.0.0. `atlas/v1.0.0/` likewise, because releases 1.0.0 through 1.4.0 declare body-atlas at 1.0.0, and so does every version release 1.6.0 superseded.
 
 **Every published URL is frozen.** Its bytes never change; a change ships at a new version URL.
 

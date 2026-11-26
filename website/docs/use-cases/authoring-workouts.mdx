@@ -6,15 +6,15 @@ usecase_promise: One schema and one field express every way people structure a s
 usecase_family: composition
 usecase_audiences: [app-developer, oem-engineer]
 usecase_sources:
-  - specification/schemas/workout/v1.1.0/workout.straight.example.json
-  - specification/schemas/workout/v1.1.0/workout.emom.example.json
-  - specification/schemas/workout/v1.1.0/workout.tabata.example.json
+  - specification/schemas/workout/v1.2.0/workout.straight.example.json
+  - specification/schemas/workout/v1.2.0/workout.emom.example.json
+  - specification/schemas/workout/v1.2.0/workout.tabata.example.json
 ---
 
 import {SpecExample, BeforeAfter, Panel, Audience, NextSteps, Next} from './_shared/UseCase';
-import straight from '../../../specification/schemas/workout/v1.1.0/workout.straight.example.json';
-import emom from '../../../specification/schemas/workout/v1.1.0/workout.emom.example.json';
-import tabata from '../../../specification/schemas/workout/v1.1.0/workout.tabata.example.json';
+import straight from '../../../specification/schemas/workout/v1.2.0/workout.straight.example.json';
+import emom from '../../../specification/schemas/workout/v1.2.0/workout.emom.example.json';
+import tabata from '../../../specification/schemas/workout/v1.2.0/workout.tabata.example.json';
 
 # Author any session, from straight sets to Tabata
 
@@ -42,7 +42,7 @@ import tabata from '../../../specification/schemas/workout/v1.1.0/workout.tabata
 Here is a straight-set session — the baseline everything else departs from. Three
 identical sets of one exercise, prescribed by percentage of a one-rep max.
 
-<SpecExample source="specification/schemas/workout/v1.1.0/workout.straight.example.json" data={straight}>
+<SpecExample source="specification/schemas/workout/v1.2.0/workout.straight.example.json" data={straight}>
   Three identical sets. `mode: "sequential"`, and no `modeParams` are needed.
 </SpecExample>
 
@@ -50,14 +50,14 @@ Change nothing but the mode, and the same shape becomes an every-minute-on-the-m
 conditioning piece. The clock now terminates each interval, which is why `modeParams`
 carries `rounds` and an `interval`.
 
-<SpecExample source="specification/schemas/workout/v1.1.0/workout.emom.example.json" data={emom}>
+<SpecExample source="specification/schemas/workout/v1.2.0/workout.emom.example.json" data={emom}>
   Every minute on the minute for twelve intervals. `mode: "emom"`.
 </SpecExample>
 
 And the same shape again, as a Tabata block — the mode simply changes what the
 consumer must do to traverse and terminate the block.
 
-<SpecExample source="specification/schemas/workout/v1.1.0/workout.tabata.example.json" data={tabata}>
+<SpecExample source="specification/schemas/workout/v1.2.0/workout.tabata.example.json" data={tabata}>
   Eight rounds of 20 seconds work, 10 seconds rest. `mode: "tabata"`.
 </SpecExample>
 

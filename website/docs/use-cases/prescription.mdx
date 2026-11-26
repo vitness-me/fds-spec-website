@@ -6,15 +6,15 @@ usecase_promise: Prescribe load, reps and rest as primitives that reference a pe
 usecase_family: prescription
 usecase_audiences: [coach, app-developer]
 usecase_sources:
-  - specification/schemas/prescription/v1.0.0/loadTarget.percent1RM.example.json
-  - specification/schemas/prescription/v1.0.0/loadTarget.rpe.example.json
-  - specification/schemas/prescription/v1.0.0/loadTarget.percent-bodyweight.example.json
+  - specification/schemas/prescription/v1.1.0/loadTarget.percent1RM.example.json
+  - specification/schemas/prescription/v1.1.0/loadTarget.rpe.example.json
+  - specification/schemas/prescription/v1.1.0/loadTarget.percent-bodyweight.example.json
 ---
 
 import {SpecExample, BeforeAfter, Panel, Audience, NextSteps, Next} from './_shared/UseCase';
-import percent1RM from '../../../specification/schemas/prescription/v1.0.0/loadTarget.percent1RM.example.json';
-import rpe from '../../../specification/schemas/prescription/v1.0.0/loadTarget.rpe.example.json';
-import percentBodyweight from '../../../specification/schemas/prescription/v1.0.0/loadTarget.percent-bodyweight.example.json';
+import percent1RM from '../../../specification/schemas/prescription/v1.1.0/loadTarget.percent1RM.example.json';
+import rpe from '../../../specification/schemas/prescription/v1.1.0/loadTarget.rpe.example.json';
+import percentBodyweight from '../../../specification/schemas/prescription/v1.1.0/loadTarget.percent-bodyweight.example.json';
 
 # Prescribe intensity without ever storing a person
 
@@ -42,21 +42,21 @@ import percentBodyweight from '../../../specification/schemas/prescription/v1.0.
 A percentage of the prescribed lift's own one-rep max. Two keys — and no number
 for the max anywhere, because the max belongs to an athlete this document never names.
 
-<SpecExample source="specification/schemas/prescription/v1.0.0/loadTarget.percent1RM.example.json" data={percent1RM}>
+<SpecExample source="specification/schemas/prescription/v1.1.0/loadTarget.percent1RM.example.json" data={percent1RM}>
   82.5% of the prescribed exercise's own one-rep max — the percentage-driven case.
 </SpecExample>
 
 An RPE target hands the load decision to the athlete at the bar, so nothing needs
 to be resolved in advance at all.
 
-<SpecExample source="specification/schemas/prescription/v1.0.0/loadTarget.rpe.example.json" data={rpe}>
+<SpecExample source="specification/schemas/prescription/v1.1.0/loadTarget.rpe.example.json" data={rpe}>
   RPE 8, half-points allowed. The athlete picks the load; the prescription states the effort.
 </SpecExample>
 
 And a percentage of bodyweight — deliberately **unresolvable inside FDS**, because
 there is no athlete in the document to read a bodyweight from.
 
-<SpecExample source="specification/schemas/prescription/v1.0.0/loadTarget.percent-bodyweight.example.json" data={percentBodyweight}>
+<SpecExample source="specification/schemas/prescription/v1.1.0/loadTarget.percent-bodyweight.example.json" data={percentBodyweight}>
   60% of bodyweight. The document says what to compute; the person supplies the number,
   elsewhere.
 </SpecExample>

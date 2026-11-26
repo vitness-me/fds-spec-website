@@ -112,6 +112,8 @@ Commonly supported optional fields that enhance interoperability:
 }
 ```
 
+`fxm` is the muscle's structural key: one muscle, or one part of it, named by its anatomical term, such as `FXM=1.0/latissimus-dorsi`. It is not an identifier; `id` stays the record's identity. The schema checks only its header, `FXM=1.0/`. See [Muscle key](../core-concepts/structural-keys/muscle-key).
+
 ### 3.3. Extension Mechanisms
 
 Two extension points for platform-specific data:
@@ -302,7 +304,7 @@ graph LR
 ## 8. JSON Schema Reference
 
 Complete JSON Schema available at:
-- **Muscle**: `/specification/schemas/muscle/v1.0.0/muscle.schema.json`
+- **Muscle**: `/specification/schemas/muscle/v1.1.0/muscle.schema.json`
 - **Body Atlas**: `/specification/schemas/atlas/v1.1.0/body-atlas.schema.json`
 
 ## 8.1. Validation
@@ -311,15 +313,15 @@ Validate with Ajv (Draft 2020-12):
 
 ```
 npx --package=ajv-cli --package=ajv-formats ajv validate --spec=draft2020 -c ajv-formats \
-  -s specification/schemas/muscle/v1.0.0/muscle.schema.json \
-  -d specification/schemas/muscle/v1.0.0/muscle.example.json
+  -s specification/schemas/muscle/v1.1.0/muscle.schema.json \
+  -d specification/schemas/muscle/v1.1.0/muscle.example.json
 ```
 
 ## 9. Example Implementation
 
 ### 9.1. Complete Quadriceps Muscle Record
 
-Based on reference implementation (`/specification/schemas/muscle/v1.0.0/muscle.example.json`):
+Based on reference implementation (`/specification/schemas/muscle/v1.1.0/muscle.example.json`):
 
 ```json
 {

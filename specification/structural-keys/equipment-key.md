@@ -709,7 +709,7 @@ An equipment record:
 
 ```json fds:ignore equipment record excerpt showing the fxe field
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.2.0",
   "id": "eq.legPress45",
   "fxe": "FXE=1.0N/k:mac/l:feet/s:supine.incline/m:push.fwd/r:plate/c:line/g:incl",
   "canonical": { "name": "45° Leg Press", "slug": "45-leg-press" },

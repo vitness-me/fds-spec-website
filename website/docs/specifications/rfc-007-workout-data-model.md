@@ -140,6 +140,8 @@ This mirrors RFC-006 §3.3 and for the same reason. Silently running an unrecogn
 
 `id` and `exercise` are required; everything else is prescription.
 
+`exercise`, like each entry of `alternatives[]`, is an RFC-001 exercise reference, and may carry the exercise's structural key in `fxi`. See [Exercise key](../core-concepts/structural-keys/exercise-key).
+
 `alternatives[]` lists substitutions **the author sanctions in advance** — equipment unavailable, movement contraindicated, a regression for a less experienced athlete. It is part of the prescription and travels with the workout.
 
 This is distinct from a substitution an athlete makes during a session, which is performed data and belongs to RFC-009. The distinction matters because the two answer different questions: `alternatives[]` says what the author considers equivalent; a logged substitution says what happened. Collapsing them would make a program's intent unrecoverable from its execution history.
@@ -203,6 +205,8 @@ A consumer that cannot apply a setting — no incline control on the equipment a
 ### 4.7. Derived rollups
 
 `targets` and `equipment` summarise what the session trains and needs. Both are **optional and advisory**.
+
+Their entries are RFC-001 muscle and equipment references, and may carry the same structural keys: `fxm` and `fxmg` on a muscle, `fxe` on a piece of equipment.
 
 A consumer MUST NOT treat either as authoritative over walking the items. They are derived data that can be absent, stale, or computed under assumptions the consumer does not share — a rollup produced before an item was substituted no longer describes the session. They exist for listing and filtering, where recomputing across a library is expensive and approximate answers are acceptable.
 
@@ -273,7 +277,7 @@ An implementation that resolves a workout against a specific athlete and stores 
 
 ## 9. JSON Schema Reference
 
-`https://spec.vitness.me/schemas/workout/v1.1.0/workout.schema.json`
+`https://spec.vitness.me/schemas/workout/v1.2.0/workout.schema.json`
 
 The superseded version stays served, and a client pinned to a release that declares workout at 1.0.0 keeps fetching it:
 
@@ -293,7 +297,7 @@ An upper-body session: a warmup block, a primary block with a top set and back-o
 
 ```json
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.2.0",
   "workoutId": "00000000-0000-4000-8000-00000000a001",
   "canonical": { "name": "Upper A", "slug": "upper-a" },
   "classification": {
@@ -310,7 +314,7 @@ An upper-body session: a warmup block, a primary block with a top set and back-o
         "items": [
           {
             "id": "i1",
-            "exercise": { "id": "ex.benchPress", "name": "Barbell Bench Press" },
+            "exercise": { "id": "ex.benchPress", "name": "Barbell Bench Press", "fxi": "FXI=1.0S/m:el.ext+sh.hadd/o:supine/s:bench/l:bar.straight@hands" },
             "scheme": {
               "pattern": "topSetBackoff",
               "sets": 4,
@@ -332,14 +336,14 @@ An upper-body session: a warmup block, a primary block with a top set and back-o
           {
             "id": "i2",
             "groupLabel": "A1",
-            "exercise": { "id": "ex.dumbbellRow", "name": "Dumbbell Row" },
+            "exercise": { "id": "ex.dumbbellRow", "name": "Dumbbell Row", "fxi": "FXI=1.0S/m:el.flex+sh.ext/o:?/l:bell.dumb@hands/x:?" },
             "reps": { "kind": "range", "min": 8, "max": 12 },
             "load": { "method": "rir", "value": 2 }
           },
           {
             "id": "i3",
             "groupLabel": "A2",
-            "exercise": { "id": "ex.inclineDbPress", "name": "Incline Dumbbell Press" },
+            "exercise": { "id": "ex.inclineDbPress", "name": "Incline Dumbbell Press", "fxi": "FXI=1.0S/m:el.ext+sh.flex+sh.hadd/o:supine.incline/s:bench/l:bell.dumb@hands" },
             "reps": { "kind": "range", "min": 8, "max": 12 },
             "load": { "method": "rir", "value": 2 }
           }
@@ -353,7 +357,7 @@ An upper-body session: a warmup block, a primary block with a top set and back-o
         "items": [
           {
             "id": "i4",
-            "exercise": { "id": "ex.airBike", "name": "Air Bike" },
+            "exercise": { "id": "ex.airBike", "name": "Air Bike", "fxi": "FXI=1.0S/m:~hip.ext+kn.ext/o:seated/l:erg.cycle@feet/x:rc" },
             "reps": { "kind": "calories", "value": 15 },
             "zone": { "system": "heartRate", "zone": "Z4", "boundsRef": "zone.fiveZoneHeartRate" }
           }

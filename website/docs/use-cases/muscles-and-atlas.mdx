@@ -6,14 +6,14 @@ usecase_promise: Name a region once; every renderer draws it, and none has to ag
 usecase_family: foundations
 usecase_audiences: [app-developer, researcher]
 usecase_sources:
-  - specification/schemas/muscle/v1.0.0/muscle.example.json
-  - specification/schemas/muscle/muscle-category/v1.0.0/muscle-category.example.json
+  - specification/schemas/muscle/v1.1.0/muscle.example.json
+  - specification/schemas/muscle/muscle-category/v1.1.0/muscle-category.example.json
   - specification/schemas/atlas/v1.1.0/body-atlas.example.json
 ---
 
 import {SpecExample, BeforeAfter, Panel, Audience, NextSteps, Next} from './_shared/UseCase';
-import quadriceps from '../../../specification/schemas/muscle/v1.0.0/muscle.example.json';
-import legs from '../../../specification/schemas/muscle/muscle-category/v1.0.0/muscle-category.example.json';
+import quadriceps from '../../../specification/schemas/muscle/v1.1.0/muscle.example.json';
+import legs from '../../../specification/schemas/muscle/muscle-category/v1.1.0/muscle-category.example.json';
 import atlas from '../../../specification/schemas/atlas/v1.1.0/body-atlas.example.json';
 
 # Bind muscles to a body without owning the artwork
@@ -41,7 +41,7 @@ import atlas from '../../../specification/schemas/atlas/v1.1.0/body-atlas.exampl
 A muscle carries a `heatmap` naming atlas regions by id, each with a weight —
 never a path, never a colour.
 
-<SpecExample source="specification/schemas/muscle/v1.0.0/muscle.example.json" data={quadriceps}>
+<SpecExample source="specification/schemas/muscle/v1.1.0/muscle.example.json" data={quadriceps}>
   The quadriceps, bound to two atlas areas at full weight. `classification.categoryId`
   points at the category below.
 </SpecExample>
@@ -49,7 +49,7 @@ never a path, never a colour.
 A muscle category groups muscles for the reader, and is itself just an id, a name,
 and classification.
 
-<SpecExample source="specification/schemas/muscle/muscle-category/v1.0.0/muscle-category.example.json" data={legs}>
+<SpecExample source="specification/schemas/muscle/muscle-category/v1.1.0/muscle-category.example.json" data={legs}>
   The "Legs" category the quadriceps belongs to, referenced by `cat.legs`.
 </SpecExample>
 
