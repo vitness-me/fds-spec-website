@@ -90,8 +90,9 @@ jobs:
       - name: Type check
         run: npm run typecheck
 
-      # The parity test against the reference tool is skipped here: the tool
-      # is not in this repository. Every other test runs.
+      # The tests that compare the package with the reference tool are skipped
+      # here: FDS_ENCODER_REFERENCE is unset, and the tool is not in this
+      # repository. Every other test runs.
       - name: Run tests
         run: npm run test:run
 
@@ -218,6 +219,11 @@ jobs:
           npm --prefix packages/fds-encoder ci
           npm --prefix packages/fds-encoder run build
           npm run check:keys
+
+      # The published conformance cases under specification/conformance/ run
+      # against the encoder built in the step above.
+      - name: Verify the encoder passes the conformance cases
+        run: npm run check:conformance
 
       # The skill is a knowledge base an assistant answers from, so a wrong field
       # name there produces confident, specific, invalid output.

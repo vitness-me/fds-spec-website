@@ -132,6 +132,7 @@ if run_job schemas; then
     else bad "build the encoder for the key registries"; fi
   fi
   try "key registries match the encoder and the pages" npm run check:keys
+  try "the encoder passes the conformance cases" npm run check:conformance
   try "skill knowledge names real fields" npm run check:skill
   try "every version claim matches the manifest" npm run check:versions
   try "the publish-credential rules can fail" npm run check:publish-auth

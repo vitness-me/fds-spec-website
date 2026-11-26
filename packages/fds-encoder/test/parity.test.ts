@@ -19,15 +19,11 @@ import type { KeyComparison } from '../src/keys';
 import { match } from '../src/match';
 import type { MatchEntry, MatchResult } from '../src/match';
 import { parseFxe, parseFxi } from '../src/syntax';
+import { loadReference, present, REF, referenceAnswers, skipReason, warningCode } from './reference';
+import type { Mod } from './reference';
 
-const REF = process.env.FDS_ENCODER_REFERENCE ?? '';
-const present = REF !== '' && existsSync(join(REF, 'syntax.ts'));
 const PKG = fileURLToPath(new URL('..', import.meta.url));
 const REPO = join(PKG, '../..');
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-type Mod = Record<string, any>;
-const load = async (rel: string): Promise<Mod> => (await import(/* @vite-ignore */ join(REF, rel))) as Mod;
 
 function rng(seed: number): () => number {
   let s = seed >>> 0;
@@ -129,20 +125,10 @@ function randomAnswer(q: { select: string; max?: number }, options: readonly { i
 const relationOf = (c: KeyComparison): string =>
   c.result === 'same' ? 'identical' : c.result === 'more-specific' ? (c.specific === 'a' ? 'refines' : 'refined-by') : c.result === 'overlap' ? 'compatible' : 'contradicting';
 
-const WARNING_CODE: [RegExp, string][] = [
-  [/^cannot cross-check/, 'invalid'], [/contradicts the row FXE/, 'main-equipment'], [/^floor@feet is implied/, 'feet-implied'],
-  [/^FXE posture/, 'posture'], [/does not fit FXE load interface/, 'load-interface'], [/^off-design use/, 'off-design'],
-];
-const warningCode = (message: string): string => WARNING_CODE.find(([re]) => re.test(message))?.[1] ?? `unmapped: ${message}`;
-
 describe.skipIf(!present)('parity with the reference tool', async () => {
   // A skipped suite is still collected; without the reference tool there is nothing to import.
-  if (!present) { test.skip(REF === '' ? 'FDS_ENCODER_REFERENCE is not set' : `the reference tool is not at ${REF}`, () => {}); return; }
-  const R = {
-    alphabet: await load('alphabet.ts'), syntax: await load('syntax.ts'), compare: await load('compare.ts'), crosscheck: await load('crosscheck.ts'),
-    fxm: await load('fxm.ts'), fxmg: await load('fxmg.ts'), fxmAlphabet: await load('fxm-alphabet.ts'), fxmgAlphabet: await load('fxmg-alphabet.ts'),
-    match: await load('match.ts'), build: await load('builder/build.ts'),
-  };
+  if (!present) { test.skip(skipReason, () => {}); return; }
+  const R = await loadReference();
 
   // Keys quoted anywhere in the docs, the published examples, both test suites and the reference manual, then random ones.
   const quoted = new Set<string>();
@@ -285,8 +271,7 @@ describe.skipIf(!present)('parity with the reference tool', async () => {
   test('the same answers build the same keys, and the same answers are rejected', () => {
     const diff: unknown[] = [];
     for (const w of walks) {
-      // Without movement words, every exercise is described joint by joint: the reference tool's "other".
-      const answers = w.answers.subject === 'equipment' ? w.answers : { movement: 'other', ...w.answers };
+      const answers = referenceAnswers(w.answers);
       let theirs: { fxi: string | null; fxe: string } | 'rejected';
       try { const b = R.build.build({ id: 'w', answers }); theirs = { fxi: b.fxi, fxe: b.fxe }; } catch (e) {
         if (!(e instanceof R.build.AnswerError)) throw e;
@@ -326,7 +311,7 @@ describe.skipIf(!present)('parity with the reference tool', async () => {
     const diff: unknown[] = [];
     for (const answers of answerSets) {
       const mine = outcome(() => buildWith('m', (q) => answers[q.id], Object.keys(answers)), (e) => e instanceof AnswerError);
-      const ref = answers.subject === 'equipment' ? answers : { movement: 'other', ...answers };
+      const ref = referenceAnswers(answers);
       const theirs = outcome(() => R.build.build({ id: 'm', answers: ref }), (e) => e instanceof R.build.AnswerError);
       if (JSON.stringify(mine) !== JSON.stringify(theirs)) diff.push({ answers, mine, theirs });
     }

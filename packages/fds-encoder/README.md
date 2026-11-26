@@ -67,7 +67,9 @@ npm run test:run
 npm run build
 ```
 
-`test/parity.test.ts` runs a large set of keys, comparisons, cross-checks, builds and matches through this package and through the VITNESS reference tool and requires identical results. It imports the reference tool from the directory in `FDS_ENCODER_REFERENCE`, and is skipped when the variable is unset:
+`test/conformance.test.ts` runs the published conformance cases for the structural keys against the package.
+
+`test/parity.test.ts` runs a large set of keys, comparisons, cross-checks, builds and matches through this package and through the VITNESS reference tool and requires identical results, and `test/conformance.test.ts` runs the conformance cases against the reference tool too. Both import the reference tool from the directory in `FDS_ENCODER_REFERENCE`, and skip those tests when the variable is unset:
 
 ```bash
 FDS_ENCODER_REFERENCE=/path/to/reference/tool npm run test:run
