@@ -27,6 +27,6 @@
     "check:translations": "node scripts/check-translations.mjs --self-test && node scripts/check-translations.mjs",
     "check:redirects": "node scripts/check-locale-redirects.mjs",
     "check:publish-auth": "node scripts/check-publish-auth.mjs --self-test",
-    "schema-review": "node scripts/schema-review.mjs"
+    "schema-review": "node scripts/schema-review.mjs --self-test && node scripts/schema-review.mjs"
   }
 }

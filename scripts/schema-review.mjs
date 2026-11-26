@@ -87,13 +87,29 @@ const outDir = expandHome(opts.out);
 const git = (...args) =>
   execFileSync('git', ['-C', repo, ...args], { encoding: 'utf8', maxBuffer: 1 << 28, stdio: ['ignore', 'pipe', 'pipe'] });
 
-let baseSha;
-try {
-  baseSha = git('rev-parse', '--verify', `${opts.base}^{commit}`).trim();
-} catch {
-  console.error(`schema-review: ${opts.base} is not a commit in ${repo}`);
-  process.exit(1);
+/**
+ * Resolves the ref given to `--<flag>` to a commit SHA through `run` (a git
+ * runner), or returns why it cannot. A value starting with `-` is refused before
+ * git sees it, so it cannot be read as an option.
+ */
+function resolveCommit(run, flag, ref, where) {
+  if (ref.startsWith('-')) return { error: `--${flag} ${ref}: a ref cannot start with "-"` };
+  try {
+    return { sha: run('rev-parse', '--verify', `${ref}^{commit}`).trim() };
+  } catch {
+    return { error: `--${flag} ${ref} is not a commit in ${where}` };
+  }
 }
+
+const commitOf = (flag, ref) => {
+  const r = resolveCommit(git, flag, ref, repo);
+  if (r.error) {
+    console.error(`schema-review: ${r.error}`);
+    process.exit(1);
+  }
+  return r.sha;
+};
+const baseSha = commitOf('base', opts.base);
 
 // ── Reading both sides ────────────────────────────────────────────────────────
 
@@ -133,12 +149,12 @@ function workTree(label) {
 }
 
 const branch = git('rev-parse', '--abbrev-ref', 'HEAD').trim();
-const headSha = git('rev-parse', opts.head ?? 'HEAD').trim();
-const dirty = !opts.head && git('status', '--porcelain', '--', 'specification').trim() !== '';
+const headSha = opts.head ? commitOf('head', opts.head) : git('rev-parse', 'HEAD').trim();
+const dirty = !opts.head && git('status', '--porcelain', '--', ...SCANNED_ROOTS).trim() !== '';
 const base = refTree(baseSha, opts.base);
 const head = opts.head
   ? refTree(headSha, opts.head)
-  : workTree(`working tree${dirty ? ' (uncommitted specification changes)' : ''}`);
+  : workTree(`working tree${dirty ? ' (uncommitted changes)' : ''}`);
 
 const parse = (text, where) => {
   try {
@@ -668,9 +684,9 @@ for (const c of changes) {
       const where =
         e.source === 'docs' ? ` <span class="badge">docs, ${e.how === 'marked' ? 'marked' : 'by shape'}</span>` : e.source === 'removed' ? ' <span class="badge">removed on branch</span>' : '';
       return (
-        `<details class="ex ${cls}" id="ex-${i}"><summary>${badge(e.newResult, c.new.version)} ${badge(e.oldResult, c.old?.version ?? '')} ` +
+        `<details class="ex ${cls}" id="ex-${i}"><summary>${badge(e.newResult, `branch ${c.new.version}`)} ${badge(e.oldResult, `base ${c.old?.version ?? ''}`)} ` +
         `<code>${esc(e.label)}</code>${where}${e.keys.length ? ` <span class="badge fx">${e.keys.length} key field${e.keys.length === 1 ? '' : 's'}</span>` : ''}</summary>` +
-        `<div class="body">${e.def ? `<p class="meta">Validated against <code>#/$defs/${esc(e.def)}</code>${e.expectInvalid ? '; must be rejected' : ''}.</p>` : ''}${rejectedFor}${errs(e.newResult, `Errors against ${c.new.version}`)}${errs(e.oldResult, `Errors against ${c.old?.version}`)}${keys}${diff}` +
+        `<div class="body">${e.def ? `<p class="meta">Validated against <code>#/$defs/${esc(e.def)}</code>${e.expectInvalid ? '; must be rejected' : ''}.</p>` : ''}${rejectedFor}${errs(e.newResult, `Errors against branch ${c.new.version}`)}${errs(e.oldResult, `Errors against base ${c.old?.version}`)}${keys}${diff}` +
         `${codeView(e.doc.value === undefined ? e.text : JSON.stringify(e.doc.value, null, 2))}</div></details>`
       );
     })
@@ -833,7 +849,8 @@ function writeOut(name, html) {
  * Proves the summary reports a schema change the way the review page states it:
  * a field gained by a nested object and by a reference definition, a field
  * removed, a field whose own constraint changed, a `required` gain, and the
- * line diff reproducing both texts.
+ * line diff reproducing both texts. Also proves a ref option resolves to a
+ * commit and refuses a value starting with `-`.
  */
 function selfTest() {
   const oldSchema = {
@@ -933,10 +950,27 @@ function selfTest() {
     'muscles[0].fxm',
   ]);
 
+  // Ref checks: a ref is resolved as a commit, an unknown one is reported, and
+  // a value starting with "-" never reaches git.
+  const calls = [];
+  const fakeGit = (...args) => {
+    calls.push(args);
+    if (args.at(-1) === 'abc123^{commit}') return 'abc123def\n';
+    throw new Error('unknown revision');
+  };
+  expect('a known head resolves', resolveCommit(fakeGit, 'head', 'abc123', 'repo'), { sha: 'abc123def' });
+  expect('git verifies a commit', calls[0], ['rev-parse', '--verify', 'abc123^{commit}']);
+  expect('an unknown head', resolveCommit(fakeGit, 'head', 'nope', 'repo'), { error: '--head nope is not a commit in repo' });
+  calls.length = 0;
+  expect('a head starting with "-"', resolveCommit(fakeGit, 'head', '--output=x', 'repo'), {
+    error: '--head --output=x: a ref cannot start with "-"',
+  });
+  expect('a refused head never reaches git', calls, []);
+
   if (failures.length) {
     console.error(`self-test — ${failures.length} failure(s):\n  ${failures.join('\n  ')}`);
     return 1;
   }
-  console.log('self-test — the summary reports added, removed and changed fields and definitions as recorded');
+  console.log('self-test — the summary reports added, removed and changed fields and definitions as recorded; refs resolve to commits');
   return 0;
 }
