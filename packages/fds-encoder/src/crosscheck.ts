@@ -8,24 +8,6 @@ import type { Issue } from './syntax';
 const TOKEN_ORDER = Object.keys(EQUIPMENT_TOKENS);
 const kindOf = (t: string): string => /k:(\w+)/.exec(EQUIPMENT_TOKENS[t]!.fxe)?.[1] ?? 'none';
 const firstByOrder = (ts: string[]): string | undefined => [...ts].sort((a, b) => TOKEN_ORDER.indexOf(a) - TOKEN_ORDER.indexOf(b))[0];
-/** Body points that rest the trunk on a surface. */
-const TRUNK_POINTS = ['back', 'chest', 'hips', 'seat', 'shoulders', 'waist'];
-
-/**
- * Whether `floor@feet` beside another support is implied: under a seated body, and under a body lying face up on a
- * surface that bears the trunk (an item with no points, or with a trunk point). A lean-back row keeps its feet.
- */
-export function feetImplied(start: string, items: readonly string[]): boolean {
-  if (items.length < 2 || !items.includes('floor@feet')) return false;
-  if (start.startsWith('seated')) return true;
-  if (!start.startsWith('supine')) return false;
-  return items.some((i) => {
-    if (i === 'floor@feet') return false;
-    const points = i.split('@')[1];
-    return points === undefined || points.split(',').some((p) => TRUNK_POINTS.includes(p));
-  });
-}
-
 /** An exercise's main equipment: the exercise-key code that names it, when one does, and the equipment key that code stands for. */
 export interface MainEquipment { readonly token: string | undefined; readonly fxe: string }
 
@@ -75,9 +57,8 @@ export function mainToken(fxi: string): string | undefined {
 /**
  * Warnings when an exercise key and the key of its equipment disagree. An empty list means they are consistent.
  * Codes: `invalid` (a key does not parse), `main-equipment` (the equipment key contradicts the main equipment code),
- * `feet-implied` (`floor@feet` is written where it is implied), `posture` (a machine's posture is not the start
- * orientation), `load-interface` (the hold point of `mac` or `erg` is not a load interface of the machine) and
- * `off-design` (a single-joint machine's motion is not in the exercise's motion).
+ * `posture` (a machine's posture is not the start orientation), `load-interface` (the hold point of `mac` or `erg` is
+ * not a load interface of the machine) and `off-design` (a single-joint machine's motion is not in the exercise's motion).
  */
 export function crossCheck(fxi: string, fxe: string): Issue[] {
   const out: Issue[] = [];
@@ -88,10 +69,6 @@ export function crossCheck(fxi: string, fxe: string): Issue[] {
   if (compareFxe(main.fxe, fxe).relation === 'contradicting') {
     const named = main.token === undefined ? 'no code' : `"${main.token}"`;
     out.push({ code: 'main-equipment', message: `The exercise's main equipment (${named}, ${main.fxe}) contradicts the equipment key.` });
-  }
-  const start0 = (i.layers.o ?? UNKNOWN).split('>')[0]!;
-  if (feetImplied(start0, (i.layers.s ?? '').split('+'))) {
-    out.push({ code: 'feet-implied', message: 'floor@feet is implied when the body sits, or lies on a surface that bears the trunk; leave it out.' });
   }
   if (e.configs.length !== 1) return out;
   const c = e.configs[0]!;

@@ -29,7 +29,7 @@ export async function loadReference(): Promise<Reference> {
 
 /** The reference tool's cross-check gives messages; the package gives codes. */
 const WARNING_CODE: [RegExp, string][] = [
-  [/^cannot cross-check/, 'invalid'], [/contradicts the row FXE/, 'main-equipment'], [/^floor@feet is implied/, 'feet-implied'],
+  [/^cannot cross-check/, 'invalid'], [/contradicts the row FXE/, 'main-equipment'],
   [/^FXE posture/, 'posture'], [/does not fit FXE load interface/, 'load-interface'], [/^off-design use/, 'off-design'],
 ];
 export const warningCode = (message: string): string => WARNING_CODE.find(([re]) => re.test(message))?.[1] ?? `unmapped: ${message}`;

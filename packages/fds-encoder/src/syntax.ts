@@ -191,12 +191,16 @@ function readFootwork(text: string | undefined, log: Log): string | undefined {
 
 const SEAT_SURFACES = ['floor', 'bench', 'box', 'chair'];
 const SEATED = ['seated', 'seated.bent', 'seated.chest'];
+/** Body points that rest the trunk on a surface. */
+const TRUNK_REST = ['back', 'chest', 'hips', 'seat', 'shoulders', 'waist'];
+/** Surfaces a face-up body lies on with its feet on the floor. */
+const LYING_SURFACE = /^(bench|ball|roller)(\.|$)/;
 
 function readSupport(text: string | undefined, start: string, log: Log): string | undefined {
   if (text === undefined) return undefined;
   if (text === UNKNOWN || text === GENERIC) return text;
   const implied = IMPLIED_POINTS[start] ?? [];
-  const items = text.split('+').map((item) => {
+  const parsed = text.split('+').map((item) => {
     const [surface, pts] = splitOnce(item, '@');
     if (surface === '') log.add('empty', 'A support item needs a surface; write ? if it is unknown.', item);
     else if (surface !== UNKNOWN && (!has(EQUIPMENT_TOKENS, surface) || surface === 'none')) log.add('unknown-surface', `"${surface}" is not a support surface.`, item);
@@ -204,7 +208,14 @@ function readSupport(text: string | undefined, start: string, log: Log): string 
       if (p !== UNKNOWN && !has(BODY_POINTS, p)) log.add('unknown-point', `"${p}" is not a body point.`, item);
       return !implied.includes(p);
     }));
-    return points.length > 0 ? `${surface}@${points.join(',')}` : surface;
+    return { surface, points };
+  });
+  // Feet on the floor are implied under a seated body, and under a face-up body lying on a bench, ball or roller.
+  const lying = start.startsWith('supine') && parsed.some((i) => LYING_SURFACE.test(i.surface) && (i.points.length === 0 || i.points.some((p) => TRUNK_REST.includes(p))));
+  const feetOnFloor = SEATED.includes(start) || lying;
+  const items = parsed.map(({ surface, points }) => {
+    const kept = surface === 'floor' && feetOnFloor ? points.filter((p) => p !== 'feet') : points;
+    return kept.length > 0 ? `${surface}@${kept.join(',')}` : surface;
   }).filter((item) => item !== 'floor' && !(SEATED.includes(start) && SEAT_SURFACES.includes(item)));
   const out = sortUnique(items);
   return out.length > 0 ? out.join('+') : undefined;
@@ -230,8 +241,8 @@ function readLoad(text: string, log: Log): string {
     const count = countText === undefined ? '' : `*${countText}`;
     return `${token}${count}@${hold ?? UNKNOWN}`;
   });
-  let out = sortUnique(items);
-  if (out.length > 1) out = out.filter((i) => i !== 'none'); // an implement already implies the body moves
+  const out = sortUnique(items);
+  if (out.length > 1 && out.includes('none')) log.add('none-alone', 'none stands alone: write the implements without it.', text);
   return out.join('+');
 }
 

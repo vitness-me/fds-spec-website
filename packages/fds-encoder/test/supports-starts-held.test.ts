@@ -8,12 +8,13 @@ import { parseFxe, parseFxi } from '../src/syntax';
 
 
 
-describe('feet on the floor are implied only under a surface that bears the trunk', () => {
+describe('feet on the floor under a face-up body', () => {
   test('a lean-back row keeps its feet; a body lying on a ball or bench does not', () => {
     expect(crossCheck('FXI=1.0S/m:el.flex+sh.ext/o:supine/s:bar.fixed@hands+floor@feet/l:none', 'FXE=1.0S/k:sup/f:bar.fixed')).toEqual([]);
     expect(crossCheck('FXI=1.0S/m:el.flex+sh.ext/o:supine.incline/s:floor@feet+strap.susp@hands/l:none', 'FXE=1.0S/k:sup/f:strap.susp')).toEqual([]);
-    expect(crossCheck('FXI=1.0S/m:sp.flex/o:supine/k:trunk/s:ball.stab+floor@feet/l:none', 'FXE=1.0S/k:sup/f:ball.stab').some((w) => w.code === 'feet-implied')).toBe(true);
-    expect(crossCheck('FXI=1.0S/m:hip.ext/o:supine/k:trunk/s:bench@back+floor@feet/l:none', 'FXE=1.0S/k:sup/f:bench').some((w) => w.code === 'feet-implied')).toBe(true);
+    expect(parseFxi('FXI=1.0S/m:sp.flex/o:supine/k:trunk/s:ball.stab+floor@feet/l:none').canonical).toBe('FXI=1.0S/m:sp.flex/o:supine/k:trunk/s:ball.stab/l:none');
+    expect(parseFxi('FXI=1.0S/m:hip.ext/o:supine/k:trunk/s:bench@back+floor@feet/l:none').canonical).toBe('FXI=1.0S/m:hip.ext/o:supine/k:trunk/s:bench/l:none');
+    expect(crossCheck('FXI=1.0S/m:hip.ext/o:supine/k:trunk/s:bench@back+floor@feet/l:none', 'FXE=1.0S/k:sup/f:bench')).toEqual([]);
   });
 });
 

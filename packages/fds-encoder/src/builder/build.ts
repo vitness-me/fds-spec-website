@@ -1,7 +1,7 @@
 // Turns answers to the question flow into the written exercise key and equipment key, through the package's own parser.
 // The same answers always give the same keys. Invalid or contradictory answers raise AnswerError.
 import { FXE_MAJOR, FXE_REV, FXI_MAJOR, FXI_REV, GENERIC, HELD_CONFLICTS, UNKNOWN } from '../alphabet';
-import { feetImplied, mainEquipment } from '../crosscheck';
+import { mainEquipment } from '../crosscheck';
 import { oppositePair, parseFxe, parseFxi } from '../syntax';
 import { ERG_TYPES } from './cardio';
 import { CHANGE_OPENS, JOINT_IDS, PHASE_KINDS, QUESTIONS, QUESTION_BY_ID } from './flow';
@@ -289,7 +289,6 @@ function support(r: Reading): string | undefined {
     items.push(`${surf === 'unknown' ? UNKNOWN : surf}${pts.length > 0 ? `@${pts.join(',')}` : ''}`);
   }
   if (items.length === 2 && items[0] === items[1]) return r.fail('sup2: the second support is the same as the first.');
-  if (feetImplied(r.startOrientation(), items)) return items.filter((i) => i !== 'floor@feet').join('+');
   return items.join('+');
 }
 
@@ -399,7 +398,8 @@ function loadLayer(r: Reading, mac: Machine | undefined, erg: string | undefined
     if (items[0]!.kind === 'unknown') r.fail('imp2: a second implement needs a known first load. Name the first load, or answer "unknown" for the whole load.');
     if (items[0]!.token === items[1]!.token) r.fail('imp2: the second implement is the same as the first. Use "How many implements" instead.');
   }
-  return out.join('+');
+  // none stands alone: an implement added to a body-weight movement is the whole load.
+  return (out.length > 1 ? out.filter((i) => i !== 'none') : out).join('+');
 }
 
 /** The equipment key of the exercise's main equipment, with the strength or cardio machine named. */

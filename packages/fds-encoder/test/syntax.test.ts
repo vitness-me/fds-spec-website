@@ -43,7 +43,6 @@ describe('canonicalisation', () => {
   test('keeps the unusual hand orientation', () => expect(canon('FXI=1.0/m:el.flex/o:standing/l:bar.straight@hands/g:pr')).toContain('/g:pr'));
   test('a trap bar forces neutral', () => expect(canon('FXI=1.0/m:hip.ext+kn.ext/o:standing/l:bar.trap@hands/g:ne')).toBe('FXI=1.0S/m:hip.ext+kn.ext/o:standing/l:bar.trap@hands'));
   test('stance only when standing', () => expect(canon('FXI=1.0/m:el.ext+sh.hadd/o:prone/s:floor@feet,hands/l:none/g:st-n')).not.toContain('g:'));
-  test('drops none next to an implement', () => expect(canon('FXI=1.0/m:el.ext+sh.ext/o:hanging/s:bar.parallel/l:none+plate@waist')).toContain('l:plate@waist'));
   test('drops an implied symmetry scope', () => {
     expect(canon('FXI=1.0/m:hip.ext+kn.ext/o:standing/f:step.back/l:none/x:u@legs')).toContain('/x:u');
     expect(canon('FXI=1.0/m:hip.ext/o:standing/l:bell.kettle@hands/x:u@arms')).toContain('/x:u@arms');
@@ -130,4 +129,38 @@ describe('FXE', () => {
   test('sorts combination configurations', () => expect(c('FXE=1.0/k:mac/l:hands/s:seated/m:sh.habd ; k:mac/l:arms/s:seated/m:sh.hadd')).toBe('FXE=1.0S/k:mac/l:arms/s:seated/m:sh.hadd;k:mac/l:hands/s:seated/m:sh.habd'));
   test('form must match kind', () => expect(parseFxe('FXE=1.0/k:sup/f:bell.dumb').ok).toBe(false));
   test('requires the revision', () => expect(parseFxe('FXE=1S/k:none').ok).toBe(false));
+});
+
+describe('none stands alone in the load layer', () => {
+  test('none beside an implement is invalid', () => {
+    expect(issues('FXI=1.0S/m:el.ext+sh.ext/o:hanging/l:none+plate@waist')).toEqual(['none-alone']);
+    expect(issues('FXI=1.0S/m:el.ext+sh.ext/o:hanging/l:plate@waist+none')).toEqual(['none-alone']);
+  });
+  test('none alone, and an implement alone, are valid', () => {
+    expect(canon('FXI=1.0S/m:el.ext+sh.ext/o:hanging/l:none')).toBe('FXI=1.0S/m:el.ext+sh.ext/o:hanging/l:none');
+    expect(canon('FXI=1.0S/m:el.ext+sh.ext/o:hanging/l:plate@waist')).toBe('FXI=1.0S/m:el.ext+sh.ext/o:hanging/l:plate@waist');
+  });
+});
+
+describe('feet on the floor under a seated body, or a face-up body on a bench, ball or roller', () => {
+  test('are never written under a seated body', () => {
+    expect(canon('FXI=1.0S/m:el.flex/o:seated/s:floor@feet/l:bell.dumb@hands')).toBe('FXI=1.0S/m:el.flex/o:seated/l:bell.dumb@hands');
+    expect(canon('FXI=1.0S/m:el.flex/o:seated.bent/s:bench+floor@feet/l:bell.dumb@hands')).toBe('FXI=1.0S/m:el.flex/o:seated.bent/l:bell.dumb@hands');
+    expect(canon('FXI=1.0S/m:el.ext+sh.ext/o:seated/s:bench@hands+floor@feet/l:none')).toBe('FXI=1.0S/m:el.ext+sh.ext/o:seated/s:bench@hands/l:none');
+    expect(canon('FXI=1.0S/m:sp.rot/o:seated/s:floor@feet,hands/l:none')).toBe('FXI=1.0S/m:sp.rot/o:seated/s:floor@hands/l:none');
+  });
+  test('are never written under a face-up body lying on a bench, ball or roller', () => {
+    expect(canon('FXI=1.0S/m:el.ext+sh.hadd/o:supine/s:bench+floor@feet/l:bar.straight@hands')).toBe('FXI=1.0S/m:el.ext+sh.hadd/o:supine/s:bench/l:bar.straight@hands');
+    expect(canon('FXI=1.0S/m:sp.flex/o:supine/k:trunk/s:ball.stab+floor@feet/l:none')).toBe('FXI=1.0S/m:sp.flex/o:supine/k:trunk/s:ball.stab/l:none');
+    expect(canon('FXI=1.0S/m:hip.ext/o:supine/k:trunk/s:bench@shoulders+floor@feet/l:none')).toBe('FXI=1.0S/m:hip.ext/o:supine/k:trunk/s:bench@shoulders/l:none');
+    expect(canon('FXI=1.0S/m:~0/o:supine.incline/s:roller.foam+floor@feet/l:none')).toBe('FXI=1.0S/m:~0/o:supine.incline/s:roller.foam/l:none');
+  });
+  test('stay under a face-up body hanging from its hands, or lying on the floor', () => {
+    expect(canon('FXI=1.0S/m:el.flex+sh.ext/o:supine/s:bar.fixed@hands+floor@feet/l:none')).toBe('FXI=1.0S/m:el.flex+sh.ext/o:supine/s:bar.fixed@hands+floor@feet/l:none');
+    expect(canon('FXI=1.0S/m:el.flex+sh.ext/o:supine/s:bench@hands+floor@feet/l:none')).toBe('FXI=1.0S/m:el.flex+sh.ext/o:supine/s:bench@hands+floor@feet/l:none');
+  });
+  test('feet on anything else stay', () => {
+    expect(canon('FXI=1.0S/m:el.flex/o:seated/s:ball.stab@feet/l:bell.dumb@hands')).toBe('FXI=1.0S/m:el.flex/o:seated/s:ball.stab@feet/l:bell.dumb@hands');
+    expect(canon('FXI=1.0S/m:sp.flex/o:supine/s:bench+box@feet/l:none')).toBe('FXI=1.0S/m:sp.flex/o:supine/s:bench+box@feet/l:none');
+  });
 });
