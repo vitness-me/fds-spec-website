@@ -78,6 +78,9 @@ if run_job encoder; then
   try "tests"         npm run test:run
   try "build"         npm run build
   popd >/dev/null
+  # Both read the dist built just above.
+  try "key registries match the encoder and the pages" npm run check:keys
+  try "the encoder passes the conformance cases" npm run check:conformance
 fi
 
 # ── schemas ────────────────────────────────────────────────────────────────────
@@ -122,16 +125,6 @@ if run_job schemas; then
   try "use-case pages stay honest" npm run check:usecases
   try "every matrix scenario has an example" npm run check:scenarios
   try "recommended values are in a registry" npm run check:registries
-
-  # The key registries and conformance checks read the built encoder. A dist
-  # left over from an earlier build passes or fails them against old code, so
-  # this job always builds it from the current source.
-  if [[ ! -d packages/fds-encoder/node_modules ]]; then
-    try "install the encoder" npm --prefix packages/fds-encoder ci --no-fund --no-audit
-  fi
-  try "build the encoder for the key registries" npm --prefix packages/fds-encoder run build
-  try "key registries match the encoder and the pages" npm run check:keys
-  try "the encoder passes the conformance cases" npm run check:conformance
   try "skill knowledge names real fields" npm run check:skill
   try "every version claim matches the manifest" npm run check:versions
   try "the publish-credential rules can fail" npm run check:publish-auth

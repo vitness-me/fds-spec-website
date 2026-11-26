@@ -3,7 +3,7 @@
 // `identical` is returned only for byte-equal canonical strings with no `?` or `*`.
 import { ACTION_PARENT, EQUIPMENT_TOKENS, FORMS, FXE_STANDARD, FXI_LAYERS, FXI_LAYER_ORDER, GENERIC, RANGE_PARENT, UNKNOWN } from './alphabet';
 import type { FxeKind, FxiLayer } from './alphabet';
-import { parseFxe, parseFxi, sortUnique, usualCount } from './syntax';
+import { bareAction, parseFxe, parseFxi, PREFIX_CHARS, sortUnique, usualCount } from './syntax';
 import type { FxeConfig } from './syntax';
 
 export type LayerRelation = 'equal' | 'narrower' | 'broader' | 'open' | 'contradicts';
@@ -25,7 +25,7 @@ const parentOf = (code: string): string | undefined => EQUIPMENT_TOKENS[code]?.p
 /** Equal codes, or one is the other's parent. */
 const related = (x: string, y: string): boolean => x === y || parentOf(y) === x || parentOf(x) === y;
 /** The codes of a value, with motion prefixes and the short-drive suffix stripped. */
-const codes = (v: string): string[] => v.split(/[+@,*>|]/).map((c) => c.replace(/^[~=%&^]/, '').replace(/-$/, ''));
+const codes = (v: string): string[] => v.split(/[+@,*>|]/).map(bareAction);
 /** `a` names a parent code where `b` names one of its children: `a` is the broader description there. */
 function coarser(a: string, b: string): boolean {
   const ca = codes(a);
@@ -80,7 +80,7 @@ function unifyOpenSet(a: string[], b: string[]): boolean {
 
 function unifyActions(a: string, b: string): boolean {
   if (a === b) return true;
-  const prefix = (t: string): string => (/^[~=%&^]/.test(t) ? t[0]! : '');
+  const prefix = (t: string): string => (t !== '' && PREFIX_CHARS.includes(t[0]!) ? t[0]! : '');
   if (prefix(a) !== prefix(b)) return false;
   const ba = a.slice(prefix(a).length);
   const bb = b.slice(prefix(b).length);

@@ -5,10 +5,11 @@ import {
   FOOTWORK, FORMS, FXE_EXTENDED, FXE_KINDS, FXE_EXTENDED_ORDER, FXE_MAJOR, FXE_REV, FXE_STANDARD, FXI_LAYERS,
   FXI_LAYER_ORDER, FXI_MAJOR, FXI_REV, GENERIC, GRIP_ELEMENTS, GRIP_WIDTHS, GUIDE_ANGLES, HAND_ORIENTATIONS, HELD, HELD_CONFLICTS,
   HOLD_ONLY, IMPLIED_POINTS, JOINT_ACTIONS, JOINTS, LEG_JOINTS, LINES, MAC_CONSTRAINTS, MAC_DIRECTIONS,
-  MAC_SINGLE_JOINT, MAC_VERBS, MOVING_END, OPPOSITE_ACTIONS, ORIENTATIONS, RANGES, START_RANGES, STANCES,
+  MAC_SINGLE_JOINT, MAC_VERBS, MOVING_END, OPPOSITE_ACTIONS, ORIENTATIONS, PHASE_PREFIXES, RANGES, START_RANGES, STANCES,
   SYMMETRY, SYMMETRY_SCOPES, UNKNOWN,
 } from './alphabet';
 import type { FxeKind, FxiLayer, Glossary } from './alphabet';
+import { FXE_HEADER, FXI_HEADER } from './headers';
 
 export interface Issue { readonly code: string; readonly message: string; readonly at?: string }
 
@@ -26,7 +27,7 @@ const has = (table: Glossary | Readonly<Record<string, unknown>>, code: string):
   Object.prototype.hasOwnProperty.call(table, code);
 
 /** Canonical order: code-unit order, with `?` and `*` after every letter. */
-export function compareCodes(a: string, b: string): number {
+function compareCodes(a: string, b: string): number {
   const ka = a.replaceAll(UNKNOWN, '\u{10FFFE}').replaceAll(GENERIC, '\u{10FFFF}');
   const kb = b.replaceAll(UNKNOWN, '\u{10FFFE}').replaceAll(GENERIC, '\u{10FFFF}');
   return ka < kb ? -1 : ka > kb ? 1 : 0;
@@ -50,7 +51,11 @@ const collapseRuns = (xs: string[]): string[] => xs.filter((v, i) => i === 0 || 
 // ───────────────────────────── FXI ─────────────────────────────
 
 const FXI_HEAD = /^FXI=(\d+)\.(\d+)([SN]?)\/(.*)$/s;
-const PREFIX_CHARS = '^~=%&';
+/** The phase-prefix characters, each one character long. */
+export const PREFIX_CHARS = Object.keys(PHASE_PREFIXES).join('');
+
+/** An action without its phase prefix and its short-drive suffix. */
+export const bareAction = (a: string): string => (a !== '' && PREFIX_CHARS.includes(a[0]!) ? a.slice(1) : a).replace(/-$/, '');
 
 /** Reads an exercise key, checks it and returns its written form. */
 export function parseFxi(input: string): ParsedFxi {
@@ -58,8 +63,8 @@ export function parseFxi(input: string): ParsedFxi {
   const text = input.trim();
   const head = FXI_HEAD.exec(text);
   if (head === null) {
-    if (/^FXI=\d+\//.test(text)) log.add('no-rev', 'The header carries the major version and the revision: write "FXI=1.0S/…".');
-    else log.add('prefix', 'An FXI starts with "FXI=1.0S/".');
+    if (/^FXI=\d+\//.test(text)) log.add('no-rev', `The header carries the major version and the revision: write "${FXI_HEADER}S/…".`);
+    else log.add('prefix', `An FXI starts with "${FXI_HEADER}S/".`);
     return { ok: false, issues: log.issues, canonical: '', layers: {}, flag: 'S' };
   }
   const [, majorText = '', revText = '', , body = ''] = head;
@@ -97,19 +102,12 @@ export function parseFxi(input: string): ParsedFxi {
   setIf(L, 'a', readNameSet(raw.get('a'), ACCESSORIES, 'none', 'an accessory', [], log));
 
   const flag: 'S' | 'N' = FXI_LAYER_ORDER.some((k) => !FXI_LAYERS[k].std && L[k] !== undefined) ? 'N' : 'S';
-  const canonical = `FXI=${FXI_MAJOR}.${FXI_REV}${flag}/` + FXI_LAYER_ORDER.filter((k) => L[k] !== undefined).map((k) => `${k}:${L[k]}`).join('/');
+  const canonical = `${FXI_HEADER}${flag}/` + FXI_LAYER_ORDER.filter((k) => L[k] !== undefined).map((k) => `${k}:${L[k]}`).join('/');
   return { ok: log.issues.length === 0, issues: log.issues, canonical, layers: L, flag };
 }
 
 function setIf(L: Partial<Record<FxiLayer, string>>, k: FxiLayer, v: string | undefined): void {
   if (v !== undefined) L[k] = v;
-}
-
-/** The written form of an exercise key, or throws listing every issue. */
-export function canonicalFxi(input: string): string {
-  const p = parseFxi(input);
-  if (!p.ok) throw new Error(`${input}: ${p.issues.map((i) => i.message).join('; ')}`);
-  return p.canonical;
 }
 
 function readMotion(text: string, log: Log): string {
@@ -282,15 +280,13 @@ function dropUsualCounts(l: string, x: string | undefined, m: string): string {
 }
 
 /** Joint codes of a canonical motion value, without prefixes and suffixes; `=0` counts as the legs. */
-export function motionJoints(m: string): string[] {
-  if (m === UNKNOWN) return [];
-  return m.split(/[>|+]/).map((a) => a.replace(/^[~=%&^]/, '').replace(/-$/, ''))
-    .filter((a) => a !== UNKNOWN && a !== '')
-    .map((a) => (a === '0' ? 'hip' : a.split('.')[0]!));
+function motionJoints(m: string): string[] {
+  return motionActions(m).map((a) => (a === '0' ? 'hip' : a.split('.')[0]!));
 }
+/** Actions of a canonical motion value, without prefixes and suffixes. */
 export function motionActions(m: string): string[] {
   if (m === UNKNOWN) return [];
-  return m.split(/[>|+]/).map((a) => a.replace(/^[~=%&^]/, '').replace(/-$/, '')).filter((a) => a !== UNKNOWN && a !== '');
+  return m.split(/[>|+]/).map(bareAction).filter((a) => a !== UNKNOWN && a !== '');
 }
 const TRUNK_TURN = ['sp.rot', 'sp.lflex', 'nk.rot', 'nk.lflex'];
 
@@ -322,7 +318,7 @@ function readSymmetry(text: string | undefined, m: string, log: Log): string | u
 }
 
 /** The usual hand orientation for a motion: `su` when every action is elbow flexion, `pr` otherwise. */
-export function usualHand(m: string): string | undefined {
+function usualHand(m: string): string | undefined {
   const acts = motionActions(m);
   if (m === UNKNOWN || acts.length === 0 || m.includes(UNKNOWN) || acts.some((a) => a.endsWith('.circ'))) return undefined;
   return acts.every((a) => a === 'el.flex') ? 'su' : 'pr';
@@ -386,20 +382,12 @@ function readNameSet(text: string | undefined, table: Glossary, dflt: string, wh
   return kept.length > 0 ? kept.join('+') : undefined;
 }
 
-/** F: complete; G: generic (`*`, no `?`); P: partial (has `?`). */
-export function fxiCompleteness(p: ParsedFxi): 'F' | 'G' | 'P' {
-  const values = Object.values(p.layers);
-  if (values.some((v) => v !== undefined && v.includes(UNKNOWN))) return 'P';
-  if (values.some((v) => v === GENERIC)) return 'G';
-  return 'F';
-}
-
 /** The standard projection: extended layers dropped, flag S. */
 export function standardFxi(input: string): string {
   const p = parseFxi(input);
   if (!p.ok) throw new Error(`${input}: ${p.issues.map((i) => i.message).join('; ')}`);
   const layers = FXI_LAYER_ORDER.filter((k) => FXI_LAYERS[k].std && p.layers[k] !== undefined);
-  return `FXI=${FXI_MAJOR}.${FXI_REV}S/` + layers.map((k) => `${k}:${p.layers[k]}`).join('/');
+  return `${FXI_HEADER}S/` + layers.map((k) => `${k}:${p.layers[k]}`).join('/');
 }
 
 // ───────────────────────────── FXE ─────────────────────────────
@@ -421,8 +409,8 @@ export function parseFxe(input: string): ParsedFxe {
   const text = input.trim();
   const head = FXE_HEAD.exec(text);
   if (head === null) {
-    if (/^FXE=\d+S?\//.test(text)) log.add('no-rev', 'The header carries the major version and the revision: write "FXE=1.0S/…".');
-    else log.add('prefix', 'An FXE starts with "FXE=1.0S/".');
+    if (/^FXE=\d+S?\//.test(text)) log.add('no-rev', `The header carries the major version and the revision: write "${FXE_HEADER}S/…".`);
+    else log.add('prefix', `An FXE starts with "${FXE_HEADER}S/".`);
     return { ok: false, issues: log.issues, canonical: '', configs: [], flag: 'S' };
   }
   const [, majorText = '', revText = '', , body = ''] = head;
@@ -433,13 +421,7 @@ export function parseFxe(input: string): ParsedFxe {
   const parsedBack = texts.map((t) => configs.find((c) => configText(c) === t)!);
   const flag: 'S' | 'N' = parsedBack.some((c) => Object.keys(c.layers).some((k) => c.k !== '?' && !FXE_STANDARD[c.k].includes(k))) ? 'N' : 'S';
   if (texts.length > 1 && parsedBack.some((c) => c.k === '?' || c.k === 'none')) log.add('combo', 'A combination joins machine or station configurations only.');
-  return { ok: log.issues.length === 0, issues: log.issues, canonical: `FXE=${FXE_MAJOR}.${FXE_REV}${flag}/${texts.join(';')}`, configs: parsedBack, flag };
-}
-
-export function canonicalFxe(input: string): string {
-  const p = parseFxe(input);
-  if (!p.ok) throw new Error(`${input}: ${p.issues.map((i) => i.message).join('; ')}`);
-  return p.canonical;
+  return { ok: log.issues.length === 0, issues: log.issues, canonical: `${FXE_HEADER}${flag}/${texts.join(';')}`, configs: parsedBack, flag };
 }
 
 function configText(c: FxeConfig): string {
@@ -522,5 +504,5 @@ export function standardFxe(input: string): string {
   const p = parseFxe(input);
   if (!p.ok) throw new Error(`${input}: ${p.issues.map((i) => i.message).join('; ')}`);
   const texts = sortUnique(p.configs.map((c) => configText(c.k === '?' ? c : { k: c.k, layers: Object.fromEntries(Object.entries(c.layers).filter(([n]) => FXE_STANDARD[c.k as FxeKind].includes(n))) })));
-  return `FXE=${FXE_MAJOR}.${FXE_REV}S/${texts.join(';')}`;
+  return `${FXE_HEADER}S/${texts.join(';')}`;
 }

@@ -27,10 +27,11 @@
 
 import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
-import { fileURLToPath, pathToFileURL } from 'node:url';
+import { fileURLToPath } from 'node:url';
+import { loadEncoder } from './lib/encoder.mjs';
+import { walk } from './lib/vocabulary.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
-const ENCODER = join(ROOT, 'packages/fds-encoder/dist/index.js');
 const REGISTRY_DIR = join(ROOT, 'specification/registries');
 const PAGE_DIR = join(ROOT, 'website/docs/core-concepts/structural-keys');
 const EXAMPLE_DIR = join(ROOT, 'specification/schemas');
@@ -56,11 +57,7 @@ const NOT_CODES = new Map([
   ['glutes', 'muscle-category-key.md: "buttock, never glutes"'],
 ]);
 
-if (!existsSync(ENCODER)) {
-  console.error(`${ENCODER} does not exist. Build the encoder first:\n  npm --prefix packages/fds-encoder ci && npm --prefix packages/fds-encoder run build`);
-  process.exit(2);
-}
-const encoder = await import(pathToFileURL(ENCODER).href);
+const encoder = await loadEncoder();
 
 const text = (registry) => `${JSON.stringify(registry, null, 2)}\n`;
 
@@ -81,14 +78,10 @@ function registryProblems(generated, read) {
 /** Every code the registries hold: values, codes, layer letters, actions, and each muscle part as muscle.part. */
 function knownCodes(registries) {
   const known = new Set(['FXI', 'FXE', 'FXM', 'FXMG', '1.0', 'S', 'N', 'fxi', 'fxe', 'fxm', 'fxmg']);
-  const walk = (node) => {
-    if (Array.isArray(node)) return node.forEach(walk);
-    if (node === null || typeof node !== 'object') return;
+  walk(registries, (node) => {
     for (const field of ['value', 'code', 'letter', 'action']) if (typeof node[field] === 'string') known.add(node[field]);
     if (typeof node.code === 'string' && Array.isArray(node.parts)) for (const part of node.parts) known.add(`${node.code}.${part.code}`);
-    Object.values(node).forEach(walk);
-  };
-  walk(registries);
+  });
   return known;
 }
 
@@ -96,14 +89,15 @@ function knownCodes(registries) {
 function codesIn(span) {
   if (/[<…]/.test(span) || /^FX(MG|M|I|E)=/.test(span)) return [];
   return span.split(/[\s/;]+/).flatMap((piece) => piece.replace(/^[a-z]:(?!$)/, '').split(/[+>|@,]/))
-    .map((c) => c.replace(/^\*n$/, '').replace(/^\*\d$/, '').replace(/\*\d$/, '').replace(/^[~=%&^]+/, '').replace(/-$/, ''))
+    .map((c) => c.replace(/^\*n$/, '').replace(/\*\d$/, '').replace(/^[~=%&^]+/, '').replace(/-$/, ''))
     .filter((c) => c !== '' && !/^[?*.:/\\\-|+>@,=~%&^0-9]+$/.test(c));
 }
 
 function codeProblems(pages, known) {
+  const list = [...known];
   const isKnown = (c) => known.has(c)
-    || (c.endsWith('.*') && [...known].some((k) => k.startsWith(c.slice(0, -1))))
-    || (c.endsWith('.') && [...known].some((k) => k.startsWith(c)))
+    || (c.endsWith('.*') && list.some((k) => k.startsWith(c.slice(0, -1))))
+    || (c.endsWith('.') && list.some((k) => k.startsWith(c)))
     || (/^(push|pull|assist)\.[a-z]+$/.test(c) && known.has(c.split('.')[1]))
     || (/^[a-z]+\.\?$/.test(c) && known.has(c.slice(0, -2)))
     || NOT_CODES.has(c);
@@ -133,11 +127,10 @@ const KEY = /(FX(?:MG|M|I|E)=[^\s`'")<…\]\\]+)/g;
 const PATTERN = /(?<![a-z0-9.-])([a-z][a-z0-9-]*(?:\.[a-z0-9-]+)*)\.\*/g;
 
 /**
- * A key with each pattern (`l:bell.*@hands`, `FXM=1.0/deltoid.*`) replaced by a code it matches, so the rest of the key
- * is checked too. Undefined when no code matches a pattern.
+ * A key with each pattern (`l:bell.*@hands`, `FXM=1.0/deltoid.*`) replaced by the first of the sorted codes it matches,
+ * so the rest of the key is checked too. Undefined when no code matches a pattern.
  */
-function patternInstance(key, known) {
-  const codes = [...known].sort();
+function patternInstance(key, codes) {
   let unmatched = false;
   const filled = key.replace(PATTERN, (_, prefix) => {
     const code = codes.find((k) => k.startsWith(`${prefix}.`));
@@ -148,6 +141,7 @@ function patternInstance(key, known) {
 }
 
 function keyProblems(sources, known) {
+  const codes = [...known].sort();
   const problems = [];
   let count = 0;
   for (const [where, text] of Object.entries(sources)) {
@@ -159,7 +153,7 @@ function keyProblems(sources, known) {
       // (`deltoid.*`, `bell.*@hands`) is checked with the pattern filled in.
       if (!/=\d+\.\d+[SN]?\/./.test(key) || next === '<' || next === '…' || DELIBERATELY_WRONG.has(key)) continue;
       count++;
-      const checked = key.includes('.*') ? patternInstance(key, known) : key;
+      const checked = key.includes('.*') ? patternInstance(key, codes) : key;
       if (checked === undefined) { problems.push(`${where}: ${key}: no code matches the pattern.`); continue; }
       const c = encoder.checkKey(checked);
       if (!c.ok) problems.push(`${where}: ${key} does not check: ${c.issues.map((i) => i.message).join(' ')}`);
@@ -182,16 +176,13 @@ function linkProblems(pages) {
 
 const generated = encoder.buildRegistries();
 const readRegistry = (file) => (existsSync(join(REGISTRY_DIR, file)) ? readFileSync(join(REGISTRY_DIR, file), 'utf8') : undefined);
-const pages = Object.fromEntries(Object.keys(PAGE_REGISTRIES).map((p) => [p, readFileSync(join(PAGE_DIR, p), 'utf8')]));
-const examples = Object.fromEntries(readdirSync(EXAMPLE_DIR, { recursive: true, encoding: 'utf8' })
-  .filter((f) => f.endsWith('.json') && !f.endsWith('.schema.json') && !f.split('/').pop().startsWith('invalid.'))
-  .map((f) => [`specification/schemas/${f}`, readFileSync(join(EXAMPLE_DIR, f), 'utf8')]));
-
 if (process.argv.includes('--write')) {
   for (const [file, registry] of Object.entries(generated)) writeFileSync(join(REGISTRY_DIR, file), text(registry));
   console.log(`wrote ${Object.keys(generated).length} key registries to specification/registries/`);
   process.exit(0);
 }
+
+const pages = Object.fromEntries(Object.keys(PAGE_REGISTRIES).map((p) => [p, readFileSync(join(PAGE_DIR, p), 'utf8')]));
 
 const known = knownCodes(generated);
 
@@ -220,6 +211,10 @@ if (process.argv.includes('--self-test')) {
   console.log('  ok    self-test — every rule fails on a broken input and passes a good one');
   process.exit(0);
 }
+
+const examples = Object.fromEntries(readdirSync(EXAMPLE_DIR, { recursive: true, encoding: 'utf8' })
+  .filter((f) => f.endsWith('.json') && !f.endsWith('.schema.json') && !f.split('/').pop().startsWith('invalid.'))
+  .map((f) => [`specification/schemas/${f}`, readFileSync(join(EXAMPLE_DIR, f), 'utf8')]));
 
 const problems = [];
 problems.push(...registryProblems(generated, readRegistry));

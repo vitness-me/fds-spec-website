@@ -54,7 +54,7 @@ const isKeyField = (k: string): k is KeyField => Object.hasOwn(KEY_FIELDS, k);
 const IDENTIFIER = /^[A-Za-z_$][\w$-]*$/;
 
 /** A path for people to read: `targets.primary[0].fxm`. A property name that is not a plain word is quoted: `["a.b"]`. */
-export function pathOf(steps: readonly RecordStep[]): string {
+function pathOf(steps: readonly RecordStep[]): string {
   let out = '';
   for (const step of steps) {
     if (typeof step === 'number') out += `[${step}]`;

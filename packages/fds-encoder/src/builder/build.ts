@@ -1,7 +1,8 @@
 // Turns answers to the question flow into the written exercise key and equipment key, through the package's own parser.
 // The same answers always give the same keys. Invalid or contradictory answers raise AnswerError.
-import { FXE_MAJOR, FXE_REV, FXI_MAJOR, FXI_REV, GENERIC, HELD_CONFLICTS, UNKNOWN } from '../alphabet';
+import { FORMS, GENERIC, HELD_CONFLICTS, MAC_VERBS, UNKNOWN } from '../alphabet';
 import { mainEquipment } from '../crosscheck';
+import { FXE_HEADER, FXI_HEADER } from '../headers';
 import { oppositePair, parseFxe, parseFxi } from '../syntax';
 import { ERG_TYPES } from './cardio';
 import { CHANGE_OPENS, JOINT_IDS, PHASE_KINDS, QUESTIONS, QUESTION_BY_ID } from './flow';
@@ -34,15 +35,16 @@ export class AnswerError extends Error {
 /** The builder wrote a key its own parser rejects. This is a defect in the builder, never in the answers. */
 export class InternalError extends Error {}
 
-const FXI_HEAD = `FXI=${FXI_MAJOR}.${FXI_REV}/`;
-const FXE_HEAD = `FXE=${FXE_MAJOR}.${FXE_REV}/`;
+const FXI_HEAD = `${FXI_HEADER}/`;
+const FXE_HEAD = `${FXE_HEADER}/`;
 
-const STATIONS = ['cable', 'smith', 'landmine'];
+/** The station form atoms (`cable`, `smith`, `landmine`). */
+const STATIONS = Object.keys(FORMS).filter((code) => FORMS[code]!.k === 'stn');
 /** Start orientations under which a stance is recorded: the body stands, or it is not known. */
 const STANCE_ORIENTATIONS = ['standing', 'standing.bent', 'standing.chest', '*', UNKNOWN];
 
 /** The load interface, a body point, that a machine's guided motion implies when nothing says otherwise. */
-export function defaultInterface(m: string): string | undefined {
+function defaultInterface(m: string): string | undefined {
   if (/^(push|pull)\./.test(m) || m.startsWith('el.') || m === 'sc.elev' || m === 'sh.habd') return 'hands';
   if (m === 'kn.flex' || m === 'kn.ext' || m === 'hip.flex') return 'ankles';
   if (['sh.hadd', 'sh.abd', 'sh.flex', 'sh.ext'].includes(m)) return 'arms';
@@ -54,7 +56,7 @@ export function defaultInterface(m: string): string | undefined {
 }
 
 /** The posture, an orientation, that a machine's guided motion and load interface imply when nothing says otherwise. */
-export function defaultPosture(m: string, iface: string): string {
+function defaultPosture(m: string, iface: string): string {
   if (m.startsWith('assist.')) return 'hanging';
   if (m === 'sh.habd') return 'seated.chest';
   if (m === 'push.fwd' && iface === 'feet') return 'supine.incline';
@@ -102,11 +104,17 @@ class Reading {
       case 'load-band': return this.loadItems().some((i) => i.token === 'band');
       case 'load-machine': return this.firstLoad()?.kind === 'mac';
       case 'load-cardio': return this.firstLoad()?.kind === 'erg';
-      case 'contact-has-usual': { const m = this.macMotion('mac'); return m !== undefined && defaultInterface(m) !== undefined; }
-      case 'eq-contact-has-usual': { const m = this.macMotion('eq.mac'); return m !== undefined && defaultInterface(m) !== undefined; }
-      case 'eq2-contact-has-usual': { const m = this.macMotion('eq2.mac'); return m !== undefined && defaultInterface(m) !== undefined; }
+      case 'contact-has-usual': return this.hasUsualContact('mac');
+      case 'eq-contact-has-usual': return this.hasUsualContact('eq.mac');
+      case 'eq2-contact-has-usual': return this.hasUsualContact('eq2.mac');
       case 'stance-recorded': return STANCE_ORIENTATIONS.includes(this.startOrientation()) || this.footPlate();
     }
+  }
+
+  /** True when the machine block's guided motion implies a load interface. */
+  private hasUsualContact(prefix: string): boolean {
+    const m = this.macMotion(prefix);
+    return m !== undefined && defaultInterface(m) !== undefined;
   }
 
   /** The start orientation as answered so far, `?` when not answered. */
@@ -129,7 +137,7 @@ class Reading {
     const mv = this.one(`${prefix}.motion`);
     if (mv === undefined) return undefined;
     if (mv === 'unknown') return UNKNOWN;
-    if (!['push', 'pull', 'assist'].includes(mv)) return mv;
+    if (!MAC_VERBS.includes(mv)) return mv;
     const d = this.one(`${prefix}.direction`);
     if (d === undefined) return undefined;
     if (d === 'unknown') return UNKNOWN;

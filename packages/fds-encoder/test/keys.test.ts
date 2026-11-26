@@ -1,10 +1,8 @@
-import { readFileSync } from 'node:fs';
 import { describe, expect, test } from 'vitest';
 import { fxmInFxmg } from '../src/fxmg';
 import { checkKey, compareKeys, KeyError, keyType, writeKey } from '../src/keys';
+import { KEY_PAGES, keyPage } from './helpers';
 
-const PAGES = ['exercise-key', 'equipment-key', 'muscle-key', 'muscle-category-key'];
-const page = (name: string): string => readFileSync(new URL(`../../../website/docs/core-concepts/structural-keys/${name}.md`, import.meta.url), 'utf8');
 
 /** The rows of a page's comparison tables: `| key A | key B | Result |`. */
 function comparisonRows(text: string): [string, string, string][] {
@@ -26,8 +24,8 @@ const expected = (text: string): { result: string; specific?: 'a' | 'b' } => {
 };
 
 describe('every comparison table on the key pages', () => {
-  for (const name of PAGES) {
-    const rows = comparisonRows(page(name));
+  for (const name of KEY_PAGES) {
+    const rows = comparisonRows(keyPage(name));
     test(`${name}: has comparisons`, () => expect(rows.length).toBeGreaterThan(2));
     for (const [a, b, result] of rows) {
       test(`${name}: ${a} against ${b} is ${result.split(':')[0]}`, () => {

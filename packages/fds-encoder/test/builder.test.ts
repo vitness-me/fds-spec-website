@@ -1,4 +1,3 @@
-import { readFileSync } from 'node:fs';
 import { describe, expect, test } from 'vitest';
 import {
   ACCESSORIES, BODY_POINTS, DESIGN_ATTRS, DRIVES, EQUIPMENT_TOKENS, FOOTWORK, FORMS, GUIDE_ANGLES, HELD, JOINT_ACTIONS, LINES,
@@ -7,13 +6,11 @@ import {
 import { AnswerError, InternalError, build, buildWith, openOptions } from '../src/builder/build';
 import type { Answer, Answers } from '../src/builder/build';
 import { QUESTIONS } from '../src/builder/flow';
-import type { FlowQuestion } from '../src/builder/flow';
 import { compare } from '../src/compare';
 import { parseFxe, parseFxi } from '../src/syntax';
-import { equipment, exercise, phase } from './helpers';
+import { equipment, exercise, KEY_PAGES, keyPage, phase, randomAnswer, rng } from './helpers';
 
-const page = (name: string): string => readFileSync(new URL(`../../../website/docs/core-concepts/structural-keys/${name}.md`, import.meta.url), 'utf8');
-const pages = ['exercise-key', 'equipment-key', 'muscle-key', 'muscle-category-key'].map(page).join('\n');
+const pages = KEY_PAGES.map(keyPage).join('\n');
 
 const dumbbells = { load: 'implement', imp1: 'bell.dumb', hold1: 'hands' };
 const pulldownMachine = { load: 'machine', 'mac.motion': 'pull', 'mac.direction': 'down', 'mac.contact': 'usual', 'mac.chest': 'usual' };
@@ -153,23 +150,6 @@ describe('errors are clear', () => {
 
 // ───────────────────────────── properties ─────────────────────────────
 
-function rng(seed: number): () => number {
-  let s = seed >>> 0;
-  return () => { s = (s + 0x6d2b79f5) >>> 0; let t = s; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
-}
-
-/** A random answer of the right shape from the given options: often "usual", otherwise any option (or a few, for multi-select). */
-function randomAnswer(q: FlowQuestion, options: FlowQuestion['options'], rnd: () => number): Answer {
-  const pick = <T>(xs: readonly T[]): T => xs[Math.floor(rnd() * xs.length)]!;
-  const usual = options.find((o) => o.id === 'usual');
-  if (q.select === 'one') return usual !== undefined && rnd() < 0.45 ? 'usual' : pick(options).id;
-  if (usual !== undefined && rnd() < 0.45) return ['usual'];
-  const excl = options.filter((o) => o.exclusive);
-  const free = options.filter((o) => !o.exclusive);
-  if (free.length === 0 || (excl.length > 0 && rnd() < 0.15)) return [pick(excl.length > 0 ? excl : free).id];
-  const n = 1 + Math.floor(rnd() * Math.min(q.max ?? 3, free.length));
-  return [...new Set(Array.from({ length: n }, () => pick(free).id))];
-}
 
 const shuffle = <T>(xs: T[], rnd: () => number): T[] => {
   const a = [...xs];

@@ -74,7 +74,7 @@ const EQ: Cond = { fact: 'equipment' };
 
 // ───────────────────────────── motion from scratch ─────────────────────────────
 
-export const MAX_PHASES = 5;
+const MAX_PHASES = 5;
 
 export const PHASE_KINDS: readonly FlowOption[] = [
   opt('normal', 'A normal moving rep: the joints move through range against the load', ''),
@@ -86,7 +86,7 @@ export const PHASE_KINDS: readonly FlowOption[] = [
   opt('dynamic-stretch', 'A dynamic stretch: taken to end range and released, again and again (leg swings, pass-throughs)', '&'),
 ];
 
-export const JOINT_OPTIONS: Readonly<Record<string, { label: string; options: readonly FlowOption[] }>> = {
+const JOINT_OPTIONS: Readonly<Record<string, { label: string; options: readonly FlowOption[] }>> = {
   nk: { label: 'Neck', options: [opt('flex', 'Chin toward the chest', 'nk.flex'), opt('ext', 'Head tips back', 'nk.ext'), opt('lflex', 'Ear toward the shoulder', 'nk.lflex'), opt('rot', 'Head turns', 'nk.rot'), opt('circ', 'Circles', 'nk.circ')] },
   sp: { label: 'Trunk (spine)', options: [opt('flex', 'Curls forward, ribs toward the pelvis (crunch)', 'sp.flex'), opt('ext', 'Straightens or arches back (back extension)', 'sp.ext'), opt('lflex', 'Bends sideways (side bend)', 'sp.lflex'), opt('rot', 'Twists, shoulders against the hips (woodchop)', 'sp.rot'), opt('circ', 'Circles', 'sp.circ')] },
   sc: { label: 'Shoulder blades, moving on their own', options: [opt('elev', 'Shrug up', 'sc.elev'), opt('dep', 'Pulled down', 'sc.dep'), opt('pro', 'Spread apart around the ribs (scapular push-up)', 'sc.pro'), opt('ret', 'Squeezed together', 'sc.ret')] },
@@ -272,7 +272,7 @@ function equipmentDetailQuestions(prefix: string, kind: Cond, kinds: (k: FxeKind
 
 // ───────────────────────────── the flow ─────────────────────────────
 
-const LOAD_TOKENS = Object.entries(EQUIPMENT_TOKENS).filter(([t, v]) => v.load && !['none', 'mac', 'erg', 'cable', 'smith', 'landmine'].includes(t) && v.parent !== 'erg');
+const LOAD_TOKENS = Object.entries(EQUIPMENT_TOKENS).filter(([t, v]) => v.load && !['none', 'mac', 'erg'].includes(t) && FORMS[t]?.k !== 'stn' && v.parent !== 'erg');
 const SUPPORT_TOKENS = Object.entries(EQUIPMENT_TOKENS).filter(([t, v]) => t !== 'none' && v.parent !== 'erg');
 const HOLD_POINTS: FlowOption[] = [...fromGlossary(BODY_POINTS), ...fromGlossary(HOLD_ONLY)];
 

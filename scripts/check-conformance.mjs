@@ -15,23 +15,14 @@
  * and the README beside the cases describe what each returns.
  */
 
-import { existsSync } from 'node:fs';
-import { dirname, join, resolve } from 'node:path';
-import { fileURLToPath, pathToFileURL } from 'node:url';
+import { resolve } from 'node:path';
+import { pathToFileURL } from 'node:url';
 import { adapterFor, failuresOf, loadCases, runCases } from './lib/conformance.mjs';
-
-const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
-const ENCODER = join(ROOT, 'packages/fds-encoder/dist/index.js');
+import { loadEncoder } from './lib/encoder.mjs';
 
 const argAfter = (flag) => { const i = process.argv.indexOf(flag); return i < 0 ? undefined : process.argv[i + 1]; };
 
-async function encoderAdapter() {
-  if (!existsSync(ENCODER)) {
-    console.error(`${ENCODER} does not exist. Build the encoder first:\n  npm --prefix packages/fds-encoder ci && npm --prefix packages/fds-encoder run build`);
-    process.exit(2);
-  }
-  return adapterFor(await import(pathToFileURL(ENCODER).href));
-}
+const encoderAdapter = async () => adapterFor(await loadEncoder());
 
 const cases = loadCases();
 
@@ -39,7 +30,7 @@ if (process.argv.includes('--self-test')) {
   const good = await encoderAdapter();
   // Each broken adapter gets one function wrong; the group that uses it must fail and nothing else may.
   const broken = {
-    syntax: { ...good, check: (k) => ({ ...good.check(k), written: `${good.check(k).written}x` }) },
+    syntax: { ...good, check: (k) => { const r = good.check(k); return { ...r, written: `${r.written}x` }; } },
     'syntax (reason)': { ...good, check: (k) => ({ ...good.check(k), issues: [] }) },
     compare: { ...good, compare: () => ({ result: 'same' }) },
     build: { ...good, build: () => null },

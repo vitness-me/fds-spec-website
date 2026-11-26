@@ -7,14 +7,14 @@
 //
 // A union term is one of the forms above or an FXM muscle or part code. Members always end in FXM leaves.
 import { FXMG_MAJOR, FXMG_REV } from './alphabet';
-import { expandFxm, FXM_PREFIX, FXM_VOCABULARY, isFxmToken, parseFxm } from './fxm';
+import { expandFxm, FXM_VOCABULARY, isFxmToken, parseFxm } from './fxm';
+import { FXM_PREFIX, FXMG_PREFIX } from './headers';
 import type { FxmVocabulary } from './fxm';
 import { FXMG_ACTIONS, FXMG_SETS } from './fxmg-alphabet';
 import type { Anchor, FxmgAction, FxmgMember, FxmgSet } from './fxmg-alphabet';
 import type { Issue } from './syntax';
 
-/** The prefix every FXMG 1.0 key starts with. */
-export const FXMG_PREFIX = `FXMG=${FXMG_MAJOR}.${FXMG_REV}/`;
+export { FXMG_PREFIX } from './headers';
 
 /** One term of a key: an FXMG set, compartment or action, or an FXM muscle or part. */
 export type FxmgTerm =
@@ -52,7 +52,7 @@ const FXMG_HEAD = /^FXMG=(\d+)\.(\d+)([SN]?)\/(.*)$/s;
 const ACTION = /^[a-z]+(?:\.[a-z]+)+$/;
 
 /** True when `value` is a set or compartment code: kebab-case words joined by dots. */
-export const isFxmgCode = (value: string): boolean => value.split('.').every(isFxmToken);
+const isFxmgCode = (value: string): boolean => value.split('.').every(isFxmToken);
 
 const termText = (term: FxmgTerm): string => {
   switch (term.kind) {
@@ -64,7 +64,7 @@ const termText = (term: FxmgTerm): string => {
 };
 
 /** Writes a key in text form, its terms in the order given. */
-export function formatFxmg(key: FxmgKey): string {
+function formatFxmg(key: FxmgKey): string {
   return `${FXMG_PREFIX}${key.terms.map(termText).join('+')}`;
 }
 
@@ -155,9 +155,7 @@ export function parseFxmg(input: string, vocabulary: FxmgVocabulary = FXMG_VOCAB
 
 /** The canonical FXMG, or throws listing every issue. */
 export function canonicalFxmg(input: string, vocabulary: FxmgVocabulary = FXMG_VOCABULARY): string {
-  const p = parseFxmg(input, vocabulary);
-  if (!p.ok) throw new Error(`${input}: ${p.issues.map((i) => `${i.code}: ${i.message}`).join('; ')}`);
-  return p.canonical;
+  return formatFxmg(keyOrThrow(input, vocabulary));
 }
 
 function keyOrThrow(input: string, vocabulary: FxmgVocabulary): FxmgKey {

@@ -19,16 +19,12 @@ import type { KeyComparison } from '../src/keys';
 import { match } from '../src/match';
 import type { MatchEntry, MatchResult } from '../src/match';
 import { parseFxe, parseFxi } from '../src/syntax';
+import { randomAnswer, rng } from './helpers';
 import { loadReference, present, REF, referenceAnswers, skipReason, warningCode } from './reference';
 import type { Mod } from './reference';
 
 const PKG = fileURLToPath(new URL('..', import.meta.url));
 const REPO = join(PKG, '../..');
-
-function rng(seed: number): () => number {
-  let s = seed >>> 0;
-  return () => { s = (s + 0x6d2b79f5) >>> 0; let t = s; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
-}
 
 // ───────────────────────────── the key corpus ─────────────────────────────
 
@@ -110,17 +106,6 @@ function randomMuscleKeys(rnd: () => number): string[] {
 
 // ───────────────────────────── random answers ─────────────────────────────
 
-function randomAnswer(q: { select: string; max?: number }, options: readonly { id: string; exclusive?: boolean }[], rnd: () => number): Answer {
-  const pick = <T>(xs: readonly T[]): T => xs[Math.floor(rnd() * xs.length)]!;
-  const usual = options.find((o) => o.id === 'usual');
-  if (q.select === 'one') return usual !== undefined && rnd() < 0.45 ? 'usual' : pick(options).id;
-  if (usual !== undefined && rnd() < 0.45) return ['usual'];
-  const excl = options.filter((o) => o.exclusive);
-  const free = options.filter((o) => !o.exclusive);
-  if (free.length === 0 || (excl.length > 0 && rnd() < 0.15)) return [pick(excl.length > 0 ? excl : free).id];
-  const n = 1 + Math.floor(rnd() * Math.min(q.max ?? 3, free.length));
-  return [...new Set(Array.from({ length: n }, () => pick(free).id))];
-}
 
 const relationOf = (c: KeyComparison): string =>
   c.result === 'same' ? 'identical' : c.result === 'more-specific' ? (c.specific === 'a' ? 'refines' : 'refined-by') : c.result === 'overlap' ? 'compatible' : 'contradicting';

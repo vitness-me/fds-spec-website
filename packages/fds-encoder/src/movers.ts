@@ -1,8 +1,8 @@
 // The prime movers of each joint action of the exercise key, as muscle keys. They are the members of the action
 // categories of the muscle category key (`FXMG=1.0/a:<joint>.<action>`).
-import { FXM_MAJOR, FXM_REV } from './alphabet';
+import { FXM_PREFIX } from './headers';
 
-const keys = (...bodies: string[]): readonly string[] => bodies.map((body) => `FXM=${FXM_MAJOR}.${FXM_REV}/${body}`);
+const keys = (...bodies: string[]): readonly string[] => bodies.map((body) => `${FXM_PREFIX}${body}`);
 
 const SCAPULAR_RETRACTORS = ['trapezius.transverse', 'rhomboid-major', 'rhomboid-minor'];
 const OBLIQUES = ['external-oblique', 'internal-oblique'];

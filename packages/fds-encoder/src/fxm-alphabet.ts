@@ -28,11 +28,14 @@ export interface FxmMuscle {
   readonly parts?: readonly FxmPart[];
 }
 
-const fma = (id: string, label: string): Anchor => ({ system: 'FMA', id: `FMA:${id}`, label });
-const uberon = (id: string, label: string): Anchor => ({ system: 'UBERON', id: `UBERON:${id}`, label });
+/** An FMA anchor. */
+export const fma = (id: string, label: string): Anchor => ({ system: 'FMA', id: `FMA:${id}`, label });
+/** An UBERON anchor. */
+export const uberon = (id: string, label: string): Anchor => ({ system: 'UBERON', id: `UBERON:${id}`, label });
 const wholeOnly = (what: string, id: string): string => `Uberon names the whole ${what} (UBERON:${id}), not its parts.`;
 const headsOnly = (what: string, id: string): string => `Uberon names the whole ${what} (UBERON:${id}), not its heads.`;
-const noTerm = (what: string): string => `Uberon has no term for the ${what}.`;
+/** The note for a structure Uberon has no term for. */
+export const noTerm = (what: string): string => `Uberon has no term for the ${what}.`;
 const RHOMBOID_NOTE = 'Uberon has one term, rhomboid (UBERON:0005621), for both rhomboid muscles.';
 
 /**

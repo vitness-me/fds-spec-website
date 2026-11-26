@@ -112,7 +112,7 @@ describe('validation', () => {
   test('=0 only as a hold', () => expect(issues('FXI=1.0/m:0/o:standing/l:none')).toContain('zero'));
   test('every implement needs a hold point', () => expect(issues('FXI=1.0/m:el.flex/o:?/l:bell.dumb')).toContain('missing-hold'));
   test('a support is not a load', () => expect(issues('FXI=1.0/m:el.flex/o:?/l:bench@hands')).toContain('support-as-load'));
-  test('st-sp is footwork now', () => expect(issues('FXI=1.0/m:hip.ext+kn.ext/o:standing/l:none/g:st-sp')).toContain('st-sp'));
+  test('st-sp is rejected: split stance is footwork', () => expect(issues('FXI=1.0/m:hip.ext+kn.ext/o:standing/l:none/g:st-sp')).toContain('st-sp'));
   test('one start position', () => expect(issues('FXI=1.0/m:hip.ext/o:standing/l:bar.straight@hands/r:from-top+from-pins')).toContain('range-conflict'));
   test('symmetry conflict', () => expect(issues('FXI=1.0/m:el.flex/o:?/l:?/x:u+a')).toContain('symmetry-conflict'));
   test('the short-drive suffix and concurrent parts', () => {

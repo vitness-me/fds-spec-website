@@ -1,8 +1,7 @@
 // The published code registries, generated from the package's code lists so the two cannot drift apart.
 import {
   ACCESSORIES, ACTION_PARENT, BODY_POINTS, CIRC_JOINTS, COMPLIANCE, DESIGN_ATTRS, DRIVES, EQUIPMENT_TOKENS, ERG_CYCLES, ERG_TRACKS,
-  FORMS, FOOTWORK, FXE_EXTENDED, FXE_KINDS, FXE_MAJOR, FXE_REV, FXE_STANDARD, FXI_LAYERS, FXI_LAYER_ORDER, FXI_MAJOR, FXI_REV, FXM_MAJOR,
-  FXM_REV, FXMG_MAJOR, FXMG_REV, GRIP_WIDTHS, GUIDE_ANGLES, HAND_ORIENTATIONS, HELD, HELD_CONFLICTS, HOLD_ONLY, IMPLIED_POINTS,
+  FORMS, FOOTWORK, FXE_EXTENDED, FXE_KINDS, FXE_STANDARD, FXI_LAYERS, FXI_LAYER_ORDER, GRIP_WIDTHS, GUIDE_ANGLES, HAND_ORIENTATIONS, HELD, HELD_CONFLICTS, HOLD_ONLY, IMPLIED_POINTS,
   JOINT_ACTIONS, JOINTS, LINES, MAC_CONSTRAINTS, MAC_DIRECTIONS, MAC_SINGLE_JOINT, MAC_VERB_GLOSSES, MOVING_END, OPPOSITE_ACTIONS,
   ORIENTATIONS, PHASE_PREFIXES, RANGE_PARENT, RANGES, START_RANGES, STANCES, SYMMETRY, SYMMETRY_SCOPES,
 } from './alphabet';
@@ -10,6 +9,7 @@ import type { FxeKind, Glossary } from './alphabet';
 import { ERG_TYPES } from './builder/cardio';
 import { FXM_MUSCLES } from './fxm-alphabet';
 import { FXMG_ACTIONS, FXMG_SETS } from './fxmg-alphabet';
+import { FXE_HEADER, FXI_HEADER, FXM_HEADER, FXM_PREFIX, FXMG_HEADER, FXMG_PREFIX } from './headers';
 import { fxmgMembers } from './fxmg';
 
 /** A registry document, ready to be written as JSON. */
@@ -34,7 +34,7 @@ const opposites = new Map<string, string>(OPPOSITE_ACTIONS.flatMap(([a, b]) => [
 
 function exerciseKey(): Registry {
   return {
-    ...head('exercise-key', `FXI=${FXI_MAJOR}.${FXI_REV}`,
+    ...head('exercise-key', FXI_HEADER,
       'The layers and codes of the exercise key, the structural key in an exercise\'s fxi field. Closed: a key that uses a code not listed here does not check. Body points are in body-points.registry.json and orientations in body-positions.registry.json; equipment codes are listed here and stand for keys of the equipment key.',
       [governs('specification/schema-sources/exercises/v1.2.0/exercise.schema.json', 'fxi')]),
     layers: FXI_LAYER_ORDER.map((letter) => ({
@@ -69,7 +69,7 @@ function exerciseKey(): Registry {
     heldConflicts: HELD_CONFLICTS.map(([a, b]) => [a, b]),
     lineOfPull: entries(LINES, 'usual'),
     accessory: Object.entries(ACCESSORIES).map(([value, description]) => ({
-      value, description, ...(FORMS[value] === undefined ? {} : { fxe: `FXE=${FXE_MAJOR}.${FXE_REV}S/k:acc/f:${value}` }), ...(value === 'none' ? { default: true } : {}),
+      value, description, ...(FORMS[value] === undefined ? {} : { fxe: `${FXE_HEADER}S/k:acc/f:${value}` }), ...(value === 'none' ? { default: true } : {}),
     })),
   };
 }
@@ -85,7 +85,7 @@ function equipmentKey(): Registry {
     letter, name, standard, kinds: kindsWith(letter, standard ? FXE_STANDARD : FXE_EXTENDED).filter((k) => standard || !FXE_STANDARD[k].includes(letter)),
   });
   return {
-    ...head('equipment-key', `FXE=${FXE_MAJOR}.${FXE_REV}`,
+    ...head('equipment-key', FXE_HEADER,
       'The kinds, forms and layer codes of the equipment key, the structural key in an equipment record\'s fxe field. Closed: a key that uses a code not listed here does not check. Load interfaces are body points (body-points.registry.json) and postures are body positions (body-positions.registry.json).',
       [governs('specification/schema-sources/equipment/v1.2.0/equipment.schema.json', 'fxe')]),
     layers: [
@@ -122,7 +122,7 @@ function equipmentKey(): Registry {
 
 function bodyPoints(): Registry {
   return {
-    ...head('body-points', `FXI=${FXI_MAJOR}.${FXI_REV} FXE=${FXE_MAJOR}.${FXE_REV}`,
+    ...head('body-points', `${FXI_HEADER} ${FXE_HEADER}`,
       'The body points both keys share: where an exercise key holds a load (after @ in l) and where the body bears weight on a support (after @ in s), and an equipment key\'s load interface (l).',
       [governs('specification/schema-sources/exercises/v1.2.0/exercise.schema.json', 'fxi'), governs('specification/schema-sources/equipment/v1.2.0/equipment.schema.json', 'fxe')]),
     entries: entries(BODY_POINTS),
@@ -131,7 +131,7 @@ function bodyPoints(): Registry {
 
 function bodyPositions(): Registry {
   return {
-    ...head('body-positions', `FXI=${FXI_MAJOR}.${FXI_REV} FXE=${FXE_MAJOR}.${FXE_REV}`,
+    ...head('body-positions', `${FXI_HEADER} ${FXE_HEADER}`,
       'The body positions both keys share: an exercise key\'s orientation (o) and an equipment key\'s posture (s). impliedPoints are the body points the position bears weight on, which a support layer never writes.',
       [governs('specification/schema-sources/exercises/v1.2.0/exercise.schema.json', 'fxi'), governs('specification/schema-sources/equipment/v1.2.0/equipment.schema.json', 'fxe')]),
     entries: Object.entries(ORIENTATIONS).map(([value, description]) => ({ value, description, impliedPoints: IMPLIED_POINTS[value] ?? [] })),
@@ -156,30 +156,29 @@ const ANATOMY_ATTRIBUTION = 'The labels and ids in anchors and members are quote
 
 function muscleKey(): Registry {
   return {
-    ...head('muscle-key', `FXM=${FXM_MAJOR}.${FXM_REV}`,
+    ...head('muscle-key', FXM_HEADER,
       'The muscle and part codes of the muscle key, each derived from its term in the Foundational Model of Anatomy (FMA 5.1.0) and anchored to its FMA id, with the Uberon id where Uberon has the structure. A muscle with parts is exactly the union of its parts.',
       [governs('specification/schema-sources/muscle/v1.1.0/muscle.schema.json', 'fxm')]),
     sources: ANATOMY_SOURCES, attribution: ANATOMY_ATTRIBUTION,
     muscles: FXM_MUSCLES.map((m) => ({
       code: m.token, name: m.name, anchors: m.anchors, ...(m.uberonNote === undefined ? {} : { uberonNote: m.uberonNote }),
       ...(m.parts === undefined ? {} : {
-        parts: m.parts.map((p) => ({ code: p.token, key: `FXM=${FXM_MAJOR}.${FXM_REV}/${m.token}.${p.token}`, name: p.name, anchors: p.anchors, ...(p.uberonNote === undefined ? {} : { uberonNote: p.uberonNote }) })),
+        parts: m.parts.map((p) => ({ code: p.token, key: `${FXM_PREFIX}${m.token}.${p.token}`, name: p.name, anchors: p.anchors, ...(p.uberonNote === undefined ? {} : { uberonNote: p.uberonNote }) })),
       }),
     })),
   };
 }
 
 function muscleCategoryKey(): Registry {
-  const prefix = `FXMG=${FXMG_MAJOR}.${FXMG_REV}/`;
   return {
-    ...head('muscle-category-key', `FXMG=${FXMG_MAJOR}.${FXMG_REV}`,
+    ...head('muscle-category-key', FXMG_HEADER,
       'The category codes of the muscle category key. A set or compartment is the FMA 5.1.0 set of that term, anchored to its FMA id and, where Uberon has it, its Uberon id; its members are the ones FMA lists. An action category holds the prime movers of one joint action of the exercise key. muscles lists every category\'s members followed down to muscle keys.',
       [governs('specification/schema-sources/muscle/muscle-category/v1.1.0/muscle-category.schema.json', 'fxmg')]),
     sources: ANATOMY_SOURCES, attribution: ANATOMY_ATTRIBUTION,
     categories: FXMG_SETS.map((c) => ({
       code: c.code, form: c.code.includes('.') ? 'compartment' : 'set', name: c.name, anchors: c.anchors,
       ...(c.uberonNote === undefined ? {} : { uberonNote: c.uberonNote }), ...(c.membersSource === undefined ? {} : { membersSource: c.membersSource }),
-      members: c.members, muscles: fxmgMembers(`${prefix}${c.code}`),
+      members: c.members, muscles: fxmgMembers(`${FXMG_PREFIX}${c.code}`),
     })),
     actions: FXMG_ACTIONS.map((a) => ({
       code: `a:${a.action}`, action: a.action, name: a.name, ...(a.related === undefined ? {} : { related: a.related }),

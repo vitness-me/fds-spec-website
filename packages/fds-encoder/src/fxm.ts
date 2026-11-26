@@ -5,13 +5,13 @@
 //
 // Tokens are lowercase kebab-case. The key carries no side: laterality belongs to the exercise (FXI `x`).
 // A set of muscles is a muscle category, keyed by FXMG (fxmg.ts).
-import { FXM_MAJOR, FXM_REV, FXMG_MAJOR, FXMG_REV } from './alphabet';
+import { FXM_MAJOR, FXM_REV } from './alphabet';
 import { FXM_MUSCLES } from './fxm-alphabet';
 import type { Anchor, FxmMuscle } from './fxm-alphabet';
+import { FXM_PREFIX, FXMG_PREFIX } from './headers';
 import type { Issue } from './syntax';
 
-/** The prefix every FXM 1.0 key starts with. */
-export const FXM_PREFIX = `FXM=${FXM_MAJOR}.${FXM_REV}/`;
+export { FXM_PREFIX } from './headers';
 
 export type FxmKey =
   | { readonly kind: 'muscle'; readonly muscle: string }
@@ -45,7 +45,7 @@ export function formatFxm(key: FxmKey): string {
 function readBody(body: string, issues: Issue[]): FxmKey | undefined {
   const bad = (message: string): undefined => { issues.push({ code: 'token', message, at: body }); return undefined; };
   if (body.startsWith('g:')) {
-    issues.push({ code: 'group', message: `FXM names one muscle or part. A set of muscles is a muscle category: write it as an FXMG key, "FXMG=${FXMG_MAJOR}.${FXMG_REV}/…".`, at: body });
+    issues.push({ code: 'group', message: `FXM names one muscle or part. A set of muscles is a muscle category: write it as an FXMG key, "${FXMG_PREFIX}…".`, at: body });
     return undefined;
   }
   const [muscle = '', part, ...rest] = body.split('.');
@@ -88,9 +88,7 @@ export function parseFxm(input: string, vocabulary: FxmVocabulary = FXM_VOCABULA
 
 /** The canonical FXM, or throws listing every issue. */
 export function canonicalFxm(input: string, vocabulary: FxmVocabulary = FXM_VOCABULARY): string {
-  const p = parseFxm(input, vocabulary);
-  if (!p.ok) throw new Error(`${input}: ${p.issues.map((i) => `${i.code}: ${i.message}`).join('; ')}`);
-  return p.canonical;
+  return formatFxm(keyOrThrow(input, vocabulary));
 }
 
 /** Builds a vocabulary and checks it: muscle and part tokens are kebab-case and unique. Throws on the first fault. */
