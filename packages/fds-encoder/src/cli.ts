@@ -237,9 +237,10 @@ async function ask(rowsFile: string | undefined, outPath: string | undefined): P
     }
     if (text !== undefined) existing = answersIn(parseJson(text, outPath), outPath);
   }
+  let wrote = false;
   const show = async (step: AskStep): Promise<boolean> => {
     say(step.out.join('\n'));
-    if (step.save && outPath !== undefined) await writeWhole(outPath, answersText(step.state));
+    if (step.save && outPath !== undefined) { await writeWhole(outPath, answersText(step.state)); wrote = true; }
     const over = step.state.stage === 'done' || step.state.stage === 'quit';
     if (over) {
       for (const e of step.state.entries) {
@@ -256,7 +257,8 @@ async function ask(rowsFile: string | undefined, outPath: string | undefined): P
     if (await show(step)) return 0;
   }
   const row = step.state.rows[step.state.row];
-  const saved = outPath === undefined ? 'Nothing was saved: run with --out <answers.json> to keep answers.' : `The rows finished before it are in ${outPath}.`;
+  const saved = outPath === undefined ? 'Nothing was saved: run with --out <answers.json> to keep answers.'
+    : wrote ? `The rows finished before it are in ${outPath}.` : `Nothing was saved to ${outPath}.`;
   say(`\nThe input ended before ${row === undefined ? 'the session finished' : `row ${row.id} was finished`}: ${row === undefined ? '' : 'its answers were not saved. '}${saved}`);
   return 1;
 }

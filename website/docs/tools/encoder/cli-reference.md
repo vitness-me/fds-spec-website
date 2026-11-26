@@ -209,10 +209,16 @@ At a question:
 
 When a row is complete, `ask` prints its answers and keys. Enter keeps the row and moves on, `r` redoes it, `b` goes back one question and `q` stops without keeping it. [Example 1](./examples.md#example-1-key-an-exercise) shows a whole session.
 
-When the input ends before the session does, as when answers are piped from a file that runs out, `ask` says the row in progress was not saved and exits with 1:
+When the input ends before the session does, as when answers are piped from a file that runs out, `ask` says the row in progress was not saved and exits with 1. It names the answers file when an earlier row was saved to it:
 
 ```text
-The input ended before row key-1 was finished: its answers were not saved. The rows finished before it are in answers.json.
+The input ended before row key-2 was finished: its answers were not saved. The rows finished before it are in answers.json.
+```
+
+and says so when the input ended on the first row, before anything was saved:
+
+```text
+The input ended before row key-1 was finished: its answers were not saved. Nothing was saved to answers.json.
 ```
 
 ### `build`

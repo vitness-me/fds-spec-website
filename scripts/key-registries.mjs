@@ -58,7 +58,7 @@ const NOT_CODES = new Map([
 
 if (!existsSync(ENCODER)) {
   console.error(`${ENCODER} does not exist. Build the encoder first:\n  npm --prefix packages/fds-encoder ci && npm --prefix packages/fds-encoder run build`);
-  process.exit(1);
+  process.exit(2);
 }
 const encoder = await import(pathToFileURL(ENCODER).href);
 
@@ -129,15 +129,22 @@ function codeProblems(pages, known) {
 // table cell writes `|` as `\|`.
 const KEY = /(FX(?:MG|M|I|E)=[^\s`'")<…\]\\]+)/g;
 
+/** A code pattern (`bell.*`, `deltoid.*`): the prefix before `.*`. What follows it in the item (`*1`, `@hands`) stays. */
+const PATTERN = /(?<![a-z0-9.-])([a-z][a-z0-9-]*(?:\.[a-z0-9-]+)*)\.\*/g;
+
 /**
- * A key that ends in a pattern (`l:bell.*`, `FXM=1.0/deltoid.*`) with the pattern replaced by a code it matches, so the
- * rest of the key is checked too. Undefined when no code starts that way.
+ * A key with each pattern (`l:bell.*@hands`, `FXM=1.0/deltoid.*`) replaced by a code it matches, so the rest of the key
+ * is checked too. Undefined when no code matches a pattern.
  */
 function patternInstance(key, known) {
-  const m = /([a-z][a-z0-9-]*(?:\.[a-z0-9-]+)*)\.\*$/.exec(key);
-  if (m === null) return undefined;
-  const code = [...known].sort().find((k) => k.startsWith(`${m[1]}.`));
-  return code === undefined ? undefined : key.slice(0, m.index) + code;
+  const codes = [...known].sort();
+  let unmatched = false;
+  const filled = key.replace(PATTERN, (_, prefix) => {
+    const code = codes.find((k) => k.startsWith(`${prefix}.`));
+    if (code === undefined) unmatched = true;
+    return code ?? prefix;
+  });
+  return unmatched ? undefined : filled;
 }
 
 function keyProblems(sources, known) {
@@ -148,11 +155,11 @@ function keyProblems(sources, known) {
     for (const m of body.matchAll(KEY)) {
       const key = m[1].replace(/[.;:,]+$/, '');
       const next = body[m.index + m[1].length] ?? '';
-      // A header alone (`FXI=1.0`) or a placeholder (`<joint>`, `…`) is not a key. A key ending in a pattern
-      // (`deltoid.*`) is checked with the pattern filled in.
+      // A header alone (`FXI=1.0`) or a placeholder (`<joint>`, `…`) is not a key. A key with a pattern
+      // (`deltoid.*`, `bell.*@hands`) is checked with the pattern filled in.
       if (!/=\d+\.\d+[SN]?\/./.test(key) || next === '<' || next === '…' || DELIBERATELY_WRONG.has(key)) continue;
       count++;
-      const checked = key.endsWith('.*') ? patternInstance(key, known) : key;
+      const checked = key.includes('.*') ? patternInstance(key, known) : key;
       if (checked === undefined) { problems.push(`${where}: ${key}: no code matches the pattern.`); continue; }
       const c = encoder.checkKey(checked);
       if (!c.ok) problems.push(`${where}: ${key} does not check: ${c.issues.map((i) => i.message).join(' ')}`);
@@ -200,9 +207,10 @@ if (process.argv.includes('--self-test')) {
   expectFail('keys (muscle)', keyProblems({ 'page.md': '`FXM=1.0/lats`' }, known).problems);
   // A key ending in a pattern is still checked before the pattern, and the pattern must match a code.
   expectFail('keys (pattern, bad motion)', keyProblems({ 'page.md': '`FXI=1.0S/m:el.bend/o:standing/l:bell.*`' }, known).problems);
+  expectFail('keys (pattern with hold, bad motion)', keyProblems({ 'page.md': '`FXI=1.0S/m:el.bend/o:standing/l:bell.*@hands`' }, known).problems);
   expectFail('keys (pattern, bad motion before a good pattern)', keyProblems({ 'page.md': '`FXI=1.0S/m:el.bend/o:standing/l:bell.dumb@hands/h:arms.*`' }, known).problems);
   expectFail('keys (pattern, no code)', keyProblems({ 'page.md': '`FXM=1.0/nomuscle.*`' }, known).problems);
-  if (keyProblems({ 'page.md': '`FXI=1.0S/m:el.flex/o:standing/l:bell.dumb@hands/h:arms.*` `FXM=1.0/deltoid.*`' }, known).problems.length > 0) failures.push('keys rejected a valid pattern');
+  if (keyProblems({ 'page.md': '`FXI=1.0S/m:el.flex/o:standing/l:bell.dumb@hands/h:arms.*` `FXM=1.0/deltoid.*` `FXI=1.0S/m:el.flex/o:standing/l:bell.*@hands` `FXI=1.0S/m:hip.ext/o:standing/l:bell.**1@hands`' }, known).problems.length > 0) failures.push('keys rejected a valid pattern');
   // Each key is valid up to a , > or | and broken after it: a check that stops at the separator passes all three.
   const separated = '`FXI=1.0S/o:standing/l:none/m:el.flex>el.bend` `FXI=1.0S/m:=sp.flex/o:prone/l:none/s:floor@feet,nope` `FXI=1.0S/o:prone/l:none/m:=sp.flex\\|hip.bend`';
   if (keyProblems({ 'page.md': separated }, known).problems.length !== 3) failures.push('keys are checked only up to a , > or |');

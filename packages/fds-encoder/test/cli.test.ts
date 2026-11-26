@@ -175,9 +175,19 @@ describe('ask', () => {
     const out = join(dir, 'ended.json');
     const r = await cli(['ask', '--out', out], ['1', 'usual']);
     expect(r.code).toBe(1);
-    expect(r.out).toContain(`The input ended before row key-1 was finished: its answers were not saved. The rows finished before it are in ${out}.`);
+    expect(r.out).toContain(`The input ended before row key-1 was finished: its answers were not saved. Nothing was saved to ${out}.`);
+    expect(r.out).not.toContain('The rows finished before it');
     expect(existsSync(out)).toBe(false);
     expect((await cli(['ask'], ['1'])).out).toContain('Nothing was saved: run with --out <answers.json> to keep answers.');
+  });
+  test('at the end of input after a finished row, ask says the finished rows are in the answers file', async () => {
+    const rows = file('two-rows.json', [{ id: 'a', name: 'Curl' }, { id: 'b', name: 'Press' }]);
+    const out = join(dir, 'ended-later.json');
+    const lines = ['1', 'usual', '1', 'usual', 'el', 'flex', 'usual', 'usual', 'standing', 'implement', 'bell.dumb', 'hands', 'usual', '', '1'];
+    const r = await cli(['ask', rows, '--out', out], lines);
+    expect(r.code).toBe(1);
+    expect(r.out).toContain(`The input ended before row b was finished: its answers were not saved. The rows finished before it are in ${out}.`);
+    expect(JSON.parse(readFileSync(out, 'utf8')).map((e: { id: string }) => e.id)).toEqual(['a']);
   });
   test('ask --out writes the answers file whole, through a temporary file it then removes', async () => {
     const sub = join(dir, 'atomic');
