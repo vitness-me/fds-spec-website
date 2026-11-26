@@ -357,6 +357,9 @@ This writes the new published schema, updates `releases.json` and
 plus its release map. The transformer's `DEFAULT_SCHEMA_VERSION` is derived from
 that generated map — it is not hand-edited, and bumping the release moves it.
 
+Read what the rebuild produced before freezing anything: see
+[Reviewing a schema change](#reviewing-a-schema-change).
+
 ### 5. Freeze — the human gate, and the irreversible one
 
 A newly published schema is recorded **unfrozen**, so it can be iterated on
@@ -649,6 +652,39 @@ npm view @vitness/fds-skill dist.attestations
 **Irreversible:** immediately.
 
 ---
+
+## Reviewing a schema change
+
+`npm run schema-review` writes a static review site for the schema changes a
+checkout makes against a base ref. It is a maintainer tool: the output is
+gitignored and is not part of the published site.
+
+```bash
+npm run schema-review
+node scripts/schema-review.mjs --repo ../other-checkout --base origin/main
+```
+
+The index lists each published schema the branch adds, edits or removes, with
+its old and new version and its added, removed and changed properties, then the
+`releases.json` change, other changed specification files, and the unchanged
+schemas. Each changed schema gets a page with:
+
+- the new, changed and removed fields and definitions, with type, pattern and
+  description, read through local `$ref`s;
+- every change by JSON path, a side-by-side diff, and both full sources;
+- every example of that schema and every docs JSON block that declares it,
+  validated with Ajv against both versions, searchable, with the structural key
+  fields (`fxi`, `fxe`, `fxm`, `fxmg`) marked, and diffed against the base copy
+  where one exists.
+
+A new version directory is compared with the newest base version of the same
+schema; an unfrozen schema edited in place is compared with its own base bytes.
+The new side is the working tree, uncommitted edits included; `--head <ref>`
+reads a commit instead and `--out <dir>` moves the output from `.schema-review/`.
+The base ref is not fetched. Serve the output with any static server.
+
+`node scripts/schema-review.mjs --self-test` checks the change summary against
+a recorded schema pair.
 
 ## Traps
 
