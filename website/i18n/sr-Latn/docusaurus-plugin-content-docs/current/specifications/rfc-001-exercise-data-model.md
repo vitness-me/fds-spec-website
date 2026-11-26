@@ -228,7 +228,7 @@ Za složene strukture podataka jedinstvene za platformu:
 }
 ```
 
-### 4.3. Ciljni mišići
+### 4.3. Ciljani mišići
 
 `targets.primary` navodi mišiće zbog kojih se vežba bira i obavezno je; `targets.secondary` navodi one koji su smisleno uključeni, ali nisu poenta pokreta. Svaki unos je referenca na mišić — `id`, prikazni `name` i `categoryId` grupe kojoj pripada — denormalizovana da bi konzument mogao da prikaže vežbu bez razrešavanja kataloga mišića.
 

@@ -72,7 +72,7 @@ Una prensa de piernas de discos, con el carro sobre una guía a 45°, tiene esta
 | Indicador | `N` | La clave lleva al menos una capa extendida. |
 | Clase | `k:mac` | Una máquina de fuerza, construida para un solo movimiento. |
 | Interfaz de carga | `l:feet` | La parte móvil se encuentra con el cuerpo en los pies, sobre una plataforma. |
-| Postura | `s:supine.incline` | El usuario se tumba boca arriba sobre un respaldo inclinado, con la cabeza más alta que la cadera. |
+| Postura | `s:supine.incline` | El usuario se tumba boca arriba sobre una almohadilla de espalda inclinada, con la cabeza más alta que la cadera. |
 | Movimiento | `m:push.fwd` | La plataforma se empuja alejándola de la parte delantera del tronco. |
 | Fuente de resistencia | `r:plate` | La resistencia son discos cargados. |
 | Restricción | `c:line` | La parte móvil corre sobre una guía recta. |
@@ -299,7 +299,7 @@ Reglas:
   | `sp.ext` | `back` |
   | `assist.up` | `knees`, o `feet` cuando el usuario está de pie sobre una plataforma |
 
-- Algunas máquinas fijan la suya: una prensa de piernas es `feet`; una sentadilla hack, una sentadilla péndulo o una V-squat, `shoulders`; una sentadilla con cinturón, `hips`; una máquina de elevación de talones, `thighs` sentado, `shoulders` de pie y `hips` en la elevación tipo burro, con el tronco sobre un respaldo; una patada de glúteo, `feet`; una máquina de hip thrust, `hips`; una reverse hyper, `ankles`; una elevación de tibial, `feet`.
+- Algunas máquinas fijan la suya: una prensa de piernas es `feet`; una sentadilla hack, una sentadilla péndulo o una V-squat, `shoulders`; una sentadilla con cinturón, `hips`; una máquina de elevación de talones, `thighs` sentado, `shoulders` de pie y `hips` en la elevación tipo burro, con el tronco sobre una almohadilla; una patada de glúteo, `feet`; una máquina de hip thrust, `hips`; una reverse hyper, `ankles`; una elevación de tibial, `feet`.
 
 ### Postura (`s`) {#posture-s}
 
@@ -308,7 +308,7 @@ La postura se escribe para una máquina de fuerza y para una máquina de cardio.
 Reglas:
 
 - Se escribe la posición en la que la máquina pone al usuario.
-- Algunas máquinas la fijan. Toda prensa de piernas con respaldo inclinado es `supine.incline`, y una con asiento erguido es `seated`. Una sentadilla hack, una sentadilla péndulo, una V-squat y una sentadilla con cinturón son `standing`. Una máquina de remo dedicada es `seated.chest`, salvo un remo en polea sentado con plataforma para los pies, que es `seated`. Una máquina de aperturas invertidas es `seated.chest`. Un remo en T con apoyo de pecho es `prone.incline`. Una máquina asistida de dominadas o de fondos es `hanging`. Una máquina de hip thrust es `supine` y una reverse hyper, `prone`. Una máquina de elevación de talones tipo burro es `standing.chest`. Una máquina de patada de glúteo es `standing`, o `kneeling` cuando la descripción dice que el usuario se arrodilla. Una máquina de elevación de tibial es `seated`.
+- Algunas máquinas la fijan. Toda prensa de piernas con almohadilla de espalda inclinada es `supine.incline`, y una con asiento erguido es `seated`. Una sentadilla hack, una sentadilla péndulo, una V-squat y una sentadilla con cinturón son `standing`. Una máquina de remo dedicada es `seated.chest`, salvo un remo en polea sentado con plataforma para los pies, que es `seated`. Una máquina de aperturas invertidas es `seated.chest`. Un remo en T con apoyo de pecho es `prone.incline`. Una máquina asistida de dominadas o de fondos es `hanging`. Una máquina de hip thrust es `supine` y una reverse hyper, `prone`. Una máquina de elevación de talones tipo burro es `standing.chest`. Una máquina de patada de glúteo es `standing`, o `kneeling` cuando la descripción dice que el usuario se arrodilla. Una máquina de elevación de tibial es `seated`.
 - Cuando nada dice lo contrario: `seated.chest` para `sh.habd`; `seated` para `kn.ext`, `el.*`, los demás movimientos `sh.*`, `sp.flex`, `sp.rot`, `hip.add`, `hip.abd`, `hip.flex`, todo `push.*` trabajado con las manos, `pull.down` y `pull.backdown`; `standing` para `sc.elev`, `hip.ext` y `pull.up`. En los demás casos se escribe `s:?`: una máquina de curl femoral o de elevación de talones sin postura declarada es `s:?`.
 
 ### Movimiento (`m`) {#motion-m}
@@ -645,13 +645,13 @@ Una torre de placas con una polea que sube y baja por un poste, usada con un asa
 
 ### Máquina de jalón al pecho {#lat-pulldown-machine}
 
-Sentado, con los muslos bajo un respaldo, una barra que se tira hacia abajo desde arriba de la cabeza.
+Sentado, con los muslos bajo un rodillo, una barra que se tira hacia abajo desde arriba de la cabeza.
 
 | Capa | Decisión | Se escribe |
 |---|---|---|
 | `k` | Una máquina construida para un solo movimiento, no la torre de poleas | `k:mac` |
 | `l` | La barra está en las manos | `l:hands` |
-| `s` | Sentado. El respaldo de muslos sujeta el cuerpo; no es la postura | `s:seated` |
+| `s` | Sentado. El rodillo de muslos sujeta el cuerpo; no es la postura | `s:seated` |
 | `m` | Se mueven varias articulaciones, y la barra viene hacia los pies | `m:pull.down` |
 
 `FXE=1.0S/k:mac/l:hands/s:seated/m:pull.down`
@@ -692,12 +692,12 @@ Un asiento sobre un riel, un asa en una cadena que se tira hacia el tronco.
 
 ### Pec deck con brazos de deltoides posterior {#pec-deck-with-rear-delt-arms}
 
-Una máquina con dos configuraciones: respaldos de brazo que se juntan por delante, o asas que se tiran hacia atrás con el pecho contra el respaldo.
+Una máquina con dos configuraciones: almohadillas de brazo que se juntan por delante, o asas que se tiran hacia atrás con el pecho contra la almohadilla.
 
 | Configuración | Decisión | Se escribe |
 |---|---|---|
-| Pec deck | Respaldos de brazo, sentado, los brazos se juntan por delante | `k:mac/l:arms/s:seated/m:sh.hadd` |
-| Aperturas invertidas | Asas, el pecho sobre el respaldo, los brazos se mueven hacia atrás y afuera | `k:mac/l:hands/s:seated.chest/m:sh.habd` |
+| Pec deck | Almohadillas de brazo, sentado, los brazos se juntan por delante | `k:mac/l:arms/s:seated/m:sh.hadd` |
+| Aperturas invertidas | Asas, el pecho sobre la almohadilla, los brazos se mueven hacia atrás y afuera | `k:mac/l:hands/s:seated.chest/m:sh.habd` |
 
 `FXE=1.0S/k:mac/l:arms/s:seated/m:sh.hadd;k:mac/l:hands/s:seated.chest/m:sh.habd`
 

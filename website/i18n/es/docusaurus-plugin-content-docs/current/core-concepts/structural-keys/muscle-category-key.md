@@ -78,7 +78,7 @@ Las palabras de la anatomía no son palabras de gimnasio, así que la categoría
 | Palabra de gimnasio | Término de FMA | Código |
 |---|---|---|
 | Glúteos | Musculature of buttock | `buttock` |
-| Gemelos | Triceps surae | `triceps-surae` |
+| Pantorrillas | Triceps surae | `triceps-surae` |
 | Pecho | Pectoral musculature | `pectoral` |
 | Espinillas | Musculature of anterior compartment of leg | `leg.anterior` |
 
@@ -120,7 +120,7 @@ Cada código tiene un conjunto de miembros, y la comparación trabaja sobre ello
 - **Un conjunto o un compartimento** tiene los músculos que FMA lista para su término, escritos como claves de músculo sin el lado. `FXMG=1.0/hamstring` tiene `FXM=1.0/biceps-femoris`, `FXM=1.0/semitendinosus` y `FXM=1.0/semimembranosus`.
 - **Un conjunto puede contener conjuntos.** El muslo contiene el cuádriceps femoral, que contiene cuatro músculos. Se siguen los miembros hacia abajo hasta llegar a claves de músculo.
 - **Un conjunto para el que FMA no lista miembros** los toma de Uberon. FMA no lista ninguno para el erector de la columna, así que sus miembros son los tres músculos que Uberon lista como sus partes. La musculatura completa, `FXMG=1.0/entire`, contiene todos los músculos.
-- **Una acción** tiene los motores principales de esa acción articular, tal como los lista [`muscle-category-key.registry.json`](https://spec.vitness.me/registries/muscle-category-key.registry.json). `FXMG=1.0/a:hip.flex` tiene `FXM=1.0/psoas-major`, `FXM=1.0/iliacus` y `FXM=1.0/rectus-femoris`. El sartorio y el tensor de la fascia lata ayudan a flexionar la cadera, pero no son motores principales, así que no son miembros. Hay 40 categorías de acción, una por cada acción articular de la clave de ejercicio excepto la eversión del tobillo, `ank.ev`, de modo que `FXMG=1.0/a:ank.ev` no es una clave, y ninguna para la circunducción.
+- **Una acción** tiene los motores principales de esa acción articular, tal como los lista [`muscle-category-key.registry.json`](https://spec.vitness.me/registries/muscle-category-key.registry.json). `FXMG=1.0/a:hip.flex` tiene `FXM=1.0/psoas-major`, `FXM=1.0/iliacus` y `FXM=1.0/rectus-femoris`. El sartorio y el tensor de la fascia lata ayudan a flexionar la cadera, pero no son motores principales, así que no son miembros. Hay 40 categorías de acción, una por cada acción articular de la clave de ejercicio excepto la eversión del tobillo, `ank.ev`, y la circunducción; por eso `FXMG=1.0/a:ank.ev` no es una clave.
 - **Una unión** tiene todo lo que abarcan sus términos. Un término es un código de categoría o el código de una clave de músculo, con o sin parte.
 
 Un propietario que se refiere a algo distinto del conjunto de FMA, o que entiende de otro modo los motores principales de una acción, escribe una unión. Nunca reutiliza el código con su propia lista de miembros. Un propietario cuyos flexores de cadera incluyen el sartorio y el tensor de la fascia lata escribe `FXMG=1.0/a:hip.flex+sartorius+tensor-fasciae-latae`.

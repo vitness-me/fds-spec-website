@@ -228,6 +228,8 @@ polja šema, komande i identifikatori se ne prevode.
 | implement | rekvizit | slobodan predmet koji se pomera, drži ili nosi; vrednost `imp` se ne prevodi |
 | support | oslonac | sloj `s` ključa vežbe i vrsta `sup` |
 | station | stanica | sajla, Smit sprava, landmine; vrednost `stn` se ne prevodi |
+| target muscles | ciljani mišići | nikada „ciljni mišići“; polje `targets` se ne prevodi |
+| foam roller | fom roler | vrednost `roller.foam` se ne prevodi; „valjak“ je rezervisan za *wrist roller* |
 | strength machine / cardio machine | sprava za snagu / kardio sprava | *machine* → „sprava“ već zabeleženo; vrednosti `mac` i `erg` se ne prevode |
 | accessory | pribor | nikada „dodatak“ — rezervisano za *plugin* |
 | motion / joint action | pokret / pokret u zglobu | sloj `m`; „kategorija pokreta“ za *action category* |

@@ -22,7 +22,7 @@ El formato se inspira en Keep a Changelog, y el proyecto se adhiere al Versionad
   en una categoría muscular (muscle-category 1.1.0). Una clave describe la cosa
   en códigos que el estándar publica, de modo que dos catálogos puedan
   encontrar el mismo registro sin importar cómo lo llame cada uno. No es un
-  identificador. Véase Conceptos clave → Claves estructurales.
+  identificador. Véase Conceptos fundamentales → Claves estructurales.
 - Las mismas claves en toda referencia que nombra un ejercicio, un equipamiento
   o un músculo por id y nombre: `fxi` en una referencia de ejercicio, `fxe` en
   una referencia de equipamiento, y `fxm` con el `fxmg` de la categoría del

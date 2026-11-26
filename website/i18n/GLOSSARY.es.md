@@ -90,6 +90,7 @@ En las cadenas de la interfaz se usan comillas inglesas ("…"); las angulares
 | rate limit | límite de tasa | |
 | cost estimation | estimación de costos | «costos», forma americana — nunca «costes» |
 | MUST / MUST NOT / SHOULD / MAY | DEBE / NO DEBE / DEBERÍA / PUEDE | palabras clave RFC 2119, siempre en mayúsculas; el inglés queda normativo |
+| Core Concepts (sección) | Conceptos fundamentales | nunca «Conceptos clave», que choca con «claves» |
 | overview | visión general | como en las cadenas de la interfaz ya publicadas; nunca «panorama general» |
 | array | arreglo | forma americana; nunca «matriz» |
 | default | predeterminado | |
@@ -213,6 +214,7 @@ En las cadenas de la interfaz se usan comillas inglesas ("…"); las angulares
 | implement | implemento | |
 | support | apoyo | la clase `sup` y la capa `s` de la clave de ejercicio |
 | station | estación | `cable`, `smith`, `landmine` |
+| pad (máquina) | almohadilla / rodillo | «rodillo» para el de pierna (muslo, parte baja de la pierna); nunca «respaldo», que traduce *fallback* |
 | strength machine / cardio machine | máquina de fuerza / máquina de cardio | |
 | accessory | accesorio | |
 | load interface / posture / track | interfaz de carga / postura / guía | capas de la clave de equipamiento |

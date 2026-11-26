@@ -14,7 +14,7 @@ Construir, comprobar, comparar y emparejar claves estructurales.
 
 ## Visión general {#overview}
 
-El FDS Encoder es una herramienta de línea de comandos y una biblioteca de TypeScript para las cuatro [claves estructurales](../../core-concepts/structural-keys.md): la clave de ejercicio (`fxi`), la clave de equipamiento (`fxe`), la clave de músculo (`fxm`) y la clave de categoría muscular (`fxmg`). Las páginas de Conceptos clave dicen cómo se construye cada clave. El Encoder aplica esas reglas por usted.
+El FDS Encoder es una herramienta de línea de comandos y una biblioteca de TypeScript para las cuatro [claves estructurales](../../core-concepts/structural-keys.md): la clave de ejercicio (`fxi`), la clave de equipamiento (`fxe`), la clave de músculo (`fxm`) y la clave de categoría muscular (`fxmg`). Las páginas de Conceptos fundamentales dicen cómo se construye cada clave. El Encoder aplica esas reglas por usted.
 
 | Clave | Campo | Ejemplo |
 |-----|-------|---------|
@@ -36,7 +36,7 @@ El FDS Encoder es una herramienta de línea de comandos y una biblioteca de Type
 
 ## Cómo encaja con el resto de FDS {#how-it-fits-with-the-rest-of-fds}
 
-- **Conceptos clave.** Las páginas de [Claves estructurales](../../core-concepts/structural-keys.md) son las reglas. El Encoder las sigue e informa, con palabras sencillas, dónde una clave incumple alguna.
+- **Conceptos fundamentales.** Las páginas de [Claves estructurales](../../core-concepts/structural-keys.md) son las reglas. El Encoder las sigue e informa, con palabras sencillas, dónde una clave incumple alguna.
 - **El Transformer.** El [FDS Transformer](/docs/tools/transformer) convierte los datos de origen en registros FDS. No rellena los campos de clave. Ejecute el Encoder sobre su salida para agregarlos o comprobarlos.
 - **Sus registros.** El Encoder lee y escribe solo el campo de clave propio de un registro y los campos de clave de las referencias que contiene. Todo lo demás del registro queda como estaba, hasta los espacios y los literales numéricos. Un enlace que usted confirme entre dos registros pertenece a sus propios datos, en `attributes` o `extensions`. El Encoder no lo lee ni lo escribe.
 

@@ -65,7 +65,7 @@ Iskoraci u hodu sa bučicom u svakoj ruci imaju ovaj ključ:
 | Rad nogu | `f:travel.fwd` | Svaki korak ide napred i ne vraća se. |
 | Opterećenje | `l:bell.dumb@hands` | Bučice, u rukama. |
 | Strane | `x:a` | Noge se smenjuju, ponavljanje po ponavljanje. |
-| Izostavljeni slojevi | `k s g r h p a` | Svaki je na podrazumevanoj vrednosti: pomera se kraj udova, pod nosi stopala, uobičajeni hvat i stav, pun obim, bez zadržanog držanja, uobičajeni pravac vuče, pribor nije naveden. |
+| Izostavljeni slojevi | `k s g r h p a` | Svaki je na podrazumevanoj vrednosti: pomera se kraj udova, pod nosi stopala, uobičajeni hvat i stav, pun obim, bez posebnog držanja, uobičajeni pravac vuče, pribor nije naveden. |
 
 Slojevi su razdvojeni znakom `/`. Svaki sloj je njegovo slovo, `:` i vrednost sastavljena od kodova i simbola.
 
@@ -84,7 +84,7 @@ Svaki sloj beleži jednu dimenziju vežbe.
 | `x` | Strane | Da li udovi rade zajedno, jedna strana pa druga, naizmenično ili u suprotnim smerovima | Ne | Obe zajedno |
 | `g` | Hvat i stav | Orijentacija šaka, širina hvata i širina stava | Ne | Uobičajena orijentacija šaka, srednja širina, srednji stav |
 | `r` | Obim i početak | Delimičan ili produžen obim, i početni položaj različit od uobičajenog | Ne | Pun obim iz uobičajenog početka |
-| `h` | Držanje | U čemu se drže udovi koji ne obavljaju rad | Ne | Bez zadržanog držanja |
+| `h` | Držanje | U čemu se drže udovi koji ne obavljaju rad | Ne | Bez posebnog držanja |
 | `p` | Pravac vuče | Odakle vuče sajla ili traka, ili putanja opterećenja pored tela | Ne | Pravac koji pokret podrazumeva |
 | `a` | Pribor | Pribor ili partner koji pomaže bez opterećivanja ili oslanjanja tela | Ne | Nije naveden |
 
@@ -161,14 +161,14 @@ Pravila:
   | Ka trupu iz položaja ispred tela, laktovi uz telo: veslanje | `sh.ext` |
   | Ka trupu iz položaja ispred tela, laktovi široko u visini ramena: face pull | `sh.habd` |
   | Nadole iz položaja iznad glave, ispred lica: zgib pothvatom, svaki zgib ili povlačenje pothvatom, neutralnim ili uskim hvatom; povlačenje opruženim rukama, pulover, bacanje lopte o pod | `sh.ext.oh` |
-  | Nadole iz položaja iznad glave, sa strane: zgib ili povlačenje nathvatom srednje ili široke širine | `sh.add` |
+  | Nadole iz položaja iznad glave, sa strane: zgib ili povlačenje srednjim ili širokim nathvatom | `sh.add` |
   | Nagore u stranu: bočno podizanje | `sh.abd` |
 
 - Jedna faza po zasebnom pokretu, redosledom ponavljanja, spojene znakom `>`. Ako drugi pokret počne pre nego što se prvi završi, to je jedna faza (thruster). Ako ne, to su dve (čučanj, pa potisak).
 - Dva suprotna pokreta, kao `el.flex` i `el.ext`, nikada ne dele jedan deo. Jedan zglob može se kretati u suprotnim smerovima u različitim fazama.
 - Prefiks ispred dela određuje njegovu vrstu: zadržan, cikličan, balistički, statičko istezanje ili dinamičko istezanje. Bez prefiksa je obična faza kretanja. Prefiksi su navedeni pod [Simboli](#symbols).
 - Zadržan deo ispod udova koji se kreću je zaseban deo, spojen sa njima znakom `|`: plank sa podizanjem noge je `=sp.flex|hip.ext`. Isto važi i za zadržan potisak uda koji se ne kreće, kada je vežba zasnovana na njemu: Janda trbušnjak povlači pete nadole kroz celo ponavljanje, `=kn.flex|hip.flex+sp.flex`.
-- U istezanju, `|` spaja i dva uda dovedena u suprotnim smerovima: istezanje trkača je `%hip.ext|%hip.flex`.
+- U istezanju, `|` spaja i dva uda dovedena u suprotne smerove: istezanje trkača je `%hip.ext|%hip.flex`.
 - U istezanju, zadržan zglob pišite kada on određuje koji se mišić isteže: koleno u istezanju lista, `kn.ext` opruženo ili `kn.flex` savijeno.
 
 ### Orijentacija (`o`) {#orientation-o}
@@ -242,7 +242,7 @@ Pravila:
 - Pišite svaku površinu koja nosi težinu tela, ili na koju je ud oslonjen, preko onoga što orijentacija podrazumeva. Posle površine napišite `@` i tačke na njoj, izostavljajući tačke koje orijentacija podrazumeva.
 - Nikada ne pišite goli pod, prostirku, sedište ili klupu ispod tela u sedu, niti sopstveno sedište i jastuke sprave. Nestabilno sedište (`ball.stab`, `dome`, `board.bal`, `roller.foam`) se piše.
 - Kada trup ne leži ni na čemu, kao u planku ili skleku, navedite svaku tačku koja nosi težinu: `s:floor@feet,forearms`. Telo licem nagore koje visi o šakama takođe zadržava `floor@feet`: obrnuto veslanje je `s:bar.fixed@hands+floor@feet`.
-- Stopala na podu nikada se ne pišu ispod tela u sedu, niti ispod tela licem nagore koje leži na klupi, lopti ili valjku. Stopala na bilo čemu drugom se pišu: vežba u sedu sa stopalima na lopti zadržava `ball.stab@feet`.
+- Stopala na podu nikada se ne pišu ispod tela u sedu, niti ispod tela licem nagore koje leži na klupi, lopti ili fom roleru. Stopala na bilo čemu drugom se pišu: vežba u sedu sa stopalima na lopti zadržava `ball.stab@feet`.
 - Površine ispod različitih tačaka su zasebne stavke: stopala na lopti i šake na podu je `s:ball.stab@feet+floor@hands`.
 - Kutija, stepenik, klupa ili platforma ispod podignutih šaka ili stopala je `box`, osim ako vežba imenuje površinu.
 - `dome` je BOSU kod kog strana nije navedena. Napišite `dome.up` ili `dome.down` kada je strana poznata.
@@ -286,8 +286,8 @@ Dve tačke držanja nisu tačke tela i pišu se samo u opterećenju:
 Pravila:
 
 - Navedite svaki komad opreme koji opterećuje radne mišiće, svaki sa `@` i mestom gde se drži: `l:bar.straight@back`.
-- `none` znači bez opreme. Stoji samo i ne uzima tačku držanja: propadanje sa tegom je `l:plate@waist`, a ne `none` pored diska.
-- Sprava za snagu je `mac`. Nema specifičniji kod, jer sopstveni pokret vežbe već kaže šta sprava vodi. Kardio sprava je `erg`, ili `erg.` i njen pokret kada je poznat: `erg.row`. [Ključ opreme](./equipment-key.md#keys-in-records) zapisa kaže o kojoj je spravi reč.
+- `none` znači bez opreme. Stoji sam i ne uzima tačku držanja: propadanje sa tegom je `l:plate@waist`, a ne `none` pored diska.
+- Sprava za snagu je `mac`. Nema specifičnijeg koda, jer sopstveni pokret vežbe već kaže šta sprava vodi. Kardio sprava je `erg`, ili `erg.` i njen pokret kada je poznat: `erg.row`. [Ključ opreme](./equipment-key.md#keys-in-records) zapisa kaže o kojoj je spravi reč.
 - Kod oslonca nikada se ne piše u `l`.
 - Traka čiji tip nije naveden je `band`. Naveden tip uzima svoj kod potomka: duga zatvorena traka je `band.loop`. Traka se drži tamo gde pritiska ili vuče telo. Mesto gde je usidrena ne piše se.
 - Izostavite broj kada je uobičajen, a `*n` pišite samo kada se razlikuje. Rekvizit za jednu ruku (`bell.dumb`, `bell.kettle`, `plate`, `club`) ide po jedan na svaku radnu šaku; svaki drugi kod je jedan. Na grudima, leđima, kukovima ili struku svaki rekvizit je jedan: goblet čučanj sa jednom bučicom je `l:bell.dumb@chest`. Jedna girja u obe ruke je `bell.kettle*1@hands`.
@@ -338,7 +338,7 @@ Pravila:
 | `deep` | Dublje od uobičajenog obima |
 | `deficit` | Stajanje na nečemu da bi se išlo dublje nego obično |
 | `from-floor` | Svako ponavljanje počinje sa opterećenjem koje miruje na podu |
-| `from-top` | Počinje u stojećem stavu sa opterećenjem u rukama, spušta se bez odlaganja (iz visa, iznad kolena) |
+| `from-top` | Počinje u stojećem stavu sa opterećenjem u rukama, spušta se, a da se ne odloži na pod (iz visa, iznad kolena) |
 | `from-top.knee` | Iz visa koji počinje u visini kolena ili ispod. Potomak koda `from-top` |
 | `from-pins` | Svako ponavljanje počinje sa klinova, blokova ili kaveza iznad poda |
 | `from-drop` | Svako ponavljanje počinje silaskom sa kutije i doskokom (dubinski skok) |
@@ -418,11 +418,11 @@ Sve u ključu što nije kod jeste simbol.
 | `.` | Spaja zglob sa njegovim pokretom, ili kod sa specifičnijim potomkom | `el.flex`, `standing.bent`, `erg.row` |
 | `+` | Spaja stavke koje idu zajedno: pokrete u jednoj fazi, površine, rekvizite, elemente hvata, kodove obima, stavke strana, kodove držanja | `m:hip.ext+kn.ext` |
 | `>` | Niz redosledom ponavljanja: faze, početna i završna orijentacija, promene rada nogu ili hvata | `g:su>pr` |
-| `\|` | Dva dela jedne faze u isto vreme: delovi različitih vrsta, ili dva uda dovedena u suprotnim smerovima u istezanju | `m:=sp.flex\|hip.ext`, `m:%hip.ext\|%hip.flex` |
+| `\|` | Dva dela jedne faze u isto vreme: delovi različitih vrsta, ili dva uda dovedena u suprotne smerove u istezanju | `m:=sp.flex\|hip.ext`, `m:%hip.ext\|%hip.flex` |
 | `@` | Gde: tačke na površini, tačka držanja opreme, obuhvat koda strana | `l:bell.dumb@hands` |
 | `,` | Više tačaka tela na jednoj površini | `s:floor@feet,hands` |
 | `*n` | Broj komada opreme, piše se samo kada se razlikuje od uobičajenog | `l:bell.kettle*1@hands` |
-| `*` | Ceo sloj namerno uopšten: vežba se može izvesti na oba načina | `o:*` |
+| `*` | Ceo sloj namerno uopšten: vežba se može izvesti na bilo koji način | `o:*` |
 | `?` | Nepoznato. Poklapa se sa bilo čim i nikada ne protivreči | `o:?`, `bell.kettle@?`, `sh.?` |
 | `-` | Posle pokreta: namerno pokretanje kratkog obima | `m:el.ext+hip.ext-+kn.ext-+sh.flex` |
 
@@ -558,7 +558,7 @@ Sprava za veslanje ispod pokazuje sve tri: veslanje na njoj drži se `@hands` i 
     </div>
   </div>
   <figcaption>
-    Svaki ključ vežbe levo, ključ njegove opreme desno. <span className="ka-shared">Uokvireno</span>: kodovi koje dele.
+    Svaki ključ vežbe levo, ključ njene opreme desno. <span className="ka-shared">Uokvireno</span>: kodovi koje dele.
   </figcaption>
 </figure>
 
@@ -627,7 +627,7 @@ U stojećem stavu, šipka preko gornjeg dela leđa, kukovi i kolena se savijaju 
 
 ### Povlačenje na lat spravi {#lat-pulldown}
 
-U sedu na spravi za povlačenje, nathvat u širini ramena, šipka se povlači iznad glave nadole do grudi.
+U sedu na spravi za povlačenje, nathvat otprilike u širini ramena, šipka se povlači iznad glave nadole do grudi.
 
 | Sloj | Odluka | Zapisano |
 |---|---|---|
@@ -647,7 +647,7 @@ Povlačenje uskim neutralnim hvatom umesto toga spušta šake ispred lica, pa se
 
 ### Plank
 
-Licem nadole na podlakticama i prstima, telo pravo, zadržano na vreme.
+Licem nadole na podlakticama i prstima, telo pravo, zadržano određeno vreme.
 
 | Sloj | Odluka | Zapisano |
 |---|---|---|
@@ -678,7 +678,7 @@ U stojećem stavu, jedna girja u obe ruke, zamahnuta iz položaja između nogu d
 
 | Sloj | Odluka | Zapisano |
 |---|---|---|
-| `m` | Kukovi se opružaju. Kolena zadržavaju fiksno savijanje, a ruke samo njišu, pa se ni jedno ni drugo ne piše. Girja nikada ne napušta šake, pa nema `^` | `m:hip.ext` |
+| `m` | Kukovi se opružaju. Kolena zadržavaju fiksno savijanje, a ruke se samo njišu, pa se ni jedno ni drugo ne piše. Girja nikada ne napušta šake, pa nema `^` | `m:hip.ext` |
 | `o` | Trup se kreće kroz pretklon, pa ponavljanje počinje kao `standing`, a ne `standing.bent` | `o:standing` |
 | `l` | Girja je, kao i obično, po jedna na svaku radnu šaku; ovde jednu girju dele obe šake | `l:bell.kettle*1@hands` |
 
@@ -751,7 +751,7 @@ Ključevi koji dele kodove čine porodice, i niko ne mora da ih deklariše. Potr
 | `m` je `hip.ext+kn.ext` | Isti pokret: čučnjeve, iskorake, penjanja na klupu i potiske nogama, bez obzira na opterećenje |
 | `l` sadrži kod `bell.*` | Istu porodicu opreme: vežbe opterećene bučicama, girjama ili cirkuskim bučicama |
 | `l` sadrži `mac` | Svaku vežbu izvedenu na spravi za snagu |
-| `o` je `hanging` | Istu orijentaciju: zgibove, podizanja nogu u visu, slobodne vise |
+| `o` je `hanging` | Istu orijentaciju: zgibove, podizanja nogu u visu, slobodne visove |
 | `m` sadrži `sh.ext` | Veslanja i propadanja, a preko potomka `sh.ext.oh` i zgibove pothvatom, pulovere i povlačenja uskim hvatom. Roditeljski kod pronalazi svoje potomke |
 | `l` sadrži `erg` | Svaku vežbu na kardio spravi, preko potomaka `erg.row`, `erg.gait` i ostalih |
 | `m` sadrži `hip.flex` | Kategoriju `FXMG=1.0/a:hip.flex`, a preko nje mišiće koji savijaju kuk: psoas major, iliacus i rectus femoris |

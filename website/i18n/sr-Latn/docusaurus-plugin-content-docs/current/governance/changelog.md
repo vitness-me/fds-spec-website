@@ -40,8 +40,8 @@ Format je inspirisan pristupom Keep a Changelog, a projekat se pridržava semant
 
 ### Kompatibilnost
 - Čisto aditivno. Svaki dokument validan pod prethodnim verzijama validira se
-  prema novim nepromenjen; dokument koji koristi ključ prethodne šeme
-  odbacuju, i upravo to ovo čini verzijom, a ne izmenom.
+  prema novim nepromenjen; prethodne šeme odbacuju dokument koji koristi
+  ključ, i upravo to ovo čini verzijom, a ne izmenom.
 - **`exercises/v1.1.0/`, `equipment/v1.1.0/`, `muscle/v1.0.0/`,
   `muscle/muscle-category/v1.0.0/`, `prescription/v1.0.0/`, `workout/v1.1.0/`
   i `program/v1.0.0/` ostaju objavljeni i zamrznuti.** Izdanja do 1.5.0 ih

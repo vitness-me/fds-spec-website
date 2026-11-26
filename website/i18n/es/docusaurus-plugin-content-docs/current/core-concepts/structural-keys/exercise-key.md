@@ -106,7 +106,7 @@ El movimiento se construye con acciones articulares, escritas `articulación.acc
 | Articulación | Significado |
 |---|---|
 | `nk` | Cuello |
-| `sp` | Columna: el tronco, torácico y lumbar juntos |
+| `sp` | Columna: el tronco, segmentos torácico y lumbar juntos |
 | `sc` | Escápula: el omóplato sobre la caja torácica |
 | `sh` | Articulación del hombro |
 | `el` | Codo |
@@ -123,7 +123,7 @@ El movimiento se construye con acciones articulares, escritas `articulación.acc
 | `sp.flex` `sp.ext` | Las costillas hacia la pelvis, como en un crunch; enderezar o arquear la espalda |
 | `sp.lflex` `sp.rot` | Inclinación lateral; los hombros girando respecto a la cadera |
 | `sc.elev` `sc.dep` | Omóplatos hacia arriba (encogimiento); hacia abajo |
-| `sc.pro` `sc.ret` | Omóplatos separados alrededor de las costillas; juntados |
+| `sc.pro` `sc.ret` | Omóplatos separados alrededor de las costillas; juntos |
 | `sh.flex` | El brazo hacia delante y arriba: elevación frontal, press por encima de la cabeza |
 | `sh.ext` | El brazo hacia abajo y atrás desde delante: remo, fondo |
 | `sh.ext.oh` | Los brazos bajan por delante de la cara desde arriba de la cabeza: dominada supina, jalón con agarre cerrado, pullover. Hijo de `sh.ext`: `el.flex+sh.ext+sh.ext.oh` se escribe `el.flex+sh.ext.oh` |
@@ -166,7 +166,7 @@ Reglas:
 
 - Una fase por cada movimiento distinto, en el orden de la repetición, unidas por `>`. Si el segundo movimiento empieza antes de que termine el primero, los dos son una sola fase (un thruster). Si no, son dos (una sentadilla y luego un press).
 - Dos acciones opuestas, como `el.flex` y `el.ext`, nunca comparten una parte. Una misma articulación puede moverse en direcciones opuestas en fases distintas.
-- Un prefijo delante de una parte fija su tipo: sostenida, cíclica, balística, estiramiento estático o estiramiento dinámico. Sin prefijo es una fase de movimiento normal. Los prefijos se listan en [Símbolos](#symbols).
+- Un prefijo delante de una parte fija su clase: sostenida, cíclica, balística, estiramiento estático o estiramiento dinámico. Sin prefijo es una fase de movimiento normal. Los prefijos se listan en [Símbolos](#symbols).
 - Una parte sostenida bajo extremidades en movimiento es una parte propia, unida a ellas con `|`: una plancha con elevación de pierna es `=sp.flex|hip.ext`. También lo es un empuje sostenido de una extremidad que no se mueve, cuando el ejercicio se construye sobre él: un abdominal Janda tira de los talones hacia abajo durante toda la repetición, `=kn.flex|hip.flex+sp.flex`.
 - En un estiramiento, `|` también une dos extremidades llevadas en direcciones opuestas: un estiramiento del corredor es `%hip.ext|%hip.flex`.
 - En un estiramiento, se escribe una articulación sostenida cuando decide qué músculo se estira: la rodilla en un estiramiento de gemelos, `kn.ext` recta o `kn.flex` doblada.
@@ -179,10 +179,10 @@ Estos códigos son las posiciones corporales de ambas claves: una [clave de equi
 |---|---|---|
 | `standing` | Sobre los pies, el tronco a menos de unos 30° de la vertical | `feet` |
 | `standing.bent` | Sobre los pies, el tronco inclinado hacia delante más de unos 30° y mantenido así (remo inclinado) | `feet` |
-| `standing.chest` | Sobre los pies, el tronco apoyado en un respaldo, erguido o inclinado (máquina de elevación de talones tipo burro) | `feet`, `chest` |
+| `standing.chest` | Sobre los pies, el tronco apoyado en una almohadilla, erguido o inclinado (máquina de elevación de talones tipo burro) | `feet`, `chest` |
 | `seated` | Sentado, el tronco a más de 60° de la horizontal | `seat` |
 | `seated.bent` | Sentado, el tronco inclinado hacia delante sobre los muslos y mantenido así | `seat` |
-| `seated.chest` | Sentado, el pecho contra un respaldo que sostiene el tronco (máquina de remo, máquina de deltoides posterior) | `seat`, `chest` |
+| `seated.chest` | Sentado, el pecho contra una almohadilla que sostiene el tronco (máquina de remo, máquina de deltoides posterior) | `seat`, `chest` |
 | `kneeling` | Sobre ambas rodillas, el tronco erguido | `knees`, `shins` |
 | `kneeling.half` | Sobre una rodilla, el otro pie adelante | `knees`, `feet` |
 | `supine` | Boca arriba, el tronco a menos de 15° de la horizontal | `back` |
@@ -202,7 +202,7 @@ Reglas:
 - Una bisagra hacia delante mantenida durante toda la serie es `standing.bent`. Una bisagra en la que el tronco se mueve, como en un peso muerto o un swing, empieza `standing`.
 - La orientación sigue al tronco: en cuadrupedia es `prone`, y `kneeling` significa que el tronco está erguido.
 - Sentado en el suelo inclinado hacia atrás 30–60° (V-sit, giro ruso) es `supine.incline`.
-- En una máquina, se escribe la posición del cuerpo: una extensión de piernas sentado es `seated`, un curl femoral tumbado `prone`, una prensa de piernas `supine.incline`, una máquina de remo con respaldo para el pecho `seated.chest`. Es el mismo código que la postura de la máquina en su clave de equipamiento.
+- En una máquina, se escribe la posición del cuerpo: una extensión de piernas sentado es `seated`, un curl femoral tumbado `prone`, una prensa de piernas `supine.incline`, una máquina de remo con almohadilla de pecho `seated.chest`. Es el mismo código que la postura de la máquina en su clave de equipamiento.
 - Cuando la repetición termina en una orientación distinta de la de inicio, se escriben ambas: levantarse desde tumbado es `o:supine>standing`. Una repetición que baja y vuelve, como un burpee, es solo su inicio.
 
 ### Extremo móvil (`k`) {#moving-end-k}
@@ -229,7 +229,7 @@ Reglas:
 
 Reglas:
 
-- Una zancada sin palabra de dirección da el paso hacia delante; una sentadilla búlgara o dividida se queda en `split`; una zancada caminando se desplaza.
+- Una zancada sin palabra de dirección da el paso hacia delante; una sentadilla dividida se queda en `split`; una zancada caminando se desplaza.
 - El trabajo en el sitio, o en una caminadora u otra máquina de cardio, omite `f`.
 - `level` se escribe solo dentro de una secuencia: un split jerk es `f:level>split`.
 
@@ -240,7 +240,7 @@ El apoyo nombra cada superficie con su [código de equipamiento](#equipment-in-a
 Reglas:
 
 - Se escribe cada superficie que soporta el peso del cuerpo, o en la que se apoya una extremidad, más allá de lo que implica la orientación. Después de la superficie se escribe `@` y los puntos sobre ella, omitiendo los puntos que implica la orientación.
-- Nunca se escribe un suelo sin más, una colchoneta, el asiento o el banco bajo un cuerpo sentado, ni el asiento y los respaldos propios de una máquina. Un asiento inestable (`ball.stab`, `dome`, `board.bal`, `roller.foam`) sí se escribe.
+- Nunca se escribe un suelo sin más, una colchoneta, el asiento o el banco bajo un cuerpo sentado, ni el asiento y las almohadillas propios de una máquina. Un asiento inestable (`ball.stab`, `dome`, `board.bal`, `roller.foam`) sí se escribe.
 - Cuando el tronco no descansa sobre nada, como en una plancha o una flexión de brazos, se listan todos los puntos que soportan peso: `s:floor@feet,forearms`. Un cuerpo boca arriba colgado de las manos también conserva `floor@feet`: un remo invertido es `s:bar.fixed@hands+floor@feet`.
 - Los pies en el suelo nunca se escriben bajo un cuerpo sentado, ni bajo un cuerpo boca arriba tumbado sobre un banco, un balón o un rodillo. Los pies sobre cualquier otra cosa sí se escriben: un ejercicio sentado con los pies sobre un balón conserva `ball.stab@feet`.
 - Las superficies bajo puntos distintos son elementos separados: los pies sobre un balón y las manos en el suelo es `s:ball.stab@feet+floor@hands`.
@@ -259,22 +259,22 @@ Un punto de sujeción es uno de los puntos corporales. Los mismos puntos corpora
 | Punto corporal | Significado |
 |---|---|
 | `hands` | Las manos, o una mano: a los costados, con el brazo extendido, por un asa; las asas o la barra de una máquina |
-| `forearms` | Los antebrazos, con los codos doblados: una plancha sobre los codos, o los respaldos de antebrazo de una máquina |
+| `forearms` | Los antebrazos, con los codos doblados: una plancha sobre los codos, o las almohadillas de antebrazo de una máquina |
 | `elbows` | El pliegue de los codos (Zercher) |
-| `arms` | La parte superior de los brazos: un banco Scott, o el respaldo de brazo de una máquina sobre el brazo o el codo |
+| `arms` | La parte superior de los brazos: un banco Scott, o la almohadilla de brazo de una máquina sobre el brazo o el codo |
 | `shoulders` | Los hombros: el rack frontal o un hombro, o las hombreras de una máquina |
-| `chest` | El pecho: una carga sujeta contra él (goblet), o un respaldo para el pecho |
-| `back` | La espalda: una barra sobre la parte alta de la espalda (sentadilla trasera), o un respaldo de espalda |
-| `hips` | La parte delantera de la cadera: una carga sobre ella (hip thrust), o el respaldo o el cinturón de cadera de una máquina |
+| `chest` | El pecho: una carga sujeta contra él (goblet), o una almohadilla de pecho |
+| `back` | La espalda: una barra sobre la parte alta de la espalda (sentadilla trasera), o una almohadilla de espalda |
+| `hips` | La parte delantera de la cadera: una carga sobre ella (hip thrust), o la almohadilla o el cinturón de cadera de una máquina |
 | `waist` | Colgado de un cinturón a la cintura |
 | `seat` | Los glúteos: sentarse sobre un cajón o un banco, o el asiento móvil de una máquina |
-| `thighs` | Sobre los muslos o alrededor de ellos, o el respaldo de muslo de una máquina |
-| `knees` | En las rodillas o alrededor de ellas, o el respaldo de rodilla o la plataforma de una máquina |
+| `thighs` | Sobre los muslos o alrededor de ellos, o el rodillo de muslo de una máquina |
+| `knees` | En las rodillas o alrededor de ellas, o la almohadilla de rodilla o la plataforma de una máquina |
 | `shins` | Las espinillas |
 | `calves` | Las pantorrillas, la parte posterior de la pierna |
 | `ankles` | En los tobillos o justo encima: una correa, una tobillera, o el rodillo de una máquina sobre la parte baja de la pierna |
 | `feet` | Los pies, o un pie: en el suelo, una plataforma o pedales |
-| `head` | La cabeza o la frente, o el respaldo de cabeza de una máquina |
+| `head` | La cabeza o la frente, o la almohadilla de cabeza de una máquina |
 
 Dos puntos de sujeción no son puntos corporales, y se escriben solo en la carga:
 
@@ -309,7 +309,7 @@ Reglas:
 - Se agrega un alcance solo cuando el movimiento no lo implica ya. Las piernas de una zancada están implícitas, así que es `x:u`, no `x:u@legs`.
 - Cuando los brazos y las piernas siguen patrones distintos, se escribe un elemento por alcance: un acarreo con un brazo es `x:rc@legs+u@arms`.
 - Los movimientos que solo rotan o inclinan lateralmente el tronco o el cuello no llevan `x`.
-- Un estiramiento, un rodamiento o un sostenimiento hecho con una extremidad y luego con la otra es `x:u`.
+- Un estiramiento, un rodamiento o una isometría hecha con una extremidad y luego con la otra es `x:u`.
 
 ### Agarre y base (`g`) {#grip-and-stance-g}
 
@@ -338,7 +338,7 @@ Reglas:
 | `deep` | Más profundo que el recorrido habitual |
 | `deficit` | De pie sobre algo para bajar más de lo habitual |
 | `from-floor` | Cada repetición empieza con la carga apoyada en el suelo |
-| `from-top` | Empieza de pie con la carga sujeta, bajada sin soltarla (un colgado, por encima de la rodilla) |
+| `from-top` | Empieza de pie con la carga sujeta, bajada sin apoyarla (desde colgado (hang), por encima de la rodilla) |
 | `from-top.knee` | Un colgado que empieza a la altura de la rodilla o por debajo. Hijo de `from-top` |
 | `from-pins` | Cada repetición empieza desde los pasadores, bloques o un rack por encima del suelo |
 | `from-drop` | Cada repetición empieza bajando de un cajón y aterrizando (salto en profundidad) |
@@ -418,7 +418,7 @@ Todo lo que en una clave no es un código es un símbolo.
 | `.` | Une una articulación a su acción, o un código a un hijo más específico | `el.flex`, `standing.bent`, `erg.row` |
 | `+` | Une elementos que van juntos: acciones de una fase, superficies, implementos, elementos de agarre, códigos de recorrido, elementos de lados, códigos de postura sostenida | `m:hip.ext+kn.ext` |
 | `>` | Una secuencia en el orden de la repetición: fases, orientación de inicio y de final, cambios de juego de pies o de agarre | `g:su>pr` |
-| `\|` | Dos partes de una fase al mismo tiempo: partes de tipos distintos, o dos extremidades llevadas en direcciones opuestas en un estiramiento | `m:=sp.flex\|hip.ext`, `m:%hip.ext\|%hip.flex` |
+| `\|` | Dos partes de una fase al mismo tiempo: partes de clases distintas, o dos extremidades llevadas en direcciones opuestas en un estiramiento | `m:=sp.flex\|hip.ext`, `m:%hip.ext\|%hip.flex` |
 | `@` | Dónde: los puntos sobre una superficie, el punto de sujeción del equipamiento, el alcance de un código de lados | `l:bell.dumb@hands` |
 | `,` | Varios puntos corporales sobre una superficie | `s:floor@feet,hands` |
 | `*n` | Cantidad de equipamiento, escrita solo cuando difiere de la cantidad habitual | `l:bell.kettle*1@hands` |
@@ -426,14 +426,14 @@ Todo lo que en una clave no es un código es un símbolo.
 | `?` | Desconocido. Coincide con cualquier cosa y nunca contradice | `o:?`, `bell.kettle@?`, `sh.?` |
 | `-` | Después de una acción: un impulso de recorrido corto a propósito | `m:el.ext+hip.ext-+kn.ext-+sh.flex` |
 
-Los prefijos de movimiento van delante de una parte de `m` y fijan su tipo.
+Los prefijos de movimiento van delante de una parte de `m` y fijan su clase.
 
-| Prefijo | Tipo | Ejemplo |
+| Prefijo | Clase | Ejemplo |
 |---|---|---|
 | ninguno | Una fase de movimiento normal | `m:el.flex` |
 | `^` | Balístico: la fase termina con el cuerpo en el aire o con el implemento soltado. Solo vuelo o suelta reales: los levantamientos olímpicos y las fases cíclicas nunca lo llevan. Una acción hecha en el aire es la fase siguiente | `m:^ank.pf+hip.ext+kn.ext`, una sentadilla con salto; `m:^el.ext+sh.hadd>sh.hadd`, una flexión con palmada |
 | `~` | Cíclico: ciclos continuos sin límite entre repeticiones; se escribe la mitad impulsora de un ciclo. `~0` es rodar sobre un rodillo de espuma, sin dirección | `m:~hip.flex`, escaladores |
-| `=` | Sostenido con esfuerzo durante toda la serie; se escribe hacia dónde empujan los músculos. `=0` es un sostenimiento de equilibrio sin dirección | `m:=sp.flex`, una plancha |
+| `=` | Sostenido con esfuerzo durante toda la serie; se escribe hacia dónde empujan los músculos. `=0` es una isometría de equilibrio sin dirección | `m:=sp.flex`, una plancha |
 | `%` | Estiramiento estático: las direcciones hacia las que se llevan las articulaciones, mantenidas al final del recorrido | `m:%ank.df+kn.ext`, un estiramiento de gemelos |
 | `&` | Estiramiento dinámico: llevado al final del recorrido y soltado, una y otra vez | `m:&hip.flex`, un balanceo de pierna hacia delante |
 
@@ -633,7 +633,7 @@ Sentado en una máquina de jalón, agarre prono a la anchura aproximada de los h
 |---|---|---|
 | `m` | Los codos se doblan y, con agarre prono, los brazos bajan desde arriba de la cabeza por los costados | `m:el.flex+sh.add` |
 | `o` | Sentado | `o:seated` |
-| `s` | El asiento y el respaldo de muslos de la máquina nunca se escriben | — |
+| `s` | El asiento y el rodillo de muslos de la máquina nunca se escriben | — |
 | `l` | Una máquina de jalón, sujeta con las manos | `l:mac@hands` |
 | `g` | Prono a anchura media es el agarre habitual para este movimiento | — |
 
@@ -647,11 +647,11 @@ Un jalón con agarre neutro cerrado baja las manos por delante de la cara, así 
 
 ### Plancha {#plank}
 
-Boca abajo sobre los antebrazos y las puntas de los pies, el cuerpo recto, mantenido durante un tiempo.
+Boca abajo sobre los antebrazos y las puntas de los pies, el cuerpo recto, mantenida por tiempo.
 
 | Capa | Decisión | Se escribe |
 |---|---|---|
-| `m` | Un sostenimiento. Los músculos del tronco empujan contra el hundimiento de la cadera, que es la dirección de la flexión del tronco | `m:=sp.flex` |
+| `m` | Una isometría. Los músculos del tronco empujan contra el hundimiento de la cadera, que es la dirección de la flexión del tronco | `m:=sp.flex` |
 | `o` | Boca abajo, el tronco horizontal | `o:prone` |
 | `s` | El tronco no descansa sobre nada, así que se listan todos los puntos que soportan peso | `s:floor@feet,forearms` |
 | `l` | Sin equipamiento | `l:none` |
