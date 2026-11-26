@@ -16,7 +16,7 @@ Este documento define un endpoint HTTP de descubrimiento opcional que permite a 
 ## Esquema de respuesta (informal)
 ```json fds:ignore a discovery document, defined by specification/discovery.md rather than by a published schema
 {
-  "spec_version": "1.5.0",
+  "spec_version": "1.6.0",
   "provider": "Acme Fitness Platform",
   "supported_entities": [
     "exercise",
@@ -28,13 +28,13 @@ Este documento define un endpoint HTTP de descubrimiento opcional que permite a 
     "program"
   ],
   "entity_versions": {
-    "exercise": "1.1.0",
-    "equipment": "1.1.0",
-    "muscle": "1.0.0",
-    "muscle-category": "1.0.0",
+    "exercise": "1.2.0",
+    "equipment": "1.2.0",
+    "muscle": "1.1.0",
+    "muscle-category": "1.1.0",
     "body-atlas": "1.1.0",
-    "workout": "1.1.0",
-    "program": "1.0.0"
+    "workout": "1.2.0",
+    "program": "1.1.0"
   },
   "supported_extensions": ["x:vitness", "x:gym-management"],
   "export_endpoints": {
@@ -59,9 +59,9 @@ Este documento define un endpoint HTTP de descubrimiento opcional que permite a 
 
 `spec_version` nombra un lanzamiento. **No** es una versión que todas las entidades compartan, y un cliente que asuma que lo es solicitará URLs que nunca se publicaron.
 
-Las entidades se versionan de forma independiente. El lanzamiento 1.5.0 publica exercise, equipment, workout y body-atlas en 1.1.0, mientras que muscle, muscle-category y program permanecen en 1.0.0. No existe `muscle/v1.5.0/` y nunca existirá a menos que muscle mismo cambie.
+Las entidades se versionan de forma independiente. El lanzamiento 1.6.0 publica exercise, equipment y workout en 1.2.0, mientras que muscle, muscle-category, body-atlas y program están en 1.1.0. No existe `muscle/v1.6.0/` y nunca existirá a menos que muscle mismo cambie.
 
-Una versión de entidad sustituida se sigue sirviendo. `workout/v1.0.0/` sigue publicada y sigue congelada, porque los lanzamientos 1.2.0 y 1.3.0 declaran workout en 1.0.0, y un cliente fijado a cualquiera de los dos debe poder seguir resolviéndola. `atlas/v1.0.0/` se queda por la misma razón: los lanzamientos 1.0.0 a 1.4.0 declaran body-atlas en 1.0.0.
+Una versión de entidad sustituida se sigue sirviendo. `workout/v1.0.0/` sigue publicada y sigue congelada, porque los lanzamientos 1.2.0 y 1.3.0 declaran workout en 1.0.0, y un cliente fijado a cualquiera de los dos debe poder seguir resolviéndola. `atlas/v1.0.0/` se queda por la misma razón: los lanzamientos 1.0.0 a 1.4.0 declaran body-atlas en 1.0.0. Lo mismo vale para las siete versiones que sustituyó el lanzamiento 1.6.0, cada una nombrada por un lanzamiento hasta el 1.5.0.
 
 Los proveedores DEBERÍAN, por lo tanto, emitir `entity_versions`, mapeando cada entidad admitida a la versión de entidad que sirven. Un cliente que lo tiene puede construir las URLs de esquemas directamente. Un cliente que no lo tiene debe resolver el lanzamiento a sus versiones de entidades de alguna otra manera, y adivinar es el fallo que este campo existe para prevenir.
 
@@ -79,12 +79,13 @@ A diferencia de un esquema, el manifiesto no está congelado. Gana un lanzamient
 | 1.3.0 | program |
 | 1.4.0 | workout pasa a 1.1.0 — zonas de intensidad por serie y ajustes de máquina |
 | 1.5.0 | body-atlas pasa a 1.1.0 — licencia y atribución en los recursos de las vistas |
+| 1.6.0 | exercise, equipment y workout pasan a 1.2.0; muscle, muscle-category, prescription y program a 1.1.0 — claves estructurales opcionales en registros y referencias |
 
 Incorporar una entidad es un lanzamiento nuevo aun cuando nada de lo existente haya cambiado, porque un lanzamiento nombra el *conjunto* que publica.
 
 ## La prescripción es una biblioteca, no una entidad
 
-`prescription` se publica en `prescription/v1.0.0/prescription.schema.json` y define las primitivas de carga, repetición, tempo, descanso, zona y esquema de series que las sesiones de entrenamiento y los programas componen (RFC-006).
+`prescription` se publica en `prescription/v1.1.0/prescription.schema.json` y define las primitivas de carga, repetición, tempo, descanso, zona y esquema de series que las sesiones de entrenamiento y los programas componen (RFC-006).
 
 **NO DEBE** aparecer en `supported_entities`. Su raíz de esquema no valida nada por construcción — no existe un documento de prescripción que exportar, y un endpoint que ofreciera uno estaría respondiendo una pregunta que nadie hizo. Un proveedor que admite sesiones de entrenamiento ya admite la prescripción; eso es lo que significa admitir sesiones de entrenamiento.
 

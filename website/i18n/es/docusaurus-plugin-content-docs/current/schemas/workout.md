@@ -10,9 +10,9 @@ Una sesión de entrenamiento es **una sesión prescrita**: qué se hace, en qué
 
 ## Ubicación del esquema
 
-**URL:** `https://spec.vitness.me/schemas/workout/v1.1.0/workout.schema.json`
+**URL:** `https://spec.vitness.me/schemas/workout/v1.2.0/workout.schema.json`
 
-**Descarga:** [workout.schema.json](https://spec.vitness.me/schemas/workout/v1.1.0/workout.schema.json)
+**Descarga:** [workout.schema.json](https://spec.vitness.me/schemas/workout/v1.2.0/workout.schema.json)
 
 `v1.0.0` permanece publicada y congelada en su propia URL. La 1.1.0 es puramente aditiva, de modo que todo documento 1.0.0 valida contra ella sin cambios.
 
@@ -74,7 +74,7 @@ Desde la 1.1.0 una serie también lleva `zone`. La carga, las repeticiones, el t
 ## Ejemplos resueltos
 
 <!-- fds:count examples:workout=46 scenarios:workout=46 -->
-Se publican 46 sesiones junto al esquema — una por cada esquema de series y repeticiones de la matriz de cobertura, una por cada estructura de agrupación desde un ejercicio único hasta un *chipper*, y una por cada escenario de cardio y resistencia. Cada una está indexada en [el README de los archivos de ejemplo](https://spec.vitness.me/schemas/workout/v1.1.0/README.md).
+Se publican 46 sesiones junto al esquema — una por cada esquema de series y repeticiones de la matriz de cobertura, una por cada estructura de agrupación desde un ejercicio único hasta un *chipper*, y una por cada escenario de cardio y resistencia. Cada una está indexada en [el README de los archivos de ejemplo](https://spec.vitness.me/schemas/workout/v1.2.0/README.md).
 
 El conjunto de agrupaciones es la verdadera prueba de la afirmación de arriba: si alguna estructura hubiera necesitado un campo que el esquema no tiene, la abstracción estaría cortada por el lugar equivocado.
 

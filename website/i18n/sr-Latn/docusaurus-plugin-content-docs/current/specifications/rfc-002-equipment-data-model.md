@@ -66,8 +66,9 @@ Svi usaglašeni podaci o opremi **MORAJU** da sadrže ova polja:
 
 ```json fds:document entity=equipment
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.2.0",
   "id": "eq.barbell",
+  "fxe": "FXE=1.0S/k:imp/f:bar.straight",
   "canonical": {
     "name": "Barbell",
     "slug": "barbell"
@@ -87,6 +88,7 @@ Uobičajeno podržana opciona polja koja unapređuju interoperabilnost:
 
 ```json fds:fragment entity=equipment partial
 {
+  "fxe": "FXE=1.0S/k:imp/f:bar.straight",
   "canonical": {
     "abbreviation": "BB",
     "aliases": ["Olympic Bar"],
@@ -280,7 +282,7 @@ graph LR
 ## 8. Referenca JSON šeme
 
 Kompletna JSON šema je dostupna na:
-- **Equipment**: `/specification/schemas/equipment/v1.1.0/equipment.schema.json`
+- **Equipment**: `/specification/schemas/equipment/v1.2.0/equipment.schema.json`
 
 ## 8.1. Validacija
 
@@ -288,20 +290,21 @@ Validirajte pomoću Ajv (Draft 2020-12):
 
 ```
 npx --package=ajv-cli --package=ajv-formats ajv validate --spec=draft2020 -c ajv-formats \
-  -s specification/schemas/equipment/v1.1.0/equipment.schema.json \
-  -d specification/schemas/equipment/v1.1.0/equipment.example.json
+  -s specification/schemas/equipment/v1.2.0/equipment.schema.json \
+  -d specification/schemas/equipment/v1.2.0/equipment.example.json
 ```
 
 ## 9. Primer implementacije
 
 ### 9.1. Kompletan zapis opreme za šipku
 
-Na osnovu referentne implementacije (`/specification/schemas/equipment/v1.1.0/equipment.example.json`):
+Na osnovu referentne implementacije (`/specification/schemas/equipment/v1.2.0/equipment.example.json`):
 
 ```json fds:document entity=equipment
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.2.0",
   "id": "eq.barbell",
+  "fxe": "FXE=1.0S/k:imp/f:bar.straight",
   "canonical": { 
     "name": "Barbell", 
     "slug": "barbell", 

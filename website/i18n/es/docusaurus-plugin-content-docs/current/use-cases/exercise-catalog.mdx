@@ -6,11 +6,11 @@ usecase_promise: Describir un ejercicio una sola vez, en una forma que otro sist
 usecase_family: foundations
 usecase_audiences: [app-developer, researcher]
 usecase_sources:
-  - specification/schemas/exercises/v1.1.0/exercise.example.json
+  - specification/schemas/exercises/v1.2.0/exercise.example.json
 ---
 
 import {SpecExample, BeforeAfter, Panel, Audience, NextSteps, Next} from '@site/docs/use-cases/_shared/UseCase';
-import backSquat from '@site/../specification/schemas/exercises/v1.1.0/exercise.example.json';
+import backSquat from '@site/../specification/schemas/exercises/v1.2.0/exercise.example.json';
 
 # Publicar un catálogo de ejercicios que otro sistema pueda leer
 
@@ -41,7 +41,7 @@ los músculos a los que apunta con los ids de sus categorías, el equipamiento q
 requiere y las métricas en que se mide. Los extras específicos del proveedor viven
 bajo el espacio de nombres `x:`, sin estorbar al núcleo.
 
-<SpecExample source="specification/schemas/exercises/v1.1.0/exercise.example.json" data={backSquat}>
+<SpecExample source="specification/schemas/exercises/v1.2.0/exercise.example.json" data={backSquat}>
   Una sentadilla trasera, descrita por completo. Nótese `targets.primary[].id` — un id de
   músculo que otro documento resuelve — y las claves de extensión `x:vitness.*`, que un
   consumidor que no las conoce ignora.

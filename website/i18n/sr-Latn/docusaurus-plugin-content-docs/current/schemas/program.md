@@ -10,9 +10,9 @@ Program smešta treninge u vreme: ciklusi, nedelje, dani i pravila po kojima se 
 
 ## Lokacija šeme
 
-**URL:** `https://spec.vitness.me/schemas/program/v1.0.0/program.schema.json`
+**URL:** `https://spec.vitness.me/schemas/program/v1.1.0/program.schema.json`
 
-**Preuzimanje:** [program.schema.json](https://spec.vitness.me/schemas/program/v1.0.0/program.schema.json)
+**Preuzimanje:** [program.schema.json](https://spec.vitness.me/schemas/program/v1.1.0/program.schema.json)
 
 ## Raspored referenci, a ne kontejner
 
@@ -74,7 +74,7 @@ Adaptivno programiranje deli se na dvoje, i samo je jedna polovina prenosiva. **
 ## Razrađeni primeri
 
 <!-- fds:count examples:program=18 scenarios:program=18 -->
-Uz šemu je objavljeno 18 programa — po jedan za svaki model periodizacije iz matrice pokrivenosti i po jedan za svaku strukturu rasporeda, indeksirani u [README datoteka primera](https://spec.vitness.me/schemas/program/v1.0.0/README.md).
+Uz šemu je objavljeno 18 programa — po jedan za svaki model periodizacije iz matrice pokrivenosti i po jedan za svaku strukturu rasporeda, indeksirani u [README datoteka primera](https://spec.vitness.me/schemas/program/v1.1.0/README.md).
 
 Nijedan od njih ne sadrži seriju, ponavljanje ni opterećenje. To je gornja tvrdnja, demonstrirana umesto samo iznesena.
 

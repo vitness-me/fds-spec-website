@@ -10,15 +10,15 @@ sidebar_position: 4
 
 ## Lokacija šeme
 
-**URL:** `https://spec.vitness.me/schemas/muscle/v1.0.0/muscle.schema.json`
+**URL:** `https://spec.vitness.me/schemas/muscle/v1.1.0/muscle.schema.json`
 
-**Preuzimanje:** [muscle.schema.json](https://spec.vitness.me/schemas/muscle/v1.0.0/muscle.schema.json)
+**Preuzimanje:** [muscle.schema.json](https://spec.vitness.me/schemas/muscle/v1.1.0/muscle.schema.json)
 
 ## Primeri
 
 Pogledajte primere mišića:
-- [Osnovni mišić](https://spec.vitness.me/schemas/muscle/v1.0.0/muscle.example.json)
-- [Mišić lats](https://spec.vitness.me/schemas/muscle/v1.0.0/muscle.example.lats.json)
+- [Osnovni mišić](https://spec.vitness.me/schemas/muscle/v1.1.0/muscle.example.json)
+- [Mišić lats](https://spec.vitness.me/schemas/muscle/v1.1.0/muscle.example.lats.json)
 
 ## Specifikacija
 

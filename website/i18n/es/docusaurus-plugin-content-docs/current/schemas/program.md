@@ -10,9 +10,9 @@ Un programa coloca sesiones en el tiempo: ciclos, semanas, días y las reglas po
 
 ## Ubicación del esquema
 
-**URL:** `https://spec.vitness.me/schemas/program/v1.0.0/program.schema.json`
+**URL:** `https://spec.vitness.me/schemas/program/v1.1.0/program.schema.json`
 
-**Descarga:** [program.schema.json](https://spec.vitness.me/schemas/program/v1.0.0/program.schema.json)
+**Descarga:** [program.schema.json](https://spec.vitness.me/schemas/program/v1.1.0/program.schema.json)
 
 ## Un cronograma de referencias, no un contenedor
 
@@ -74,7 +74,7 @@ La programación adaptativa se divide en dos, y solo una mitad es portable. **La
 ## Ejemplos resueltos
 
 <!-- fds:count examples:program=18 scenarios:program=18 -->
-Se publican 18 programas junto al esquema — uno por cada modelo de periodización de la matriz de cobertura y uno por cada estructura de cronograma, indexados en [el README de los archivos de ejemplo](https://spec.vitness.me/schemas/program/v1.0.0/README.md).
+Se publican 18 programas junto al esquema — uno por cada modelo de periodización de la matriz de cobertura y uno por cada estructura de cronograma, indexados en [el README de los archivos de ejemplo](https://spec.vitness.me/schemas/program/v1.1.0/README.md).
 
 Ninguno de ellos contiene una serie, una repetición ni una carga. Esa es la afirmación de arriba, demostrada en lugar de afirmada.
 

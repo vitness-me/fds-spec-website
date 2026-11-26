@@ -10,14 +10,14 @@ El esquema de equipamiento define entidades de equipamiento de fitness con clasi
 
 ## Ubicación del esquema
 
-**URL:** `https://spec.vitness.me/schemas/equipment/v1.1.0/equipment.schema.json`
+**URL:** `https://spec.vitness.me/schemas/equipment/v1.2.0/equipment.schema.json`
 
-**Descarga:** [equipment.schema.json](https://spec.vitness.me/schemas/equipment/v1.1.0/equipment.schema.json)
+**Descarga:** [equipment.schema.json](https://spec.vitness.me/schemas/equipment/v1.2.0/equipment.schema.json)
 
 ## Ejemplos
 
 Ver los ejemplos de equipamiento:
-- [Equipamiento básico](https://spec.vitness.me/schemas/equipment/v1.1.0/equipment.example.json)
+- [Equipamiento básico](https://spec.vitness.me/schemas/equipment/v1.2.0/equipment.example.json)
 
 ## Especificación
 

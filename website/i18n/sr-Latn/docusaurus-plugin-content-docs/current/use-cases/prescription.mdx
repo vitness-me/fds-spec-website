@@ -6,15 +6,15 @@ usecase_promise: Propišite opterećenje, ponavljanja i odmor kao primitive koji
 usecase_family: prescription
 usecase_audiences: [coach, app-developer]
 usecase_sources:
-  - specification/schemas/prescription/v1.0.0/loadTarget.percent1RM.example.json
-  - specification/schemas/prescription/v1.0.0/loadTarget.rpe.example.json
-  - specification/schemas/prescription/v1.0.0/loadTarget.percent-bodyweight.example.json
+  - specification/schemas/prescription/v1.1.0/loadTarget.percent1RM.example.json
+  - specification/schemas/prescription/v1.1.0/loadTarget.rpe.example.json
+  - specification/schemas/prescription/v1.1.0/loadTarget.percent-bodyweight.example.json
 ---
 
 import {SpecExample, BeforeAfter, Panel, Audience, NextSteps, Next} from '@site/docs/use-cases/_shared/UseCase';
-import percent1RM from '@site/../specification/schemas/prescription/v1.0.0/loadTarget.percent1RM.example.json';
-import rpe from '@site/../specification/schemas/prescription/v1.0.0/loadTarget.rpe.example.json';
-import percentBodyweight from '@site/../specification/schemas/prescription/v1.0.0/loadTarget.percent-bodyweight.example.json';
+import percent1RM from '@site/../specification/schemas/prescription/v1.1.0/loadTarget.percent1RM.example.json';
+import rpe from '@site/../specification/schemas/prescription/v1.1.0/loadTarget.rpe.example.json';
+import percentBodyweight from '@site/../specification/schemas/prescription/v1.1.0/loadTarget.percent-bodyweight.example.json';
 
 # Propišite intenzitet, a da nikada ne sačuvate osobu
 
@@ -44,7 +44,7 @@ Procenat sopstvenog maksimuma za jedno ponavljanje propisane vežbe. Dva ključa
 nigde broj za maksimum, jer maksimum pripada sportisti koga ovaj dokument nikada ne
 imenuje.
 
-<SpecExample source="specification/schemas/prescription/v1.0.0/loadTarget.percent1RM.example.json" data={percent1RM}>
+<SpecExample source="specification/schemas/prescription/v1.1.0/loadTarget.percent1RM.example.json" data={percent1RM}>
   82,5% sopstvenog maksimuma za jedno ponavljanje propisane vežbe — slučaj vođen
   procentom.
 </SpecExample>
@@ -52,14 +52,14 @@ imenuje.
 RPE cilj prepušta odluku o opterećenju sportisti pod šipkom, pa ništa uopšte ne mora
 unapred da se razrešava.
 
-<SpecExample source="specification/schemas/prescription/v1.0.0/loadTarget.rpe.example.json" data={rpe}>
+<SpecExample source="specification/schemas/prescription/v1.1.0/loadTarget.rpe.example.json" data={rpe}>
   RPE 8, dozvoljene polovine poena. Sportista bira opterećenje; preskripcija iskazuje napor.
 </SpecExample>
 
 A procenat telesne mase — namerno **nerazrešiv unutar FDS-a**, jer u dokumentu nema
 sportiste iz koga bi se pročitala telesna masa.
 
-<SpecExample source="specification/schemas/prescription/v1.0.0/loadTarget.percent-bodyweight.example.json" data={percentBodyweight}>
+<SpecExample source="specification/schemas/prescription/v1.1.0/loadTarget.percent-bodyweight.example.json" data={percentBodyweight}>
   60% telesne mase. Dokument kaže šta da se izračuna; osoba isporučuje broj, drugde.
 </SpecExample>
 

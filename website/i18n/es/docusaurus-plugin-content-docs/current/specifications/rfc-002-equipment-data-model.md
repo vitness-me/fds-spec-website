@@ -66,8 +66,9 @@ Todos los datos de equipamiento conformes **DEBEN** incluir estos campos:
 
 ```json fds:document entity=equipment
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.2.0",
   "id": "eq.barbell",
+  "fxe": "FXE=1.0S/k:imp/f:bar.straight",
   "canonical": {
     "name": "Barbell",
     "slug": "barbell"
@@ -87,6 +88,7 @@ Campos opcionales comúnmente admitidos que mejoran la interoperabilidad:
 
 ```json fds:fragment entity=equipment partial
 {
+  "fxe": "FXE=1.0S/k:imp/f:bar.straight",
   "canonical": {
     "abbreviation": "BB",
     "aliases": ["Olympic Bar"],
@@ -280,7 +282,7 @@ graph LR
 ## 8. Referencia de JSON Schema
 
 El JSON Schema completo está disponible en:
-- **Equipamiento**: `/specification/schemas/equipment/v1.1.0/equipment.schema.json`
+- **Equipamiento**: `/specification/schemas/equipment/v1.2.0/equipment.schema.json`
 
 ## 8.1. Validación
 
@@ -288,20 +290,21 @@ Validar con Ajv (Draft 2020-12):
 
 ```
 npx --package=ajv-cli --package=ajv-formats ajv validate --spec=draft2020 -c ajv-formats \
-  -s specification/schemas/equipment/v1.1.0/equipment.schema.json \
-  -d specification/schemas/equipment/v1.1.0/equipment.example.json
+  -s specification/schemas/equipment/v1.2.0/equipment.schema.json \
+  -d specification/schemas/equipment/v1.2.0/equipment.example.json
 ```
 
 ## 9. Ejemplo de implementación
 
 ### 9.1. Registro completo del equipamiento barra
 
-Basado en la implementación de referencia (`/specification/schemas/equipment/v1.1.0/equipment.example.json`):
+Basado en la implementación de referencia (`/specification/schemas/equipment/v1.2.0/equipment.example.json`):
 
 ```json fds:document entity=equipment
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.2.0",
   "id": "eq.barbell",
+  "fxe": "FXE=1.0S/k:imp/f:bar.straight",
   "canonical": { 
     "name": "Barbell", 
     "slug": "barbell", 

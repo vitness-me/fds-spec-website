@@ -279,7 +279,7 @@ Una implementación que resuelve un programa contra un atleta específico y alma
 
 ## 9. Referencia del JSON Schema
 
-`https://spec.vitness.me/schemas/program/v1.0.0/program.schema.json`
+`https://spec.vitness.me/schemas/program/v1.1.0/program.schema.json`
 
 ### 9.1. Validación
 
@@ -293,7 +293,7 @@ Un bloque lineal de cuatro semanas en un cronograma de calendario: tres días de
 
 ```json
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "programId": "00000000-0000-4000-8000-00000000b001",
   "canonical": { "name": "Foundation Strength", "slug": "foundation-strength" },
   "classification": {
@@ -311,7 +311,7 @@ Un bloque lineal de cuatro semanas en un cronograma de calendario: tres días de
     "trainingMaxes": [
       {
         "id": "tm.backSquat",
-        "exercise": { "id": "ex.backSquat", "name": "Barbell Back Squat" },
+        "exercise": { "id": "ex.backSquat", "name": "Barbell Back Squat", "fxi": "FXI=1.0S/m:hip.ext+kn.ext/o:standing/l:bar.straight@back" },
         "method": "percentOfOneRepMax",
         "percent": 90
       }

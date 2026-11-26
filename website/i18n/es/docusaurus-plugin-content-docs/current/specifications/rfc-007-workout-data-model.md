@@ -273,7 +273,7 @@ Una implementación que resuelve una sesión de entrenamiento contra un atleta e
 
 ## 9. Referencia del JSON Schema
 
-`https://spec.vitness.me/schemas/workout/v1.1.0/workout.schema.json`
+`https://spec.vitness.me/schemas/workout/v1.2.0/workout.schema.json`
 
 La versión sustituida sigue sirviéndose, y un cliente fijado a un lanzamiento que declara workout en 1.0.0 sigue descargándola:
 
@@ -293,7 +293,7 @@ Una sesión de tren superior: un bloque de calentamiento, un bloque principal co
 
 ```json
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.2.0",
   "workoutId": "00000000-0000-4000-8000-00000000a001",
   "canonical": { "name": "Upper A", "slug": "upper-a" },
   "classification": {
@@ -310,7 +310,7 @@ Una sesión de tren superior: un bloque de calentamiento, un bloque principal co
         "items": [
           {
             "id": "i1",
-            "exercise": { "id": "ex.benchPress", "name": "Barbell Bench Press" },
+            "exercise": { "id": "ex.benchPress", "name": "Barbell Bench Press", "fxi": "FXI=1.0S/m:el.ext+sh.hadd/o:supine/s:bench/l:bar.straight@hands" },
             "scheme": {
               "pattern": "topSetBackoff",
               "sets": 4,
@@ -332,14 +332,14 @@ Una sesión de tren superior: un bloque de calentamiento, un bloque principal co
           {
             "id": "i2",
             "groupLabel": "A1",
-            "exercise": { "id": "ex.dumbbellRow", "name": "Dumbbell Row" },
+            "exercise": { "id": "ex.dumbbellRow", "name": "Dumbbell Row", "fxi": "FXI=1.0S/m:el.flex+sh.ext/o:?/l:bell.dumb@hands/x:?" },
             "reps": { "kind": "range", "min": 8, "max": 12 },
             "load": { "method": "rir", "value": 2 }
           },
           {
             "id": "i3",
             "groupLabel": "A2",
-            "exercise": { "id": "ex.inclineDbPress", "name": "Incline Dumbbell Press" },
+            "exercise": { "id": "ex.inclineDbPress", "name": "Incline Dumbbell Press", "fxi": "FXI=1.0S/m:el.ext+sh.flex+sh.hadd/o:supine.incline/s:bench/l:bell.dumb@hands" },
             "reps": { "kind": "range", "min": 8, "max": 12 },
             "load": { "method": "rir", "value": 2 }
           }
@@ -353,7 +353,7 @@ Una sesión de tren superior: un bloque de calentamiento, un bloque principal co
         "items": [
           {
             "id": "i4",
-            "exercise": { "id": "ex.airBike", "name": "Air Bike" },
+            "exercise": { "id": "ex.airBike", "name": "Air Bike", "fxi": "FXI=1.0S/m:~hip.ext+kn.ext/o:seated/l:erg.cycle@feet/x:rc" },
             "reps": { "kind": "calories", "value": 15 },
             "zone": { "system": "heartRate", "zone": "Z4", "boundsRef": "zone.fiveZoneHeartRate" }
           }

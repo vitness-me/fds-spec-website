@@ -6,11 +6,11 @@ usecase_promise: Opišite vežbu jednom, u obliku koji drugi sistem čita ne pit
 usecase_family: foundations
 usecase_audiences: [app-developer, researcher]
 usecase_sources:
-  - specification/schemas/exercises/v1.1.0/exercise.example.json
+  - specification/schemas/exercises/v1.2.0/exercise.example.json
 ---
 
 import {SpecExample, BeforeAfter, Panel, Audience, NextSteps, Next} from '@site/docs/use-cases/_shared/UseCase';
-import backSquat from '@site/../specification/schemas/exercises/v1.1.0/exercise.example.json';
+import backSquat from '@site/../specification/schemas/exercises/v1.2.0/exercise.example.json';
 
 # Objavite katalog vežbi koji drugi sistem može da čita
 
@@ -40,7 +40,7 @@ lokalizovana imena, klasifikacija pokreta i mehanike, mišići koje cilja sa ID-
 njihovih kategorija, oprema koja joj je potrebna i metrike u kojima se meri. Dodaci
 specifični za proizvođača žive pod imenskim prostorom `x:`, sklonjeni od jezgra.
 
-<SpecExample source="specification/schemas/exercises/v1.1.0/exercise.example.json" data={backSquat}>
+<SpecExample source="specification/schemas/exercises/v1.2.0/exercise.example.json" data={backSquat}>
   Zadnji čučanj, potpuno opisan. Obratite pažnju na `targets.primary[].id` — id mišića
   koji drugi dokument razrešava — i na ključeve ekstenzija `x:vitness.*`, koje
   konzument koji ih ne poznaje ignoriše.

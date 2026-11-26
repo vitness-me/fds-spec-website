@@ -18,7 +18,7 @@ Aquello contra lo que se valida es una *definición en su interior*. Cada archiv
 
 El transformador no incluye este esquema por la misma razón. Valida entidades, y una biblioteca de definiciones no lo es.
 
-**URL:** `https://spec.vitness.me/schemas/prescription/v1.0.0/prescription.schema.json`
+**URL:** `https://spec.vitness.me/schemas/prescription/v1.1.0/prescription.schema.json`
 
 ## Las definiciones
 
@@ -65,7 +65,7 @@ Las implementaciones que extiendan estas uniones deben preservar ese carácter d
 
 ## Ejemplos resueltos
 
-Se publican 69 archivos de ejemplo junto al esquema, uno por definición y uno por valor de discriminador, cada uno nombrado por lo que demuestra e indexado en [el README de los archivos de ejemplo](https://spec.vitness.me/schemas/prescription/v1.0.0/README.md).
+Se publican 69 archivos de ejemplo junto al esquema, uno por definición y uno por valor de discriminador, cada uno nombrado por lo que demuestra e indexado en [el README de los archivos de ejemplo](https://spec.vitness.me/schemas/prescription/v1.1.0/README.md).
 
 También se incluyen ejemplos negativos — documentos que **deben** ser rechazados. Un esquema que acepta todo pasa todas las pruebas positivas.
 

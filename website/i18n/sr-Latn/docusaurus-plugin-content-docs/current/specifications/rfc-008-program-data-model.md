@@ -279,7 +279,7 @@ Implementacija koja razreši program prema konkretnom sportisti i sačuva rezult
 
 ## 9. Referenca JSON šeme
 
-`https://spec.vitness.me/schemas/program/v1.0.0/program.schema.json`
+`https://spec.vitness.me/schemas/program/v1.1.0/program.schema.json`
 
 ### 9.1. Validacija
 
@@ -293,7 +293,7 @@ npm run verify schemas
 
 ```json
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "programId": "00000000-0000-4000-8000-00000000b001",
   "canonical": { "name": "Foundation Strength", "slug": "foundation-strength" },
   "classification": {
@@ -311,7 +311,7 @@ npm run verify schemas
     "trainingMaxes": [
       {
         "id": "tm.backSquat",
-        "exercise": { "id": "ex.backSquat", "name": "Barbell Back Squat" },
+        "exercise": { "id": "ex.backSquat", "name": "Barbell Back Squat", "fxi": "FXI=1.0S/m:hip.ext+kn.ext/o:standing/l:bar.straight@back" },
         "method": "percentOfOneRepMax",
         "percent": 90
       }

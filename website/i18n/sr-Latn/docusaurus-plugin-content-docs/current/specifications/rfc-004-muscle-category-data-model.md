@@ -65,8 +65,9 @@ Svi usaglašeni podaci o kategorijama mišića **MORAJU** da uključuju sledeća
 
 ```json fds:document entity=muscle-category
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "id": "cat.legs",
+  "fxmg": "FXMG=1.0/a:hip.flex+buttock+hamstring+quadriceps-femoris+sartorius+tensor-fasciae-latae+thigh.medial+tibialis-anterior+triceps-surae",
   "canonical": {
     "name": "Legs",
     "slug": "legs"
@@ -86,6 +87,7 @@ Uobičajeno podržana opciona polja koja unapređuju interoperabilnost:
 
 ```json fds:fragment entity=muscle-category partial
 {
+  "fxmg": "FXMG=1.0/a:hip.flex+buttock+hamstring+quadriceps-femoris+sartorius+tensor-fasciae-latae+thigh.medial+tibialis-anterior+triceps-surae",
   "canonical": {
     "localized": [
       { "lang": "sr", "name": "Noge" }
@@ -243,7 +245,7 @@ graph LR
 ## 8. Referenca JSON šeme
 
 Kompletna JSON šema dostupna je na:
-- **Kategorija mišića**: `/specification/schemas/muscle/muscle-category/v1.0.0/muscle-category.schema.json`
+- **Kategorija mišića**: `/specification/schemas/muscle/muscle-category/v1.1.0/muscle-category.schema.json`
 
 ## Agregacija toplotnih mapa (informativno)
 
@@ -259,20 +261,21 @@ Validirajte pomoću Ajv (Draft 2020-12):
 
 ```
 npx --package=ajv-cli --package=ajv-formats ajv validate --spec=draft2020 -c ajv-formats \
-  -s specification/schemas/muscle/muscle-category/v1.0.0/muscle-category.schema.json \
-  -d specification/schemas/muscle/muscle-category/v1.0.0/muscle-category.example.json
+  -s specification/schemas/muscle/muscle-category/v1.1.0/muscle-category.schema.json \
+  -d specification/schemas/muscle/muscle-category/v1.1.0/muscle-category.example.json
 ```
 
 ## 9. Primer implementacije
 
 ### 9.1. Kompletan zapis kategorije mišića „Legs“
 
-Na osnovu referentne implementacije (`/specification/schemas/muscle/muscle-category/v1.0.0/muscle-category.example.json`):
+Na osnovu referentne implementacije (`/specification/schemas/muscle/muscle-category/v1.1.0/muscle-category.example.json`):
 
 ```json fds:document entity=muscle-category
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "id": "cat.legs",
+  "fxmg": "FXMG=1.0/a:hip.flex+buttock+hamstring+quadriceps-femoris+sartorius+tensor-fasciae-latae+thigh.medial+tibialis-anterior+triceps-surae",
   "canonical": { 
     "name": "Legs", 
     "slug": "legs",

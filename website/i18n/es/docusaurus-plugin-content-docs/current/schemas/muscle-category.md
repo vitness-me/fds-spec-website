@@ -10,14 +10,14 @@ El esquema de categoría de músculos define agrupaciones y categorizaciones de 
 
 ## Ubicación del esquema
 
-**URL:** `https://spec.vitness.me/schemas/muscle/muscle-category/v1.0.0/muscle-category.schema.json`
+**URL:** `https://spec.vitness.me/schemas/muscle/muscle-category/v1.1.0/muscle-category.schema.json`
 
-**Descarga:** [muscle-category.schema.json](https://spec.vitness.me/schemas/muscle/muscle-category/v1.0.0/muscle-category.schema.json)
+**Descarga:** [muscle-category.schema.json](https://spec.vitness.me/schemas/muscle/muscle-category/v1.1.0/muscle-category.schema.json)
 
 ## Ejemplos
 
 Ver los ejemplos de categoría de músculos:
-- [Categoría básica](https://spec.vitness.me/schemas/muscle/muscle-category/v1.0.0/muscle-category.example.json)
+- [Categoría básica](https://spec.vitness.me/schemas/muscle/muscle-category/v1.1.0/muscle-category.example.json)
 
 ## Especificación
 

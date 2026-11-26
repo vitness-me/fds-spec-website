@@ -10,14 +10,14 @@ sidebar_position: 3
 
 ## Lokacija šeme
 
-**URL:** `https://spec.vitness.me/schemas/equipment/v1.1.0/equipment.schema.json`
+**URL:** `https://spec.vitness.me/schemas/equipment/v1.2.0/equipment.schema.json`
 
-**Preuzimanje:** [equipment.schema.json](https://spec.vitness.me/schemas/equipment/v1.1.0/equipment.schema.json)
+**Preuzimanje:** [equipment.schema.json](https://spec.vitness.me/schemas/equipment/v1.2.0/equipment.schema.json)
 
 ## Primeri
 
 Pogledajte primere opreme:
-- [Osnovna oprema](https://spec.vitness.me/schemas/equipment/v1.1.0/equipment.example.json)
+- [Osnovna oprema](https://spec.vitness.me/schemas/equipment/v1.2.0/equipment.example.json)
 
 ## Specifikacija
 

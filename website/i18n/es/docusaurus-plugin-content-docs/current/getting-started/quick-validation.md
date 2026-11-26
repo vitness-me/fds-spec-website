@@ -16,16 +16,16 @@ Los comandos siguientes se ejecutan desde una copia clonada del [repositorio de 
 
 ```bash
 npx --package=ajv-cli --package=ajv-formats ajv validate --spec=draft2020 -c ajv-formats \
-  -s specification/schemas/exercises/v1.1.0/exercise.schema.json \
-  -d specification/schemas/exercises/v1.1.0/exercise.example.json
+  -s specification/schemas/exercises/v1.2.0/exercise.schema.json \
+  -d specification/schemas/exercises/v1.2.0/exercise.example.json
 ```
 
 ### Esquema de equipamiento
 
 ```bash
 npx --package=ajv-cli --package=ajv-formats ajv validate --spec=draft2020 -c ajv-formats \
-  -s specification/schemas/equipment/v1.1.0/equipment.schema.json \
-  -d specification/schemas/equipment/v1.1.0/equipment.example.json
+  -s specification/schemas/equipment/v1.2.0/equipment.schema.json \
+  -d specification/schemas/equipment/v1.2.0/equipment.example.json
 ```
 
 ## Ubicación de los esquemas

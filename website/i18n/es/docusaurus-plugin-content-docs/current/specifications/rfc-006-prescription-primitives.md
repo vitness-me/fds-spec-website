@@ -75,7 +75,7 @@ El esquema publicado no transporta `schemaVersion`, ni identificador, ni bloque 
 Validar cualquier documento contra la raíz de la biblioteca falla por construcción. Esto es una salvaguarda, no una molestia: una biblioteca cuya raíz aceptara todo aprobaría en silencio cualquier documento que se le entregara, y un consumidor lo tomaría como confirmación. En su lugar, referenciar una definición:
 
 ```json fds:ignore a JSON Schema excerpt, not a document
-{ "$ref": "https://spec.vitness.me/schemas/prescription/v1.0.0/prescription.schema.json#/$defs/loadTarget" }
+{ "$ref": "https://spec.vitness.me/schemas/prescription/v1.1.0/prescription.schema.json#/$defs/loadTarget" }
 ```
 
 Dado que los esquemas FDS publicados son autocontenidos (véase la guía de autoría), RFC-007 y RFC-008 transportarán copias aplanadas de las definiciones que usan. Los implementadores que validan un Workout nunca necesitan descargar este archivo.
@@ -244,7 +244,7 @@ Esto reformula el §3.3 para una falla distinta: el §3.3 gobierna un método qu
 
 ## 6. Versionado y compatibilidad
 
-Esta biblioteca sigue las reglas de versionado del RFC-001 §5. Su URL publicada es un contrato congelado: los bytes en `prescription/v1.0.0/prescription.schema.json` no cambiarán. Las adiciones se publican como una nueva versión minor en una nueva URL.
+Esta biblioteca sigue las reglas de versionado del RFC-001 §5. Su URL publicada es un contrato congelado: los bytes en `prescription/v1.1.0/prescription.schema.json` no cambiarán. Las adiciones se publican como una nueva versión minor en una nueva URL.
 
 Agregar un método a una unión discriminada es un cambio MENOR: los documentos válidos bajo la versión anterior siguen siendo válidos, porque el nuevo método antes validaba a través de la rama comodín. Esa es la propiedad de compatibilidad que la rama comodín existe para proporcionar, y es la razón por la que la rama se especifica en lugar de dejarse a las implementaciones.
 
@@ -278,7 +278,7 @@ Una implementación que incruste valores personales resueltos en una prescripci�
 
 ## 9. Referencia del JSON Schema
 
-`https://spec.vitness.me/schemas/prescription/v1.0.0/prescription.schema.json`
+`https://spec.vitness.me/schemas/prescription/v1.1.0/prescription.schema.json`
 
 ### 9.1. Validación
 

@@ -273,7 +273,7 @@ Implementacija koja razreši trening prema konkretnom sportisti i sačuva rezult
 
 ## 9. Referenca JSON šeme
 
-`https://spec.vitness.me/schemas/workout/v1.1.0/workout.schema.json`
+`https://spec.vitness.me/schemas/workout/v1.2.0/workout.schema.json`
 
 Zamenjena verzija ostaje dostupna, i klijent fiksiran na izdanje koje deklariše workout na 1.0.0 nastavlja da je preuzima:
 
@@ -293,7 +293,7 @@ Trening za gornji deo tela: blok zagrevanja, primarni blok sa top serijom i back
 
 ```json
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.2.0",
   "workoutId": "00000000-0000-4000-8000-00000000a001",
   "canonical": { "name": "Upper A", "slug": "upper-a" },
   "classification": {
@@ -310,7 +310,7 @@ Trening za gornji deo tela: blok zagrevanja, primarni blok sa top serijom i back
         "items": [
           {
             "id": "i1",
-            "exercise": { "id": "ex.benchPress", "name": "Barbell Bench Press" },
+            "exercise": { "id": "ex.benchPress", "name": "Barbell Bench Press", "fxi": "FXI=1.0S/m:el.ext+sh.hadd/o:supine/s:bench/l:bar.straight@hands" },
             "scheme": {
               "pattern": "topSetBackoff",
               "sets": 4,
@@ -332,14 +332,14 @@ Trening za gornji deo tela: blok zagrevanja, primarni blok sa top serijom i back
           {
             "id": "i2",
             "groupLabel": "A1",
-            "exercise": { "id": "ex.dumbbellRow", "name": "Dumbbell Row" },
+            "exercise": { "id": "ex.dumbbellRow", "name": "Dumbbell Row", "fxi": "FXI=1.0S/m:el.flex+sh.ext/o:?/l:bell.dumb@hands/x:?" },
             "reps": { "kind": "range", "min": 8, "max": 12 },
             "load": { "method": "rir", "value": 2 }
           },
           {
             "id": "i3",
             "groupLabel": "A2",
-            "exercise": { "id": "ex.inclineDbPress", "name": "Incline Dumbbell Press" },
+            "exercise": { "id": "ex.inclineDbPress", "name": "Incline Dumbbell Press", "fxi": "FXI=1.0S/m:el.ext+sh.flex+sh.hadd/o:supine.incline/s:bench/l:bell.dumb@hands" },
             "reps": { "kind": "range", "min": 8, "max": 12 },
             "load": { "method": "rir", "value": 2 }
           }
@@ -353,7 +353,7 @@ Trening za gornji deo tela: blok zagrevanja, primarni blok sa top serijom i back
         "items": [
           {
             "id": "i4",
-            "exercise": { "id": "ex.airBike", "name": "Air Bike" },
+            "exercise": { "id": "ex.airBike", "name": "Air Bike", "fxi": "FXI=1.0S/m:~hip.ext+kn.ext/o:seated/l:erg.cycle@feet/x:rc" },
             "reps": { "kind": "calories", "value": 15 },
             "zone": { "system": "heartRate", "zone": "Z4", "boundsRef": "zone.fiveZoneHeartRate" }
           }

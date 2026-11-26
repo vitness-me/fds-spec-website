@@ -10,14 +10,14 @@ sidebar_position: 5
 
 ## Lokacija šeme
 
-**URL:** `https://spec.vitness.me/schemas/muscle/muscle-category/v1.0.0/muscle-category.schema.json`
+**URL:** `https://spec.vitness.me/schemas/muscle/muscle-category/v1.1.0/muscle-category.schema.json`
 
-**Preuzimanje:** [muscle-category.schema.json](https://spec.vitness.me/schemas/muscle/muscle-category/v1.0.0/muscle-category.schema.json)
+**Preuzimanje:** [muscle-category.schema.json](https://spec.vitness.me/schemas/muscle/muscle-category/v1.1.0/muscle-category.schema.json)
 
 ## Primeri
 
 Pogledajte primere kategorija mišića:
-- [Osnovna kategorija](https://spec.vitness.me/schemas/muscle/muscle-category/v1.0.0/muscle-category.example.json)
+- [Osnovna kategorija](https://spec.vitness.me/schemas/muscle/muscle-category/v1.1.0/muscle-category.example.json)
 
 ## Specifikacija
 

@@ -18,7 +18,7 @@ Ono prema čemu validirate jeste *definicija unutar nje*. Svaka objavljena datot
 
 Transformator ne nosi ovu šemu iz istog razloga. On validira entitete, a biblioteka definicija to nije.
 
-**URL:** `https://spec.vitness.me/schemas/prescription/v1.0.0/prescription.schema.json`
+**URL:** `https://spec.vitness.me/schemas/prescription/v1.1.0/prescription.schema.json`
 
 ## Definicije
 
@@ -65,7 +65,7 @@ Implementacije koje proširuju ove unije moraju očuvati tu disjunktnost.
 
 ## Razrađeni primeri
 
-Uz šemu je objavljeno 69 datoteka primera, po jedna za svaku definiciju i po jedna za svaku vrednost diskriminatora, svaka imenovana prema onome što demonstrira i indeksirana u [README datoteka primera](https://spec.vitness.me/schemas/prescription/v1.0.0/README.md).
+Uz šemu je objavljeno 69 datoteka primera, po jedna za svaku definiciju i po jedna za svaku vrednost diskriminatora, svaka imenovana prema onome što demonstrira i indeksirana u [README datoteka primera](https://spec.vitness.me/schemas/prescription/v1.1.0/README.md).
 
 Uključeni su i negativni primeri — dokumenti koji **moraju** biti odbačeni. Šema koja prihvata sve prolazi svaki pozitivan test.
 

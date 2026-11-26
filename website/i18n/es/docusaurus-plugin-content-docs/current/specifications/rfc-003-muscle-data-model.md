@@ -309,7 +309,7 @@ graph LR
 ## 8. Referencia de JSON Schema
 
 El JSON Schema completo está disponible en:
-- **Músculo**: `/specification/schemas/muscle/v1.0.0/muscle.schema.json`
+- **Músculo**: `/specification/schemas/muscle/v1.1.0/muscle.schema.json`
 - **Atlas corporal**: `/specification/schemas/atlas/v1.1.0/body-atlas.schema.json`
 
 ## 8.1. Validación
@@ -318,15 +318,15 @@ Validar con Ajv (Draft 2020-12):
 
 ```
 npx --package=ajv-cli --package=ajv-formats ajv validate --spec=draft2020 -c ajv-formats \
-  -s specification/schemas/muscle/v1.0.0/muscle.schema.json \
-  -d specification/schemas/muscle/v1.0.0/muscle.example.json
+  -s specification/schemas/muscle/v1.1.0/muscle.schema.json \
+  -d specification/schemas/muscle/v1.1.0/muscle.example.json
 ```
 
 ## 9. Ejemplo de implementación
 
 ### 9.1. Registro completo del músculo cuádriceps
 
-Basado en la implementación de referencia (`/specification/schemas/muscle/v1.0.0/muscle.example.json`):
+Basado en la implementación de referencia (`/specification/schemas/muscle/v1.1.0/muscle.example.json`):
 
 ```json
 {

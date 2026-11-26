@@ -10,9 +10,9 @@ Trening je **jedna propisana celina rada**: šta se radi, kojim redosledom, kako
 
 ## Lokacija šeme
 
-**URL:** `https://spec.vitness.me/schemas/workout/v1.1.0/workout.schema.json`
+**URL:** `https://spec.vitness.me/schemas/workout/v1.2.0/workout.schema.json`
 
-**Preuzimanje:** [workout.schema.json](https://spec.vitness.me/schemas/workout/v1.1.0/workout.schema.json)
+**Preuzimanje:** [workout.schema.json](https://spec.vitness.me/schemas/workout/v1.2.0/workout.schema.json)
 
 `v1.0.0` ostaje objavljena i zamrznuta na sopstvenom URL-u. 1.1.0 je čisto aditivna, pa se svaki 1.0.0 dokument validira prema njoj nepromenjen.
 
@@ -74,7 +74,7 @@ Od 1.1.0 serija nosi i `zone`. Opterećenje, ponavljanja, tempo i odmor oduvek s
 ## Razrađeni primeri
 
 <!-- fds:count examples:workout=46 scenarios:workout=46 -->
-Uz šemu je objavljeno 46 treninga — po jedan za svaku šemu serija i ponavljanja iz matrice pokrivenosti, po jedan za svaku strukturu grupisanja od jedne vežbe do „chipper“ formata, i po jedan za svaki kardio scenario i scenario izdržljivosti. Svaki je indeksiran u [README datoteka primera](https://spec.vitness.me/schemas/workout/v1.1.0/README.md).
+Uz šemu je objavljeno 46 treninga — po jedan za svaku šemu serija i ponavljanja iz matrice pokrivenosti, po jedan za svaku strukturu grupisanja od jedne vežbe do „chipper“ formata, i po jedan za svaki kardio scenario i scenario izdržljivosti. Svaki je indeksiran u [README datoteka primera](https://spec.vitness.me/schemas/workout/v1.2.0/README.md).
 
 Skup grupisanja je pravi test gornje tvrdnje: da je ijednoj strukturi zatrebalo polje koje šema nema, apstrakcija bi bila presečena na pogrešnom mestu.
 

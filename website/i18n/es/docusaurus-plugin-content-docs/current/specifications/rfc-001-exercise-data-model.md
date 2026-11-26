@@ -70,8 +70,9 @@ Todos los datos de ejercicio conformes **DEBEN** incluir estos campos:
 
 ```json
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.2.0",
   "exerciseId": "550e8400-e29b-41d4-a716-446655440000",
+  "fxi": "FXI=1.0S/m:hip.ext+kn.ext/o:standing/l:bar.straight@back",
   "canonical": {
     "name": "Back Squat",
     "slug": "back-squat"
@@ -85,7 +86,7 @@ Todos los datos de ejercicio conformes **DEBEN** incluir estos campos:
   },
   "targets": {
     "primary": [
-      { "id": "mus.quadriceps", "name": "Quadriceps", "categoryId": "cat.legs" }
+      { "id": "mus.quadriceps", "name": "Quadriceps", "categoryId": "cat.legs", "fxmg": "FXMG=1.0/a:hip.flex+buttock+hamstring+quadriceps-femoris+sartorius+tensor-fasciae-latae+thigh.medial+tibialis-anterior+triceps-surae" }
     ]
   },
   "metrics": {
@@ -115,13 +116,14 @@ Téngase en cuenta que `constraints.progressions` y `constraints.regressions` so
 
 ```json fds:fragment entity=exercise
 {
+  "fxi": "FXI=1.0S/m:hip.ext+kn.ext/o:standing/l:bar.straight@back",
   "equipment": {
     "required": [
-      { "id": "eq.barbell", "name": "Barbell" },
-      { "id": "eq.rack", "name": "Power Rack" }
+      { "id": "eq.barbell", "name": "Barbell", "fxe": "FXE=1.0S/k:imp/f:bar.straight" },
+      { "id": "eq.rack", "name": "Power Rack", "fxe": "FXE=1.0S/k:sup/f:rack" }
     ],
     "optional": [
-      { "id": "eq.belt", "name": "Lifting Belt" }
+      { "id": "eq.belt", "name": "Lifting Belt", "fxe": "FXE=1.0S/k:acc/f:belt.lift" }
     ]
   },
   "constraints": {
@@ -231,11 +233,11 @@ La división importa para cualquier cosa que calcule el volumen de entrenamiento
 {
   "targets": {
     "primary": [
-      { "id": "mus.quadriceps", "name": "Quadriceps", "categoryId": "cat.legs" }
+      { "id": "mus.quadriceps", "name": "Quadriceps", "categoryId": "cat.legs", "fxmg": "FXMG=1.0/a:hip.flex+buttock+hamstring+quadriceps-femoris+sartorius+tensor-fasciae-latae+thigh.medial+tibialis-anterior+triceps-surae" }
     ],
     "secondary": [
-      { "id": "mus.hamstrings", "name": "Hamstrings", "categoryId": "cat.legs" },
-      { "id": "mus.erectorSpinae", "name": "Erector Spinae", "categoryId": "cat.back" }
+      { "id": "mus.hamstrings", "name": "Hamstrings", "categoryId": "cat.legs", "fxmg": "FXMG=1.0/a:hip.flex+buttock+hamstring+quadriceps-femoris+sartorius+tensor-fasciae-latae+thigh.medial+tibialis-anterior+triceps-surae" },
+      { "id": "mus.erectorSpinae", "name": "Erector Spinae", "categoryId": "cat.back", "fxmg": "FXMG=1.0/deltoid.spinal+erector-spinae+latissimus-dorsi+quadratus-lumborum+rhomboid-major+rhomboid-minor+trapezius" }
     ]
   }
 }
@@ -249,11 +251,11 @@ La división importa para cualquier cosa que calcule el volumen de entrenamiento
 {
   "equipment": {
     "required": [
-      { "id": "eq.barbell", "name": "Barbell" },
-      { "id": "eq.rack", "name": "Power Rack" }
+      { "id": "eq.barbell", "name": "Barbell", "fxe": "FXE=1.0S/k:imp/f:bar.straight" },
+      { "id": "eq.rack", "name": "Power Rack", "fxe": "FXE=1.0S/k:sup/f:rack" }
     ],
     "optional": [
-      { "id": "eq.belt", "name": "Lifting Belt" }
+      { "id": "eq.belt", "name": "Lifting Belt", "fxe": "FXE=1.0S/k:acc/f:belt.lift" }
     ]
   }
 }
@@ -403,9 +405,9 @@ Estructura de respuesta potencial:
 ## 8. Referencia de JSON Schema
 
 El JSON Schema completo está disponible en:
-- **Ejercicio**: `/specification/schemas/exercises/v1.1.0/exercise.schema.json`
-- **Equipamiento**: `/specification/schemas/equipment/v1.1.0/equipment.schema.json`
-- **Músculo**: `/specification/schemas/muscle/v1.0.0/muscle.schema.json`
+- **Ejercicio**: `/specification/schemas/exercises/v1.2.0/exercise.schema.json`
+- **Equipamiento**: `/specification/schemas/equipment/v1.2.0/equipment.schema.json`
+- **Músculo**: `/specification/schemas/muscle/v1.1.0/muscle.schema.json`
 
 ## 8.1. Validación
 
@@ -413,34 +415,35 @@ Validar con Ajv (Draft 2020-12):
 
 ```
 npx --package=ajv-cli --package=ajv-formats ajv validate --spec=draft2020 -c ajv-formats \
-  -s specification/schemas/exercises/v1.1.0/exercise.schema.json \
-  -d specification/schemas/exercises/v1.1.0/exercise.example.json
+  -s specification/schemas/exercises/v1.2.0/exercise.schema.json \
+  -d specification/schemas/exercises/v1.2.0/exercise.example.json
 
 # Additional examples (optional):
 npx --package=ajv-cli --package=ajv-formats ajv validate --spec=draft2020 -c ajv-formats \
-  -s specification/schemas/exercises/v1.1.0/exercise.schema.json \
-  -d specification/schemas/exercises/v1.1.0/exercise.example.cardio.json
+  -s specification/schemas/exercises/v1.2.0/exercise.schema.json \
+  -d specification/schemas/exercises/v1.2.0/exercise.example.cardio.json
 npx --package=ajv-cli --package=ajv-formats ajv validate --spec=draft2020 -c ajv-formats \
-  -s specification/schemas/exercises/v1.1.0/exercise.schema.json \
-  -d specification/schemas/exercises/v1.1.0/exercise.example.mobility.json
+  -s specification/schemas/exercises/v1.2.0/exercise.schema.json \
+  -d specification/schemas/exercises/v1.2.0/exercise.example.mobility.json
 npx --package=ajv-cli --package=ajv-formats ajv validate --spec=draft2020 -c ajv-formats \
-  -s specification/schemas/exercises/v1.1.0/exercise.schema.json \
-  -d specification/schemas/exercises/v1.1.0/exercise.example.machine.json
+  -s specification/schemas/exercises/v1.2.0/exercise.schema.json \
+  -d specification/schemas/exercises/v1.2.0/exercise.example.machine.json
 npx --package=ajv-cli --package=ajv-formats ajv validate --spec=draft2020 -c ajv-formats \
-  -s specification/schemas/exercises/v1.1.0/exercise.schema.json \
-  -d specification/schemas/exercises/v1.1.0/exercise.example.unilateral.json
+  -s specification/schemas/exercises/v1.2.0/exercise.schema.json \
+  -d specification/schemas/exercises/v1.2.0/exercise.example.unilateral.json
 ```
 
 ## 9. Ejemplo de implementación
 
 ### 9.1. Exportación completa de la sentadilla trasera
 
-Basado en la implementación de referencia (`/specification/schemas/exercises/v1.1.0/exercise.example.json`):
+Basado en la implementación de referencia (`/specification/schemas/exercises/v1.2.0/exercise.example.json`):
 
 ```json
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.2.0",
   "exerciseId": "550e8400-e29b-41d4-a716-446655440000",
+  "fxi": "FXI=1.0S/m:hip.ext+kn.ext/o:standing/l:bar.straight@back",
   "canonical": {
     "name": "Back Squat",
     "slug": "back-squat",
@@ -462,20 +465,20 @@ Basado en la implementación de referencia (`/specification/schemas/exercises/v1
   },
   "targets": {
     "primary": [
-      { "id": "mus.quadriceps", "name": "Quadriceps", "categoryId": "cat.legs" }
+      { "id": "mus.quadriceps", "name": "Quadriceps", "categoryId": "cat.legs", "fxmg": "FXMG=1.0/a:hip.flex+buttock+hamstring+quadriceps-femoris+sartorius+tensor-fasciae-latae+thigh.medial+tibialis-anterior+triceps-surae" }
     ],
     "secondary": [
-      { "id": "mus.hamstrings", "name": "Hamstrings", "categoryId": "cat.legs" },
-      { "id": "mus.erectorSpinae", "name": "Erector Spinae", "categoryId": "cat.back" }
+      { "id": "mus.hamstrings", "name": "Hamstrings", "categoryId": "cat.legs", "fxmg": "FXMG=1.0/a:hip.flex+buttock+hamstring+quadriceps-femoris+sartorius+tensor-fasciae-latae+thigh.medial+tibialis-anterior+triceps-surae" },
+      { "id": "mus.erectorSpinae", "name": "Erector Spinae", "categoryId": "cat.back", "fxmg": "FXMG=1.0/deltoid.spinal+erector-spinae+latissimus-dorsi+quadratus-lumborum+rhomboid-major+rhomboid-minor+trapezius" }
     ]
   },
   "equipment": {
     "required": [
-      { "id": "eq.barbell", "name": "Barbell" },
-      { "id": "eq.rack", "name": "Power Rack" }
+      { "id": "eq.barbell", "name": "Barbell", "fxe": "FXE=1.0S/k:imp/f:bar.straight" },
+      { "id": "eq.rack", "name": "Power Rack", "fxe": "FXE=1.0S/k:sup/f:rack" }
     ],
     "optional": [
-      { "id": "eq.belt", "name": "Lifting Belt" }
+      { "id": "eq.belt", "name": "Lifting Belt", "fxe": "FXE=1.0S/k:acc/f:belt.lift" }
     ]
   },
   "constraints": {

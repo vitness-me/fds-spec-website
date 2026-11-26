@@ -10,18 +10,18 @@ sidebar_position: 2
 
 ## Lokacija šeme
 
-**URL:** `https://spec.vitness.me/schemas/exercises/v1.1.0/exercise.schema.json`
+**URL:** `https://spec.vitness.me/schemas/exercises/v1.2.0/exercise.schema.json`
 
-**Preuzimanje:** [exercise.schema.json](https://spec.vitness.me/schemas/exercises/v1.1.0/exercise.schema.json)
+**Preuzimanje:** [exercise.schema.json](https://spec.vitness.me/schemas/exercises/v1.2.0/exercise.schema.json)
 
 ## Primeri
 
 Pogledajte primere vežbi:
-- [Osnovna vežba](https://spec.vitness.me/schemas/exercises/v1.1.0/exercise.example.json)
-- [Kardio vežba](https://spec.vitness.me/schemas/exercises/v1.1.0/exercise.example.cardio.json)
-- [Vežba mobilnosti](https://spec.vitness.me/schemas/exercises/v1.1.0/exercise.example.mobility.json)
-- [Vežba na mašini](https://spec.vitness.me/schemas/exercises/v1.1.0/exercise.example.machine.json)
-- [Unilateralna vežba](https://spec.vitness.me/schemas/exercises/v1.1.0/exercise.example.unilateral.json)
+- [Osnovna vežba](https://spec.vitness.me/schemas/exercises/v1.2.0/exercise.example.json)
+- [Kardio vežba](https://spec.vitness.me/schemas/exercises/v1.2.0/exercise.example.cardio.json)
+- [Vežba mobilnosti](https://spec.vitness.me/schemas/exercises/v1.2.0/exercise.example.mobility.json)
+- [Vežba na mašini](https://spec.vitness.me/schemas/exercises/v1.2.0/exercise.example.machine.json)
+- [Unilateralna vežba](https://spec.vitness.me/schemas/exercises/v1.2.0/exercise.example.unilateral.json)
 
 ## Specifikacija
 

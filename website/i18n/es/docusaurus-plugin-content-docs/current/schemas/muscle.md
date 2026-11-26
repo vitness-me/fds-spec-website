@@ -10,15 +10,15 @@ El esquema de músculo define entidades anatómicas de músculos con clasificaci
 
 ## Ubicación del esquema
 
-**URL:** `https://spec.vitness.me/schemas/muscle/v1.0.0/muscle.schema.json`
+**URL:** `https://spec.vitness.me/schemas/muscle/v1.1.0/muscle.schema.json`
 
-**Descarga:** [muscle.schema.json](https://spec.vitness.me/schemas/muscle/v1.0.0/muscle.schema.json)
+**Descarga:** [muscle.schema.json](https://spec.vitness.me/schemas/muscle/v1.1.0/muscle.schema.json)
 
 ## Ejemplos
 
 Ver los ejemplos de músculo:
-- [Músculo básico](https://spec.vitness.me/schemas/muscle/v1.0.0/muscle.example.json)
-- [Músculo dorsal ancho](https://spec.vitness.me/schemas/muscle/v1.0.0/muscle.example.lats.json)
+- [Músculo básico](https://spec.vitness.me/schemas/muscle/v1.1.0/muscle.example.json)
+- [Músculo dorsal ancho](https://spec.vitness.me/schemas/muscle/v1.1.0/muscle.example.lats.json)
 
 ## Especificación
 

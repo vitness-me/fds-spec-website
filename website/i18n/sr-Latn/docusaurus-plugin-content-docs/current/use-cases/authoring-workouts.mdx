@@ -6,15 +6,15 @@ usecase_promise: Jedna šema i jedno polje izražavaju svaki način na koji ljud
 usecase_family: composition
 usecase_audiences: [app-developer, oem-engineer]
 usecase_sources:
-  - specification/schemas/workout/v1.1.0/workout.straight.example.json
-  - specification/schemas/workout/v1.1.0/workout.emom.example.json
-  - specification/schemas/workout/v1.1.0/workout.tabata.example.json
+  - specification/schemas/workout/v1.2.0/workout.straight.example.json
+  - specification/schemas/workout/v1.2.0/workout.emom.example.json
+  - specification/schemas/workout/v1.2.0/workout.tabata.example.json
 ---
 
 import {SpecExample, BeforeAfter, Panel, Audience, NextSteps, Next} from '@site/docs/use-cases/_shared/UseCase';
-import straight from '@site/../specification/schemas/workout/v1.1.0/workout.straight.example.json';
-import emom from '@site/../specification/schemas/workout/v1.1.0/workout.emom.example.json';
-import tabata from '@site/../specification/schemas/workout/v1.1.0/workout.tabata.example.json';
+import straight from '@site/../specification/schemas/workout/v1.2.0/workout.straight.example.json';
+import emom from '@site/../specification/schemas/workout/v1.2.0/workout.emom.example.json';
+import tabata from '@site/../specification/schemas/workout/v1.2.0/workout.tabata.example.json';
 
 # Sastavite bilo koji trening, od klasičnih serija do Tabate
 
@@ -44,7 +44,7 @@ import tabata from '@site/../specification/schemas/workout/v1.1.0/workout.tabata
 Evo treninga sa klasičnim serijama — polazna tačka od koje sve ostalo odstupa. Tri
 identične serije jedne vežbe, propisane procentom maksimuma za jedno ponavljanje.
 
-<SpecExample source="specification/schemas/workout/v1.1.0/workout.straight.example.json" data={straight}>
+<SpecExample source="specification/schemas/workout/v1.2.0/workout.straight.example.json" data={straight}>
   Tri identične serije. `mode: "sequential"`, i nikakvi `modeParams` nisu potrebni.
 </SpecExample>
 
@@ -52,14 +52,14 @@ Ne menjajte ništa osim polja `mode`, i isti oblik postaje kondiciona deonica po
 „na svaki pun minut“ (EMOM). Sat sada okončava svaki interval, i zato `modeParams` nosi
 `rounds` i `interval`.
 
-<SpecExample source="specification/schemas/workout/v1.1.0/workout.emom.example.json" data={emom}>
+<SpecExample source="specification/schemas/workout/v1.2.0/workout.emom.example.json" data={emom}>
   Na svaki pun minut, dvanaest intervala. `mode: "emom"`.
 </SpecExample>
 
 I opet isti oblik, kao Tabata blok — mod prosto menja šta konzument mora da uradi da
 bi prošao kroz blok i okončao ga.
 
-<SpecExample source="specification/schemas/workout/v1.1.0/workout.tabata.example.json" data={tabata}>
+<SpecExample source="specification/schemas/workout/v1.2.0/workout.tabata.example.json" data={tabata}>
   Osam krugova od 20 sekundi rada i 10 sekundi odmora. `mode: "tabata"`.
 </SpecExample>
 
