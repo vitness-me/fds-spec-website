@@ -69,13 +69,13 @@ Svi usaglašeni podaci o mišićima **MORAJU** da sadrže ova polja:
 ```json fds:document entity=muscle
 {
   "schemaVersion": "1.0.0",
-  "id": "mus.quadriceps",
+  "id": "mus.rectusFemoris",
   "canonical": {
-    "name": "Quadriceps",
-    "slug": "quadriceps"
+    "name": "Rectus Femoris",
+    "slug": "rectus-femoris"
   },
   "classification": {
-    "categoryId": "cat.legs",
+    "categoryId": "cat.quadriceps",
     "region": "lower-front"
   },
   "metadata": {
@@ -94,9 +94,9 @@ Uobičajeno podržana opciona polja koja unapređuju interoperabilnost:
 ```json fds:fragment entity=muscle partial
 {
   "canonical": {
-    "aliases": ["Quads"],
+    "aliases": ["Rec Fem"],
     "localized": [
-      { "lang": "sr", "name": "Kvadriceps" }
+      { "lang": "sr", "name": "Pravi mišić buta" }
     ]
   },
   "classification": {
@@ -141,7 +141,7 @@ Za složene strukture podataka jedinstvene za platformu:
 {
   "extensions": {
     "x:anatomy": {
-      "origin": "Anterior superior iliac spine, femur",
+      "origin": "Anterior inferior iliac spine, ilium above the acetabulum",
       "insertion": "Patella, tibial tuberosity",
       "innervation": "Femoral nerve"
     }
@@ -158,11 +158,11 @@ Za složene strukture podataka jedinstvene za platformu:
 ```json fds:fragment entity=muscle
 {
   "canonical": {
-    "name": "Quadriceps",
-    "slug": "quadriceps",
-    "aliases": ["Quads"],
+    "name": "Rectus Femoris",
+    "slug": "rectus-femoris",
+    "aliases": ["Rec Fem"],
     "localized": [
-      { "lang": "sr", "name": "Kvadriceps" }
+      { "lang": "sr", "name": "Pravi mišić buta" }
     ]
   }
 }
@@ -175,7 +175,7 @@ Za složene strukture podataka jedinstvene za platformu:
 ```json fds:fragment entity=muscle
 {
   "classification": {
-    "categoryId": "cat.legs",
+    "categoryId": "cat.quadriceps",
     "region": "lower-front",
     "laterality": "bilateral",
     "tags": ["major-muscle", "lower-body"]
@@ -212,7 +212,7 @@ Polje `laterality` opisuje karakteristike simetrije:
   "media": [
     {
       "type": "image",
-      "uri": "https://cdn.example.com/anatomy/quadriceps.jpg"
+      "uri": "https://cdn.example.com/anatomy/rectus-femoris.jpg"
     }
   ]
 }
@@ -264,8 +264,8 @@ Verzija 1.0.0 → 1.1.0 (dodavanje opcionog biomehaničkog polja):
 ```json fds:ignore a hypothetical next version illustrating how an optional field arrives; no published muscle schema has biomechanics
 {
   "schemaVersion": "1.1.0",
-  "id": "mus.quadriceps",
-  "canonical": { "name": "Quadriceps", "slug": "quadriceps" },
+  "id": "mus.rectusFemoris",
+  "canonical": { "name": "Rectus Femoris", "slug": "rectus-femoris" },
   "biomechanics": {
     "primaryActions": ["knee-extension", "hip-flexion"],
     "forceDirection": "linear"
@@ -324,24 +324,25 @@ npx --package=ajv-cli --package=ajv-formats ajv validate --spec=draft2020 -c ajv
 
 ## 9. Primer implementacije
 
-### 9.1. Kompletan zapis mišića kvadricepsa
+### 9.1. Kompletan zapis pravog mišića buta
 
 Na osnovu referentne implementacije (`/specification/schemas/muscle/v1.1.0/muscle.example.json`):
 
 ```json
 {
-  "schemaVersion": "1.0.0",
-  "id": "mus.quadriceps",
+  "schemaVersion": "1.1.0",
+  "id": "mus.rectusFemoris",
+  "fxm": "FXM=1.0/rectus-femoris",
   "canonical": { 
-    "name": "Quadriceps", 
-    "slug": "quadriceps",
-    "aliases": ["Quads"],
+    "name": "Rectus Femoris", 
+    "slug": "rectus-femoris",
+    "aliases": ["Rec Fem"],
     "localized": [
-      { "lang": "sr", "name": "Kvadriceps" }
+      { "lang": "sr", "name": "Pravi mišić buta" }
     ]
   },
   "classification": { 
-    "categoryId": "cat.legs", 
+    "categoryId": "cat.quadriceps", 
     "region": "lower-front", 
     "laterality": "bilateral"
   },
@@ -360,7 +361,7 @@ Na osnovu referentne implementacije (`/specification/schemas/muscle/v1.1.0/muscl
   },
   "extensions": {
     "x:anatomy": {
-      "origin": "Anterior superior iliac spine, femur",
+      "origin": "Anterior inferior iliac spine, ilium above the acetabulum",
       "insertion": "Patella, tibial tuberosity",
       "innervation": "Femoral nerve"
     }

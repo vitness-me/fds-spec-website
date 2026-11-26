@@ -35,8 +35,8 @@ The `.example.` in the filename is the distinction — a file named `*.registry.
 
 ## Example Entities
 
-<!-- fds:count examples=136 -->
-136 example documents are published, each served from the same versioned path as the schema it demonstrates. Every one is validated in CI, so an example that stops matching its schema fails the build.
+<!-- fds:count examples=137 -->
+137 example documents are published, each served from the same versioned path as the schema it demonstrates. Every one is validated in CI, so an example that stops matching its schema fails the build.
 
 <!-- fds:count examples:exercise=8 -->
 ### Exercise Examples (8)
@@ -59,9 +59,10 @@ The `.example.` in the filename is the distinction — a file named `*.registry.
 - A muscle with heatmap regions and a localized name
 - A second muscle carrying localized aliases alongside its regions
 
-<!-- fds:count examples:muscle-category=1 -->
-### Muscle Category Examples (1)
+<!-- fds:count examples:muscle-category=2 -->
+### Muscle Category Examples (2)
 - A top-level category with localized descriptions and classification tags
+- A category for one group of muscles, the quadriceps
 
 <!-- fds:count examples:body-atlas=1 -->
 ### Body Atlas Examples (1)

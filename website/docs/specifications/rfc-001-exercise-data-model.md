@@ -86,7 +86,10 @@ All compliant exercise data **MUST** include these fields:
   },
   "targets": {
     "primary": [
-      { "id": "mus.quadriceps", "name": "Quadriceps", "categoryId": "cat.legs", "fxmg": "FXMG=1.0/a:hip.flex+buttock+hamstring+quadriceps-femoris+sartorius+tensor-fasciae-latae+thigh.medial+tibialis-anterior+triceps-surae" }
+      { "id": "mus.rectusFemoris", "name": "Rectus Femoris", "categoryId": "cat.quadriceps", "fxm": "FXM=1.0/rectus-femoris", "fxmg": "FXMG=1.0/quadriceps-femoris" },
+      { "id": "mus.vastusLateralis", "name": "Vastus Lateralis", "categoryId": "cat.quadriceps", "fxm": "FXM=1.0/vastus-lateralis", "fxmg": "FXMG=1.0/quadriceps-femoris" },
+      { "id": "mus.vastusMedialis", "name": "Vastus Medialis", "categoryId": "cat.quadriceps", "fxm": "FXM=1.0/vastus-medialis", "fxmg": "FXMG=1.0/quadriceps-femoris" },
+      { "id": "mus.vastusIntermedius", "name": "Vastus Intermedius", "categoryId": "cat.quadriceps", "fxm": "FXM=1.0/vastus-intermedius", "fxmg": "FXMG=1.0/quadriceps-femoris" }
     ]
   },
   "metrics": {
@@ -237,11 +240,17 @@ The split matters to anything computing training volume per muscle: counting sec
 {
   "targets": {
     "primary": [
-      { "id": "mus.quadriceps", "name": "Quadriceps", "categoryId": "cat.legs", "fxmg": "FXMG=1.0/a:hip.flex+buttock+hamstring+quadriceps-femoris+sartorius+tensor-fasciae-latae+thigh.medial+tibialis-anterior+triceps-surae" }
+      { "id": "mus.rectusFemoris", "name": "Rectus Femoris", "categoryId": "cat.quadriceps", "fxm": "FXM=1.0/rectus-femoris", "fxmg": "FXMG=1.0/quadriceps-femoris" },
+      { "id": "mus.vastusLateralis", "name": "Vastus Lateralis", "categoryId": "cat.quadriceps", "fxm": "FXM=1.0/vastus-lateralis", "fxmg": "FXMG=1.0/quadriceps-femoris" },
+      { "id": "mus.vastusMedialis", "name": "Vastus Medialis", "categoryId": "cat.quadriceps", "fxm": "FXM=1.0/vastus-medialis", "fxmg": "FXMG=1.0/quadriceps-femoris" },
+      { "id": "mus.vastusIntermedius", "name": "Vastus Intermedius", "categoryId": "cat.quadriceps", "fxm": "FXM=1.0/vastus-intermedius", "fxmg": "FXMG=1.0/quadriceps-femoris" }
     ],
     "secondary": [
-      { "id": "mus.hamstrings", "name": "Hamstrings", "categoryId": "cat.legs", "fxmg": "FXMG=1.0/a:hip.flex+buttock+hamstring+quadriceps-femoris+sartorius+tensor-fasciae-latae+thigh.medial+tibialis-anterior+triceps-surae" },
-      { "id": "mus.erectorSpinae", "name": "Erector Spinae", "categoryId": "cat.back", "fxmg": "FXMG=1.0/deltoid.spinal+erector-spinae+latissimus-dorsi+quadratus-lumborum+rhomboid-major+rhomboid-minor+trapezius" }
+      { "id": "mus.bicepsFemoris", "name": "Biceps Femoris", "categoryId": "cat.hamstrings", "fxm": "FXM=1.0/biceps-femoris", "fxmg": "FXMG=1.0/hamstring" },
+      { "id": "mus.semitendinosus", "name": "Semitendinosus", "categoryId": "cat.hamstrings", "fxm": "FXM=1.0/semitendinosus", "fxmg": "FXMG=1.0/hamstring" },
+      { "id": "mus.semimembranosus", "name": "Semimembranosus", "categoryId": "cat.hamstrings", "fxm": "FXM=1.0/semimembranosus", "fxmg": "FXMG=1.0/hamstring" },
+      { "id": "mus.iliocostalis", "name": "Iliocostalis", "categoryId": "cat.erectorSpinae", "fxm": "FXM=1.0/iliocostalis", "fxmg": "FXMG=1.0/erector-spinae" },
+      { "id": "mus.longissimus", "name": "Longissimus", "categoryId": "cat.erectorSpinae", "fxm": "FXM=1.0/longissimus", "fxmg": "FXMG=1.0/erector-spinae" }
     ]
   }
 }
@@ -471,11 +480,17 @@ Based on reference implementation (`/specification/schemas/exercises/v1.2.0/exer
   },
   "targets": {
     "primary": [
-      { "id": "mus.quadriceps", "name": "Quadriceps", "categoryId": "cat.legs", "fxmg": "FXMG=1.0/a:hip.flex+buttock+hamstring+quadriceps-femoris+sartorius+tensor-fasciae-latae+thigh.medial+tibialis-anterior+triceps-surae" }
+      { "id": "mus.rectusFemoris", "name": "Rectus Femoris", "categoryId": "cat.quadriceps", "fxm": "FXM=1.0/rectus-femoris", "fxmg": "FXMG=1.0/quadriceps-femoris" },
+      { "id": "mus.vastusLateralis", "name": "Vastus Lateralis", "categoryId": "cat.quadriceps", "fxm": "FXM=1.0/vastus-lateralis", "fxmg": "FXMG=1.0/quadriceps-femoris" },
+      { "id": "mus.vastusMedialis", "name": "Vastus Medialis", "categoryId": "cat.quadriceps", "fxm": "FXM=1.0/vastus-medialis", "fxmg": "FXMG=1.0/quadriceps-femoris" },
+      { "id": "mus.vastusIntermedius", "name": "Vastus Intermedius", "categoryId": "cat.quadriceps", "fxm": "FXM=1.0/vastus-intermedius", "fxmg": "FXMG=1.0/quadriceps-femoris" }
     ],
     "secondary": [
-      { "id": "mus.hamstrings", "name": "Hamstrings", "categoryId": "cat.legs", "fxmg": "FXMG=1.0/a:hip.flex+buttock+hamstring+quadriceps-femoris+sartorius+tensor-fasciae-latae+thigh.medial+tibialis-anterior+triceps-surae" },
-      { "id": "mus.erectorSpinae", "name": "Erector Spinae", "categoryId": "cat.back", "fxmg": "FXMG=1.0/deltoid.spinal+erector-spinae+latissimus-dorsi+quadratus-lumborum+rhomboid-major+rhomboid-minor+trapezius" }
+      { "id": "mus.bicepsFemoris", "name": "Biceps Femoris", "categoryId": "cat.hamstrings", "fxm": "FXM=1.0/biceps-femoris", "fxmg": "FXMG=1.0/hamstring" },
+      { "id": "mus.semitendinosus", "name": "Semitendinosus", "categoryId": "cat.hamstrings", "fxm": "FXM=1.0/semitendinosus", "fxmg": "FXMG=1.0/hamstring" },
+      { "id": "mus.semimembranosus", "name": "Semimembranosus", "categoryId": "cat.hamstrings", "fxm": "FXM=1.0/semimembranosus", "fxmg": "FXMG=1.0/hamstring" },
+      { "id": "mus.iliocostalis", "name": "Iliocostalis", "categoryId": "cat.erectorSpinae", "fxm": "FXM=1.0/iliocostalis", "fxmg": "FXMG=1.0/erector-spinae" },
+      { "id": "mus.longissimus", "name": "Longissimus", "categoryId": "cat.erectorSpinae", "fxm": "FXM=1.0/longissimus", "fxmg": "FXMG=1.0/erector-spinae" }
     ]
   },
   "equipment": {

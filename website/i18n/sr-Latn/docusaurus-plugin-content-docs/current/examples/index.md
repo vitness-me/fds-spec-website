@@ -35,8 +35,8 @@ Oni pokazuju oblik koji provajder servira — niz dokumenata entiteta, od kojih 
 
 ## Primeri entiteta
 
-<!-- fds:count examples=136 -->
-Objavljeno je 136 primera dokumenata, od kojih se svaki servira sa iste verzionisane putanje kao i šema koju demonstrira. Svaki od njih validira se u CI-ju, pa primer koji prestane da odgovara svojoj šemi obara build.
+<!-- fds:count examples=137 -->
+Objavljeno je 137 primera dokumenata, od kojih se svaki servira sa iste verzionisane putanje kao i šema koju demonstrira. Svaki od njih validira se u CI-ju, pa primer koji prestane da odgovara svojoj šemi obara build.
 
 <!-- fds:count examples:exercise=8 -->
 ### Primeri vežbi (8)
@@ -59,9 +59,10 @@ Objavljeno je 136 primera dokumenata, od kojih se svaki servira sa iste verzioni
 - Mišić sa regionima toplotne mape i lokalizovanim nazivom
 - Drugi mišić koji uz svoje regione nosi lokalizovane alijase
 
-<!-- fds:count examples:muscle-category=1 -->
-### Primeri kategorija mišića (1)
+<!-- fds:count examples:muscle-category=2 -->
+### Primeri kategorija mišića (2)
 - Kategorija najvišeg nivoa sa lokalizovanim opisima i klasifikacionim oznakama
+- Kategorija za jednu grupu mišića, kvadriceps
 
 <!-- fds:count examples:body-atlas=1 -->
 ### Primeri atlasa tela (1)

@@ -69,13 +69,13 @@ Todos los datos de músculo conformes **DEBEN** incluir estos campos:
 ```json fds:document entity=muscle
 {
   "schemaVersion": "1.0.0",
-  "id": "mus.quadriceps",
+  "id": "mus.rectusFemoris",
   "canonical": {
-    "name": "Quadriceps",
-    "slug": "quadriceps"
+    "name": "Rectus Femoris",
+    "slug": "rectus-femoris"
   },
   "classification": {
-    "categoryId": "cat.legs",
+    "categoryId": "cat.quadriceps",
     "region": "lower-front"
   },
   "metadata": {
@@ -94,9 +94,9 @@ Campos opcionales comúnmente admitidos que mejoran la interoperabilidad:
 ```json fds:fragment entity=muscle partial
 {
   "canonical": {
-    "aliases": ["Quads"],
+    "aliases": ["Rec Fem"],
     "localized": [
-      { "lang": "sr", "name": "Kvadriceps" }
+      { "lang": "sr", "name": "Pravi mišić buta" }
     ]
   },
   "classification": {
@@ -141,7 +141,7 @@ Para estructuras de datos complejas y exclusivas de una plataforma:
 {
   "extensions": {
     "x:anatomy": {
-      "origin": "Anterior superior iliac spine, femur",
+      "origin": "Anterior inferior iliac spine, ilium above the acetabulum",
       "insertion": "Patella, tibial tuberosity",
       "innervation": "Femoral nerve"
     }
@@ -158,11 +158,11 @@ Para estructuras de datos complejas y exclusivas de una plataforma:
 ```json fds:fragment entity=muscle
 {
   "canonical": {
-    "name": "Quadriceps",
-    "slug": "quadriceps",
-    "aliases": ["Quads"],
+    "name": "Rectus Femoris",
+    "slug": "rectus-femoris",
+    "aliases": ["Rec Fem"],
     "localized": [
-      { "lang": "sr", "name": "Kvadriceps" }
+      { "lang": "sr", "name": "Pravi mišić buta" }
     ]
   }
 }
@@ -175,7 +175,7 @@ Para estructuras de datos complejas y exclusivas de una plataforma:
 ```json fds:fragment entity=muscle
 {
   "classification": {
-    "categoryId": "cat.legs",
+    "categoryId": "cat.quadriceps",
     "region": "lower-front",
     "laterality": "bilateral",
     "tags": ["major-muscle", "lower-body"]
@@ -212,7 +212,7 @@ El campo `laterality` describe características de simetría:
   "media": [
     {
       "type": "image",
-      "uri": "https://cdn.example.com/anatomy/quadriceps.jpg"
+      "uri": "https://cdn.example.com/anatomy/rectus-femoris.jpg"
     }
   ]
 }
@@ -264,8 +264,8 @@ Versión 1.0.0 → 1.1.0 (adición de un campo opcional biomecánico):
 ```json fds:ignore a hypothetical next version illustrating how an optional field arrives; no published muscle schema has biomechanics
 {
   "schemaVersion": "1.1.0",
-  "id": "mus.quadriceps",
-  "canonical": { "name": "Quadriceps", "slug": "quadriceps" },
+  "id": "mus.rectusFemoris",
+  "canonical": { "name": "Rectus Femoris", "slug": "rectus-femoris" },
   "biomechanics": {
     "primaryActions": ["knee-extension", "hip-flexion"],
     "forceDirection": "linear"
@@ -324,24 +324,25 @@ npx --package=ajv-cli --package=ajv-formats ajv validate --spec=draft2020 -c ajv
 
 ## 9. Ejemplo de implementación
 
-### 9.1. Registro completo del músculo cuádriceps
+### 9.1. Registro completo del músculo recto femoral
 
 Basado en la implementación de referencia (`/specification/schemas/muscle/v1.1.0/muscle.example.json`):
 
 ```json
 {
-  "schemaVersion": "1.0.0",
-  "id": "mus.quadriceps",
+  "schemaVersion": "1.1.0",
+  "id": "mus.rectusFemoris",
+  "fxm": "FXM=1.0/rectus-femoris",
   "canonical": { 
-    "name": "Quadriceps", 
-    "slug": "quadriceps",
-    "aliases": ["Quads"],
+    "name": "Rectus Femoris", 
+    "slug": "rectus-femoris",
+    "aliases": ["Rec Fem"],
     "localized": [
-      { "lang": "sr", "name": "Kvadriceps" }
+      { "lang": "sr", "name": "Pravi mišić buta" }
     ]
   },
   "classification": { 
-    "categoryId": "cat.legs", 
+    "categoryId": "cat.quadriceps", 
     "region": "lower-front", 
     "laterality": "bilateral"
   },
@@ -360,7 +361,7 @@ Basado en la implementación de referencia (`/specification/schemas/muscle/v1.1.
   },
   "extensions": {
     "x:anatomy": {
-      "origin": "Anterior superior iliac spine, femur",
+      "origin": "Anterior inferior iliac spine, ilium above the acetabulum",
       "insertion": "Patella, tibial tuberosity",
       "innervation": "Femoral nerve"
     }

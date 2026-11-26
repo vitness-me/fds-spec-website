@@ -20,7 +20,10 @@
   },
   "targets": {
     "primary": [ { "id": "mus.rectusAbdominis", "name": "Rectus Abdominis", "categoryId": "cat.core", "fxm": "FXM=1.0/rectus-abdominis", "fxmg": "FXMG=1.0/anterior-abdominal-wall+erector-spinae+quadratus-lumborum" } ],
-    "secondary": [ { "id": "mus.obliques", "name": "Obliques", "categoryId": "cat.core", "fxmg": "FXMG=1.0/anterior-abdominal-wall+erector-spinae+quadratus-lumborum" } ]
+    "secondary": [
+      { "id": "mus.externalOblique", "name": "External Oblique", "categoryId": "cat.obliques", "fxm": "FXM=1.0/external-oblique", "fxmg": "FXMG=1.0/external-oblique+internal-oblique" },
+      { "id": "mus.internalOblique", "name": "Internal Oblique", "categoryId": "cat.obliques", "fxm": "FXM=1.0/internal-oblique", "fxmg": "FXMG=1.0/external-oblique+internal-oblique" }
+    ]
   },
   "equipment": {
     "optional": [ { "id": "eq.mat", "name": "Exercise Mat", "fxe": "FXE=1.0S/k:acc/f:mat" } ]

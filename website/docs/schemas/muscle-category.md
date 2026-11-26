@@ -18,6 +18,7 @@ The Muscle Category schema defines groupings and categorizations of muscles with
 
 View the muscle category examples:
 - [Basic Category](https://spec.vitness.me/schemas/muscle/muscle-category/v1.1.0/muscle-category.example.json)
+- [Quadriceps Category](https://spec.vitness.me/schemas/muscle/muscle-category/v1.1.0/muscle-category.example.quadriceps.json)
 
 ## Specification
 

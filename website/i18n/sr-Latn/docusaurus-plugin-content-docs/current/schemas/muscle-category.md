@@ -18,6 +18,7 @@ sidebar_position: 5
 
 Pogledajte primere kategorija mišića:
 - [Osnovna kategorija](https://spec.vitness.me/schemas/muscle/muscle-category/v1.1.0/muscle-category.example.json)
+- [Kategorija kvadricepsa](https://spec.vitness.me/schemas/muscle/muscle-category/v1.1.0/muscle-category.example.quadriceps.json)
 
 ## Specifikacija
 

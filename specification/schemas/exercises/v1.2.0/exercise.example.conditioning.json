@@ -20,7 +20,12 @@
     "tags": ["machine", "conditioning", "interval"]
   },
   "targets": {
-    "primary": [{ "id": "mus.quadriceps", "name": "Quadriceps", "categoryId": "cat.legs", "fxmg": "FXMG=1.0/a:hip.flex+buttock+hamstring+quadriceps-femoris+sartorius+tensor-fasciae-latae+thigh.medial+tibialis-anterior+triceps-surae" }],
+    "primary": [
+      { "id": "mus.rectusFemoris", "name": "Rectus Femoris", "categoryId": "cat.quadriceps", "fxm": "FXM=1.0/rectus-femoris", "fxmg": "FXMG=1.0/quadriceps-femoris" },
+      { "id": "mus.vastusLateralis", "name": "Vastus Lateralis", "categoryId": "cat.quadriceps", "fxm": "FXM=1.0/vastus-lateralis", "fxmg": "FXMG=1.0/quadriceps-femoris" },
+      { "id": "mus.vastusMedialis", "name": "Vastus Medialis", "categoryId": "cat.quadriceps", "fxm": "FXM=1.0/vastus-medialis", "fxmg": "FXMG=1.0/quadriceps-femoris" },
+      { "id": "mus.vastusIntermedius", "name": "Vastus Intermedius", "categoryId": "cat.quadriceps", "fxm": "FXM=1.0/vastus-intermedius", "fxmg": "FXMG=1.0/quadriceps-femoris" }
+    ],
     "secondary": [{ "id": "mus.deltoids", "name": "Deltoids", "categoryId": "cat.shoulders", "fxm": "FXM=1.0/deltoid", "fxmg": "FXMG=1.0/deltoid" }]
   },
   "equipment": {

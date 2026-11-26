@@ -35,8 +35,8 @@ El `.example.` en el nombre del archivo es la distinción: un archivo llamado `*
 
 ## Entidades de ejemplo
 
-<!-- fds:count examples=136 -->
-Se publican 136 documentos de ejemplo, cada uno servido desde la misma ruta versionada que el esquema que demuestra. Todos se validan en CI, de modo que un ejemplo que deja de coincidir con su esquema hace fallar la compilación.
+<!-- fds:count examples=137 -->
+Se publican 137 documentos de ejemplo, cada uno servido desde la misma ruta versionada que el esquema que demuestra. Todos se validan en CI, de modo que un ejemplo que deja de coincidir con su esquema hace fallar la compilación.
 
 <!-- fds:count examples:exercise=8 -->
 ### Ejemplos de ejercicio (8)
@@ -59,9 +59,10 @@ Se publican 136 documentos de ejemplo, cada uno servido desde la misma ruta vers
 - Un músculo con regiones de mapa de calor y un nombre localizado
 - Un segundo músculo que lleva alias localizados junto a sus regiones
 
-<!-- fds:count examples:muscle-category=1 -->
-### Ejemplos de categoría de músculo (1)
+<!-- fds:count examples:muscle-category=2 -->
+### Ejemplos de categoría de músculo (2)
 - Una categoría de nivel superior con descripciones localizadas y etiquetas de clasificación
+- Una categoría para un grupo de músculos, el cuádriceps
 
 <!-- fds:count examples:body-atlas=1 -->
 ### Ejemplos de atlas corporal (1)

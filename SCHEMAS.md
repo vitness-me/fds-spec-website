@@ -72,6 +72,7 @@ Both tables above are published, machine-readable, at **https://spec.vitness.me/
 - 1.1.0 added the optional structural key `fxmg` — RFC-004 §3.2
 - **Examples**:
   - https://spec.vitness.me/schemas/muscle/muscle-category/v1.1.0/muscle-category.example.json
+  - https://spec.vitness.me/schemas/muscle/muscle-category/v1.1.0/muscle-category.example.quadriceps.json
 
 ### Body Atlas Schema (v1.1.0)
 - **Schema**: https://spec.vitness.me/schemas/atlas/v1.1.0/body-atlas.schema.json

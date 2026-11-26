@@ -18,6 +18,7 @@ El esquema de categoría de músculos define agrupaciones y categorizaciones de 
 
 Ver los ejemplos de categoría de músculos:
 - [Categoría básica](https://spec.vitness.me/schemas/muscle/muscle-category/v1.1.0/muscle-category.example.json)
+- [Categoría del cuádriceps](https://spec.vitness.me/schemas/muscle/muscle-category/v1.1.0/muscle-category.example.quadriceps.json)
 
 ## Especificación
 
