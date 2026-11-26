@@ -15,8 +15,8 @@ export interface FxmPart {
   readonly token: string;
   readonly name: string;
   readonly anchors: readonly Anchor[];
-  /** Why the part has no UBERON anchor, and what UBERON has instead. */
-  readonly uberonGap?: string;
+  /** Why the part has no Uberon anchor, and what Uberon has instead. */
+  readonly uberonNote?: string;
 }
 
 /** An anatomical muscle. When it has parts, the whole muscle is exactly the union of its parts. */
@@ -24,16 +24,16 @@ export interface FxmMuscle {
   readonly token: string;
   readonly name: string;
   readonly anchors: readonly Anchor[];
-  readonly uberonGap?: string;
+  readonly uberonNote?: string;
   readonly parts?: readonly FxmPart[];
 }
 
 const fma = (id: string, label: string): Anchor => ({ system: 'FMA', id: `FMA:${id}`, label });
 const uberon = (id: string, label: string): Anchor => ({ system: 'UBERON', id: `UBERON:${id}`, label });
-const wholeOnly = (what: string, id: string): string => `UBERON has the whole ${what} (UBERON:${id}) but not its parts.`;
-const headsOnly = (what: string, id: string): string => `UBERON has the whole ${what} (UBERON:${id}) but not its heads.`;
-const noTerm = (what: string): string => `UBERON has no term for the ${what}.`;
-const RHOMBOID_GAP = 'UBERON has only "rhomboid" (UBERON:0005621), covering both rhomboids.';
+const wholeOnly = (what: string, id: string): string => `Uberon names the whole ${what} (UBERON:${id}), not its parts.`;
+const headsOnly = (what: string, id: string): string => `Uberon names the whole ${what} (UBERON:${id}), not its heads.`;
+const noTerm = (what: string): string => `Uberon has no term for the ${what}.`;
+const RHOMBOID_NOTE = 'Uberon has one term, rhomboid (UBERON:0005621), for both rhomboid muscles.';
 
 /**
  * The anatomical muscles FXM names. Each anchor is the FMA 5.1.0 or UBERON term the EBI Ontology Lookup
@@ -47,30 +47,30 @@ export const FXM_MUSCLES: readonly FxmMuscle[] = [
   {
     token: 'deltoid', name: 'Deltoid', anchors: [fma('32521', 'Deltoid'), uberon('0001476', 'deltoid')],
     parts: [
-      { token: 'clavicular', name: 'Clavicular part of deltoid', anchors: [fma('34677', 'Clavicular part of deltoid')], uberonGap: wholeOnly('deltoid', '0001476') },
-      { token: 'acromial', name: 'Acromial part of deltoid', anchors: [fma('34678', 'Acromial part of deltoid')], uberonGap: wholeOnly('deltoid', '0001476') },
-      { token: 'spinal', name: 'Spinal part of deltoid', anchors: [fma('34679', 'Spinal part of deltoid')], uberonGap: wholeOnly('deltoid', '0001476') },
+      { token: 'clavicular', name: 'Clavicular part of deltoid', anchors: [fma('34677', 'Clavicular part of deltoid')], uberonNote: wholeOnly('deltoid', '0001476') },
+      { token: 'acromial', name: 'Acromial part of deltoid', anchors: [fma('34678', 'Acromial part of deltoid')], uberonNote: wholeOnly('deltoid', '0001476') },
+      { token: 'spinal', name: 'Spinal part of deltoid', anchors: [fma('34679', 'Spinal part of deltoid')], uberonNote: wholeOnly('deltoid', '0001476') },
     ],
   },
   {
     token: 'pectoralis-major', name: 'Pectoralis major', anchors: [fma('9627', 'Pectoralis major'), uberon('0002381', 'pectoralis major')],
     parts: [
-      { token: 'clavicular', name: 'Clavicular part of pectoralis major', anchors: [fma('34687', 'Clavicular part of pectoralis major')], uberonGap: wholeOnly('pectoralis major', '0002381') },
-      { token: 'sternocostal', name: 'Sternocostal part of pectoralis major', anchors: [fma('34696', 'Sternocostal part of pectoralis major')], uberonGap: wholeOnly('pectoralis major', '0002381') },
-      { token: 'abdominal', name: 'Abdominal part of pectoralis major', anchors: [fma('34699', 'Abdominal part of pectoralis major')], uberonGap: wholeOnly('pectoralis major', '0002381') },
+      { token: 'clavicular', name: 'Clavicular part of pectoralis major', anchors: [fma('34687', 'Clavicular part of pectoralis major')], uberonNote: wholeOnly('pectoralis major', '0002381') },
+      { token: 'sternocostal', name: 'Sternocostal part of pectoralis major', anchors: [fma('34696', 'Sternocostal part of pectoralis major')], uberonNote: wholeOnly('pectoralis major', '0002381') },
+      { token: 'abdominal', name: 'Abdominal part of pectoralis major', anchors: [fma('34699', 'Abdominal part of pectoralis major')], uberonNote: wholeOnly('pectoralis major', '0002381') },
     ],
   },
   {
     token: 'trapezius', name: 'Trapezius', anchors: [fma('9626', 'Trapezius'), uberon('0002380', 'trapezius muscle')],
     parts: [
-      { token: 'descending', name: 'Descending part of trapezius', anchors: [fma('32557', 'Descending part of trapezius')], uberonGap: wholeOnly('trapezius', '0002380') },
-      { token: 'transverse', name: 'Transverse part of trapezius', anchors: [fma('32556', 'Transverse part of trapezius')], uberonGap: wholeOnly('trapezius', '0002380') },
-      { token: 'ascending', name: 'Ascending part of trapezius', anchors: [fma('32555', 'Ascending part of trapezius')], uberonGap: wholeOnly('trapezius', '0002380') },
+      { token: 'descending', name: 'Descending part of trapezius', anchors: [fma('32557', 'Descending part of trapezius')], uberonNote: wholeOnly('trapezius', '0002380') },
+      { token: 'transverse', name: 'Transverse part of trapezius', anchors: [fma('32556', 'Transverse part of trapezius')], uberonNote: wholeOnly('trapezius', '0002380') },
+      { token: 'ascending', name: 'Ascending part of trapezius', anchors: [fma('32555', 'Ascending part of trapezius')], uberonNote: wholeOnly('trapezius', '0002380') },
     ],
   },
   { token: 'latissimus-dorsi', name: 'Latissimus dorsi', anchors: [fma('13357', 'Latissimus dorsi'), uberon('0001112', 'latissimus dorsi muscle')] },
-  { token: 'rhomboid-major', name: 'Rhomboid major', anchors: [fma('13379', 'Rhomboid major')], uberonGap: RHOMBOID_GAP },
-  { token: 'rhomboid-minor', name: 'Rhomboid minor', anchors: [fma('13380', 'Rhomboid minor')], uberonGap: RHOMBOID_GAP },
+  { token: 'rhomboid-major', name: 'Rhomboid major', anchors: [fma('13379', 'Rhomboid major')], uberonNote: RHOMBOID_NOTE },
+  { token: 'rhomboid-minor', name: 'Rhomboid minor', anchors: [fma('13380', 'Rhomboid minor')], uberonNote: RHOMBOID_NOTE },
   {
     token: 'biceps-brachii', name: 'Biceps brachii', anchors: [fma('37670', 'Biceps brachii'), uberon('0001507', 'biceps brachii')],
     parts: [
@@ -83,9 +83,9 @@ export const FXM_MUSCLES: readonly FxmMuscle[] = [
   {
     token: 'triceps-brachii', name: 'Triceps brachii', anchors: [fma('37688', 'Triceps brachii'), uberon('0001509', 'triceps brachii')],
     parts: [
-      { token: 'long', name: 'Long head of triceps brachii', anchors: [fma('37692', 'Long head of triceps brachii')], uberonGap: headsOnly('triceps brachii', '0001509') },
-      { token: 'lateral', name: 'Lateral head of triceps brachii', anchors: [fma('37694', 'Lateral head of triceps brachii')], uberonGap: headsOnly('triceps brachii', '0001509') },
-      { token: 'medial', name: 'Medial head of triceps brachii', anchors: [fma('37693', 'Medial head of triceps brachii')], uberonGap: headsOnly('triceps brachii', '0001509') },
+      { token: 'long', name: 'Long head of triceps brachii', anchors: [fma('37692', 'Long head of triceps brachii')], uberonNote: headsOnly('triceps brachii', '0001509') },
+      { token: 'lateral', name: 'Lateral head of triceps brachii', anchors: [fma('37694', 'Lateral head of triceps brachii')], uberonNote: headsOnly('triceps brachii', '0001509') },
+      { token: 'medial', name: 'Medial head of triceps brachii', anchors: [fma('37693', 'Medial head of triceps brachii')], uberonNote: headsOnly('triceps brachii', '0001509') },
     ],
   },
   { token: 'rectus-abdominis', name: 'Rectus abdominis', anchors: [fma('9628', 'Rectus abdominis'), uberon('0002382', 'rectus abdominis muscle')] },
@@ -143,11 +143,11 @@ export const FXM_MUSCLES: readonly FxmMuscle[] = [
   { token: 'teres-major', name: 'Teres major', anchors: [fma('32549', 'Teres major'), uberon('0001478', 'teres major muscle')] },
   { token: 'subscapularis', name: 'Subscapularis', anchors: [fma('13413', 'Subscapularis'), uberon('0001129', 'subscapularis muscle')] },
   { token: 'coracobrachialis', name: 'Coracobrachialis', anchors: [fma('37664', 'Coracobrachialis'), uberon('0001505', 'coracobrachialis muscle')] },
-  { token: 'articularis-cubiti', name: 'Articularis cubiti', anchors: [fma('37701', 'Articularis cubiti')], uberonGap: noTerm('articularis cubiti') },
+  { token: 'articularis-cubiti', name: 'Articularis cubiti', anchors: [fma('37701', 'Articularis cubiti')], uberonNote: noTerm('articularis cubiti') },
   { token: 'anconeus', name: 'Anconeus', anchors: [fma('37704', 'Anconeus'), uberon('0002989', 'anconeus muscle')] },
   { token: 'pronator-teres', name: 'Pronator teres', anchors: [fma('38450', 'Pronator teres'), uberon('0001520', 'pronator teres')] },
   { token: 'flexor-digitorum-superficialis', name: 'Flexor digitorum superficialis', anchors: [fma('38469', 'Flexor digitorum superficialis'), uberon('0003222', 'flexor digitorum superficialis')] },
-  { token: 'pronator-quadratus', name: 'Pronator quadratus', anchors: [fma('38453', 'Pronator quadratus')], uberonGap: noTerm('pronator quadratus') },
+  { token: 'pronator-quadratus', name: 'Pronator quadratus', anchors: [fma('38453', 'Pronator quadratus')], uberonNote: noTerm('pronator quadratus') },
   { token: 'flexor-digitorum-profundus', name: 'Flexor digitorum profundus', anchors: [fma('38478', 'Flexor digitorum profundus'), uberon('0001523', 'flexor digitorum profundus')] },
   { token: 'flexor-pollicis-longus', name: 'Flexor pollicis longus', anchors: [fma('38481', 'Flexor pollicis longus'), uberon('0008446', 'flexor pollicis longus muscle')] },
   { token: 'extensor-digitorum', name: 'Extensor digitorum', anchors: [fma('38500', 'Extensor digitorum'), uberon('0007612', 'extensor digitorum communis')] },
@@ -156,10 +156,10 @@ export const FXM_MUSCLES: readonly FxmMuscle[] = [
   { token: 'abductor-pollicis-longus', name: 'Abductor pollicis longus', anchors: [fma('38515', 'Abductor pollicis longus'), uberon('0001527', 'abductor pollicis longus')] },
   { token: 'extensor-pollicis-brevis', name: 'Extensor pollicis brevis', anchors: [fma('38518', 'Extensor pollicis brevis'), uberon('0017618', 'extensor pollicis brevis muscle')] },
   { token: 'extensor-pollicis-longus', name: 'Extensor pollicis longus', anchors: [fma('38521', 'Extensor pollicis longus'), uberon('0003234', 'extensor pollicis longus muscle')] },
-  { token: 'extensor-indicis', name: 'Extensor indicis', anchors: [fma('38524', 'Extensor indicis')], uberonGap: noTerm('extensor indicis') },
-  { token: 'adductor-minimus', name: 'Adductor minimus', anchors: [fma('43885', 'Adductor minimus')], uberonGap: noTerm('adductor minimus') },
-  { token: 'articularis-genus', name: 'Articularis genus', anchors: [fma('22437', 'Articularis genus')], uberonGap: noTerm('articularis genus') },
-  { token: 'extensor-hallucis-longus', name: 'Extensor hallucis longus', anchors: [fma('22533', 'Extensor hallucis longus')], uberonGap: noTerm('extensor hallucis longus') },
+  { token: 'extensor-indicis', name: 'Extensor indicis', anchors: [fma('38524', 'Extensor indicis')], uberonNote: noTerm('extensor indicis') },
+  { token: 'adductor-minimus', name: 'Adductor minimus', anchors: [fma('43885', 'Adductor minimus')], uberonNote: noTerm('adductor minimus') },
+  { token: 'articularis-genus', name: 'Articularis genus', anchors: [fma('22437', 'Articularis genus')], uberonNote: noTerm('articularis genus') },
+  { token: 'extensor-hallucis-longus', name: 'Extensor hallucis longus', anchors: [fma('22533', 'Extensor hallucis longus')], uberonNote: noTerm('extensor hallucis longus') },
   { token: 'extensor-digitorum-longus', name: 'Extensor digitorum longus', anchors: [fma('22534', 'Extensor digitorum longus'), uberon('0001386', 'extensor digitorum longus')] },
   { token: 'fibularis-tertius', name: 'Fibularis tertius', anchors: [fma('22538', 'Fibularis tertius'), uberon('0010524', 'fibularis tertius')] },
   { token: 'plantaris', name: 'Plantaris', anchors: [fma('22543', 'Plantaris'), uberon('0011905', 'plantaris')] },

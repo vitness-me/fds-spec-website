@@ -40,6 +40,8 @@ These list the codes the four [structural keys](https://spec.vitness.me/docs/cor
 | `muscle-key.registry.json` | `fxm` on a muscle and on every muscle reference | The muscle and part codes, each derived from its FMA 5.1.0 term, with its FMA id and, where Uberon has the structure, its Uberon id |
 | `muscle-category-key.registry.json` | `fxmg` on a muscle category and on every muscle reference | The category codes with their FMA and Uberon ids and their members, and the action categories with their prime movers |
 
+The muscle and category registries quote labels and ids from the Foundational Model of Anatomy Ontology (FMA) 5.1.0, University of Washington, under [CC BY 3.0 Unported](https://creativecommons.org/licenses/by/3.0/), and from Uberon, release 2026-11-05, under [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/). Each file names them in `sources` and `attribution`.
+
 They are generated from the FDS Encoder (`packages/fds-encoder`), never edited by hand: `node scripts/key-registries.mjs --write` regenerates them, and `npm run check:keys` fails when a registry differs from the encoder, when a key page shows a code that is in no registry, or when a key quoted on the key pages or in a published example does not check.
 
 ## Entity registry examples — illustrative

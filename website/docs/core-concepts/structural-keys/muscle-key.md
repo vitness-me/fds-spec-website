@@ -72,7 +72,18 @@ Anatomy already has standard names. The Foundational Model of Anatomy (FMA) give
 
 Uberon is a second anatomy reference that covers the same muscles under its own identifiers. It helps you confirm you have the right structure. It often has a whole muscle but not its heads or parts, and the code always comes from the FMA term.
 
-You can search both references in the EBI Ontology Lookup Service: [FMA](https://www.ebi.ac.uk/ols4/ontologies/fma) and [Uberon](https://www.ebi.ac.uk/ols4/ontologies/uberon). The [Uberon project](https://obophenotype.github.io/uberon/) has its own documentation. These links are an informative pointer. FDS doesn't copy either reference, and a key stays valid if a site moves.
+You can search both references in the EBI Ontology Lookup Service: [FMA](https://www.ebi.ac.uk/ols4/ontologies/fma) and [Uberon](https://www.ebi.ac.uk/ols4/ontologies/uberon). The [Uberon project](https://obophenotype.github.io/uberon/) has its own documentation. These links are an informative pointer: a key stays valid if a site moves.
+
+### Sources and licences
+
+The muscle registry, [`muscle-key.registry.json`](https://spec.vitness.me/registries/muscle-key.registry.json), and the category registry, [`muscle-category-key.registry.json`](https://spec.vitness.me/registries/muscle-category-key.registry.json), quote labels and identifiers from two references, unchanged. Each registry names its sources in `sources` and `attribution`.
+
+| Source | Version | Licence |
+|---|---|---|
+| [Foundational Model of Anatomy Ontology (FMA)](http://si.washington.edu/projects/fma), Structural Informatics Group, University of Washington | 5.1.0 | [CC BY 3.0 Unported](https://creativecommons.org/licenses/by/3.0/) |
+| [Uberon](http://uberon.org), the Uber-anatomy ontology, OBO Foundry | release 2026-11-05 | [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/) |
+
+The codes are FDS's own, written from the FMA labels. Anyone who republishes the registries' labels or ids keeps this credit and the licence link.
 
 ## The muscle code
 

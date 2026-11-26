@@ -2,7 +2,7 @@
   "registry": "muscle-key",
   "version": "1.0.0",
   "key": "FXM=1.0",
-  "description": "The muscle and part codes of the muscle key, each derived from its term in the Foundational Model of Anatomy (FMA 5.1.0) and anchored to its FMA id, with the UBERON id where UBERON has the structure. A muscle with parts is exactly the union of its parts.",
+  "description": "The muscle and part codes of the muscle key, each derived from its term in the Foundational Model of Anatomy (FMA 5.1.0) and anchored to its FMA id, with the Uberon id where Uberon has the structure. A muscle with parts is exactly the union of its parts.",
   "policy": "closed",
   "governs": [
     {
@@ -10,6 +10,29 @@
       "pointer": "fxm"
     }
   ],
+  "sources": [
+    {
+      "name": "Foundational Model of Anatomy Ontology (FMA)",
+      "version": "5.1.0",
+      "publisher": "Structural Informatics Group, University of Washington",
+      "url": "http://si.washington.edu/projects/fma",
+      "license": "CC-BY-3.0",
+      "licenseName": "Creative Commons Attribution 3.0 Unported",
+      "licenseUrl": "https://creativecommons.org/licenses/by/3.0/",
+      "used": "Term labels and FMA ids, and the members of each FMA set"
+    },
+    {
+      "name": "Uberon (Uber-anatomy ontology)",
+      "version": "2026-11-05",
+      "publisher": "The Uberon editors, OBO Foundry",
+      "url": "http://uberon.org",
+      "license": "CC-BY-3.0",
+      "licenseName": "Creative Commons Attribution 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/3.0/",
+      "used": "Term labels and Uberon ids, and the parts of erector spinae"
+    }
+  ],
+  "attribution": "The labels and ids in anchors and members are quoted unchanged from the Foundational Model of Anatomy Ontology (FMA) 5.1.0, University of Washington, under CC BY 3.0 Unported, and from Uberon, release 2026-11-05, under CC BY 3.0. The codes are FDS's own, written from the FMA labels: lowercased and hyphenated, without the word \"muscle\".",
   "muscles": [
     {
       "code": "deltoid",
@@ -38,7 +61,7 @@
               "label": "Clavicular part of deltoid"
             }
           ],
-          "uberonGap": "UBERON has the whole deltoid (UBERON:0001476) but not its parts."
+          "uberonNote": "Uberon names the whole deltoid (UBERON:0001476), not its parts."
         },
         {
           "code": "acromial",
@@ -51,7 +74,7 @@
               "label": "Acromial part of deltoid"
             }
           ],
-          "uberonGap": "UBERON has the whole deltoid (UBERON:0001476) but not its parts."
+          "uberonNote": "Uberon names the whole deltoid (UBERON:0001476), not its parts."
         },
         {
           "code": "spinal",
@@ -64,7 +87,7 @@
               "label": "Spinal part of deltoid"
             }
           ],
-          "uberonGap": "UBERON has the whole deltoid (UBERON:0001476) but not its parts."
+          "uberonNote": "Uberon names the whole deltoid (UBERON:0001476), not its parts."
         }
       ]
     },
@@ -95,7 +118,7 @@
               "label": "Clavicular part of pectoralis major"
             }
           ],
-          "uberonGap": "UBERON has the whole pectoralis major (UBERON:0002381) but not its parts."
+          "uberonNote": "Uberon names the whole pectoralis major (UBERON:0002381), not its parts."
         },
         {
           "code": "sternocostal",
@@ -108,7 +131,7 @@
               "label": "Sternocostal part of pectoralis major"
             }
           ],
-          "uberonGap": "UBERON has the whole pectoralis major (UBERON:0002381) but not its parts."
+          "uberonNote": "Uberon names the whole pectoralis major (UBERON:0002381), not its parts."
         },
         {
           "code": "abdominal",
@@ -121,7 +144,7 @@
               "label": "Abdominal part of pectoralis major"
             }
           ],
-          "uberonGap": "UBERON has the whole pectoralis major (UBERON:0002381) but not its parts."
+          "uberonNote": "Uberon names the whole pectoralis major (UBERON:0002381), not its parts."
         }
       ]
     },
@@ -152,7 +175,7 @@
               "label": "Descending part of trapezius"
             }
           ],
-          "uberonGap": "UBERON has the whole trapezius (UBERON:0002380) but not its parts."
+          "uberonNote": "Uberon names the whole trapezius (UBERON:0002380), not its parts."
         },
         {
           "code": "transverse",
@@ -165,7 +188,7 @@
               "label": "Transverse part of trapezius"
             }
           ],
-          "uberonGap": "UBERON has the whole trapezius (UBERON:0002380) but not its parts."
+          "uberonNote": "Uberon names the whole trapezius (UBERON:0002380), not its parts."
         },
         {
           "code": "ascending",
@@ -178,7 +201,7 @@
               "label": "Ascending part of trapezius"
             }
           ],
-          "uberonGap": "UBERON has the whole trapezius (UBERON:0002380) but not its parts."
+          "uberonNote": "Uberon names the whole trapezius (UBERON:0002380), not its parts."
         }
       ]
     },
@@ -208,7 +231,7 @@
           "label": "Rhomboid major"
         }
       ],
-      "uberonGap": "UBERON has only \"rhomboid\" (UBERON:0005621), covering both rhomboids."
+      "uberonNote": "Uberon has one term, rhomboid (UBERON:0005621), for both rhomboid muscles."
     },
     {
       "code": "rhomboid-minor",
@@ -220,7 +243,7 @@
           "label": "Rhomboid minor"
         }
       ],
-      "uberonGap": "UBERON has only \"rhomboid\" (UBERON:0005621), covering both rhomboids."
+      "uberonNote": "Uberon has one term, rhomboid (UBERON:0005621), for both rhomboid muscles."
     },
     {
       "code": "biceps-brachii",
@@ -333,7 +356,7 @@
               "label": "Long head of triceps brachii"
             }
           ],
-          "uberonGap": "UBERON has the whole triceps brachii (UBERON:0001509) but not its heads."
+          "uberonNote": "Uberon names the whole triceps brachii (UBERON:0001509), not its heads."
         },
         {
           "code": "lateral",
@@ -346,7 +369,7 @@
               "label": "Lateral head of triceps brachii"
             }
           ],
-          "uberonGap": "UBERON has the whole triceps brachii (UBERON:0001509) but not its heads."
+          "uberonNote": "Uberon names the whole triceps brachii (UBERON:0001509), not its heads."
         },
         {
           "code": "medial",
@@ -359,7 +382,7 @@
               "label": "Medial head of triceps brachii"
             }
           ],
-          "uberonGap": "UBERON has the whole triceps brachii (UBERON:0001509) but not its heads."
+          "uberonNote": "Uberon names the whole triceps brachii (UBERON:0001509), not its heads."
         }
       ]
     },
@@ -1193,7 +1216,7 @@
           "label": "Articularis cubiti"
         }
       ],
-      "uberonGap": "UBERON has no term for the articularis cubiti."
+      "uberonNote": "Uberon has no term for the articularis cubiti."
     },
     {
       "code": "anconeus",
@@ -1253,7 +1276,7 @@
           "label": "Pronator quadratus"
         }
       ],
-      "uberonGap": "UBERON has no term for the pronator quadratus."
+      "uberonNote": "Uberon has no term for the pronator quadratus."
     },
     {
       "code": "flexor-digitorum-profundus",
@@ -1393,7 +1416,7 @@
           "label": "Extensor indicis"
         }
       ],
-      "uberonGap": "UBERON has no term for the extensor indicis."
+      "uberonNote": "Uberon has no term for the extensor indicis."
     },
     {
       "code": "adductor-minimus",
@@ -1405,7 +1428,7 @@
           "label": "Adductor minimus"
         }
       ],
-      "uberonGap": "UBERON has no term for the adductor minimus."
+      "uberonNote": "Uberon has no term for the adductor minimus."
     },
     {
       "code": "articularis-genus",
@@ -1417,7 +1440,7 @@
           "label": "Articularis genus"
         }
       ],
-      "uberonGap": "UBERON has no term for the articularis genus."
+      "uberonNote": "Uberon has no term for the articularis genus."
     },
     {
       "code": "extensor-hallucis-longus",
@@ -1429,7 +1452,7 @@
           "label": "Extensor hallucis longus"
         }
       ],
-      "uberonGap": "UBERON has no term for the extensor hallucis longus."
+      "uberonNote": "Uberon has no term for the extensor hallucis longus."
     },
     {
       "code": "extensor-digitorum-longus",

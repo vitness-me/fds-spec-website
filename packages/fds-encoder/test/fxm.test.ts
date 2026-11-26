@@ -122,7 +122,7 @@ describe('anatomy anchors', () => {
   test('every muscle and part carries an UBERON anchor or a listed gap, never both', () => {
     for (const t of terms) {
       const uberon = t.anchors.some((a) => a.system === 'UBERON');
-      expect(uberon !== (t.uberonGap !== undefined), t.key).toBe(true);
+      expect(uberon !== (t.uberonNote !== undefined), t.key).toBe(true);
     }
   });
 
@@ -135,7 +135,7 @@ describe('anatomy anchors', () => {
   test('95 terms: 95 FMA, 75 UBERON, 20 UBERON gaps', () => {
     expect(terms.length).toBe(95);
     expect(terms.filter((t) => t.anchors.some((a) => a.system === 'UBERON')).length).toBe(75);
-    expect(terms.filter((t) => t.uberonGap !== undefined).length).toBe(20);
+    expect(terms.filter((t) => t.uberonNote !== undefined).length).toBe(20);
   });
 
   test('names the muscles the categories need: the rotator cuff, the erector spinae columns, the pectorals, the abdominal wall, the arm, forearm and shank compartments', () => {

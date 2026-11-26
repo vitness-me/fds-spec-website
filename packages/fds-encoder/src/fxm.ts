@@ -156,7 +156,7 @@ export function gradeFxm(a: string, b: string, vocabulary: FxmVocabulary = FXM_V
 }
 
 /** The vocabulary term a valid key names: its name, its anchors and its UBERON gap. */
-export function fxmTerm(input: string, vocabulary: FxmVocabulary = FXM_VOCABULARY): { name: string; anchors: readonly Anchor[]; uberonGap?: string } {
+export function fxmTerm(input: string, vocabulary: FxmVocabulary = FXM_VOCABULARY): { name: string; anchors: readonly Anchor[]; uberonNote?: string } {
   const key = keyOrThrow(input, vocabulary);
   const muscle = vocabulary.muscles.get(key.muscle)!;
   return key.kind === 'part' ? (muscle.parts ?? []).find((p) => p.token === key.part)! : muscle;

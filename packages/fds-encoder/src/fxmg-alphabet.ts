@@ -32,11 +32,11 @@ export interface FxmgSet {
   readonly name: string;
   /** The FMA term, then the UBERON term for the same structure when one exists. */
   readonly anchors: readonly Anchor[];
-  /** Why the set has no UBERON anchor, and what UBERON has instead. */
-  readonly uberonGap?: string;
+  /** Why the set has no Uberon anchor, and what Uberon has instead. */
+  readonly uberonNote?: string;
   readonly members: readonly FxmgMember[];
-  /** How the members are derived where FMA asserts none. */
-  readonly derivation?: string;
+  /** Where the members come from when FMA lists none. */
+  readonly membersSource?: string;
 }
 
 /** The prime movers of one joint action, named by the exercise key's joint-action code. */
@@ -59,7 +59,7 @@ const m = (token: string, id: string, label: string): FxmgMember => ({ key: fxm(
 const ms = (code: string, id: string, label: string): FxmgMember => ({ key: fxmg(code), relation: 'member', source: fma(id, label) });
 /** A member FMA asserts with `regional_part`. */
 const rp = (token: string, id: string, label: string): FxmgMember => ({ key: fxm(token), relation: 'regional_part', source: fma(id, label) });
-const noSet = (what: string): string => `UBERON has no term for the ${what}.`;
+const noSet = (what: string): string => `Uberon has no term for the ${what}.`;
 
 const HAMSTRING_MEMBERS = [m('biceps-femoris', '22356', 'Biceps femoris'), m('semitendinosus', '22357', 'Semitendinosus'), m('semimembranosus', '22438', 'Semimembranosus')];
 const ANTERIOR_ARM = [m('coracobrachialis', '37664', 'Coracobrachialis'), m('brachialis', '37667', 'Brachialis'), m('biceps-brachii', '37670', 'Biceps brachii')];
@@ -100,12 +100,12 @@ export const FXMG_SETS: readonly FxmgSet[] = [
   },
   {
     code: 'thigh.anterior', name: 'Musculature of anterior compartment of thigh',
-    anchors: [fma('51035', 'Musculature of anterior compartment of thigh')], uberonGap: noSet('anterior compartment of the thigh'),
+    anchors: [fma('51035', 'Musculature of anterior compartment of thigh')], uberonNote: noSet('anterior compartment of the thigh'),
     members: [m('sartorius', '22353', 'Sartorius'), ms('quadriceps-femoris', '22428', 'Quadriceps femoris'), m('articularis-genus', '22437', 'Articularis genus')],
   },
   {
     code: 'thigh.medial', name: 'Musculature of medial compartment of thigh',
-    anchors: [fma('74149', 'Musculature of medial compartment of thigh')], uberonGap: noSet('medial compartment of the thigh'),
+    anchors: [fma('74149', 'Musculature of medial compartment of thigh')], uberonNote: noSet('medial compartment of the thigh'),
     members: [
       m('pectineus', '22440', 'Pectineus'), m('adductor-longus', '22441', 'Adductor longus'), m('adductor-brevis', '22442', 'Adductor brevis'),
       m('adductor-magnus', '22443', 'Adductor magnus'), m('gracilis', '43882', 'Gracilis'), m('adductor-minimus', '43885', 'Adductor minimus'),
@@ -113,12 +113,12 @@ export const FXMG_SETS: readonly FxmgSet[] = [
   },
   {
     code: 'thigh.posterior', name: 'Musculature of posterior compartment of thigh',
-    anchors: [fma('51036', 'Musculature of posterior compartment of thigh')], uberonGap: noSet('posterior compartment of the thigh'),
+    anchors: [fma('51036', 'Musculature of posterior compartment of thigh')], uberonNote: noSet('posterior compartment of the thigh'),
     members: HAMSTRING_MEMBERS,
   },
   {
     code: 'buttock', name: 'Musculature of buttock',
-    anchors: [fma('50230', 'Musculature of buttock')], uberonGap: 'UBERON has no term for the buttock musculature; gluteal muscle (UBERON:0002000) also holds the hip rotators.',
+    anchors: [fma('50230', 'Musculature of buttock')], uberonNote: 'Uberon has no term for the musculature of the buttock; its gluteal muscle (UBERON:0002000) includes the deep hip rotators.',
     members: [m('gluteus-maximus', '22314', 'Gluteus maximus'), m('gluteus-medius', '22315', 'Gluteus medius'), m('gluteus-minimus', '22317', 'Gluteus minimus')],
   },
   {
@@ -129,12 +129,12 @@ export const FXMG_SETS: readonly FxmgSet[] = [
   },
   {
     code: 'leg.posterior.superficial', name: 'Set of superficial muscles of posterior compartment of leg',
-    anchors: [fma('51065', 'Set of superficial muscles of posterior compartment of leg')], uberonGap: noSet('superficial muscles of the posterior compartment of the leg'),
+    anchors: [fma('51065', 'Set of superficial muscles of posterior compartment of leg')], uberonNote: noSet('superficial muscles of the posterior compartment of the leg'),
     members: [m('gastrocnemius', '22541', 'Gastrocnemius'), m('soleus', '22542', 'Soleus'), m('plantaris', '22543', 'Plantaris')],
   },
   {
     code: 'leg.anterior', name: 'Musculature of anterior compartment of leg',
-    anchors: [fma('51052', 'Musculature of anterior compartment of leg')], uberonGap: noSet('anterior compartment of the leg'),
+    anchors: [fma('51052', 'Musculature of anterior compartment of leg')], uberonNote: noSet('anterior compartment of the leg'),
     members: [
       m('tibialis-anterior', '22532', 'Tibialis anterior'), m('extensor-hallucis-longus', '22533', 'Extensor hallucis longus'),
       m('extensor-digitorum-longus', '22534', 'Extensor digitorum longus'), m('fibularis-tertius', '22538', 'Fibularis tertius'),
@@ -143,7 +143,7 @@ export const FXMG_SETS: readonly FxmgSet[] = [
   {
     code: 'erector-spinae', name: 'Erector spinae muscle group',
     anchors: [fma('71302', 'Erector spinae muscle group'), uberon('0002462', 'erector spinae muscle group')],
-    derivation: 'FMA asserts no members for the erector spinae or its sided sets (FMA:22731, FMA:22732). The members are the three muscles UBERON:0002462 lists as its parts, each keyed by its FMA term.',
+    membersSource: 'FMA lists no members for the erector spinae or its left and right sets (FMA:22731, FMA:22732). Its members are its three columns, the parts of erector spinae in Uberon (UBERON:0002462), each named by its FMA term.',
     members: [
       { key: fxm('iliocostalis'), relation: 'part_of', source: uberon('0002251', 'iliocostalis muscle') },
       { key: fxm('longissimus'), relation: 'part_of', source: uberon('0000392', 'longissimus muscle') },
@@ -152,7 +152,7 @@ export const FXMG_SETS: readonly FxmgSet[] = [
   },
   {
     code: 'anterior-abdominal-wall', name: 'Musculature of anterior abdominal wall',
-    anchors: [fma('78435', 'Musculature of anterior abdominal wall')], uberonGap: 'UBERON has no term for this set; anterior abdominal wall muscle (UBERON:0002461) is the type of its muscles.',
+    anchors: [fma('78435', 'Musculature of anterior abdominal wall')], uberonNote: 'Uberon has no term for this set; each of its muscles is an anterior abdominal wall muscle (UBERON:0002461).',
     members: [
       m('external-oblique', '13336', 'Right external oblique'), m('internal-oblique', '13892', 'Right internal oblique'),
       m('rectus-abdominis', '9628', 'Rectus abdominis'), m('transversus-abdominis', '15570', 'Transversus abdominis'), m('pyramidalis', '22346', 'Right pyramidalis'),
@@ -160,18 +160,18 @@ export const FXMG_SETS: readonly FxmgSet[] = [
   },
   {
     code: 'pectoral', name: 'Pectoral musculature',
-    anchors: [fma('50223', 'Pectoral musculature')], uberonGap: 'UBERON has no term for this set; pectoral muscle (UBERON:0001495) is the type of its muscles.',
+    anchors: [fma('50223', 'Pectoral musculature')], uberonNote: 'Uberon has no term for this set; each of its muscles is a pectoral muscle (UBERON:0001495).',
     members: [m('pectoralis-major', '9627', 'Pectoralis major'), m('pectoralis-minor', '13109', 'Pectoralis minor'), m('subclavius', '13410', 'Subclavius')],
   },
   {
     code: 'rotator-cuff', name: 'Set of rotator cuff muscles',
     anchors: [fma('82650', 'Set of rotator cuff muscles')],
-    uberonGap: 'UBERON has no term for this set; its rotator cuff (UBERON:0003683) cross-references the tendinous cuff (FMA:37018).',
+    uberonNote: 'Uberon has no term for this set; its rotator cuff (UBERON:0003683) is the tendinous cuff (FMA:37018) the four tendons form.',
     members: ROTATOR_CUFF,
   },
   {
     code: 'shoulder.intrinsic', name: 'Set of intrinsic muscles of shoulder',
-    anchors: [fma('33522', 'Set of intrinsic muscles of shoulder')], uberonGap: noSet('intrinsic muscles of the shoulder'),
+    anchors: [fma('33522', 'Set of intrinsic muscles of shoulder')], uberonNote: noSet('intrinsic muscles of the shoulder'),
     members: [m('deltoid', '32521', 'Deltoid'), ...ROTATOR_CUFF, m('teres-major', '32549', 'Teres major')],
   },
   {
@@ -181,12 +181,12 @@ export const FXMG_SETS: readonly FxmgSet[] = [
   },
   {
     code: 'arm.anterior', name: 'Musculature of anterior compartment of arm',
-    anchors: [fma('50193', 'Musculature of anterior compartment of arm')], uberonGap: noSet('anterior compartment of the arm'),
+    anchors: [fma('50193', 'Musculature of anterior compartment of arm')], uberonNote: noSet('anterior compartment of the arm'),
     members: ANTERIOR_ARM,
   },
   {
     code: 'arm.posterior', name: 'Musculature of posterior compartment of arm',
-    anchors: [fma('50194', 'Musculature of posterior compartment of arm')], uberonGap: noSet('posterior compartment of the arm'),
+    anchors: [fma('50194', 'Musculature of posterior compartment of arm')], uberonNote: noSet('posterior compartment of the arm'),
     members: POSTERIOR_ARM,
   },
   {
@@ -199,7 +199,7 @@ export const FXMG_SETS: readonly FxmgSet[] = [
   },
   {
     code: 'forearm.anterior', name: 'Musculature of anterior compartment of forearm',
-    anchors: [fma('39098', 'Musculature of anterior compartment of forearm')], uberonGap: noSet('anterior compartment of the forearm'),
+    anchors: [fma('39098', 'Musculature of anterior compartment of forearm')], uberonNote: noSet('anterior compartment of the forearm'),
     members: [
       ms('forearm.anterior.superficial', '39092', 'Set of superficial muscles of anterior compartment of forearm'),
       ms('forearm.anterior.deep', '39095', 'Set of deep muscles of anterior compartment of forearm'),
@@ -207,7 +207,7 @@ export const FXMG_SETS: readonly FxmgSet[] = [
   },
   {
     code: 'forearm.anterior.superficial', name: 'Set of superficial muscles of anterior compartment of forearm',
-    anchors: [fma('39092', 'Set of superficial muscles of anterior compartment of forearm')], uberonGap: noSet('superficial muscles of the anterior compartment of the forearm'),
+    anchors: [fma('39092', 'Set of superficial muscles of anterior compartment of forearm')], uberonNote: noSet('superficial muscles of the anterior compartment of the forearm'),
     members: [
       m('pronator-teres', '38450', 'Pronator teres'), m('flexor-carpi-radialis', '38459', 'Flexor carpi radialis'), m('palmaris-longus', '38462', 'Palmaris longus'),
       m('flexor-carpi-ulnaris', '38465', 'Flexor carpi ulnaris'), m('flexor-digitorum-superficialis', '38469', 'Flexor digitorum superficialis'),
@@ -215,7 +215,7 @@ export const FXMG_SETS: readonly FxmgSet[] = [
   },
   {
     code: 'forearm.anterior.deep', name: 'Set of deep muscles of anterior compartment of forearm',
-    anchors: [fma('39095', 'Set of deep muscles of anterior compartment of forearm')], uberonGap: noSet('deep muscles of the anterior compartment of the forearm'),
+    anchors: [fma('39095', 'Set of deep muscles of anterior compartment of forearm')], uberonNote: noSet('deep muscles of the anterior compartment of the forearm'),
     members: [
       m('pronator-quadratus', '38453', 'Pronator quadratus'), m('flexor-digitorum-profundus', '38478', 'Flexor digitorum profundus'),
       m('flexor-pollicis-longus', '38481', 'Flexor pollicis longus'),
@@ -223,7 +223,7 @@ export const FXMG_SETS: readonly FxmgSet[] = [
   },
   {
     code: 'forearm.posterior', name: 'Musculature of posterior compartment of forearm',
-    anchors: [fma('39101', 'Musculature of posterior compartment of forearm')], uberonGap: noSet('posterior compartment of the forearm'),
+    anchors: [fma('39101', 'Musculature of posterior compartment of forearm')], uberonNote: noSet('posterior compartment of the forearm'),
     members: [
       ms('forearm.posterior.superficial', '39104', 'Set of superficial muscles of posterior compartment of forearm'),
       ms('forearm.posterior.deep', '39105', 'Set of deep muscles of posterior compartment of forearm'),
@@ -231,7 +231,7 @@ export const FXMG_SETS: readonly FxmgSet[] = [
   },
   {
     code: 'forearm.posterior.superficial', name: 'Set of superficial muscles of posterior compartment of forearm',
-    anchors: [fma('39104', 'Set of superficial muscles of posterior compartment of forearm')], uberonGap: noSet('superficial muscles of the posterior compartment of the forearm'),
+    anchors: [fma('39104', 'Set of superficial muscles of posterior compartment of forearm')], uberonNote: noSet('superficial muscles of the posterior compartment of the forearm'),
     members: [
       m('brachioradialis', '38485', 'Brachioradialis'), m('extensor-carpi-radialis-longus', '38494', 'Extensor carpi radialis longus'),
       m('extensor-carpi-radialis-brevis', '38497', 'Extensor carpi radialis brevis'), m('extensor-digitorum', '38500', 'Extensor digitorum'),
@@ -240,7 +240,7 @@ export const FXMG_SETS: readonly FxmgSet[] = [
   },
   {
     code: 'forearm.posterior.deep', name: 'Set of deep muscles of posterior compartment of forearm',
-    anchors: [fma('39105', 'Set of deep muscles of posterior compartment of forearm')], uberonGap: noSet('deep muscles of the posterior compartment of the forearm'),
+    anchors: [fma('39105', 'Set of deep muscles of posterior compartment of forearm')], uberonNote: noSet('deep muscles of the posterior compartment of the forearm'),
     members: [
       m('supinator', '38512', 'Supinator'), m('abductor-pollicis-longus', '38515', 'Abductor pollicis longus'),
       m('extensor-pollicis-brevis', '38518', 'Extensor pollicis brevis'), m('extensor-pollicis-longus', '38521', 'Extensor pollicis longus'),
@@ -250,7 +250,7 @@ export const FXMG_SETS: readonly FxmgSet[] = [
   {
     code: 'entire', name: 'Entire musculature',
     anchors: [fma('72954', 'Entire musculature'), uberon('0000383', 'musculature of body')],
-    derivation: 'The entire musculature holds every muscle of the body, so its members are every muscle FXM names.',
+    membersSource: 'The entire musculature is every muscle of the body: its members are all the muscles the muscle key names.',
     members: FXM_MUSCLES.map((muscle) => ({ key: fxm(muscle.token), relation: 'whole-body', source: muscle.anchors.find((a) => a.system === 'FMA')! })),
   },
 ];

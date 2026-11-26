@@ -2,7 +2,7 @@
   "registry": "muscle-category-key",
   "version": "1.0.0",
   "key": "FXMG=1.0",
-  "description": "The category codes of the muscle category key. A set or compartment is the FMA 5.1.0 set of that term, anchored to its FMA id and, where UBERON has it, its UBERON id; its members are the ones FMA asserts. An action category holds the prime movers of one joint action of the exercise key. muscles lists every category's members followed down to muscle keys.",
+  "description": "The category codes of the muscle category key. A set or compartment is the FMA 5.1.0 set of that term, anchored to its FMA id and, where Uberon has it, its Uberon id; its members are the ones FMA lists. An action category holds the prime movers of one joint action of the exercise key. muscles lists every category's members followed down to muscle keys.",
   "policy": "closed",
   "governs": [
     {
@@ -10,6 +10,29 @@
       "pointer": "fxmg"
     }
   ],
+  "sources": [
+    {
+      "name": "Foundational Model of Anatomy Ontology (FMA)",
+      "version": "5.1.0",
+      "publisher": "Structural Informatics Group, University of Washington",
+      "url": "http://si.washington.edu/projects/fma",
+      "license": "CC-BY-3.0",
+      "licenseName": "Creative Commons Attribution 3.0 Unported",
+      "licenseUrl": "https://creativecommons.org/licenses/by/3.0/",
+      "used": "Term labels and FMA ids, and the members of each FMA set"
+    },
+    {
+      "name": "Uberon (Uber-anatomy ontology)",
+      "version": "2026-11-05",
+      "publisher": "The Uberon editors, OBO Foundry",
+      "url": "http://uberon.org",
+      "license": "CC-BY-3.0",
+      "licenseName": "Creative Commons Attribution 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/3.0/",
+      "used": "Term labels and Uberon ids, and the parts of erector spinae"
+    }
+  ],
+  "attribution": "The labels and ids in anchors and members are quoted unchanged from the Foundational Model of Anatomy Ontology (FMA) 5.1.0, University of Washington, under CC BY 3.0 Unported, and from Uberon, release 2026-11-05, under CC BY 3.0. The codes are FDS's own, written from the FMA labels: lowercased and hyphenated, without the word \"muscle\".",
   "categories": [
     {
       "code": "hamstring",
@@ -278,7 +301,7 @@
           "label": "Musculature of anterior compartment of thigh"
         }
       ],
-      "uberonGap": "UBERON has no term for the anterior compartment of the thigh.",
+      "uberonNote": "Uberon has no term for the anterior compartment of the thigh.",
       "members": [
         {
           "key": "FXM=1.0/sartorius",
@@ -328,7 +351,7 @@
           "label": "Musculature of medial compartment of thigh"
         }
       ],
-      "uberonGap": "UBERON has no term for the medial compartment of the thigh.",
+      "uberonNote": "Uberon has no term for the medial compartment of the thigh.",
       "members": [
         {
           "key": "FXM=1.0/pectineus",
@@ -405,7 +428,7 @@
           "label": "Musculature of posterior compartment of thigh"
         }
       ],
-      "uberonGap": "UBERON has no term for the posterior compartment of the thigh.",
+      "uberonNote": "Uberon has no term for the posterior compartment of the thigh.",
       "members": [
         {
           "key": "FXM=1.0/biceps-femoris",
@@ -452,7 +475,7 @@
           "label": "Musculature of buttock"
         }
       ],
-      "uberonGap": "UBERON has no term for the buttock musculature; gluteal muscle (UBERON:0002000) also holds the hip rotators.",
+      "uberonNote": "Uberon has no term for the musculature of the buttock; its gluteal muscle (UBERON:0002000) includes the deep hip rotators.",
       "members": [
         {
           "key": "FXM=1.0/gluteus-maximus",
@@ -540,7 +563,7 @@
           "label": "Set of superficial muscles of posterior compartment of leg"
         }
       ],
-      "uberonGap": "UBERON has no term for the superficial muscles of the posterior compartment of the leg.",
+      "uberonNote": "Uberon has no term for the superficial muscles of the posterior compartment of the leg.",
       "members": [
         {
           "key": "FXM=1.0/gastrocnemius",
@@ -587,7 +610,7 @@
           "label": "Musculature of anterior compartment of leg"
         }
       ],
-      "uberonGap": "UBERON has no term for the anterior compartment of the leg.",
+      "uberonNote": "Uberon has no term for the anterior compartment of the leg.",
       "members": [
         {
           "key": "FXM=1.0/tibialis-anterior",
@@ -649,7 +672,7 @@
           "label": "erector spinae muscle group"
         }
       ],
-      "derivation": "FMA asserts no members for the erector spinae or its sided sets (FMA:22731, FMA:22732). The members are the three muscles UBERON:0002462 lists as its parts, each keyed by its FMA term.",
+      "membersSource": "FMA lists no members for the erector spinae or its left and right sets (FMA:22731, FMA:22732). Its members are its three columns, the parts of erector spinae in Uberon (UBERON:0002462), each named by its FMA term.",
       "members": [
         {
           "key": "FXM=1.0/iliocostalis",
@@ -696,7 +719,7 @@
           "label": "Musculature of anterior abdominal wall"
         }
       ],
-      "uberonGap": "UBERON has no term for this set; anterior abdominal wall muscle (UBERON:0002461) is the type of its muscles.",
+      "uberonNote": "Uberon has no term for this set; each of its muscles is an anterior abdominal wall muscle (UBERON:0002461).",
       "members": [
         {
           "key": "FXM=1.0/external-oblique",
@@ -763,7 +786,7 @@
           "label": "Pectoral musculature"
         }
       ],
-      "uberonGap": "UBERON has no term for this set; pectoral muscle (UBERON:0001495) is the type of its muscles.",
+      "uberonNote": "Uberon has no term for this set; each of its muscles is a pectoral muscle (UBERON:0001495).",
       "members": [
         {
           "key": "FXM=1.0/pectoralis-major",
@@ -810,7 +833,7 @@
           "label": "Set of rotator cuff muscles"
         }
       ],
-      "uberonGap": "UBERON has no term for this set; its rotator cuff (UBERON:0003683) cross-references the tendinous cuff (FMA:37018).",
+      "uberonNote": "Uberon has no term for this set; its rotator cuff (UBERON:0003683) is the tendinous cuff (FMA:37018) the four tendons form.",
       "members": [
         {
           "key": "FXM=1.0/subscapularis",
@@ -867,7 +890,7 @@
           "label": "Set of intrinsic muscles of shoulder"
         }
       ],
-      "uberonGap": "UBERON has no term for the intrinsic muscles of the shoulder.",
+      "uberonNote": "Uberon has no term for the intrinsic muscles of the shoulder.",
       "members": [
         {
           "key": "FXM=1.0/deltoid",
@@ -1025,7 +1048,7 @@
           "label": "Musculature of anterior compartment of arm"
         }
       ],
-      "uberonGap": "UBERON has no term for the anterior compartment of the arm.",
+      "uberonNote": "Uberon has no term for the anterior compartment of the arm.",
       "members": [
         {
           "key": "FXM=1.0/coracobrachialis",
@@ -1072,7 +1095,7 @@
           "label": "Musculature of posterior compartment of arm"
         }
       ],
-      "uberonGap": "UBERON has no term for the posterior compartment of the arm.",
+      "uberonNote": "Uberon has no term for the posterior compartment of the arm.",
       "members": [
         {
           "key": "FXM=1.0/triceps-brachii",
@@ -1177,7 +1200,7 @@
           "label": "Musculature of anterior compartment of forearm"
         }
       ],
-      "uberonGap": "UBERON has no term for the anterior compartment of the forearm.",
+      "uberonNote": "Uberon has no term for the anterior compartment of the forearm.",
       "members": [
         {
           "key": "FXMG=1.0/forearm.anterior.superficial",
@@ -1220,7 +1243,7 @@
           "label": "Set of superficial muscles of anterior compartment of forearm"
         }
       ],
-      "uberonGap": "UBERON has no term for the superficial muscles of the anterior compartment of the forearm.",
+      "uberonNote": "Uberon has no term for the superficial muscles of the anterior compartment of the forearm.",
       "members": [
         {
           "key": "FXM=1.0/pronator-teres",
@@ -1287,7 +1310,7 @@
           "label": "Set of deep muscles of anterior compartment of forearm"
         }
       ],
-      "uberonGap": "UBERON has no term for the deep muscles of the anterior compartment of the forearm.",
+      "uberonNote": "Uberon has no term for the deep muscles of the anterior compartment of the forearm.",
       "members": [
         {
           "key": "FXM=1.0/pronator-quadratus",
@@ -1334,7 +1357,7 @@
           "label": "Musculature of posterior compartment of forearm"
         }
       ],
-      "uberonGap": "UBERON has no term for the posterior compartment of the forearm.",
+      "uberonNote": "Uberon has no term for the posterior compartment of the forearm.",
       "members": [
         {
           "key": "FXMG=1.0/forearm.posterior.superficial",
@@ -1380,7 +1403,7 @@
           "label": "Set of superficial muscles of posterior compartment of forearm"
         }
       ],
-      "uberonGap": "UBERON has no term for the superficial muscles of the posterior compartment of the forearm.",
+      "uberonNote": "Uberon has no term for the superficial muscles of the posterior compartment of the forearm.",
       "members": [
         {
           "key": "FXM=1.0/brachioradialis",
@@ -1457,7 +1480,7 @@
           "label": "Set of deep muscles of posterior compartment of forearm"
         }
       ],
-      "uberonGap": "UBERON has no term for the deep muscles of the posterior compartment of the forearm.",
+      "uberonNote": "Uberon has no term for the deep muscles of the posterior compartment of the forearm.",
       "members": [
         {
           "key": "FXM=1.0/supinator",
@@ -1529,7 +1552,7 @@
           "label": "musculature of body"
         }
       ],
-      "derivation": "The entire musculature holds every muscle of the body, so its members are every muscle FXM names.",
+      "membersSource": "The entire musculature is every muscle of the body: its members are all the muscles the muscle key names.",
       "members": [
         {
           "key": "FXM=1.0/deltoid",

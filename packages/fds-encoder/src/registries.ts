@@ -138,15 +138,32 @@ function bodyPositions(): Registry {
   };
 }
 
+/** The anatomy references the muscle registries quote labels and ids from, with the terms of their licences. */
+const ANATOMY_SOURCES = [
+  {
+    name: 'Foundational Model of Anatomy Ontology (FMA)', version: '5.1.0', publisher: 'Structural Informatics Group, University of Washington',
+    url: 'http://si.washington.edu/projects/fma', license: 'CC-BY-3.0', licenseName: 'Creative Commons Attribution 3.0 Unported',
+    licenseUrl: 'https://creativecommons.org/licenses/by/3.0/', used: 'Term labels and FMA ids, and the members of each FMA set',
+  },
+  {
+    name: 'Uberon (Uber-anatomy ontology)', version: '2026-11-05', publisher: 'The Uberon editors, OBO Foundry',
+    url: 'http://uberon.org', license: 'CC-BY-3.0', licenseName: 'Creative Commons Attribution 3.0',
+    licenseUrl: 'https://creativecommons.org/licenses/by/3.0/', used: 'Term labels and Uberon ids, and the parts of erector spinae',
+  },
+] as const;
+
+const ANATOMY_ATTRIBUTION = 'The labels and ids in anchors and members are quoted unchanged from the Foundational Model of Anatomy Ontology (FMA) 5.1.0, University of Washington, under CC BY 3.0 Unported, and from Uberon, release 2026-11-05, under CC BY 3.0. The codes are FDS\'s own, written from the FMA labels: lowercased and hyphenated, without the word "muscle".';
+
 function muscleKey(): Registry {
   return {
     ...head('muscle-key', `FXM=${FXM_MAJOR}.${FXM_REV}`,
-      'The muscle and part codes of the muscle key, each derived from its term in the Foundational Model of Anatomy (FMA 5.1.0) and anchored to its FMA id, with the UBERON id where UBERON has the structure. A muscle with parts is exactly the union of its parts.',
+      'The muscle and part codes of the muscle key, each derived from its term in the Foundational Model of Anatomy (FMA 5.1.0) and anchored to its FMA id, with the Uberon id where Uberon has the structure. A muscle with parts is exactly the union of its parts.',
       [governs('specification/schema-sources/muscle/v1.1.0/muscle.schema.json', 'fxm')]),
+    sources: ANATOMY_SOURCES, attribution: ANATOMY_ATTRIBUTION,
     muscles: FXM_MUSCLES.map((m) => ({
-      code: m.token, name: m.name, anchors: m.anchors, ...(m.uberonGap === undefined ? {} : { uberonGap: m.uberonGap }),
+      code: m.token, name: m.name, anchors: m.anchors, ...(m.uberonNote === undefined ? {} : { uberonNote: m.uberonNote }),
       ...(m.parts === undefined ? {} : {
-        parts: m.parts.map((p) => ({ code: p.token, key: `FXM=${FXM_MAJOR}.${FXM_REV}/${m.token}.${p.token}`, name: p.name, anchors: p.anchors, ...(p.uberonGap === undefined ? {} : { uberonGap: p.uberonGap }) })),
+        parts: m.parts.map((p) => ({ code: p.token, key: `FXM=${FXM_MAJOR}.${FXM_REV}/${m.token}.${p.token}`, name: p.name, anchors: p.anchors, ...(p.uberonNote === undefined ? {} : { uberonNote: p.uberonNote }) })),
       }),
     })),
   };
@@ -156,11 +173,12 @@ function muscleCategoryKey(): Registry {
   const prefix = `FXMG=${FXMG_MAJOR}.${FXMG_REV}/`;
   return {
     ...head('muscle-category-key', `FXMG=${FXMG_MAJOR}.${FXMG_REV}`,
-      'The category codes of the muscle category key. A set or compartment is the FMA 5.1.0 set of that term, anchored to its FMA id and, where UBERON has it, its UBERON id; its members are the ones FMA asserts. An action category holds the prime movers of one joint action of the exercise key. muscles lists every category\'s members followed down to muscle keys.',
+      'The category codes of the muscle category key. A set or compartment is the FMA 5.1.0 set of that term, anchored to its FMA id and, where Uberon has it, its Uberon id; its members are the ones FMA lists. An action category holds the prime movers of one joint action of the exercise key. muscles lists every category\'s members followed down to muscle keys.',
       [governs('specification/schema-sources/muscle/muscle-category/v1.1.0/muscle-category.schema.json', 'fxmg')]),
+    sources: ANATOMY_SOURCES, attribution: ANATOMY_ATTRIBUTION,
     categories: FXMG_SETS.map((c) => ({
       code: c.code, form: c.code.includes('.') ? 'compartment' : 'set', name: c.name, anchors: c.anchors,
-      ...(c.uberonGap === undefined ? {} : { uberonGap: c.uberonGap }), ...(c.derivation === undefined ? {} : { derivation: c.derivation }),
+      ...(c.uberonNote === undefined ? {} : { uberonNote: c.uberonNote }), ...(c.membersSource === undefined ? {} : { membersSource: c.membersSource }),
       members: c.members, muscles: fxmgMembers(`${prefix}${c.code}`),
     })),
     actions: FXMG_ACTIONS.map((a) => ({

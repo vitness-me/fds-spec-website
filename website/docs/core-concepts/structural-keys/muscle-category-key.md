@@ -86,6 +86,8 @@ In FMA, "arm" is the upper arm only and "leg" is the shank only. Uberon uses bot
 
 Some gym words have an FMA term that doesn't fit. FMA's sets for the back, the lower limb and the neck reach muscles a gym category doesn't mean, so a gym's back, legs and neck are unions, not FMA codes. See [When no term exists](#when-no-term-exists).
 
+The category registry quotes FMA and Uberon labels and ids under their CC BY licences: [Sources and licences](./muscle-key.md#sources-and-licences) on the muscle key page gives each source, its version and its licence.
+
 ## The category code
 
 A category code is the FMA term of the set, rewritten with the muscle key's rule:
