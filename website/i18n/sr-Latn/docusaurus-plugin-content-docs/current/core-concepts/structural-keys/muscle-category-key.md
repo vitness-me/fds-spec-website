@@ -159,7 +159,7 @@ Ključevi su opcioni, pa je zapis bez ključa i dalje validan FDS.
 
 ## Šta šema ne može da proveri {#what-the-schema-cant-check}
 
-Šema proverava da je ključ dobro formiran: zaglavlje, jedan od četiri oblika i kodovi malim slovima. Ne može da proveri da je kod ispravno izveden iz FMA termina, niti koji su članovi nekog koda.
+Šema proverava samo zaglavlje, `FXMG=1.0/`. Encoder proverava ostatak ključa: jedan od četiri oblika i kodove malim slovima. Šema ne može da proveri da je kod ispravno izveden iz FMA termina, niti koji su članovi nekog koda.
 
 Članovi skupa ili lože potiču iz FMA, pa svaki vlasnik koji prati pravilo dobija istu listu. Članovi pokreta ne potiču iz anatomije: oni su procena o tome koji mišići obavljaju najveći deo posla, a dva vlasnika mogu ih proceniti različito. Kod je zajednički, a neslaganje se pokazuje kao preklapanje kada se ključevi uporede.
 
@@ -266,8 +266,8 @@ Poređenje gleda mišiće i delove koje svaki ključ pokriva kada se njegovi čl
 
 - **Isti**: dva ključa pokrivaju iste mišiće i delove.
 - **Specifičniji**: jedan ključ pokriva deo onoga što pokriva drugi, i ništa van toga.
-- **Različit**: dva ključa nemaju nijedan zajednički mišić ili deo.
 - **Preklapanje**: dele neke mišiće, a svaki pokriva neki koji drugi ne pokriva.
+- **Različit**: dva ključa nemaju nijedan zajednički mišić ili deo.
 
 | Ključ A | Ključ B | Rezultat |
 |---|---|---|

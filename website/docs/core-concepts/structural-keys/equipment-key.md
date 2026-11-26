@@ -750,6 +750,7 @@ Comparison goes layer by layer. `?` matches any value, and a parent code covers 
 
 - **Same**: the two keys are written identically and contain no `?`.
 - **More specific**: no layer contradicts, and one key states something the other leaves open, names a child where the other names its parent, or carries an extended layer the other leaves out.
+- **Overlap**: no layer contradicts, and neither key is more specific. The two may still describe the same thing.
 - **Different**: at least one layer can't match.
 
 | Key A | Key B | Result |
@@ -758,12 +759,12 @@ Comparison goes layer by layer. `?` matches any value, and a parent code covers 
 | `FXE=1.0S/k:imp/f:band.loop` | `FXE=1.0S/k:imp/f:band` | A is more specific: `band.loop` is a child of `band` |
 | `FXE=1.0S/k:mac/l:hands/s:seated/m:pull.down` | `FXE=1.0S/k:mac/l:?/s:?/m:?` | A is more specific: it states the layers B leaves open |
 | `FXE=1.0N/k:mac/l:ankles/s:prone/m:kn.flex/r:plate/c:arc` | `FXE=1.0S/k:mac/l:ankles/s:prone/m:kn.flex` | A is more specific: it carries extended layers B leaves out |
+| `FXE=1.0S/k:mac/l:hands/s:?/m:pull.back` | `FXE=1.0S/k:mac/l:?/s:seated.chest/m:pull.back` | Overlap: each key leaves open something the other states |
+| `FXE=1.0S/k:mac/l:arms/s:seated/m:sh.hadd;k:mac/l:hands/s:seated.chest/m:sh.habd` | `FXE=1.0S/k:mac/l:arms/s:seated/m:sh.hadd` | Overlap: a combination machine and one of its configurations |
 | `FXE=1.0S/k:mac/l:ankles/s:seated/m:kn.flex` | `FXE=1.0S/k:mac/l:ankles/s:prone/m:kn.flex` | Different: the postures differ |
 | `FXE=1.0N/k:mac/l:ankles/s:prone/m:kn.flex/r:plate/c:arc` | `FXE=1.0N/k:mac/l:ankles/s:prone/m:kn.flex/r:stack` | Different: both carry a drive, and the drives differ |
 | `FXE=1.0S/k:stn/f:cable` | `FXE=1.0S/k:mac/l:hands/s:seated/m:pull.down` | Different: a station and a strength machine |
 | `FXE=1.0S/k:imp/f:band.mini` | `FXE=1.0S/k:imp/f:band.loop` | Different: two children of `band` |
-
-When each key leaves open something the other states, neither is more specific, and the two may still describe the same equipment: `FXE=1.0S/k:mac/l:hands/s:?/m:pull.back` and `FXE=1.0S/k:mac/l:?/s:seated.chest/m:pull.back`. A combination machine and one of its configurations compare the same way: neither is more specific, and nothing contradicts.
 
 An identical key is a strong match, and anything else gives a short list for a person to confirm. See [Using keys](../structural-keys.md#using-keys) for how to keep confirmed links.
 

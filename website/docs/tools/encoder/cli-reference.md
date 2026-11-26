@@ -152,7 +152,7 @@ fds-encoder compare 'FXI=1.0S/m:el.flex/o:standing/l:none' 'FXE=1.0S/k:none'
 ```
 
 ```text
-A FXI key and a FXE key do not compare.
+An FXI key and an FXE key do not compare.
 ```
 
 ### `questions`

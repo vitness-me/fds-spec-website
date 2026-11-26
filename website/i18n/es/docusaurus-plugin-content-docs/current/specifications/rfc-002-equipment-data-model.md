@@ -8,8 +8,8 @@ keywords: [equipment, data model, json schema, fitness, interoperability, rfc]
 # RFC-002: Especificación del modelo de datos de equipamiento
 
 **Estado**: Borrador
-**Versión**: 0.1.0
-**Fecha**: 2025-09-09
+**Versión**: 0.2.0
+**Fecha**: 2026-11-26
 **Autores**: Equipo VITNESS
 **Categoría**: Standards Track
 
@@ -217,6 +217,8 @@ El objeto opcional `loading` describe cómo un implemento transporta la carga. E
 Esta es la contraparte de `exercise.loading` (RFC-001 §4.6): el ejercicio declara *si* un movimiento acepta carga; el equipamiento declara *en qué pasos*.
 
 ## 5. Versionado y compatibilidad
+
+**1.2.0** agrega el campo opcional `fxe` (§3.2).
 
 ### 5.1. Versionado de esquemas
 

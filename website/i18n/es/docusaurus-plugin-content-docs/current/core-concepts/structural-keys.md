@@ -25,11 +25,11 @@ Una clave describe la cosa en sí. Está hecha de capas, y cada capa registra un
 
 Se lee como flexión de codo, de pie, con una mancuerna en las manos. Un catálogo en español y uno en inglés pueden escribir la misma clave, porque la clave no depende de los nombres de ninguno de los dos.
 
-FDS publica cómo se construyen las claves y las listas de códigos de las que se nutren. No publica claves para ningún ejercicio, músculo o equipamiento, porque FDS es un estándar y no un catálogo. Cada propietario escribe las claves de sus propios registros.
+FDS publica cómo se construyen las claves y las listas de códigos de las que se nutren. No publica claves para los registros de ningún catálogo, porque FDS es un estándar y no un catálogo. Para los músculos y las categorías musculares, la lista de códigos es la propia anatomía. Cada propietario escribe las claves de sus propios registros.
 
 ## Qué hacen posible las claves {#what-keys-make-possible}
 
-- **Emparejar entre catálogos.** Se comparan claves en lugar de nombres. Comparar dos claves indica que son iguales, que una es más específica que la otra o que son distintas. Las páginas de cada clave describen los casos más finos.
+- **Emparejar entre catálogos.** Se comparan claves en lugar de nombres. Comparar dos claves indica que son iguales, que una es más específica que la otra, que se solapan (ninguna es más específica y nada se contradice) o que son distintas. Las páginas de cada clave describen los casos más finos.
 - **Interoperabilidad.** Dos plataformas pueden enlazar sus catálogos sin acordar antes los nombres ni adoptar una lista compartida.
 - **Un historial que sobrevive a un cambio.** Cuando alguien cambia de aplicación, la nueva aplicación puede buscar por clave cada ejercicio registrado en su propio catálogo, de modo que el historial sigue siendo útil.
 

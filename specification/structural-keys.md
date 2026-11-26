@@ -20,11 +20,11 @@ A key describes the thing itself. It is made of layers, and each layer records o
 
 It reads as elbow flexion, standing, with a dumbbell in the hands. A Spanish catalog and an English one can write the same key, because the key doesn't depend on either catalog's names.
 
-FDS publishes how keys are built and the code lists they draw on. It does not publish keys for any exercise, muscle or piece of equipment, because FDS is a standard and not a catalog. Each owner writes the keys for its own records.
+FDS publishes how keys are built and the code lists they draw on. It does not publish keys for any catalog's records, because FDS is a standard and not a catalog. For muscles and muscle categories, the code list is the anatomy itself. Each owner writes the keys for its own records.
 
 ## What keys make possible
 
-- **Matching across catalogs.** You compare keys instead of names. Comparing two keys tells you they are the same, that one is more specific than the other, or that they are different. The key pages describe the finer cases.
+- **Matching across catalogs.** You compare keys instead of names. Comparing two keys tells you they are the same, that one is more specific than the other, that they overlap (neither is more specific, and nothing contradicts), or that they are different. The key pages describe the finer cases.
 - **Interoperability.** Two platforms can link their catalogs without first agreeing on names or adopting a shared list.
 - **History that survives a move.** When someone changes apps, the new app can look up each logged exercise in its own catalog by key, so their history stays usable.
 

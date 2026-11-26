@@ -1,5 +1,5 @@
 // The fds-encoder command line: check, compare, build and match structural keys.
-import { readFile, rename, rm, writeFile } from 'node:fs/promises';
+import { readFile, rename, rm, stat, writeFile } from 'node:fs/promises';
 import { basename, dirname, join } from 'node:path';
 import { createInterface } from 'node:readline';
 import pkg from '../package.json';
@@ -55,6 +55,13 @@ function flag(args: readonly string[], name: string): string | undefined {
   return i >= 0 ? args[i + 1] : undefined;
 }
 
+/** The value after `name`: absent when the flag is, `null` when the flag is given without a value. */
+function flagValue(args: readonly string[], name: string): string | null | undefined {
+  if (!args.includes(name)) return undefined;
+  const value = flag(args, name);
+  return value === undefined || value.startsWith('--') ? null : value;
+}
+
 /** A problem with the command's input: a file that cannot be read or written, is not JSON, or holds the wrong thing. */
 class InputError extends Error {}
 
@@ -94,6 +101,7 @@ let temporaries = 0;
 
 /** Writes a whole file: to a temporary file beside it, then renamed over it, so a failed write never leaves part of one. */
 async function writeWhole(path: string, text: string): Promise<void> {
+  if ((await stat(path).catch(() => undefined))?.isDirectory()) throw new InputError(`${path}: ${FILE_PROBLEMS.EISDIR}.`);
   const tmp = join(dirname(path), `.${basename(path)}.${process.pid}.${temporaries++}.tmp`);
   try {
     await writeFile(tmp, text);
@@ -286,8 +294,13 @@ async function dispatch(args: readonly string[]): Promise<number> {
   if (cmd === '--version' || cmd === '-v') { say(pkg.version); return 0; }
   if (cmd === undefined || cmd === '--help' || cmd === '-h' || cmd === 'help') { say(USAGE); return cmd === undefined ? 1 : 0; }
   if (cmd === 'check') {
-    const records = flag(rest, '--records');
-    if (records !== undefined) return checkRecords(records, flag(rest, '--write'));
+    const records = flagValue(rest, '--records');
+    if (records === null) { warn('check --records needs a file: --records <file.json>.'); return 2; }
+    if (records !== undefined) {
+      const out = flagValue(rest, '--write');
+      if (out === null) { warn('--write needs a path: --write <out.json>.'); return 2; }
+      return checkRecords(records, out);
+    }
     if (rest.length === 0) { warn('check needs at least one key, or --records <file.json>.'); return 2; }
     return check(rest);
   }

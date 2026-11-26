@@ -41,6 +41,7 @@ describe('FXMG header', () => {
     ['FXMG=2.0/hamstring', 'major'],
     ['FXMG=1.1/hamstring', 'rev'],
     ['FXMG=1.00/hamstring', 'rev'],
+    ['FXMG=01.0/hamstring', 'major'],
   ])('refuses %j with %s', (text, code) => {
     expect(codes(text)).toContain(code);
   });

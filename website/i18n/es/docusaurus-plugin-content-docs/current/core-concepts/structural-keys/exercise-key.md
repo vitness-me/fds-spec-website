@@ -101,7 +101,7 @@ Las capas siguientes se listan en el orden de la clave. Para cada una: sus códi
 
 ### Movimiento (`m`) {#motion-m}
 
-El movimiento se construye con acciones articulares, escritas `articulación.acción`.
+El movimiento se construye con acciones articulares, escritas `joint.action`.
 
 | Articulación | Significado |
 |---|---|
@@ -730,15 +730,16 @@ La comparación va capa por capa. Una capa omitida toma su valor predeterminado,
 
 - **Igual**: las dos claves se escriben de forma idéntica y no contienen `?` ni `*`.
 - **Más específica**: ninguna capa se contradice, y una clave declara algo que la otra deja abierto, o nombra un hijo donde la otra nombra a su padre.
+- **Solapamiento**: ninguna capa se contradice, y ninguna clave es más específica. Las dos aún pueden describir lo mismo.
 - **Distinta**: al menos una capa no puede coincidir.
 
 | Clave A | Clave B | Resultado |
 |---|---|---|
 | `FXI=1.0S/m:el.flex/o:standing/l:bell.dumb@hands` | `FXI=1.0S/m:el.flex/o:standing/l:bell.dumb@hands` | Igual |
 | `FXI=1.0S/m:el.flex/o:standing/l:bell.dumb@hands` | `FXI=1.0S/m:el.flex/o:?/l:bell.dumb@hands` | A es más específica: declara la orientación que B deja abierta |
+| `FXI=1.0S/m:el.flex/o:?/l:bell.dumb@hands` | `FXI=1.0S/m:el.flex/o:standing/l:?` | Solapamiento: cada clave deja abierto algo que la otra declara |
+| `FXI=1.0S/m:el.flex/o:?/l:?` | `FXI=1.0S/m:el.flex/o:?/l:?` | Solapamiento: las claves son idénticas, pero contienen `?` |
 | `FXI=1.0S/m:hip.ext+kn.ext/o:standing/l:none` | `FXI=1.0S/m:hip.ext+kn.ext/o:standing/l:none/h:hands.head` | Distinta: la postura sostenida de A es la predeterminada, la de B es con las manos detrás de la cabeza |
-
-Cuando cada clave deja abierto algo que la otra declara, ninguna es más específica, y las dos pueden seguir describiendo el mismo ejercicio.
 
 Una clave idéntica es una coincidencia fuerte, y cualquier otro resultado da una lista corta para que una persona la confirme. Véase [Usar las claves](../structural-keys.md#using-keys) para saber cómo guardar los enlaces confirmados.
 

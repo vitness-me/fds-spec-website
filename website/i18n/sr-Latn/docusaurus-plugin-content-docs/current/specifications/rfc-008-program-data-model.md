@@ -8,8 +8,8 @@ keywords: [program, periodization, mesocycle, deload, schedule, progression, tra
 # RFC-008: Specifikacija modela podataka trenažnog programa
 
 **Status**: Nacrt
-**Verzija**: 0.1.0
-**Datum**: 2026-08-10
+**Verzija**: 0.2.0
+**Datum**: 2026-11-26
 **Autori**: VITNESS tim
 **Kategorija**: Standards Track
 
@@ -234,6 +234,8 @@ Ovaj entitet prati pravila verzionisanja iz RFC-001 §5. Njegov objavljeni URL j
 Dodavanje `schedule.model` vrednosti, namere ciklusa, `kind` vrednosti uslova ili tipa u `relations` je SPOREDNA izmena. Dokumenti važeći pod starom verzijom ostaju važeći: otvoreni klasifikatori su tu vrednost već prihvatali, a novi model se ranije validirao kroz sabirnu granu.
 
 Entiteti se verzionišu nezavisno. Nova verzija programa ne obavezuje trening, vežbu ni biblioteku preskripcije da se pomere, i nijedna od njihovih verzija ne obavezuje ovu.
+
+**1.1.0** dodaje opciono polje `fxi` na referenci vežbe za trenažni maksimum (§8.1).
 
 ## 7. Smernice za implementaciju
 

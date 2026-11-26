@@ -8,8 +8,8 @@ keywords: [muscle category, grouping, data model, json schema, interoperability,
 # RFC-004: Especificación del modelo de datos de categorías musculares
 
 **Estado**: Borrador
-**Versión**: 0.1.0
-**Fecha**: 2025-09-09
+**Versión**: 0.2.0
+**Fecha**: 2026-11-26
 **Autores**: Equipo VITNESS
 **Categoría**: Standards Track
 
@@ -180,6 +180,8 @@ Para estructuras de datos complejas únicas de una plataforma:
 ```
 
 ## 5. Versionado y compatibilidad
+
+**1.1.0** agrega el campo opcional `fxmg` (§3.2).
 
 ### 5.1. Versionado del esquema
 

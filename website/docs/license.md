@@ -20,6 +20,8 @@ Subject to the terms and conditions of this License, VITNESS grants You a worldw
 - Create and distribute derivative works of the Materials (including modifications and translations);
 - Implement the specifications and schemas, and make, use, and distribute implementations.
 
+The FMA and Uberon labels and ids in the muscle and muscle-category key registries (`specification/registries/muscle-key.registry.json` and `specification/registries/muscle-category-key.registry.json`) remain under the Creative Commons Attribution 3.0 license of their sources. They are credited in those files and are not relicensed by this License.
+
 3. Conditions
 - Attribution: You must retain all notices of authorship, copyright, and license in copies or substantial portions of the Materials.
 - No Misrepresentation: You must not state or imply that Your derivatives are official or endorsed by VITNESS unless expressly authorized.

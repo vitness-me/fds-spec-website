@@ -8,8 +8,8 @@ keywords: [workout, session, superset, circuit, emom, amrap, tabata, data model,
 # RFC-007: Especificación del modelo de datos de sesiones de entrenamiento
 
 **Estado**: Borrador
-**Versión**: 0.2.0
-**Fecha**: 2026-08-10
+**Versión**: 0.3.0
+**Fecha**: 2026-11-26
 **Autores**: Equipo VITNESS
 **Categoría**: Standards Track
 
@@ -252,6 +252,8 @@ Agregar un `mode` es un cambio MENOR: los documentos válidos bajo la versión a
 <!-- fds:pin workout/v1.0.0/workout.schema.json — this document names the superseded version deliberately, in §6 and again in §9, because releases 1.2.0 and 1.3.0 declare workout at 1.0.0 and a client pinned to either must keep resolving it. New work uses 1.1.0. -->
 
 **1.1.0** agregó `settings` en elementos y series, y `zone` en una serie. Ambas son adiciones opcionales a objetos cerrados, de modo que todo documento 1.0.0 sigue siendo válido sin cambios — pero un documento 1.1.0 que use cualquiera de las dos es rechazado por el esquema 1.0.0, que es lo que hace de esto una versión y no una edición. `workout/v1.0.0/workout.schema.json` permanece publicado y congelado; los lanzamientos 1.2.0 y 1.3.0 declaran workout en 1.0.0 y siguen resolviendo. El lanzamiento 1.4.0 es el primero que lo declara en 1.1.0.
+
+**1.2.0** agrega el campo opcional `fxi` en una referencia de ejercicio (§4.3), y `fxm`, `fxmg` y `fxe` en las referencias de músculo y de equipamiento de los totales derivados (§4.7).
 
 Las entidades versionan de forma independiente. Una nueva versión de workout no obliga a moverse a exercise, a equipment ni a la biblioteca de prescripción, y ninguna de sus versiones obliga a esta.
 

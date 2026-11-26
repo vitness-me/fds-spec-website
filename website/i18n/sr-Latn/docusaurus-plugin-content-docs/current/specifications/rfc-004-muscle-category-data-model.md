@@ -8,8 +8,8 @@ keywords: [muscle category, grouping, data model, json schema, interoperability,
 # RFC-004: Specifikacija modela podataka kategorije mišića
 
 **Status**: Nacrt
-**Verzija**: 0.1.0
-**Datum**: 2025-09-09
+**Verzija**: 0.2.0
+**Datum**: 2026-11-26
 **Autori**: VITNESS tim
 **Kategorija**: Standards Track
 
@@ -180,6 +180,8 @@ Za složene strukture podataka jedinstvene za platformu:
 ```
 
 ## 5. Verzionisanje i kompatibilnost
+
+**1.1.0** dodaje opciono polje `fxmg` (§3.2).
 
 ### 5.1. Verzionisanje šeme
 

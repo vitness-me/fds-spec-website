@@ -18,6 +18,8 @@ describe('FXI header', () => {
     expect(canon('FXI=1.0/m:sh.hadd/o:standing/l:cable@hands/p:hi')).toBe('FXI=1.0S/m:sh.hadd/o:standing/l:cable@hands/p:hi');
   });
   test('rejects a newer revision', () => expect(issues('FXI=1.1S/m:?/o:?/l:?')).toContain('rev'));
+  test('rejects a leading zero in the major version', () => expect(issues('FXI=01.0S/m:el.flex/o:standing/l:none')).toContain('major'));
+  test('rejects a leading zero in the revision', () => expect(issues('FXI=1.00S/m:el.flex/o:standing/l:none')).toContain('rev'));
 });
 
 describe('canonicalisation', () => {
@@ -129,6 +131,8 @@ describe('FXE', () => {
   test('sorts combination configurations', () => expect(c('FXE=1.0/k:mac/l:hands/s:seated/m:sh.habd ; k:mac/l:arms/s:seated/m:sh.hadd')).toBe('FXE=1.0S/k:mac/l:arms/s:seated/m:sh.hadd;k:mac/l:hands/s:seated/m:sh.habd'));
   test('form must match kind', () => expect(parseFxe('FXE=1.0/k:sup/f:bell.dumb').ok).toBe(false));
   test('requires the revision', () => expect(parseFxe('FXE=1S/k:none').ok).toBe(false));
+  test('rejects a leading zero in the major version', () => expect(parseFxe('FXE=01.0S/k:imp/f:bell.dumb').issues.map((i) => i.code)).toContain('major'));
+  test('rejects a leading zero in the revision', () => expect(parseFxe('FXE=1.00S/k:imp/f:bell.dumb').issues.map((i) => i.code)).toContain('rev'));
 });
 
 describe('none stands alone in the load layer', () => {

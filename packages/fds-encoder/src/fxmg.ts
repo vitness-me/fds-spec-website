@@ -144,6 +144,7 @@ export function parseFxmg(input: string, vocabulary: FxmgVocabulary = FXMG_VOCAB
   }
   const [, majorText = '', revText = '', , body = ''] = head;
   if (Number(majorText) !== FXMG_MAJOR) issues.push({ code: 'major', message: `Only FXMG major version ${FXMG_MAJOR} is defined.` });
+  if (/^0\d/.test(majorText)) issues.push({ code: 'major', message: 'Write the major version without leading zeros.' });
   if (Number(revText) > FXMG_REV) issues.push({ code: 'rev', message: `This checker knows revisions up to ${FXMG_MAJOR}.${FXMG_REV}.` });
   if (/^0\d/.test(revText)) issues.push({ code: 'rev', message: 'Write the revision without leading zeros.' });
   const before = issues.length;

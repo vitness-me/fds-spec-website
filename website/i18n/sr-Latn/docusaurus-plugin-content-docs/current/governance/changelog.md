@@ -11,7 +11,8 @@ Sve značajne izmene FDS RFC dokumenata i šema dokumentovane su ovde.
 Format je inspirisan pristupom Keep a Changelog, a projekat se pridržava semantičkog verzionisanja za izdanja specifikacije.
 
 ## [Neobjavljeno]
-- Politika imenskog prostora ekstenzija (nacrt) i odeljci o usaglašenosti (planirano).
+- Politika imenskog prostora ekstenzija (nacrt).
+- Slučajevi usaglašenosti za četiri strukturna ključa, u `specification/conformance/structural-keys/`.
 
 ## Izdanje šeme — exercise 1.2.0, equipment 1.2.0, workout 1.2.0, muscle 1.1.0, muscle-category 1.1.0, prescription 1.1.0, program 1.1.0 (2026-11-26)
 

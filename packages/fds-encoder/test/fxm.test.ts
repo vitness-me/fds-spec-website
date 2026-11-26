@@ -27,6 +27,7 @@ describe('FXM header', () => {
     ['FXM=2.0/deltoid', 'major'],
     ['FXM=1.1/deltoid', 'rev'],
     ['FXM=1.00/deltoid', 'rev'],
+    ['FXM=01.0/deltoid', 'major'],
   ])('refuses %j with %s', (text, code) => {
     expect(codes(text)).toContain(code);
   });

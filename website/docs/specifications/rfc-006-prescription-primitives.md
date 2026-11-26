@@ -8,8 +8,8 @@ keywords: [prescription, load target, rpe, percent 1rm, tempo, rest, progression
 # RFC-006: Prescription Primitives Specification
 
 **Status**: Draft
-**Version**: 0.1.0
-**Date**: 2026-08-07
+**Version**: 0.2.0
+**Date**: 2026-11-26
 **Authors**: VITNESS Team
 **Category**: Standards Track
 
@@ -251,6 +251,8 @@ This library follows the versioning rules in RFC-001 §5. Its published URL is a
 Adding a method to a discriminated union is a MINOR change: documents valid under the old version remain valid, because the new method previously validated through the catch-all branch. That is the compatibility property the catch-all exists to provide, and it is why the branch is specified rather than left to implementations.
 
 Removing a method, or narrowing an existing payload, is a MAJOR change.
+
+**1.1.0** adds the optional `fxe` on the equipment of `bandResistance` (§4.1).
 
 ## 7. Implementation Guidance
 

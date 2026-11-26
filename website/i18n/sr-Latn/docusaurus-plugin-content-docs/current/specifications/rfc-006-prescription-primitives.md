@@ -8,8 +8,8 @@ keywords: [prescription, load target, rpe, percent 1rm, tempo, rest, progression
 # RFC-006: Specifikacija primitiva preskripcije
 
 **Status**: Nacrt
-**Verzija**: 0.1.0
-**Datum**: 2026-08-07
+**Verzija**: 0.2.0
+**Datum**: 2026-11-26
 **Autori**: VITNESS tim
 **Kategorija**: Standards Track
 
@@ -251,6 +251,8 @@ Ova biblioteka prati pravila verzionisanja iz RFC-001 §5. Njen objavljeni URL j
 Dodavanje metode u diskriminisanu uniju je SPOREDNA izmena: dokumenti važeći pod starom verzijom ostaju važeći, jer se nova metoda ranije validirala kroz sabirnu granu. To je svojstvo kompatibilnosti radi kojeg sabirna grana postoji, i zato je ta grana specifikovana umesto da bude prepuštena implementacijama.
 
 Uklanjanje metode, ili sužavanje postojećeg sadržaja, je GLAVNA izmena.
+
+**1.1.0** dodaje opciono polje `fxe` na opremi za `bandResistance` (§4.1).
 
 ## 7. Smernice za implementaciju
 

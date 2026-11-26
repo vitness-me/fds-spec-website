@@ -149,7 +149,8 @@ export function match(query: MatchEntry, library: readonly MatchEntry[], options
   }
 
   const same = found.filter(({ s }) => s.cmp.result === 'same');
-  if (same.length > 1) return warned({ kind: 'confirm', candidates, why: 'several library entries have the same key' });
+  if (new Set(same.map(({ s }) => s.row.id)).size > 1) return warned({ kind: 'confirm', candidates, why: 'several library entries have the same key' });
+  if (same.length > 1) return warned({ kind: 'confirm', candidates, why: 'the library lists the entry with the same key more than once' });
   if (same.length === 0) return warned({ kind: 'confirm', candidates, why: own.ok ? 'no library entry has the same key' : 'the key does not check' });
   const only = same[0]!.s.row;
   if (hasFxe(query) && hasFxe(only) && compareOrDifferent(query.fxe, only.fxe).result !== 'same') {

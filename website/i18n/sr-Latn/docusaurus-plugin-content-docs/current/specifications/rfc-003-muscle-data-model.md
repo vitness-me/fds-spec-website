@@ -8,8 +8,8 @@ keywords: [muscle, anatomy, data model, json schema, heatmap, interoperability, 
 # RFC-003: Specifikacija modela podataka o mišiću
 
 **Status**: Nacrt
-**Verzija**: 0.1.0
-**Datum**: 2025-09-09
+**Verzija**: 0.2.0
+**Datum**: 2026-11-26
 **Autori**: VITNESS tim
 **Kategorija**: Standards Track
 
@@ -247,6 +247,8 @@ Napomene:
 - Konzumenti TREBALO BI da ograniče težine na `[0,1]` i mapiraju ih na skale boje/providnosti po potrebi.
 
 ## 5. Verzionisanje i kompatibilnost
+
+**1.1.0** dodaje opciono polje `fxm` (§3.2).
 
 ### 5.1. Verzionisanje šeme
 

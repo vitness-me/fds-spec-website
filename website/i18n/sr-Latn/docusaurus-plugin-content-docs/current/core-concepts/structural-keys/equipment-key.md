@@ -750,6 +750,7 @@ Poređenje ide sloj po sloj. `?` se poklapa sa bilo kojom vrednošću, a roditel
 
 - **Isti**: dva ključa su zapisana identično i ne sadrže `?`.
 - **Specifičniji**: nijedan sloj ne protivreči, a jedan ključ navodi nešto što drugi ostavlja otvorenim, imenuje potomka tamo gde drugi imenuje njegovog roditelja, ili nosi prošireni sloj koji drugi izostavlja.
+- **Preklapanje**: nijedan sloj ne protivreči, a nijedan ključ nije specifičniji. Oba ključa i dalje mogu da opisuju isto.
 - **Različit**: bar jedan sloj ne može da se poklopi.
 
 | Ključ A | Ključ B | Rezultat |
@@ -758,12 +759,12 @@ Poređenje ide sloj po sloj. `?` se poklapa sa bilo kojom vrednošću, a roditel
 | `FXE=1.0S/k:imp/f:band.loop` | `FXE=1.0S/k:imp/f:band` | A je specifičniji: `band.loop` je potomak koda `band` |
 | `FXE=1.0S/k:mac/l:hands/s:seated/m:pull.down` | `FXE=1.0S/k:mac/l:?/s:?/m:?` | A je specifičniji: navodi slojeve koje B ostavlja otvorenim |
 | `FXE=1.0N/k:mac/l:ankles/s:prone/m:kn.flex/r:plate/c:arc` | `FXE=1.0S/k:mac/l:ankles/s:prone/m:kn.flex` | A je specifičniji: nosi proširene slojeve koje B izostavlja |
+| `FXE=1.0S/k:mac/l:hands/s:?/m:pull.back` | `FXE=1.0S/k:mac/l:?/s:seated.chest/m:pull.back` | Preklapanje: svaki ključ ostavlja otvorenim nešto što drugi navodi |
+| `FXE=1.0S/k:mac/l:arms/s:seated/m:sh.hadd;k:mac/l:hands/s:seated.chest/m:sh.habd` | `FXE=1.0S/k:mac/l:arms/s:seated/m:sh.hadd` | Preklapanje: kombinovana sprava i jedna od njenih konfiguracija |
 | `FXE=1.0S/k:mac/l:ankles/s:seated/m:kn.flex` | `FXE=1.0S/k:mac/l:ankles/s:prone/m:kn.flex` | Različit: položaji se razlikuju |
 | `FXE=1.0N/k:mac/l:ankles/s:prone/m:kn.flex/r:plate/c:arc` | `FXE=1.0N/k:mac/l:ankles/s:prone/m:kn.flex/r:stack` | Različit: oba nose pogon, a pogoni se razlikuju |
 | `FXE=1.0S/k:stn/f:cable` | `FXE=1.0S/k:mac/l:hands/s:seated/m:pull.down` | Različit: stanica i sprava za snagu |
 | `FXE=1.0S/k:imp/f:band.mini` | `FXE=1.0S/k:imp/f:band.loop` | Različit: dva potomka koda `band` |
-
-Kada svaki ključ ostavlja otvorenim nešto što drugi navodi, nijedan nije specifičniji, a njih dva i dalje mogu opisivati istu opremu: `FXE=1.0S/k:mac/l:hands/s:?/m:pull.back` i `FXE=1.0S/k:mac/l:?/s:seated.chest/m:pull.back`. Kombinovana sprava i jedna od njenih konfiguracija porede se na isti način: nijedna nije specifičnija i ništa ne protivreči.
 
 Identičan ključ je pouzdano poklapanje, a sve ostalo daje kratku listu koju osoba potvrđuje. Pogledajte [Korišćenje ključeva](../structural-keys.md#using-keys) za to kako se čuvaju potvrđene veze.
 

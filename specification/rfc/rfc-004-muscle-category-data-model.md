@@ -1,8 +1,8 @@
 # RFC-004: Muscle Category Data Model Specification
 
 **Status**: Draft
-**Version**: 0.1.0
-**Date**: 2025-09-09
+**Version**: 0.2.0
+**Date**: 2026-11-26
 **Authors**: VITNESS Team
 **Category**: Standards Track
 
@@ -173,6 +173,8 @@ For complex platform-unique data structures:
 ```
 
 ## 5. Versioning and Compatibility
+
+**1.1.0** adds the optional `fxmg` (§3.2).
 
 ### 5.1. Schema Versioning
 

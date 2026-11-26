@@ -69,6 +69,7 @@ export function parseFxi(input: string): ParsedFxi {
   }
   const [, majorText = '', revText = '', , body = ''] = head;
   if (Number(majorText) !== FXI_MAJOR) log.add('major', `Only FXI major version ${FXI_MAJOR} is defined.`);
+  if (/^0\d/.test(majorText)) log.add('major', 'Write the major version without leading zeros.');
   if (Number(revText) > FXI_REV) log.add('rev', `This checker knows revisions up to ${FXI_MAJOR}.${FXI_REV}.`);
   if (/^0\d/.test(revText)) log.add('rev', 'Write the revision without leading zeros.');
 
@@ -415,7 +416,9 @@ export function parseFxe(input: string): ParsedFxe {
   }
   const [, majorText = '', revText = '', , body = ''] = head;
   if (Number(majorText) !== FXE_MAJOR) log.add('major', `Only FXE major version ${FXE_MAJOR} is defined.`);
+  if (/^0\d/.test(majorText)) log.add('major', 'Write the major version without leading zeros.');
   if (Number(revText) > FXE_REV) log.add('rev', `This checker knows revisions up to ${FXE_MAJOR}.${FXE_REV}.`);
+  if (/^0\d/.test(revText)) log.add('rev', 'Write the revision without leading zeros.');
   const configs = body.split(';').map((c) => readConfig(c.trim(), log));
   const texts = sortUnique(configs.map(configText));
   const parsedBack = texts.map((t) => configs.find((c) => configText(c) === t)!);

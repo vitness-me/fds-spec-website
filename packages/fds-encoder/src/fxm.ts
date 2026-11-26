@@ -78,6 +78,7 @@ export function parseFxm(input: string, vocabulary: FxmVocabulary = FXM_VOCABULA
   }
   const [, majorText = '', revText = '', , body = ''] = head;
   if (Number(majorText) !== FXM_MAJOR) issues.push({ code: 'major', message: `Only FXM major version ${FXM_MAJOR} is defined.` });
+  if (/^0\d/.test(majorText)) issues.push({ code: 'major', message: 'Write the major version without leading zeros.' });
   if (Number(revText) > FXM_REV) issues.push({ code: 'rev', message: `This checker knows revisions up to ${FXM_MAJOR}.${FXM_REV}.` });
   if (/^0\d/.test(revText)) issues.push({ code: 'rev', message: 'Write the revision without leading zeros.' });
   const key = readBody(body, issues);

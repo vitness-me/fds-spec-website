@@ -8,8 +8,8 @@ keywords: [program, periodization, mesocycle, deload, schedule, progression, tra
 # RFC-008: Especificación del modelo de datos de programas de entrenamiento
 
 **Estado**: Borrador
-**Versión**: 0.1.0
-**Fecha**: 2026-08-10
+**Versión**: 0.2.0
+**Fecha**: 2026-11-26
 **Autores**: Equipo VITNESS
 **Categoría**: Standards Track
 
@@ -234,6 +234,8 @@ Esta entidad sigue las reglas de versionado del RFC-001 §5. Su URL publicada es
 Agregar un `schedule.model`, un `intent` de ciclo, un `kind` de condición o un tipo de `relations` es un cambio MENOR. Los documentos válidos bajo la versión anterior siguen siendo válidos: los clasificadores abiertos ya aceptaban el valor, y un modelo nuevo antes validaba a través de la rama comodín.
 
 Las entidades versionan de forma independiente. Una nueva versión de program no obliga a moverse a workout, a exercise ni a la biblioteca de prescripción, y ninguna de sus versiones obliga a esta.
+
+**1.1.0** agrega el campo opcional `fxi` en la referencia de ejercicio de un máximo de entrenamiento (§8.1).
 
 ## 7. Guía de implementación
 

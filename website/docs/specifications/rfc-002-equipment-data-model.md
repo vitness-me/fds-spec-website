@@ -8,8 +8,8 @@ keywords: [equipment, data model, json schema, fitness, interoperability, rfc]
 # RFC-002: Equipment Data Model Specification
 
 **Status**: Draft
-**Version**: 0.1.0
-**Date**: 2025-09-09
+**Version**: 0.2.0
+**Date**: 2026-11-26
 **Authors**: VITNESS Team
 **Category**: Standards Track
 
@@ -217,6 +217,8 @@ The optional `loading` object describes how an implement carries load. It is the
 This is the counterpart to `exercise.loading` (RFC-001 §4.6): the exercise states *whether* a movement takes load, the equipment states *in what steps*.
 
 ## 5. Versioning and Compatibility
+
+**1.2.0** adds the optional `fxe` (§3.2).
 
 ### 5.1. Schema Versioning
 

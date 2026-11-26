@@ -8,8 +8,8 @@ keywords: [exercise, data model, json schema, fitness, interoperability, rfc]
 # RFC-001: Especificación del modelo de datos de ejercicio
 
 **Estado**: Borrador
-**Versión**: 0.1.0
-**Fecha**: 2025-09-02
+**Versión**: 0.2.0
+**Fecha**: 2026-11-26
 **Autores**: Equipo VITNESS
 **Categoría**: Standards Track
 
@@ -331,6 +331,8 @@ Valores de `externalLoad`:
 Los consumidores NO DEBEN rechazar un ejercicio que omite `loading`. La ausencia significa no declarado, no `none`.
 
 ## 5. Versionado y compatibilidad
+
+**1.2.0** agrega el campo opcional `fxi` (§3.2), `fxm` y `fxmg` en una referencia de músculo (§4.3), y `fxe` en una referencia de equipamiento (§4.4).
 
 ### 5.1. Versionado de esquemas
 

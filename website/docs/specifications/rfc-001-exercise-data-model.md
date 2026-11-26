@@ -8,8 +8,8 @@ keywords: [exercise, data model, json schema, fitness, interoperability, rfc]
 # RFC-001: Exercise Data Model Specification
 
 **Status**: Draft
-**Version**: 0.1.0
-**Date**: 2025-09-02
+**Version**: 0.2.0
+**Date**: 2026-11-26
 **Authors**: VITNESS Team
 **Category**: Standards Track
 
@@ -331,6 +331,8 @@ The optional `loading` object describes **how a movement accepts external load**
 Consumers MUST NOT reject an exercise that omits `loading`. Absence means unstated, not `none`.
 
 ## 5. Versioning and Compatibility
+
+**1.2.0** adds the optional `fxi` (§3.2), `fxm` and `fxmg` on a muscle reference (§4.3), and `fxe` on an equipment reference (§4.4).
 
 ### 5.1. Schema Versioning
 

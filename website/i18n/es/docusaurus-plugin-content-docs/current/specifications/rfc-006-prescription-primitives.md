@@ -8,8 +8,8 @@ keywords: [prescription, load target, rpe, percent 1rm, tempo, rest, progression
 # RFC-006: Especificación de las primitivas de prescripción
 
 **Estado**: Borrador
-**Versión**: 0.1.0
-**Fecha**: 2026-08-07
+**Versión**: 0.2.0
+**Fecha**: 2026-11-26
 **Autores**: Equipo VITNESS
 **Categoría**: Standards Track
 
@@ -251,6 +251,8 @@ Esta biblioteca sigue las reglas de versionado del RFC-001 §5. Su URL publicada
 Agregar un método a una unión discriminada es un cambio MENOR: los documentos válidos bajo la versión anterior siguen siendo válidos, porque el nuevo método antes validaba a través de la rama comodín. Esa es la propiedad de compatibilidad que la rama comodín existe para proporcionar, y es la razón por la que la rama se especifica en lugar de dejarse a las implementaciones.
 
 Eliminar un método, o estrechar una carga útil existente, es un cambio MAYOR.
+
+**1.1.0** agrega el campo opcional `fxe` en el equipamiento de `bandResistance` (§4.1).
 
 ## 7. Guía de implementación
 

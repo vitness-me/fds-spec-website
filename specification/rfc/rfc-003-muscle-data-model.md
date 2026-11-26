@@ -1,8 +1,8 @@
 # RFC-003: Muscle Data Model Specification
 
 **Status**: Draft
-**Version**: 0.1.0
-**Date**: 2025-09-09
+**Version**: 0.2.0
+**Date**: 2026-11-26
 **Authors**: VITNESS Team
 **Category**: Standards Track
 
@@ -240,6 +240,8 @@ Notes:
 - Consumers SHOULD clamp weights to `[0,1]` and map them to color/opacity scales as appropriate.
 
 ## 5. Versioning and Compatibility
+
+**1.1.0** adds the optional `fxm` (§3.2).
 
 ### 5.1. Schema Versioning
 

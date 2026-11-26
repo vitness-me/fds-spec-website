@@ -159,7 +159,7 @@ Las claves son opcionales, así que un registro sin clave sigue siendo FDS váli
 
 ## Lo que el esquema no puede comprobar {#what-the-schema-cant-check}
 
-El esquema comprueba que una clave esté bien formada: el encabezado, una de las cuatro formas y códigos en minúsculas. No puede comprobar que un código se haya derivado correctamente de un término de FMA, ni cuáles son los miembros de un código.
+El esquema solo comprueba el encabezado, `FXMG=1.0/`. El Encoder comprueba el resto de la clave: una de las cuatro formas y códigos en minúsculas. El esquema no puede comprobar que un código se haya derivado correctamente de un término de FMA, ni cuáles son los miembros de un código.
 
 Los miembros de un conjunto o de un compartimento vienen de FMA, así que todo propietario que sigue la regla obtiene la misma lista. Los miembros de una acción no vienen de la anatomía: son un criterio sobre qué músculos hacen la mayor parte del trabajo, y dos propietarios pueden juzgarlos de forma distinta. El código es compartido, y un desacuerdo aparece como un solapamiento al comparar las claves.
 
@@ -266,8 +266,8 @@ La comparación mira los músculos y las partes que abarca cada clave una vez qu
 
 - **Igual**: las dos claves abarcan los mismos músculos y partes.
 - **Más específica**: una clave abarca parte de lo que abarca la otra, y nada fuera de ello.
-- **Distinta**: las dos claves no abarcan ningún músculo ni parte en común.
 - **Solapamiento**: comparten algunos músculos, y cada una abarca uno que la otra no.
+- **Distinta**: las dos claves no abarcan ningún músculo ni parte en común.
 
 | Clave A | Clave B | Resultado |
 |---|---|---|

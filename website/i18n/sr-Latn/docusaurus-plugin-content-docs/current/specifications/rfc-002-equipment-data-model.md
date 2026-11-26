@@ -8,8 +8,8 @@ keywords: [equipment, data model, json schema, fitness, interoperability, rfc]
 # RFC-002: Specifikacija modela podataka o opremi
 
 **Status**: Nacrt
-**Verzija**: 0.1.0
-**Datum**: 2025-09-09
+**Verzija**: 0.2.0
+**Datum**: 2026-11-26
 **Autori**: VITNESS tim
 **Kategorija**: Standards Track
 
@@ -217,6 +217,8 @@ Opcioni objekat `loading` opisuje kako sprava nosi opterećenje. On je merodavan
 Ovo je pandan objektu `exercise.loading` (RFC-001 §4.6): vežba iskazuje *da li* pokret prima opterećenje, a oprema *u kojim koracima*.
 
 ## 5. Verzionisanje i kompatibilnost
+
+**1.2.0** dodaje opciono polje `fxe` (§3.2).
 
 ### 5.1. Verzionisanje šema
 

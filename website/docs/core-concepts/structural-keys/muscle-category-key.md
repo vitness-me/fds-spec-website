@@ -159,7 +159,7 @@ Keys are optional, so a record without one is still valid FDS.
 
 ## What the schema can't check
 
-The schema checks that a key is well formed: the header, one of the four forms, and lowercase codes. It can't check that a code was derived correctly from an FMA term, or what a code's members are.
+The schema checks only the header, `FXMG=1.0/`. The Encoder checks the rest of the key: one of the four forms, and lowercase codes. The schema can't check that a code was derived correctly from an FMA term, or what a code's members are.
 
 Members of a set or compartment come from FMA, so every owner who follows the rule gets the same list. The members of an action don't come from anatomy: they are a judgement of which muscles do most of the work, and two owners can judge them differently. The code is shared, and a disagreement shows up as an overlap when the keys are compared.
 
@@ -266,8 +266,8 @@ Comparison looks at the muscles and parts each key covers once its members are f
 
 - **Same**: the two keys cover the same muscles and parts.
 - **More specific**: one key covers part of what the other covers, and nothing outside it.
-- **Different**: the two keys cover no muscle or part in common.
 - **Overlap**: they share some muscles, and each covers one the other doesn't.
+- **Different**: the two keys cover no muscle or part in common.
 
 | Key A | Key B | Result |
 |---|---|---|

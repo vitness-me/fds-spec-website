@@ -730,15 +730,16 @@ Comparison goes layer by layer. A layer left out takes its default, which is a v
 
 - **Same**: the two keys are written identically and contain no `?` or `*`.
 - **More specific**: no layer contradicts, and one key states something the other leaves open, or names a child where the other names its parent.
+- **Overlap**: no layer contradicts, and neither key is more specific. The two may still describe the same thing.
 - **Different**: at least one layer can't match.
 
 | Key A | Key B | Result |
 |---|---|---|
 | `FXI=1.0S/m:el.flex/o:standing/l:bell.dumb@hands` | `FXI=1.0S/m:el.flex/o:standing/l:bell.dumb@hands` | Same |
 | `FXI=1.0S/m:el.flex/o:standing/l:bell.dumb@hands` | `FXI=1.0S/m:el.flex/o:?/l:bell.dumb@hands` | A is more specific: it states the orientation B leaves open |
+| `FXI=1.0S/m:el.flex/o:?/l:bell.dumb@hands` | `FXI=1.0S/m:el.flex/o:standing/l:?` | Overlap: each key leaves open something the other states |
+| `FXI=1.0S/m:el.flex/o:?/l:?` | `FXI=1.0S/m:el.flex/o:?/l:?` | Overlap: the keys are identical, but they contain `?` |
 | `FXI=1.0S/m:hip.ext+kn.ext/o:standing/l:none` | `FXI=1.0S/m:hip.ext+kn.ext/o:standing/l:none/h:hands.head` | Different: A's held posture is the default, B's is hands behind the head |
-
-When each key leaves open something the other states, neither is more specific, and the two may still describe the same exercise.
 
 An identical key is a strong match, and anything else gives a short list for a person to confirm. See [Using keys](../structural-keys.md#using-keys) for how to keep confirmed links.
 

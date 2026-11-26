@@ -8,8 +8,8 @@ keywords: [exercise, data model, json schema, fitness, interoperability, rfc]
 # RFC-001: Specifikacija modela podataka o vežbi
 
 **Status**: Nacrt
-**Verzija**: 0.1.0
-**Datum**: 2025-09-02
+**Verzija**: 0.2.0
+**Datum**: 2026-11-26
 **Autori**: VITNESS tim
 **Kategorija**: Standards Track
 
@@ -331,6 +331,8 @@ Vrednosti `externalLoad`:
 Konzumenti NE SMEJU da odbace vežbu koja izostavlja `loading`. Odsustvo znači da nije iskazano, a ne `none`.
 
 ## 5. Verzionisanje i kompatibilnost
+
+**1.2.0** dodaje opciono polje `fxi` (§3.2), `fxm` i `fxmg` na referenci mišića (§4.3) i `fxe` na referenci opreme (§4.4).
 
 ### 5.1. Verzionisanje šema
 

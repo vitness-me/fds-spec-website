@@ -11,7 +11,8 @@ All notable changes to the FDS RFCs and schemas are documented here.
 The format is inspired by Keep a Changelog, and the project adheres to Semantic Versioning for spec releases.
 
 ## [Unreleased]
-- Extension namespace policy (draft) and conformance sections (planned).
+- Extension namespace policy (draft).
+- Conformance cases for the four structural keys, in `specification/conformance/structural-keys/`.
 
 ## Schema release — exercise 1.2.0, equipment 1.2.0, workout 1.2.0, muscle 1.1.0, muscle-category 1.1.0, prescription 1.1.0, program 1.1.0 (2026-11-26)
 

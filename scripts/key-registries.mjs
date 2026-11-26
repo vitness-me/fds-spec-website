@@ -12,9 +12,10 @@
  *   2. CODES.  Every code shown in a table on the four key pages exists in a
  *      registry. A page that documents a code the encoder doesn't know is either a
  *      typo or a code nobody added.
- *   3. KEYS.  Every full key quoted on the key pages and in the published examples
- *      passes the encoder's check. The few keys a page quotes to show a mistake are
- *      listed in DELIBERATELY_WRONG, each with the reason.
+ *   3. KEYS.  Every full key quoted on a docs page, English or translated, and in a
+ *      JSON example under specification/ passes the encoder's check. The few keys a
+ *      page quotes to show a mistake are listed in DELIBERATELY_WRONG, each with the
+ *      reason. The conformance cases are left out: they quote invalid keys on purpose.
  *   4. LINKS.  Each key page links the registries that hold its codes.
  *
  * It reads the built encoder, so build it first:
@@ -34,7 +35,10 @@ import { walk } from './lib/vocabulary.mjs';
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const REGISTRY_DIR = join(ROOT, 'specification/registries');
 const PAGE_DIR = join(ROOT, 'website/docs/core-concepts/structural-keys');
-const EXAMPLE_DIR = join(ROOT, 'specification/schemas');
+/** Where the docs pages live: the English pages and each locale's translations. */
+const DOC_DIRS = ['website/docs', ...readdirSync(join(ROOT, 'website/i18n'), { withFileTypes: true })
+  .filter((d) => d.isDirectory()).map((d) => `website/i18n/${d.name}/docusaurus-plugin-content-docs`)]
+  .filter((d) => existsSync(join(ROOT, d)));
 const REGISTRY_URL = 'https://spec.vitness.me/registries/';
 
 /** The registries each key page must link. */
@@ -49,6 +53,9 @@ const PAGE_REGISTRIES = {
 const DELIBERATELY_WRONG = new Map([
   ['FXM=1.0/deltoid.lateral', 'muscle-key.md shows the gym word "lateral" as the mistake; the FMA part is acromial'],
   ['FXMG=1.0/a:ank.ev', 'muscle-category-key.md says ankle eversion has no action category'],
+  ['FXE=1.0S/k:robot', 'the Encoder\'s CLI reference and library API show the error for an unknown kind'],
+  ['FXI=1.0S/m:el.flexx/o:standing/l:bell.dumb@hands', 'the Encoder\'s examples show check catching a typo'],
+  ['FXI=1.0S/m:el.bend/o:standing/l:bell.dumb@hands', 'the Encoder\'s library API shows the KeyError for an unknown joint action'],
 ]);
 
 /** Words a key-page table shows as what not to write. */
@@ -186,6 +193,17 @@ const pages = Object.fromEntries(Object.keys(PAGE_REGISTRIES).map((p) => [p, rea
 
 const known = knownCodes(generated);
 
+/** Every docs page and JSON example whose keys rule 3 checks, by repository path. */
+function keySources() {
+  const files = (dir, keep) => readdirSync(join(ROOT, dir), { recursive: true, encoding: 'utf8' }).filter(keep).map((f) => `${dir}/${f}`);
+  const docs = DOC_DIRS.flatMap((dir) => files(dir, (f) => /\.mdx?$/.test(f)));
+  const examples = files('specification', (f) => f.endsWith('.json') && !f.endsWith('.schema.json')
+    && !f.startsWith('conformance/') && !f.split('/').pop().startsWith('invalid.'));
+  return Object.fromEntries([...docs, ...examples].sort().map((p) => [p, readFileSync(join(ROOT, p), 'utf8')]));
+}
+
+const sources = keySources();
+
 if (process.argv.includes('--self-test')) {
   const failures = [];
   const expectFail = (name, problems) => { if (problems.length === 0) failures.push(`${name} passed a broken input`); };
@@ -205,6 +223,14 @@ if (process.argv.includes('--self-test')) {
   // Each key is valid up to a , > or | and broken after it: a check that stops at the separator passes all three.
   const separated = '`FXI=1.0S/o:standing/l:none/m:el.flex>el.bend` `FXI=1.0S/m:=sp.flex/o:prone/l:none/s:floor@feet,nope` `FXI=1.0S/o:prone/l:none/m:=sp.flex\\|hip.bend`';
   if (keyProblems({ 'page.md': separated }, known).problems.length !== 3) failures.push('keys are checked only up to a , > or |');
+  // A bad key in any docs page fails: an Encoder page, and a translation alone, are scanned too.
+  const planted = (path) => {
+    if (!(path in sources)) { failures.push(`keys: ${path} is not scanned`); return []; }
+    return keyProblems({ ...sources, [path]: `${sources[path]}\n\n\`FXI=1.0S/m:el.twist/o:standing/l:none\`\n` }, known).problems;
+  };
+  if (keyProblems(sources, known).problems.length > 0) failures.push('keys: the repository fails before anything is planted');
+  expectFail('keys (Encoder page)', planted('website/docs/tools/encoder/index.md'));
+  expectFail('keys (Spanish page only)', planted('website/i18n/es/docusaurus-plugin-content-docs/current/core-concepts/structural-keys/exercise-key.md'));
   expectFail('links', linkProblems({ ...pages, 'muscle-key.md': '' }));
   if (codeProblems({ 'page.md': '| `m:hip.ext+kn.ext` | `l:bell.dumb@hands` | `x:rc@legs+u@arms` | `bell.*` | `FXMG=1.0/a:hip.flex` |' }, known).problems.length > 0) failures.push('codes rejected valid codes');
   if (failures.length > 0) { console.error(failures.join('\n')); process.exit(1); }
@@ -212,15 +238,11 @@ if (process.argv.includes('--self-test')) {
   process.exit(0);
 }
 
-const examples = Object.fromEntries(readdirSync(EXAMPLE_DIR, { recursive: true, encoding: 'utf8' })
-  .filter((f) => f.endsWith('.json') && !f.endsWith('.schema.json') && !f.split('/').pop().startsWith('invalid.'))
-  .map((f) => [`specification/schemas/${f}`, readFileSync(join(EXAMPLE_DIR, f), 'utf8')]));
-
 const problems = [];
 problems.push(...registryProblems(generated, readRegistry));
 const codes = codeProblems(pages, known);
 problems.push(...codes.problems);
-const keys = keyProblems({ ...Object.fromEntries(Object.entries(pages).map(([p, b]) => [`website/docs/core-concepts/structural-keys/${p}`, b])), 'website/docs/core-concepts/structural-keys.md': readFileSync(join(ROOT, 'website/docs/core-concepts/structural-keys.md'), 'utf8'), ...examples }, known);
+const keys = keyProblems(sources, known);
 problems.push(...keys.problems);
 problems.push(...linkProblems(pages));
 
@@ -229,4 +251,4 @@ if (problems.length > 0) {
   for (const p of problems) console.error(`  ${p}`);
   process.exit(1);
 }
-console.log(`  ok    ${Object.keys(generated).length} key registries match the encoder; ${codes.count} table codes are in them; ${keys.count} quoted keys check; the key pages link them`);
+console.log(`  ok    ${Object.keys(generated).length} key registries match the encoder; ${codes.count} table codes are in them; ${keys.count} quoted keys in ${Object.keys(sources).length} docs pages and examples check; the key pages link them`);

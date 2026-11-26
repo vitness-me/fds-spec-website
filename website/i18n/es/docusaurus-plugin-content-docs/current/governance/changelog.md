@@ -11,7 +11,8 @@ Todos los cambios notables en los RFC y esquemas de FDS se documentan aquí.
 El formato se inspira en Keep a Changelog, y el proyecto se adhiere al Versionado Semántico para los lanzamientos de la especificación.
 
 ## [Sin publicar]
-- Política de espacio de nombres de extensiones (borrador) y secciones de conformidad (planificadas).
+- Política de espacio de nombres de extensiones (borrador).
+- Casos de conformidad para las cuatro claves estructurales, en `specification/conformance/structural-keys/`.
 
 ## Lanzamiento de esquema — exercise 1.2.0, equipment 1.2.0, workout 1.2.0, muscle 1.1.0, muscle-category 1.1.0, prescription 1.1.0, program 1.1.0 (2026-11-26)
 

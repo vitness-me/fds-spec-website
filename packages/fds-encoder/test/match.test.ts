@@ -37,6 +37,11 @@ describe('an identical key', () => {
   test('several identical entries go to confirm', () => {
     expect(match(query(), [row('a', BACK_SQUAT), row('b', BACK_SQUAT)])).toMatchObject({ kind: 'confirm', why: 'several library entries have the same key' });
   });
+  test('one entry listed twice goes to confirm with a reason about that one entry', () => {
+    const r = match(query(), [row('a', BACK_SQUAT), row('a', BACK_SQUAT)]);
+    expect(r).toMatchObject({ kind: 'confirm', why: 'the library lists the entry with the same key more than once' });
+    expect(candidates(r)).toEqual([{ id: 'a', via: 'key', result: 'same' }]);
+  });
 });
 
 describe('an identical key needs the same equipment key when both entries carry one', () => {

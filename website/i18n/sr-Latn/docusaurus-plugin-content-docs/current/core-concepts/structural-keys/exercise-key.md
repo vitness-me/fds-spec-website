@@ -730,15 +730,16 @@ Poređenje ide sloj po sloj. Izostavljen sloj uzima svoju podrazumevanu vrednost
 
 - **Isti**: dva ključa su zapisana identično i ne sadrže `?` ni `*`.
 - **Specifičniji**: nijedan sloj ne protivreči, a jedan ključ navodi nešto što drugi ostavlja otvorenim, ili imenuje potomka tamo gde drugi imenuje njegovog roditelja.
+- **Preklapanje**: nijedan sloj ne protivreči, a nijedan ključ nije specifičniji. Oba ključa i dalje mogu da opisuju isto.
 - **Različit**: bar jedan sloj ne može da se poklopi.
 
 | Ključ A | Ključ B | Rezultat |
 |---|---|---|
 | `FXI=1.0S/m:el.flex/o:standing/l:bell.dumb@hands` | `FXI=1.0S/m:el.flex/o:standing/l:bell.dumb@hands` | Isti |
 | `FXI=1.0S/m:el.flex/o:standing/l:bell.dumb@hands` | `FXI=1.0S/m:el.flex/o:?/l:bell.dumb@hands` | A je specifičniji: navodi orijentaciju koju B ostavlja otvorenom |
+| `FXI=1.0S/m:el.flex/o:?/l:bell.dumb@hands` | `FXI=1.0S/m:el.flex/o:standing/l:?` | Preklapanje: svaki ključ ostavlja otvorenim nešto što drugi navodi |
+| `FXI=1.0S/m:el.flex/o:?/l:?` | `FXI=1.0S/m:el.flex/o:?/l:?` | Preklapanje: ključevi su identični, ali sadrže `?` |
 | `FXI=1.0S/m:hip.ext+kn.ext/o:standing/l:none` | `FXI=1.0S/m:hip.ext+kn.ext/o:standing/l:none/h:hands.head` | Različit: držanje kod A je podrazumevano, kod B su šake iza glave |
-
-Kada svaki ključ ostavlja otvorenim nešto što drugi navodi, nijedan nije specifičniji, a njih dva i dalje mogu opisivati istu vežbu.
 
 Identičan ključ je pouzdano poklapanje, a sve ostalo daje kratku listu koju osoba potvrđuje. Pogledajte [Korišćenje ključeva](../structural-keys.md#using-keys) za to kako se čuvaju potvrđene veze.
 

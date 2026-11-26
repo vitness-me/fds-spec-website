@@ -25,11 +25,11 @@ Ključ opisuje samu stvar. Sastoji se od slojeva, a svaki sloj beleži jednu dim
 
 Čita se kao fleksija lakta, u stojećem stavu, sa bučicom u rukama. Srpski i engleski katalog mogu da napišu isti ključ, jer ključ ne zavisi od imena ni u jednom od njih.
 
-FDS objavljuje kako se ključevi grade i liste kodova iz kojih se uzimaju. Ne objavljuje ključeve ni za jednu vežbu, mišić ili komad opreme, jer je FDS standard, a ne katalog. Svaki vlasnik piše ključeve za sopstvene zapise.
+FDS objavljuje kako se ključevi grade i liste kodova iz kojih se uzimaju. Ne objavljuje ključeve za zapise nijednog kataloga, jer je FDS standard, a ne katalog. Za mišiće i kategorije mišića, lista kodova je sama anatomija. Svaki vlasnik piše ključeve za sopstvene zapise.
 
 ## Šta ključevi omogućavaju {#what-keys-make-possible}
 
-- **Uparivanje među katalozima.** Upoređujete ključeve umesto imena. Poređenje dva ključa kaže vam da su isti, da je jedan specifičniji od drugog ili da su različiti. Stranice o ključevima opisuju finije slučajeve.
+- **Uparivanje među katalozima.** Upoređujete ključeve umesto imena. Poređenje dva ključa kaže vam da su isti, da je jedan specifičniji od drugog, da se preklapaju (nijedan nije specifičniji i ništa ne protivreči) ili da su različiti. Stranice o ključevima opisuju finije slučajeve.
 - **Interoperabilnost.** Dve platforme mogu da povežu svoje kataloge bez prethodnog dogovora o imenima i bez usvajanja zajedničke liste.
 - **Istorija koja preživi prelazak.** Kada neko promeni aplikaciju, nova aplikacija može svaku zabeleženu vežbu da pronađe u sopstvenom katalogu po ključu, pa istorija ostaje upotrebljiva.
 

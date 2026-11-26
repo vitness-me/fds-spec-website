@@ -138,7 +138,7 @@ Ključevi su opcioni, pa je zapis bez ključa i dalje validan FDS.
 
 ## Šta šema ne može da proveri {#what-the-schema-cant-check}
 
-Šema proverava da je ključ dobro formiran: zaglavlje, jedan od dva oblika i kodovi malim slovima spojeni crticama. Ne može da proveri da je kod mišića ispravno izveden iz FMA termina, niti da kod dela imenuje deo koji FMA ima.
+Šema proverava samo zaglavlje, `FXM=1.0/`. Encoder proverava ostatak ključa: jedan od dva oblika i kodove malim slovima spojene crticama. Šema ne može da proveri da je kod mišića ispravno izveden iz FMA termina, niti da kod dela imenuje deo koji FMA ima.
 
 To je cena objavljivanja pravila umesto liste. Dva vlasnika mogu napisati različite ključeve za jedan mišić i oba ključa prolaze šemu. Jedan vlasnik čita FMA i za bočni deltoid piše `FXM=1.0/deltoid.acromial`. Drugi se ravna po nazivu iz teretane i piše `FXM=1.0/deltoid.lateral`. Oba ključa su dobro formirana, poređenje kaže da su različiti, a samo osoba koja proveri FMA termin može da kaže koji prati pravilo. Doslednim izvođenjem ključevi različitih vlasnika se susreću.
 

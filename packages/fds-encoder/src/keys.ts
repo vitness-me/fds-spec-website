@@ -85,7 +85,7 @@ export function compareKeys(a: string, b: string): KeyComparison {
   writeKey(a);
   writeKey(b);
   const [ta, tb] = [keyType(a), keyType(b)];
-  if (ta !== tb) throw new KeyError(`A ${ta} key and a ${tb} key do not compare.`);
+  if (ta !== tb) throw new KeyError(`An ${ta} key and an ${tb} key do not compare.`);
   switch (ta) {
     case 'FXI': return fromLayers('FXI', compareFxi(a, b));
     case 'FXE': return fromLayers('FXE', compareFxe(a, b));

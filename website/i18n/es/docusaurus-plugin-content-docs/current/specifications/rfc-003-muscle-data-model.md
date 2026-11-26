@@ -8,8 +8,8 @@ keywords: [muscle, anatomy, data model, json schema, heatmap, interoperability, 
 # RFC-003: Especificación del modelo de datos de músculo
 
 **Estado**: Borrador
-**Versión**: 0.1.0
-**Fecha**: 2025-09-09
+**Versión**: 0.2.0
+**Fecha**: 2026-11-26
 **Autores**: Equipo VITNESS
 **Categoría**: Standards Track
 
@@ -247,6 +247,8 @@ Notas:
 - Los consumidores DEBERÍAN acotar los pesos a `[0,1]` y mapearlos a escalas de color/opacidad según corresponda.
 
 ## 5. Versionado y compatibilidad
+
+**1.1.0** agrega el campo opcional `fxm` (§3.2).
 
 ### 5.1. Versionado de esquemas
 

@@ -750,6 +750,7 @@ La comparación va capa por capa. `?` coincide con cualquier valor, y un código
 
 - **Igual**: las dos claves se escriben de forma idéntica y no contienen `?`.
 - **Más específica**: ninguna capa se contradice, y una clave declara algo que la otra deja abierto, nombra un hijo donde la otra nombra a su padre, o lleva una capa extendida que la otra omite.
+- **Solapamiento**: ninguna capa se contradice, y ninguna clave es más específica. Las dos aún pueden describir lo mismo.
 - **Distinta**: al menos una capa no puede coincidir.
 
 | Clave A | Clave B | Resultado |
@@ -758,12 +759,12 @@ La comparación va capa por capa. `?` coincide con cualquier valor, y un código
 | `FXE=1.0S/k:imp/f:band.loop` | `FXE=1.0S/k:imp/f:band` | A es más específica: `band.loop` es hijo de `band` |
 | `FXE=1.0S/k:mac/l:hands/s:seated/m:pull.down` | `FXE=1.0S/k:mac/l:?/s:?/m:?` | A es más específica: declara las capas que B deja abiertas |
 | `FXE=1.0N/k:mac/l:ankles/s:prone/m:kn.flex/r:plate/c:arc` | `FXE=1.0S/k:mac/l:ankles/s:prone/m:kn.flex` | A es más específica: lleva capas extendidas que B omite |
+| `FXE=1.0S/k:mac/l:hands/s:?/m:pull.back` | `FXE=1.0S/k:mac/l:?/s:seated.chest/m:pull.back` | Solapamiento: cada clave deja abierto algo que la otra declara |
+| `FXE=1.0S/k:mac/l:arms/s:seated/m:sh.hadd;k:mac/l:hands/s:seated.chest/m:sh.habd` | `FXE=1.0S/k:mac/l:arms/s:seated/m:sh.hadd` | Solapamiento: una máquina combinada y una de sus configuraciones |
 | `FXE=1.0S/k:mac/l:ankles/s:seated/m:kn.flex` | `FXE=1.0S/k:mac/l:ankles/s:prone/m:kn.flex` | Distinta: las posturas difieren |
 | `FXE=1.0N/k:mac/l:ankles/s:prone/m:kn.flex/r:plate/c:arc` | `FXE=1.0N/k:mac/l:ankles/s:prone/m:kn.flex/r:stack` | Distinta: ambas llevan una fuente de resistencia, y difieren |
 | `FXE=1.0S/k:stn/f:cable` | `FXE=1.0S/k:mac/l:hands/s:seated/m:pull.down` | Distinta: una estación y una máquina de fuerza |
 | `FXE=1.0S/k:imp/f:band.mini` | `FXE=1.0S/k:imp/f:band.loop` | Distinta: dos hijos de `band` |
-
-Cuando cada clave deja abierto algo que la otra declara, ninguna es más específica, y las dos pueden seguir describiendo el mismo equipamiento: `FXE=1.0S/k:mac/l:hands/s:?/m:pull.back` y `FXE=1.0S/k:mac/l:?/s:seated.chest/m:pull.back`. Una máquina combinada y una de sus configuraciones se comparan de la misma manera: ninguna es más específica, y nada se contradice.
 
 Una clave idéntica es una coincidencia fuerte, y cualquier otro resultado da una lista corta para que una persona la confirme. Véase [Usar las claves](../structural-keys.md#using-keys) para saber cómo guardar los enlaces confirmados.
 

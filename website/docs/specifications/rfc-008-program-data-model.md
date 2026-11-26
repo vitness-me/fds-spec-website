@@ -8,8 +8,8 @@ keywords: [program, periodization, mesocycle, deload, schedule, progression, tra
 # RFC-008: Training Program Data Model Specification
 
 **Status**: Draft
-**Version**: 0.1.0
-**Date**: 2026-08-10
+**Version**: 0.2.0
+**Date**: 2026-11-26
 **Authors**: VITNESS Team
 **Category**: Standards Track
 
@@ -234,6 +234,8 @@ This entity follows the versioning rules in RFC-001 §5. Its published URL is a 
 Adding a `schedule.model`, a `cycle` intent, a condition `kind` or a `relations` type is a MINOR change. Documents valid under the old version remain valid: the open classifiers accepted the value already, and a new model previously validated through the catch-all branch.
 
 Entities version independently. A new program version does not oblige workout, exercise or the prescription library to move, and none of their versions oblige this one.
+
+**1.1.0** adds the optional `fxi` on the exercise reference of a training max (§8.1).
 
 ## 7. Implementation Guidance
 

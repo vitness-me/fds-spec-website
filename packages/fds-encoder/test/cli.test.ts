@@ -57,7 +57,7 @@ describe('fds-encoder', () => {
     expect((await cli(['compare', 'FXMG=1.0/triceps-surae', 'FXMG=1.0/pectoral'])).out).toMatch(/^different/);
     expect((await cli(['compare', 'FXMG=1.0/hamstring', 'FXM=1.0/semitendinosus'])).out).toMatch(/^in /);
     const mixed = await cli(['compare', 'FXI=1.0S/m:el.flex/o:standing/l:none', 'FXE=1.0S/k:none']);
-    expect([mixed.code, mixed.err]).toEqual([1, 'A FXI key and a FXE key do not compare.\n']);
+    expect([mixed.code, mixed.err]).toEqual([1, 'An FXI key and an FXE key do not compare.\n']);
   });
 
   test('build prints the keys of each entry and reports answers that do not build', async () => {
@@ -105,6 +105,13 @@ describe('fds-encoder', () => {
     expect((await cli(['nope'])).code).toBe(2);
     expect((await cli(['match', 'x.json'])).code).toBe(2);
   });
+
+  test('check --records without a file, or --write without a path, is a usage error', async () => {
+    const records = file('usage.json', [{ id: 'm', fxm: 'FXM=1.0/biceps-brachii' }]);
+    expect(await cli(['check', '--records'])).toEqual({ code: 2, out: '', err: 'check --records needs a file: --records <file.json>.\n' });
+    expect(await cli(['check', '--records', '--write', join(dir, 'w.json')])).toEqual({ code: 2, out: '', err: 'check --records needs a file: --records <file.json>.\n' });
+    expect(await cli(['check', '--records', records, '--write'])).toEqual({ code: 2, out: '', err: '--write needs a path: --write <out.json>.\n' });
+  });
 });
 
 describe('check --records --write', () => {
@@ -145,6 +152,8 @@ describe('errors', () => {
     const records = file('ok.json', [{ id: 'm', fxm: 'FXM=1.0S/biceps-brachii' }]);
     const r = await cli(['check', '--records', records, '--write', dir]);
     expect([r.code, r.err]).toEqual([1, `${dir}: is a directory, not a file.\n`]);
+    const slash = await cli(['check', '--records', records, '--write', `${dir}/`]);
+    expect([slash.code, slash.err]).toEqual([1, `${dir}/: is a directory, not a file.\n`]);
   });
   test('main prints any other error as one line and exits 1; a closed output pipe exits 0 quietly', async () => {
     const throwing = (e: Error) => async (_: string[], io: CliIo) => main(['--version'], { ...io, out: () => { throw e; } });

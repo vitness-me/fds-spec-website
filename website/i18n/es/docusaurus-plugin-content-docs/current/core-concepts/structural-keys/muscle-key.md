@@ -138,7 +138,7 @@ Las claves son opcionales, así que un registro sin clave sigue siendo FDS váli
 
 ## Lo que el esquema no puede comprobar {#what-the-schema-cant-check}
 
-El esquema comprueba que una clave esté bien formada: el encabezado, una de las dos formas y códigos en minúsculas unidos por guiones. No puede comprobar que un código de músculo se haya derivado correctamente del término de FMA, ni que un código de parte nombre una parte que FMA tiene.
+El esquema solo comprueba el encabezado, `FXM=1.0/`. El Encoder comprueba el resto de la clave: una de las dos formas y códigos en minúsculas unidos por guiones. El esquema no puede comprobar que un código de músculo se haya derivado correctamente del término de FMA, ni que un código de parte nombre una parte que FMA tiene.
 
 Ese es el precio de publicar una regla en lugar de una lista. Dos propietarios pueden escribir claves distintas para un músculo y ambas pasan el esquema. Un propietario consulta FMA y escribe `FXM=1.0/deltoid.acromial` para el deltoides lateral. Otro se guía por el nombre del gimnasio y escribe `FXM=1.0/deltoid.lateral`. Ambas claves están bien formadas, la comparación dice que son distintas, y solo una persona que compruebe el término de FMA puede saber cuál sigue la regla. Seguir la derivación es lo que hace que las claves de propietarios distintos coincidan.
 
