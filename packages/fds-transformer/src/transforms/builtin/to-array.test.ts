@@ -224,11 +224,11 @@ describe('toMediaArray', () => {
         'http://d205bpvrqc9yn1.cloudfront.net/0001.gif',
         { 
           type: 'gif',
-          baseUrl: '/Users/vpetkovic/Data/Animations/gymVisuals'
+          baseUrl: '/data/media/exercises'
         }
       );
       expect(result).toEqual([
-        { type: 'gif', uri: '/Users/vpetkovic/Data/Animations/gymVisuals/0001.gif' }
+        { type: 'gif', uri: '/data/media/exercises/0001.gif' }
       ]);
     });
   });
