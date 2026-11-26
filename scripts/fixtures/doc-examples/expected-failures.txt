@@ -2,8 +2,8 @@
     / must have required property 'metrics'
 
   scripts/fixtures/doc-examples/failing-examples.md:41 — declares exercise schemaVersion 2.0.0, which is not published.
-    Published: 1.1.0. A reader validating this against the URL it names gets nothing.
-    Validated against the current 1.1.0 instead, so the rest of the errors are still visible.
+    Published: 1.1.0, 1.2.0. A reader validating this against the URL it names gets nothing.
+    Validated against the current 1.2.0 instead, so the rest of the errors are still visible.
 
   scripts/fixtures/doc-examples/failing-examples.md:73 — the snippet does not satisfy #/$defs/repTarget (35 error(s)):
     / must have required property 'kind'
@@ -33,10 +33,10 @@
     A reader copying it gets a parse error. Fence it as text, or mark it `fds:ignore <reason>`.
 
   scripts/fixtures/doc-examples/comparison-data.ts:172 — declares exercise schemaVersion 1.0.0, which is withdrawn and no longer served.
-    Published: 1.1.0. A reader validating this against the URL it names gets nothing.
-    Validated against the current 1.1.0 instead, so the rest of the errors are still visible.
+    Published: 1.1.0, 1.2.0. A reader validating this against the URL it names gets nothing.
+    Validated against the current 1.2.0 instead, so the rest of the errors are still visible.
 
-  scripts/fixtures/doc-examples/comparison-data.ts:172 — does not validate against exercise 1.1.0 (5 error(s)):
+  scripts/fixtures/doc-examples/comparison-data.ts:172 — does not validate against exercise 1.2.0 (5 error(s)):
     / must have required property 'metrics'
     /classification must have required property 'force'
     /targets/primary/0 must have required property 'categoryId'
@@ -44,5 +44,5 @@
     /targets/secondary/1 must have required property 'categoryId'
 
   scripts/fixtures/doc-examples/comparison-data.ts:208 — declares exercise schemaVersion 1.0.0, which is withdrawn and no longer served.
-    Published: 1.1.0. A reader validating this against the URL it names gets nothing.
-    Validated against the current 1.1.0 instead, so the rest of the errors are still visible.
+    Published: 1.1.0, 1.2.0. A reader validating this against the URL it names gets nothing.
+    Validated against the current 1.2.0 instead, so the rest of the errors are still visible.
