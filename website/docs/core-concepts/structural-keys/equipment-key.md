@@ -10,6 +10,8 @@ The equipment key is the structural key of a piece of equipment. It sits in the 
 
 The header `FXE=1.0` is the key's version, and the code lists come with the FDS release that publishes them. A later release may add codes or split a code into more specific children, but it never changes what a code means, so a key written today stays valid.
 
+The code lists are published as registries: the kinds, forms and layer codes of this key in [`equipment-key.registry.json`](https://spec.vitness.me/registries/equipment-key.registry.json), and the [body points](https://spec.vitness.me/registries/body-points.registry.json) and [body positions](https://spec.vitness.me/registries/body-positions.registry.json) it shares with the exercise key.
+
 ## Anatomy of the key
 
 A plate-loaded leg press, with the sled on a 45° track, has this key:

@@ -1,0 +1,148 @@
+{
+  "registry": "body-positions",
+  "version": "1.0.0",
+  "key": "FXI=1.0 FXE=1.0",
+  "description": "The body positions both keys share: an exercise key's orientation (o) and an equipment key's posture (s). impliedPoints are the body points the position bears weight on, which a support layer never writes.",
+  "policy": "closed",
+  "governs": [
+    {
+      "source": "specification/schema-sources/exercises/v1.2.0/exercise.schema.json",
+      "pointer": "fxi"
+    },
+    {
+      "source": "specification/schema-sources/equipment/v1.2.0/equipment.schema.json",
+      "pointer": "fxe"
+    }
+  ],
+  "entries": [
+    {
+      "value": "standing",
+      "description": "On the feet, trunk within about 30° of vertical.",
+      "impliedPoints": [
+        "feet"
+      ]
+    },
+    {
+      "value": "standing.bent",
+      "description": "On the feet, trunk hinged forward more than about 30° and held there (bent-over row).",
+      "impliedPoints": [
+        "feet"
+      ]
+    },
+    {
+      "value": "standing.chest",
+      "description": "On the feet, trunk resting on a pad, upright or bent over (donkey calf raise machine).",
+      "impliedPoints": [
+        "feet",
+        "chest"
+      ]
+    },
+    {
+      "value": "seated",
+      "description": "Sitting, trunk more than 60° from horizontal.",
+      "impliedPoints": [
+        "seat"
+      ]
+    },
+    {
+      "value": "seated.bent",
+      "description": "Sitting, trunk hinged forward over the thighs and held there (seated bent-over raise).",
+      "impliedPoints": [
+        "seat"
+      ]
+    },
+    {
+      "value": "seated.chest",
+      "description": "Sitting, chest against a pad that holds the trunk (row machine, rear-delt machine).",
+      "impliedPoints": [
+        "seat",
+        "chest"
+      ]
+    },
+    {
+      "value": "kneeling",
+      "description": "On both knees, trunk upright. On hands and knees is `prone`.",
+      "impliedPoints": [
+        "knees",
+        "shins"
+      ]
+    },
+    {
+      "value": "kneeling.half",
+      "description": "On one knee, the other foot forward.",
+      "impliedPoints": [
+        "knees",
+        "feet"
+      ]
+    },
+    {
+      "value": "supine",
+      "description": "Face up, trunk within 15° of horizontal.",
+      "impliedPoints": [
+        "back"
+      ]
+    },
+    {
+      "value": "supine.incline",
+      "description": "Face up, head higher than hips, trunk 15–60° from horizontal.",
+      "impliedPoints": [
+        "back"
+      ]
+    },
+    {
+      "value": "supine.decline",
+      "description": "Face up, head lower than hips, trunk 15–60° from horizontal.",
+      "impliedPoints": [
+        "back"
+      ]
+    },
+    {
+      "value": "prone",
+      "description": "Face down, trunk within 15° of horizontal: lying, plank, push-up, on hands and knees.",
+      "impliedPoints": [
+        "chest"
+      ]
+    },
+    {
+      "value": "prone.incline",
+      "description": "Face down, head higher than hips, 15–60° (hands raised).",
+      "impliedPoints": [
+        "chest"
+      ]
+    },
+    {
+      "value": "prone.decline",
+      "description": "Face down, head lower than hips, 15–60° (feet raised).",
+      "impliedPoints": [
+        "chest"
+      ]
+    },
+    {
+      "value": "prone.pike",
+      "description": "Face down, hips highest, hands and feet down, trunk more than 60° head-down (pike).",
+      "impliedPoints": [
+        "feet",
+        "hands"
+      ]
+    },
+    {
+      "value": "side-lying",
+      "description": "On one side: lying, or a side plank.",
+      "impliedPoints": []
+    },
+    {
+      "value": "hanging",
+      "description": "Held up by the hands or arms, feet off the floor: hanging from a bar, propped on dip bars.",
+      "impliedPoints": [
+        "hands"
+      ]
+    },
+    {
+      "value": "inverted",
+      "description": "Upside down, trunk within 30° of vertical, head lowest: handstand, headstand.",
+      "impliedPoints": [
+        "hands"
+      ]
+    }
+  ]
+}

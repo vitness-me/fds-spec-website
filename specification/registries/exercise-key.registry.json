@@ -1,0 +1,1329 @@
+{
+  "registry": "exercise-key",
+  "version": "1.0.0",
+  "key": "FXI=1.0",
+  "description": "The layers and codes of the exercise key, the structural key in an exercise's fxi field. Closed: a key that uses a code not listed here does not check. Body points are in body-points.registry.json and orientations in body-positions.registry.json; equipment codes are listed here and stand for keys of the equipment key.",
+  "policy": "closed",
+  "governs": [
+    {
+      "source": "specification/schema-sources/exercises/v1.2.0/exercise.schema.json",
+      "pointer": "fxi"
+    }
+  ],
+  "layers": [
+    {
+      "letter": "m",
+      "name": "Motion",
+      "standard": true,
+      "required": true,
+      "description": "Motion: the joint actions of each phase, in rep order. Required."
+    },
+    {
+      "letter": "o",
+      "name": "Orientation",
+      "standard": true,
+      "required": true,
+      "description": "Orientation: the body to gravity at the start of the rep. Always written; `?` if unknown."
+    },
+    {
+      "letter": "k",
+      "name": "Moving end",
+      "standard": true,
+      "required": false,
+      "description": "Moving end, for trunk work on the floor or a bench. Default: the limb end moves."
+    },
+    {
+      "letter": "f",
+      "name": "Footwork",
+      "standard": true,
+      "required": false,
+      "description": "Footwork: stepping, split stance or travel. Default: feet planted level."
+    },
+    {
+      "letter": "s",
+      "name": "Support",
+      "standard": true,
+      "required": false,
+      "description": "Support: surfaces beyond what the orientation implies, and the body points on them. Default: the floor as the orientation implies."
+    },
+    {
+      "letter": "l",
+      "name": "Load",
+      "standard": true,
+      "required": true,
+      "description": "Load: each implement and where it is held, or `none`. Always written; `?` if unknown."
+    },
+    {
+      "letter": "x",
+      "name": "Sides",
+      "standard": true,
+      "required": false,
+      "description": "Sides: whether the limbs work together, one side at a time, in turns or in opposite directions. Default: `b`, both together."
+    },
+    {
+      "letter": "g",
+      "name": "Grip and stance",
+      "standard": true,
+      "required": false,
+      "description": "Grip and stance: hand orientation, width, stance. Default: the usual grip, medium width, medium stance."
+    },
+    {
+      "letter": "r",
+      "name": "Range and start",
+      "standard": true,
+      "required": false,
+      "description": "Range and start: partial or deep range, deficit, start position. Default: full range from the usual start."
+    },
+    {
+      "letter": "h",
+      "name": "Held posture",
+      "standard": true,
+      "required": false,
+      "description": "Held posture of limbs that do not work. Default: no held posture."
+    },
+    {
+      "letter": "p",
+      "name": "Line of pull",
+      "standard": true,
+      "required": false,
+      "description": "Line of pull or path past the body. Default: the line the movement implies."
+    },
+    {
+      "letter": "a",
+      "name": "Accessory",
+      "standard": false,
+      "required": false,
+      "description": "Accessory: a strap or a partner that helps the exercise without loading it. Extended: compared only when both keys carry it."
+    }
+  ],
+  "motion": {
+    "joints": [
+      {
+        "value": "nk",
+        "description": "Neck.",
+        "circles": true
+      },
+      {
+        "value": "sp",
+        "description": "Spine: the trunk, thoracic and lumbar together.",
+        "circles": true
+      },
+      {
+        "value": "sc",
+        "description": "Scapula: the shoulder blade on the rib cage.",
+        "circles": false
+      },
+      {
+        "value": "sh",
+        "description": "Shoulder joint.",
+        "circles": true
+      },
+      {
+        "value": "el",
+        "description": "Elbow.",
+        "circles": false
+      },
+      {
+        "value": "fa",
+        "description": "Forearm: the turn that rotates the palm.",
+        "circles": false
+      },
+      {
+        "value": "wr",
+        "description": "Wrist.",
+        "circles": true
+      },
+      {
+        "value": "hip",
+        "description": "Hip.",
+        "circles": true
+      },
+      {
+        "value": "kn",
+        "description": "Knee.",
+        "circles": false
+      },
+      {
+        "value": "ank",
+        "description": "Ankle and foot.",
+        "circles": true
+      }
+    ],
+    "jointActions": [
+      {
+        "value": "nk.flex",
+        "joint": "nk",
+        "description": "Neck flexion: chin toward the chest.",
+        "opposite": "nk.ext"
+      },
+      {
+        "value": "nk.ext",
+        "joint": "nk",
+        "description": "Neck extension: head tips back.",
+        "opposite": "nk.flex"
+      },
+      {
+        "value": "nk.lflex",
+        "joint": "nk",
+        "description": "Neck side bend: ear toward the shoulder."
+      },
+      {
+        "value": "nk.rot",
+        "joint": "nk",
+        "description": "Neck rotation: turning the head."
+      },
+      {
+        "value": "sp.flex",
+        "joint": "sp",
+        "description": "Trunk flexion: ribs toward the pelvis, as in a crunch.",
+        "opposite": "sp.ext"
+      },
+      {
+        "value": "sp.ext",
+        "joint": "sp",
+        "description": "Trunk extension: straightening or arching the back from a bent position.",
+        "opposite": "sp.flex"
+      },
+      {
+        "value": "sp.lflex",
+        "joint": "sp",
+        "description": "Trunk side bend."
+      },
+      {
+        "value": "sp.rot",
+        "joint": "sp",
+        "description": "Trunk rotation: shoulders twist against the hips."
+      },
+      {
+        "value": "sc.elev",
+        "joint": "sc",
+        "description": "Scapular elevation: shrug up.",
+        "opposite": "sc.dep"
+      },
+      {
+        "value": "sc.dep",
+        "joint": "sc",
+        "description": "Scapular depression: shoulders pulled down.",
+        "opposite": "sc.elev"
+      },
+      {
+        "value": "sc.pro",
+        "joint": "sc",
+        "description": "Scapular protraction: shoulder blades spread around the ribs.",
+        "opposite": "sc.ret"
+      },
+      {
+        "value": "sc.ret",
+        "joint": "sc",
+        "description": "Scapular retraction: shoulder blades squeezed together.",
+        "opposite": "sc.pro"
+      },
+      {
+        "value": "sh.flex",
+        "joint": "sh",
+        "description": "Shoulder flexion: arm forward and up, as in a front raise or overhead press.",
+        "opposite": "sh.ext"
+      },
+      {
+        "value": "sh.ext",
+        "joint": "sh",
+        "description": "Shoulder extension: arm down and back from in front, as in a row or a dip. Covers `sh.ext.oh`.",
+        "opposite": "sh.flex"
+      },
+      {
+        "value": "sh.ext.oh",
+        "joint": "sh",
+        "description": "Shoulder extension from overhead: the arms come down in front of the face from above the head, as in a chin-up, a close or neutral pulldown, a straight-arm pulldown, a pullover or a slam. Child of `sh.ext`.",
+        "parent": "sh.ext"
+      },
+      {
+        "value": "sh.abd",
+        "joint": "sh",
+        "description": "Shoulder abduction: arm out to the side and up, as in a lateral raise.",
+        "opposite": "sh.add"
+      },
+      {
+        "value": "sh.add",
+        "joint": "sh",
+        "description": "Shoulder adduction: arm down to the side from out to the side, as in a wide pull-up.",
+        "opposite": "sh.abd"
+      },
+      {
+        "value": "sh.hadd",
+        "joint": "sh",
+        "description": "Horizontal adduction: arm across the front at chest height, as in a press or fly.",
+        "opposite": "sh.habd"
+      },
+      {
+        "value": "sh.habd",
+        "joint": "sh",
+        "description": "Horizontal abduction: arm back and out at chest height, as in a reverse fly.",
+        "opposite": "sh.hadd"
+      },
+      {
+        "value": "sh.ir",
+        "joint": "sh",
+        "description": "Shoulder internal rotation: forearm turns in toward the belly, elbow bent.",
+        "opposite": "sh.er"
+      },
+      {
+        "value": "sh.er",
+        "joint": "sh",
+        "description": "Shoulder external rotation: forearm turns out, elbow bent.",
+        "opposite": "sh.ir"
+      },
+      {
+        "value": "el.flex",
+        "joint": "el",
+        "description": "Elbow flexion, as in a curl.",
+        "opposite": "el.ext"
+      },
+      {
+        "value": "el.ext",
+        "joint": "el",
+        "description": "Elbow extension, as in a press or triceps extension.",
+        "opposite": "el.flex"
+      },
+      {
+        "value": "fa.pron",
+        "joint": "fa",
+        "description": "Forearm pronation: palm turns down.",
+        "opposite": "fa.sup"
+      },
+      {
+        "value": "fa.sup",
+        "joint": "fa",
+        "description": "Forearm supination: palm turns up.",
+        "opposite": "fa.pron"
+      },
+      {
+        "value": "wr.flex",
+        "joint": "wr",
+        "description": "Wrist flexion: palm toward the forearm.",
+        "opposite": "wr.ext"
+      },
+      {
+        "value": "wr.ext",
+        "joint": "wr",
+        "description": "Wrist extension: back of the hand toward the forearm.",
+        "opposite": "wr.flex"
+      },
+      {
+        "value": "wr.rdev",
+        "joint": "wr",
+        "description": "Wrist radial deviation: thumb side toward the forearm.",
+        "opposite": "wr.udev"
+      },
+      {
+        "value": "wr.udev",
+        "joint": "wr",
+        "description": "Wrist ulnar deviation: little-finger side toward the forearm.",
+        "opposite": "wr.rdev"
+      },
+      {
+        "value": "hip.flex",
+        "joint": "hip",
+        "description": "Hip flexion: thigh toward the trunk, or trunk toward the thigh.",
+        "opposite": "hip.ext"
+      },
+      {
+        "value": "hip.ext",
+        "joint": "hip",
+        "description": "Hip extension: thigh away from the trunk, as in standing up from a squat.",
+        "opposite": "hip.flex"
+      },
+      {
+        "value": "hip.abd",
+        "joint": "hip",
+        "description": "Hip abduction: leg out to the side.",
+        "opposite": "hip.add"
+      },
+      {
+        "value": "hip.add",
+        "joint": "hip",
+        "description": "Hip adduction: leg in toward the other leg.",
+        "opposite": "hip.abd"
+      },
+      {
+        "value": "hip.ir",
+        "joint": "hip",
+        "description": "Hip internal rotation: knee turns in.",
+        "opposite": "hip.er"
+      },
+      {
+        "value": "hip.er",
+        "joint": "hip",
+        "description": "Hip external rotation: knee turns out.",
+        "opposite": "hip.ir"
+      },
+      {
+        "value": "kn.flex",
+        "joint": "kn",
+        "description": "Knee flexion against resistance, as in a leg curl.",
+        "opposite": "kn.ext"
+      },
+      {
+        "value": "kn.ext",
+        "joint": "kn",
+        "description": "Knee extension, as in standing up from a squat.",
+        "opposite": "kn.flex"
+      },
+      {
+        "value": "ank.df",
+        "joint": "ank",
+        "description": "Ankle dorsiflexion: toes toward the shin.",
+        "opposite": "ank.pf"
+      },
+      {
+        "value": "ank.pf",
+        "joint": "ank",
+        "description": "Ankle plantar flexion: rising onto the toes, pushing off.",
+        "opposite": "ank.df"
+      },
+      {
+        "value": "ank.inv",
+        "joint": "ank",
+        "description": "Ankle inversion: sole turns in.",
+        "opposite": "ank.ev"
+      },
+      {
+        "value": "ank.ev",
+        "joint": "ank",
+        "description": "Ankle eversion: sole turns out.",
+        "opposite": "ank.inv"
+      }
+    ],
+    "prefixes": [
+      {
+        "value": "^",
+        "description": "Ballistic: the phase ends in flight (body leaves the ground) or release (implement leaves the hands). A phase after it happens in the air."
+      },
+      {
+        "value": "~",
+        "description": "Cyclic: continuous cycles with no rep boundary; write the driving half of one cycle."
+      },
+      {
+        "value": "=",
+        "description": "Isometric: a hold under effort for the whole set; write what the muscles push toward. `=0` is a hold with no direction (balance)."
+      },
+      {
+        "value": "%",
+        "description": "Static stretch: the directions the joints are taken to, held at end range."
+      },
+      {
+        "value": "&",
+        "description": "Dynamic stretch: the same directions, taken to end range and released repeatedly (swings, pass-throughs)."
+      }
+    ]
+  },
+  "movingEnd": [
+    {
+      "value": "limbs",
+      "description": "The limb end moves (default, never written).",
+      "default": true
+    },
+    {
+      "value": "trunk",
+      "description": "The trunk end moves; the legs stay put: sit-up, crunch, bridge, hip thrust, back extension, glute-ham raise, Nordic curl."
+    },
+    {
+      "value": "both",
+      "description": "Both ends move toward each other: V-up, jackknife, tuck-up."
+    }
+  ],
+  "footwork": [
+    {
+      "value": "level",
+      "description": "Feet planted level (default). Written only inside a sequence.",
+      "default": true
+    },
+    {
+      "value": "split",
+      "description": "Feet planted in a split stance, one in front of the other."
+    },
+    {
+      "value": "step.fwd",
+      "description": "Each rep steps forward and returns."
+    },
+    {
+      "value": "step.back",
+      "description": "Each rep steps back and returns."
+    },
+    {
+      "value": "step.side",
+      "description": "Each rep steps to the side and returns."
+    },
+    {
+      "value": "step.cross",
+      "description": "Each rep steps back and across behind the other leg (curtsy) and returns."
+    },
+    {
+      "value": "travel.fwd",
+      "description": "The body travels forward and does not return each rep."
+    },
+    {
+      "value": "travel.back",
+      "description": "Travels backward."
+    },
+    {
+      "value": "travel.side",
+      "description": "Travels sideways."
+    }
+  ],
+  "equipment": [
+    {
+      "value": "none",
+      "fxe": "FXE=1.0S/k:none",
+      "inLoad": true,
+      "inSupport": false,
+      "description": "No implement: body weight only. Stands alone, no hold point."
+    },
+    {
+      "value": "bar.straight",
+      "fxe": "FXE=1.0S/k:imp/f:bar.straight",
+      "inLoad": true,
+      "inSupport": true,
+      "description": "Barbell, Olympic or standard."
+    },
+    {
+      "value": "bar.ez",
+      "fxe": "FXE=1.0S/k:imp/f:bar.ez",
+      "inLoad": true,
+      "inSupport": true,
+      "description": "EZ curl bar."
+    },
+    {
+      "value": "bar.trap",
+      "fxe": "FXE=1.0S/k:imp/f:bar.trap",
+      "inLoad": true,
+      "inSupport": true,
+      "description": "Trap or hex bar."
+    },
+    {
+      "value": "bar.axle",
+      "fxe": "FXE=1.0S/k:imp/f:bar.axle",
+      "inLoad": true,
+      "inSupport": true,
+      "description": "Thick axle bar."
+    },
+    {
+      "value": "bar.camber",
+      "fxe": "FXE=1.0S/k:imp/f:bar.camber",
+      "inLoad": true,
+      "inSupport": true,
+      "description": "Cambered bar."
+    },
+    {
+      "value": "bell.dumb",
+      "fxe": "FXE=1.0S/k:imp/f:bell.dumb",
+      "inLoad": true,
+      "inSupport": true,
+      "description": "Dumbbell."
+    },
+    {
+      "value": "bell.kettle",
+      "fxe": "FXE=1.0S/k:imp/f:bell.kettle",
+      "inLoad": true,
+      "inSupport": true,
+      "description": "Kettlebell."
+    },
+    {
+      "value": "bell.circus",
+      "fxe": "FXE=1.0S/k:imp/f:bell.circus",
+      "inLoad": true,
+      "inSupport": true,
+      "description": "Circus dumbbell."
+    },
+    {
+      "value": "ball.med",
+      "fxe": "FXE=1.0S/k:imp/f:ball.med",
+      "inLoad": true,
+      "inSupport": true,
+      "description": "Medicine ball."
+    },
+    {
+      "value": "ball.slam",
+      "fxe": "FXE=1.0S/k:imp/f:ball.slam",
+      "inLoad": true,
+      "inSupport": true,
+      "description": "Slam ball."
+    },
+    {
+      "value": "bag.sand",
+      "fxe": "FXE=1.0S/k:imp/f:bag.sand",
+      "inLoad": true,
+      "inSupport": true,
+      "description": "Sandbag."
+    },
+    {
+      "value": "bag.heavy",
+      "fxe": "FXE=1.0S/k:imp/f:bag.heavy",
+      "inLoad": true,
+      "inSupport": true,
+      "description": "Hanging heavy bag."
+    },
+    {
+      "value": "plate",
+      "fxe": "FXE=1.0S/k:imp/f:plate",
+      "inLoad": true,
+      "inSupport": true,
+      "description": "A weight plate held or worn on its own."
+    },
+    {
+      "value": "chain",
+      "fxe": "FXE=1.0S/k:imp/f:chain",
+      "inLoad": true,
+      "inSupport": true,
+      "description": "Lifting chain."
+    },
+    {
+      "value": "rope.battle",
+      "fxe": "FXE=1.0S/k:imp/f:rope.battle",
+      "inLoad": true,
+      "inSupport": true,
+      "description": "Battle rope."
+    },
+    {
+      "value": "rope.jump",
+      "fxe": "FXE=1.0S/k:imp/f:rope.jump",
+      "inLoad": true,
+      "inSupport": true,
+      "description": "Skipping rope."
+    },
+    {
+      "value": "band",
+      "fxe": "FXE=1.0S/k:imp/f:band",
+      "inLoad": true,
+      "inSupport": true,
+      "description": "Elastic band or tube, type not stated."
+    },
+    {
+      "value": "band.loop",
+      "fxe": "FXE=1.0S/k:imp/f:band.loop",
+      "inLoad": true,
+      "inSupport": true,
+      "parent": "band",
+      "description": "Long loop band: superband, power band."
+    },
+    {
+      "value": "band.mini",
+      "fxe": "FXE=1.0S/k:imp/f:band.mini",
+      "inLoad": true,
+      "inSupport": true,
+      "parent": "band",
+      "description": "Short loop band worn around the legs: miniband."
+    },
+    {
+      "value": "band.tube",
+      "fxe": "FXE=1.0S/k:imp/f:band.tube",
+      "inLoad": true,
+      "inSupport": true,
+      "parent": "band",
+      "description": "Tube band with handles."
+    },
+    {
+      "value": "sled",
+      "fxe": "FXE=1.0S/k:imp/f:sled",
+      "inLoad": true,
+      "inSupport": true,
+      "description": "Ground sled or prowler, pushed or dragged."
+    },
+    {
+      "value": "tire",
+      "fxe": "FXE=1.0S/k:imp/f:tire",
+      "inLoad": true,
+      "inSupport": true,
+      "description": "Large tyre."
+    },
+    {
+      "value": "hammer",
+      "fxe": "FXE=1.0S/k:imp/f:hammer",
+      "inLoad": true,
+      "inSupport": true,
+      "description": "Sledgehammer."
+    },
+    {
+      "value": "stone",
+      "fxe": "FXE=1.0S/k:imp/f:stone",
+      "inLoad": true,
+      "inSupport": true,
+      "description": "Atlas stone."
+    },
+    {
+      "value": "log",
+      "fxe": "FXE=1.0S/k:imp/f:log",
+      "inLoad": true,
+      "inSupport": true,
+      "description": "Strongman log."
+    },
+    {
+      "value": "keg",
+      "fxe": "FXE=1.0S/k:imp/f:keg",
+      "inLoad": true,
+      "inSupport": true,
+      "description": "Keg."
+    },
+    {
+      "value": "yoke",
+      "fxe": "FXE=1.0S/k:imp/f:yoke",
+      "inLoad": true,
+      "inSupport": true,
+      "description": "Strongman yoke."
+    },
+    {
+      "value": "frame.carry",
+      "fxe": "FXE=1.0S/k:imp/f:frame.carry",
+      "inLoad": true,
+      "inSupport": true,
+      "description": "Farmer handles or a carry frame (rickshaw)."
+    },
+    {
+      "value": "car",
+      "fxe": "FXE=1.0S/k:imp/f:car",
+      "inLoad": true,
+      "inSupport": true,
+      "description": "A car, lifted or pushed."
+    },
+    {
+      "value": "wear.vest",
+      "fxe": "FXE=1.0S/k:imp/f:wear.vest",
+      "inLoad": true,
+      "inSupport": true,
+      "description": "Weight vest."
+    },
+    {
+      "value": "wear.ankle",
+      "fxe": "FXE=1.0S/k:imp/f:wear.ankle",
+      "inLoad": true,
+      "inSupport": true,
+      "description": "Ankle weight."
+    },
+    {
+      "value": "club",
+      "fxe": "FXE=1.0S/k:imp/f:club",
+      "inLoad": true,
+      "inSupport": true,
+      "description": "Indian club or mace."
+    },
+    {
+      "value": "stick",
+      "fxe": "FXE=1.0S/k:imp/f:stick",
+      "inLoad": true,
+      "inSupport": true,
+      "description": "Dowel, broomstick or PVC pipe: sets the hands, adds no load."
+    },
+    {
+      "value": "wheel",
+      "fxe": "FXE=1.0S/k:imp/f:wheel",
+      "inLoad": true,
+      "inSupport": true,
+      "description": "Ab wheel."
+    },
+    {
+      "value": "roller.wrist",
+      "fxe": "FXE=1.0S/k:imp/f:roller.wrist",
+      "inLoad": true,
+      "inSupport": true,
+      "description": "Wrist roller."
+    },
+    {
+      "value": "harness.head",
+      "fxe": "FXE=1.0S/k:imp/f:harness.head",
+      "inLoad": true,
+      "inSupport": true,
+      "description": "Head harness with a hanging load."
+    },
+    {
+      "value": "cable",
+      "fxe": "FXE=1.0S/k:stn/f:cable",
+      "inLoad": true,
+      "inSupport": true,
+      "description": "Cable column, crossover or functional trainer: a pulley set per exercise. A lat pulldown or seated cable row machine is `mac`."
+    },
+    {
+      "value": "smith",
+      "fxe": "FXE=1.0S/k:stn/f:smith",
+      "inLoad": true,
+      "inSupport": true,
+      "description": "Smith machine: a bar on fixed rails."
+    },
+    {
+      "value": "landmine",
+      "fxe": "FXE=1.0S/k:stn/f:landmine",
+      "inLoad": true,
+      "inSupport": true,
+      "description": "Landmine: one end of a barbell in a floor pivot (also a corner T-bar row)."
+    },
+    {
+      "value": "erg.gait",
+      "fxe": "FXE=1.0S/k:erg/c:?/l:?/s:?/m:gait",
+      "inLoad": true,
+      "inSupport": true,
+      "parent": "erg",
+      "description": "Cardio machine for walking or running on a belt (treadmill)."
+    },
+    {
+      "value": "erg.step",
+      "fxe": "FXE=1.0S/k:erg/c:?/l:?/s:?/m:step",
+      "inLoad": true,
+      "inSupport": true,
+      "parent": "erg",
+      "description": "Cardio machine for stepping (stair stepper, stepmill)."
+    },
+    {
+      "value": "erg.cycle",
+      "fxe": "FXE=1.0S/k:erg/c:?/l:?/s:?/m:cycle",
+      "inLoad": true,
+      "inSupport": true,
+      "parent": "erg",
+      "description": "Cardio machine for pedalling or hand cranking (bike, air bike, arm crank)."
+    },
+    {
+      "value": "erg.row",
+      "fxe": "FXE=1.0S/k:erg/c:?/l:?/s:?/m:row",
+      "inLoad": true,
+      "inSupport": true,
+      "parent": "erg",
+      "description": "Rowing machine."
+    },
+    {
+      "value": "erg.ski",
+      "fxe": "FXE=1.0S/k:erg/c:?/l:?/s:?/m:ski",
+      "inLoad": true,
+      "inSupport": true,
+      "parent": "erg",
+      "description": "Ski erg."
+    },
+    {
+      "value": "erg.glide",
+      "fxe": "FXE=1.0S/k:erg/c:?/l:?/s:?/m:glide",
+      "inLoad": true,
+      "inSupport": true,
+      "parent": "erg",
+      "description": "Elliptical."
+    },
+    {
+      "value": "erg.climb",
+      "fxe": "FXE=1.0S/k:erg/c:?/l:?/s:?/m:climb",
+      "inLoad": true,
+      "inSupport": true,
+      "parent": "erg",
+      "description": "Climbing machine (vertical or ladder climber)."
+    },
+    {
+      "value": "mac",
+      "fxe": "FXE=1.0S/k:mac/l:?/s:?/m:?",
+      "inLoad": true,
+      "inSupport": true,
+      "description": "Any dedicated strength machine (including lat pulldown and seated cable row machines). The record’s fxe names which."
+    },
+    {
+      "value": "erg",
+      "fxe": "FXE=1.0S/k:erg/c:?/l:?/s:?/m:?",
+      "inLoad": true,
+      "inSupport": true,
+      "description": "Any cardio machine: treadmill, bike, rower, elliptical, stair machine, ski erg. The record’s fxe names which."
+    },
+    {
+      "value": "floor",
+      "fxe": "FXE=1.0S/k:sup/f:floor",
+      "inLoad": false,
+      "inSupport": true,
+      "description": "The floor, or a mat on it."
+    },
+    {
+      "value": "wall",
+      "fxe": "FXE=1.0S/k:sup/f:wall",
+      "inLoad": false,
+      "inSupport": true,
+      "description": "A wall."
+    },
+    {
+      "value": "bench",
+      "fxe": "FXE=1.0S/k:sup/f:bench",
+      "inLoad": false,
+      "inSupport": true,
+      "description": "A bench, flat or adjustable."
+    },
+    {
+      "value": "box",
+      "fxe": "FXE=1.0S/k:sup/f:box",
+      "inLoad": false,
+      "inSupport": true,
+      "description": "A box, step or platform."
+    },
+    {
+      "value": "chair",
+      "fxe": "FXE=1.0S/k:sup/f:chair",
+      "inLoad": false,
+      "inSupport": true,
+      "description": "A chair."
+    },
+    {
+      "value": "block",
+      "fxe": "FXE=1.0S/k:sup/f:block",
+      "inLoad": false,
+      "inSupport": true,
+      "description": "Lifting blocks a bar starts from."
+    },
+    {
+      "value": "rack",
+      "fxe": "FXE=1.0S/k:sup/f:rack",
+      "inLoad": false,
+      "inSupport": true,
+      "description": "Power rack or squat stand, with its pins."
+    },
+    {
+      "value": "ball.stab",
+      "fxe": "FXE=1.0S/k:sup/f:ball.stab",
+      "inLoad": false,
+      "inSupport": true,
+      "description": "Stability, Swiss or exercise ball."
+    },
+    {
+      "value": "dome",
+      "fxe": "FXE=1.0S/k:sup/f:dome",
+      "inLoad": false,
+      "inSupport": true,
+      "description": "BOSU, either side up."
+    },
+    {
+      "value": "dome.up",
+      "fxe": "FXE=1.0S/k:sup/f:dome.up",
+      "inLoad": false,
+      "inSupport": true,
+      "parent": "dome",
+      "description": "BOSU, dome side up."
+    },
+    {
+      "value": "dome.down",
+      "fxe": "FXE=1.0S/k:sup/f:dome.down",
+      "inLoad": false,
+      "inSupport": true,
+      "parent": "dome",
+      "description": "BOSU, flat side up: the dome on the floor."
+    },
+    {
+      "value": "board.bal",
+      "fxe": "FXE=1.0S/k:sup/f:board.bal",
+      "inLoad": false,
+      "inSupport": true,
+      "description": "Balance or wobble board."
+    },
+    {
+      "value": "roller.foam",
+      "fxe": "FXE=1.0S/k:sup/f:roller.foam",
+      "inLoad": false,
+      "inSupport": true,
+      "description": "Foam roller."
+    },
+    {
+      "value": "slider",
+      "fxe": "FXE=1.0S/k:sup/f:slider",
+      "inLoad": false,
+      "inSupport": true,
+      "description": "Slider disc."
+    },
+    {
+      "value": "strap.susp",
+      "fxe": "FXE=1.0S/k:sup/f:strap.susp",
+      "inLoad": false,
+      "inSupport": true,
+      "description": "Suspension trainer."
+    },
+    {
+      "value": "ring",
+      "fxe": "FXE=1.0S/k:sup/f:ring",
+      "inLoad": false,
+      "inSupport": true,
+      "description": "Gymnastic rings."
+    },
+    {
+      "value": "rope.climb",
+      "fxe": "FXE=1.0S/k:sup/f:rope.climb",
+      "inLoad": false,
+      "inSupport": true,
+      "description": "Climbing rope."
+    },
+    {
+      "value": "bar.fixed",
+      "fxe": "FXE=1.0S/k:sup/f:bar.fixed",
+      "inLoad": false,
+      "inSupport": true,
+      "description": "Fixed overhead bar: pull-up bar, or a racked bar used as a handhold."
+    },
+    {
+      "value": "bar.parallel",
+      "fxe": "FXE=1.0S/k:sup/f:bar.parallel",
+      "inLoad": false,
+      "inSupport": true,
+      "description": "Parallel dip bars."
+    },
+    {
+      "value": "bar.parallette",
+      "fxe": "FXE=1.0S/k:sup/f:bar.parallette",
+      "inLoad": false,
+      "inSupport": true,
+      "description": "Floor parallettes."
+    },
+    {
+      "value": "pad.preacher",
+      "fxe": "FXE=1.0S/k:sup/f:pad.preacher",
+      "inLoad": false,
+      "inSupport": true,
+      "description": "Preacher bench."
+    },
+    {
+      "value": "pad.hyper",
+      "fxe": "FXE=1.0S/k:sup/f:pad.hyper",
+      "inLoad": false,
+      "inSupport": true,
+      "description": "Back-extension bench, 45° or 90° (also called a Roman chair for back or side raises)."
+    },
+    {
+      "value": "pad.ghd",
+      "fxe": "FXE=1.0S/k:sup/f:pad.ghd",
+      "inLoad": false,
+      "inSupport": true,
+      "description": "Glute-ham developer."
+    },
+    {
+      "value": "station.vkr",
+      "fxe": "FXE=1.0S/k:sup/f:station.vkr",
+      "inLoad": false,
+      "inSupport": true,
+      "description": "Vertical knee-raise station (captain’s chair)."
+    },
+    {
+      "value": "pole",
+      "fxe": "FXE=1.0S/k:sup/f:pole",
+      "inLoad": false,
+      "inSupport": true,
+      "description": "A vertical pole, post or rack upright gripped by the hands (human flag)."
+    },
+    {
+      "value": "ball.massage",
+      "fxe": "FXE=1.0S/k:sup/f:ball.massage",
+      "inLoad": false,
+      "inSupport": true,
+      "description": "Massage or lacrosse ball rolled under the body."
+    }
+  ],
+  "holdPoints": [
+    {
+      "value": "overhead",
+      "description": "Held in the hands with the arms straight overhead for the whole rep."
+    },
+    {
+      "value": "assist",
+      "description": "The implement takes part of the body weight (assist band, assisted machine)."
+    }
+  ],
+  "sides": [
+    {
+      "value": "b",
+      "description": "Bilateral: both limbs work together, or the movement has no sides (default, never written).",
+      "default": true
+    },
+    {
+      "value": "u",
+      "description": "Unilateral: one side does every rep of the set, then the other side."
+    },
+    {
+      "value": "a",
+      "description": "Alternating: the sides take turns rep by rep; one side works while the other waits."
+    },
+    {
+      "value": "rc",
+      "description": "Reciprocal: both sides move at once in opposite directions (gait, flutter kicks, see-saw press)."
+    }
+  ],
+  "sideScopes": [
+    {
+      "value": "arms",
+      "description": "The pattern applies to the arms."
+    },
+    {
+      "value": "legs",
+      "description": "The pattern applies to the legs."
+    }
+  ],
+  "grip": [
+    {
+      "value": "pr",
+      "description": "Pronated: palms down or away (overhand).",
+      "group": "hand"
+    },
+    {
+      "value": "su",
+      "description": "Supinated: palms up or toward you (underhand).",
+      "group": "hand"
+    },
+    {
+      "value": "ne",
+      "description": "Neutral: palms face each other (hammer).",
+      "group": "hand"
+    },
+    {
+      "value": "mx",
+      "description": "Mixed: one hand over, one under.",
+      "group": "hand"
+    },
+    {
+      "value": "w-t",
+      "description": "Hands touching or overlapping (diamond).",
+      "group": "width"
+    },
+    {
+      "value": "w-n",
+      "description": "Narrow: hands inside shoulder width.",
+      "group": "width"
+    },
+    {
+      "value": "w-m",
+      "description": "Medium: about shoulder width (default, never written).",
+      "default": true,
+      "group": "width"
+    },
+    {
+      "value": "w-w",
+      "description": "Wide: hands well outside shoulder width.",
+      "group": "width"
+    },
+    {
+      "value": "st-n",
+      "description": "Narrow stance: feet together or closer than hip width.",
+      "group": "stance"
+    },
+    {
+      "value": "st-m",
+      "description": "Medium stance: about hip width (default, never written).",
+      "default": true,
+      "group": "stance"
+    },
+    {
+      "value": "st-w",
+      "description": "Wide stance (sumo).",
+      "group": "stance"
+    }
+  ],
+  "range": [
+    {
+      "value": "partial",
+      "description": "Part of the usual range on purpose: half, quarter, pulses, top or bottom half.",
+      "start": false
+    },
+    {
+      "value": "deep",
+      "description": "Deeper than the usual range: full depth, ass to grass, pistol depth.",
+      "start": false
+    },
+    {
+      "value": "deficit",
+      "description": "Standing on something to go deeper than usual.",
+      "start": false
+    },
+    {
+      "value": "from-floor",
+      "description": "Each rep starts with the load at rest on the floor, where the usual start is not the floor.",
+      "start": true
+    },
+    {
+      "value": "from-top",
+      "description": "Starts standing with the load held, lowered without being set down (hang), where that is not the usual start. With no child, the usual hang: above the knee.",
+      "start": true
+    },
+    {
+      "value": "from-top.knee",
+      "description": "A hang that starts at or below the knee. Child of `from-top`.",
+      "start": true,
+      "parent": "from-top"
+    },
+    {
+      "value": "from-pins",
+      "description": "Each rep starts from pins, blocks or a rack above the floor.",
+      "start": true
+    },
+    {
+      "value": "from-drop",
+      "description": "Each rep starts with a drop: the body steps off a box or platform and lands before the working phase (depth jump). The box dropped from is not written in `s`.",
+      "start": true
+    }
+  ],
+  "held": [
+    {
+      "value": "none",
+      "description": "No held posture: the non-working limbs do what the movement implies (default, never written).",
+      "default": true
+    },
+    {
+      "value": "arms.oh",
+      "description": "Arms held straight overhead, nothing in the hands."
+    },
+    {
+      "value": "arms.fwd",
+      "description": "Arms held straight and reaching forward from the shoulders, nothing in the hands (\"arms extended\", \"straight arm\")."
+    },
+    {
+      "value": "arms.side",
+      "description": "Arms held out to the sides."
+    },
+    {
+      "value": "arms.cross",
+      "description": "Arms crossed on the chest."
+    },
+    {
+      "value": "hands.head",
+      "description": "Hands behind or on the head (prisoner)."
+    },
+    {
+      "value": "el.bent",
+      "description": "Working elbows held bent at about 90° (\"bent arm\", \"90 degree\")."
+    },
+    {
+      "value": "ua.oh",
+      "description": "Upper arms held up beside the head while the elbows work (overhead triceps extension)."
+    },
+    {
+      "value": "ua.side",
+      "description": "Upper arms held out from the sides, elbows flared, while the elbows work (inner biceps curl, Tate press)."
+    },
+    {
+      "value": "leg.fwd",
+      "description": "Free leg held straight in front."
+    },
+    {
+      "value": "leg.back",
+      "description": "Free leg held behind."
+    },
+    {
+      "value": "legs.l",
+      "description": "Legs held straight at about 90° hip flexion."
+    },
+    {
+      "value": "kn.bent",
+      "description": "Knees held bent while the hips or arms work (hanging knee raise; inverted row with the feet flat on the floor)."
+    },
+    {
+      "value": "trunk.fwd",
+      "description": "Trunk held leaning forward where the orientation does not already say so (chest dip)."
+    }
+  ],
+  "heldConflicts": [
+    [
+      "legs.l",
+      "kn.bent"
+    ],
+    [
+      "ua.oh",
+      "ua.side"
+    ]
+  ],
+  "lineOfPull": [
+    {
+      "value": "usual",
+      "description": "The line of pull the movement implies (default, never written).",
+      "default": true
+    },
+    {
+      "value": "hi",
+      "description": "Cable or band anchored higher than usual for the movement."
+    },
+    {
+      "value": "lo",
+      "description": "Anchored lower than usual for the movement."
+    },
+    {
+      "value": "behind",
+      "description": "The load or the body passes behind the head or trunk instead of in front (behind-the-neck press, rear pull-up)."
+    },
+    {
+      "value": "side",
+      "description": "The load pulls from one side: the body stands side-on to the anchor (a cable press done side-on)."
+    },
+    {
+      "value": "neck",
+      "description": "The load comes down to the neck, throat or chin instead of the chest (JM press, guillotine press)."
+    },
+    {
+      "value": "double",
+      "description": "A rope passes under the feet twice in each jump (double under)."
+    }
+  ],
+  "accessory": [
+    {
+      "value": "none",
+      "description": "No accessory (default, never written).",
+      "default": true
+    },
+    {
+      "value": "partner",
+      "description": "A partner who holds, resists or assists."
+    },
+    {
+      "value": "handle",
+      "description": "Single D-handle.",
+      "fxe": "FXE=1.0S/k:acc/f:handle"
+    },
+    {
+      "value": "handle.bar",
+      "description": "Straight or cambered cable bar.",
+      "fxe": "FXE=1.0S/k:acc/f:handle.bar"
+    },
+    {
+      "value": "handle.v",
+      "description": "V-bar or close-grip handle.",
+      "fxe": "FXE=1.0S/k:acc/f:handle.v"
+    },
+    {
+      "value": "handle.rope",
+      "description": "Triceps rope.",
+      "fxe": "FXE=1.0S/k:acc/f:handle.rope"
+    },
+    {
+      "value": "strap.ankle",
+      "description": "Ankle cuff.",
+      "fxe": "FXE=1.0S/k:acc/f:strap.ankle"
+    },
+    {
+      "value": "belt.dip",
+      "description": "Dip belt.",
+      "fxe": "FXE=1.0S/k:acc/f:belt.dip"
+    },
+    {
+      "value": "belt.lift",
+      "description": "Lifting belt.",
+      "fxe": "FXE=1.0S/k:acc/f:belt.lift"
+    },
+    {
+      "value": "strap.lift",
+      "description": "Lifting straps.",
+      "fxe": "FXE=1.0S/k:acc/f:strap.lift"
+    },
+    {
+      "value": "strap.stretch",
+      "description": "Stretching strap: a strap, belt, towel, rope or loop band used to pull or hold a limb in a stretch.",
+      "fxe": "FXE=1.0S/k:acc/f:strap.stretch"
+    },
+    {
+      "value": "towel",
+      "description": "A towel used as a handle.",
+      "fxe": "FXE=1.0S/k:acc/f:towel"
+    },
+    {
+      "value": "marker",
+      "description": "Cone, hurdle or floor marker.",
+      "fxe": "FXE=1.0S/k:acc/f:marker"
+    },
+    {
+      "value": "board.press",
+      "description": "Board laid on the chest for partial presses.",
+      "fxe": "FXE=1.0S/k:acc/f:board.press"
+    },
+    {
+      "value": "mat",
+      "description": "Floor mat.",
+      "fxe": "FXE=1.0S/k:acc/f:mat"
+    }
+  ]
+}

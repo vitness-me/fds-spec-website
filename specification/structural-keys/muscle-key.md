@@ -2,7 +2,7 @@
 
 The muscle key is the structural key of a muscle. It sits in the `fxm` field and names one muscle or one part of a muscle, in words taken from standard anatomy. This page shows how a key is put together, where its codes come from, and how two keys compare.
 
-The muscle key is simpler than the exercise key. It has no layers and no code lists of its own. Its codes come from an anatomy reference, so FDS publishes the rule for deriving them and never a list of muscles. Every key on this page is an illustration.
+The muscle key is simpler than the exercise key. It has no layers and no code lists of its own. Its codes come from an anatomy reference, so FDS publishes the rule for deriving them. The codes derived so far, each with its FMA id, are in [`muscle-key.registry.json`](https://spec.vitness.me/registries/muscle-key.registry.json). Every key on this page is an illustration.
 
 A set of muscles, such as the hamstrings or the hip flexors, is a muscle category and has a key of its own: see the [muscle category key](./muscle-category-key.md).
 

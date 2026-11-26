@@ -1,0 +1,203 @@
+#!/usr/bin/env node
+/**
+ * The structural-key code registries, and the key pages that quote them.
+ *
+ * The six key registries under specification/registries/ are generated from the
+ * FDS Encoder's code lists (packages/fds-encoder), so the codes a key may use are
+ * written down once. This script writes them, or checks four things:
+ *
+ *   1. REGISTRIES.  Every key registry on disk is byte-equal to what the encoder
+ *      generates. A hand edit to a registry, or a code-list change in the encoder
+ *      that nobody regenerated, fails here.
+ *   2. CODES.  Every code shown in a table on the four key pages exists in a
+ *      registry. A page that documents a code the encoder doesn't know is either a
+ *      typo or a code nobody added.
+ *   3. KEYS.  Every full key quoted on the key pages and in the published examples
+ *      passes the encoder's check. The few keys a page quotes to show a mistake are
+ *      listed in DELIBERATELY_WRONG, each with the reason.
+ *   4. LINKS.  Each key page links the registries that hold its codes.
+ *
+ * It reads the built encoder, so build it first:
+ *
+ *   npm --prefix packages/fds-encoder ci && npm --prefix packages/fds-encoder run build
+ *   node scripts/key-registries.mjs --write     regenerate the registries
+ *   node scripts/key-registries.mjs             check
+ *   node scripts/key-registries.mjs --self-test prove each rule fails on a broken input
+ */
+
+import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { fileURLToPath, pathToFileURL } from 'node:url';
+
+const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
+const ENCODER = join(ROOT, 'packages/fds-encoder/dist/index.js');
+const REGISTRY_DIR = join(ROOT, 'specification/registries');
+const PAGE_DIR = join(ROOT, 'website/docs/core-concepts/structural-keys');
+const EXAMPLE_DIR = join(ROOT, 'specification/schemas');
+const REGISTRY_URL = 'https://spec.vitness.me/registries/';
+
+/** The registries each key page must link. */
+const PAGE_REGISTRIES = {
+  'exercise-key.md': ['exercise-key.registry.json', 'equipment-key.registry.json', 'body-points.registry.json', 'body-positions.registry.json'],
+  'equipment-key.md': ['equipment-key.registry.json', 'body-points.registry.json', 'body-positions.registry.json'],
+  'muscle-key.md': ['muscle-key.registry.json'],
+  'muscle-category-key.md': ['muscle-category-key.registry.json', 'muscle-key.registry.json'],
+};
+
+/** Keys a page quotes on purpose to show a key that does not check. */
+const DELIBERATELY_WRONG = new Map([
+  ['FXM=1.0/deltoid.lateral', 'muscle-key.md shows the gym word "lateral" as the mistake; the FMA part is acromial'],
+  ['FXMG=1.0/a:ank.ev', 'muscle-category-key.md says ankle eversion has no action category'],
+]);
+
+/** Words a key-page table shows as what not to write. */
+const NOT_CODES = new Map([
+  ['lats', 'muscle-key.md: "latissimus-dorsi, never lats"'],
+  ['glutes', 'muscle-category-key.md: "buttock, never glutes"'],
+]);
+
+if (!existsSync(ENCODER)) {
+  console.error(`${ENCODER} does not exist. Build the encoder first:\n  npm --prefix packages/fds-encoder ci && npm --prefix packages/fds-encoder run build`);
+  process.exit(1);
+}
+const encoder = await import(pathToFileURL(ENCODER).href);
+
+const text = (registry) => `${JSON.stringify(registry, null, 2)}\n`;
+
+// ── rule 1: the registries are the encoder's ────────────────────────────────
+
+function registryProblems(generated, read) {
+  const problems = [];
+  for (const [file, registry] of Object.entries(generated)) {
+    const onDisk = read(file);
+    if (onDisk === undefined) problems.push(`${file} is missing. Run node scripts/key-registries.mjs --write.`);
+    else if (onDisk !== text(registry)) problems.push(`${file} is not what the encoder generates. Run node scripts/key-registries.mjs --write, or change the encoder's code lists instead of the file.`);
+  }
+  return problems;
+}
+
+// ── rule 2: every code in a key-page table is in a registry ─────────────────
+
+/** Every code the registries hold: values, codes, layer letters, actions, and each muscle part as muscle.part. */
+function knownCodes(registries) {
+  const known = new Set(['FXI', 'FXE', 'FXM', 'FXMG', '1.0', 'S', 'N', 'fxi', 'fxe', 'fxm', 'fxmg']);
+  const walk = (node) => {
+    if (Array.isArray(node)) return node.forEach(walk);
+    if (node === null || typeof node !== 'object') return;
+    for (const field of ['value', 'code', 'letter', 'action']) if (typeof node[field] === 'string') known.add(node[field]);
+    if (typeof node.code === 'string' && Array.isArray(node.parts)) for (const part of node.parts) known.add(`${node.code}.${part.code}`);
+    Object.values(node).forEach(walk);
+  };
+  walk(registries);
+  return known;
+}
+
+/** The codes in one backticked span: layer letters, symbols and placeholders dropped. */
+function codesIn(span) {
+  if (/[<…]/.test(span) || /^FX(MG|M|I|E)=/.test(span)) return [];
+  return span.split(/[\s/;]+/).flatMap((piece) => piece.replace(/^[a-z]:(?!$)/, '').split(/[+>|@,]/))
+    .map((c) => c.replace(/^\*n$/, '').replace(/^\*\d$/, '').replace(/\*\d$/, '').replace(/^[~=%&^]+/, '').replace(/-$/, ''))
+    .filter((c) => c !== '' && !/^[?*.:/\\\-|+>@,=~%&^0-9]+$/.test(c));
+}
+
+function codeProblems(pages, known) {
+  const isKnown = (c) => known.has(c)
+    || (c.endsWith('.*') && [...known].some((k) => k.startsWith(c.slice(0, -1))))
+    || (c.endsWith('.') && [...known].some((k) => k.startsWith(c)))
+    || (/^(push|pull|assist)\.[a-z]+$/.test(c) && known.has(c.split('.')[1]))
+    || (/^[a-z]+\.\?$/.test(c) && known.has(c.slice(0, -2)))
+    || NOT_CODES.has(c);
+  const problems = [];
+  let count = 0;
+  for (const [page, body] of Object.entries(pages)) {
+    for (const line of body.split('\n')) {
+      if (!line.startsWith('|') || /^\|[-| ]+\|$/.test(line)) continue;
+      for (const [, span] of line.replaceAll('\\|', '\u0000').matchAll(/`([^`]+)`/g)) {
+        for (const code of codesIn(span.replaceAll('\u0000', '|'))) {
+          count++;
+          if (!isKnown(code)) problems.push(`${page}: \`${code}\` (in \`${span}\`) is in no key registry.`);
+        }
+      }
+    }
+  }
+  return { problems: [...new Set(problems)], count };
+}
+
+// ── rule 3: every quoted key checks ─────────────────────────────────────────
+
+const KEY = /(FX(?:MG|M|I|E)=[^\s`'"|)<>…\]\\,]+)/g;
+function keyProblems(sources) {
+  const problems = [];
+  let count = 0;
+  for (const [where, body] of Object.entries(sources)) {
+    for (const m of body.matchAll(KEY)) {
+      const key = m[1].replace(/[.;:]+$/, '');
+      const next = body[m.index + m[1].length] ?? '';
+      // A header alone (`FXI=1.0`), a pattern (`<joint>`, `…`) or a search (`deltoid.*`) is not a key.
+      if (!/=\d+\.\d+[SN]?\/./.test(key) || next === '<' || next === '…' || key.endsWith('.*') || DELIBERATELY_WRONG.has(key)) continue;
+      count++;
+      const c = encoder.checkKey(key);
+      if (!c.ok) problems.push(`${where}: ${key} does not check: ${c.issues.map((i) => i.message).join(' ')}`);
+    }
+  }
+  return { problems: [...new Set(problems)], count };
+}
+
+// ── rule 4: the pages link their registries ─────────────────────────────────
+
+function linkProblems(pages) {
+  const problems = [];
+  for (const [page, files] of Object.entries(PAGE_REGISTRIES)) {
+    for (const file of files) if (!(pages[page] ?? '').includes(`](${REGISTRY_URL}${file})`)) problems.push(`${page} does not link ${REGISTRY_URL}${file}.`);
+  }
+  return problems;
+}
+
+// ── run ─────────────────────────────────────────────────────────────────────
+
+const generated = encoder.buildRegistries();
+const readRegistry = (file) => (existsSync(join(REGISTRY_DIR, file)) ? readFileSync(join(REGISTRY_DIR, file), 'utf8') : undefined);
+const pages = Object.fromEntries(Object.keys(PAGE_REGISTRIES).map((p) => [p, readFileSync(join(PAGE_DIR, p), 'utf8')]));
+const examples = Object.fromEntries(readdirSync(EXAMPLE_DIR, { recursive: true, encoding: 'utf8' })
+  .filter((f) => f.endsWith('.json') && !f.endsWith('.schema.json') && !f.split('/').pop().startsWith('invalid.'))
+  .map((f) => [`specification/schemas/${f}`, readFileSync(join(EXAMPLE_DIR, f), 'utf8')]));
+
+if (process.argv.includes('--write')) {
+  for (const [file, registry] of Object.entries(generated)) writeFileSync(join(REGISTRY_DIR, file), text(registry));
+  console.log(`wrote ${Object.keys(generated).length} key registries to specification/registries/`);
+  process.exit(0);
+}
+
+const known = knownCodes(generated);
+
+if (process.argv.includes('--self-test')) {
+  const failures = [];
+  const expectFail = (name, problems) => { if (problems.length === 0) failures.push(`${name} passed a broken input`); };
+  const [first] = Object.keys(generated);
+  expectFail('registries', registryProblems(generated, (f) => (f === first ? text({ tampered: true }) : text(generated[f]))));
+  expectFail('registries (missing)', registryProblems(generated, (f) => (f === first ? undefined : text(generated[f]))));
+  expectFail('codes', codeProblems({ 'page.md': '| `bell.dumbb` | A typo |' }, known).problems);
+  expectFail('codes (layer value)', codeProblems({ 'page.md': '| `l:bar.straight@backside` | x |' }, known).problems);
+  expectFail('keys', keyProblems({ 'page.md': 'A key `FXI=1.0S/m:el.bend/o:standing/l:none` here.' }).problems);
+  expectFail('keys (muscle)', keyProblems({ 'page.md': '`FXM=1.0/lats`' }).problems);
+  expectFail('links', linkProblems({ ...pages, 'muscle-key.md': '' }));
+  if (codeProblems({ 'page.md': '| `m:hip.ext+kn.ext` | `l:bell.dumb@hands` | `x:rc@legs+u@arms` | `bell.*` | `FXMG=1.0/a:hip.flex` |' }, known).problems.length > 0) failures.push('codes rejected valid codes');
+  if (failures.length > 0) { console.error(failures.join('\n')); process.exit(1); }
+  console.log('  ok    self-test — every rule fails on a broken input and passes a good one');
+  process.exit(0);
+}
+
+const problems = [];
+problems.push(...registryProblems(generated, readRegistry));
+const codes = codeProblems(pages, known);
+problems.push(...codes.problems);
+const keys = keyProblems({ ...Object.fromEntries(Object.entries(pages).map(([p, b]) => [`website/docs/core-concepts/structural-keys/${p}`, b])), 'website/docs/core-concepts/structural-keys.md': readFileSync(join(ROOT, 'website/docs/core-concepts/structural-keys.md'), 'utf8'), ...examples });
+problems.push(...keys.problems);
+problems.push(...linkProblems(pages));
+
+if (problems.length > 0) {
+  console.error(`${problems.length} problem(s):\n`);
+  for (const p of problems) console.error(`  ${p}`);
+  process.exit(1);
+}
+console.log(`  ok    ${Object.keys(generated).length} key registries match the encoder; ${codes.count} table codes are in them; ${keys.count} quoted keys check; the key pages link them`);

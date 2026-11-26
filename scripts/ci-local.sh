@@ -3,11 +3,11 @@
 # Runs the same checks as .github/workflows/ci.yml, locally.
 #
 # Exists so a GitHub Actions outage is not a release blocker: if this passes,
-# the three CI jobs are expected to pass. Keep it in step with ci.yml — if a job
+# the CI jobs are expected to pass. Keep it in step with ci.yml — if a job
 # is added there, add it here.
 #
 #   ./scripts/ci-local.sh            all jobs
-#   ./scripts/ci-local.sh schemas    a single job (transformer | schemas | website)
+#   ./scripts/ci-local.sh schemas    a single job (transformer | encoder | schemas | website)
 #
 set -uo pipefail
 cd "$(dirname "$0")/.."
@@ -20,8 +20,8 @@ run_job() { [[ "$ONLY" == "all" || "$ONLY" == "$1" ]]; }
 # end in "ALL CHECKS PASSED". A filter that silently selects the empty set is
 # the same defect this suite exists to catch, so an unknown name is an error.
 case "$ONLY" in
-  all|transformer|schemas|website) ;;
-  *) printf 'unknown job "%s" — expected transformer, schemas, website or all\n' "$ONLY" >&2; exit 2 ;;
+  all|transformer|encoder|schemas|website) ;;
+  *) printf 'unknown job "%s" — expected transformer, encoder, schemas, website or all\n' "$ONLY" >&2; exit 2 ;;
 esac
 
 # This script's promise is "green here means green there". A different Node
@@ -63,8 +63,21 @@ if run_job transformer; then
 
   # Runs here rather than in the schemas job because it packs the transformer,
   # and packing runs `prepack`, which needs the dependencies the job above just
-  # installed. It covers both packages: the skill needs neither.
+  # installed. It covers every package: the skill needs neither, and the
+  # encoder's dependencies are installed for its `prepack`.
+  try "encoder npm ci (for packing)" npm --prefix packages/fds-encoder ci --no-fund --no-audit
   try "packages contain what they claim" npm run check:packages
+fi
+
+# ── encoder ────────────────────────────────────────────────────────────────────
+if run_job encoder; then
+  hdr "encoder — typecheck, test, build"
+  pushd packages/fds-encoder >/dev/null
+  try "npm ci"        npm ci --no-fund --no-audit
+  try "typecheck"     npm run typecheck
+  try "tests"         npm run test:run
+  try "build"         npm run build
+  popd >/dev/null
 fi
 
 # ── schemas ────────────────────────────────────────────────────────────────────
@@ -109,6 +122,16 @@ if run_job schemas; then
   try "use-case pages stay honest" npm run check:usecases
   try "every matrix scenario has an example" npm run check:scenarios
   try "recommended values are in a registry" npm run check:registries
+
+  # The key registries check reads the built encoder. The encoder job above
+  # builds it, but this job runs standalone too, so build on demand.
+  if [[ ! -f packages/fds-encoder/dist/index.js ]]; then
+    step "build the encoder for the key registries"
+    if npm --prefix packages/fds-encoder ci --no-fund --no-audit >/dev/null 2>&1 &&
+       npm --prefix packages/fds-encoder run build >/dev/null 2>&1; then ok
+    else bad "build the encoder for the key registries"; fi
+  fi
+  try "key registries match the encoder and the pages" npm run check:keys
   try "skill knowledge names real fields" npm run check:skill
   try "every version claim matches the manifest" npm run check:versions
   try "the publish-credential rules can fail" npm run check:publish-auth

@@ -1,0 +1,2708 @@
+{
+  "registry": "muscle-category-key",
+  "version": "1.0.0",
+  "key": "FXMG=1.0",
+  "description": "The category codes of the muscle category key. A set or compartment is the FMA 5.1.0 set of that term, anchored to its FMA id and, where UBERON has it, its UBERON id; its members are the ones FMA asserts. An action category holds the prime movers of one joint action of the exercise key. muscles lists every category's members followed down to muscle keys.",
+  "policy": "closed",
+  "governs": [
+    {
+      "source": "specification/schema-sources/muscle/muscle-category/v1.1.0/muscle-category.schema.json",
+      "pointer": "fxmg"
+    }
+  ],
+  "categories": [
+    {
+      "code": "hamstring",
+      "form": "set",
+      "name": "Set of hamstring muscles",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:81022",
+          "label": "Set of hamstring muscles"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0002463",
+          "label": "muscle of posterior compartment of hindlimb stylopod"
+        }
+      ],
+      "members": [
+        {
+          "key": "FXM=1.0/biceps-femoris",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:22356",
+            "label": "Biceps femoris"
+          }
+        },
+        {
+          "key": "FXM=1.0/semitendinosus",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:22357",
+            "label": "Semitendinosus"
+          }
+        },
+        {
+          "key": "FXM=1.0/semimembranosus",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:22438",
+            "label": "Semimembranosus"
+          }
+        }
+      ],
+      "muscles": [
+        "FXM=1.0/biceps-femoris",
+        "FXM=1.0/semimembranosus",
+        "FXM=1.0/semitendinosus"
+      ]
+    },
+    {
+      "code": "quadriceps-femoris",
+      "form": "set",
+      "name": "Quadriceps femoris",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:22428",
+          "label": "Quadriceps femoris"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0001377",
+          "label": "quadriceps femoris"
+        }
+      ],
+      "members": [
+        {
+          "key": "FXM=1.0/rectus-femoris",
+          "relation": "regional_part",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:22430",
+            "label": "Rectus femoris"
+          }
+        },
+        {
+          "key": "FXM=1.0/vastus-lateralis",
+          "relation": "regional_part",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:22431",
+            "label": "Vastus lateralis"
+          }
+        },
+        {
+          "key": "FXM=1.0/vastus-medialis",
+          "relation": "regional_part",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:22432",
+            "label": "Vastus medialis"
+          }
+        },
+        {
+          "key": "FXM=1.0/vastus-intermedius",
+          "relation": "regional_part",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:22433",
+            "label": "Vastus intermedius"
+          }
+        }
+      ],
+      "muscles": [
+        "FXM=1.0/rectus-femoris",
+        "FXM=1.0/vastus-intermedius",
+        "FXM=1.0/vastus-lateralis",
+        "FXM=1.0/vastus-medialis"
+      ]
+    },
+    {
+      "code": "thigh",
+      "form": "set",
+      "name": "Musculature of thigh",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:50208",
+          "label": "Musculature of thigh"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0004463",
+          "label": "musculature of hindlimb stylopod"
+        }
+      ],
+      "members": [
+        {
+          "key": "FXM=1.0/sartorius",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:22353",
+            "label": "Sartorius"
+          }
+        },
+        {
+          "key": "FXM=1.0/biceps-femoris",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:22356",
+            "label": "Biceps femoris"
+          }
+        },
+        {
+          "key": "FXM=1.0/semitendinosus",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:22357",
+            "label": "Semitendinosus"
+          }
+        },
+        {
+          "key": "FXM=1.0/semimembranosus",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:22438",
+            "label": "Semimembranosus"
+          }
+        },
+        {
+          "key": "FXMG=1.0/quadriceps-femoris",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:22428",
+            "label": "Quadriceps femoris"
+          }
+        },
+        {
+          "key": "FXM=1.0/articularis-genus",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:22437",
+            "label": "Articularis genus"
+          }
+        },
+        {
+          "key": "FXM=1.0/pectineus",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:22440",
+            "label": "Pectineus"
+          }
+        },
+        {
+          "key": "FXM=1.0/adductor-longus",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:22441",
+            "label": "Adductor longus"
+          }
+        },
+        {
+          "key": "FXM=1.0/adductor-brevis",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:22442",
+            "label": "Adductor brevis"
+          }
+        },
+        {
+          "key": "FXM=1.0/adductor-magnus",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:22443",
+            "label": "Adductor magnus"
+          }
+        },
+        {
+          "key": "FXM=1.0/gracilis",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:43882",
+            "label": "Gracilis"
+          }
+        },
+        {
+          "key": "FXM=1.0/adductor-minimus",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:43885",
+            "label": "Adductor minimus"
+          }
+        }
+      ],
+      "muscles": [
+        "FXM=1.0/adductor-brevis",
+        "FXM=1.0/adductor-longus",
+        "FXM=1.0/adductor-magnus",
+        "FXM=1.0/adductor-minimus",
+        "FXM=1.0/articularis-genus",
+        "FXM=1.0/biceps-femoris",
+        "FXM=1.0/gracilis",
+        "FXM=1.0/pectineus",
+        "FXM=1.0/rectus-femoris",
+        "FXM=1.0/sartorius",
+        "FXM=1.0/semimembranosus",
+        "FXM=1.0/semitendinosus",
+        "FXM=1.0/vastus-intermedius",
+        "FXM=1.0/vastus-lateralis",
+        "FXM=1.0/vastus-medialis"
+      ]
+    },
+    {
+      "code": "thigh.anterior",
+      "form": "compartment",
+      "name": "Musculature of anterior compartment of thigh",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:51035",
+          "label": "Musculature of anterior compartment of thigh"
+        }
+      ],
+      "uberonGap": "UBERON has no term for the anterior compartment of the thigh.",
+      "members": [
+        {
+          "key": "FXM=1.0/sartorius",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:22353",
+            "label": "Sartorius"
+          }
+        },
+        {
+          "key": "FXMG=1.0/quadriceps-femoris",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:22428",
+            "label": "Quadriceps femoris"
+          }
+        },
+        {
+          "key": "FXM=1.0/articularis-genus",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:22437",
+            "label": "Articularis genus"
+          }
+        }
+      ],
+      "muscles": [
+        "FXM=1.0/articularis-genus",
+        "FXM=1.0/rectus-femoris",
+        "FXM=1.0/sartorius",
+        "FXM=1.0/vastus-intermedius",
+        "FXM=1.0/vastus-lateralis",
+        "FXM=1.0/vastus-medialis"
+      ]
+    },
+    {
+      "code": "thigh.medial",
+      "form": "compartment",
+      "name": "Musculature of medial compartment of thigh",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:74149",
+          "label": "Musculature of medial compartment of thigh"
+        }
+      ],
+      "uberonGap": "UBERON has no term for the medial compartment of the thigh.",
+      "members": [
+        {
+          "key": "FXM=1.0/pectineus",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:22440",
+            "label": "Pectineus"
+          }
+        },
+        {
+          "key": "FXM=1.0/adductor-longus",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:22441",
+            "label": "Adductor longus"
+          }
+        },
+        {
+          "key": "FXM=1.0/adductor-brevis",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:22442",
+            "label": "Adductor brevis"
+          }
+        },
+        {
+          "key": "FXM=1.0/adductor-magnus",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:22443",
+            "label": "Adductor magnus"
+          }
+        },
+        {
+          "key": "FXM=1.0/gracilis",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:43882",
+            "label": "Gracilis"
+          }
+        },
+        {
+          "key": "FXM=1.0/adductor-minimus",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:43885",
+            "label": "Adductor minimus"
+          }
+        }
+      ],
+      "muscles": [
+        "FXM=1.0/adductor-brevis",
+        "FXM=1.0/adductor-longus",
+        "FXM=1.0/adductor-magnus",
+        "FXM=1.0/adductor-minimus",
+        "FXM=1.0/gracilis",
+        "FXM=1.0/pectineus"
+      ]
+    },
+    {
+      "code": "thigh.posterior",
+      "form": "compartment",
+      "name": "Musculature of posterior compartment of thigh",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:51036",
+          "label": "Musculature of posterior compartment of thigh"
+        }
+      ],
+      "uberonGap": "UBERON has no term for the posterior compartment of the thigh.",
+      "members": [
+        {
+          "key": "FXM=1.0/biceps-femoris",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:22356",
+            "label": "Biceps femoris"
+          }
+        },
+        {
+          "key": "FXM=1.0/semitendinosus",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:22357",
+            "label": "Semitendinosus"
+          }
+        },
+        {
+          "key": "FXM=1.0/semimembranosus",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:22438",
+            "label": "Semimembranosus"
+          }
+        }
+      ],
+      "muscles": [
+        "FXM=1.0/biceps-femoris",
+        "FXM=1.0/semimembranosus",
+        "FXM=1.0/semitendinosus"
+      ]
+    },
+    {
+      "code": "buttock",
+      "form": "set",
+      "name": "Musculature of buttock",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:50230",
+          "label": "Musculature of buttock"
+        }
+      ],
+      "uberonGap": "UBERON has no term for the buttock musculature; gluteal muscle (UBERON:0002000) also holds the hip rotators.",
+      "members": [
+        {
+          "key": "FXM=1.0/gluteus-maximus",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:22314",
+            "label": "Gluteus maximus"
+          }
+        },
+        {
+          "key": "FXM=1.0/gluteus-medius",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:22315",
+            "label": "Gluteus medius"
+          }
+        },
+        {
+          "key": "FXM=1.0/gluteus-minimus",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:22317",
+            "label": "Gluteus minimus"
+          }
+        }
+      ],
+      "muscles": [
+        "FXM=1.0/gluteus-maximus",
+        "FXM=1.0/gluteus-medius",
+        "FXM=1.0/gluteus-minimus"
+      ]
+    },
+    {
+      "code": "triceps-surae",
+      "form": "set",
+      "name": "Triceps surae",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:51062",
+          "label": "Triceps surae"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0001665",
+          "label": "triceps surae"
+        }
+      ],
+      "members": [
+        {
+          "key": "FXM=1.0/gastrocnemius",
+          "relation": "regional_part",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:22541",
+            "label": "Gastrocnemius"
+          }
+        },
+        {
+          "key": "FXM=1.0/soleus",
+          "relation": "regional_part",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:22542",
+            "label": "Soleus"
+          }
+        }
+      ],
+      "muscles": [
+        "FXM=1.0/gastrocnemius",
+        "FXM=1.0/soleus"
+      ]
+    },
+    {
+      "code": "leg.posterior.superficial",
+      "form": "compartment",
+      "name": "Set of superficial muscles of posterior compartment of leg",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:51065",
+          "label": "Set of superficial muscles of posterior compartment of leg"
+        }
+      ],
+      "uberonGap": "UBERON has no term for the superficial muscles of the posterior compartment of the leg.",
+      "members": [
+        {
+          "key": "FXM=1.0/gastrocnemius",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:22541",
+            "label": "Gastrocnemius"
+          }
+        },
+        {
+          "key": "FXM=1.0/soleus",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:22542",
+            "label": "Soleus"
+          }
+        },
+        {
+          "key": "FXM=1.0/plantaris",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:22543",
+            "label": "Plantaris"
+          }
+        }
+      ],
+      "muscles": [
+        "FXM=1.0/gastrocnemius",
+        "FXM=1.0/plantaris",
+        "FXM=1.0/soleus"
+      ]
+    },
+    {
+      "code": "leg.anterior",
+      "form": "compartment",
+      "name": "Musculature of anterior compartment of leg",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:51052",
+          "label": "Musculature of anterior compartment of leg"
+        }
+      ],
+      "uberonGap": "UBERON has no term for the anterior compartment of the leg.",
+      "members": [
+        {
+          "key": "FXM=1.0/tibialis-anterior",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:22532",
+            "label": "Tibialis anterior"
+          }
+        },
+        {
+          "key": "FXM=1.0/extensor-hallucis-longus",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:22533",
+            "label": "Extensor hallucis longus"
+          }
+        },
+        {
+          "key": "FXM=1.0/extensor-digitorum-longus",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:22534",
+            "label": "Extensor digitorum longus"
+          }
+        },
+        {
+          "key": "FXM=1.0/fibularis-tertius",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:22538",
+            "label": "Fibularis tertius"
+          }
+        }
+      ],
+      "muscles": [
+        "FXM=1.0/extensor-digitorum-longus",
+        "FXM=1.0/extensor-hallucis-longus",
+        "FXM=1.0/fibularis-tertius",
+        "FXM=1.0/tibialis-anterior"
+      ]
+    },
+    {
+      "code": "erector-spinae",
+      "form": "set",
+      "name": "Erector spinae muscle group",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:71302",
+          "label": "Erector spinae muscle group"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0002462",
+          "label": "erector spinae muscle group"
+        }
+      ],
+      "derivation": "FMA asserts no members for the erector spinae or its sided sets (FMA:22731, FMA:22732). The members are the three muscles UBERON:0002462 lists as its parts, each keyed by its FMA term.",
+      "members": [
+        {
+          "key": "FXM=1.0/iliocostalis",
+          "relation": "part_of",
+          "source": {
+            "system": "UBERON",
+            "id": "UBERON:0002251",
+            "label": "iliocostalis muscle"
+          }
+        },
+        {
+          "key": "FXM=1.0/longissimus",
+          "relation": "part_of",
+          "source": {
+            "system": "UBERON",
+            "id": "UBERON:0000392",
+            "label": "longissimus muscle"
+          }
+        },
+        {
+          "key": "FXM=1.0/spinalis",
+          "relation": "part_of",
+          "source": {
+            "system": "UBERON",
+            "id": "UBERON:0011013",
+            "label": "spinalis muscle"
+          }
+        }
+      ],
+      "muscles": [
+        "FXM=1.0/iliocostalis",
+        "FXM=1.0/longissimus",
+        "FXM=1.0/spinalis"
+      ]
+    },
+    {
+      "code": "anterior-abdominal-wall",
+      "form": "set",
+      "name": "Musculature of anterior abdominal wall",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:78435",
+          "label": "Musculature of anterior abdominal wall"
+        }
+      ],
+      "uberonGap": "UBERON has no term for this set; anterior abdominal wall muscle (UBERON:0002461) is the type of its muscles.",
+      "members": [
+        {
+          "key": "FXM=1.0/external-oblique",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:13336",
+            "label": "Right external oblique"
+          }
+        },
+        {
+          "key": "FXM=1.0/internal-oblique",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:13892",
+            "label": "Right internal oblique"
+          }
+        },
+        {
+          "key": "FXM=1.0/rectus-abdominis",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:9628",
+            "label": "Rectus abdominis"
+          }
+        },
+        {
+          "key": "FXM=1.0/transversus-abdominis",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:15570",
+            "label": "Transversus abdominis"
+          }
+        },
+        {
+          "key": "FXM=1.0/pyramidalis",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:22346",
+            "label": "Right pyramidalis"
+          }
+        }
+      ],
+      "muscles": [
+        "FXM=1.0/external-oblique",
+        "FXM=1.0/internal-oblique",
+        "FXM=1.0/pyramidalis",
+        "FXM=1.0/rectus-abdominis",
+        "FXM=1.0/transversus-abdominis"
+      ]
+    },
+    {
+      "code": "pectoral",
+      "form": "set",
+      "name": "Pectoral musculature",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:50223",
+          "label": "Pectoral musculature"
+        }
+      ],
+      "uberonGap": "UBERON has no term for this set; pectoral muscle (UBERON:0001495) is the type of its muscles.",
+      "members": [
+        {
+          "key": "FXM=1.0/pectoralis-major",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:9627",
+            "label": "Pectoralis major"
+          }
+        },
+        {
+          "key": "FXM=1.0/pectoralis-minor",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:13109",
+            "label": "Pectoralis minor"
+          }
+        },
+        {
+          "key": "FXM=1.0/subclavius",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:13410",
+            "label": "Subclavius"
+          }
+        }
+      ],
+      "muscles": [
+        "FXM=1.0/pectoralis-major",
+        "FXM=1.0/pectoralis-minor",
+        "FXM=1.0/subclavius"
+      ]
+    },
+    {
+      "code": "rotator-cuff",
+      "form": "set",
+      "name": "Set of rotator cuff muscles",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:82650",
+          "label": "Set of rotator cuff muscles"
+        }
+      ],
+      "uberonGap": "UBERON has no term for this set; its rotator cuff (UBERON:0003683) cross-references the tendinous cuff (FMA:37018).",
+      "members": [
+        {
+          "key": "FXM=1.0/subscapularis",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:13413",
+            "label": "Subscapularis"
+          }
+        },
+        {
+          "key": "FXM=1.0/infraspinatus",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:32546",
+            "label": "Infraspinatus"
+          }
+        },
+        {
+          "key": "FXM=1.0/teres-minor",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:32550",
+            "label": "Teres minor"
+          }
+        },
+        {
+          "key": "FXM=1.0/supraspinatus",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:9629",
+            "label": "Supraspinatus"
+          }
+        }
+      ],
+      "muscles": [
+        "FXM=1.0/infraspinatus",
+        "FXM=1.0/subscapularis",
+        "FXM=1.0/supraspinatus",
+        "FXM=1.0/teres-minor"
+      ]
+    },
+    {
+      "code": "shoulder.intrinsic",
+      "form": "compartment",
+      "name": "Set of intrinsic muscles of shoulder",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:33522",
+          "label": "Set of intrinsic muscles of shoulder"
+        }
+      ],
+      "uberonGap": "UBERON has no term for the intrinsic muscles of the shoulder.",
+      "members": [
+        {
+          "key": "FXM=1.0/deltoid",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:32521",
+            "label": "Deltoid"
+          }
+        },
+        {
+          "key": "FXM=1.0/subscapularis",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:13413",
+            "label": "Subscapularis"
+          }
+        },
+        {
+          "key": "FXM=1.0/infraspinatus",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:32546",
+            "label": "Infraspinatus"
+          }
+        },
+        {
+          "key": "FXM=1.0/teres-minor",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:32550",
+            "label": "Teres minor"
+          }
+        },
+        {
+          "key": "FXM=1.0/supraspinatus",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:9629",
+            "label": "Supraspinatus"
+          }
+        },
+        {
+          "key": "FXM=1.0/teres-major",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:32549",
+            "label": "Teres major"
+          }
+        }
+      ],
+      "muscles": [
+        "FXM=1.0/deltoid",
+        "FXM=1.0/infraspinatus",
+        "FXM=1.0/subscapularis",
+        "FXM=1.0/supraspinatus",
+        "FXM=1.0/teres-major",
+        "FXM=1.0/teres-minor"
+      ]
+    },
+    {
+      "code": "arm",
+      "form": "set",
+      "name": "Musculature of arm",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:50202",
+          "label": "Musculature of arm"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0014791",
+          "label": "musculature of forelimb stylopod"
+        }
+      ],
+      "members": [
+        {
+          "key": "FXM=1.0/coracobrachialis",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:37664",
+            "label": "Coracobrachialis"
+          }
+        },
+        {
+          "key": "FXM=1.0/brachialis",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:37667",
+            "label": "Brachialis"
+          }
+        },
+        {
+          "key": "FXM=1.0/biceps-brachii",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:37670",
+            "label": "Biceps brachii"
+          }
+        },
+        {
+          "key": "FXM=1.0/triceps-brachii",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:37688",
+            "label": "Triceps brachii"
+          }
+        },
+        {
+          "key": "FXM=1.0/articularis-cubiti",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:37701",
+            "label": "Articularis cubiti"
+          }
+        },
+        {
+          "key": "FXM=1.0/anconeus",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:37704",
+            "label": "Anconeus"
+          }
+        }
+      ],
+      "muscles": [
+        "FXM=1.0/anconeus",
+        "FXM=1.0/articularis-cubiti",
+        "FXM=1.0/biceps-brachii",
+        "FXM=1.0/brachialis",
+        "FXM=1.0/coracobrachialis",
+        "FXM=1.0/triceps-brachii"
+      ]
+    },
+    {
+      "code": "arm.anterior",
+      "form": "compartment",
+      "name": "Musculature of anterior compartment of arm",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:50193",
+          "label": "Musculature of anterior compartment of arm"
+        }
+      ],
+      "uberonGap": "UBERON has no term for the anterior compartment of the arm.",
+      "members": [
+        {
+          "key": "FXM=1.0/coracobrachialis",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:37664",
+            "label": "Coracobrachialis"
+          }
+        },
+        {
+          "key": "FXM=1.0/brachialis",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:37667",
+            "label": "Brachialis"
+          }
+        },
+        {
+          "key": "FXM=1.0/biceps-brachii",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:37670",
+            "label": "Biceps brachii"
+          }
+        }
+      ],
+      "muscles": [
+        "FXM=1.0/biceps-brachii",
+        "FXM=1.0/brachialis",
+        "FXM=1.0/coracobrachialis"
+      ]
+    },
+    {
+      "code": "arm.posterior",
+      "form": "compartment",
+      "name": "Musculature of posterior compartment of arm",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:50194",
+          "label": "Musculature of posterior compartment of arm"
+        }
+      ],
+      "uberonGap": "UBERON has no term for the posterior compartment of the arm.",
+      "members": [
+        {
+          "key": "FXM=1.0/triceps-brachii",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:37688",
+            "label": "Triceps brachii"
+          }
+        },
+        {
+          "key": "FXM=1.0/articularis-cubiti",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:37701",
+            "label": "Articularis cubiti"
+          }
+        },
+        {
+          "key": "FXM=1.0/anconeus",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:37704",
+            "label": "Anconeus"
+          }
+        }
+      ],
+      "muscles": [
+        "FXM=1.0/anconeus",
+        "FXM=1.0/articularis-cubiti",
+        "FXM=1.0/triceps-brachii"
+      ]
+    },
+    {
+      "code": "forearm",
+      "form": "set",
+      "name": "Musculature of forearm",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:39089",
+          "label": "Musculature of forearm"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0004487",
+          "label": "musculature of forelimb zeugopod"
+        }
+      ],
+      "members": [
+        {
+          "key": "FXMG=1.0/forearm.anterior",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:39098",
+            "label": "Musculature of anterior compartment of forearm"
+          }
+        },
+        {
+          "key": "FXMG=1.0/forearm.posterior",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:39101",
+            "label": "Musculature of posterior compartment of forearm"
+          }
+        }
+      ],
+      "muscles": [
+        "FXM=1.0/abductor-pollicis-longus",
+        "FXM=1.0/brachioradialis",
+        "FXM=1.0/extensor-carpi-radialis-brevis",
+        "FXM=1.0/extensor-carpi-radialis-longus",
+        "FXM=1.0/extensor-carpi-ulnaris",
+        "FXM=1.0/extensor-digiti-minimi",
+        "FXM=1.0/extensor-digitorum",
+        "FXM=1.0/extensor-indicis",
+        "FXM=1.0/extensor-pollicis-brevis",
+        "FXM=1.0/extensor-pollicis-longus",
+        "FXM=1.0/flexor-carpi-radialis",
+        "FXM=1.0/flexor-carpi-ulnaris",
+        "FXM=1.0/flexor-digitorum-profundus",
+        "FXM=1.0/flexor-digitorum-superficialis",
+        "FXM=1.0/flexor-pollicis-longus",
+        "FXM=1.0/palmaris-longus",
+        "FXM=1.0/pronator-quadratus",
+        "FXM=1.0/pronator-teres",
+        "FXM=1.0/supinator"
+      ]
+    },
+    {
+      "code": "forearm.anterior",
+      "form": "compartment",
+      "name": "Musculature of anterior compartment of forearm",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:39098",
+          "label": "Musculature of anterior compartment of forearm"
+        }
+      ],
+      "uberonGap": "UBERON has no term for the anterior compartment of the forearm.",
+      "members": [
+        {
+          "key": "FXMG=1.0/forearm.anterior.superficial",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:39092",
+            "label": "Set of superficial muscles of anterior compartment of forearm"
+          }
+        },
+        {
+          "key": "FXMG=1.0/forearm.anterior.deep",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:39095",
+            "label": "Set of deep muscles of anterior compartment of forearm"
+          }
+        }
+      ],
+      "muscles": [
+        "FXM=1.0/flexor-carpi-radialis",
+        "FXM=1.0/flexor-carpi-ulnaris",
+        "FXM=1.0/flexor-digitorum-profundus",
+        "FXM=1.0/flexor-digitorum-superficialis",
+        "FXM=1.0/flexor-pollicis-longus",
+        "FXM=1.0/palmaris-longus",
+        "FXM=1.0/pronator-quadratus",
+        "FXM=1.0/pronator-teres"
+      ]
+    },
+    {
+      "code": "forearm.anterior.superficial",
+      "form": "compartment",
+      "name": "Set of superficial muscles of anterior compartment of forearm",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:39092",
+          "label": "Set of superficial muscles of anterior compartment of forearm"
+        }
+      ],
+      "uberonGap": "UBERON has no term for the superficial muscles of the anterior compartment of the forearm.",
+      "members": [
+        {
+          "key": "FXM=1.0/pronator-teres",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:38450",
+            "label": "Pronator teres"
+          }
+        },
+        {
+          "key": "FXM=1.0/flexor-carpi-radialis",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:38459",
+            "label": "Flexor carpi radialis"
+          }
+        },
+        {
+          "key": "FXM=1.0/palmaris-longus",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:38462",
+            "label": "Palmaris longus"
+          }
+        },
+        {
+          "key": "FXM=1.0/flexor-carpi-ulnaris",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:38465",
+            "label": "Flexor carpi ulnaris"
+          }
+        },
+        {
+          "key": "FXM=1.0/flexor-digitorum-superficialis",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:38469",
+            "label": "Flexor digitorum superficialis"
+          }
+        }
+      ],
+      "muscles": [
+        "FXM=1.0/flexor-carpi-radialis",
+        "FXM=1.0/flexor-carpi-ulnaris",
+        "FXM=1.0/flexor-digitorum-superficialis",
+        "FXM=1.0/palmaris-longus",
+        "FXM=1.0/pronator-teres"
+      ]
+    },
+    {
+      "code": "forearm.anterior.deep",
+      "form": "compartment",
+      "name": "Set of deep muscles of anterior compartment of forearm",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:39095",
+          "label": "Set of deep muscles of anterior compartment of forearm"
+        }
+      ],
+      "uberonGap": "UBERON has no term for the deep muscles of the anterior compartment of the forearm.",
+      "members": [
+        {
+          "key": "FXM=1.0/pronator-quadratus",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:38453",
+            "label": "Pronator quadratus"
+          }
+        },
+        {
+          "key": "FXM=1.0/flexor-digitorum-profundus",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:38478",
+            "label": "Flexor digitorum profundus"
+          }
+        },
+        {
+          "key": "FXM=1.0/flexor-pollicis-longus",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:38481",
+            "label": "Flexor pollicis longus"
+          }
+        }
+      ],
+      "muscles": [
+        "FXM=1.0/flexor-digitorum-profundus",
+        "FXM=1.0/flexor-pollicis-longus",
+        "FXM=1.0/pronator-quadratus"
+      ]
+    },
+    {
+      "code": "forearm.posterior",
+      "form": "compartment",
+      "name": "Musculature of posterior compartment of forearm",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:39101",
+          "label": "Musculature of posterior compartment of forearm"
+        }
+      ],
+      "uberonGap": "UBERON has no term for the posterior compartment of the forearm.",
+      "members": [
+        {
+          "key": "FXMG=1.0/forearm.posterior.superficial",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:39104",
+            "label": "Set of superficial muscles of posterior compartment of forearm"
+          }
+        },
+        {
+          "key": "FXMG=1.0/forearm.posterior.deep",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:39105",
+            "label": "Set of deep muscles of posterior compartment of forearm"
+          }
+        }
+      ],
+      "muscles": [
+        "FXM=1.0/abductor-pollicis-longus",
+        "FXM=1.0/brachioradialis",
+        "FXM=1.0/extensor-carpi-radialis-brevis",
+        "FXM=1.0/extensor-carpi-radialis-longus",
+        "FXM=1.0/extensor-carpi-ulnaris",
+        "FXM=1.0/extensor-digiti-minimi",
+        "FXM=1.0/extensor-digitorum",
+        "FXM=1.0/extensor-indicis",
+        "FXM=1.0/extensor-pollicis-brevis",
+        "FXM=1.0/extensor-pollicis-longus",
+        "FXM=1.0/supinator"
+      ]
+    },
+    {
+      "code": "forearm.posterior.superficial",
+      "form": "compartment",
+      "name": "Set of superficial muscles of posterior compartment of forearm",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:39104",
+          "label": "Set of superficial muscles of posterior compartment of forearm"
+        }
+      ],
+      "uberonGap": "UBERON has no term for the superficial muscles of the posterior compartment of the forearm.",
+      "members": [
+        {
+          "key": "FXM=1.0/brachioradialis",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:38485",
+            "label": "Brachioradialis"
+          }
+        },
+        {
+          "key": "FXM=1.0/extensor-carpi-radialis-longus",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:38494",
+            "label": "Extensor carpi radialis longus"
+          }
+        },
+        {
+          "key": "FXM=1.0/extensor-carpi-radialis-brevis",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:38497",
+            "label": "Extensor carpi radialis brevis"
+          }
+        },
+        {
+          "key": "FXM=1.0/extensor-digitorum",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:38500",
+            "label": "Extensor digitorum"
+          }
+        },
+        {
+          "key": "FXM=1.0/extensor-digiti-minimi",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:38503",
+            "label": "Extensor digiti minimi"
+          }
+        },
+        {
+          "key": "FXM=1.0/extensor-carpi-ulnaris",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:38506",
+            "label": "Extensor carpi ulnaris"
+          }
+        }
+      ],
+      "muscles": [
+        "FXM=1.0/brachioradialis",
+        "FXM=1.0/extensor-carpi-radialis-brevis",
+        "FXM=1.0/extensor-carpi-radialis-longus",
+        "FXM=1.0/extensor-carpi-ulnaris",
+        "FXM=1.0/extensor-digiti-minimi",
+        "FXM=1.0/extensor-digitorum"
+      ]
+    },
+    {
+      "code": "forearm.posterior.deep",
+      "form": "compartment",
+      "name": "Set of deep muscles of posterior compartment of forearm",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:39105",
+          "label": "Set of deep muscles of posterior compartment of forearm"
+        }
+      ],
+      "uberonGap": "UBERON has no term for the deep muscles of the posterior compartment of the forearm.",
+      "members": [
+        {
+          "key": "FXM=1.0/supinator",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:38512",
+            "label": "Supinator"
+          }
+        },
+        {
+          "key": "FXM=1.0/abductor-pollicis-longus",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:38515",
+            "label": "Abductor pollicis longus"
+          }
+        },
+        {
+          "key": "FXM=1.0/extensor-pollicis-brevis",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:38518",
+            "label": "Extensor pollicis brevis"
+          }
+        },
+        {
+          "key": "FXM=1.0/extensor-pollicis-longus",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:38521",
+            "label": "Extensor pollicis longus"
+          }
+        },
+        {
+          "key": "FXM=1.0/extensor-indicis",
+          "relation": "member",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:38524",
+            "label": "Extensor indicis"
+          }
+        }
+      ],
+      "muscles": [
+        "FXM=1.0/abductor-pollicis-longus",
+        "FXM=1.0/extensor-indicis",
+        "FXM=1.0/extensor-pollicis-brevis",
+        "FXM=1.0/extensor-pollicis-longus",
+        "FXM=1.0/supinator"
+      ]
+    },
+    {
+      "code": "entire",
+      "form": "set",
+      "name": "Entire musculature",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:72954",
+          "label": "Entire musculature"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0000383",
+          "label": "musculature of body"
+        }
+      ],
+      "derivation": "The entire musculature holds every muscle of the body, so its members are every muscle FXM names.",
+      "members": [
+        {
+          "key": "FXM=1.0/deltoid",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:32521",
+            "label": "Deltoid"
+          }
+        },
+        {
+          "key": "FXM=1.0/pectoralis-major",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:9627",
+            "label": "Pectoralis major"
+          }
+        },
+        {
+          "key": "FXM=1.0/trapezius",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:9626",
+            "label": "Trapezius"
+          }
+        },
+        {
+          "key": "FXM=1.0/latissimus-dorsi",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:13357",
+            "label": "Latissimus dorsi"
+          }
+        },
+        {
+          "key": "FXM=1.0/rhomboid-major",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:13379",
+            "label": "Rhomboid major"
+          }
+        },
+        {
+          "key": "FXM=1.0/rhomboid-minor",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:13380",
+            "label": "Rhomboid minor"
+          }
+        },
+        {
+          "key": "FXM=1.0/biceps-brachii",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:37670",
+            "label": "Biceps brachii"
+          }
+        },
+        {
+          "key": "FXM=1.0/brachialis",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:37667",
+            "label": "Brachialis"
+          }
+        },
+        {
+          "key": "FXM=1.0/brachioradialis",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:38485",
+            "label": "Brachioradialis"
+          }
+        },
+        {
+          "key": "FXM=1.0/triceps-brachii",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:37688",
+            "label": "Triceps brachii"
+          }
+        },
+        {
+          "key": "FXM=1.0/rectus-abdominis",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:9628",
+            "label": "Rectus abdominis"
+          }
+        },
+        {
+          "key": "FXM=1.0/external-oblique",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:13335",
+            "label": "External oblique"
+          }
+        },
+        {
+          "key": "FXM=1.0/internal-oblique",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:13891",
+            "label": "Internal oblique"
+          }
+        },
+        {
+          "key": "FXM=1.0/serratus-anterior",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:13397",
+            "label": "Serratus anterior"
+          }
+        },
+        {
+          "key": "FXM=1.0/iliocostalis",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:77177",
+            "label": "Iliocostalis"
+          }
+        },
+        {
+          "key": "FXM=1.0/longissimus",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:77178",
+            "label": "Longissimus"
+          }
+        },
+        {
+          "key": "FXM=1.0/spinalis",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:77179",
+            "label": "Spinalis"
+          }
+        },
+        {
+          "key": "FXM=1.0/quadratus-lumborum",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:15569",
+            "label": "Quadratus lumborum"
+          }
+        },
+        {
+          "key": "FXM=1.0/gluteus-maximus",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:22314",
+            "label": "Gluteus maximus"
+          }
+        },
+        {
+          "key": "FXM=1.0/gluteus-medius",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:22315",
+            "label": "Gluteus medius"
+          }
+        },
+        {
+          "key": "FXM=1.0/gluteus-minimus",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:22317",
+            "label": "Gluteus minimus"
+          }
+        },
+        {
+          "key": "FXM=1.0/tensor-fasciae-latae",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:22423",
+            "label": "Tensor fasciae latae"
+          }
+        },
+        {
+          "key": "FXM=1.0/biceps-femoris",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:22356",
+            "label": "Biceps femoris"
+          }
+        },
+        {
+          "key": "FXM=1.0/semitendinosus",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:22357",
+            "label": "Semitendinosus"
+          }
+        },
+        {
+          "key": "FXM=1.0/semimembranosus",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:22438",
+            "label": "Semimembranosus"
+          }
+        },
+        {
+          "key": "FXM=1.0/rectus-femoris",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:22430",
+            "label": "Rectus femoris"
+          }
+        },
+        {
+          "key": "FXM=1.0/vastus-lateralis",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:22431",
+            "label": "Vastus lateralis"
+          }
+        },
+        {
+          "key": "FXM=1.0/vastus-medialis",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:22432",
+            "label": "Vastus medialis"
+          }
+        },
+        {
+          "key": "FXM=1.0/vastus-intermedius",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:22433",
+            "label": "Vastus intermedius"
+          }
+        },
+        {
+          "key": "FXM=1.0/adductor-longus",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:22441",
+            "label": "Adductor longus"
+          }
+        },
+        {
+          "key": "FXM=1.0/adductor-brevis",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:22442",
+            "label": "Adductor brevis"
+          }
+        },
+        {
+          "key": "FXM=1.0/adductor-magnus",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:22443",
+            "label": "Adductor magnus"
+          }
+        },
+        {
+          "key": "FXM=1.0/gracilis",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:43882",
+            "label": "Gracilis"
+          }
+        },
+        {
+          "key": "FXM=1.0/pectineus",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:22440",
+            "label": "Pectineus"
+          }
+        },
+        {
+          "key": "FXM=1.0/psoas-major",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:18060",
+            "label": "Psoas major"
+          }
+        },
+        {
+          "key": "FXM=1.0/iliacus",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:22310",
+            "label": "Iliacus"
+          }
+        },
+        {
+          "key": "FXM=1.0/sartorius",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:22353",
+            "label": "Sartorius"
+          }
+        },
+        {
+          "key": "FXM=1.0/gastrocnemius",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:22541",
+            "label": "Gastrocnemius"
+          }
+        },
+        {
+          "key": "FXM=1.0/soleus",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:22542",
+            "label": "Soleus"
+          }
+        },
+        {
+          "key": "FXM=1.0/tibialis-anterior",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:22532",
+            "label": "Tibialis anterior"
+          }
+        },
+        {
+          "key": "FXM=1.0/sternocleidomastoid",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:13407",
+            "label": "Sternocleidomastoid"
+          }
+        },
+        {
+          "key": "FXM=1.0/splenius-capitis",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:22653",
+            "label": "Splenius capitis"
+          }
+        },
+        {
+          "key": "FXM=1.0/semispinalis-capitis",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:22830",
+            "label": "Semispinalis capitis"
+          }
+        },
+        {
+          "key": "FXM=1.0/flexor-carpi-radialis",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:38459",
+            "label": "Flexor carpi radialis"
+          }
+        },
+        {
+          "key": "FXM=1.0/flexor-carpi-ulnaris",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:38465",
+            "label": "Flexor carpi ulnaris"
+          }
+        },
+        {
+          "key": "FXM=1.0/palmaris-longus",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:38462",
+            "label": "Palmaris longus"
+          }
+        },
+        {
+          "key": "FXM=1.0/extensor-carpi-radialis-longus",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:38494",
+            "label": "Extensor carpi radialis longus"
+          }
+        },
+        {
+          "key": "FXM=1.0/extensor-carpi-radialis-brevis",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:38497",
+            "label": "Extensor carpi radialis brevis"
+          }
+        },
+        {
+          "key": "FXM=1.0/extensor-carpi-ulnaris",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:38506",
+            "label": "Extensor carpi ulnaris"
+          }
+        },
+        {
+          "key": "FXM=1.0/transversus-abdominis",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:15570",
+            "label": "Transversus abdominis"
+          }
+        },
+        {
+          "key": "FXM=1.0/pyramidalis",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:15568",
+            "label": "Pyramidalis"
+          }
+        },
+        {
+          "key": "FXM=1.0/pectoralis-minor",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:13109",
+            "label": "Pectoralis minor"
+          }
+        },
+        {
+          "key": "FXM=1.0/subclavius",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:13410",
+            "label": "Subclavius"
+          }
+        },
+        {
+          "key": "FXM=1.0/supraspinatus",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:9629",
+            "label": "Supraspinatus"
+          }
+        },
+        {
+          "key": "FXM=1.0/infraspinatus",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:32546",
+            "label": "Infraspinatus"
+          }
+        },
+        {
+          "key": "FXM=1.0/teres-minor",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:32550",
+            "label": "Teres minor"
+          }
+        },
+        {
+          "key": "FXM=1.0/teres-major",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:32549",
+            "label": "Teres major"
+          }
+        },
+        {
+          "key": "FXM=1.0/subscapularis",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:13413",
+            "label": "Subscapularis"
+          }
+        },
+        {
+          "key": "FXM=1.0/coracobrachialis",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:37664",
+            "label": "Coracobrachialis"
+          }
+        },
+        {
+          "key": "FXM=1.0/articularis-cubiti",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:37701",
+            "label": "Articularis cubiti"
+          }
+        },
+        {
+          "key": "FXM=1.0/anconeus",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:37704",
+            "label": "Anconeus"
+          }
+        },
+        {
+          "key": "FXM=1.0/pronator-teres",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:38450",
+            "label": "Pronator teres"
+          }
+        },
+        {
+          "key": "FXM=1.0/flexor-digitorum-superficialis",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:38469",
+            "label": "Flexor digitorum superficialis"
+          }
+        },
+        {
+          "key": "FXM=1.0/pronator-quadratus",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:38453",
+            "label": "Pronator quadratus"
+          }
+        },
+        {
+          "key": "FXM=1.0/flexor-digitorum-profundus",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:38478",
+            "label": "Flexor digitorum profundus"
+          }
+        },
+        {
+          "key": "FXM=1.0/flexor-pollicis-longus",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:38481",
+            "label": "Flexor pollicis longus"
+          }
+        },
+        {
+          "key": "FXM=1.0/extensor-digitorum",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:38500",
+            "label": "Extensor digitorum"
+          }
+        },
+        {
+          "key": "FXM=1.0/extensor-digiti-minimi",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:38503",
+            "label": "Extensor digiti minimi"
+          }
+        },
+        {
+          "key": "FXM=1.0/supinator",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:38512",
+            "label": "Supinator"
+          }
+        },
+        {
+          "key": "FXM=1.0/abductor-pollicis-longus",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:38515",
+            "label": "Abductor pollicis longus"
+          }
+        },
+        {
+          "key": "FXM=1.0/extensor-pollicis-brevis",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:38518",
+            "label": "Extensor pollicis brevis"
+          }
+        },
+        {
+          "key": "FXM=1.0/extensor-pollicis-longus",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:38521",
+            "label": "Extensor pollicis longus"
+          }
+        },
+        {
+          "key": "FXM=1.0/extensor-indicis",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:38524",
+            "label": "Extensor indicis"
+          }
+        },
+        {
+          "key": "FXM=1.0/adductor-minimus",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:43885",
+            "label": "Adductor minimus"
+          }
+        },
+        {
+          "key": "FXM=1.0/articularis-genus",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:22437",
+            "label": "Articularis genus"
+          }
+        },
+        {
+          "key": "FXM=1.0/extensor-hallucis-longus",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:22533",
+            "label": "Extensor hallucis longus"
+          }
+        },
+        {
+          "key": "FXM=1.0/extensor-digitorum-longus",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:22534",
+            "label": "Extensor digitorum longus"
+          }
+        },
+        {
+          "key": "FXM=1.0/fibularis-tertius",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:22538",
+            "label": "Fibularis tertius"
+          }
+        },
+        {
+          "key": "FXM=1.0/plantaris",
+          "relation": "whole-body",
+          "source": {
+            "system": "FMA",
+            "id": "FMA:22543",
+            "label": "Plantaris"
+          }
+        }
+      ],
+      "muscles": [
+        "FXM=1.0/abductor-pollicis-longus",
+        "FXM=1.0/adductor-brevis",
+        "FXM=1.0/adductor-longus",
+        "FXM=1.0/adductor-magnus",
+        "FXM=1.0/adductor-minimus",
+        "FXM=1.0/anconeus",
+        "FXM=1.0/articularis-cubiti",
+        "FXM=1.0/articularis-genus",
+        "FXM=1.0/biceps-brachii",
+        "FXM=1.0/biceps-femoris",
+        "FXM=1.0/brachialis",
+        "FXM=1.0/brachioradialis",
+        "FXM=1.0/coracobrachialis",
+        "FXM=1.0/deltoid",
+        "FXM=1.0/extensor-carpi-radialis-brevis",
+        "FXM=1.0/extensor-carpi-radialis-longus",
+        "FXM=1.0/extensor-carpi-ulnaris",
+        "FXM=1.0/extensor-digiti-minimi",
+        "FXM=1.0/extensor-digitorum",
+        "FXM=1.0/extensor-digitorum-longus",
+        "FXM=1.0/extensor-hallucis-longus",
+        "FXM=1.0/extensor-indicis",
+        "FXM=1.0/extensor-pollicis-brevis",
+        "FXM=1.0/extensor-pollicis-longus",
+        "FXM=1.0/external-oblique",
+        "FXM=1.0/fibularis-tertius",
+        "FXM=1.0/flexor-carpi-radialis",
+        "FXM=1.0/flexor-carpi-ulnaris",
+        "FXM=1.0/flexor-digitorum-profundus",
+        "FXM=1.0/flexor-digitorum-superficialis",
+        "FXM=1.0/flexor-pollicis-longus",
+        "FXM=1.0/gastrocnemius",
+        "FXM=1.0/gluteus-maximus",
+        "FXM=1.0/gluteus-medius",
+        "FXM=1.0/gluteus-minimus",
+        "FXM=1.0/gracilis",
+        "FXM=1.0/iliacus",
+        "FXM=1.0/iliocostalis",
+        "FXM=1.0/infraspinatus",
+        "FXM=1.0/internal-oblique",
+        "FXM=1.0/latissimus-dorsi",
+        "FXM=1.0/longissimus",
+        "FXM=1.0/palmaris-longus",
+        "FXM=1.0/pectineus",
+        "FXM=1.0/pectoralis-major",
+        "FXM=1.0/pectoralis-minor",
+        "FXM=1.0/plantaris",
+        "FXM=1.0/pronator-quadratus",
+        "FXM=1.0/pronator-teres",
+        "FXM=1.0/psoas-major",
+        "FXM=1.0/pyramidalis",
+        "FXM=1.0/quadratus-lumborum",
+        "FXM=1.0/rectus-abdominis",
+        "FXM=1.0/rectus-femoris",
+        "FXM=1.0/rhomboid-major",
+        "FXM=1.0/rhomboid-minor",
+        "FXM=1.0/sartorius",
+        "FXM=1.0/semimembranosus",
+        "FXM=1.0/semispinalis-capitis",
+        "FXM=1.0/semitendinosus",
+        "FXM=1.0/serratus-anterior",
+        "FXM=1.0/soleus",
+        "FXM=1.0/spinalis",
+        "FXM=1.0/splenius-capitis",
+        "FXM=1.0/sternocleidomastoid",
+        "FXM=1.0/subclavius",
+        "FXM=1.0/subscapularis",
+        "FXM=1.0/supinator",
+        "FXM=1.0/supraspinatus",
+        "FXM=1.0/tensor-fasciae-latae",
+        "FXM=1.0/teres-major",
+        "FXM=1.0/teres-minor",
+        "FXM=1.0/tibialis-anterior",
+        "FXM=1.0/transversus-abdominis",
+        "FXM=1.0/trapezius",
+        "FXM=1.0/triceps-brachii",
+        "FXM=1.0/vastus-intermedius",
+        "FXM=1.0/vastus-lateralis",
+        "FXM=1.0/vastus-medialis"
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "code": "a:nk.flex",
+      "action": "nk.flex",
+      "name": "Prime movers of neck flexion",
+      "members": [
+        "FXM=1.0/sternocleidomastoid"
+      ]
+    },
+    {
+      "code": "a:nk.ext",
+      "action": "nk.ext",
+      "name": "Prime movers of neck extension",
+      "members": [
+        "FXM=1.0/splenius-capitis",
+        "FXM=1.0/semispinalis-capitis"
+      ]
+    },
+    {
+      "code": "a:nk.lflex",
+      "action": "nk.lflex",
+      "name": "Prime movers of neck side bend",
+      "members": [
+        "FXM=1.0/sternocleidomastoid",
+        "FXM=1.0/splenius-capitis"
+      ]
+    },
+    {
+      "code": "a:nk.rot",
+      "action": "nk.rot",
+      "name": "Prime movers of neck rotation",
+      "members": [
+        "FXM=1.0/sternocleidomastoid",
+        "FXM=1.0/splenius-capitis"
+      ]
+    },
+    {
+      "code": "a:sp.flex",
+      "action": "sp.flex",
+      "name": "Prime movers of trunk flexion",
+      "members": [
+        "FXM=1.0/rectus-abdominis"
+      ]
+    },
+    {
+      "code": "a:sp.ext",
+      "action": "sp.ext",
+      "name": "Prime movers of trunk extension",
+      "members": [
+        "FXM=1.0/iliocostalis",
+        "FXM=1.0/longissimus",
+        "FXM=1.0/spinalis"
+      ]
+    },
+    {
+      "code": "a:sp.lflex",
+      "action": "sp.lflex",
+      "name": "Prime movers of trunk side bend.",
+      "members": [
+        "FXM=1.0/external-oblique",
+        "FXM=1.0/internal-oblique",
+        "FXM=1.0/quadratus-lumborum"
+      ]
+    },
+    {
+      "code": "a:sp.rot",
+      "action": "sp.rot",
+      "name": "Prime movers of trunk rotation",
+      "members": [
+        "FXM=1.0/external-oblique",
+        "FXM=1.0/internal-oblique"
+      ]
+    },
+    {
+      "code": "a:sc.elev",
+      "action": "sc.elev",
+      "name": "Prime movers of scapular elevation",
+      "members": [
+        "FXM=1.0/trapezius.descending"
+      ]
+    },
+    {
+      "code": "a:sc.dep",
+      "action": "sc.dep",
+      "name": "Prime movers of scapular depression",
+      "members": [
+        "FXM=1.0/trapezius.ascending"
+      ]
+    },
+    {
+      "code": "a:sc.pro",
+      "action": "sc.pro",
+      "name": "Prime movers of scapular protraction",
+      "members": [
+        "FXM=1.0/serratus-anterior"
+      ]
+    },
+    {
+      "code": "a:sc.ret",
+      "action": "sc.ret",
+      "name": "Prime movers of scapular retraction",
+      "members": [
+        "FXM=1.0/trapezius.transverse",
+        "FXM=1.0/rhomboid-major",
+        "FXM=1.0/rhomboid-minor"
+      ]
+    },
+    {
+      "code": "a:sh.flex",
+      "action": "sh.flex",
+      "name": "Prime movers of shoulder flexion",
+      "members": [
+        "FXM=1.0/deltoid.clavicular"
+      ]
+    },
+    {
+      "code": "a:sh.ext",
+      "action": "sh.ext",
+      "name": "Prime movers of shoulder extension",
+      "members": [
+        "FXM=1.0/latissimus-dorsi"
+      ]
+    },
+    {
+      "code": "a:sh.ext.oh",
+      "action": "sh.ext.oh",
+      "name": "Prime movers of shoulder extension from overhead",
+      "members": [
+        "FXM=1.0/latissimus-dorsi"
+      ]
+    },
+    {
+      "code": "a:sh.abd",
+      "action": "sh.abd",
+      "name": "Prime movers of shoulder abduction",
+      "members": [
+        "FXM=1.0/deltoid.acromial"
+      ]
+    },
+    {
+      "code": "a:sh.add",
+      "action": "sh.add",
+      "name": "Prime movers of shoulder adduction",
+      "members": [
+        "FXM=1.0/latissimus-dorsi"
+      ]
+    },
+    {
+      "code": "a:sh.hadd",
+      "action": "sh.hadd",
+      "name": "Prime movers of horizontal adduction",
+      "members": [
+        "FXM=1.0/pectoralis-major.sternocostal"
+      ]
+    },
+    {
+      "code": "a:sh.habd",
+      "action": "sh.habd",
+      "name": "Prime movers of horizontal abduction",
+      "members": [
+        "FXM=1.0/deltoid.spinal"
+      ]
+    },
+    {
+      "code": "a:sh.ir",
+      "action": "sh.ir",
+      "name": "Prime movers of shoulder internal rotation",
+      "members": [
+        "FXM=1.0/subscapularis",
+        "FXM=1.0/teres-major"
+      ]
+    },
+    {
+      "code": "a:sh.er",
+      "action": "sh.er",
+      "name": "Prime movers of shoulder external rotation",
+      "members": [
+        "FXM=1.0/infraspinatus",
+        "FXM=1.0/teres-minor"
+      ]
+    },
+    {
+      "code": "a:el.flex",
+      "action": "el.flex",
+      "name": "Prime movers of elbow flexion, as in a curl.",
+      "members": [
+        "FXM=1.0/biceps-brachii",
+        "FXM=1.0/brachialis"
+      ]
+    },
+    {
+      "code": "a:el.ext",
+      "action": "el.ext",
+      "name": "Prime movers of elbow extension, as in a press or triceps extension.",
+      "members": [
+        "FXM=1.0/triceps-brachii"
+      ]
+    },
+    {
+      "code": "a:fa.pron",
+      "action": "fa.pron",
+      "name": "Prime movers of forearm pronation",
+      "members": [
+        "FXM=1.0/pronator-teres",
+        "FXM=1.0/pronator-quadratus"
+      ]
+    },
+    {
+      "code": "a:fa.sup",
+      "action": "fa.sup",
+      "name": "Prime movers of forearm supination",
+      "members": [
+        "FXM=1.0/biceps-brachii"
+      ]
+    },
+    {
+      "code": "a:wr.flex",
+      "action": "wr.flex",
+      "name": "Prime movers of wrist flexion",
+      "members": [
+        "FXM=1.0/flexor-carpi-radialis",
+        "FXM=1.0/flexor-carpi-ulnaris",
+        "FXM=1.0/palmaris-longus"
+      ]
+    },
+    {
+      "code": "a:wr.ext",
+      "action": "wr.ext",
+      "name": "Prime movers of wrist extension",
+      "members": [
+        "FXM=1.0/extensor-carpi-radialis-longus",
+        "FXM=1.0/extensor-carpi-radialis-brevis",
+        "FXM=1.0/extensor-carpi-ulnaris"
+      ]
+    },
+    {
+      "code": "a:wr.rdev",
+      "action": "wr.rdev",
+      "name": "Prime movers of wrist radial deviation",
+      "members": [
+        "FXM=1.0/flexor-carpi-radialis",
+        "FXM=1.0/extensor-carpi-radialis-longus",
+        "FXM=1.0/extensor-carpi-radialis-brevis"
+      ]
+    },
+    {
+      "code": "a:wr.udev",
+      "action": "wr.udev",
+      "name": "Prime movers of wrist ulnar deviation",
+      "members": [
+        "FXM=1.0/flexor-carpi-ulnaris",
+        "FXM=1.0/extensor-carpi-ulnaris"
+      ]
+    },
+    {
+      "code": "a:hip.flex",
+      "action": "hip.flex",
+      "name": "Prime movers of hip flexion",
+      "related": [
+        {
+          "system": "FMA",
+          "id": "FMA:64918",
+          "label": "Iliopsoas"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0001999",
+          "label": "iliopsoas"
+        }
+      ],
+      "members": [
+        "FXM=1.0/psoas-major",
+        "FXM=1.0/iliacus",
+        "FXM=1.0/rectus-femoris"
+      ]
+    },
+    {
+      "code": "a:hip.ext",
+      "action": "hip.ext",
+      "name": "Prime movers of hip extension",
+      "members": [
+        "FXM=1.0/gluteus-maximus",
+        "FXM=1.0/biceps-femoris",
+        "FXM=1.0/semitendinosus",
+        "FXM=1.0/semimembranosus"
+      ]
+    },
+    {
+      "code": "a:hip.abd",
+      "action": "hip.abd",
+      "name": "Prime movers of hip abduction",
+      "members": [
+        "FXM=1.0/gluteus-medius",
+        "FXM=1.0/gluteus-minimus"
+      ]
+    },
+    {
+      "code": "a:hip.add",
+      "action": "hip.add",
+      "name": "Prime movers of hip adduction",
+      "related": [
+        {
+          "system": "UBERON",
+          "id": "UBERON:0011144",
+          "label": "adductor muscle of hip"
+        }
+      ],
+      "members": [
+        "FXM=1.0/adductor-longus",
+        "FXM=1.0/adductor-brevis",
+        "FXM=1.0/adductor-magnus",
+        "FXM=1.0/gracilis",
+        "FXM=1.0/pectineus"
+      ]
+    },
+    {
+      "code": "a:hip.ir",
+      "action": "hip.ir",
+      "name": "Prime movers of hip internal rotation",
+      "members": [
+        "FXM=1.0/gluteus-minimus",
+        "FXM=1.0/tensor-fasciae-latae"
+      ]
+    },
+    {
+      "code": "a:hip.er",
+      "action": "hip.er",
+      "name": "Prime movers of hip external rotation",
+      "members": [
+        "FXM=1.0/gluteus-maximus"
+      ]
+    },
+    {
+      "code": "a:kn.flex",
+      "action": "kn.flex",
+      "name": "Prime movers of knee flexion against resistance, as in a leg curl.",
+      "members": [
+        "FXM=1.0/biceps-femoris",
+        "FXM=1.0/semitendinosus",
+        "FXM=1.0/semimembranosus"
+      ]
+    },
+    {
+      "code": "a:kn.ext",
+      "action": "kn.ext",
+      "name": "Prime movers of knee extension, as in standing up from a squat.",
+      "members": [
+        "FXM=1.0/rectus-femoris",
+        "FXM=1.0/vastus-lateralis",
+        "FXM=1.0/vastus-medialis",
+        "FXM=1.0/vastus-intermedius"
+      ]
+    },
+    {
+      "code": "a:ank.df",
+      "action": "ank.df",
+      "name": "Prime movers of ankle dorsiflexion",
+      "members": [
+        "FXM=1.0/tibialis-anterior"
+      ]
+    },
+    {
+      "code": "a:ank.pf",
+      "action": "ank.pf",
+      "name": "Prime movers of ankle plantar flexion",
+      "members": [
+        "FXM=1.0/gastrocnemius",
+        "FXM=1.0/soleus"
+      ]
+    },
+    {
+      "code": "a:ank.inv",
+      "action": "ank.inv",
+      "name": "Prime movers of ankle inversion",
+      "members": [
+        "FXM=1.0/tibialis-anterior"
+      ]
+    }
+  ]
+}

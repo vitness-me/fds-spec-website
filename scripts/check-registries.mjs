@@ -68,6 +68,20 @@ const REGISTRIES = [
   },
 ];
 
+/**
+ * The structural-key code registries. They are closed vocabularies generated
+ * from the FDS Encoder, and scripts/key-registries.mjs checks their content
+ * against it. Here they are known files whose governed fields must exist.
+ */
+const KEY_REGISTRIES = [
+  'exercise-key.registry.json',
+  'equipment-key.registry.json',
+  'body-points.registry.json',
+  'body-positions.registry.json',
+  'muscle-key.registry.json',
+  'muscle-category-key.registry.json',
+];
+
 /** Systems a zone entry may claim, read from the schema rather than restated. */
 async function zoneSystems() {
   const schema = JSON.parse(
@@ -207,7 +221,23 @@ for (const registry of REGISTRIES) {
   }
 }
 
-const known = new Set(REGISTRIES.map((r) => r.file));
+for (const file of KEY_REGISTRIES) {
+  const raw = await readFile(join(DIR, file), 'utf8').catch(() => null);
+  if (raw === null) {
+    problems.push(`${file} is missing. Run node scripts/key-registries.mjs --write.`);
+    continue;
+  }
+  const doc = JSON.parse(raw);
+  for (const governed of doc.governs ?? []) {
+    const source = await readFile(join(ROOT, governed.source), 'utf8').catch(() => null);
+    const property = governed.pointer.split('.').pop();
+    if (source === null) problems.push(`${file}: governs "${governed.source}", which does not exist.`);
+    else if (!source.includes(`"${property}"`)) problems.push(`${file}: governs "${governed.pointer}", but "${property}" does not appear in ${governed.source}.`);
+  }
+  console.log(`  ok    ${file.replace('.registry.json', '')} — key code registry, governs ${(doc.governs ?? []).length} field(s)`);
+}
+
+const known = new Set([...REGISTRIES.map((r) => r.file), ...KEY_REGISTRIES]);
 const untracked = onDisk.filter((f) => !known.has(f)).sort();
 if (untracked.length) {
   problems.push(

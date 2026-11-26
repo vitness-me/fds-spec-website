@@ -59,10 +59,44 @@ jobs:
       #
       # Here rather than in the schemas job because packing runs `prepack`,
       # which needs the dependencies and the build this job already has. It
-      # covers the skill too; that half needs neither.
+      # covers the skill and the encoder too; the skill needs neither, and the
+      # encoder's dependencies are installed here for its `prepack`.
       - name: Verify the packages contain what they claim
         working-directory: .
-        run: npm run check:packages
+        run: |
+          npm --prefix packages/fds-encoder ci
+          npm run check:packages
+
+  encoder:
+    name: Encoder — typecheck, test, build
+    runs-on: blacksmith-4vcpu-ubuntu-2404
+    defaults:
+      run:
+        working-directory: packages/fds-encoder
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: packages/fds-encoder/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Type check
+        run: npm run typecheck
+
+      # The parity test against the reference tool is skipped here: the tool
+      # is not in this repository. Every other test runs.
+      - name: Run tests
+        run: npm run test:run
+
+      - name: Build
+        run: npm run build
 
   schemas:
     name: Schemas — validate examples
@@ -173,6 +207,17 @@ jobs:
       # place its vocabulary is written down, which makes it load-bearing.
       - name: Verify recommended values are in a registry
         run: npm run check:registries
+
+      # The structural-key registries are generated from the encoder's code
+      # lists. This rebuilds them and diffs, then reads the four key pages: every
+      # code a table shows must be in a registry, and every key a page or a
+      # published example quotes must pass the encoder's check. Builds the
+      # encoder here because jobs do not share a filesystem.
+      - name: Verify the key registries match the encoder and the key pages
+        run: |
+          npm --prefix packages/fds-encoder ci
+          npm --prefix packages/fds-encoder run build
+          npm run check:keys
 
       # The skill is a knowledge base an assistant answers from, so a wrong field
       # name there produces confident, specific, invalid output.

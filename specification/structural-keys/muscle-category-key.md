@@ -2,7 +2,7 @@
 
 The muscle category key is the structural key of a muscle category. It sits in the `fxmg` field and names a set of muscles that people train and talk about together, such as the hamstrings, the adductors, the hip flexors or the lower back. This page shows how a key is put together, what its members are, and how two keys compare.
 
-A category is defined by its members, and its members are always muscle keys. The [muscle key](./muscle-key.md) names one muscle or one part. The category key names a set of them. Like the muscle key, it has no code lists of its own: its codes come from an anatomy reference and from the joint actions of the [exercise key](./exercise-key.md). Every key on this page is an illustration.
+A category is defined by its members, and its members are always muscle keys. The [muscle key](./muscle-key.md) names one muscle or one part. The category key names a set of them. Like the muscle key, it has no code lists of its own: its codes come from an anatomy reference and from the joint actions of the [exercise key](./exercise-key.md). The categories derived so far, with their FMA and Uberon ids and their members, are in [`muscle-category-key.registry.json`](https://spec.vitness.me/registries/muscle-category-key.registry.json), and the muscles they hold in [`muscle-key.registry.json`](https://spec.vitness.me/registries/muscle-key.registry.json). Every key on this page is an illustration.
 
 This page describes version 1.0 of the muscle category key.
 

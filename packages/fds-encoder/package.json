@@ -1,0 +1,56 @@
+{
+  "name": "@vitness/fds-encoder",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Check, write, compare and build the structural keys of the Fitness Data Standard (FDS): exercise, equipment, muscle and muscle category keys",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "fds-encoder": "./dist/bin/fds-encoder.js"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "prepack": "npm run build"
+  },
+  "keywords": [
+    "fds",
+    "fitness",
+    "data",
+    "standard",
+    "structural-key",
+    "exercise",
+    "equipment",
+    "muscle"
+  ],
+  "author": "VITNESS",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vitness-me/fds-spec-website.git",
+    "directory": "packages/fds-encoder"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.6",
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.3",
+    "vitest": "^2.1.8"
+  }
+}

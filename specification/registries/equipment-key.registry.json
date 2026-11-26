@@ -1,0 +1,1080 @@
+{
+  "registry": "equipment-key",
+  "version": "1.0.0",
+  "key": "FXE=1.0",
+  "description": "The kinds, forms and layer codes of the equipment key, the structural key in an equipment record's fxe field. Closed: a key that uses a code not listed here does not check. Load interfaces are body points (body-points.registry.json) and postures are body positions (body-positions.registry.json).",
+  "policy": "closed",
+  "governs": [
+    {
+      "source": "specification/schema-sources/equipment/v1.2.0/equipment.schema.json",
+      "pointer": "fxe"
+    }
+  ],
+  "layers": [
+    {
+      "letter": "k",
+      "name": "Kind",
+      "standard": true,
+      "kinds": [
+        "none",
+        "imp",
+        "sup",
+        "acc",
+        "stn",
+        "mac",
+        "erg"
+      ]
+    },
+    {
+      "letter": "f",
+      "name": "Form",
+      "standard": true,
+      "kinds": [
+        "imp",
+        "sup",
+        "acc",
+        "stn"
+      ]
+    },
+    {
+      "letter": "c",
+      "name": "Track",
+      "standard": true,
+      "kinds": [
+        "erg"
+      ]
+    },
+    {
+      "letter": "l",
+      "name": "Load interface",
+      "standard": true,
+      "kinds": [
+        "mac",
+        "erg"
+      ]
+    },
+    {
+      "letter": "s",
+      "name": "Posture",
+      "standard": true,
+      "kinds": [
+        "mac",
+        "erg"
+      ]
+    },
+    {
+      "letter": "m",
+      "name": "Motion",
+      "standard": true,
+      "kinds": [
+        "mac",
+        "erg"
+      ]
+    },
+    {
+      "letter": "r",
+      "name": "Drive",
+      "standard": false,
+      "kinds": [
+        "imp",
+        "stn",
+        "mac",
+        "erg"
+      ]
+    },
+    {
+      "letter": "c",
+      "name": "Constraint or compliance",
+      "standard": false,
+      "kinds": [
+        "imp",
+        "sup",
+        "stn",
+        "mac"
+      ]
+    },
+    {
+      "letter": "g",
+      "name": "Guide angle",
+      "standard": false,
+      "kinds": [
+        "mac"
+      ]
+    },
+    {
+      "letter": "a",
+      "name": "Design",
+      "standard": false,
+      "kinds": [
+        "stn",
+        "mac"
+      ]
+    }
+  ],
+  "kinds": [
+    {
+      "value": "none",
+      "description": "No equipment: the body is the whole load.",
+      "standardLayers": [],
+      "extendedLayers": []
+    },
+    {
+      "value": "imp",
+      "description": "Implement: a free object moved, held or worn.",
+      "standardLayers": [
+        "f"
+      ],
+      "extendedLayers": [
+        "r",
+        "c"
+      ]
+    },
+    {
+      "value": "sup",
+      "description": "Support: a surface or frame the body rests on, hangs from or pushes against. It does not carry the load.",
+      "standardLayers": [
+        "f"
+      ],
+      "extendedLayers": [
+        "c"
+      ]
+    },
+    {
+      "value": "acc",
+      "description": "Accessory: a handle, strap, belt, mat, towel or marker. It never defines the exercise.",
+      "standardLayers": [
+        "f"
+      ],
+      "extendedLayers": []
+    },
+    {
+      "value": "stn",
+      "description": "Station: a guide or anchor with a general interface used for many movements: cable column, Smith machine, landmine.",
+      "standardLayers": [
+        "f"
+      ],
+      "extendedLayers": [
+        "r",
+        "c",
+        "a"
+      ]
+    },
+    {
+      "value": "mac",
+      "description": "Dedicated machine: a guided mechanism with fixed body interfaces, built for one movement.",
+      "standardLayers": [
+        "l",
+        "s",
+        "m"
+      ],
+      "extendedLayers": [
+        "r",
+        "c",
+        "g",
+        "a"
+      ]
+    },
+    {
+      "value": "erg",
+      "description": "Cyclic machine: repeats whole cycles (cardio).",
+      "standardLayers": [
+        "c",
+        "l",
+        "s",
+        "m"
+      ],
+      "extendedLayers": [
+        "r"
+      ]
+    }
+  ],
+  "forms": [
+    {
+      "value": "bar.straight",
+      "kind": "imp",
+      "impliesDrive": "grav",
+      "description": "Barbell, Olympic or standard."
+    },
+    {
+      "value": "bar.ez",
+      "kind": "imp",
+      "impliesDrive": "grav",
+      "description": "EZ curl bar."
+    },
+    {
+      "value": "bar.trap",
+      "kind": "imp",
+      "impliesDrive": "grav",
+      "description": "Trap or hex bar."
+    },
+    {
+      "value": "bar.axle",
+      "kind": "imp",
+      "impliesDrive": "grav",
+      "description": "Thick axle bar."
+    },
+    {
+      "value": "bar.camber",
+      "kind": "imp",
+      "impliesDrive": "grav",
+      "description": "Cambered bar."
+    },
+    {
+      "value": "bell.dumb",
+      "kind": "imp",
+      "impliesDrive": "grav",
+      "description": "Dumbbell."
+    },
+    {
+      "value": "bell.kettle",
+      "kind": "imp",
+      "impliesDrive": "grav",
+      "description": "Kettlebell."
+    },
+    {
+      "value": "bell.circus",
+      "kind": "imp",
+      "impliesDrive": "grav",
+      "description": "Circus dumbbell."
+    },
+    {
+      "value": "ball.med",
+      "kind": "imp",
+      "impliesDrive": "grav",
+      "description": "Medicine ball."
+    },
+    {
+      "value": "ball.slam",
+      "kind": "imp",
+      "impliesDrive": "grav",
+      "description": "Slam ball."
+    },
+    {
+      "value": "bag.sand",
+      "kind": "imp",
+      "impliesDrive": "grav",
+      "description": "Sandbag."
+    },
+    {
+      "value": "bag.heavy",
+      "kind": "imp",
+      "impliesDrive": "grav",
+      "impliesConstraint": "swing",
+      "description": "Hanging heavy bag."
+    },
+    {
+      "value": "plate",
+      "kind": "imp",
+      "impliesDrive": "grav",
+      "description": "A weight plate held or worn on its own."
+    },
+    {
+      "value": "chain",
+      "kind": "imp",
+      "impliesDrive": "grav",
+      "description": "Lifting chain."
+    },
+    {
+      "value": "rope.battle",
+      "kind": "imp",
+      "impliesDrive": "grav",
+      "description": "Battle rope."
+    },
+    {
+      "value": "rope.jump",
+      "kind": "imp",
+      "impliesDrive": "none",
+      "description": "Skipping rope."
+    },
+    {
+      "value": "band",
+      "kind": "imp",
+      "impliesDrive": "elastic",
+      "description": "Elastic band or tube, type not stated."
+    },
+    {
+      "value": "band.loop",
+      "kind": "imp",
+      "parent": "band",
+      "impliesDrive": "elastic",
+      "description": "Long loop band: superband, power band."
+    },
+    {
+      "value": "band.mini",
+      "kind": "imp",
+      "parent": "band",
+      "impliesDrive": "elastic",
+      "description": "Short loop band worn around the legs: miniband."
+    },
+    {
+      "value": "band.tube",
+      "kind": "imp",
+      "parent": "band",
+      "impliesDrive": "elastic",
+      "description": "Tube band with handles."
+    },
+    {
+      "value": "sled",
+      "kind": "imp",
+      "impliesDrive": "friction",
+      "description": "Ground sled or prowler, pushed or dragged."
+    },
+    {
+      "value": "tire",
+      "kind": "imp",
+      "impliesDrive": "grav",
+      "description": "Large tyre."
+    },
+    {
+      "value": "hammer",
+      "kind": "imp",
+      "impliesDrive": "grav",
+      "description": "Sledgehammer."
+    },
+    {
+      "value": "stone",
+      "kind": "imp",
+      "impliesDrive": "grav",
+      "description": "Atlas stone."
+    },
+    {
+      "value": "log",
+      "kind": "imp",
+      "impliesDrive": "grav",
+      "description": "Strongman log."
+    },
+    {
+      "value": "keg",
+      "kind": "imp",
+      "impliesDrive": "grav",
+      "description": "Keg."
+    },
+    {
+      "value": "yoke",
+      "kind": "imp",
+      "impliesDrive": "grav",
+      "description": "Strongman yoke."
+    },
+    {
+      "value": "frame.carry",
+      "kind": "imp",
+      "impliesDrive": "grav",
+      "description": "Farmer handles or a carry frame (rickshaw)."
+    },
+    {
+      "value": "car",
+      "kind": "imp",
+      "impliesDrive": "grav",
+      "description": "A car, lifted or pushed."
+    },
+    {
+      "value": "wear.vest",
+      "kind": "imp",
+      "impliesDrive": "grav",
+      "description": "Weight vest."
+    },
+    {
+      "value": "wear.ankle",
+      "kind": "imp",
+      "impliesDrive": "grav",
+      "description": "Ankle weight."
+    },
+    {
+      "value": "club",
+      "kind": "imp",
+      "impliesDrive": "grav",
+      "description": "Indian club or mace."
+    },
+    {
+      "value": "stick",
+      "kind": "imp",
+      "impliesDrive": "none",
+      "description": "Dowel, broomstick or PVC pipe: sets the hands, adds no load."
+    },
+    {
+      "value": "wheel",
+      "kind": "imp",
+      "impliesDrive": "none",
+      "impliesConstraint": "roll",
+      "description": "Ab wheel."
+    },
+    {
+      "value": "roller.wrist",
+      "kind": "imp",
+      "impliesDrive": "grav",
+      "description": "Wrist roller."
+    },
+    {
+      "value": "harness.head",
+      "kind": "imp",
+      "impliesDrive": "grav",
+      "description": "Head harness with a hanging load."
+    },
+    {
+      "value": "floor",
+      "kind": "sup",
+      "description": "The floor, or a mat on it."
+    },
+    {
+      "value": "wall",
+      "kind": "sup",
+      "description": "A wall."
+    },
+    {
+      "value": "bench",
+      "kind": "sup",
+      "description": "A bench, flat or adjustable."
+    },
+    {
+      "value": "box",
+      "kind": "sup",
+      "description": "A box, step or platform."
+    },
+    {
+      "value": "chair",
+      "kind": "sup",
+      "description": "A chair."
+    },
+    {
+      "value": "block",
+      "kind": "sup",
+      "description": "Lifting blocks a bar starts from."
+    },
+    {
+      "value": "rack",
+      "kind": "sup",
+      "description": "Power rack or squat stand, with its pins."
+    },
+    {
+      "value": "ball.stab",
+      "kind": "sup",
+      "impliesConstraint": "tilt",
+      "description": "Stability, Swiss or exercise ball."
+    },
+    {
+      "value": "dome",
+      "kind": "sup",
+      "impliesConstraint": "tilt",
+      "description": "BOSU, either side up."
+    },
+    {
+      "value": "dome.up",
+      "kind": "sup",
+      "parent": "dome",
+      "impliesConstraint": "tilt",
+      "description": "BOSU, dome side up."
+    },
+    {
+      "value": "dome.down",
+      "kind": "sup",
+      "parent": "dome",
+      "impliesConstraint": "tilt",
+      "description": "BOSU, flat side up: the dome on the floor."
+    },
+    {
+      "value": "board.bal",
+      "kind": "sup",
+      "impliesConstraint": "tilt",
+      "description": "Balance or wobble board."
+    },
+    {
+      "value": "roller.foam",
+      "kind": "sup",
+      "impliesConstraint": "roll",
+      "description": "Foam roller."
+    },
+    {
+      "value": "slider",
+      "kind": "sup",
+      "impliesConstraint": "slide",
+      "description": "Slider disc."
+    },
+    {
+      "value": "strap.susp",
+      "kind": "sup",
+      "impliesConstraint": "swing",
+      "description": "Suspension trainer."
+    },
+    {
+      "value": "ring",
+      "kind": "sup",
+      "impliesConstraint": "swing",
+      "description": "Gymnastic rings."
+    },
+    {
+      "value": "rope.climb",
+      "kind": "sup",
+      "impliesConstraint": "swing",
+      "description": "Climbing rope."
+    },
+    {
+      "value": "bar.fixed",
+      "kind": "sup",
+      "description": "Fixed overhead bar: pull-up bar, or a racked bar used as a handhold."
+    },
+    {
+      "value": "bar.parallel",
+      "kind": "sup",
+      "description": "Parallel dip bars."
+    },
+    {
+      "value": "bar.parallette",
+      "kind": "sup",
+      "description": "Floor parallettes."
+    },
+    {
+      "value": "pad.preacher",
+      "kind": "sup",
+      "description": "Preacher bench."
+    },
+    {
+      "value": "pad.hyper",
+      "kind": "sup",
+      "description": "Back-extension bench, 45° or 90° (also called a Roman chair for back or side raises)."
+    },
+    {
+      "value": "pad.ghd",
+      "kind": "sup",
+      "description": "Glute-ham developer."
+    },
+    {
+      "value": "station.vkr",
+      "kind": "sup",
+      "description": "Vertical knee-raise station (captain’s chair)."
+    },
+    {
+      "value": "pole",
+      "kind": "sup",
+      "description": "A vertical pole, post or rack upright gripped by the hands (human flag)."
+    },
+    {
+      "value": "ball.massage",
+      "kind": "sup",
+      "description": "Massage or lacrosse ball rolled under the body."
+    },
+    {
+      "value": "handle",
+      "kind": "acc",
+      "description": "Single D-handle."
+    },
+    {
+      "value": "handle.bar",
+      "kind": "acc",
+      "description": "Straight or cambered cable bar."
+    },
+    {
+      "value": "handle.v",
+      "kind": "acc",
+      "description": "V-bar or close-grip handle."
+    },
+    {
+      "value": "handle.rope",
+      "kind": "acc",
+      "description": "Triceps rope."
+    },
+    {
+      "value": "strap.ankle",
+      "kind": "acc",
+      "description": "Ankle cuff."
+    },
+    {
+      "value": "belt.dip",
+      "kind": "acc",
+      "description": "Dip belt."
+    },
+    {
+      "value": "belt.lift",
+      "kind": "acc",
+      "description": "Lifting belt."
+    },
+    {
+      "value": "strap.lift",
+      "kind": "acc",
+      "description": "Lifting straps."
+    },
+    {
+      "value": "strap.stretch",
+      "kind": "acc",
+      "description": "Stretching strap: a strap, belt, towel, rope or loop band used to pull or hold a limb in a stretch."
+    },
+    {
+      "value": "towel",
+      "kind": "acc",
+      "description": "A towel used as a handle."
+    },
+    {
+      "value": "marker",
+      "kind": "acc",
+      "description": "Cone, hurdle or floor marker."
+    },
+    {
+      "value": "board.press",
+      "kind": "acc",
+      "description": "Board laid on the chest for partial presses."
+    },
+    {
+      "value": "mat",
+      "kind": "acc",
+      "description": "Floor mat."
+    },
+    {
+      "value": "cable",
+      "kind": "stn",
+      "impliesDrive": "stack",
+      "impliesConstraint": "cable",
+      "description": "Cable column, crossover or functional trainer: a pulley set per exercise. A lat pulldown or seated cable row machine is `mac`."
+    },
+    {
+      "value": "smith",
+      "kind": "stn",
+      "impliesDrive": "plate",
+      "impliesConstraint": "line",
+      "description": "Smith machine: a bar on fixed rails."
+    },
+    {
+      "value": "landmine",
+      "kind": "stn",
+      "impliesDrive": "grav",
+      "impliesConstraint": "pivot",
+      "description": "Landmine: one end of a barbell in a floor pivot (also a corner T-bar row)."
+    }
+  ],
+  "tracks": [
+    {
+      "value": "belt",
+      "description": "A moving belt or revolving stairs."
+    },
+    {
+      "value": "link",
+      "description": "Linked pedals (stepper)."
+    },
+    {
+      "value": "loop",
+      "description": "A closed loop: cranks, elliptical."
+    },
+    {
+      "value": "rail",
+      "description": "A seat on a rail (rower)."
+    },
+    {
+      "value": "cable",
+      "description": "A cable pulled from above (ski erg)."
+    },
+    {
+      "value": "line",
+      "description": "A straight track (vertical climber)."
+    }
+  ],
+  "motion": {
+    "singleJoint": [
+      {
+        "value": "kn.flex",
+        "description": "Knee flexion against resistance, as in a leg curl."
+      },
+      {
+        "value": "kn.ext",
+        "description": "Knee extension, as in standing up from a squat."
+      },
+      {
+        "value": "el.flex",
+        "description": "Elbow flexion, as in a curl."
+      },
+      {
+        "value": "el.ext",
+        "description": "Elbow extension, as in a press or triceps extension."
+      },
+      {
+        "value": "sh.flex",
+        "description": "Shoulder flexion: arm forward and up, as in a front raise or overhead press."
+      },
+      {
+        "value": "sh.ext",
+        "description": "Shoulder extension: arm down and back from in front, as in a row or a dip. Covers `sh.ext.oh`."
+      },
+      {
+        "value": "sh.abd",
+        "description": "Shoulder abduction: arm out to the side and up, as in a lateral raise."
+      },
+      {
+        "value": "sh.add",
+        "description": "Shoulder adduction: arm down to the side from out to the side, as in a wide pull-up."
+      },
+      {
+        "value": "sh.hadd",
+        "description": "Horizontal adduction: arm across the front at chest height, as in a press or fly."
+      },
+      {
+        "value": "sh.habd",
+        "description": "Horizontal abduction: arm back and out at chest height, as in a reverse fly."
+      },
+      {
+        "value": "sh.ir",
+        "description": "Shoulder internal rotation: forearm turns in toward the belly, elbow bent."
+      },
+      {
+        "value": "sh.er",
+        "description": "Shoulder external rotation: forearm turns out, elbow bent."
+      },
+      {
+        "value": "sc.elev",
+        "description": "Scapular elevation: shrug up."
+      },
+      {
+        "value": "hip.flex",
+        "description": "Hip flexion: thigh toward the trunk, or trunk toward the thigh."
+      },
+      {
+        "value": "hip.ext",
+        "description": "Hip extension: thigh away from the trunk, as in standing up from a squat."
+      },
+      {
+        "value": "hip.abd",
+        "description": "Hip abduction: leg out to the side."
+      },
+      {
+        "value": "hip.add",
+        "description": "Hip adduction: leg in toward the other leg."
+      },
+      {
+        "value": "sp.flex",
+        "description": "Trunk flexion: ribs toward the pelvis, as in a crunch."
+      },
+      {
+        "value": "sp.ext",
+        "description": "Trunk extension: straightening or arching the back from a bent position."
+      },
+      {
+        "value": "sp.rot",
+        "description": "Trunk rotation: shoulders twist against the hips."
+      },
+      {
+        "value": "sp.lflex",
+        "description": "Trunk side bend."
+      },
+      {
+        "value": "ank.pf",
+        "description": "Ankle plantar flexion: rising onto the toes, pushing off."
+      },
+      {
+        "value": "ank.df",
+        "description": "Ankle dorsiflexion: toes toward the shin."
+      },
+      {
+        "value": "nk.flex",
+        "description": "Neck flexion: chin toward the chest."
+      },
+      {
+        "value": "nk.ext",
+        "description": "Neck extension: head tips back."
+      },
+      {
+        "value": "nk.lflex",
+        "description": "Neck side bend: ear toward the shoulder."
+      },
+      {
+        "value": "wr.flex",
+        "description": "Wrist flexion: palm toward the forearm."
+      },
+      {
+        "value": "wr.ext",
+        "description": "Wrist extension: back of the hand toward the forearm."
+      }
+    ],
+    "verbs": [
+      {
+        "value": "push",
+        "description": "The moving part is pushed away."
+      },
+      {
+        "value": "pull",
+        "description": "The moving part is pulled toward the user."
+      },
+      {
+        "value": "assist",
+        "description": "The moving part helps lift the body."
+      }
+    ],
+    "directions": [
+      {
+        "value": "up",
+        "description": "Toward the head: shoulder press, hack squat, belt squat, deadlift machine."
+      },
+      {
+        "value": "down",
+        "description": "Toward the feet: pulldown, seated dip."
+      },
+      {
+        "value": "fwd",
+        "description": "Away from the front of the trunk: chest press, leg press."
+      },
+      {
+        "value": "back",
+        "description": "Toward the front of the trunk: row."
+      },
+      {
+        "value": "fwdup",
+        "description": "Forward and up: incline press."
+      },
+      {
+        "value": "fwddown",
+        "description": "Forward and down: decline press."
+      },
+      {
+        "value": "backdown",
+        "description": "Back and down: high row."
+      }
+    ],
+    "cardio": [
+      {
+        "value": "gait",
+        "description": "Walking or running on a belt."
+      },
+      {
+        "value": "cycle",
+        "description": "Pedalling (or hand cranking)."
+      },
+      {
+        "value": "step",
+        "description": "Stepping (stepper or stepmill)."
+      },
+      {
+        "value": "row",
+        "description": "Rowing."
+      },
+      {
+        "value": "ski",
+        "description": "Double-pole pull (ski erg)."
+      },
+      {
+        "value": "glide",
+        "description": "Elliptical glide."
+      },
+      {
+        "value": "climb",
+        "description": "Climbing with hands and feet."
+      }
+    ]
+  },
+  "cardioMachines": [
+    {
+      "name": "Treadmill",
+      "c": "belt",
+      "l": "feet",
+      "s": "standing",
+      "m": "gait"
+    },
+    {
+      "name": "Stepmill (revolving stairs)",
+      "c": "belt",
+      "l": "feet",
+      "s": "standing",
+      "m": "step"
+    },
+    {
+      "name": "Stair stepper (pedals)",
+      "c": "link",
+      "l": "feet",
+      "s": "standing",
+      "m": "step"
+    },
+    {
+      "name": "Stair machine, stepper or stepmill not known",
+      "c": "?",
+      "l": "feet",
+      "s": "standing",
+      "m": "step"
+    },
+    {
+      "name": "Upright or spin bike",
+      "c": "loop",
+      "l": "feet",
+      "s": "seated",
+      "m": "cycle"
+    },
+    {
+      "name": "Recumbent bike",
+      "c": "loop",
+      "l": "feet",
+      "s": "supine.incline",
+      "m": "cycle"
+    },
+    {
+      "name": "Stationary bike, upright or recumbent not known",
+      "c": "loop",
+      "l": "feet",
+      "s": "?",
+      "m": "cycle"
+    },
+    {
+      "name": "Air bike (moving arms)",
+      "c": "loop",
+      "l": "feet+hands",
+      "s": "seated",
+      "m": "cycle"
+    },
+    {
+      "name": "Elliptical",
+      "c": "loop",
+      "l": "feet+hands",
+      "s": "standing",
+      "m": "glide"
+    },
+    {
+      "name": "Rowing machine",
+      "c": "rail",
+      "l": "hands",
+      "s": "seated",
+      "m": "row"
+    },
+    {
+      "name": "Ski machine",
+      "c": "cable",
+      "l": "hands",
+      "s": "standing",
+      "m": "ski"
+    },
+    {
+      "name": "Arm crank, seated",
+      "c": "loop",
+      "l": "hands",
+      "s": "seated",
+      "m": "cycle"
+    },
+    {
+      "name": "Vertical climber",
+      "c": "line",
+      "l": "feet+hands",
+      "s": "standing",
+      "m": "climb"
+    },
+    {
+      "name": "Ladder climber",
+      "c": "belt",
+      "l": "feet+hands",
+      "s": "standing",
+      "m": "climb"
+    }
+  ],
+  "drives": [
+    {
+      "value": "grav",
+      "description": "Free weight under gravity."
+    },
+    {
+      "value": "stack",
+      "description": "Selectorised weight stack."
+    },
+    {
+      "value": "plate",
+      "description": "Plate-loaded."
+    },
+    {
+      "value": "elastic",
+      "description": "Elastic."
+    },
+    {
+      "value": "air",
+      "description": "Air fan."
+    },
+    {
+      "value": "mag",
+      "description": "Magnetic brake."
+    },
+    {
+      "value": "water",
+      "description": "Water tank."
+    },
+    {
+      "value": "motor",
+      "description": "Motor."
+    },
+    {
+      "value": "friction",
+      "description": "Friction."
+    },
+    {
+      "value": "hydraulic",
+      "description": "Hydraulic."
+    },
+    {
+      "value": "flywheel",
+      "description": "Flywheel (isoinertial)."
+    },
+    {
+      "value": "none",
+      "description": "No resistance of its own."
+    }
+  ],
+  "constraints": [
+    {
+      "value": "line",
+      "description": "A straight track (sled, rails)."
+    },
+    {
+      "value": "arc",
+      "description": "A lever on one pivot."
+    },
+    {
+      "value": "link",
+      "description": "A linkage of several pivots."
+    },
+    {
+      "value": "cable",
+      "description": "A cable over pulleys."
+    },
+    {
+      "value": "pivot",
+      "description": "One end in a floor pivot."
+    }
+  ],
+  "compliance": [
+    {
+      "value": "tilt",
+      "description": "Tilts under the body."
+    },
+    {
+      "value": "roll",
+      "description": "Rolls."
+    },
+    {
+      "value": "slide",
+      "description": "Slides."
+    },
+    {
+      "value": "swing",
+      "description": "Hangs and swings."
+    }
+  ],
+  "guideAngles": [
+    {
+      "value": "incl",
+      "description": "Inclined (45° leg press)."
+    },
+    {
+      "value": "horiz",
+      "description": "Horizontal."
+    },
+    {
+      "value": "vert",
+      "description": "Vertical."
+    }
+  ],
+  "design": [
+    {
+      "value": "iso",
+      "description": "Independent arms (iso-lateral)."
+    },
+    {
+      "value": "conv",
+      "description": "Converging path."
+    },
+    {
+      "value": "cb",
+      "description": "Counterbalanced (Smith)."
+    },
+    {
+      "value": "dual",
+      "description": "Two stacks."
+    }
+  ]
+}
