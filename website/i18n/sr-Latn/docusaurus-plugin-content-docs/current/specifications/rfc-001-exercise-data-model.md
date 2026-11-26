@@ -105,7 +105,7 @@ Svi usaglašeni podaci o vežbama **MORAJU** da sadrže ova polja:
 
 ### 3.2. Opciona standardna polja
 
-Četiri opciona polja nose najveći deo onoga što implementacija zaista prikazuje.
+Pet opcionih polja nosi najveći deo onoga što implementacija zaista prikazuje.
 
 `equipment` se deli na ono bez čega pokret ne može da se izvede i ono što samo pomaže. `media` nosi resurse za demonstraciju.
 
@@ -342,10 +342,10 @@ Prema semantičkom verzionisanju:
 
 ### 5.3. Primer evolucije šeme
 
-Verzija 1.0.0 → 1.1.0 (dodavanje opcionog polja):
+Od jedne manje verzije do sledeće (dodavanje opcionog polja):
 ```json fds:ignore a hypothetical next version illustrating how an optional field arrives; no published exercise schema has newOptionalField
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.x.0",
   "exerciseId": "550e8400-e29b-41d4-a716-446655440000",
   "canonical": { "name": "Back Squat", "slug": "back-squat" },
   "classification": {

@@ -232,10 +232,10 @@ Prema semantičkom verzionisanju:
 
 ### 5.3. Primer evolucije šeme
 
-Verzija 1.0.0 → 1.1.0 (dodavanje opcionog polja za sertifikaciju):
+Od jedne manje verzije do sledeće (dodavanje opcionog polja za sertifikaciju):
 ```json fds:ignore a hypothetical next version illustrating how an optional field arrives; no published equipment schema has certification
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.x.0",
   "id": "eq.barbell",
   "canonical": { "name": "Barbell", "slug": "barbell" },
   "certification": {

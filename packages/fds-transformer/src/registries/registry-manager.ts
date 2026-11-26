@@ -30,7 +30,7 @@ const REGISTRY_BASE_URL = 'https://spec.vitness.me/registries';
  * fetched a 404 in every published release and the remote path has never run.
  *
  * The repair is not to move the default onto the example catalog. What a
- * registry lookup yields is an id — `mus.quadriceps` — and that id is written
+ * registry lookup yields is an id — `mus.rectusFemoris` — and that id is written
  * into the transformed document, and from there into the consumer's database.
  * The example ids are illustrative in exactly the way the entries are: they
  * belong to no provider, and the spec reserves the right to change them. A

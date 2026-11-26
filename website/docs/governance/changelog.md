@@ -13,7 +13,7 @@ The format is inspired by Keep a Changelog, and the project adheres to Semantic 
 ## [Unreleased]
 - Extension namespace policy (draft) and conformance sections (planned).
 
-## Schema release — structural keys (2026-11-26)
+## Schema release — exercise 1.2.0, equipment 1.2.0, workout 1.2.0, muscle 1.1.0, muscle-category 1.1.0, prescription 1.1.0, program 1.1.0 (2026-11-26)
 
 ### Added
 - The optional structural keys, each a string whose pattern checks only the
@@ -34,10 +34,9 @@ The format is inspired by Keep a Changelog, and the project adheres to Semantic 
   1.1.0.
 - The transformer bundles release 1.6.0 and defaults to it. 1.0.0 through 1.5.0
   remain bundled.
-- Examples move beside their new schemas and carry the keys of what they name,
-  built with the reference encoder. A muscle record or reference that names a
-  group of muscles, such as the quadriceps, carries its category's `fxmg` and no
-  `fxm`.
+- Examples move beside their new schemas and carry the keys of what they name.
+  Examples name individual muscles; a group such as the quadriceps is a muscle
+  category record with `fxmg`.
 
 ### Compatibility
 - Purely additive. Every document valid under the previous versions validates

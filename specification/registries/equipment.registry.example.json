@@ -1,24 +1,26 @@
 [
   {
-    "schemaVersion": "1.0.0",
+    "schemaVersion": "1.2.0",
     "id": "eq.barbell",
+    "fxe": "FXE=1.0S/k:imp/f:bar.straight",
     "canonical": { "name": "Barbell", "slug": "barbell", "abbreviation": "BB" },
     "classification": { "tags": ["free-weight"] },
     "metadata": { "createdAt": "2025-01-01T00:00:00Z", "updatedAt": "2025-09-03T00:00:00Z", "status": "active" }
   },
   {
-    "schemaVersion": "1.0.0",
+    "schemaVersion": "1.2.0",
     "id": "eq.dumbbell",
+    "fxe": "FXE=1.0S/k:imp/f:bell.dumb",
     "canonical": { "name": "Dumbbell", "slug": "dumbbell" },
     "classification": { "tags": ["free-weight"] },
     "metadata": { "createdAt": "2025-01-01T00:00:00Z", "updatedAt": "2025-09-03T00:00:00Z", "status": "active" }
   },
   {
-    "schemaVersion": "1.0.0",
+    "schemaVersion": "1.2.0",
     "id": "eq.latPulldown",
+    "fxe": "FXE=1.0S/k:mac/l:hands/s:seated/m:pull.down",
     "canonical": { "name": "Lat Pulldown Machine", "slug": "lat-pulldown-machine" },
     "classification": { "tags": ["machine"] },
     "metadata": { "createdAt": "2025-01-01T00:00:00Z", "updatedAt": "2025-09-03T00:00:00Z", "status": "active" }
   }
 ]
-

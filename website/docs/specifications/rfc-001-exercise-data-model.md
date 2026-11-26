@@ -105,7 +105,7 @@ All compliant exercise data **MUST** include these fields:
 
 ### 3.2. Optional Standard Fields
 
-Four optional fields carry most of what an implementation actually renders.
+Five optional fields carry most of what an implementation actually renders.
 
 `equipment` splits into what the movement cannot be performed without and what merely helps. `media` carries demonstration assets.
 
@@ -348,10 +348,10 @@ Following semantic versioning:
 
 ### 5.3. Schema Evolution Example
 
-Version 1.0.0 → 1.1.0 (Adding optional field):
+From one minor version to the next (Adding optional field):
 ```json fds:ignore a hypothetical next version illustrating how an optional field arrives; no published exercise schema has newOptionalField
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.x.0",
   "exerciseId": "550e8400-e29b-41d4-a716-446655440000",
   "canonical": { "name": "Back Squat", "slug": "back-squat" },
   "classification": {

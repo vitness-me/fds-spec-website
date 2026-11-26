@@ -68,8 +68,9 @@ Svi usaglašeni podaci o mišićima **MORAJU** da sadrže ova polja:
 
 ```json fds:document entity=muscle
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "id": "mus.rectusFemoris",
+  "fxm": "FXM=1.0/rectus-femoris",
   "canonical": {
     "name": "Rectus Femoris",
     "slug": "rectus-femoris"
@@ -93,6 +94,7 @@ Uobičajeno podržana opciona polja koja unapređuju interoperabilnost:
 
 ```json fds:fragment entity=muscle partial
 {
+  "fxm": "FXM=1.0/rectus-femoris",
   "canonical": {
     "aliases": ["Rec Fem"],
     "localized": [
@@ -260,10 +262,10 @@ Prema semantičkom verzionisanju:
 
 ### 5.3. Primer evolucije šeme
 
-Verzija 1.0.0 → 1.1.0 (dodavanje opcionog biomehaničkog polja):
+Od jedne manje verzije do sledeće (dodavanje opcionog biomehaničkog polja):
 ```json fds:ignore a hypothetical next version illustrating how an optional field arrives; no published muscle schema has biomechanics
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.x.0",
   "id": "mus.rectusFemoris",
   "canonical": { "name": "Rectus Femoris", "slug": "rectus-femoris" },
   "biomechanics": {

@@ -8,6 +8,8 @@ sidebar_position: 8
 
 This guide provides complete, end-to-end examples of using the FDS Transformer for common workflows.
 
+The Transformer doesn't fill the structural keys (`fxi`, `fxe`, `fxm`, `fxmg`); add them yourself if you want them. See [Structural Keys](../../core-concepts/structural-keys.md).
+
 ## Example 1: Basic Transformation
 
 Transform a simple exercise dataset without AI enrichment.

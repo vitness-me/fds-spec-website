@@ -232,10 +232,10 @@ Siguiendo el versionado semántico:
 
 ### 5.3. Ejemplo de evolución del esquema
 
-Versión 1.0.0 → 1.1.0 (adición de un campo opcional de certificación):
+De una versión menor a la siguiente (adición de un campo opcional de certificación):
 ```json fds:ignore a hypothetical next version illustrating how an optional field arrives; no published equipment schema has certification
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.x.0",
   "id": "eq.barbell",
   "canonical": { "name": "Barbell", "slug": "barbell" },
   "certification": {

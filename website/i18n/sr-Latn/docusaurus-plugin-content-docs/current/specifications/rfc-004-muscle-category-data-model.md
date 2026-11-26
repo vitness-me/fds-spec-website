@@ -195,10 +195,10 @@ Prati semantičko verzionisanje:
 
 ### 5.3. Primer evolucije šeme
 
-Verzija 1.0.0 → 1.1.0 (dodavanje opcionog polja hierarchy):
+Od jedne manje verzije do sledeće (dodavanje opcionog polja hierarchy):
 ```json fds:ignore a hypothetical next version illustrating how an optional field arrives; no published muscle-category schema has hierarchy
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.x.0",
   "id": "cat.legs",
   "canonical": { "name": "Legs", "slug": "legs" },
   "hierarchy": {

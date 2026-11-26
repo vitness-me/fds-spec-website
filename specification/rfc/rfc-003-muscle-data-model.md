@@ -61,8 +61,9 @@ All compliant muscle data **MUST** include these fields:
 
 ```json fds:document entity=muscle
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "id": "mus.rectusFemoris",
+  "fxm": "FXM=1.0/rectus-femoris",
   "canonical": {
     "name": "Rectus Femoris",
     "slug": "rectus-femoris"
@@ -86,6 +87,7 @@ Commonly supported optional fields that enhance interoperability:
 
 ```json fds:fragment entity=muscle partial
 {
+  "fxm": "FXM=1.0/rectus-femoris",
   "canonical": {
     "aliases": ["Rec Fem"],
     "localized": [
@@ -255,10 +257,10 @@ Following semantic versioning:
 
 ### 5.3. Schema Evolution Example
 
-Version 1.0.0 → 1.1.0 (Adding optional biomechanical field):
+From one minor version to the next (Adding optional biomechanical field):
 ```json fds:ignore a hypothetical next version illustrating how an optional field arrives; no published muscle schema has biomechanics
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.x.0",
   "id": "mus.rectusFemoris",
   "canonical": { "name": "Rectus Femoris", "slug": "rectus-femoris" },
   "biomechanics": {

@@ -45,7 +45,7 @@ Normative policy:
 - This applies to identifiers such as `exerciseId`, equipment/muscle/category `id`, and any cross‑entity references.
 
 Documentation policy:
-- For readability, examples in RFCs may use illustrative IDs like `eq.barbell`, `mus.quadriceps`, `cat.legs`. These are NOT valid production IDs and are used only to demonstrate relationships and structure.
+- For readability, examples in RFCs may use illustrative IDs like `eq.barbell`, `mus.rectusFemoris`, `cat.quadriceps`. These are NOT valid production IDs and are used only to demonstrate relationships and structure.
 
 Conformance implications:
 - Conforming Producers MUST emit UUIDv4 identifiers in real datasets.

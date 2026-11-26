@@ -195,10 +195,10 @@ Siguiendo el versionado semántico:
 
 ### 5.3. Ejemplo de evolución del esquema
 
-Versión 1.0.0 → 1.1.0 (agregando el campo opcional hierarchy):
+De una versión menor a la siguiente (agregando el campo opcional hierarchy):
 ```json fds:ignore a hypothetical next version illustrating how an optional field arrives; no published muscle-category schema has hierarchy
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.x.0",
   "id": "cat.legs",
   "canonical": { "name": "Legs", "slug": "legs" },
   "hierarchy": {

@@ -101,7 +101,7 @@ Commonly supported optional fields that enhance interoperability:
 }
 ```
 
-`fxe` is the equipment's structural key: a string that describes what kind of equipment it is and its form, in codes FDS publishes, so two catalogs can find the same equipment whatever they call it. A record carries the whole key, extended layers and the `N` flag included. It is not an identifier; `id` stays the record's identity. The schema checks only its header, `FXE=1.0S/` or `FXE=1.0N/`. See [Equipment key](../core-concepts/structural-keys/equipment-key).
+`fxe` is the equipment's structural key: a string that describes what kind of equipment it is and its form, in codes FDS publishes, so two catalogs can find the same equipment whatever they call it. A record carries the whole key, including any extended layers, which record how the equipment is built, and the flag `N` that marks a key carrying them. It is not an identifier; `id` stays the record's identity. The schema checks only its header, `FXE=1.0S/` or `FXE=1.0N/`. See [Equipment key](../core-concepts/structural-keys/equipment-key).
 
 ### 3.3. Extension Mechanisms
 
@@ -227,10 +227,10 @@ Following semantic versioning:
 
 ### 5.3. Schema Evolution Example
 
-Version 1.0.0 → 1.1.0 (Adding optional certification field):
+From one minor version to the next (Adding optional certification field):
 ```json fds:ignore a hypothetical next version illustrating how an optional field arrives; no published equipment schema has certification
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.x.0",
   "id": "eq.barbell",
   "canonical": { "name": "Barbell", "slug": "barbell" },
   "certification": {

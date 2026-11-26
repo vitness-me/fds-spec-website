@@ -205,7 +205,7 @@ interface MediaItem {
 interface FDSEquipment {
   schemaVersion: string;   // Required
   id: string;              // Required: UUIDv4
-  fxe?: string;          // structural key, "FXE=1.0S/…; extended layers and the N flag allowed"
+  fxe?: string;          // structural key, "FXE=1.0S/…"; extended layers and the N flag allowed
   canonical: {
     name: string;          // Required
     slug: string;          // Required

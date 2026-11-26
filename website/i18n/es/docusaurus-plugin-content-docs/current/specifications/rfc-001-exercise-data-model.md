@@ -105,7 +105,7 @@ Todos los datos de ejercicio conformes **DEBEN** incluir estos campos:
 
 ### 3.2. Campos estándar opcionales
 
-Cuatro campos opcionales transportan la mayor parte de lo que una implementación realmente renderiza.
+Cinco campos opcionales transportan la mayor parte de lo que una implementación realmente renderiza.
 
 `equipment` se divide entre aquello sin lo cual el movimiento no puede realizarse y lo que simplemente ayuda. `media` transporta los recursos de demostración.
 
@@ -342,10 +342,10 @@ Siguiendo el versionado semántico:
 
 ### 5.3. Ejemplo de evolución del esquema
 
-Versión 1.0.0 → 1.1.0 (adición de un campo opcional):
+De una versión menor a la siguiente (adición de un campo opcional):
 ```json fds:ignore a hypothetical next version illustrating how an optional field arrives; no published exercise schema has newOptionalField
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.x.0",
   "exerciseId": "550e8400-e29b-41d4-a716-446655440000",
   "canonical": { "name": "Back Squat", "slug": "back-squat" },
   "classification": {

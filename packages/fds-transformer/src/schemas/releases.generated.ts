@@ -5,8 +5,9 @@
  * do not edit. Run `npm run build:schemas` from the repository root.
  *
  * A release is a *set* of entity versions rather than one path segment they all
- * share: 1.6.0 serves exercise, equipment and workout at 1.2.0 while muscle,
- * muscle-category, body-atlas and program stay at 1.1.0. Expanding a release
+ * share: 1.6.0 serves exercise, equipment and workout at 1.2.0 and muscle,
+ * muscle-category and program at 1.1.0, while body-atlas stays at the 1.1.0
+ * release 1.5.0 named. Expanding a release
  * name into a path segment requests URLs that were never published.
  *
  * Definition libraries are absent by construction. `prescription` publishes

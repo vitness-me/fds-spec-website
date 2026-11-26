@@ -68,8 +68,9 @@ Todos los datos de músculo conformes **DEBEN** incluir estos campos:
 
 ```json fds:document entity=muscle
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "id": "mus.rectusFemoris",
+  "fxm": "FXM=1.0/rectus-femoris",
   "canonical": {
     "name": "Rectus Femoris",
     "slug": "rectus-femoris"
@@ -93,6 +94,7 @@ Campos opcionales comúnmente admitidos que mejoran la interoperabilidad:
 
 ```json fds:fragment entity=muscle partial
 {
+  "fxm": "FXM=1.0/rectus-femoris",
   "canonical": {
     "aliases": ["Rec Fem"],
     "localized": [
@@ -260,10 +262,10 @@ Siguiendo el versionado semántico:
 
 ### 5.3. Ejemplo de evolución del esquema
 
-Versión 1.0.0 → 1.1.0 (adición de un campo opcional biomecánico):
+De una versión menor a la siguiente (adición de un campo opcional biomecánico):
 ```json fds:ignore a hypothetical next version illustrating how an optional field arrives; no published muscle schema has biomechanics
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.x.0",
   "id": "mus.rectusFemoris",
   "canonical": { "name": "Rectus Femoris", "slug": "rectus-femoris" },
   "biomechanics": {

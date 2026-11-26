@@ -15,7 +15,7 @@ sidebar_position: 3
 ## Documentation Identifiers
 
 **Documentation policy:**
-- For readability, examples in RFCs may use illustrative IDs like `eq.barbell`, `mus.quadriceps`, `cat.legs`
+- For readability, examples in RFCs may use illustrative IDs like `eq.barbell`, `mus.rectusFemoris`, `cat.quadriceps`
 - These are **NOT** valid production IDs and are used only to demonstrate relationships and structure
 
 ## Conformance

@@ -97,7 +97,7 @@ Provide a JSON object with ALL of the following fields:
 
 IMPORTANT:
 - Use realistic exercise slugs for relations (e.g., "goblet-squat", "front-squat")
-- Use standard muscle IDs: mus.quadriceps, mus.glutes, mus.hamstrings, mus.lats, mus.pectorals, mus.deltoids, mus.triceps, mus.biceps, mus.abs, mus.obliques, mus.erectorSpinae, etc.
+- Name individual muscles as targets, never a group such as the quadriceps or hamstrings: mus.rectusFemoris, mus.vastusLateralis, mus.gluteusMaximus, mus.bicepsFemoris, mus.lats, mus.pectoralisMajor, mus.anteriorDeltoid, mus.tricepsBrachii, mus.bicepsBrachii, mus.rectusAbdominis, mus.externalOblique, mus.longissimus, etc.
 - Use standard category IDs: cat.legs, cat.back, cat.chest, cat.shoulders, cat.arms, cat.core
 - Use standard equipment IDs: eq.barbell, eq.dumbbell, eq.cable, eq.machine, eq.bench, eq.rack, eq.mat, eq.band, eq.kettlebell
 - Provide 8-12 relations covering different relationship types
@@ -153,7 +153,7 @@ Return JSON with secondary muscles activated:
   ]
 }
 
-Use standard IDs: mus.quadriceps, mus.glutes, mus.hamstrings, mus.lats, mus.pectorals, mus.deltoids, mus.triceps, mus.biceps, mus.abs, mus.obliques, mus.erectorSpinae, mus.adductors, mus.calves, mus.forearms, mus.traps, mus.rhomboids, mus.serratus
+Name individual muscles, never a group such as the quadriceps or hamstrings: mus.rectusFemoris, mus.vastusLateralis, mus.gluteusMaximus, mus.bicepsFemoris, mus.lats, mus.pectoralisMajor, mus.anteriorDeltoid, mus.tricepsBrachii, mus.bicepsBrachii, mus.rectusAbdominis, mus.externalOblique, mus.longissimus, mus.adductorMagnus, mus.gastrocnemius, mus.brachioradialis, mus.trapezius, mus.rhomboidMajor, mus.serratusAnterior
 Categories: cat.legs, cat.back, cat.chest, cat.shoulders, cat.arms, cat.core`,
 
   'exercise-constraints': (ctx) => `

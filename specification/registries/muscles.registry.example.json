@@ -1,24 +1,26 @@
 [
   {
-    "schemaVersion": "1.0.0",
-    "id": "mus.quadriceps",
-    "canonical": { "name": "Quadriceps", "slug": "quadriceps", "aliases": ["Quads"] },
-    "classification": { "categoryId": "cat.legs", "region": "lower-front", "laterality": "bilateral" },
+    "schemaVersion": "1.1.0",
+    "id": "mus.rectusFemoris",
+    "fxm": "FXM=1.0/rectus-femoris",
+    "canonical": { "name": "Rectus Femoris", "slug": "rectus-femoris", "aliases": ["Rec Fem"] },
+    "classification": { "categoryId": "cat.quadriceps", "region": "lower-front", "laterality": "bilateral" },
     "metadata": { "createdAt": "2025-01-01T00:00:00Z", "updatedAt": "2025-09-03T00:00:00Z", "status": "active" }
   },
   {
-    "schemaVersion": "1.0.0",
+    "schemaVersion": "1.1.0",
     "id": "mus.lats",
+    "fxm": "FXM=1.0/latissimus-dorsi",
     "canonical": { "name": "Latissimus Dorsi", "slug": "latissimus-dorsi", "aliases": ["Lats"] },
     "classification": { "categoryId": "cat.back", "region": "upper-back", "laterality": "bilateral" },
     "metadata": { "createdAt": "2025-01-01T00:00:00Z", "updatedAt": "2025-09-03T00:00:00Z", "status": "active" }
   },
   {
-    "schemaVersion": "1.0.0",
+    "schemaVersion": "1.1.0",
     "id": "mus.rectusAbdominis",
+    "fxm": "FXM=1.0/rectus-abdominis",
     "canonical": { "name": "Rectus Abdominis", "slug": "rectus-abdominis" },
     "classification": { "categoryId": "cat.core", "region": "core", "laterality": "bilateral" },
     "metadata": { "createdAt": "2025-01-01T00:00:00Z", "updatedAt": "2025-09-03T00:00:00Z", "status": "active" }
   }
 ]
-
