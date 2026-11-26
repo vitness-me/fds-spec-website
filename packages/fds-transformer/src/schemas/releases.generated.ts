@@ -5,8 +5,8 @@
  * do not edit. Run `npm run build:schemas` from the repository root.
  *
  * A release is a *set* of entity versions rather than one path segment they all
- * share: 1.5.0 serves exercise, equipment, workout and body-atlas at 1.1.0
- * while muscle, muscle-category and program stay at 1.0.0. Expanding a release
+ * share: 1.6.0 serves exercise, equipment and workout at 1.2.0 while muscle,
+ * muscle-category, body-atlas and program stay at 1.1.0. Expanding a release
  * name into a path segment requests URLs that were never published.
  *
  * Definition libraries are absent by construction. `prescription` publishes
@@ -15,7 +15,7 @@
  */
 
 /** The newest published release. */
-export const CURRENT_RELEASE = '1.5.0';
+export const CURRENT_RELEASE = '1.6.0';
 
 /** Entity schema versions per release. */
 export const RELEASE_ENTITY_VERSIONS: Record<string, Record<string, string>> = {
@@ -67,5 +67,14 @@ export const RELEASE_ENTITY_VERSIONS: Record<string, Record<string, string>> = {
     'body-atlas': '1.1.0',
     workout: '1.1.0',
     program: '1.0.0',
+  },
+  '1.6.0': {
+    exercise: '1.2.0',
+    equipment: '1.2.0',
+    muscle: '1.1.0',
+    'muscle-category': '1.1.0',
+    'body-atlas': '1.1.0',
+    workout: '1.2.0',
+    program: '1.1.0',
   },
 };

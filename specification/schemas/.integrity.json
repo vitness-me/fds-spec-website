@@ -13,25 +13,49 @@
       "sha256": "605f43389f57c97b0902c1fada3eccf18525de9c2ee27e7db6ea35bc4e26acfb",
       "frozen": true
     },
+    "equipment/v1.2.0/equipment.schema.json": {
+      "sha256": "5d3d14384941a7c670f013fd0df41c4b172a51628c5eccbce4ac6d6f055be1c6",
+      "frozen": false
+    },
     "exercises/v1.1.0/exercise.schema.json": {
       "sha256": "4e237c85219dc938aad4c6f9665d216420592f131ed5d3270ae2366c0c683817",
       "frozen": true
+    },
+    "exercises/v1.2.0/exercise.schema.json": {
+      "sha256": "475f878c626add165fed1cf759dd93bd1cf315a030433316e6ec4c3a1da1ee74",
+      "frozen": false
     },
     "muscle/muscle-category/v1.0.0/muscle-category.schema.json": {
       "sha256": "b55f5e5ff550a9df74df48334b434e918bd537eee04aef355f3bc99d47a1e038",
       "frozen": true
     },
+    "muscle/muscle-category/v1.1.0/muscle-category.schema.json": {
+      "sha256": "3fca6dc546ae6f39a5e247b57d2bc342e75d8c10951ae9d96a092cc8d009a506",
+      "frozen": false
+    },
     "muscle/v1.0.0/muscle.schema.json": {
       "sha256": "a865d7fdf402794b5daa5ddaa979bb3ac46bdc04f52dd28c501c5fe4ec55930f",
       "frozen": true
+    },
+    "muscle/v1.1.0/muscle.schema.json": {
+      "sha256": "dfa28f909cd601a7ba687ac01faf5df9a8aa92744458b2c32a11771cc4568095",
+      "frozen": false
     },
     "prescription/v1.0.0/prescription.schema.json": {
       "sha256": "a3eec1f02277304451a443bb85f5e97dd1e6fd992305c4924b874bb18cd930ac",
       "frozen": true
     },
+    "prescription/v1.1.0/prescription.schema.json": {
+      "sha256": "f1e42f3780aa0a2d953b2aa888dea7619744dabe8127a8057dc333491539baee",
+      "frozen": false
+    },
     "program/v1.0.0/program.schema.json": {
       "sha256": "2d25db0ee62ae033dac3aa8f0f4b22cf6495cba0e6c72a22240ee88c0429b2aa",
       "frozen": true
+    },
+    "program/v1.1.0/program.schema.json": {
+      "sha256": "e02a911a4399c938d9d3eac6125b89722c876fc5bdd32632d69eda586aad22e4",
+      "frozen": false
     },
     "transformer/provenance/v1.0.0/provenance.schema.json": {
       "sha256": "2244aeec081cb6fc5611ffcd3c5749f56bc2b526ade6311593bee1b5daca9bec",
@@ -64,6 +88,10 @@
     "workout/v1.1.0/workout.schema.json": {
       "sha256": "aaea453ea86e588410074cfbbcae393d32084e253d39afd551165bf3449c316e",
       "frozen": true
+    },
+    "workout/v1.2.0/workout.schema.json": {
+      "sha256": "22f903a04c49a88ffc18a289cc71b54581dc101937cef80a0f3213c5ec4a4d86",
+      "frozen": false
     }
   },
   "bundles": {

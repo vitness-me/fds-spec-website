@@ -20,7 +20,7 @@ afterEach(() => {
 describe('SchemaManager', () => {
   describe('bundled version registry', () => {
     it('reports the versions it can serve offline', () => {
-      expect(SchemaManager.getBundledVersions()).toEqual(['1.0.0', '1.1.0', '1.2.0', '1.3.0', '1.4.0', '1.5.0']);
+      expect(SchemaManager.getBundledVersions()).toEqual(['1.0.0', '1.1.0', '1.2.0', '1.3.0', '1.4.0', '1.5.0', '1.6.0']);
     });
 
     it('answers hasBundledVersion for known and unknown versions', () => {
@@ -30,6 +30,7 @@ describe('SchemaManager', () => {
       expect(SchemaManager.hasBundledVersion('1.3.0')).toBe(true);
       expect(SchemaManager.hasBundledVersion('1.4.0')).toBe(true);
       expect(SchemaManager.hasBundledVersion('1.5.0')).toBe(true);
+      expect(SchemaManager.hasBundledVersion('1.6.0')).toBe(true);
       expect(SchemaManager.hasBundledVersion('9.9.9')).toBe(false);
     });
   });
@@ -101,7 +102,7 @@ describe('SchemaManager', () => {
   });
 
   describe('bundled schemas are self-contained', () => {
-    it.each(['1.0.0', '1.1.0', '1.2.0', '1.3.0', '1.4.0', '1.5.0'])(
+    it.each(['1.0.0', '1.1.0', '1.2.0', '1.3.0', '1.4.0', '1.5.0', '1.6.0'])(
       'compiles every bundled entity schema of %s without unresolved $refs',
       async (version) => {
         vi.stubGlobal('fetch', unreachableRemote());
@@ -330,6 +331,82 @@ describe('SchemaManager', () => {
       const result = await manager.validate(withLicense, 'body-atlas', '1.4.0');
       expect(result.valid).toBe(false);
       expect(JSON.stringify(result.errors)).toMatch(/license/);
+    });
+  });
+
+  /**
+   * Release 1.6.0 adds the optional structural keys: `fxi`, `fxe`, `fxm` and
+   * `fxmg` on records and on the references that name them. 1.5.0 closes the
+   * same objects without them.
+   */
+  describe('structural keys in 1.6.0 are additive over 1.5.0', () => {
+    const keyed = {
+      schemaVersion: '1.2.0',
+      exerciseId: 'ex.test',
+      fxi: 'FXI=1.0S/m:hip.ext+kn.ext/o:standing/l:bar.straight@back',
+      canonical: { name: 'Back Squat', slug: 'back-squat' },
+      classification: {
+        exerciseType: 'strength',
+        movement: 'squat',
+        mechanics: 'compound',
+        force: 'push',
+        level: 'intermediate',
+      },
+      targets: {
+        primary: [
+          {
+            id: 'mus.gluteusMaximus',
+            name: 'Gluteus Maximus',
+            categoryId: 'cat.glutes',
+            fxm: 'FXM=1.0/gluteus-maximus',
+            fxmg: 'FXMG=1.0/buttock',
+          },
+        ],
+      },
+      equipment: {
+        required: [{ id: 'eq.barbell', name: 'Barbell', fxe: 'FXE=1.0S/k:imp/f:bar.straight' }],
+      },
+      metrics: { primary: { type: 'reps', unit: 'count' } },
+      metadata: {
+        createdAt: '2026-11-26T00:00:00Z',
+        updatedAt: '2026-11-26T00:00:00Z',
+        status: 'active',
+      },
+    };
+
+    it('accepts keys on the record and its references under 1.6.0', async () => {
+      vi.stubGlobal('fetch', unreachableRemote());
+      const manager = new SchemaManager();
+
+      await manager.loadVersion('1.6.0');
+
+      expect(manager.getLoadResult()?.source).toBe('bundled');
+      const result = await manager.validate(keyed, 'exercise', '1.6.0');
+      expect(result.errors).toEqual([]);
+      expect(result.valid).toBe(true);
+    });
+
+    it('rejects a key whose header names another key type', async () => {
+      vi.stubGlobal('fetch', unreachableRemote());
+      const manager = new SchemaManager();
+
+      await manager.loadVersion('1.6.0');
+
+      const misfiled = { ...keyed, fxi: 'FXE=1.0S/k:imp/f:bar.straight' };
+      const result = await manager.validate(misfiled, 'exercise', '1.6.0');
+      expect(result.valid).toBe(false);
+      expect(JSON.stringify(result.errors)).toMatch(/fxi/);
+    });
+
+    it('rejects the keys under 1.5.0, so the two bundles differ', async () => {
+      vi.stubGlobal('fetch', unreachableRemote());
+      const manager = new SchemaManager();
+
+      await manager.loadBundledOnly('1.5.0');
+
+      const result = await manager.validate({ ...keyed, schemaVersion: '1.1.0' }, 'exercise', '1.5.0');
+      expect(result.valid).toBe(false);
+      expect(JSON.stringify(result.errors)).toMatch(/fx(i|e|m|mg)/);
     });
   });
 

@@ -1,0 +1,78 @@
+{
+  "schemaVersion": "1.2.0",
+  "workoutId": "00000000-0000-4000-8000-000000000116",
+  "canonical": {
+    "name": "Cooldown Block",
+    "slug": "cooldown-block"
+  },
+  "classification": {
+    "workoutType": "recovery"
+  },
+  "structure": {
+    "blocks": [
+      {
+        "id": "b1",
+        "mode": "sequential",
+        "items": [
+          {
+            "id": "i1",
+            "exercise": {
+              "id": "ex.rowErg",
+              "name": "Rowing Ergometer",
+              "fxi": "FXI=1.0S/m:~el.flex+hip.ext+kn.ext+sh.ext/o:seated/l:erg.row@hands"
+            },
+            "reps": {
+              "kind": "time",
+              "value": 5,
+              "unit": "min"
+            },
+            "zone": {
+              "system": "heartRate",
+              "zone": "Z1",
+              "boundsRef": "zone.fiveZoneHeartRate"
+            }
+          }
+        ],
+        "role": "primary"
+      },
+      {
+        "id": "b2",
+        "mode": "sequential",
+        "items": [
+          {
+            "id": "i2",
+            "exercise": {
+              "id": "ex.hamstringStretch",
+              "name": "Hamstring Stretch",
+              "fxi": "FXI=1.0S/m:%hip.flex+kn.ext/o:?/l:none"
+            },
+            "reps": {
+              "kind": "maxHold",
+              "min": 45,
+              "unit": "s"
+            }
+          },
+          {
+            "id": "i3",
+            "exercise": {
+              "id": "ex.catCow",
+              "name": "Cat-Cow",
+              "fxi": "FXI=1.0S/m:&sp.flex>&sp.ext/o:prone/s:floor@hands,knees/l:none"
+            },
+            "reps": {
+              "kind": "fixed",
+              "value": 10
+            }
+          }
+        ],
+        "role": "cooldown"
+      }
+    ]
+  },
+  "metadata": {
+    "createdAt": "2026-08-09T00:00:00Z",
+    "updatedAt": "2026-08-09T00:00:00Z",
+    "status": "active",
+    "source": "vitness.core"
+  }
+}

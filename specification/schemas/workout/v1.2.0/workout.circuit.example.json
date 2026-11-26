@@ -1,0 +1,77 @@
+{
+  "schemaVersion": "1.2.0",
+  "workoutId": "00000000-0000-4000-8000-000000000108",
+  "canonical": {
+    "name": "Circuit",
+    "slug": "circuit"
+  },
+  "classification": {
+    "workoutType": "conditioning"
+  },
+  "structure": {
+    "blocks": [
+      {
+        "id": "b1",
+        "mode": "circuit",
+        "items": [
+          {
+            "id": "i1",
+            "exercise": {
+              "id": "ex.kettlebellSwing",
+              "name": "Kettlebell Swing",
+              "fxi": "FXI=1.0S/m:hip.ext/o:standing/l:bell.kettle@hands"
+            },
+            "reps": {
+              "kind": "fixed",
+              "value": 15
+            }
+          },
+          {
+            "id": "i2",
+            "exercise": {
+              "id": "ex.pushUp",
+              "name": "Push-Up",
+              "fxi": "FXI=1.0S/m:el.ext+sh.hadd/o:prone/s:floor@feet,hands/l:none"
+            },
+            "reps": {
+              "kind": "fixed",
+              "value": 12
+            }
+          },
+          {
+            "id": "i3",
+            "exercise": {
+              "id": "ex.sitUp",
+              "name": "Sit-Up",
+              "fxi": "FXI=1.0S/m:hip.flex+sp.flex/o:supine/k:trunk/l:none"
+            },
+            "reps": {
+              "kind": "fixed",
+              "value": 20
+            }
+          }
+        ],
+        "role": "conditioning",
+        "modeParams": {
+          "rounds": 4,
+          "rest": {
+            "value": 60,
+            "unit": "s"
+          }
+        },
+        "rest": {
+          "method": "fixed",
+          "appliesTo": "round",
+          "value": 60,
+          "unit": "s"
+        }
+      }
+    ]
+  },
+  "metadata": {
+    "createdAt": "2026-08-09T00:00:00Z",
+    "updatedAt": "2026-08-09T00:00:00Z",
+    "status": "active",
+    "source": "vitness.core"
+  }
+}

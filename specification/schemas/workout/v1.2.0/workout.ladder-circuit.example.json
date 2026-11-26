@@ -1,0 +1,81 @@
+{
+  "schemaVersion": "1.2.0",
+  "workoutId": "00000000-0000-4000-8000-000000000114",
+  "canonical": {
+    "name": "Ladder Circuit",
+    "slug": "ladder-circuit"
+  },
+  "classification": {
+    "workoutType": "conditioning"
+  },
+  "structure": {
+    "blocks": [
+      {
+        "id": "b1",
+        "mode": "circuit",
+        "items": [
+          {
+            "id": "i1",
+            "exercise": {
+              "id": "ex.burpee",
+              "name": "Burpee",
+              "fxi": "FXI=1.0S/m:^hip.ext+kn.ext>^hip.flex+kn.flex>^ank.pf+hip.ext+kn.ext/o:standing/s:floor@hands/l:none"
+            },
+            "scheme": {
+              "pattern": "ladder",
+              "sets": 5,
+              "params": {
+                "rungs": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5
+                ],
+                "direction": "ascending"
+              }
+            }
+          },
+          {
+            "id": "i2",
+            "exercise": {
+              "id": "ex.pullUp",
+              "name": "Pull-Up",
+              "fxi": "FXI=1.0S/m:el.flex+sh.add/o:hanging/s:bar.fixed/l:none"
+            },
+            "scheme": {
+              "pattern": "ladder",
+              "sets": 5,
+              "params": {
+                "rungs": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5
+                ],
+                "direction": "ascending"
+              }
+            }
+          }
+        ],
+        "role": "conditioning",
+        "modeParams": {
+          "rounds": 5
+        },
+        "rest": {
+          "method": "fixed",
+          "appliesTo": "round",
+          "value": 60,
+          "unit": "s"
+        }
+      }
+    ]
+  },
+  "metadata": {
+    "createdAt": "2026-08-09T00:00:00Z",
+    "updatedAt": "2026-08-09T00:00:00Z",
+    "status": "active",
+    "source": "vitness.core"
+  }
+}

@@ -14,7 +14,7 @@
  * One entity's examples, and the matrix sections they answer.
  *
  * `entity` is the directory under specification/schemas and, by default, the
- * filename prefix — `workout` covers specification/schemas/workout/v1.1.0 and
+ * filename prefix — `workout` covers specification/schemas/workout/v1.2.0 and
  * files named `workout.<row>.example.json`.
  *
  * The prescription fixtures are named for the *definition* they exemplify
@@ -27,7 +27,7 @@
 export const SUITES = [
   {
     entity: 'workout',
-    version: 'v1.1.0',
+    version: 'v1.2.0',
     sections: [
       [
         '§4.1 set and rep schemes',
@@ -59,7 +59,7 @@ export const SUITES = [
   },
   {
     entity: 'prescription',
-    version: 'v1.0.0',
+    version: 'v1.1.0',
     prefixed: false,
     allowUnmatched: true,
     checkReadme: false,
@@ -87,7 +87,7 @@ export const SUITES = [
   },
   {
     entity: 'program',
-    version: 'v1.0.0',
+    version: 'v1.1.0',
     sections: [
       [
         '§4.6 periodization models',

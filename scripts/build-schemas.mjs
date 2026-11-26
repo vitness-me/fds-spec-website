@@ -59,10 +59,10 @@ const BUNDLED = join(ROOT, 'packages/fds-transformer/src/schemas/bundled');
  * that validates nothing.
  */
 const ENTITIES = [
-  { name: 'exercise', path: 'exercises/v1.1.0/exercise.schema.json' },
-  { name: 'equipment', path: 'equipment/v1.1.0/equipment.schema.json' },
-  { name: 'muscle', path: 'muscle/v1.0.0/muscle.schema.json' },
-  { name: 'muscle-category', path: 'muscle/muscle-category/v1.0.0/muscle-category.schema.json' },
+  { name: 'exercise', path: 'exercises/v1.2.0/exercise.schema.json' },
+  { name: 'equipment', path: 'equipment/v1.2.0/equipment.schema.json' },
+  { name: 'muscle', path: 'muscle/v1.1.0/muscle.schema.json' },
+  { name: 'muscle-category', path: 'muscle/muscle-category/v1.1.0/muscle-category.schema.json' },
   { name: 'body-atlas', path: 'atlas/v1.1.0/body-atlas.schema.json' },
   // A definition library rather than an entity — nothing is ever "a prescription
   // document", so the transformer has nothing to validate against it. RFC-007 and
@@ -74,13 +74,13 @@ const ENTITIES = [
   // an entity" and "is not bundled" cannot come apart — which they could while
   // the only marker here was a `bundled: false` flag that said nothing about
   // what the schema is.
-  { name: 'prescription', kind: 'library', path: 'prescription/v1.0.0/prescription.schema.json' },
+  { name: 'prescription', kind: 'library', path: 'prescription/v1.1.0/prescription.schema.json' },
   // After prescription: workout composes its definitions, and a library must be
   // built before anything that references it.
-  { name: 'workout', path: 'workout/v1.1.0/workout.schema.json' },
+  { name: 'workout', path: 'workout/v1.2.0/workout.schema.json' },
   // After workout: program references it by workoutRef and composes RFC-006
   // progression rules.
-  { name: 'program', path: 'program/v1.0.0/program.schema.json' },
+  { name: 'program', path: 'program/v1.1.0/program.schema.json' },
 ];
 
 /** What a published schema is. Anything unmarked is an entity. */
@@ -93,7 +93,7 @@ const kindOf = (declaration) => declaration.kind ?? 'entity';
  * name rather than being folded into the last one — a consumer pinned to 1.1.0
  * should not find a workout schema appearing in it.
  */
-const CURRENT_RELEASE = '1.5.0';
+const CURRENT_RELEASE = '1.6.0';
 
 /**
  * Published schemas that are served but not generated from an authoring source.
@@ -124,6 +124,11 @@ const CURRENT_RELEASE = '1.5.0';
  * optional asset `license` and `attribution`. Releases 1.0.0 through 1.4.0 name
  * it, so it stays served, hashed and frozen.
  *
+ * Release 1.6.0 supersedes seven more the same way, with the optional structural
+ * keys on records and references: exercise and equipment 1.1.0, muscle,
+ * muscle-category, prescription and program 1.0.0, and workout 1.1.0. Releases
+ * up to 1.5.0 name them, so each stays served, hashed and frozen.
+ *
  * Each entry carries the same `name` and `kind` a generated one does, because
  * the release manifest has to describe these too and inferring either from a
  * file path is how a tooling schema ends up listed as an entity a provider can
@@ -142,6 +147,13 @@ const UNGENERATED = [
   { name: 'provenance', kind: 'tooling', path: 'transformer/provenance/v1.1.0/provenance.schema.json' },
   { name: 'workout', kind: 'entity', path: 'workout/v1.0.0/workout.schema.json' },
   { name: 'body-atlas', kind: 'entity', path: 'atlas/v1.0.0/body-atlas.schema.json' },
+  { name: 'exercise', kind: 'entity', path: 'exercises/v1.1.0/exercise.schema.json' },
+  { name: 'equipment', kind: 'entity', path: 'equipment/v1.1.0/equipment.schema.json' },
+  { name: 'muscle', kind: 'entity', path: 'muscle/v1.0.0/muscle.schema.json' },
+  { name: 'muscle-category', kind: 'entity', path: 'muscle/muscle-category/v1.0.0/muscle-category.schema.json' },
+  { name: 'prescription', kind: 'library', path: 'prescription/v1.0.0/prescription.schema.json' },
+  { name: 'workout', kind: 'entity', path: 'workout/v1.1.0/workout.schema.json' },
+  { name: 'program', kind: 'entity', path: 'program/v1.0.0/program.schema.json' },
 ];
 
 /**
@@ -166,10 +178,10 @@ const PACKAGED_MAPPING = join(ROOT, 'packages/fds-transformer/schemas/mapping.sc
  * What each FDS release names.
  *
  * A release is a *set* of schema versions, not a version every schema shares —
- * see `specification/discovery.md`. Release 1.5.0 serves exercise, equipment,
- * workout and body-atlas at 1.1.0 while muscle, muscle-category, prescription
- * and program stay at 1.0.0. There is no `muscle/v1.5.0/` and there never will
- * be unless muscle itself changes.
+ * see `specification/discovery.md`. Release 1.6.0 serves exercise, equipment and
+ * workout at 1.2.0, and muscle, muscle-category, body-atlas, prescription and
+ * program at 1.1.0. There is no `muscle/v1.6.0/` and there never will be unless
+ * muscle itself changes.
  *
  * This is history, so it is declared rather than derived: nothing on disk
  * remembers what 1.2.0 contained. The newest release is the exception that keeps
@@ -245,6 +257,19 @@ const RELEASES = {
     prescription: '1.0.0',
     workout: '1.1.0',
     program: '1.0.0',
+  },
+  // Adds the optional structural keys: `fxi`, `fxe`, `fxm` and `fxmg` on their
+  // records, and on every reference to an exercise, a piece of equipment or a
+  // muscle. Every schema that holds one moves; body-atlas holds none and stays.
+  '1.6.0': {
+    exercise: '1.2.0',
+    equipment: '1.2.0',
+    muscle: '1.1.0',
+    'muscle-category': '1.1.0',
+    'body-atlas': '1.1.0',
+    prescription: '1.1.0',
+    workout: '1.2.0',
+    program: '1.1.0',
   },
 };
 
@@ -791,8 +816,8 @@ function renderTransformerReleases(manifest) {
  * do not edit. Run \`npm run build:schemas\` from the repository root.
  *
  * A release is a *set* of entity versions rather than one path segment they all
- * share: 1.5.0 serves exercise, equipment, workout and body-atlas at 1.1.0
- * while muscle, muscle-category and program stay at 1.0.0. Expanding a release
+ * share: 1.6.0 serves exercise, equipment and workout at 1.2.0 while muscle,
+ * muscle-category, body-atlas and program stay at 1.1.0. Expanding a release
  * name into a path segment requests URLs that were never published.
  *
  * Definition libraries are absent by construction. \`prescription\` publishes

@@ -1,0 +1,40 @@
+{
+  "schemaVersion": "1.2.0",
+  "exerciseId": "00000000-0000-4000-8000-000000000002",
+  "fxi": "FXI=1.0S/m:=sp.flex/o:prone/s:floor@feet,forearms/l:none",
+  "canonical": {
+    "name": "Plank",
+    "slug": "plank",
+    "aliases": ["Front Plank"],
+    "localized": [ { "lang": "en", "name": "Plank" } ]
+  },
+  "classification": {
+    "exerciseType": "mobility",
+    "movement": "core-anti-extension",
+    "mechanics": "isolation",
+    "force": "static",
+    "level": "beginner",
+    "unilateral": false,
+    "kineticChain": "closed",
+    "tags": ["isometric", "core"]
+  },
+  "targets": {
+    "primary": [ { "id": "mus.rectusAbdominis", "name": "Rectus Abdominis", "categoryId": "cat.core", "fxm": "FXM=1.0/rectus-abdominis", "fxmg": "FXMG=1.0/anterior-abdominal-wall+erector-spinae+quadratus-lumborum" } ],
+    "secondary": [ { "id": "mus.obliques", "name": "Obliques", "categoryId": "cat.core", "fxmg": "FXMG=1.0/anterior-abdominal-wall+erector-spinae+quadratus-lumborum" } ]
+  },
+  "equipment": {
+    "optional": [ { "id": "eq.mat", "name": "Exercise Mat", "fxe": "FXE=1.0S/k:acc/f:mat" } ]
+  },
+  "metrics": {
+    "primary": { "type": "duration", "unit": "s" },
+    "secondary": [ { "type": "rpe", "unit": "count" } ]
+  },
+  "metadata": {
+    "createdAt": "2025-09-03T00:00:00Z",
+    "updatedAt": "2025-09-03T00:00:00Z",
+    "status": "active",
+    "source": "vitness.core",
+    "version": "1.0.0"
+  }
+}
+

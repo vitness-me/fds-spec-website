@@ -1,0 +1,6 @@
+{
+  "method": "bandResistance",
+  "equipment": { "id": "eq.resistanceBand", "name": "Resistance Band", "fxe": "FXE=1.0S/k:imp/f:band" },
+  "colour": "green",
+  "estimatedLoad": { "value": 23, "unit": "kg" }
+}

@@ -1,0 +1,98 @@
+{
+  "schemaVersion": "1.2.0",
+  "exerciseId": "550e8400-e29b-41d4-a716-446655440000",
+  "fxi": "FXI=1.0S/m:hip.ext+kn.ext/o:standing/l:bar.straight@back",
+  "canonical": {
+    "name": "Back Squat",
+    "slug": "back-squat",
+    "description": "A compound lower body exercise that primarily targets the quadriceps, hamstrings, and glutes while engaging core stability",
+    "aliases": ["Barbell Back Squat", "BB Back Squat"],
+    "localized": [
+      { 
+        "lang": "sr", 
+        "name": "Сквот са шипком", 
+        "description": "Комплексна вежба за јачање ногу која активира квадрицепс, хамстринг и седални мишић" 
+      },
+      { 
+        "lang": "es", 
+        "name": "Sentadilla trasera", 
+        "description": "Ejercicio compuesto para el fortalecimiento de piernas que trabaja cuádriceps, isquiotibiales y glúteos",
+        "aliases": ["Sentadilla con barra atrás"] 
+      }
+    ]
+  },
+  "classification": {
+    "exerciseType": "strength",
+    "movement": "squat",
+    "mechanics": "compound",
+    "force": "push",
+    "level": "intermediate",
+    "unilateral": false,
+    "kineticChain": "closed",
+    "tags": ["bilateral","hipDominant"]
+  },
+  "targets": {
+    "primary": [
+      { "id": "mus.quadriceps", "name": "Quadriceps", "categoryId": "cat.legs", "fxmg": "FXMG=1.0/a:hip.flex+buttock+hamstring+quadriceps-femoris+sartorius+tensor-fasciae-latae+thigh.medial+tibialis-anterior+triceps-surae" }
+    ],
+    "secondary": [
+      { "id": "mus.hamstrings", "name": "Hamstrings", "categoryId": "cat.legs", "fxmg": "FXMG=1.0/a:hip.flex+buttock+hamstring+quadriceps-femoris+sartorius+tensor-fasciae-latae+thigh.medial+tibialis-anterior+triceps-surae" },
+      { "id": "mus.erectorSpinae", "name": "Erector Spinae", "categoryId": "cat.back", "fxmg": "FXMG=1.0/deltoid.spinal+erector-spinae+latissimus-dorsi+quadratus-lumborum+rhomboid-major+rhomboid-minor+trapezius" }
+    ]
+  },
+  "equipment": {
+    "required": [
+      { "id": "eq.barbell", "name": "Barbell", "fxe": "FXE=1.0S/k:imp/f:bar.straight" },
+      { "id": "eq.rack", "name": "Power Rack", "fxe": "FXE=1.0S/k:sup/f:rack" }
+    ],
+    "optional": [
+      { "id": "eq.belt", "name": "Lifting Belt", "fxe": "FXE=1.0S/k:acc/f:belt.lift" }
+    ]
+  },
+  "constraints": {
+    "contraindications": ["Acute knee injury without professional clearance"],
+    "prerequisites": ["Bodyweight squat competency"],
+    "progressions": ["High-bar back squat", "Paused back squat"],
+    "regressions": ["Goblet squat", "Box squat"]
+  },
+  "relations": [
+    { "type": "alternate", "targetId": "urn:slug:front-squat" },
+    { "type": "regression", "targetId": "urn:slug:goblet-squat" }
+  ],
+  "metrics": {
+    "primary": { "type": "reps", "unit": "count" },
+    "secondary": [
+      { "type": "weight", "unit": "lb" },
+      { "type": "tempo", "unit": "count" },
+      { "type": "rpe", "unit": "count" }
+    ]
+  },
+  "media": [
+    {
+      "type": "video",
+      "uri": "https://cdn.example.com/exercises/back-squat.mp4",
+      "caption": "Side view, full-depth demo",
+      "license": "CC BY 4.0",
+      "attribution": "Vitness"
+    }
+  ],
+  "attributes": {
+    "x:vitness.barPathHint": "midfoot → midfoot",
+    "x:vitness.stanceWidth": "shoulder-width"
+  },
+  "extensions": {
+    "x:vitness.tempo": { "eccentric": 3, "isometric": 1, "concentric": 1 },
+    "x:vitness.rangeOfMotion": { "standard": "hip-crease below knee" }
+  },
+  "metadata": {
+    "createdAt": "2025-09-02T15:00:00Z",
+    "updatedAt": "2025-09-02T15:00:00Z",
+    "status": "active",
+    "source": "vitness.core",
+    "version": "1.0.0",
+    "externalRefs": [
+      { "system": "platform-a", "id": "ex-back-squat-001" },
+      { "system": "legacy-system", "id": "squat_barbell_back" }
+    ]
+  }
+}

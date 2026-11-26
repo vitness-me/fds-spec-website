@@ -5,7 +5,7 @@
   "policy": "open",
   "governs": [
     {
-      "source": "specification/schema-sources/prescription/v1.0.0/prescription.schema.json",
+      "source": "specification/schema-sources/prescription/v1.1.0/prescription.schema.json",
       "pointer": "intensityZone.boundsRef"
     }
   ],

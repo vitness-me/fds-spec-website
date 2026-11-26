@@ -22,7 +22,7 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const GUIDE = join(ROOT, 'specification/metrics-guide.md');
 const SCHEMA = join(
   ROOT,
-  'specification/schemas/exercises/v1.1.0/exercise.schema.json'
+  'specification/schemas/exercises/v1.2.0/exercise.schema.json'
 );
 
 const schema = JSON.parse(await readFile(SCHEMA, 'utf8'));

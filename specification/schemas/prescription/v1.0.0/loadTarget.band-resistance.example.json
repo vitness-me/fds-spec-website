@@ -1,6 +1,0 @@
-{
-  "method": "bandResistance",
-  "equipment": { "id": "eq.resistanceBand", "name": "Resistance Band" },
-  "colour": "green",
-  "estimatedLoad": { "value": 23, "unit": "kg" }
-}

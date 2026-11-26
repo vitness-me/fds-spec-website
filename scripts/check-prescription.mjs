@@ -29,11 +29,11 @@ import { fileURLToPath } from 'node:url';
 import { checkReadmeIndex } from './lib/fixture-readme.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
-const DIR = join(ROOT, 'specification/schemas/prescription/v1.0.0');
+const DIR = join(ROOT, 'specification/schemas/prescription/v1.1.0');
 const LIBRARY = join(DIR, 'prescription.schema.json');
 const SOURCE = join(
   ROOT,
-  'specification/schema-sources/prescription/v1.0.0/prescription.schema.json'
+  'specification/schema-sources/prescription/v1.1.0/prescription.schema.json'
 );
 
 let Ajv;

@@ -52,7 +52,7 @@
  *   usecase_family: composition
  *   usecase_audiences: [app-developer, oem-engineer]
  *   usecase_sources:
- *     - specification/schemas/workout/v1.1.0/workout.straight.example.json
+ *     - specification/schemas/workout/v1.2.0/workout.straight.example.json
  *   ---
  *
  * Offline, like its siblings: it proves a source names a file the build

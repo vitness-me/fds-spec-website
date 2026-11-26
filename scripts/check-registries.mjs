@@ -41,30 +41,30 @@ const REGISTRIES = [
   {
     file: 'exercise-type.registry.json',
     field: 'exerciseType',
-    usedIn: ['exercises/v1.1.0'],
+    usedIn: ['exercises/v1.2.0'],
   },
   {
     file: 'workout-type.registry.json',
     field: 'workoutType',
     schemaField: {
-      source: 'workout/v1.1.0/workout.schema.json',
+      source: 'workout/v1.2.0/workout.schema.json',
       property: 'workoutType',
     },
-    usedIn: ['workout/v1.1.0'],
+    usedIn: ['workout/v1.2.0'],
   },
   {
     file: 'block-role.registry.json',
     field: 'role',
     schemaField: {
-      source: 'workout/v1.1.0/workout.schema.json',
+      source: 'workout/v1.2.0/workout.schema.json',
       property: 'role',
     },
-    usedIn: ['workout/v1.1.0'],
+    usedIn: ['workout/v1.2.0'],
   },
   {
     file: 'intensity-zone.registry.json',
     field: 'boundsRef',
-    usedIn: ['workout/v1.1.0', 'prescription/v1.0.0', 'program/v1.0.0'],
+    usedIn: ['workout/v1.2.0', 'prescription/v1.1.0', 'program/v1.1.0'],
   },
 ];
 
@@ -72,7 +72,7 @@ const REGISTRIES = [
 async function zoneSystems() {
   const schema = JSON.parse(
     await readFile(
-      join(ROOT, 'specification/schema-sources/prescription/v1.0.0/prescription.schema.json'),
+      join(ROOT, 'specification/schema-sources/prescription/v1.1.0/prescription.schema.json'),
       'utf8'
     )
   );
