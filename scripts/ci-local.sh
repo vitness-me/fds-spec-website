@@ -112,6 +112,7 @@ if run_job schemas; then
   try "skill knowledge names real fields" npm run check:skill
   try "every version claim matches the manifest" npm run check:versions
   try "the publish-credential rules can fail" npm run check:publish-auth
+  try "the schema review reports changes as recorded" node scripts/schema-review.mjs --self-test
 
   # The schemas to validate against come from the release manifest, which is
   # generated from the published tree — publishing an entity adds it here with

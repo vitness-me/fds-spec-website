@@ -35,8 +35,11 @@ export const PUBLISHED_DIRS = {
  * block again; `currentOf` answers "which version should documentation name".
  */
 export async function loadManifest() {
-  const manifest = JSON.parse(await readFile(join(ROOT, MANIFEST_PATH), 'utf8'));
+  return indexManifest(JSON.parse(await readFile(join(ROOT, MANIFEST_PATH), 'utf8')));
+}
 
+/** The indexes `loadManifest` returns, for a manifest already read (from a git ref, say). */
+export function indexManifest(manifest) {
   const byPath = new Map(); // published path -> { name, version, status, kind, $id }
   const currentOf = new Map(); // schema name -> current version
   const versionsOf = new Map(); // schema name -> Map(version -> entry)

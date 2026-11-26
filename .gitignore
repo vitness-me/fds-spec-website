@@ -8,6 +8,9 @@ dist/
 # Local scratch
 packages/fds-transformer/poc-test/output/
 
+# Schema review site written by `npm run schema-review`
+.schema-review/
+
 # OS
 .DS_Store
 
