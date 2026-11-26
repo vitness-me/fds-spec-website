@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "1.1.0",
+  "id": "cat.quadriceps",
+  "fxmg": "FXMG=1.0/quadriceps-femoris",
+  "canonical": {
+    "name": "Quadriceps",
+    "slug": "quadriceps",
+    "description": "The four muscles at the front of the thigh that extend the knee: rectus femoris and the lateral, medial and intermediate vasti",
+    "aliases": ["Quads"],
+    "localized": [
+      {
+        "lang": "sr",
+        "name": "Kvadriceps",
+        "description": "Четири мишића на предњој страни бутине који испружају колено"
+      }
+    ]
+  },
+  "classification": {
+    "tags": ["lower-body", "knee-extensors"]
+  },
+  "metadata": {
+    "createdAt": "2025-01-01T00:00:00Z",
+    "updatedAt": "2025-09-03T00:00:00Z",
+    "source": "vitness.registry",
+    "status": "active"
+  }
+}

@@ -1,24 +1,26 @@
 [
   {
-    "schemaVersion": "1.0.0",
-    "id": "cat.legs",
-    "canonical": { "name": "Legs", "slug": "legs" },
-    "classification": { "tags": ["major-group"] },
+    "schemaVersion": "1.1.0",
+    "id": "cat.quadriceps",
+    "fxmg": "FXMG=1.0/quadriceps-femoris",
+    "canonical": { "name": "Quadriceps", "slug": "quadriceps", "aliases": ["Quads"] },
+    "classification": { "tags": ["knee-extensors"] },
     "metadata": { "createdAt": "2025-01-01T00:00:00Z", "updatedAt": "2025-09-03T00:00:00Z", "status": "active" }
   },
   {
-    "schemaVersion": "1.0.0",
+    "schemaVersion": "1.1.0",
     "id": "cat.back",
+    "fxmg": "FXMG=1.0/deltoid.spinal+erector-spinae+latissimus-dorsi+quadratus-lumborum+rhomboid-major+rhomboid-minor+trapezius",
     "canonical": { "name": "Back", "slug": "back" },
     "classification": { "tags": ["major-group"] },
     "metadata": { "createdAt": "2025-01-01T00:00:00Z", "updatedAt": "2025-09-03T00:00:00Z", "status": "active" }
   },
   {
-    "schemaVersion": "1.0.0",
+    "schemaVersion": "1.1.0",
     "id": "cat.core",
+    "fxmg": "FXMG=1.0/anterior-abdominal-wall+erector-spinae+quadratus-lumborum",
     "canonical": { "name": "Core", "slug": "core" },
     "classification": { "tags": ["major-group"] },
     "metadata": { "createdAt": "2025-01-01T00:00:00Z", "updatedAt": "2025-09-03T00:00:00Z", "status": "active" }
   }
 ]
-

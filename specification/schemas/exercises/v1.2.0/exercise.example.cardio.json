@@ -1,0 +1,58 @@
+{
+  "schemaVersion": "1.2.0",
+  "exerciseId": "00000000-0000-4000-8000-000000000001",
+  "fxi": "FXI=1.0S/m:~ank.pf+hip.ext+kn.ext/o:standing/l:erg.gait@feet/x:rc",
+  "canonical": {
+    "name": "Treadmill Run",
+    "slug": "treadmill-run",
+    "aliases": ["TM Run"],
+    "localized": [
+      { "lang": "en", "name": "Treadmill Run" },
+      { "lang": "es", "name": "Cinta de correr" }
+    ]
+  },
+  "classification": {
+    "exerciseType": "cardio",
+    "movement": "locomotion",
+    "mechanics": "compound",
+    "force": "mixed",
+    "level": "beginner",
+    "unilateral": false,
+    "kineticChain": "mixed",
+    "tags": ["cardio", "aerobic"]
+  },
+  "targets": {
+    "primary": [
+      { "id": "mus.rectusFemoris", "name": "Rectus Femoris", "categoryId": "cat.quadriceps", "fxm": "FXM=1.0/rectus-femoris", "fxmg": "FXMG=1.0/quadriceps-femoris" },
+      { "id": "mus.vastusLateralis", "name": "Vastus Lateralis", "categoryId": "cat.quadriceps", "fxm": "FXM=1.0/vastus-lateralis", "fxmg": "FXMG=1.0/quadriceps-femoris" },
+      { "id": "mus.vastusMedialis", "name": "Vastus Medialis", "categoryId": "cat.quadriceps", "fxm": "FXM=1.0/vastus-medialis", "fxmg": "FXMG=1.0/quadriceps-femoris" },
+      { "id": "mus.vastusIntermedius", "name": "Vastus Intermedius", "categoryId": "cat.quadriceps", "fxm": "FXM=1.0/vastus-intermedius", "fxmg": "FXMG=1.0/quadriceps-femoris" }
+    ],
+    "secondary": [
+      { "id": "mus.bicepsFemoris", "name": "Biceps Femoris", "categoryId": "cat.hamstrings", "fxm": "FXM=1.0/biceps-femoris", "fxmg": "FXMG=1.0/hamstring" },
+      { "id": "mus.semitendinosus", "name": "Semitendinosus", "categoryId": "cat.hamstrings", "fxm": "FXM=1.0/semitendinosus", "fxmg": "FXMG=1.0/hamstring" },
+      { "id": "mus.semimembranosus", "name": "Semimembranosus", "categoryId": "cat.hamstrings", "fxm": "FXM=1.0/semimembranosus", "fxmg": "FXMG=1.0/hamstring" },
+      { "id": "mus.gluteusMaximus", "name": "Gluteus Maximus", "categoryId": "cat.glutes", "fxm": "FXM=1.0/gluteus-maximus", "fxmg": "FXMG=1.0/buttock" }
+    ]
+  },
+  "equipment": {
+    "required": [ { "id": "eq.treadmill", "name": "Treadmill", "fxe": "FXE=1.0S/k:erg/c:belt/l:feet/s:standing/m:gait" } ]
+  },
+  "metrics": {
+    "primary": { "type": "duration", "unit": "min" },
+    "secondary": [
+      { "type": "distance", "unit": "km" },
+      { "type": "pace", "unit": "min_per_km" },
+      { "type": "heartRate", "unit": "bpm" },
+      { "type": "calories", "unit": "kcal" }
+    ]
+  },
+  "metadata": {
+    "createdAt": "2025-09-03T00:00:00Z",
+    "updatedAt": "2025-09-03T00:00:00Z",
+    "status": "active",
+    "source": "vitness.core",
+    "version": "1.0.0"
+  }
+}
+

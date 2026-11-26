@@ -4,15 +4,15 @@ description: JSON Schema de una sola sesión de entrenamiento prescrita — bloq
 sidebar_position: 8
 ---
 
-# Esquema de sesión de entrenamiento (v1.1.0)
+# Esquema de sesión de entrenamiento (v1.2.0)
 
 Una sesión de entrenamiento es **una sesión prescrita**: qué se hace, en qué orden, agrupado cómo, y cómo se prescribe cada elemento.
 
 ## Ubicación del esquema
 
-**URL:** `https://spec.vitness.me/schemas/workout/v1.1.0/workout.schema.json`
+**URL:** `https://spec.vitness.me/schemas/workout/v1.2.0/workout.schema.json`
 
-**Descarga:** [workout.schema.json](https://spec.vitness.me/schemas/workout/v1.1.0/workout.schema.json)
+**Descarga:** [workout.schema.json](https://spec.vitness.me/schemas/workout/v1.2.0/workout.schema.json)
 
 `v1.0.0` permanece publicada y congelada en su propia URL. La 1.1.0 es puramente aditiva, de modo que todo documento 1.0.0 valida contra ella sin cambios.
 
@@ -74,7 +74,7 @@ Desde la 1.1.0 una serie también lleva `zone`. La carga, las repeticiones, el t
 ## Ejemplos resueltos
 
 <!-- fds:count examples:workout=46 scenarios:workout=46 -->
-Se publican 46 sesiones junto al esquema — una por cada esquema de series y repeticiones de la matriz de cobertura, una por cada estructura de agrupación desde un ejercicio único hasta un *chipper*, y una por cada escenario de cardio y resistencia. Cada una está indexada en [el README de los archivos de ejemplo](https://spec.vitness.me/schemas/workout/v1.1.0/README.md).
+Se publican 46 sesiones junto al esquema — una por cada esquema de series y repeticiones de la matriz de cobertura, una por cada estructura de agrupación desde un ejercicio único hasta un *chipper*, y una por cada escenario de cardio y resistencia. Cada una está indexada en [el README de los archivos de ejemplo](https://spec.vitness.me/schemas/workout/v1.2.0/README.md).
 
 El conjunto de agrupaciones es la verdadera prueba de la afirmación de arriba: si alguna estructura hubiera necesitado un campo que el esquema no tiene, la abstracción estaría cortada por el lugar equivocado.
 
@@ -86,6 +86,7 @@ El conjunto de agrupaciones es la verdadera prueba de la afirmación de arriba: 
 - `blocks[].role` — para qué sirve un bloque, con valores recomendados en el [registro de roles de bloque](https://spec.vitness.me/registries/block-role.registry.json)
 - `items[].alternatives[]` — sustituciones que el autor sanciona de antemano, distintas de la que un atleta hace a mitad de sesión
 - `items[].repStyle` — rango de movimiento y composición de la repetición, para repeticiones parciales y de una y media
+- `items[].exercise` y `items[].alternatives[]` — referencias de ejercicio, cada una con su [clave de ejercicio](/docs/core-concepts/structural-keys/exercise-key) opcional en `fxi`; las referencias de músculo y de equipamiento en `targets` y `equipment` pueden llevar `fxm`, `fxmg` y `fxe`
 
 ## Especificación
 

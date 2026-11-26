@@ -8,8 +8,8 @@ keywords: [prescription, load target, rpe, percent 1rm, tempo, rest, progression
 # RFC-006: Specifikacija primitiva preskripcije
 
 **Status**: Nacrt
-**Verzija**: 0.1.0
-**Datum**: 2026-08-07
+**Verzija**: 0.2.0
+**Datum**: 2026-11-26
 **Autori**: VITNESS tim
 **Kategorija**: Standards Track
 
@@ -75,7 +75,7 @@ Objavljena šema ne nosi `schemaVersion`, identifikator ni blok `metadata`, jer 
 Validacija bilo kog dokumenta prema korenu biblioteke ne uspeva po konstrukciji. Ovo je zaštitna ograda, a ne neprijatnost: biblioteka čiji bi koren prihvatao sve tiho bi propustila svaki dokument koji joj se preda, a konzument bi to shvatio kao potvrdu. Umesto toga referencirajte definiciju:
 
 ```json fds:ignore a JSON Schema excerpt, not a document
-{ "$ref": "https://spec.vitness.me/schemas/prescription/v1.0.0/prescription.schema.json#/$defs/loadTarget" }
+{ "$ref": "https://spec.vitness.me/schemas/prescription/v1.1.0/prescription.schema.json#/$defs/loadTarget" }
 ```
 
 Pošto su objavljene FDS šeme samosadržane (pogledajte vodič za pisanje šema), RFC-007 i RFC-008 će nositi spljoštene kopije definicija koje koriste. Implementatori koji validiraju trening nikada ne moraju da preuzmu ovu datoteku.
@@ -127,6 +127,8 @@ Trinaest definisanih metoda plus grana unapredne kompatibilnosti. Sve metode osi
 | `bodyweight` | — | Da |
 | `autoregulated` | `progressionRuleRef` | Ne — potrebno je stanje pravila |
 | `none` | — | Da |
+
+`equipment` u `bandResistance` je referenca na opremu iz RFC-001 i može nositi strukturni ključ trake u `fxe`. Pogledajte [Ključ opreme](../core-concepts/structural-keys/equipment-key).
 
 Tri od njih nose semantiku koju konzument može pogrešno shvatiti na način koji validacija ne može da uhvati:
 
@@ -244,11 +246,13 @@ Ovo ponavlja §3.3 za drugačiji neuspeh: §3.3 upravlja metodom koja nije *shva
 
 ## 6. Verzionisanje i kompatibilnost
 
-Ova biblioteka prati pravila verzionisanja iz RFC-001 §5. Njen objavljeni URL je zamrznut ugovor: bajtovi na `prescription/v1.0.0/prescription.schema.json` neće se menjati. Dodaci se isporučuju kao nova sporedna verzija na novom URL-u.
+Ova biblioteka prati pravila verzionisanja iz RFC-001 §5. Njen objavljeni URL je zamrznut ugovor: bajtovi na `prescription/v1.1.0/prescription.schema.json` neće se menjati. Dodaci se isporučuju kao nova sporedna verzija na novom URL-u.
 
 Dodavanje metode u diskriminisanu uniju je SPOREDNA izmena: dokumenti važeći pod starom verzijom ostaju važeći, jer se nova metoda ranije validirala kroz sabirnu granu. To je svojstvo kompatibilnosti radi kojeg sabirna grana postoji, i zato je ta grana specifikovana umesto da bude prepuštena implementacijama.
 
 Uklanjanje metode, ili sužavanje postojećeg sadržaja, je GLAVNA izmena.
+
+**1.1.0** je dodala opciono polje `fxe` na opremi za `bandResistance` (§4.1).
 
 ## 7. Smernice za implementaciju
 
@@ -278,7 +282,7 @@ Implementacija koja ugrađuje razrešene lične vrednosti u preskripciju — upi
 
 ## 9. Referenca JSON šeme
 
-`https://spec.vitness.me/schemas/prescription/v1.0.0/prescription.schema.json`
+`https://spec.vitness.me/schemas/prescription/v1.1.0/prescription.schema.json`
 
 ### 9.1. Validacija
 

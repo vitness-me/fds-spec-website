@@ -8,8 +8,8 @@ keywords: [equipment, data model, json schema, fitness, interoperability, rfc]
 # RFC-002: Specifikacija modela podataka o opremi
 
 **Status**: Nacrt
-**Verzija**: 0.1.0
-**Datum**: 2025-09-09
+**Verzija**: 0.2.0
+**Datum**: 2026-11-26
 **Autori**: VITNESS tim
 **Kategorija**: Standards Track
 
@@ -66,8 +66,9 @@ Svi usaglašeni podaci o opremi **MORAJU** da sadrže ova polja:
 
 ```json fds:document entity=equipment
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.2.0",
   "id": "eq.barbell",
+  "fxe": "FXE=1.0S/k:imp/f:bar.straight",
   "canonical": {
     "name": "Barbell",
     "slug": "barbell"
@@ -87,6 +88,7 @@ Uobičajeno podržana opciona polja koja unapređuju interoperabilnost:
 
 ```json fds:fragment entity=equipment partial
 {
+  "fxe": "FXE=1.0S/k:imp/f:bar.straight",
   "canonical": {
     "abbreviation": "BB",
     "aliases": ["Olympic Bar"],
@@ -105,6 +107,8 @@ Uobičajeno podržana opciona polja koja unapređuju interoperabilnost:
   ]
 }
 ```
+
+`fxe` je strukturni ključ opreme: string koji opisuje koja je vrsta opreme i njen oblik, kodovima koje FDS objavljuje, pa dva kataloga mogu da pronađu istu opremu kako god je zvali. Zapis nosi ceo ključ, uključujući eventualne proširene slojeve, koji beleže kako je oprema građena, i zastavicu `N` koja označava ključ koji ih nosi. On nije identifikator; `id` ostaje identitet zapisa. Šema proverava samo njegovo zaglavlje, `FXE=1.0S/` ili `FXE=1.0N/`. Pogledajte [Ključ opreme](../core-concepts/structural-keys/equipment-key).
 
 ### 3.3. Mehanizmi ekstenzija
 
@@ -214,6 +218,8 @@ Ovo je pandan objektu `exercise.loading` (RFC-001 §4.6): vežba iskazuje *da li
 
 ## 5. Verzionisanje i kompatibilnost
 
+**1.2.0** je dodala opciono polje `fxe` (§3.2).
+
 ### 5.1. Verzionisanje šema
 
 Prema semantičkom verzionisanju:
@@ -230,10 +236,10 @@ Prema semantičkom verzionisanju:
 
 ### 5.3. Primer evolucije šeme
 
-Verzija 1.0.0 → 1.1.0 (dodavanje opcionog polja za sertifikaciju):
+Od jedne sporedne verzije do sledeće (dodavanje opcionog polja za sertifikaciju):
 ```json fds:ignore a hypothetical next version illustrating how an optional field arrives; no published equipment schema has certification
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.x.0",
   "id": "eq.barbell",
   "canonical": { "name": "Barbell", "slug": "barbell" },
   "certification": {
@@ -280,7 +286,7 @@ graph LR
 ## 8. Referenca JSON šeme
 
 Kompletna JSON šema je dostupna na:
-- **Equipment**: `/specification/schemas/equipment/v1.1.0/equipment.schema.json`
+- **Equipment**: `/specification/schemas/equipment/v1.2.0/equipment.schema.json`
 
 ## 8.1. Validacija
 
@@ -288,20 +294,21 @@ Validirajte pomoću Ajv (Draft 2020-12):
 
 ```
 npx --package=ajv-cli --package=ajv-formats ajv validate --spec=draft2020 -c ajv-formats \
-  -s specification/schemas/equipment/v1.1.0/equipment.schema.json \
-  -d specification/schemas/equipment/v1.1.0/equipment.example.json
+  -s specification/schemas/equipment/v1.2.0/equipment.schema.json \
+  -d specification/schemas/equipment/v1.2.0/equipment.example.json
 ```
 
 ## 9. Primer implementacije
 
 ### 9.1. Kompletan zapis opreme za šipku
 
-Na osnovu referentne implementacije (`/specification/schemas/equipment/v1.1.0/equipment.example.json`):
+Na osnovu referentne implementacije (`/specification/schemas/equipment/v1.2.0/equipment.example.json`):
 
 ```json fds:document entity=equipment
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.2.0",
   "id": "eq.barbell",
+  "fxe": "FXE=1.0S/k:imp/f:bar.straight",
   "canonical": { 
     "name": "Barbell", 
     "slug": "barbell", 

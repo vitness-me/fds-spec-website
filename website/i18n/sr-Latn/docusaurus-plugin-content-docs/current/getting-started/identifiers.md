@@ -15,7 +15,7 @@ sidebar_position: 3
 ## Identifikatori u dokumentaciji
 
 **Politika dokumentacije:**
-- Radi čitljivosti, primeri u RFC dokumentima mogu koristiti ilustrativne ID-jeve poput `eq.barbell`, `mus.quadriceps`, `cat.legs`
+- Radi čitljivosti, primeri u RFC dokumentima mogu koristiti ilustrativne ID-jeve poput `eq.barbell`, `mus.rectusFemoris`, `cat.quadriceps`
 - Oni **NISU** važeći produkcioni ID-jevi i služe samo za prikaz odnosa i strukture
 
 ## Usaglašenost

@@ -15,7 +15,7 @@ sidebar_position: 3
 ## Identificadores de documentación
 
 **Política de documentación:**
-- Por legibilidad, los ejemplos en los RFC pueden usar ID ilustrativos como `eq.barbell`, `mus.quadriceps`, `cat.legs`
+- Por legibilidad, los ejemplos en los RFC pueden usar ID ilustrativos como `eq.barbell`, `mus.rectusFemoris`, `cat.quadriceps`
 - Estos **NO** son ID de producción válidos y se usan solo para demostrar relaciones y estructura
 
 ## Conformidad
@@ -83,4 +83,4 @@ Todas las entidades de FDS admiten un arreglo opcional `externalRefs` dentro del
 }
 ```
 
-Esta estructura está disponible en todas las entidades de FDS: ejercicio, equipamiento, músculo, categoría de músculo y atlas corporal
+Esta estructura está disponible en todas las entidades de FDS: ejercicio, equipamiento, músculo, categoría muscular y atlas corporal

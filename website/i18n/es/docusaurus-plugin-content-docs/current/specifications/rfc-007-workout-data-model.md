@@ -8,8 +8,8 @@ keywords: [workout, session, superset, circuit, emom, amrap, tabata, data model,
 # RFC-007: Especificación del modelo de datos de sesiones de entrenamiento
 
 **Estado**: Borrador
-**Versión**: 0.2.0
-**Fecha**: 2026-08-10
+**Versión**: 0.3.0
+**Fecha**: 2026-11-26
 **Autores**: Equipo VITNESS
 **Categoría**: Standards Track
 
@@ -140,6 +140,8 @@ Esto refleja el RFC-006 §3.3 y por la misma razón. Ejecutar en silencio una es
 
 `id` y `exercise` son obligatorios; todo lo demás es prescripción.
 
+`exercise`, igual que cada entrada de `alternatives[]`, es una referencia de ejercicio del RFC-001, y puede llevar la clave estructural del ejercicio en `fxi`. Véase [Clave de ejercicio](../core-concepts/structural-keys/exercise-key).
+
 `alternatives[]` lista las sustituciones **que el autor autoriza por adelantado** — equipamiento no disponible, movimiento contraindicado, una regresión para un atleta menos experimentado. Es parte de la prescripción y viaja con la sesión de entrenamiento.
 
 Esto es distinto de una sustitución que un atleta hace durante una sesión, que es dato ejecutado y pertenece al RFC-009. La distinción importa porque los dos responden preguntas distintas: `alternatives[]` dice qué considera equivalente el autor; una sustitución registrada dice qué ocurrió. Colapsarlas haría irrecuperable la intención de un programa a partir de su historial de ejecución.
@@ -204,6 +206,8 @@ Un consumidor que no puede aplicar un ajuste — sin control de pendiente en el 
 
 `targets` y `equipment` resumen lo que la sesión entrena y necesita. Ambos son **opcionales y orientativos**.
 
+Sus entradas son referencias de músculo y de equipamiento del RFC-001, y pueden llevar las mismas claves estructurales: `fxm` y `fxmg` en un músculo, `fxe` en un equipamiento.
+
 Un consumidor NO DEBE tratar a ninguno de los dos como autoritativo por encima de recorrer los elementos. Son datos derivados que pueden estar ausentes, desactualizados o calculados bajo supuestos que el consumidor no comparte — un resumen agregado producido antes de que un elemento fuera sustituido ya no describe la sesión. Existen para los listados y el filtrado, donde recalcular a lo largo de una biblioteca es costoso y las respuestas aproximadas son aceptables.
 
 ### 4.8. Campos descriptivos opcionales
@@ -249,6 +253,8 @@ Agregar un `mode` es un cambio MENOR: los documentos válidos bajo la versión a
 
 **1.1.0** agregó `settings` en elementos y series, y `zone` en una serie. Ambas son adiciones opcionales a objetos cerrados, de modo que todo documento 1.0.0 sigue siendo válido sin cambios — pero un documento 1.1.0 que use cualquiera de las dos es rechazado por el esquema 1.0.0, que es lo que hace de esto una versión y no una edición. `workout/v1.0.0/workout.schema.json` permanece publicado y congelado; los lanzamientos 1.2.0 y 1.3.0 declaran workout en 1.0.0 y siguen resolviendo. El lanzamiento 1.4.0 es el primero que lo declara en 1.1.0.
 
+**1.2.0** agregó el campo opcional `fxi` en una referencia de ejercicio (§4.3), y `fxm`, `fxmg` y `fxe` en las referencias de músculo y de equipamiento de los totales derivados (§4.7).
+
 Las entidades versionan de forma independiente. Una nueva versión de workout no obliga a moverse a exercise, a equipment ni a la biblioteca de prescripción, y ninguna de sus versiones obliga a esta.
 
 ## 7. Guía de implementación
@@ -273,7 +279,7 @@ Una implementación que resuelve una sesión de entrenamiento contra un atleta e
 
 ## 9. Referencia del JSON Schema
 
-`https://spec.vitness.me/schemas/workout/v1.1.0/workout.schema.json`
+`https://spec.vitness.me/schemas/workout/v1.2.0/workout.schema.json`
 
 La versión sustituida sigue sirviéndose, y un cliente fijado a un lanzamiento que declara workout en 1.0.0 sigue descargándola:
 
@@ -293,7 +299,7 @@ Una sesión de tren superior: un bloque de calentamiento, un bloque principal co
 
 ```json
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.2.0",
   "workoutId": "00000000-0000-4000-8000-00000000a001",
   "canonical": { "name": "Upper A", "slug": "upper-a" },
   "classification": {
@@ -310,7 +316,7 @@ Una sesión de tren superior: un bloque de calentamiento, un bloque principal co
         "items": [
           {
             "id": "i1",
-            "exercise": { "id": "ex.benchPress", "name": "Barbell Bench Press" },
+            "exercise": { "id": "ex.benchPress", "name": "Barbell Bench Press", "fxi": "FXI=1.0S/m:el.ext+sh.hadd/o:supine/s:bench/l:bar.straight@hands" },
             "scheme": {
               "pattern": "topSetBackoff",
               "sets": 4,
@@ -332,14 +338,14 @@ Una sesión de tren superior: un bloque de calentamiento, un bloque principal co
           {
             "id": "i2",
             "groupLabel": "A1",
-            "exercise": { "id": "ex.dumbbellRow", "name": "Dumbbell Row" },
+            "exercise": { "id": "ex.dumbbellRow", "name": "Dumbbell Row", "fxi": "FXI=1.0S/m:el.flex+sh.ext/o:?/l:bell.dumb@hands/x:?" },
             "reps": { "kind": "range", "min": 8, "max": 12 },
             "load": { "method": "rir", "value": 2 }
           },
           {
             "id": "i3",
             "groupLabel": "A2",
-            "exercise": { "id": "ex.inclineDbPress", "name": "Incline Dumbbell Press" },
+            "exercise": { "id": "ex.inclineDbPress", "name": "Incline Dumbbell Press", "fxi": "FXI=1.0S/m:el.ext+sh.flex+sh.hadd/o:supine.incline/s:bench/l:bell.dumb@hands" },
             "reps": { "kind": "range", "min": 8, "max": 12 },
             "load": { "method": "rir", "value": 2 }
           }
@@ -353,7 +359,7 @@ Una sesión de tren superior: un bloque de calentamiento, un bloque principal co
         "items": [
           {
             "id": "i4",
-            "exercise": { "id": "ex.airBike", "name": "Air Bike" },
+            "exercise": { "id": "ex.airBike", "name": "Air Bike", "fxi": "FXI=1.0S/m:~hip.ext+kn.ext/o:seated/l:erg.cycle@feet/x:rc" },
             "reps": { "kind": "calories", "value": 15 },
             "zone": { "system": "heartRate", "zone": "Z4", "boundsRef": "zone.fiveZoneHeartRate" }
           }

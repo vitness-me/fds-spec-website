@@ -11,7 +11,45 @@ Todos los cambios notables en los RFC y esquemas de FDS se documentan aquí.
 El formato se inspira en Keep a Changelog, y el proyecto se adhiere al Versionado Semántico para los lanzamientos de la especificación.
 
 ## [Sin publicar]
-- Política de espacio de nombres de extensiones (borrador) y secciones de conformidad (planificadas).
+- Política de espacio de nombres de extensiones (borrador).
+- Casos de conformidad para las cuatro claves estructurales, en `specification/conformance/structural-keys/`.
+
+## Lanzamiento de esquema — exercise 1.2.0, equipment 1.2.0, workout 1.2.0, muscle 1.1.0, muscle-category 1.1.0, prescription 1.1.0, program 1.1.0 (2026-11-26)
+
+### Agregado
+- Las claves estructurales opcionales, cada una una cadena cuyo patrón solo
+  comprueba el encabezado: `fxi` en un ejercicio (exercise 1.2.0), `fxe` en un
+  equipamiento (equipment 1.2.0), `fxm` en un músculo (muscle 1.1.0) y `fxmg`
+  en una categoría muscular (muscle-category 1.1.0). Una clave describe la cosa
+  en códigos que el estándar publica, de modo que dos catálogos puedan
+  encontrar el mismo registro sin importar cómo lo llame cada uno. No es un
+  identificador. Véase Conceptos fundamentales → Claves estructurales.
+- Las mismas claves en toda referencia que nombra un ejercicio, un equipamiento
+  o un músculo por id y nombre: `fxi` en una referencia de ejercicio, `fxe` en
+  una referencia de equipamiento, y `fxm` con el `fxmg` de la categoría del
+  músculo en una referencia de músculo. Las llevan exercise, workout, program y
+  la carga de resistencia de banda de la biblioteca de prescripción.
+
+### Cambiado
+- El lanzamiento **1.6.0** nombra exercise, equipment y workout en 1.2.0, y
+  muscle, muscle-category, prescription y program en 1.1.0. Body-atlas se queda
+  en 1.1.0.
+- El transformador incluye el lanzamiento 1.6.0 y lo usa por defecto. Los
+  lanzamientos 1.0.0 a 1.5.0 siguen incluidos.
+- Los ejemplos pasan junto a sus nuevos esquemas y llevan las claves de lo que
+  nombran. Los ejemplos nombran músculos individuales; un grupo como el
+  cuádriceps es un registro de categoría muscular con `fxmg`.
+
+### Compatibilidad
+- Puramente aditivo. Todo documento válido bajo las versiones anteriores valida
+  contra las nuevas sin cambios; un documento que use una clave es rechazado
+  por los esquemas anteriores, y eso es lo que lo convierte en una versión y no
+  en una edición.
+- **`exercises/v1.1.0/`, `equipment/v1.1.0/`, `muscle/v1.0.0/`,
+  `muscle/muscle-category/v1.0.0/`, `prescription/v1.0.0/`, `workout/v1.1.0/`
+  y `program/v1.0.0/` siguen publicados y congelados.** Los lanzamientos hasta
+  el 1.5.0 los nombran, y un cliente fijado a cualquiera de esos lanzamientos
+  debe poder seguir resolviéndolos.
 
 ## Lanzamiento de esquema — body-atlas 1.1.0 (2026-11-14)
 
@@ -223,7 +261,7 @@ URLs `v1.0.0`.
 - RFC‑001 Modelo de datos de ejercicio (borrador) con el esquema `exercises/v1.0.0` y ejemplo.
 - RFC‑002 Modelo de datos de equipamiento (borrador) con el esquema `equipment/v1.0.0` y ejemplo.
 - RFC‑003 Modelo de datos de músculo (borrador) con el esquema `muscle/v1.0.0` y ejemplo.
-- RFC‑004 Modelo de datos de categoría de músculo (borrador) con el esquema `muscle/muscle-category/v1.0.0` y ejemplo.
+- RFC‑004 Modelo de datos de categoría muscular (borrador) con el esquema `muscle/muscle-category/v1.0.0` y ejemplo.
 
 ### Notas
 - Política de identificadores aclarada: UUIDv4 es obligatorio en producción; los ejemplos pueden usar IDs ilustrativos por legibilidad.

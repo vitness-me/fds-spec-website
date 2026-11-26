@@ -1,0 +1,89 @@
+{
+  "schemaVersion": "1.2.0",
+  "workoutId": "00000000-0000-4000-8000-000000000104",
+  "canonical": {
+    "name": "Giant Set",
+    "slug": "giant-set"
+  },
+  "classification": {
+    "workoutType": "hypertrophy"
+  },
+  "structure": {
+    "blocks": [
+      {
+        "id": "b1",
+        "mode": "superset",
+        "items": [
+          {
+            "id": "i1",
+            "exercise": {
+              "id": "ex.dumbbellFly",
+              "name": "Dumbbell Fly",
+              "fxi": "FXI=1.0S/m:sh.hadd/o:supine/s:bench/l:bell.dumb@hands"
+            },
+            "groupLabel": "A1",
+            "reps": {
+              "kind": "fixed",
+              "value": 12
+            }
+          },
+          {
+            "id": "i2",
+            "exercise": {
+              "id": "ex.benchPress",
+              "name": "Barbell Bench Press",
+              "fxi": "FXI=1.0S/m:el.ext+sh.hadd/o:supine/s:bench/l:bar.straight@hands"
+            },
+            "groupLabel": "A2",
+            "reps": {
+              "kind": "fixed",
+              "value": 10
+            }
+          },
+          {
+            "id": "i3",
+            "exercise": {
+              "id": "ex.dip",
+              "name": "Dip",
+              "fxi": "FXI=1.0S/m:el.ext+sh.ext/o:hanging/s:bar.parallel/l:none"
+            },
+            "groupLabel": "A3",
+            "reps": {
+              "kind": "fixed",
+              "value": 10
+            }
+          },
+          {
+            "id": "i4",
+            "exercise": {
+              "id": "ex.tricepExtension",
+              "name": "Triceps Extension",
+              "fxi": "FXI=1.0S/m:el.ext/o:?/l:?"
+            },
+            "groupLabel": "A4",
+            "reps": {
+              "kind": "fixed",
+              "value": 15
+            }
+          }
+        ],
+        "role": "accessory",
+        "modeParams": {
+          "rounds": 3
+        },
+        "rest": {
+          "method": "fixed",
+          "appliesTo": "group",
+          "value": 3,
+          "unit": "min"
+        }
+      }
+    ]
+  },
+  "metadata": {
+    "createdAt": "2026-08-09T00:00:00Z",
+    "updatedAt": "2026-08-09T00:00:00Z",
+    "status": "active",
+    "source": "vitness.core"
+  }
+}

@@ -47,6 +47,8 @@ and the published JSON Schema is that document made machine-checkable.
 The website pages under [`/docs/specifications`](https://spec.vitness.me/docs/specifications)
 are byte-for-byte copies of these files, compared on every change.
 
+Exercises, equipment, muscles and muscle categories can carry an optional structural key, a string that describes the thing in codes the standard publishes so two catalogs can find the same record. See [Structural Keys](https://spec.vitness.me/docs/core-concepts/structural-keys).
+
 ### Deliberately out of scope
 
 - **Performed data** — what was actually done, and by whom. Deferred (RFC-009)

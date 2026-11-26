@@ -115,7 +115,7 @@ import { join, posix } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { loadManifest, manifestProblems, ROOT } from './lib/releases.mjs';
 
-const PACKAGES = ['fds-transformer', 'fds-skill'];
+const PACKAGES = ['fds-transformer', 'fds-skill', 'fds-encoder'];
 
 /** Extensions Node will load as a module. Anything else is not an entry point. */
 const LOADABLE = new Set(['.js', '.mjs', '.cjs', '.node']);

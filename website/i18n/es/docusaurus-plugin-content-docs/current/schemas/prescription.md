@@ -4,7 +4,7 @@ description: Cuánta carga, cuántas repeticiones, a qué tempo, cuánto descans
 sidebar_position: 7
 ---
 
-# Primitivas de prescripción (v1.0.0)
+# Primitivas de prescripción (v1.1.0)
 
 La prescripción responde cuatro preguntas sobre una serie: **cuánta carga, cuántas repeticiones, a qué tempo y cuánto descanso.** Todo lo que en FDS prescribe trabajo compone estas definiciones, de modo que una serie dentro de una sesión de entrenamiento independiente y la misma serie dentro de un programa de doce semanas significan exactamente lo mismo.
 
@@ -18,7 +18,7 @@ Aquello contra lo que se valida es una *definición en su interior*. Cada archiv
 
 El transformador no incluye este esquema por la misma razón. Valida entidades, y una biblioteca de definiciones no lo es.
 
-**URL:** `https://spec.vitness.me/schemas/prescription/v1.0.0/prescription.schema.json`
+**URL:** `https://spec.vitness.me/schemas/prescription/v1.1.0/prescription.schema.json`
 
 ## Las definiciones
 
@@ -34,6 +34,8 @@ El transformador no incluye este esquema por la misma razón. Valida entidades, 
 | `intensityZone` | Una zona en un sistema con nombre — frecuencia cardíaca, potencia, ritmo, percepción |
 | `setScheme` | Un patrón con nombre a lo largo de las series, con sus parámetros |
 | `progressionRule` | Cuándo cambia la prescripción, y cómo |
+
+La referencia `equipment` de una carga `bandResistance` puede llevar la [clave estructural](/docs/core-concepts/structural-keys/equipment-key) de la banda en `fxe`.
 
 ## Dos reglas que vale la pena leer antes de implementar
 
@@ -65,7 +67,7 @@ Las implementaciones que extiendan estas uniones deben preservar ese carácter d
 
 ## Ejemplos resueltos
 
-Se publican 69 archivos de ejemplo junto al esquema, uno por definición y uno por valor de discriminador, cada uno nombrado por lo que demuestra e indexado en [el README de los archivos de ejemplo](https://spec.vitness.me/schemas/prescription/v1.0.0/README.md).
+Se publican 69 archivos de ejemplo junto al esquema, uno por definición y uno por valor de discriminador, cada uno nombrado por lo que demuestra e indexado en [el README de los archivos de ejemplo](https://spec.vitness.me/schemas/prescription/v1.1.0/README.md).
 
 También se incluyen ejemplos negativos — documentos que **deben** ser rechazados. Un esquema que acepta todo pasa todas las pruebas positivas.
 

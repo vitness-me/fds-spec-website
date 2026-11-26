@@ -6,13 +6,13 @@ usecase_promise: A program points at sessions; fix one session and every plan us
 usecase_family: composition
 usecase_audiences: [coach, researcher]
 usecase_sources:
-  - specification/schemas/program/v1.0.0/program.linear.example.json
-  - specification/schemas/program/v1.0.0/program.percentage-waves.example.json
+  - specification/schemas/program/v1.1.0/program.linear.example.json
+  - specification/schemas/program/v1.1.0/program.percentage-waves.example.json
 ---
 
 import {SpecExample, BeforeAfter, Panel, Audience, NextSteps, Next} from './_shared/UseCase';
-import linear from '../../../specification/schemas/program/v1.0.0/program.linear.example.json';
-import waves from '../../../specification/schemas/program/v1.0.0/program.percentage-waves.example.json';
+import linear from '../../../specification/schemas/program/v1.1.0/program.linear.example.json';
+import waves from '../../../specification/schemas/program/v1.1.0/program.percentage-waves.example.json';
 
 # Plan twelve weeks without copying a session thirty-six times
 
@@ -40,7 +40,7 @@ Linear progression is the whole methodology in one rule: add load whenever every
 rep is completed. Both weeks are identical — the load moves, the plan does not — and
 the days point at a workout by reference.
 
-<SpecExample source="specification/schemas/program/v1.0.0/program.linear.example.json" data={linear}>
+<SpecExample source="specification/schemas/program/v1.1.0/program.linear.example.json" data={linear}>
   Every day is a `workout` reference with a denormalised `name`. Not one set, rep or
   load appears in the program — they live in the session it points at.
 </SpecExample>
@@ -48,7 +48,7 @@ the days point at a workout by reference.
 The same structure scales to a 5/3/1-style wave — and still carries no athlete's
 numbers.
 
-<SpecExample source="specification/schemas/program/v1.0.0/program.percentage-waves.example.json" data={waves}>
+<SpecExample source="specification/schemas/program/v1.1.0/program.percentage-waves.example.json" data={waves}>
   Training-max slots declare which lifts the plan is computed from; `overrides`
   carry the wave. No training-max *value* appears anywhere in the document.
 </SpecExample>

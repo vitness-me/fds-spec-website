@@ -3,6 +3,10 @@
     "message": "Core Concepts",
     "description": "The label for category 'Core Concepts' in sidebar 'mainSidebar'"
   },
+  "sidebar.mainSidebar.category.FDS Encoder": {
+    "message": "FDS Encoder",
+    "description": "The label for category 'FDS Encoder' in sidebar 'mainSidebar'"
+  },
   "sidebar.mainSidebar.category.FDS Transformer": {
     "message": "FDS Transformer",
     "description": "The label for category 'FDS Transformer' in sidebar 'mainSidebar'"
@@ -23,6 +27,10 @@
     "message": "Specifications (RFCs)",
     "description": "The label for category 'Specifications (RFCs)' in sidebar 'mainSidebar'"
   },
+  "sidebar.mainSidebar.category.Structural Keys": {
+    "message": "Structural Keys",
+    "description": "The label for category 'Structural Keys' in sidebar 'mainSidebar'"
+  },
   "sidebar.mainSidebar.category.Tools": {
     "message": "Tools",
     "description": "The label for category 'Tools' in sidebar 'mainSidebar'"
@@ -40,7 +48,7 @@
     "description": "The label for category 'Prescription — the intent primitives' in sidebar 'useCasesSidebar'"
   },
   "version.label": {
-    "message": "1.5.0",
+    "message": "1.6.0",
     "description": "The label for version current"
   }
 }

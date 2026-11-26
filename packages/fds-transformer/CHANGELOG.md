@@ -95,6 +95,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   record skips only the tiers its checkpoint already holds, so a tier that
   failed is retried. Checkpoints written by 0.2.0 do not match and are ignored.
 
+- **Release 1.6.0 is bundled and is the default.** It names exercise,
+  equipment and workout 1.2.0, and muscle, muscle-category, prescription and
+  program 1.1.0, which add the optional structural keys on records and
+  references. 1.0.0 through 1.5.0 stay bundled; pin one to keep validating
+  against it.
 - **Release 1.5.0 is bundled and is the default.** It names body-atlas 1.1.0,
   which adds optional `license` and `attribution` on a view's asset. 1.0.0
   through 1.4.0 stay bundled; pin one to keep validating against it.

@@ -1,0 +1,102 @@
+{
+  "schemaVersion": "1.2.0",
+  "workoutId": "00000000-0000-4000-8000-000000000115",
+  "canonical": {
+    "name": "Warmup Block",
+    "slug": "warmup-block"
+  },
+  "classification": {
+    "workoutType": "strength"
+  },
+  "structure": {
+    "blocks": [
+      {
+        "id": "b1",
+        "mode": "circuit",
+        "items": [
+          {
+            "id": "i1",
+            "exercise": {
+              "id": "ex.jumpingJack",
+              "name": "Jumping Jack",
+              "fxi": "FXI=1.0S/m:~hip.abd+sh.abd/o:standing/l:none"
+            },
+            "reps": {
+              "kind": "time",
+              "value": 60,
+              "unit": "s"
+            }
+          },
+          {
+            "id": "i2",
+            "exercise": {
+              "id": "ex.catCow",
+              "name": "Cat-Cow",
+              "fxi": "FXI=1.0S/m:&sp.flex>&sp.ext/o:prone/s:floor@hands,knees/l:none"
+            },
+            "reps": {
+              "kind": "fixed",
+              "value": 10
+            }
+          },
+          {
+            "id": "i3",
+            "exercise": {
+              "id": "ex.bodyweightSquat",
+              "name": "Bodyweight Squat",
+              "fxi": "FXI=1.0S/m:hip.ext+kn.ext/o:standing/l:none"
+            },
+            "reps": {
+              "kind": "fixed",
+              "value": 15
+            }
+          }
+        ],
+        "role": "warmup",
+        "name": "General warmup",
+        "modeParams": {
+          "rounds": 2
+        }
+      },
+      {
+        "id": "b2",
+        "mode": "sequential",
+        "items": [
+          {
+            "id": "i4",
+            "exercise": {
+              "id": "ex.backSquat",
+              "name": "Barbell Back Squat",
+              "fxi": "FXI=1.0S/m:hip.ext+kn.ext/o:standing/l:bar.straight@back"
+            },
+            "scheme": {
+              "pattern": "ramping",
+              "sets": 3,
+              "params": {
+                "startPercent": 40,
+                "endPercent": 75
+              }
+            },
+            "reps": {
+              "kind": "fixed",
+              "value": 5
+            },
+            "rest": {
+              "method": "fixed",
+              "appliesTo": "set",
+              "value": 2,
+              "unit": "min"
+            }
+          }
+        ],
+        "role": "primary"
+      }
+    ]
+  },
+  "metadata": {
+    "createdAt": "2026-08-09T00:00:00Z",
+    "updatedAt": "2026-08-09T00:00:00Z",
+    "status": "active",
+    "source": "vitness.core"
+  }
+}

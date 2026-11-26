@@ -8,8 +8,8 @@ keywords: [muscle, anatomy, data model, json schema, heatmap, interoperability, 
 # RFC-003: Specifikacija modela podataka o mišiću
 
 **Status**: Nacrt
-**Verzija**: 0.1.0
-**Datum**: 2025-09-09
+**Verzija**: 0.2.0
+**Datum**: 2026-11-26
 **Autori**: VITNESS tim
 **Kategorija**: Standards Track
 
@@ -68,14 +68,15 @@ Svi usaglašeni podaci o mišićima **MORAJU** da sadrže ova polja:
 
 ```json fds:document entity=muscle
 {
-  "schemaVersion": "1.0.0",
-  "id": "mus.quadriceps",
+  "schemaVersion": "1.1.0",
+  "id": "mus.rectusFemoris",
+  "fxm": "FXM=1.0/rectus-femoris",
   "canonical": {
-    "name": "Quadriceps",
-    "slug": "quadriceps"
+    "name": "Rectus Femoris",
+    "slug": "rectus-femoris"
   },
   "classification": {
-    "categoryId": "cat.legs",
+    "categoryId": "cat.quadriceps",
     "region": "lower-front"
   },
   "metadata": {
@@ -93,10 +94,11 @@ Uobičajeno podržana opciona polja koja unapređuju interoperabilnost:
 
 ```json fds:fragment entity=muscle partial
 {
+  "fxm": "FXM=1.0/rectus-femoris",
   "canonical": {
-    "aliases": ["Quads"],
+    "aliases": ["Rec Fem"],
     "localized": [
-      { "lang": "sr", "name": "Kvadriceps" }
+      { "lang": "sr", "name": "Pravi mišić buta" }
     ]
   },
   "classification": {
@@ -118,6 +120,8 @@ Uobičajeno podržana opciona polja koja unapređuju interoperabilnost:
   }
 }
 ```
+
+`fxm` je strukturni ključ mišića: jedan mišić, ili jedan njegov deo, imenovan svojim anatomskim terminom, kao `FXM=1.0/latissimus-dorsi`. On nije identifikator; `id` ostaje identitet zapisa. Šema proverava samo njegovo zaglavlje, `FXM=1.0/`. Pogledajte [Ključ mišića](../core-concepts/structural-keys/muscle-key).
 
 ### 3.3. Mehanizmi ekstenzija
 
@@ -141,7 +145,7 @@ Za složene strukture podataka jedinstvene za platformu:
 {
   "extensions": {
     "x:anatomy": {
-      "origin": "Anterior superior iliac spine, femur",
+      "origin": "Anterior inferior iliac spine, ilium above the acetabulum",
       "insertion": "Patella, tibial tuberosity",
       "innervation": "Femoral nerve"
     }
@@ -158,11 +162,11 @@ Za složene strukture podataka jedinstvene za platformu:
 ```json fds:fragment entity=muscle
 {
   "canonical": {
-    "name": "Quadriceps",
-    "slug": "quadriceps",
-    "aliases": ["Quads"],
+    "name": "Rectus Femoris",
+    "slug": "rectus-femoris",
+    "aliases": ["Rec Fem"],
     "localized": [
-      { "lang": "sr", "name": "Kvadriceps" }
+      { "lang": "sr", "name": "Pravi mišić buta" }
     ]
   }
 }
@@ -175,7 +179,7 @@ Za složene strukture podataka jedinstvene za platformu:
 ```json fds:fragment entity=muscle
 {
   "classification": {
-    "categoryId": "cat.legs",
+    "categoryId": "cat.quadriceps",
     "region": "lower-front",
     "laterality": "bilateral",
     "tags": ["major-muscle", "lower-body"]
@@ -212,7 +216,7 @@ Polje `laterality` opisuje karakteristike simetrije:
   "media": [
     {
       "type": "image",
-      "uri": "https://cdn.example.com/anatomy/quadriceps.jpg"
+      "uri": "https://cdn.example.com/anatomy/rectus-femoris.jpg"
     }
   ]
 }
@@ -244,6 +248,8 @@ Napomene:
 
 ## 5. Verzionisanje i kompatibilnost
 
+**1.1.0** je dodala opciono polje `fxm` (§3.2).
+
 ### 5.1. Verzionisanje šeme
 
 Prema semantičkom verzionisanju:
@@ -260,12 +266,12 @@ Prema semantičkom verzionisanju:
 
 ### 5.3. Primer evolucije šeme
 
-Verzija 1.0.0 → 1.1.0 (dodavanje opcionog biomehaničkog polja):
+Od jedne sporedne verzije do sledeće (dodavanje opcionog biomehaničkog polja):
 ```json fds:ignore a hypothetical next version illustrating how an optional field arrives; no published muscle schema has biomechanics
 {
-  "schemaVersion": "1.1.0",
-  "id": "mus.quadriceps",
-  "canonical": { "name": "Quadriceps", "slug": "quadriceps" },
+  "schemaVersion": "1.x.0",
+  "id": "mus.rectusFemoris",
+  "canonical": { "name": "Rectus Femoris", "slug": "rectus-femoris" },
   "biomechanics": {
     "primaryActions": ["knee-extension", "hip-flexion"],
     "forceDirection": "linear"
@@ -309,7 +315,7 @@ graph LR
 ## 8. Referenca JSON šeme
 
 Kompletna JSON šema je dostupna na:
-- **Muscle**: `/specification/schemas/muscle/v1.0.0/muscle.schema.json`
+- **Muscle**: `/specification/schemas/muscle/v1.1.0/muscle.schema.json`
 - **Body Atlas**: `/specification/schemas/atlas/v1.1.0/body-atlas.schema.json`
 
 ## 8.1. Validacija
@@ -318,30 +324,31 @@ Validirajte pomoću Ajv (Draft 2020-12):
 
 ```
 npx --package=ajv-cli --package=ajv-formats ajv validate --spec=draft2020 -c ajv-formats \
-  -s specification/schemas/muscle/v1.0.0/muscle.schema.json \
-  -d specification/schemas/muscle/v1.0.0/muscle.example.json
+  -s specification/schemas/muscle/v1.1.0/muscle.schema.json \
+  -d specification/schemas/muscle/v1.1.0/muscle.example.json
 ```
 
 ## 9. Primer implementacije
 
-### 9.1. Kompletan zapis mišića kvadricepsa
+### 9.1. Kompletan zapis pravog mišića buta
 
-Na osnovu referentne implementacije (`/specification/schemas/muscle/v1.0.0/muscle.example.json`):
+Na osnovu referentne implementacije (`/specification/schemas/muscle/v1.1.0/muscle.example.json`):
 
 ```json
 {
-  "schemaVersion": "1.0.0",
-  "id": "mus.quadriceps",
+  "schemaVersion": "1.1.0",
+  "id": "mus.rectusFemoris",
+  "fxm": "FXM=1.0/rectus-femoris",
   "canonical": { 
-    "name": "Quadriceps", 
-    "slug": "quadriceps",
-    "aliases": ["Quads"],
+    "name": "Rectus Femoris", 
+    "slug": "rectus-femoris",
+    "aliases": ["Rec Fem"],
     "localized": [
-      { "lang": "sr", "name": "Kvadriceps" }
+      { "lang": "sr", "name": "Pravi mišić buta" }
     ]
   },
   "classification": { 
-    "categoryId": "cat.legs", 
+    "categoryId": "cat.quadriceps", 
     "region": "lower-front", 
     "laterality": "bilateral"
   },
@@ -360,7 +367,7 @@ Na osnovu referentne implementacije (`/specification/schemas/muscle/v1.0.0/muscl
   },
   "extensions": {
     "x:anatomy": {
-      "origin": "Anterior superior iliac spine, femur",
+      "origin": "Anterior inferior iliac spine, ilium above the acetabulum",
       "insertion": "Patella, tibial tuberosity",
       "innervation": "Femoral nerve"
     }

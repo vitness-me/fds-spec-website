@@ -49,6 +49,10 @@ const BUNDLED_SCHEMA_LOADERS: Record<string, () => Promise<Record<string, object
     const mod = await import('./bundled/v1.5.0/index.js');
     return (mod.default ?? mod) as unknown as Record<string, object>;
   },
+  '1.6.0': async () => {
+    const mod = await import('./bundled/v1.6.0/index.js');
+    return (mod.default ?? mod) as unknown as Record<string, object>;
+  },
 };
 
 

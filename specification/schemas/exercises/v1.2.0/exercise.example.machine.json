@@ -1,0 +1,43 @@
+{
+  "schemaVersion": "1.2.0",
+  "exerciseId": "00000000-0000-4000-8000-000000000003",
+  "fxi": "FXI=1.0S/m:el.flex+sh.add/o:seated/l:mac@hands",
+  "canonical": {
+    "name": "Lat Pulldown",
+    "slug": "lat-pulldown",
+    "aliases": ["Cable Pulldown"],
+    "localized": [ { "lang": "en", "name": "Lat Pulldown" } ]
+  },
+  "classification": {
+    "exerciseType": "strength",
+    "movement": "pull-vertical",
+    "mechanics": "compound",
+    "force": "pull",
+    "level": "beginner",
+    "unilateral": false,
+    "kineticChain": "open",
+    "tags": ["machine", "upper-body"]
+  },
+  "targets": {
+    "primary": [ { "id": "mus.lats", "name": "Latissimus Dorsi", "categoryId": "cat.back", "fxm": "FXM=1.0/latissimus-dorsi", "fxmg": "FXMG=1.0/deltoid.spinal+erector-spinae+latissimus-dorsi+quadratus-lumborum+rhomboid-major+rhomboid-minor+trapezius" } ],
+    "secondary": [ { "id": "mus.biceps", "name": "Biceps", "categoryId": "cat.arms", "fxm": "FXM=1.0/biceps-brachii", "fxmg": "FXMG=1.0/arm+forearm" } ]
+  },
+  "equipment": {
+    "required": [ { "id": "eq.latPulldown", "name": "Lat Pulldown Machine", "fxe": "FXE=1.0S/k:mac/l:hands/s:seated/m:pull.down" } ]
+  },
+  "relations": [
+    { "type": "alternate", "targetId": "urn:slug:pull-up" }
+  ],
+  "metrics": {
+    "primary": { "type": "reps", "unit": "count" },
+    "secondary": [ { "type": "weight", "unit": "kg" } ]
+  },
+  "metadata": {
+    "createdAt": "2025-09-03T00:00:00Z",
+    "updatedAt": "2025-09-03T00:00:00Z",
+    "status": "active",
+    "source": "vitness.core",
+    "version": "1.0.0"
+  }
+}
+

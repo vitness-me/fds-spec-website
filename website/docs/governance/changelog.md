@@ -11,7 +11,42 @@ All notable changes to the FDS RFCs and schemas are documented here.
 The format is inspired by Keep a Changelog, and the project adheres to Semantic Versioning for spec releases.
 
 ## [Unreleased]
-- Extension namespace policy (draft) and conformance sections (planned).
+- Extension namespace policy (draft).
+- Conformance cases for the four structural keys, in `specification/conformance/structural-keys/`.
+
+## Schema release — exercise 1.2.0, equipment 1.2.0, workout 1.2.0, muscle 1.1.0, muscle-category 1.1.0, prescription 1.1.0, program 1.1.0 (2026-11-26)
+
+### Added
+- The optional structural keys, each a string whose pattern checks only the
+  header: `fxi` on an exercise (exercise 1.2.0), `fxe` on a piece of equipment
+  (equipment 1.2.0), `fxm` on a muscle (muscle 1.1.0) and `fxmg` on a muscle
+  category (muscle-category 1.1.0). A key describes the thing in codes the
+  standard publishes, so two catalogs can find the same record whatever they
+  call it. It is not an identifier. See Core Concepts → Structural Keys.
+- The same keys on every reference that names an exercise, a piece of equipment
+  or a muscle by id and name: `fxi` on an exercise reference, `fxe` on an
+  equipment reference, and `fxm` with the `fxmg` of the muscle's category on a
+  muscle reference. Exercise, workout, program and the prescription library's
+  band-resistance load carry them.
+
+### Changed
+- Release **1.6.0** names exercise, equipment and workout at 1.2.0, and muscle,
+  muscle-category, prescription and program at 1.1.0. Body-atlas stays at
+  1.1.0.
+- The transformer bundles release 1.6.0 and defaults to it. 1.0.0 through 1.5.0
+  remain bundled.
+- Examples move beside their new schemas and carry the keys of what they name.
+  Examples name individual muscles; a group such as the quadriceps is a muscle
+  category record with `fxmg`.
+
+### Compatibility
+- Purely additive. Every document valid under the previous versions validates
+  against the new ones unchanged; a document using a key is rejected by the
+  previous schemas, which is what makes this a version rather than an edit.
+- **`exercises/v1.1.0/`, `equipment/v1.1.0/`, `muscle/v1.0.0/`,
+  `muscle/muscle-category/v1.0.0/`, `prescription/v1.0.0/`, `workout/v1.1.0/`
+  and `program/v1.0.0/` stay published and frozen.** Releases up to 1.5.0 name
+  them, and a client pinned to any of those releases must keep resolving them.
 
 ## Schema release — body-atlas 1.1.0 (2026-11-14)
 

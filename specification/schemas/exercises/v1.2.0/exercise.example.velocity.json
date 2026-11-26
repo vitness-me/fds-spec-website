@@ -1,0 +1,60 @@
+{
+  "schemaVersion": "1.2.0",
+  "exerciseId": "00000000-0000-4000-8000-000000000007",
+  "fxi": "FXI=1.0S/m:hip.ext+kn.ext/o:standing/l:bar.straight@back",
+  "canonical": {
+    "name": "Barbell Back Squat",
+    "slug": "barbell-back-squat",
+    "description": "Bilateral squat loaded across the upper back, prescribed here for velocity-based training.",
+    "aliases": ["Back Squat"],
+    "localized": [{ "lang": "en", "name": "Barbell Back Squat" }]
+  },
+  "classification": {
+    "exerciseType": "strength",
+    "movement": "squat",
+    "mechanics": "compound",
+    "force": "push",
+    "level": "advanced",
+    "unilateral": false,
+    "kineticChain": "closed",
+    "tags": ["barbell", "lower-body", "velocity-based"]
+  },
+  "targets": {
+    "primary": [
+      { "id": "mus.rectusFemoris", "name": "Rectus Femoris", "categoryId": "cat.quadriceps", "fxm": "FXM=1.0/rectus-femoris", "fxmg": "FXMG=1.0/quadriceps-femoris" },
+      { "id": "mus.vastusLateralis", "name": "Vastus Lateralis", "categoryId": "cat.quadriceps", "fxm": "FXM=1.0/vastus-lateralis", "fxmg": "FXMG=1.0/quadriceps-femoris" },
+      { "id": "mus.vastusMedialis", "name": "Vastus Medialis", "categoryId": "cat.quadriceps", "fxm": "FXM=1.0/vastus-medialis", "fxmg": "FXMG=1.0/quadriceps-femoris" },
+      { "id": "mus.vastusIntermedius", "name": "Vastus Intermedius", "categoryId": "cat.quadriceps", "fxm": "FXM=1.0/vastus-intermedius", "fxmg": "FXMG=1.0/quadriceps-femoris" }
+    ],
+    "secondary": [{ "id": "mus.gluteusMaximus", "name": "Gluteus Maximus", "categoryId": "cat.glutes", "fxm": "FXM=1.0/gluteus-maximus", "fxmg": "FXMG=1.0/buttock" }]
+  },
+  "equipment": {
+    "required": [
+      { "id": "eq.barbell", "name": "Barbell", "fxe": "FXE=1.0S/k:imp/f:bar.straight" },
+      { "id": "eq.squatRack", "name": "Squat Rack", "fxe": "FXE=1.0S/k:sup/f:rack" }
+    ]
+  },
+  "loading": {
+    "externalLoad": "required",
+    "assisted": false,
+    "asymmetric": false
+  },
+  "metrics": {
+    "primary": { "type": "reps", "unit": "count" },
+    "secondary": [
+      { "type": "weight", "unit": "kg" },
+      { "type": "percent1RM", "unit": "percent" },
+      { "type": "oneRepMax", "unit": "kg" },
+      { "type": "velocity", "unit": "m_s" },
+      { "type": "sets", "unit": "count" },
+      { "type": "duration", "unit": "ms" }
+    ]
+  },
+  "metadata": {
+    "createdAt": "2026-08-06T00:00:00Z",
+    "updatedAt": "2026-08-06T00:00:00Z",
+    "status": "active",
+    "source": "vitness.core",
+    "version": "1.1.0"
+  }
+}

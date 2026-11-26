@@ -1,0 +1,52 @@
+{
+  "schemaVersion": "1.2.0",
+  "exerciseId": "00000000-0000-4000-8000-000000000005",
+  "fxi": "FXI=1.0S/m:el.flex+sh.add/o:hanging/l:mac@assist",
+  "canonical": {
+    "name": "Assisted Pull-Up",
+    "slug": "assisted-pull-up",
+    "description": "Vertical pull performed on a counterweighted machine, where added load reduces rather than increases effort.",
+    "aliases": ["Machine Assisted Pull-Up"],
+    "localized": [{ "lang": "en", "name": "Assisted Pull-Up" }]
+  },
+  "classification": {
+    "exerciseType": "strength",
+    "movement": "pull-vertical",
+    "mechanics": "compound",
+    "force": "pull",
+    "level": "beginner",
+    "unilateral": false,
+    "kineticChain": "closed",
+    "tags": ["machine", "upper-body", "regression"]
+  },
+  "targets": {
+    "primary": [{ "id": "mus.lats", "name": "Latissimus Dorsi", "categoryId": "cat.back", "fxm": "FXM=1.0/latissimus-dorsi", "fxmg": "FXMG=1.0/deltoid.spinal+erector-spinae+latissimus-dorsi+quadratus-lumborum+rhomboid-major+rhomboid-minor+trapezius" }],
+    "secondary": [{ "id": "mus.biceps", "name": "Biceps", "categoryId": "cat.arms", "fxm": "FXM=1.0/biceps-brachii", "fxmg": "FXMG=1.0/arm+forearm" }]
+  },
+  "equipment": {
+    "required": [{ "id": "eq.assistedPullUpMachine", "name": "Assisted Pull-Up Machine", "fxe": "FXE=1.0S/k:mac/l:?/s:hanging/m:assist.up" }]
+  },
+  "loading": {
+    "externalLoad": "optional",
+    "assisted": true,
+    "asymmetric": false
+  },
+  "relations": [
+    { "type": "progression", "targetId": "urn:slug:pull-up" }
+  ],
+  "metrics": {
+    "primary": { "type": "reps", "unit": "count" },
+    "secondary": [
+      { "type": "percentBodyweight", "unit": "percent" },
+      { "type": "rir", "unit": "count" },
+      { "type": "rest", "unit": "s" }
+    ]
+  },
+  "metadata": {
+    "createdAt": "2026-08-06T00:00:00Z",
+    "updatedAt": "2026-08-06T00:00:00Z",
+    "status": "active",
+    "source": "vitness.core",
+    "version": "1.1.0"
+  }
+}

@@ -8,8 +8,8 @@ keywords: [exercise, data model, json schema, fitness, interoperability, rfc]
 # RFC-001: Specifikacija modela podataka o vežbi
 
 **Status**: Nacrt
-**Verzija**: 0.1.0
-**Datum**: 2025-09-02
+**Verzija**: 0.2.0
+**Datum**: 2026-11-26
 **Autori**: VITNESS tim
 **Kategorija**: Standards Track
 
@@ -70,8 +70,9 @@ Svi usaglašeni podaci o vežbama **MORAJU** da sadrže ova polja:
 
 ```json
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.2.0",
   "exerciseId": "550e8400-e29b-41d4-a716-446655440000",
+  "fxi": "FXI=1.0S/m:hip.ext+kn.ext/o:standing/l:bar.straight@back",
   "canonical": {
     "name": "Back Squat",
     "slug": "back-squat"
@@ -85,7 +86,10 @@ Svi usaglašeni podaci o vežbama **MORAJU** da sadrže ova polja:
   },
   "targets": {
     "primary": [
-      { "id": "mus.quadriceps", "name": "Quadriceps", "categoryId": "cat.legs" }
+      { "id": "mus.rectusFemoris", "name": "Rectus Femoris", "categoryId": "cat.quadriceps", "fxm": "FXM=1.0/rectus-femoris", "fxmg": "FXMG=1.0/quadriceps-femoris" },
+      { "id": "mus.vastusLateralis", "name": "Vastus Lateralis", "categoryId": "cat.quadriceps", "fxm": "FXM=1.0/vastus-lateralis", "fxmg": "FXMG=1.0/quadriceps-femoris" },
+      { "id": "mus.vastusMedialis", "name": "Vastus Medialis", "categoryId": "cat.quadriceps", "fxm": "FXM=1.0/vastus-medialis", "fxmg": "FXMG=1.0/quadriceps-femoris" },
+      { "id": "mus.vastusIntermedius", "name": "Vastus Intermedius", "categoryId": "cat.quadriceps", "fxm": "FXM=1.0/vastus-intermedius", "fxmg": "FXMG=1.0/quadriceps-femoris" }
     ]
   },
   "metrics": {
@@ -101,7 +105,7 @@ Svi usaglašeni podaci o vežbama **MORAJU** da sadrže ova polja:
 
 ### 3.2. Opciona standardna polja
 
-Četiri opciona polja nose najveći deo onoga što implementacija zaista prikazuje.
+Pet opcionih polja nosi najveći deo onoga što implementacija zaista prikazuje.
 
 `equipment` se deli na ono bez čega pokret ne može da se izvede i ono što samo pomaže. `media` nosi resurse za demonstraciju.
 
@@ -113,15 +117,18 @@ Svi usaglašeni podaci o vežbama **MORAJU** da sadrže ova polja:
 
 Imajte na umu da su `constraints.progressions` i `constraints.regressions` opisi u slobodnom tekstu, dok je unos u `relations` tipa `progression` veza ka drugoj vežbi. Oba postoje zato što autor često zna *da* je neki pokret teži pre nego što se taj teži pokret nađe u katalogu.
 
+`fxi` je strukturni ključ vežbe: string koji opisuje kako se telo kreće, njegov položaj i čime se kreće, kodovima koje FDS objavljuje, pa dva kataloga mogu da pronađu istu vežbu kako god je zvali. On pronalazi kandidate i nije identifikator; `exerciseId` ostaje identitet zapisa. Šema proverava samo njegovo zaglavlje, `FXI=1.0S/` ili `FXI=1.0N/`. Pogledajte [Ključ vežbe](../core-concepts/structural-keys/exercise-key).
+
 ```json fds:fragment entity=exercise
 {
+  "fxi": "FXI=1.0S/m:hip.ext+kn.ext/o:standing/l:bar.straight@back",
   "equipment": {
     "required": [
-      { "id": "eq.barbell", "name": "Barbell" },
-      { "id": "eq.rack", "name": "Power Rack" }
+      { "id": "eq.barbell", "name": "Barbell", "fxe": "FXE=1.0S/k:imp/f:bar.straight" },
+      { "id": "eq.rack", "name": "Power Rack", "fxe": "FXE=1.0S/k:sup/f:rack" }
     ],
     "optional": [
-      { "id": "eq.belt", "name": "Lifting Belt" }
+      { "id": "eq.belt", "name": "Lifting Belt", "fxe": "FXE=1.0S/k:acc/f:belt.lift" }
     ]
   },
   "constraints": {
@@ -221,9 +228,11 @@ Za složene strukture podataka jedinstvene za platformu:
 }
 ```
 
-### 4.3. Ciljni mišići
+### 4.3. Ciljani mišići
 
 `targets.primary` navodi mišiće zbog kojih se vežba bira i obavezno je; `targets.secondary` navodi one koji su smisleno uključeni, ali nisu poenta pokreta. Svaki unos je referenca na mišić — `id`, prikazni `name` i `categoryId` grupe kojoj pripada — denormalizovana da bi konzument mogao da prikaže vežbu bez razrešavanja kataloga mišića.
+
+Referenca na mišić može nositi i strukturni ključ mišića u `fxm` i ključ njegove kategorije u `fxmg`. Pogledajte [Ključ mišića](../core-concepts/structural-keys/muscle-key) i [Ključ kategorije mišića](../core-concepts/structural-keys/muscle-category-key).
 
 Ta podela je važna svemu što izračunava obim treninga po mišiću: računanje sekundarnog učešća kao primarnog naduvava obim na način koji se uvećava kroz čitav program.
 
@@ -231,11 +240,17 @@ Ta podela je važna svemu što izračunava obim treninga po mišiću: računanje
 {
   "targets": {
     "primary": [
-      { "id": "mus.quadriceps", "name": "Quadriceps", "categoryId": "cat.legs" }
+      { "id": "mus.rectusFemoris", "name": "Rectus Femoris", "categoryId": "cat.quadriceps", "fxm": "FXM=1.0/rectus-femoris", "fxmg": "FXMG=1.0/quadriceps-femoris" },
+      { "id": "mus.vastusLateralis", "name": "Vastus Lateralis", "categoryId": "cat.quadriceps", "fxm": "FXM=1.0/vastus-lateralis", "fxmg": "FXMG=1.0/quadriceps-femoris" },
+      { "id": "mus.vastusMedialis", "name": "Vastus Medialis", "categoryId": "cat.quadriceps", "fxm": "FXM=1.0/vastus-medialis", "fxmg": "FXMG=1.0/quadriceps-femoris" },
+      { "id": "mus.vastusIntermedius", "name": "Vastus Intermedius", "categoryId": "cat.quadriceps", "fxm": "FXM=1.0/vastus-intermedius", "fxmg": "FXMG=1.0/quadriceps-femoris" }
     ],
     "secondary": [
-      { "id": "mus.hamstrings", "name": "Hamstrings", "categoryId": "cat.legs" },
-      { "id": "mus.erectorSpinae", "name": "Erector Spinae", "categoryId": "cat.back" }
+      { "id": "mus.bicepsFemoris", "name": "Biceps Femoris", "categoryId": "cat.hamstrings", "fxm": "FXM=1.0/biceps-femoris", "fxmg": "FXMG=1.0/hamstring" },
+      { "id": "mus.semitendinosus", "name": "Semitendinosus", "categoryId": "cat.hamstrings", "fxm": "FXM=1.0/semitendinosus", "fxmg": "FXMG=1.0/hamstring" },
+      { "id": "mus.semimembranosus", "name": "Semimembranosus", "categoryId": "cat.hamstrings", "fxm": "FXM=1.0/semimembranosus", "fxmg": "FXMG=1.0/hamstring" },
+      { "id": "mus.iliocostalis", "name": "Iliocostalis", "categoryId": "cat.erectorSpinae", "fxm": "FXM=1.0/iliocostalis", "fxmg": "FXMG=1.0/erector-spinae" },
+      { "id": "mus.longissimus", "name": "Longissimus", "categoryId": "cat.erectorSpinae", "fxm": "FXM=1.0/longissimus", "fxmg": "FXMG=1.0/erector-spinae" }
     ]
   }
 }
@@ -245,15 +260,17 @@ Ta podela je važna svemu što izračunava obim treninga po mišiću: računanje
 
 `equipment.required` je ono bez čega pokret ne može da se izvede; `equipment.optional` je ono što menja doživljaj, ali ne i vežbu. Svaki unos denormalizuje `id` i `name` iz istog razloga iz kog to čine ciljni mišići.
 
+Referenca na opremu može nositi i strukturni ključ opreme u `fxe`, istu vrednost kao u zapisu opreme. Pogledajte [Ključ opreme](../core-concepts/structural-keys/equipment-key).
+
 ```json fds:fragment entity=exercise
 {
   "equipment": {
     "required": [
-      { "id": "eq.barbell", "name": "Barbell" },
-      { "id": "eq.rack", "name": "Power Rack" }
+      { "id": "eq.barbell", "name": "Barbell", "fxe": "FXE=1.0S/k:imp/f:bar.straight" },
+      { "id": "eq.rack", "name": "Power Rack", "fxe": "FXE=1.0S/k:sup/f:rack" }
     ],
     "optional": [
-      { "id": "eq.belt", "name": "Lifting Belt" }
+      { "id": "eq.belt", "name": "Lifting Belt", "fxe": "FXE=1.0S/k:acc/f:belt.lift" }
     ]
   }
 }
@@ -315,6 +332,8 @@ Konzumenti NE SMEJU da odbace vežbu koja izostavlja `loading`. Odsustvo znači 
 
 ## 5. Verzionisanje i kompatibilnost
 
+**1.2.0** je dodala opciono polje `fxi` (§3.2), `fxm` i `fxmg` na referenci mišića (§4.3) i `fxe` na referenci opreme (§4.4).
+
 ### 5.1. Verzionisanje šema
 
 Prema semantičkom verzionisanju:
@@ -331,10 +350,10 @@ Prema semantičkom verzionisanju:
 
 ### 5.3. Primer evolucije šeme
 
-Verzija 1.0.0 → 1.1.0 (dodavanje opcionog polja):
+Od jedne sporedne verzije do sledeće (dodavanje opcionog polja):
 ```json fds:ignore a hypothetical next version illustrating how an optional field arrives; no published exercise schema has newOptionalField
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.x.0",
   "exerciseId": "550e8400-e29b-41d4-a716-446655440000",
   "canonical": { "name": "Back Squat", "slug": "back-squat" },
   "classification": {
@@ -403,9 +422,9 @@ Moguća struktura odgovora:
 ## 8. Referenca JSON šeme
 
 Kompletna JSON šema je dostupna na:
-- **Exercise**: `/specification/schemas/exercises/v1.1.0/exercise.schema.json`
-- **Equipment**: `/specification/schemas/equipment/v1.1.0/equipment.schema.json`  
-- **Muscle**: `/specification/schemas/muscle/v1.0.0/muscle.schema.json`
+- **Exercise**: `/specification/schemas/exercises/v1.2.0/exercise.schema.json`
+- **Equipment**: `/specification/schemas/equipment/v1.2.0/equipment.schema.json`  
+- **Muscle**: `/specification/schemas/muscle/v1.1.0/muscle.schema.json`
 
 ## 8.1. Validacija
 
@@ -413,34 +432,35 @@ Validirajte pomoću Ajv (Draft 2020-12):
 
 ```
 npx --package=ajv-cli --package=ajv-formats ajv validate --spec=draft2020 -c ajv-formats \
-  -s specification/schemas/exercises/v1.1.0/exercise.schema.json \
-  -d specification/schemas/exercises/v1.1.0/exercise.example.json
+  -s specification/schemas/exercises/v1.2.0/exercise.schema.json \
+  -d specification/schemas/exercises/v1.2.0/exercise.example.json
 
 # Additional examples (optional):
 npx --package=ajv-cli --package=ajv-formats ajv validate --spec=draft2020 -c ajv-formats \
-  -s specification/schemas/exercises/v1.1.0/exercise.schema.json \
-  -d specification/schemas/exercises/v1.1.0/exercise.example.cardio.json
+  -s specification/schemas/exercises/v1.2.0/exercise.schema.json \
+  -d specification/schemas/exercises/v1.2.0/exercise.example.cardio.json
 npx --package=ajv-cli --package=ajv-formats ajv validate --spec=draft2020 -c ajv-formats \
-  -s specification/schemas/exercises/v1.1.0/exercise.schema.json \
-  -d specification/schemas/exercises/v1.1.0/exercise.example.mobility.json
+  -s specification/schemas/exercises/v1.2.0/exercise.schema.json \
+  -d specification/schemas/exercises/v1.2.0/exercise.example.mobility.json
 npx --package=ajv-cli --package=ajv-formats ajv validate --spec=draft2020 -c ajv-formats \
-  -s specification/schemas/exercises/v1.1.0/exercise.schema.json \
-  -d specification/schemas/exercises/v1.1.0/exercise.example.machine.json
+  -s specification/schemas/exercises/v1.2.0/exercise.schema.json \
+  -d specification/schemas/exercises/v1.2.0/exercise.example.machine.json
 npx --package=ajv-cli --package=ajv-formats ajv validate --spec=draft2020 -c ajv-formats \
-  -s specification/schemas/exercises/v1.1.0/exercise.schema.json \
-  -d specification/schemas/exercises/v1.1.0/exercise.example.unilateral.json
+  -s specification/schemas/exercises/v1.2.0/exercise.schema.json \
+  -d specification/schemas/exercises/v1.2.0/exercise.example.unilateral.json
 ```
 
 ## 9. Primer implementacije
 
 ### 9.1. Kompletan izvoz zadnjeg čučnja
 
-Na osnovu referentne implementacije (`/specification/schemas/exercises/v1.1.0/exercise.example.json`):
+Na osnovu referentne implementacije (`/specification/schemas/exercises/v1.2.0/exercise.example.json`):
 
 ```json
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.2.0",
   "exerciseId": "550e8400-e29b-41d4-a716-446655440000",
+  "fxi": "FXI=1.0S/m:hip.ext+kn.ext/o:standing/l:bar.straight@back",
   "canonical": {
     "name": "Back Squat",
     "slug": "back-squat",
@@ -462,20 +482,26 @@ Na osnovu referentne implementacije (`/specification/schemas/exercises/v1.1.0/ex
   },
   "targets": {
     "primary": [
-      { "id": "mus.quadriceps", "name": "Quadriceps", "categoryId": "cat.legs" }
+      { "id": "mus.rectusFemoris", "name": "Rectus Femoris", "categoryId": "cat.quadriceps", "fxm": "FXM=1.0/rectus-femoris", "fxmg": "FXMG=1.0/quadriceps-femoris" },
+      { "id": "mus.vastusLateralis", "name": "Vastus Lateralis", "categoryId": "cat.quadriceps", "fxm": "FXM=1.0/vastus-lateralis", "fxmg": "FXMG=1.0/quadriceps-femoris" },
+      { "id": "mus.vastusMedialis", "name": "Vastus Medialis", "categoryId": "cat.quadriceps", "fxm": "FXM=1.0/vastus-medialis", "fxmg": "FXMG=1.0/quadriceps-femoris" },
+      { "id": "mus.vastusIntermedius", "name": "Vastus Intermedius", "categoryId": "cat.quadriceps", "fxm": "FXM=1.0/vastus-intermedius", "fxmg": "FXMG=1.0/quadriceps-femoris" }
     ],
     "secondary": [
-      { "id": "mus.hamstrings", "name": "Hamstrings", "categoryId": "cat.legs" },
-      { "id": "mus.erectorSpinae", "name": "Erector Spinae", "categoryId": "cat.back" }
+      { "id": "mus.bicepsFemoris", "name": "Biceps Femoris", "categoryId": "cat.hamstrings", "fxm": "FXM=1.0/biceps-femoris", "fxmg": "FXMG=1.0/hamstring" },
+      { "id": "mus.semitendinosus", "name": "Semitendinosus", "categoryId": "cat.hamstrings", "fxm": "FXM=1.0/semitendinosus", "fxmg": "FXMG=1.0/hamstring" },
+      { "id": "mus.semimembranosus", "name": "Semimembranosus", "categoryId": "cat.hamstrings", "fxm": "FXM=1.0/semimembranosus", "fxmg": "FXMG=1.0/hamstring" },
+      { "id": "mus.iliocostalis", "name": "Iliocostalis", "categoryId": "cat.erectorSpinae", "fxm": "FXM=1.0/iliocostalis", "fxmg": "FXMG=1.0/erector-spinae" },
+      { "id": "mus.longissimus", "name": "Longissimus", "categoryId": "cat.erectorSpinae", "fxm": "FXM=1.0/longissimus", "fxmg": "FXMG=1.0/erector-spinae" }
     ]
   },
   "equipment": {
     "required": [
-      { "id": "eq.barbell", "name": "Barbell" },
-      { "id": "eq.rack", "name": "Power Rack" }
+      { "id": "eq.barbell", "name": "Barbell", "fxe": "FXE=1.0S/k:imp/f:bar.straight" },
+      { "id": "eq.rack", "name": "Power Rack", "fxe": "FXE=1.0S/k:sup/f:rack" }
     ],
     "optional": [
-      { "id": "eq.belt", "name": "Lifting Belt" }
+      { "id": "eq.belt", "name": "Lifting Belt", "fxe": "FXE=1.0S/k:acc/f:belt.lift" }
     ]
   },
   "constraints": {

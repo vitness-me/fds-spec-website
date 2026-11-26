@@ -4,21 +4,21 @@ description: JSON šema za model podataka mišića
 sidebar_position: 4
 ---
 
-# Šema mišića (v1.0.0)
+# Šema mišića (v1.1.0)
 
 Šema mišića definiše entitete anatomskih mišića sa klasifikacijom, podacima za vizualizaciju toplotnom mapom i metapodacima.
 
 ## Lokacija šeme
 
-**URL:** `https://spec.vitness.me/schemas/muscle/v1.0.0/muscle.schema.json`
+**URL:** `https://spec.vitness.me/schemas/muscle/v1.1.0/muscle.schema.json`
 
-**Preuzimanje:** [muscle.schema.json](https://spec.vitness.me/schemas/muscle/v1.0.0/muscle.schema.json)
+**Preuzimanje:** [muscle.schema.json](https://spec.vitness.me/schemas/muscle/v1.1.0/muscle.schema.json)
 
 ## Primeri
 
 Pogledajte primere mišića:
-- [Osnovni mišić](https://spec.vitness.me/schemas/muscle/v1.0.0/muscle.example.json)
-- [Mišić lats](https://spec.vitness.me/schemas/muscle/v1.0.0/muscle.example.lats.json)
+- [Osnovni mišić](https://spec.vitness.me/schemas/muscle/v1.1.0/muscle.example.json)
+- [Mišić lats](https://spec.vitness.me/schemas/muscle/v1.1.0/muscle.example.lats.json)
 
 ## Specifikacija
 
@@ -28,6 +28,7 @@ Za detaljne informacije o modelu podataka mišića pogledajte [RFC-003: Model po
 
 - `id`: UUID identifikator
 - `schemaVersion`: string verzije (npr. "1.0.0")
+- `fxm`: opcioni [ključ mišića](/docs/core-concepts/structural-keys/muscle-key), strukturni ključ mišića
 - `canonical`: standardizovano imenovanje sa slug vrednošću i alijasima
 - `classification`: kategorija mišića, region, lateralnost
 - `heatmap`: podaci za vizualizaciju sa regionima i vrednostima intenziteta

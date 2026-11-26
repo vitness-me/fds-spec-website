@@ -60,6 +60,13 @@ const sidebars: SidebarsConfig = {
         'core-concepts/metrics',
         'core-concepts/extensions',
         'core-concepts/discovery',
+        {
+          type: 'category',
+          label: 'Structural Keys',
+          collapsed: false,
+          link: {type: 'doc', id: 'core-concepts/structural-keys'},
+          items: ['core-concepts/structural-keys/exercise-key', 'core-concepts/structural-keys/equipment-key', 'core-concepts/structural-keys/muscle-key', 'core-concepts/structural-keys/muscle-category-key'],
+        },
       ],
     },
     {
@@ -118,6 +125,19 @@ const sidebars: SidebarsConfig = {
             'tools/transformer/transforms',
             'tools/transformer/plugins',
             'tools/transformer/examples',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'FDS Encoder',
+          collapsed: false,
+          items: [
+            'tools/encoder/index',
+            'tools/encoder/installation',
+            'tools/encoder/cli-reference',
+            'tools/encoder/library-api',
+            'tools/encoder/examples',
+            'tools/encoder/conformance',
           ],
         },
       ],

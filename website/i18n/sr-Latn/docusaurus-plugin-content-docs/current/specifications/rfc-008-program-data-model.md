@@ -8,8 +8,8 @@ keywords: [program, periodization, mesocycle, deload, schedule, progression, tra
 # RFC-008: Specifikacija modela podataka trenažnog programa
 
 **Status**: Nacrt
-**Verzija**: 0.1.0
-**Datum**: 2026-08-10
+**Verzija**: 0.2.0
+**Datum**: 2026-11-26
 **Autori**: VITNESS tim
 **Kategorija**: Standards Track
 
@@ -235,6 +235,8 @@ Dodavanje `schedule.model` vrednosti, namere ciklusa, `kind` vrednosti uslova il
 
 Entiteti se verzionišu nezavisno. Nova verzija programa ne obavezuje trening, vežbu ni biblioteku preskripcije da se pomere, i nijedna od njihovih verzija ne obavezuje ovu.
 
+**1.1.0** je dodala opciono polje `fxi` na referenci vežbe za trenažni maksimum (§8.1).
+
 ## 7. Smernice za implementaciju
 
 ### 7.1. Proizvođači podataka
@@ -265,6 +267,8 @@ Program je referentni podatak i po konstrukciji ne sadrži lične podatke. Ne no
 
 Svaki `trainingMaxSlot` nosi `exercise`, `method` koji imenuje kako pozivalac izvodi vrednost — `testedOneRepMax`, `estimatedOneRepMax`, `percentOfOneRepMax`, `recentBest` ili `callerSupplied` — i opcioni `id`. `percent` prati `percentOfOneRepMax`: trenažni maksimum postavljen na 90% pravog maksimuma je konvencija 5/3/1. `notes` može da objasni kućno pravilo.
 
+Dizanje je referenca na vežbu iz RFC-001 u `exercise` i može nositi strukturni ključ vežbe u `fxi`. Pogledajte [Ključ vežbe](../core-concepts/structural-keys/exercise-key).
+
 `id` je lokalna oznaka, da bi pravilo progresije ili nadjačavanje dana moglo da citira slot. Ciljna opterećenja ga ne koriste. `percent1RM` imenuje dizanje kroz `referenceExerciseId`, a važi onaj slot čiji ga `exercise` imenuje — poklapanje je po vežbi, a ne po sopstvenom identifikatoru slota. Proizvođač podataka koji emituje slot za dizanje koje nijedna preskripcija ne referencira deklarisao je zahtev koji plan nema, i konzumenti TREBALO BI da upozore umesto da zahtevaju vrednost.
 
 **Usaglašena implementacija NE SME da proširi ovu strukturu samom vrednošću.** Ovo je iskazano normativno jer je to pojedinačno najverovatnija stvar koju će implementator „popraviti“. Slot izgleda kao objekat kome nedostaje polje, a njegovo dodavanje naizgled čini programe samosadržanim bez ikakve cene.
@@ -279,7 +283,7 @@ Implementacija koja razreši program prema konkretnom sportisti i sačuva rezult
 
 ## 9. Referenca JSON šeme
 
-`https://spec.vitness.me/schemas/program/v1.0.0/program.schema.json`
+`https://spec.vitness.me/schemas/program/v1.1.0/program.schema.json`
 
 ### 9.1. Validacija
 
@@ -293,7 +297,7 @@ npm run verify schemas
 
 ```json
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "programId": "00000000-0000-4000-8000-00000000b001",
   "canonical": { "name": "Foundation Strength", "slug": "foundation-strength" },
   "classification": {
@@ -311,7 +315,7 @@ npm run verify schemas
     "trainingMaxes": [
       {
         "id": "tm.backSquat",
-        "exercise": { "id": "ex.backSquat", "name": "Barbell Back Squat" },
+        "exercise": { "id": "ex.backSquat", "name": "Barbell Back Squat", "fxi": "FXI=1.0S/m:hip.ext+kn.ext/o:standing/l:bar.straight@back" },
         "method": "percentOfOneRepMax",
         "percent": 90
       }

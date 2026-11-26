@@ -8,8 +8,8 @@ keywords: [equipment, data model, json schema, fitness, interoperability, rfc]
 # RFC-002: Especificación del modelo de datos de equipamiento
 
 **Estado**: Borrador
-**Versión**: 0.1.0
-**Fecha**: 2025-09-09
+**Versión**: 0.2.0
+**Fecha**: 2026-11-26
 **Autores**: Equipo VITNESS
 **Categoría**: Standards Track
 
@@ -66,8 +66,9 @@ Todos los datos de equipamiento conformes **DEBEN** incluir estos campos:
 
 ```json fds:document entity=equipment
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.2.0",
   "id": "eq.barbell",
+  "fxe": "FXE=1.0S/k:imp/f:bar.straight",
   "canonical": {
     "name": "Barbell",
     "slug": "barbell"
@@ -87,6 +88,7 @@ Campos opcionales comúnmente admitidos que mejoran la interoperabilidad:
 
 ```json fds:fragment entity=equipment partial
 {
+  "fxe": "FXE=1.0S/k:imp/f:bar.straight",
   "canonical": {
     "abbreviation": "BB",
     "aliases": ["Olympic Bar"],
@@ -105,6 +107,8 @@ Campos opcionales comúnmente admitidos que mejoran la interoperabilidad:
   ]
 }
 ```
+
+`fxe` es la clave estructural del equipamiento: una cadena que describe qué clase de equipamiento es y su forma, en códigos que FDS publica, de modo que dos catálogos puedan encontrar el mismo equipamiento sin importar cómo lo llame cada uno. Un registro lleva la clave completa, incluidas las capas extendidas que tenga, que registran cómo está construido el equipamiento, y el indicador `N` que marca una clave que las lleva. No es un identificador; `id` sigue siendo la identidad del registro. El esquema solo comprueba su encabezado, `FXE=1.0S/` o `FXE=1.0N/`. Véase [Clave de equipamiento](../core-concepts/structural-keys/equipment-key).
 
 ### 3.3. Mecanismos de extensión
 
@@ -214,6 +218,8 @@ Esta es la contraparte de `exercise.loading` (RFC-001 §4.6): el ejercicio decla
 
 ## 5. Versionado y compatibilidad
 
+**1.2.0** agregó el campo opcional `fxe` (§3.2).
+
 ### 5.1. Versionado de esquemas
 
 Siguiendo el versionado semántico:
@@ -230,10 +236,10 @@ Siguiendo el versionado semántico:
 
 ### 5.3. Ejemplo de evolución del esquema
 
-Versión 1.0.0 → 1.1.0 (adición de un campo opcional de certificación):
+De una versión menor a la siguiente (adición de un campo opcional de certificación):
 ```json fds:ignore a hypothetical next version illustrating how an optional field arrives; no published equipment schema has certification
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.x.0",
   "id": "eq.barbell",
   "canonical": { "name": "Barbell", "slug": "barbell" },
   "certification": {
@@ -280,7 +286,7 @@ graph LR
 ## 8. Referencia de JSON Schema
 
 El JSON Schema completo está disponible en:
-- **Equipamiento**: `/specification/schemas/equipment/v1.1.0/equipment.schema.json`
+- **Equipamiento**: `/specification/schemas/equipment/v1.2.0/equipment.schema.json`
 
 ## 8.1. Validación
 
@@ -288,20 +294,21 @@ Validar con Ajv (Draft 2020-12):
 
 ```
 npx --package=ajv-cli --package=ajv-formats ajv validate --spec=draft2020 -c ajv-formats \
-  -s specification/schemas/equipment/v1.1.0/equipment.schema.json \
-  -d specification/schemas/equipment/v1.1.0/equipment.example.json
+  -s specification/schemas/equipment/v1.2.0/equipment.schema.json \
+  -d specification/schemas/equipment/v1.2.0/equipment.example.json
 ```
 
 ## 9. Ejemplo de implementación
 
 ### 9.1. Registro completo del equipamiento barra
 
-Basado en la implementación de referencia (`/specification/schemas/equipment/v1.1.0/equipment.example.json`):
+Basado en la implementación de referencia (`/specification/schemas/equipment/v1.2.0/equipment.example.json`):
 
 ```json fds:document entity=equipment
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.2.0",
   "id": "eq.barbell",
+  "fxe": "FXE=1.0S/k:imp/f:bar.straight",
   "canonical": { 
     "name": "Barbell", 
     "slug": "barbell", 

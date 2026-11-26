@@ -4,15 +4,15 @@ description: JSON šema za trenažni program — ciklusi, nedelje, raspoređivan
 sidebar_position: 9
 ---
 
-# Šema programa (v1.0.0)
+# Šema programa (v1.1.0)
 
 Program smešta treninge u vreme: ciklusi, nedelje, dani i pravila po kojima se preskripcija menja kako plan napreduje.
 
 ## Lokacija šeme
 
-**URL:** `https://spec.vitness.me/schemas/program/v1.0.0/program.schema.json`
+**URL:** `https://spec.vitness.me/schemas/program/v1.1.0/program.schema.json`
 
-**Preuzimanje:** [program.schema.json](https://spec.vitness.me/schemas/program/v1.0.0/program.schema.json)
+**Preuzimanje:** [program.schema.json](https://spec.vitness.me/schemas/program/v1.1.0/program.schema.json)
 
 ## Raspored referenci, a ne kontejner
 
@@ -59,7 +59,7 @@ Ovo je stvar koju će implementator najverovatnije „popraviti“, jer se slot 
 
 Prihvaćena posledica: **potpuno personalizovan program ne može da napravi *round-trip* kao jedan samosadržan dokument.** Izvoz je plan plus odvojen kontekst razrešavanja. Taj kompromis je nameran.
 
-Slot se poklapa po svom polju `exercise` — `percent1RM` imenuje vežbu kroz `referenceExerciseId`, a važi onaj slot koji imenuje tu vežbu. Sopstveni `id` slota je lokalna oznaka za citiranje iz pravila ili iz nadjačavanja.
+Slot se poklapa po svom polju `exercise` — `percent1RM` imenuje vežbu kroz `referenceExerciseId`, a važi onaj slot koji imenuje tu vežbu. Sopstveni `id` slota je lokalna oznaka za citiranje iz pravila ili iz nadjačavanja. Polje `exercise` slota može nositi [strukturni ključ](/docs/core-concepts/structural-keys/exercise-key) vežbe u `fxi`.
 
 ## Grananje, i granica adaptivnih planova
 
@@ -74,7 +74,7 @@ Adaptivno programiranje deli se na dvoje, i samo je jedna polovina prenosiva. **
 ## Razrađeni primeri
 
 <!-- fds:count examples:program=18 scenarios:program=18 -->
-Uz šemu je objavljeno 18 programa — po jedan za svaki model periodizacije iz matrice pokrivenosti i po jedan za svaku strukturu rasporeda, indeksirani u [README datoteka primera](https://spec.vitness.me/schemas/program/v1.0.0/README.md).
+Uz šemu je objavljeno 18 programa — po jedan za svaki model periodizacije iz matrice pokrivenosti i po jedan za svaku strukturu rasporeda, indeksirani u [README datoteka primera](https://spec.vitness.me/schemas/program/v1.1.0/README.md).
 
 Nijedan od njih ne sadrži seriju, ponavljanje ni opterećenje. To je gornja tvrdnja, demonstrirana umesto samo iznesena.
 

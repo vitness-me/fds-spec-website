@@ -8,8 +8,8 @@ keywords: [exercise, data model, json schema, fitness, interoperability, rfc]
 # RFC-001: Especificación del modelo de datos de ejercicio
 
 **Estado**: Borrador
-**Versión**: 0.1.0
-**Fecha**: 2025-09-02
+**Versión**: 0.2.0
+**Fecha**: 2026-11-26
 **Autores**: Equipo VITNESS
 **Categoría**: Standards Track
 
@@ -70,8 +70,9 @@ Todos los datos de ejercicio conformes **DEBEN** incluir estos campos:
 
 ```json
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.2.0",
   "exerciseId": "550e8400-e29b-41d4-a716-446655440000",
+  "fxi": "FXI=1.0S/m:hip.ext+kn.ext/o:standing/l:bar.straight@back",
   "canonical": {
     "name": "Back Squat",
     "slug": "back-squat"
@@ -85,7 +86,10 @@ Todos los datos de ejercicio conformes **DEBEN** incluir estos campos:
   },
   "targets": {
     "primary": [
-      { "id": "mus.quadriceps", "name": "Quadriceps", "categoryId": "cat.legs" }
+      { "id": "mus.rectusFemoris", "name": "Rectus Femoris", "categoryId": "cat.quadriceps", "fxm": "FXM=1.0/rectus-femoris", "fxmg": "FXMG=1.0/quadriceps-femoris" },
+      { "id": "mus.vastusLateralis", "name": "Vastus Lateralis", "categoryId": "cat.quadriceps", "fxm": "FXM=1.0/vastus-lateralis", "fxmg": "FXMG=1.0/quadriceps-femoris" },
+      { "id": "mus.vastusMedialis", "name": "Vastus Medialis", "categoryId": "cat.quadriceps", "fxm": "FXM=1.0/vastus-medialis", "fxmg": "FXMG=1.0/quadriceps-femoris" },
+      { "id": "mus.vastusIntermedius", "name": "Vastus Intermedius", "categoryId": "cat.quadriceps", "fxm": "FXM=1.0/vastus-intermedius", "fxmg": "FXMG=1.0/quadriceps-femoris" }
     ]
   },
   "metrics": {
@@ -101,7 +105,7 @@ Todos los datos de ejercicio conformes **DEBEN** incluir estos campos:
 
 ### 3.2. Campos estándar opcionales
 
-Cuatro campos opcionales transportan la mayor parte de lo que una implementación realmente renderiza.
+Cinco campos opcionales transportan la mayor parte de lo que una implementación realmente renderiza.
 
 `equipment` se divide entre aquello sin lo cual el movimiento no puede realizarse y lo que simplemente ayuda. `media` transporta los recursos de demostración.
 
@@ -113,15 +117,18 @@ Cuatro campos opcionales transportan la mayor parte de lo que una implementació
 
 Téngase en cuenta que `constraints.progressions` y `constraints.regressions` son descripciones de texto libre, mientras que una entrada de `relations` de tipo `progression` es un enlace a otro ejercicio. Ambos existen porque un autor a menudo sabe *que* un movimiento es más difícil antes de que el movimiento más difícil esté en el catálogo.
 
+`fxi` es la clave estructural del ejercicio: una cadena que describe cómo se mueve el cuerpo, su posición y con qué se mueve, en códigos que FDS publica, de modo que dos catálogos puedan encontrar el mismo ejercicio sin importar cómo lo llame cada uno. Sirve para encontrar candidatos y no es un identificador; `exerciseId` sigue siendo la identidad del registro. El esquema solo comprueba su encabezado, `FXI=1.0S/` o `FXI=1.0N/`. Véase [Clave de ejercicio](../core-concepts/structural-keys/exercise-key).
+
 ```json fds:fragment entity=exercise
 {
+  "fxi": "FXI=1.0S/m:hip.ext+kn.ext/o:standing/l:bar.straight@back",
   "equipment": {
     "required": [
-      { "id": "eq.barbell", "name": "Barbell" },
-      { "id": "eq.rack", "name": "Power Rack" }
+      { "id": "eq.barbell", "name": "Barbell", "fxe": "FXE=1.0S/k:imp/f:bar.straight" },
+      { "id": "eq.rack", "name": "Power Rack", "fxe": "FXE=1.0S/k:sup/f:rack" }
     ],
     "optional": [
-      { "id": "eq.belt", "name": "Lifting Belt" }
+      { "id": "eq.belt", "name": "Lifting Belt", "fxe": "FXE=1.0S/k:acc/f:belt.lift" }
     ]
   },
   "constraints": {
@@ -225,17 +232,25 @@ Para estructuras de datos complejas y exclusivas de una plataforma:
 
 `targets.primary` enumera los músculos por los que se elige el ejercicio y es obligatorio; `targets.secondary` enumera los que participan de manera significativa pero no son el propósito del movimiento. Cada entrada es una referencia de músculo — un `id`, un `name` para mostrar y el `categoryId` del grupo al que pertenece — desnormalizada para que un consumidor pueda renderizar el ejercicio sin resolver el catálogo de músculos.
 
+Una referencia de músculo también puede llevar la clave estructural del músculo en `fxm` y la de su categoría en `fxmg`. Véanse [Clave de músculo](../core-concepts/structural-keys/muscle-key) y [Clave de categoría muscular](../core-concepts/structural-keys/muscle-category-key).
+
 La división importa para cualquier cosa que calcule el volumen de entrenamiento por músculo: contar la participación secundaria como primaria infla el volumen de una manera que se acumula a lo largo de un programa.
 
 ```json fds:fragment entity=exercise
 {
   "targets": {
     "primary": [
-      { "id": "mus.quadriceps", "name": "Quadriceps", "categoryId": "cat.legs" }
+      { "id": "mus.rectusFemoris", "name": "Rectus Femoris", "categoryId": "cat.quadriceps", "fxm": "FXM=1.0/rectus-femoris", "fxmg": "FXMG=1.0/quadriceps-femoris" },
+      { "id": "mus.vastusLateralis", "name": "Vastus Lateralis", "categoryId": "cat.quadriceps", "fxm": "FXM=1.0/vastus-lateralis", "fxmg": "FXMG=1.0/quadriceps-femoris" },
+      { "id": "mus.vastusMedialis", "name": "Vastus Medialis", "categoryId": "cat.quadriceps", "fxm": "FXM=1.0/vastus-medialis", "fxmg": "FXMG=1.0/quadriceps-femoris" },
+      { "id": "mus.vastusIntermedius", "name": "Vastus Intermedius", "categoryId": "cat.quadriceps", "fxm": "FXM=1.0/vastus-intermedius", "fxmg": "FXMG=1.0/quadriceps-femoris" }
     ],
     "secondary": [
-      { "id": "mus.hamstrings", "name": "Hamstrings", "categoryId": "cat.legs" },
-      { "id": "mus.erectorSpinae", "name": "Erector Spinae", "categoryId": "cat.back" }
+      { "id": "mus.bicepsFemoris", "name": "Biceps Femoris", "categoryId": "cat.hamstrings", "fxm": "FXM=1.0/biceps-femoris", "fxmg": "FXMG=1.0/hamstring" },
+      { "id": "mus.semitendinosus", "name": "Semitendinosus", "categoryId": "cat.hamstrings", "fxm": "FXM=1.0/semitendinosus", "fxmg": "FXMG=1.0/hamstring" },
+      { "id": "mus.semimembranosus", "name": "Semimembranosus", "categoryId": "cat.hamstrings", "fxm": "FXM=1.0/semimembranosus", "fxmg": "FXMG=1.0/hamstring" },
+      { "id": "mus.iliocostalis", "name": "Iliocostalis", "categoryId": "cat.erectorSpinae", "fxm": "FXM=1.0/iliocostalis", "fxmg": "FXMG=1.0/erector-spinae" },
+      { "id": "mus.longissimus", "name": "Longissimus", "categoryId": "cat.erectorSpinae", "fxm": "FXM=1.0/longissimus", "fxmg": "FXMG=1.0/erector-spinae" }
     ]
   }
 }
@@ -245,15 +260,17 @@ La división importa para cualquier cosa que calcule el volumen de entrenamiento
 
 `equipment.required` es aquello sin lo cual el movimiento no puede realizarse; `equipment.optional` es lo que cambia la experiencia pero no el ejercicio. Cada entrada desnormaliza un `id` y un `name` por la misma razón que lo hacen los músculos objetivo.
 
+Una referencia de equipamiento también puede llevar la clave estructural del equipamiento en `fxe`, el mismo valor que tiene el registro del equipamiento. Véase [Clave de equipamiento](../core-concepts/structural-keys/equipment-key).
+
 ```json fds:fragment entity=exercise
 {
   "equipment": {
     "required": [
-      { "id": "eq.barbell", "name": "Barbell" },
-      { "id": "eq.rack", "name": "Power Rack" }
+      { "id": "eq.barbell", "name": "Barbell", "fxe": "FXE=1.0S/k:imp/f:bar.straight" },
+      { "id": "eq.rack", "name": "Power Rack", "fxe": "FXE=1.0S/k:sup/f:rack" }
     ],
     "optional": [
-      { "id": "eq.belt", "name": "Lifting Belt" }
+      { "id": "eq.belt", "name": "Lifting Belt", "fxe": "FXE=1.0S/k:acc/f:belt.lift" }
     ]
   }
 }
@@ -315,6 +332,8 @@ Los consumidores NO DEBEN rechazar un ejercicio que omite `loading`. La ausencia
 
 ## 5. Versionado y compatibilidad
 
+**1.2.0** agregó el campo opcional `fxi` (§3.2), `fxm` y `fxmg` en una referencia de músculo (§4.3), y `fxe` en una referencia de equipamiento (§4.4).
+
 ### 5.1. Versionado de esquemas
 
 Siguiendo el versionado semántico:
@@ -331,10 +350,10 @@ Siguiendo el versionado semántico:
 
 ### 5.3. Ejemplo de evolución del esquema
 
-Versión 1.0.0 → 1.1.0 (adición de un campo opcional):
+De una versión menor a la siguiente (adición de un campo opcional):
 ```json fds:ignore a hypothetical next version illustrating how an optional field arrives; no published exercise schema has newOptionalField
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.x.0",
   "exerciseId": "550e8400-e29b-41d4-a716-446655440000",
   "canonical": { "name": "Back Squat", "slug": "back-squat" },
   "classification": {
@@ -403,9 +422,9 @@ Estructura de respuesta potencial:
 ## 8. Referencia de JSON Schema
 
 El JSON Schema completo está disponible en:
-- **Ejercicio**: `/specification/schemas/exercises/v1.1.0/exercise.schema.json`
-- **Equipamiento**: `/specification/schemas/equipment/v1.1.0/equipment.schema.json`
-- **Músculo**: `/specification/schemas/muscle/v1.0.0/muscle.schema.json`
+- **Ejercicio**: `/specification/schemas/exercises/v1.2.0/exercise.schema.json`
+- **Equipamiento**: `/specification/schemas/equipment/v1.2.0/equipment.schema.json`
+- **Músculo**: `/specification/schemas/muscle/v1.1.0/muscle.schema.json`
 
 ## 8.1. Validación
 
@@ -413,34 +432,35 @@ Validar con Ajv (Draft 2020-12):
 
 ```
 npx --package=ajv-cli --package=ajv-formats ajv validate --spec=draft2020 -c ajv-formats \
-  -s specification/schemas/exercises/v1.1.0/exercise.schema.json \
-  -d specification/schemas/exercises/v1.1.0/exercise.example.json
+  -s specification/schemas/exercises/v1.2.0/exercise.schema.json \
+  -d specification/schemas/exercises/v1.2.0/exercise.example.json
 
 # Additional examples (optional):
 npx --package=ajv-cli --package=ajv-formats ajv validate --spec=draft2020 -c ajv-formats \
-  -s specification/schemas/exercises/v1.1.0/exercise.schema.json \
-  -d specification/schemas/exercises/v1.1.0/exercise.example.cardio.json
+  -s specification/schemas/exercises/v1.2.0/exercise.schema.json \
+  -d specification/schemas/exercises/v1.2.0/exercise.example.cardio.json
 npx --package=ajv-cli --package=ajv-formats ajv validate --spec=draft2020 -c ajv-formats \
-  -s specification/schemas/exercises/v1.1.0/exercise.schema.json \
-  -d specification/schemas/exercises/v1.1.0/exercise.example.mobility.json
+  -s specification/schemas/exercises/v1.2.0/exercise.schema.json \
+  -d specification/schemas/exercises/v1.2.0/exercise.example.mobility.json
 npx --package=ajv-cli --package=ajv-formats ajv validate --spec=draft2020 -c ajv-formats \
-  -s specification/schemas/exercises/v1.1.0/exercise.schema.json \
-  -d specification/schemas/exercises/v1.1.0/exercise.example.machine.json
+  -s specification/schemas/exercises/v1.2.0/exercise.schema.json \
+  -d specification/schemas/exercises/v1.2.0/exercise.example.machine.json
 npx --package=ajv-cli --package=ajv-formats ajv validate --spec=draft2020 -c ajv-formats \
-  -s specification/schemas/exercises/v1.1.0/exercise.schema.json \
-  -d specification/schemas/exercises/v1.1.0/exercise.example.unilateral.json
+  -s specification/schemas/exercises/v1.2.0/exercise.schema.json \
+  -d specification/schemas/exercises/v1.2.0/exercise.example.unilateral.json
 ```
 
 ## 9. Ejemplo de implementación
 
 ### 9.1. Exportación completa de la sentadilla trasera
 
-Basado en la implementación de referencia (`/specification/schemas/exercises/v1.1.0/exercise.example.json`):
+Basado en la implementación de referencia (`/specification/schemas/exercises/v1.2.0/exercise.example.json`):
 
 ```json
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.2.0",
   "exerciseId": "550e8400-e29b-41d4-a716-446655440000",
+  "fxi": "FXI=1.0S/m:hip.ext+kn.ext/o:standing/l:bar.straight@back",
   "canonical": {
     "name": "Back Squat",
     "slug": "back-squat",
@@ -462,20 +482,26 @@ Basado en la implementación de referencia (`/specification/schemas/exercises/v1
   },
   "targets": {
     "primary": [
-      { "id": "mus.quadriceps", "name": "Quadriceps", "categoryId": "cat.legs" }
+      { "id": "mus.rectusFemoris", "name": "Rectus Femoris", "categoryId": "cat.quadriceps", "fxm": "FXM=1.0/rectus-femoris", "fxmg": "FXMG=1.0/quadriceps-femoris" },
+      { "id": "mus.vastusLateralis", "name": "Vastus Lateralis", "categoryId": "cat.quadriceps", "fxm": "FXM=1.0/vastus-lateralis", "fxmg": "FXMG=1.0/quadriceps-femoris" },
+      { "id": "mus.vastusMedialis", "name": "Vastus Medialis", "categoryId": "cat.quadriceps", "fxm": "FXM=1.0/vastus-medialis", "fxmg": "FXMG=1.0/quadriceps-femoris" },
+      { "id": "mus.vastusIntermedius", "name": "Vastus Intermedius", "categoryId": "cat.quadriceps", "fxm": "FXM=1.0/vastus-intermedius", "fxmg": "FXMG=1.0/quadriceps-femoris" }
     ],
     "secondary": [
-      { "id": "mus.hamstrings", "name": "Hamstrings", "categoryId": "cat.legs" },
-      { "id": "mus.erectorSpinae", "name": "Erector Spinae", "categoryId": "cat.back" }
+      { "id": "mus.bicepsFemoris", "name": "Biceps Femoris", "categoryId": "cat.hamstrings", "fxm": "FXM=1.0/biceps-femoris", "fxmg": "FXMG=1.0/hamstring" },
+      { "id": "mus.semitendinosus", "name": "Semitendinosus", "categoryId": "cat.hamstrings", "fxm": "FXM=1.0/semitendinosus", "fxmg": "FXMG=1.0/hamstring" },
+      { "id": "mus.semimembranosus", "name": "Semimembranosus", "categoryId": "cat.hamstrings", "fxm": "FXM=1.0/semimembranosus", "fxmg": "FXMG=1.0/hamstring" },
+      { "id": "mus.iliocostalis", "name": "Iliocostalis", "categoryId": "cat.erectorSpinae", "fxm": "FXM=1.0/iliocostalis", "fxmg": "FXMG=1.0/erector-spinae" },
+      { "id": "mus.longissimus", "name": "Longissimus", "categoryId": "cat.erectorSpinae", "fxm": "FXM=1.0/longissimus", "fxmg": "FXMG=1.0/erector-spinae" }
     ]
   },
   "equipment": {
     "required": [
-      { "id": "eq.barbell", "name": "Barbell" },
-      { "id": "eq.rack", "name": "Power Rack" }
+      { "id": "eq.barbell", "name": "Barbell", "fxe": "FXE=1.0S/k:imp/f:bar.straight" },
+      { "id": "eq.rack", "name": "Power Rack", "fxe": "FXE=1.0S/k:sup/f:rack" }
     ],
     "optional": [
-      { "id": "eq.belt", "name": "Lifting Belt" }
+      { "id": "eq.belt", "name": "Lifting Belt", "fxe": "FXE=1.0S/k:acc/f:belt.lift" }
     ]
   },
   "constraints": {

@@ -8,8 +8,8 @@ keywords: [program, periodization, mesocycle, deload, schedule, progression, tra
 # RFC-008: Training Program Data Model Specification
 
 **Status**: Draft
-**Version**: 0.1.0
-**Date**: 2026-08-10
+**Version**: 0.2.0
+**Date**: 2026-11-26
 **Authors**: VITNESS Team
 **Category**: Standards Track
 
@@ -235,6 +235,8 @@ Adding a `schedule.model`, a `cycle` intent, a condition `kind` or a `relations`
 
 Entities version independently. A new program version does not oblige workout, exercise or the prescription library to move, and none of their versions oblige this one.
 
+**1.1.0** added the optional `fxi` on the exercise reference of a training max (§8.1).
+
 ## 7. Implementation Guidance
 
 ### 7.1. Producers
@@ -265,6 +267,8 @@ A program is reference data and contains no personal data by construction. It ca
 
 Each `trainingMaxSlot` carries an `exercise`, a `method` naming how the caller derives the value — `testedOneRepMax`, `estimatedOneRepMax`, `percentOfOneRepMax`, `recentBest`, or `callerSupplied` — and an optional `id`. A `percent` accompanies `percentOfOneRepMax`: a training max set at 90% of a true max is the 5/3/1 convention. `notes` may explain a house rule.
 
+The lift is an RFC-001 exercise reference in `exercise`, and may carry the exercise's structural key in `fxi`. See [Exercise key](../core-concepts/structural-keys/exercise-key).
+
 The `id` is a local handle, so that a progression rule or a day override can cite the slot. Load targets do not use it. A `percent1RM` names the lift through `referenceExerciseId`, and the slot that applies is the one whose `exercise` it names — the match is on the exercise, not on the slot's own identifier. A producer emitting a slot for a lift no prescription references has declared a requirement the plan does not have, and consumers SHOULD warn rather than demand the value.
 
 **A conforming implementation MUST NOT extend this structure with the value itself.** This is stated normatively because it is the single most likely thing for an implementer to "fix". The slot looks like an object with a field missing, and adding one appears to make programs self-contained at the cost of nothing.
@@ -279,7 +283,7 @@ An implementation that resolves a program against a specific athlete and stores 
 
 ## 9. JSON Schema Reference
 
-`https://spec.vitness.me/schemas/program/v1.0.0/program.schema.json`
+`https://spec.vitness.me/schemas/program/v1.1.0/program.schema.json`
 
 ### 9.1. Validation
 
@@ -293,7 +297,7 @@ A four-week linear block on a calendar schedule: three training days a week, a d
 
 ```json
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "programId": "00000000-0000-4000-8000-00000000b001",
   "canonical": { "name": "Foundation Strength", "slug": "foundation-strength" },
   "classification": {
@@ -311,7 +315,7 @@ A four-week linear block on a calendar schedule: three training days a week, a d
     "trainingMaxes": [
       {
         "id": "tm.backSquat",
-        "exercise": { "id": "ex.backSquat", "name": "Barbell Back Squat" },
+        "exercise": { "id": "ex.backSquat", "name": "Barbell Back Squat", "fxi": "FXI=1.0S/m:hip.ext+kn.ext/o:standing/l:bar.straight@back" },
         "method": "percentOfOneRepMax",
         "percent": 90
       }

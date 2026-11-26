@@ -6,13 +6,13 @@ usecase_promise: Program pokazuje na treninge; popravite jedan trening i popravl
 usecase_family: composition
 usecase_audiences: [coach, researcher]
 usecase_sources:
-  - specification/schemas/program/v1.0.0/program.linear.example.json
-  - specification/schemas/program/v1.0.0/program.percentage-waves.example.json
+  - specification/schemas/program/v1.1.0/program.linear.example.json
+  - specification/schemas/program/v1.1.0/program.percentage-waves.example.json
 ---
 
 import {SpecExample, BeforeAfter, Panel, Audience, NextSteps, Next} from '@site/docs/use-cases/_shared/UseCase';
-import linear from '@site/../specification/schemas/program/v1.0.0/program.linear.example.json';
-import waves from '@site/../specification/schemas/program/v1.0.0/program.percentage-waves.example.json';
+import linear from '@site/../specification/schemas/program/v1.1.0/program.linear.example.json';
+import waves from '@site/../specification/schemas/program/v1.1.0/program.percentage-waves.example.json';
 
 # Isplanirajte dvanaest nedelja bez kopiranja treninga trideset šest puta
 
@@ -40,7 +40,7 @@ Linearna progresija je cela metodologija u jednom pravilu: dodajte opterećenje 
 god je svako ponavljanje završeno. Obe nedelje su identične — opterećenje se pomera,
 plan ne — a dani pokazuju na trening referencom.
 
-<SpecExample source="specification/schemas/program/v1.0.0/program.linear.example.json" data={linear}>
+<SpecExample source="specification/schemas/program/v1.1.0/program.linear.example.json" data={linear}>
   Svaki dan je referenca `workout` sa denormalizovanim `name`. Ni serija, ni
   ponavljanje, ni opterećenje ne pojavljuju se u programu — žive u treningu na koji
   pokazuje.
@@ -49,7 +49,7 @@ plan ne — a dani pokazuju na trening referencom.
 Ista struktura skalira se do talasa u stilu 5/3/1 — i dalje ne nosi brojeve nijednog
 sportiste.
 
-<SpecExample source="specification/schemas/program/v1.0.0/program.percentage-waves.example.json" data={waves}>
+<SpecExample source="specification/schemas/program/v1.1.0/program.percentage-waves.example.json" data={waves}>
   Slotovi trenažnog maksimuma deklarišu iz kojih vežbi se plan računa; `overrides`
   nose talas. Nijedna *vrednost* trenažnog maksimuma ne pojavljuje se nigde u
   dokumentu.

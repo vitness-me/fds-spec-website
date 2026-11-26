@@ -5,7 +5,7 @@ sidebar_position: 1
 
 # Internacionalización (i18n) y convenciones de slugs
 
-Esta guía especifica las reglas de idioma y de slugs usadas en las entidades de FDS (ejercicios, equipamiento, músculos, categorías de músculos).
+Esta guía especifica las reglas de idioma y de slugs usadas en las entidades de FDS (ejercicios, equipamiento, músculos, categorías musculares).
 
 ## Etiquetas de idioma
 - Usar etiquetas de idioma BCP 47 para `localized[*].lang` (p. ej., `en`, `en-GB`, `sr`).

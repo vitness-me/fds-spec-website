@@ -8,6 +8,8 @@ sidebar_position: 8
 
 Esta guía ofrece ejemplos completos, de extremo a extremo, del uso del FDS Transformer en flujos de trabajo habituales.
 
+El Transformer no rellena las claves estructurales (`fxi`, `fxe`, `fxm`, `fxmg`); añádalas usted si las necesita. Véase [Claves estructurales](../../core-concepts/structural-keys.md).
+
 ## Ejemplo 1: Transformación básica
 
 Transformar un conjunto de datos simple de ejercicios sin enriquecimiento con IA.

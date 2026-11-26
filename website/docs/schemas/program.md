@@ -4,15 +4,15 @@ description: JSON Schema for a training program — cycles, weeks, day placement
 sidebar_position: 9
 ---
 
-# Program Schema (v1.0.0)
+# Program Schema (v1.1.0)
 
 A program places sessions in time: cycles, weeks, days, and the rules by which the prescription changes as the plan advances.
 
 ## Schema Location
 
-**URL:** `https://spec.vitness.me/schemas/program/v1.0.0/program.schema.json`
+**URL:** `https://spec.vitness.me/schemas/program/v1.1.0/program.schema.json`
 
-**Download:** [program.schema.json](https://spec.vitness.me/schemas/program/v1.0.0/program.schema.json)
+**Download:** [program.schema.json](https://spec.vitness.me/schemas/program/v1.1.0/program.schema.json)
 
 ## A schedule of references, not a container
 
@@ -59,7 +59,7 @@ This is the single most likely thing for an implementer to "fix", because the sl
 
 The accepted consequence: **a fully personalised program cannot round-trip as one self-contained document.** Export is the plan plus a separate resolution context. That trade-off is deliberate.
 
-A slot is matched by its `exercise` — a `percent1RM` names the lift through `referenceExerciseId`, and the slot that applies is the one naming that exercise. The slot's own `id` is a local handle for citation from a rule or an override.
+A slot is matched by its `exercise` — a `percent1RM` names the lift through `referenceExerciseId`, and the slot that applies is the one naming that exercise. The slot's own `id` is a local handle for citation from a rule or an override. The slot's `exercise` may carry the exercise's [structural key](/docs/core-concepts/structural-keys/exercise-key) in `fxi`.
 
 ## Branching, and the limit of adaptive plans
 
@@ -74,7 +74,7 @@ Adaptive programming splits in two, and only one half is portable. **Load adapta
 ## Worked examples
 
 <!-- fds:count examples:program=18 scenarios:program=18 -->
-Eighteen programs are published alongside the schema — one for every periodization model in the coverage matrix and one for every scheduling structure, indexed in [the fixture README](https://spec.vitness.me/schemas/program/v1.0.0/README.md).
+Eighteen programs are published alongside the schema — one for every periodization model in the coverage matrix and one for every scheduling structure, indexed in [the fixture README](https://spec.vitness.me/schemas/program/v1.1.0/README.md).
 
 Not one of them contains a set, a rep or a load. That is the claim above, demonstrated rather than asserted.
 

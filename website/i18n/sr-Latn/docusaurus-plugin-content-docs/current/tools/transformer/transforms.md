@@ -8,6 +8,8 @@ sidebar_position: 6
 
 FDS Transformer uključuje skup ugrađenih funkcija transformacija za uobičajene zadatke obrade podataka. Mogu se koristiti u svojstvu `transform` u mapiranjima polja.
 
+Transformator ne popunjava strukturne ključeve (`fxi`, `fxe`, `fxm`, `fxmg`); dodajte ih sami ako su vam potrebni. Pogledajte [Strukturni ključevi](../../core-concepts/structural-keys.md).
+
 ## Referenca transformacija
 
 ### `slugify`

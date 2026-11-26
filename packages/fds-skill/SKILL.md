@@ -1,7 +1,7 @@
 # FDS Specification Expert Skill
 
 > **Version:** 2.0.0  
-> **Specification Version:** FDS release 1.5.0  
+> **Specification Version:** FDS release 1.6.0  
 > **Last Updated:** November 2026
 
 ## What this document is
@@ -46,14 +46,14 @@ You validate against a *definition inside it*. The transformer does not carry th
 ### Schema URLs (Production)
 
 ```
-https://spec.vitness.me/schemas/exercises/v1.1.0/exercise.schema.json
-https://spec.vitness.me/schemas/equipment/v1.1.0/equipment.schema.json
-https://spec.vitness.me/schemas/muscle/v1.0.0/muscle.schema.json
-https://spec.vitness.me/schemas/muscle/muscle-category/v1.0.0/muscle-category.schema.json
+https://spec.vitness.me/schemas/exercises/v1.2.0/exercise.schema.json
+https://spec.vitness.me/schemas/equipment/v1.2.0/equipment.schema.json
+https://spec.vitness.me/schemas/muscle/v1.1.0/muscle.schema.json
+https://spec.vitness.me/schemas/muscle/muscle-category/v1.1.0/muscle-category.schema.json
 https://spec.vitness.me/schemas/atlas/v1.1.0/body-atlas.schema.json
-https://spec.vitness.me/schemas/prescription/v1.0.0/prescription.schema.json
-https://spec.vitness.me/schemas/workout/v1.1.0/workout.schema.json
-https://spec.vitness.me/schemas/program/v1.0.0/program.schema.json
+https://spec.vitness.me/schemas/prescription/v1.1.0/prescription.schema.json
+https://spec.vitness.me/schemas/workout/v1.2.0/workout.schema.json
+https://spec.vitness.me/schemas/program/v1.1.0/program.schema.json
 ```
 
 ### Entity versions are not uniform — get this right first
@@ -70,8 +70,9 @@ Release 1.3.0 serves exercise and equipment at 1.1.0 and everything else at 1.0.
 | 1.3.0 | as 1.2.0, plus program 1.0.0 |
 | 1.4.0 | as 1.3.0, but workout moves to 1.1.0 |
 | 1.5.0 | as 1.4.0, but body-atlas moves to 1.1.0 |
+| 1.6.0 | exercise, equipment, workout 1.2.0; muscle, muscle-category, prescription, program 1.1.0; body-atlas 1.1.0 |
 
-A superseded entity version stays published. `workout/v1.0.0/` is still served and still frozen, because releases 1.2.0 and 1.3.0 declare workout at 1.0.0. `atlas/v1.0.0/` likewise, because releases 1.0.0 through 1.4.0 declare body-atlas at 1.0.0.
+A superseded entity version stays published. `workout/v1.0.0/` is still served and still frozen, because releases 1.2.0 and 1.3.0 declare workout at 1.0.0. `atlas/v1.0.0/` likewise, because releases 1.0.0 through 1.4.0 declare body-atlas at 1.0.0. Every version release 1.6.0 superseded stays published too, because releases up to 1.5.0 name it.
 
 **Every published URL is frozen.** Its bytes never change; a change ships at a new version URL.
 
@@ -85,7 +86,7 @@ Every FDS Exercise MUST include:
 
 ```json
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.2.0",
   "exerciseId": "uuid-v4-here",
   "canonical": {
     "name": "Exercise Name",
@@ -111,6 +112,8 @@ Every FDS Exercise MUST include:
   }
 }
 ```
+
+An exercise may also carry its structural key in `fxi`. A muscle reference carries the muscle's `fxm` and its category's `fxmg` beside `categoryId`; an equipment reference carries the equipment's `fxe`.
 
 ### Classification Enumerations
 
@@ -216,8 +219,9 @@ Short IDs like `eq.barbell`, `mus.biceps`, `cat.legs` are ONLY for documentation
 ### Equipment Registry Entry
 ```json
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.2.0",
   "id": "b2c3d4e5-2222-4000-8000-000000000003",
+  "fxe": "FXE=1.0S/k:imp/f:bar.straight",
   "canonical": {
     "name": "Barbell",
     "slug": "barbell",
@@ -238,12 +242,13 @@ Short IDs like `eq.barbell`, `mus.biceps`, `cat.legs` are ONLY for documentation
 ### Muscle Registry Entry
 ```json
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "id": "c3d4e5f6-3333-4000-8000-000000000033",
+  "fxm": "FXM=1.0/rectus-femoris",
   "canonical": {
-    "name": "Quadriceps",
-    "slug": "quadriceps",
-    "aliases": ["quads", "front thigh"]
+    "name": "Rectus Femoris",
+    "slug": "rectus-femoris",
+    "aliases": ["rec fem"]
   },
   "classification": {
     "categoryId": "a1b2c3d4-1111-4000-8000-000000000006",

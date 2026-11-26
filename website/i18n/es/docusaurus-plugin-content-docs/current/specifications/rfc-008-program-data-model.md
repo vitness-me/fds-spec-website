@@ -8,8 +8,8 @@ keywords: [program, periodization, mesocycle, deload, schedule, progression, tra
 # RFC-008: Especificación del modelo de datos de programas de entrenamiento
 
 **Estado**: Borrador
-**Versión**: 0.1.0
-**Fecha**: 2026-08-10
+**Versión**: 0.2.0
+**Fecha**: 2026-11-26
 **Autores**: Equipo VITNESS
 **Categoría**: Standards Track
 
@@ -235,6 +235,8 @@ Agregar un `schedule.model`, un `intent` de ciclo, un `kind` de condición o un 
 
 Las entidades versionan de forma independiente. Una nueva versión de program no obliga a moverse a workout, a exercise ni a la biblioteca de prescripción, y ninguna de sus versiones obliga a esta.
 
+**1.1.0** agregó el campo opcional `fxi` en la referencia de ejercicio de un máximo de entrenamiento (§8.1).
+
 ## 7. Guía de implementación
 
 ### 7.1. Productores
@@ -265,6 +267,8 @@ Un programa es dato de referencia y no contiene datos personales por construcci�
 
 Cada `trainingMaxSlot` transporta un `exercise`, un `method` que nombra cómo quien llama deriva el valor — `testedOneRepMax`, `estimatedOneRepMax`, `percentOfOneRepMax`, `recentBest` o `callerSupplied` — y un `id` opcional. Un `percent` acompaña a `percentOfOneRepMax`: un máximo de entrenamiento fijado en el 90% de un máximo real es la convención del 5/3/1. `notes` puede explicar una regla de la casa.
 
+El levantamiento es una referencia de ejercicio del RFC-001 en `exercise`, y puede llevar la clave estructural del ejercicio en `fxi`. Véase [Clave de ejercicio](../core-concepts/structural-keys/exercise-key).
+
 El `id` es un identificador local, para que una regla de progresión o un override de día puedan citar el *slot*. Los objetivos de carga no lo usan. Un `percent1RM` nombra el levantamiento a través de `referenceExerciseId`, y el *slot* que aplica es aquel cuyo `exercise` nombra — la coincidencia es por el ejercicio, no por el identificador propio del *slot*. Un productor que emite un *slot* para un levantamiento que ninguna prescripción referencia ha declarado un requisito que el plan no tiene, y los consumidores DEBERÍAN advertir en lugar de exigir el valor.
 
 **Una implementación conforme NO DEBE extender esta estructura con el valor en sí.** Esto se declara de forma normativa porque es lo que un implementador tiene más probabilidades de intentar "arreglar". El *slot* se lee como un objeto al que le falta un campo, y agregarlo parece hacer los programas autocontenidos sin costo alguno.
@@ -279,7 +283,7 @@ Una implementación que resuelve un programa contra un atleta específico y alma
 
 ## 9. Referencia del JSON Schema
 
-`https://spec.vitness.me/schemas/program/v1.0.0/program.schema.json`
+`https://spec.vitness.me/schemas/program/v1.1.0/program.schema.json`
 
 ### 9.1. Validación
 
@@ -293,7 +297,7 @@ Un bloque lineal de cuatro semanas en un cronograma de calendario: tres días de
 
 ```json
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "programId": "00000000-0000-4000-8000-00000000b001",
   "canonical": { "name": "Foundation Strength", "slug": "foundation-strength" },
   "classification": {
@@ -311,7 +315,7 @@ Un bloque lineal de cuatro semanas en un cronograma de calendario: tres días de
     "trainingMaxes": [
       {
         "id": "tm.backSquat",
-        "exercise": { "id": "ex.backSquat", "name": "Barbell Back Squat" },
+        "exercise": { "id": "ex.backSquat", "name": "Barbell Back Squat", "fxi": "FXI=1.0S/m:hip.ext+kn.ext/o:standing/l:bar.straight@back" },
         "method": "percentOfOneRepMax",
         "percent": 90
       }

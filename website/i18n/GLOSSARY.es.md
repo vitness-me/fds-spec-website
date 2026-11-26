@@ -90,6 +90,7 @@ En las cadenas de la interfaz se usan comillas inglesas ("…"); las angulares
 | rate limit | límite de tasa | |
 | cost estimation | estimación de costos | «costos», forma americana — nunca «costes» |
 | MUST / MUST NOT / SHOULD / MAY | DEBE / NO DEBE / DEBERÍA / PUEDE | palabras clave RFC 2119, siempre en mayúsculas; el inglés queda normativo |
+| Core Concepts (sección) | Conceptos fundamentales | nunca «Conceptos clave», que choca con «claves» |
 | overview | visión general | como en las cadenas de la interfaz ya publicadas; nunca «panorama general» |
 | array | arreglo | forma americana; nunca «matriz» |
 | default | predeterminado | |
@@ -197,3 +198,44 @@ En las cadenas de la interfaz se usan comillas inglesas ("…"); las angulares
 | wearable | wearable | «dispositivos wearables» |
 | Standards Track | Standards Track | nombre del proceso RFC; sin traducir |
 | RFC 2119 en plural | DEBEN / DEBERÍAN | la concordancia flexiona la palabra clave, nunca la modalidad |
+| structural key | clave estructural | los campos `fxi`, `fxe`, `fxm`, `fxmg` y los encabezados (`FXI=1.0S`…) no se traducen |
+| exercise key / equipment key | clave de ejercicio / clave de equipamiento | |
+| muscle key / muscle category key | clave de músculo / clave de categoría muscular | |
+| layer | capa | «la capa de carga», «capas extendidas» |
+| dimension | dimensión | |
+| code | código | los códigos (`el.flex`, `bell.dumb`…) no se traducen |
+| symbol | símbolo | |
+| flag (S / N) | indicador | el valor `S` o `N` no se traduce |
+| header | encabezado | |
+| body point / hold point | punto corporal / punto de sujeción | los valores (`hands`, `feet`…) no se traducen |
+| body position | posición corporal | |
+| form (`f`) | forma | |
+| kind (`k`) | clase | nunca «tipo», que traduce *type* (`classification.type`) |
+| implement | implemento | |
+| support | apoyo | la clase `sup` y la capa `s` de la clave de ejercicio |
+| station | estación | `cable`, `smith`, `landmine` |
+| pad (máquina) | almohadilla / rodillo | «rodillo» para el de pierna (muslo, parte baja de la pierna); nunca «respaldo», que traduce *fallback* |
+| strength machine / cardio machine | máquina de fuerza / máquina de cardio | |
+| accessory | accesorio | |
+| load interface / posture / track | interfaz de carga / postura / guía | capas de la clave de equipamiento |
+| same / more specific / different / overlap | igual / más específico / distinto / solapamiento | resultados de comparación; los valores `same`, `more-specific`… no se traducen. «se solapan» como verbo |
+| in / partly in / not in | dentro / parcialmente dentro / fuera | un músculo en una categoría; los valores `in`, `partly-in`, `not-in` no se traducen |
+| owner | propietario | quien escribe las claves de sus propios registros |
+| member | miembro | los miembros de una categoría |
+| union | unión | |
+| compartment | compartimento | |
+| prime mover | motor principal | «los motores principales de la flexión de cadera» |
+| Encoder | FDS Encoder | nombre propio; sin traducir, masculino: «el Encoder» |
+| conformance case | caso de conformidad | véase *conformance* más arriba |
+
+## Nombres en los ejemplos
+
+En la prosa, los ejercicios, el equipamiento y los músculos llevan el nombre
+asentado en español, el que usa quien entrena en un gimnasio, no una
+traducción palabra por palabra del nombre inglés: «curl con mancuerna»,
+«jalón al pecho», «dorsales». Donde el inglés cita un nombre de otro idioma
+para mostrar que los nombres cambian con el idioma, se conserva el contraste y
+se reestructura la frase: el nombre en español es el conocido, y los de otros
+idiomas, el inglés incluido, son los extranjeros. Las claves, los códigos, los
+nombres de campos, los bloques JSON y los comandos no cambian; los ejemplos
+JSON quedan idénticos al inglés, incluidos los valores de `name`.

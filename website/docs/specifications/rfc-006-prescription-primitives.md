@@ -8,8 +8,8 @@ keywords: [prescription, load target, rpe, percent 1rm, tempo, rest, progression
 # RFC-006: Prescription Primitives Specification
 
 **Status**: Draft
-**Version**: 0.1.0
-**Date**: 2026-08-07
+**Version**: 0.2.0
+**Date**: 2026-11-26
 **Authors**: VITNESS Team
 **Category**: Standards Track
 
@@ -75,7 +75,7 @@ The published schema carries no `schemaVersion`, no identifier and no `metadata`
 Validating any document against the library root fails by construction. This is a guardrail, not an inconvenience: a library whose root accepted everything would silently pass any document handed to it, and a consumer would take that as confirmation. Reference a definition instead:
 
 ```json fds:ignore a JSON Schema excerpt, not a document
-{ "$ref": "https://spec.vitness.me/schemas/prescription/v1.0.0/prescription.schema.json#/$defs/loadTarget" }
+{ "$ref": "https://spec.vitness.me/schemas/prescription/v1.1.0/prescription.schema.json#/$defs/loadTarget" }
 ```
 
 Because published FDS schemas are self-contained (see the authoring guide), RFC-007 and RFC-008 will carry flattened copies of the definitions they use. Implementers validating a Workout never need to fetch this file.
@@ -127,6 +127,8 @@ Thirteen defined methods plus the forward-compatibility branch. All methods exce
 | `bodyweight` | — | Yes |
 | `autoregulated` | `progressionRuleRef` | No — needs rule state |
 | `none` | — | Yes |
+
+The `equipment` of `bandResistance` is an RFC-001 equipment reference, and may carry the band's structural key in `fxe`. See [Equipment key](../core-concepts/structural-keys/equipment-key).
 
 Three of these carry semantics a consumer can get wrong in a way validation cannot catch:
 
@@ -244,11 +246,13 @@ This restates §3.3 for a different failure: §3.3 governs a method that is not 
 
 ## 6. Versioning and Compatibility
 
-This library follows the versioning rules in RFC-001 §5. Its published URL is a frozen contract: the bytes at `prescription/v1.0.0/prescription.schema.json` will not change. Additions ship as a new minor version at a new URL.
+This library follows the versioning rules in RFC-001 §5. Its published URL is a frozen contract: the bytes at `prescription/v1.1.0/prescription.schema.json` will not change. Additions ship as a new minor version at a new URL.
 
 Adding a method to a discriminated union is a MINOR change: documents valid under the old version remain valid, because the new method previously validated through the catch-all branch. That is the compatibility property the catch-all exists to provide, and it is why the branch is specified rather than left to implementations.
 
 Removing a method, or narrowing an existing payload, is a MAJOR change.
+
+**1.1.0** added the optional `fxe` on the equipment of `bandResistance` (§4.1).
 
 ## 7. Implementation Guidance
 
@@ -278,7 +282,7 @@ An implementation that embeds resolved personal values into a prescription — w
 
 ## 9. JSON Schema Reference
 
-`https://spec.vitness.me/schemas/prescription/v1.0.0/prescription.schema.json`
+`https://spec.vitness.me/schemas/prescription/v1.1.0/prescription.schema.json`
 
 ### 9.1. Validation
 

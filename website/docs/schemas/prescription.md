@@ -4,7 +4,7 @@ description: How much load, how many reps, what tempo, how much rest — the sha
 sidebar_position: 7
 ---
 
-# Prescription Primitives (v1.0.0)
+# Prescription Primitives (v1.1.0)
 
 Prescription answers four questions about a set: **how much load, how many repetitions, at what tempo, and how much rest.** Everything in FDS that prescribes work composes these definitions, so a set inside a standalone workout and the same set inside a twelve-week program mean exactly the same thing.
 
@@ -18,7 +18,7 @@ What you validate against is a *definition inside it*. The published fixtures ea
 
 The transformer does not carry this schema for the same reason. It validates entities, and a definition library is not one.
 
-**URL:** `https://spec.vitness.me/schemas/prescription/v1.0.0/prescription.schema.json`
+**URL:** `https://spec.vitness.me/schemas/prescription/v1.1.0/prescription.schema.json`
 
 ## The definitions
 
@@ -34,6 +34,8 @@ The transformer does not carry this schema for the same reason. It validates ent
 | `intensityZone` | A zone in a named system — heart rate, power, pace, perceived |
 | `setScheme` | A named pattern across sets, with its parameters |
 | `progressionRule` | When the prescription changes, and how |
+
+The `equipment` reference in a `bandResistance` load may carry the band's [structural key](/docs/core-concepts/structural-keys/equipment-key) in `fxe`.
 
 ## Two rules worth reading before you implement
 
@@ -65,7 +67,7 @@ Implementations extending these unions must preserve that disjointness.
 
 ## Worked examples
 
-Sixty-nine fixtures are published alongside the schema, one per definition and one per discriminator value, each named for what it demonstrates and indexed in [the fixture README](https://spec.vitness.me/schemas/prescription/v1.0.0/README.md).
+Sixty-nine fixtures are published alongside the schema, one per definition and one per discriminator value, each named for what it demonstrates and indexed in [the fixture README](https://spec.vitness.me/schemas/prescription/v1.1.0/README.md).
 
 Negative fixtures are included too — documents that **must** be rejected. A schema that accepts everything passes every positive test.
 

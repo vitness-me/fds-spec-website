@@ -1,0 +1,87 @@
+{
+  "registry": "body-points",
+  "version": "1.0.0",
+  "key": "FXI=1.0 FXE=1.0",
+  "description": "The body points both keys share: where an exercise key holds a load (after @ in l) and where the body bears weight on a support (after @ in s), and an equipment key's load interface (l).",
+  "policy": "closed",
+  "governs": [
+    {
+      "source": "specification/schema-sources/exercises/v1.2.0/exercise.schema.json",
+      "pointer": "fxi"
+    },
+    {
+      "source": "specification/schema-sources/equipment/v1.2.0/equipment.schema.json",
+      "pointer": "fxe"
+    }
+  ],
+  "entries": [
+    {
+      "value": "hands",
+      "description": "The hands, or one hand: a held implement, handles or a bar."
+    },
+    {
+      "value": "forearms",
+      "description": "The forearms, elbows bent: an elbow plank, or a machine’s forearm pads."
+    },
+    {
+      "value": "elbows",
+      "description": "The crook of the elbows (Zercher)."
+    },
+    {
+      "value": "arms",
+      "description": "The upper arms: a preacher pad, or a machine’s arm pad on the upper arm or elbow."
+    },
+    {
+      "value": "shoulders",
+      "description": "The shoulders: the front rack or one shoulder, or a machine’s shoulder pads."
+    },
+    {
+      "value": "chest",
+      "description": "The chest: a load held against it (goblet, bear hug), or a chest pad."
+    },
+    {
+      "value": "back",
+      "description": "The back: a bar across the upper back (back squat), or a back pad."
+    },
+    {
+      "value": "hips",
+      "description": "The front of the hips: a load across them (hip thrust), or a machine’s hip pad or belt."
+    },
+    {
+      "value": "waist",
+      "description": "Hung from a belt at the waist."
+    },
+    {
+      "value": "seat",
+      "description": "The buttocks: sitting down onto a box or bench, or a machine’s moving seat."
+    },
+    {
+      "value": "thighs",
+      "description": "On or around the thighs, or a machine’s thigh pad."
+    },
+    {
+      "value": "knees",
+      "description": "At or around the knees, or a machine’s knee pad or platform."
+    },
+    {
+      "value": "shins",
+      "description": "The shins."
+    },
+    {
+      "value": "calves",
+      "description": "The calves (the back of the lower leg)."
+    },
+    {
+      "value": "ankles",
+      "description": "At or just above the ankles: a strap, a cuff, or a machine pad on the lower leg."
+    },
+    {
+      "value": "feet",
+      "description": "The feet, or one foot: on the floor, or on a foot plate or pedals."
+    },
+    {
+      "value": "head",
+      "description": "The head or forehead, or a machine’s head pad."
+    }
+  ]
+}

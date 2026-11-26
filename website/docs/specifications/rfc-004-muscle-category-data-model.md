@@ -8,8 +8,8 @@ keywords: [muscle category, grouping, data model, json schema, interoperability,
 # RFC-004: Muscle Category Data Model Specification
 
 **Status**: Draft
-**Version**: 0.1.0
-**Date**: 2025-09-09
+**Version**: 0.2.0
+**Date**: 2026-11-26
 **Authors**: VITNESS Team
 **Category**: Standards Track
 
@@ -65,8 +65,9 @@ All compliant muscle category data **MUST** include these fields:
 
 ```json fds:document entity=muscle-category
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "id": "cat.legs",
+  "fxmg": "FXMG=1.0/a:hip.flex+buttock+hamstring+quadriceps-femoris+sartorius+tensor-fasciae-latae+thigh.medial+tibialis-anterior+triceps-surae",
   "canonical": {
     "name": "Legs",
     "slug": "legs"
@@ -86,6 +87,7 @@ Commonly supported optional fields that enhance interoperability:
 
 ```json fds:fragment entity=muscle-category partial
 {
+  "fxmg": "FXMG=1.0/a:hip.flex+buttock+hamstring+quadriceps-femoris+sartorius+tensor-fasciae-latae+thigh.medial+tibialis-anterior+triceps-surae",
   "canonical": {
     "localized": [
       { "lang": "sr", "name": "Noge" }
@@ -101,6 +103,8 @@ Commonly supported optional fields that enhance interoperability:
   }
 }
 ```
+
+`fxmg` is the muscle category's structural key: the set of muscles the category holds, named by anatomy, by joint action, or as a union of these and single muscles or parts. It is not an identifier; `id` stays the record's identity. The schema checks only its header, `FXMG=1.0/`. See [Muscle category key](../core-concepts/structural-keys/muscle-category-key).
 
 ### 3.3. Extension Mechanisms
 
@@ -177,6 +181,8 @@ For complex platform-unique data structures:
 
 ## 5. Versioning and Compatibility
 
+**1.1.0** added the optional `fxmg` (§3.2).
+
 ### 5.1. Schema Versioning
 
 Following semantic versioning:
@@ -193,10 +199,10 @@ Following semantic versioning:
 
 ### 5.3. Schema Evolution Example
 
-Version 1.0.0 → 1.1.0 (Adding optional hierarchy field):
+From one minor version to the next (Adding optional hierarchy field):
 ```json fds:ignore a hypothetical next version illustrating how an optional field arrives; no published muscle-category schema has hierarchy
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.x.0",
   "id": "cat.legs",
   "canonical": { "name": "Legs", "slug": "legs" },
   "hierarchy": {
@@ -243,7 +249,7 @@ graph LR
 ## 8. JSON Schema Reference
 
 Complete JSON Schema available at:
-- **Muscle Category**: `/specification/schemas/muscle/muscle-category/v1.0.0/muscle-category.schema.json`
+- **Muscle Category**: `/specification/schemas/muscle/muscle-category/v1.1.0/muscle-category.schema.json`
 
 ## Heatmap Aggregation (Informative)
 
@@ -259,20 +265,21 @@ Validate with Ajv (Draft 2020-12):
 
 ```
 npx --package=ajv-cli --package=ajv-formats ajv validate --spec=draft2020 -c ajv-formats \
-  -s specification/schemas/muscle/muscle-category/v1.0.0/muscle-category.schema.json \
-  -d specification/schemas/muscle/muscle-category/v1.0.0/muscle-category.example.json
+  -s specification/schemas/muscle/muscle-category/v1.1.0/muscle-category.schema.json \
+  -d specification/schemas/muscle/muscle-category/v1.1.0/muscle-category.example.json
 ```
 
 ## 9. Example Implementation
 
 ### 9.1. Complete Legs Muscle Category Record
 
-Based on reference implementation (`/specification/schemas/muscle/muscle-category/v1.0.0/muscle-category.example.json`):
+Based on reference implementation (`/specification/schemas/muscle/muscle-category/v1.1.0/muscle-category.example.json`):
 
 ```json fds:document entity=muscle-category
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "id": "cat.legs",
+  "fxmg": "FXMG=1.0/a:hip.flex+buttock+hamstring+quadriceps-femoris+sartorius+tensor-fasciae-latae+thigh.medial+tibialis-anterior+triceps-surae",
   "canonical": { 
     "name": "Legs", 
     "slug": "legs",

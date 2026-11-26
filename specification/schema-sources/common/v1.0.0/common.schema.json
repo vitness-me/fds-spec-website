@@ -307,6 +307,26 @@
         }
       }
     },
+    "fxi": {
+      "description": "The exercise's structural key: how the body moves, its position and what it moves with, in codes FDS publishes. Optional; the pattern checks the header only. See https://spec.vitness.me/docs/core-concepts/structural-keys/exercise-key",
+      "type": "string",
+      "pattern": "^FXI=1\\.0[SN]/"
+    },
+    "fxe": {
+      "description": "The equipment's structural key: what kind of equipment it is and its form, in codes FDS publishes. Optional; the pattern checks the header only. See https://spec.vitness.me/docs/core-concepts/structural-keys/equipment-key",
+      "type": "string",
+      "pattern": "^FXE=1\\.0[SN]/"
+    },
+    "fxm": {
+      "description": "The muscle's structural key: one muscle, or one part of it, by its anatomical term. Optional; the pattern checks the header only. See https://spec.vitness.me/docs/core-concepts/structural-keys/muscle-key",
+      "type": "string",
+      "pattern": "^FXM=1\\.0/"
+    },
+    "fxmg": {
+      "description": "The muscle category's structural key: the set of muscles the category holds. Optional; the pattern checks the header only. See https://spec.vitness.me/docs/core-concepts/structural-keys/muscle-category-key",
+      "type": "string",
+      "pattern": "^FXMG=1\\.0/"
+    },
     "muscleRef": {
       "type": "object",
       "required": [
@@ -327,6 +347,12 @@
         },
         "categoryId": {
           "type": "string"
+        },
+        "fxm": {
+          "$ref": "#/$defs/fxm"
+        },
+        "fxmg": {
+          "$ref": "#/$defs/fxmg"
         },
         "aliases": {
           "type": "array",
@@ -352,6 +378,9 @@
         },
         "name": {
           "type": "string"
+        },
+        "fxe": {
+          "$ref": "#/$defs/fxe"
         },
         "abbreviation": {
           "type": "string"
@@ -387,6 +416,9 @@
         },
         "name": {
           "type": "string"
+        },
+        "fxi": {
+          "$ref": "#/$defs/fxi"
         },
         "aliases": {
           "type": "array",

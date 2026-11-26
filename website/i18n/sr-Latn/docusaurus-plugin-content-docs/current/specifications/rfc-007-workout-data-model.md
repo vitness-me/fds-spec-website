@@ -8,8 +8,8 @@ keywords: [workout, session, superset, circuit, emom, amrap, tabata, data model,
 # RFC-007: Specifikacija modela podataka treninga
 
 **Status**: Nacrt
-**Verzija**: 0.2.0
-**Datum**: 2026-08-10
+**Verzija**: 0.3.0
+**Datum**: 2026-11-26
 **Autori**: VITNESS tim
 **Kategorija**: Standards Track
 
@@ -140,6 +140,8 @@ Ovo preslikava RFC-006 §3.3 i iz istog razloga. Tiho izvršavanje neprepoznate 
 
 `id` i `exercise` su obavezni; sve ostalo je preskripcija.
 
+`exercise`, kao i svaki unos u `alternatives[]`, jeste referenca na vežbu iz RFC-001 i može nositi strukturni ključ vežbe u `fxi`. Pogledajte [Ključ vežbe](../core-concepts/structural-keys/exercise-key).
+
 `alternatives[]` navodi zamene **koje autor unapred odobrava** — oprema nedostupna, pokret kontraindikovan, regresija za manje iskusnog sportistu. To je deo preskripcije i putuje sa treningom.
 
 Ovo je različito od zamene koju sportista napravi tokom treninga, što su podaci o izvedenom i pripadaju RFC-009. Razlika je bitna jer to dvoje odgovara na različita pitanja: `alternatives[]` kaže šta autor smatra ekvivalentnim; zabeležena zamena kaže šta se dogodilo. Njihovo sažimanje učinilo bi nameru programa nepovratnom iz istorije njegovog izvršavanja.
@@ -204,6 +206,8 @@ Konzument koji ne može da primeni podešavanje — nema kontrole nagiba na opre
 
 `targets` i `equipment` sumiraju šta trening trenira i šta mu je potrebno. Oba su **opciona i savetodavna**.
 
+Njihovi unosi su reference na mišiće i opremu iz RFC-001 i mogu nositi iste strukturne ključeve: `fxm` i `fxmg` na mišiću, `fxe` na komadu opreme.
+
 Konzument NE SME da tretira nijedno od njih kao merodavno u odnosu na obilazak stavki. To su izvedeni podaci koji mogu biti odsutni, zastareli ili izračunati pod pretpostavkama koje konzument ne deli — zbirni prikaz proizveden pre nego što je stavka zamenjena više ne opisuje trening. Postoje za izlistavanje i filtriranje, gde je preračunavanje preko cele biblioteke skupo, a približni odgovori prihvatljivi.
 
 ### 4.8. Opciona opisna polja
@@ -249,6 +253,8 @@ Dodavanje `mode` vrednosti je SPOREDNA izmena: dokumenti važeći pod starom ver
 
 **1.1.0** je dodala `settings` na stavkama i serijama, i `zone` na seriji. Oba su opciona dodavanja zatvorenim objektima, pa svaki 1.0.0 dokument ostaje važeći nepromenjen — ali 1.1.0 dokument koji koristi bilo koje od njih biva odbačen od strane 1.0.0 šeme, što je ono što ovo čini verzijom, a ne izmenom. `workout/v1.0.0/workout.schema.json` ostaje objavljena i zamrznuta; izdanja 1.2.0 i 1.3.0 deklarišu workout na 1.0.0 i nastavljaju da se razrešavaju. Izdanje 1.4.0 je prvo koje ga deklariše na 1.1.0.
 
+**1.2.0** je dodala opciono polje `fxi` na referenci vežbe (§4.3), i `fxm`, `fxmg` i `fxe` na referencama mišića i opreme u izvedenim zbirovima (§4.7).
+
 Entiteti se verzionišu nezavisno. Nova verzija treninga ne obavezuje vežbu, opremu ni biblioteku preskripcije da se pomere, i nijedna od njihovih verzija ne obavezuje ovu.
 
 ## 7. Smernice za implementaciju
@@ -273,7 +279,7 @@ Implementacija koja razreši trening prema konkretnom sportisti i sačuva rezult
 
 ## 9. Referenca JSON šeme
 
-`https://spec.vitness.me/schemas/workout/v1.1.0/workout.schema.json`
+`https://spec.vitness.me/schemas/workout/v1.2.0/workout.schema.json`
 
 Zamenjena verzija ostaje dostupna, i klijent fiksiran na izdanje koje deklariše workout na 1.0.0 nastavlja da je preuzima:
 
@@ -293,7 +299,7 @@ Trening za gornji deo tela: blok zagrevanja, primarni blok sa top serijom i back
 
 ```json
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.2.0",
   "workoutId": "00000000-0000-4000-8000-00000000a001",
   "canonical": { "name": "Upper A", "slug": "upper-a" },
   "classification": {
@@ -310,7 +316,7 @@ Trening za gornji deo tela: blok zagrevanja, primarni blok sa top serijom i back
         "items": [
           {
             "id": "i1",
-            "exercise": { "id": "ex.benchPress", "name": "Barbell Bench Press" },
+            "exercise": { "id": "ex.benchPress", "name": "Barbell Bench Press", "fxi": "FXI=1.0S/m:el.ext+sh.hadd/o:supine/s:bench/l:bar.straight@hands" },
             "scheme": {
               "pattern": "topSetBackoff",
               "sets": 4,
@@ -332,14 +338,14 @@ Trening za gornji deo tela: blok zagrevanja, primarni blok sa top serijom i back
           {
             "id": "i2",
             "groupLabel": "A1",
-            "exercise": { "id": "ex.dumbbellRow", "name": "Dumbbell Row" },
+            "exercise": { "id": "ex.dumbbellRow", "name": "Dumbbell Row", "fxi": "FXI=1.0S/m:el.flex+sh.ext/o:?/l:bell.dumb@hands/x:?" },
             "reps": { "kind": "range", "min": 8, "max": 12 },
             "load": { "method": "rir", "value": 2 }
           },
           {
             "id": "i3",
             "groupLabel": "A2",
-            "exercise": { "id": "ex.inclineDbPress", "name": "Incline Dumbbell Press" },
+            "exercise": { "id": "ex.inclineDbPress", "name": "Incline Dumbbell Press", "fxi": "FXI=1.0S/m:el.ext+sh.flex+sh.hadd/o:supine.incline/s:bench/l:bell.dumb@hands" },
             "reps": { "kind": "range", "min": 8, "max": 12 },
             "load": { "method": "rir", "value": 2 }
           }
@@ -353,7 +359,7 @@ Trening za gornji deo tela: blok zagrevanja, primarni blok sa top serijom i back
         "items": [
           {
             "id": "i4",
-            "exercise": { "id": "ex.airBike", "name": "Air Bike" },
+            "exercise": { "id": "ex.airBike", "name": "Air Bike", "fxi": "FXI=1.0S/m:~hip.ext+kn.ext/o:seated/l:erg.cycle@feet/x:rc" },
             "reps": { "kind": "calories", "value": 15 },
             "zone": { "system": "heartRate", "zone": "Z4", "boundsRef": "zone.fiveZoneHeartRate" }
           }

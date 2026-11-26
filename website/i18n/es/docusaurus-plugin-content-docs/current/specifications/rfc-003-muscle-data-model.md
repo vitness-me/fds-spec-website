@@ -8,8 +8,8 @@ keywords: [muscle, anatomy, data model, json schema, heatmap, interoperability, 
 # RFC-003: Especificación del modelo de datos de músculo
 
 **Estado**: Borrador
-**Versión**: 0.1.0
-**Fecha**: 2025-09-09
+**Versión**: 0.2.0
+**Fecha**: 2026-11-26
 **Autores**: Equipo VITNESS
 **Categoría**: Standards Track
 
@@ -68,14 +68,15 @@ Todos los datos de músculo conformes **DEBEN** incluir estos campos:
 
 ```json fds:document entity=muscle
 {
-  "schemaVersion": "1.0.0",
-  "id": "mus.quadriceps",
+  "schemaVersion": "1.1.0",
+  "id": "mus.rectusFemoris",
+  "fxm": "FXM=1.0/rectus-femoris",
   "canonical": {
-    "name": "Quadriceps",
-    "slug": "quadriceps"
+    "name": "Rectus Femoris",
+    "slug": "rectus-femoris"
   },
   "classification": {
-    "categoryId": "cat.legs",
+    "categoryId": "cat.quadriceps",
     "region": "lower-front"
   },
   "metadata": {
@@ -93,10 +94,11 @@ Campos opcionales comúnmente admitidos que mejoran la interoperabilidad:
 
 ```json fds:fragment entity=muscle partial
 {
+  "fxm": "FXM=1.0/rectus-femoris",
   "canonical": {
-    "aliases": ["Quads"],
+    "aliases": ["Rec Fem"],
     "localized": [
-      { "lang": "sr", "name": "Kvadriceps" }
+      { "lang": "sr", "name": "Pravi mišić buta" }
     ]
   },
   "classification": {
@@ -118,6 +120,8 @@ Campos opcionales comúnmente admitidos que mejoran la interoperabilidad:
   }
 }
 ```
+
+`fxm` es la clave estructural del músculo: un músculo, o una parte de él, nombrado por su término anatómico, como `FXM=1.0/latissimus-dorsi`. No es un identificador; `id` sigue siendo la identidad del registro. El esquema solo comprueba su encabezado, `FXM=1.0/`. Véase [Clave de músculo](../core-concepts/structural-keys/muscle-key).
 
 ### 3.3. Mecanismos de extensión
 
@@ -141,7 +145,7 @@ Para estructuras de datos complejas y exclusivas de una plataforma:
 {
   "extensions": {
     "x:anatomy": {
-      "origin": "Anterior superior iliac spine, femur",
+      "origin": "Anterior inferior iliac spine, ilium above the acetabulum",
       "insertion": "Patella, tibial tuberosity",
       "innervation": "Femoral nerve"
     }
@@ -158,11 +162,11 @@ Para estructuras de datos complejas y exclusivas de una plataforma:
 ```json fds:fragment entity=muscle
 {
   "canonical": {
-    "name": "Quadriceps",
-    "slug": "quadriceps",
-    "aliases": ["Quads"],
+    "name": "Rectus Femoris",
+    "slug": "rectus-femoris",
+    "aliases": ["Rec Fem"],
     "localized": [
-      { "lang": "sr", "name": "Kvadriceps" }
+      { "lang": "sr", "name": "Pravi mišić buta" }
     ]
   }
 }
@@ -175,7 +179,7 @@ Para estructuras de datos complejas y exclusivas de una plataforma:
 ```json fds:fragment entity=muscle
 {
   "classification": {
-    "categoryId": "cat.legs",
+    "categoryId": "cat.quadriceps",
     "region": "lower-front",
     "laterality": "bilateral",
     "tags": ["major-muscle", "lower-body"]
@@ -212,7 +216,7 @@ El campo `laterality` describe características de simetría:
   "media": [
     {
       "type": "image",
-      "uri": "https://cdn.example.com/anatomy/quadriceps.jpg"
+      "uri": "https://cdn.example.com/anatomy/rectus-femoris.jpg"
     }
   ]
 }
@@ -244,6 +248,8 @@ Notas:
 
 ## 5. Versionado y compatibilidad
 
+**1.1.0** agregó el campo opcional `fxm` (§3.2).
+
 ### 5.1. Versionado de esquemas
 
 Siguiendo el versionado semántico:
@@ -260,12 +266,12 @@ Siguiendo el versionado semántico:
 
 ### 5.3. Ejemplo de evolución del esquema
 
-Versión 1.0.0 → 1.1.0 (adición de un campo opcional biomecánico):
+De una versión menor a la siguiente (adición de un campo opcional biomecánico):
 ```json fds:ignore a hypothetical next version illustrating how an optional field arrives; no published muscle schema has biomechanics
 {
-  "schemaVersion": "1.1.0",
-  "id": "mus.quadriceps",
-  "canonical": { "name": "Quadriceps", "slug": "quadriceps" },
+  "schemaVersion": "1.x.0",
+  "id": "mus.rectusFemoris",
+  "canonical": { "name": "Rectus Femoris", "slug": "rectus-femoris" },
   "biomechanics": {
     "primaryActions": ["knee-extension", "hip-flexion"],
     "forceDirection": "linear"
@@ -309,7 +315,7 @@ graph LR
 ## 8. Referencia de JSON Schema
 
 El JSON Schema completo está disponible en:
-- **Músculo**: `/specification/schemas/muscle/v1.0.0/muscle.schema.json`
+- **Músculo**: `/specification/schemas/muscle/v1.1.0/muscle.schema.json`
 - **Atlas corporal**: `/specification/schemas/atlas/v1.1.0/body-atlas.schema.json`
 
 ## 8.1. Validación
@@ -318,30 +324,31 @@ Validar con Ajv (Draft 2020-12):
 
 ```
 npx --package=ajv-cli --package=ajv-formats ajv validate --spec=draft2020 -c ajv-formats \
-  -s specification/schemas/muscle/v1.0.0/muscle.schema.json \
-  -d specification/schemas/muscle/v1.0.0/muscle.example.json
+  -s specification/schemas/muscle/v1.1.0/muscle.schema.json \
+  -d specification/schemas/muscle/v1.1.0/muscle.example.json
 ```
 
 ## 9. Ejemplo de implementación
 
-### 9.1. Registro completo del músculo cuádriceps
+### 9.1. Registro completo del músculo recto femoral
 
-Basado en la implementación de referencia (`/specification/schemas/muscle/v1.0.0/muscle.example.json`):
+Basado en la implementación de referencia (`/specification/schemas/muscle/v1.1.0/muscle.example.json`):
 
 ```json
 {
-  "schemaVersion": "1.0.0",
-  "id": "mus.quadriceps",
+  "schemaVersion": "1.1.0",
+  "id": "mus.rectusFemoris",
+  "fxm": "FXM=1.0/rectus-femoris",
   "canonical": { 
-    "name": "Quadriceps", 
-    "slug": "quadriceps",
-    "aliases": ["Quads"],
+    "name": "Rectus Femoris", 
+    "slug": "rectus-femoris",
+    "aliases": ["Rec Fem"],
     "localized": [
-      { "lang": "sr", "name": "Kvadriceps" }
+      { "lang": "sr", "name": "Pravi mišić buta" }
     ]
   },
   "classification": { 
-    "categoryId": "cat.legs", 
+    "categoryId": "cat.quadriceps", 
     "region": "lower-front", 
     "laterality": "bilateral"
   },
@@ -360,7 +367,7 @@ Basado en la implementación de referencia (`/specification/schemas/muscle/v1.0.
   },
   "extensions": {
     "x:anatomy": {
-      "origin": "Anterior superior iliac spine, femur",
+      "origin": "Anterior inferior iliac spine, ilium above the acetabulum",
       "insertion": "Patella, tibial tuberosity",
       "innervation": "Femoral nerve"
     }

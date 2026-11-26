@@ -8,8 +8,8 @@ keywords: [muscle category, grouping, data model, json schema, interoperability,
 # RFC-004: Specifikacija modela podataka kategorije mišića
 
 **Status**: Nacrt
-**Verzija**: 0.1.0
-**Datum**: 2025-09-09
+**Verzija**: 0.2.0
+**Datum**: 2026-11-26
 **Autori**: VITNESS tim
 **Kategorija**: Standards Track
 
@@ -65,8 +65,9 @@ Svi usaglašeni podaci o kategorijama mišića **MORAJU** da uključuju sledeća
 
 ```json fds:document entity=muscle-category
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "id": "cat.legs",
+  "fxmg": "FXMG=1.0/a:hip.flex+buttock+hamstring+quadriceps-femoris+sartorius+tensor-fasciae-latae+thigh.medial+tibialis-anterior+triceps-surae",
   "canonical": {
     "name": "Legs",
     "slug": "legs"
@@ -86,6 +87,7 @@ Uobičajeno podržana opciona polja koja unapređuju interoperabilnost:
 
 ```json fds:fragment entity=muscle-category partial
 {
+  "fxmg": "FXMG=1.0/a:hip.flex+buttock+hamstring+quadriceps-femoris+sartorius+tensor-fasciae-latae+thigh.medial+tibialis-anterior+triceps-surae",
   "canonical": {
     "localized": [
       { "lang": "sr", "name": "Noge" }
@@ -101,6 +103,8 @@ Uobičajeno podržana opciona polja koja unapređuju interoperabilnost:
   }
 }
 ```
+
+`fxmg` je strukturni ključ kategorije mišića: skup mišića koje kategorija sadrži, imenovan po anatomiji, po pokretu u zglobu ili kao unija njih i pojedinačnih mišića ili delova. On nije identifikator; `id` ostaje identitet zapisa. Šema proverava samo njegovo zaglavlje, `FXMG=1.0/`. Pogledajte [Ključ kategorije mišića](../core-concepts/structural-keys/muscle-category-key).
 
 ### 3.3. Mehanizmi ekstenzija
 
@@ -177,6 +181,8 @@ Za složene strukture podataka jedinstvene za platformu:
 
 ## 5. Verzionisanje i kompatibilnost
 
+**1.1.0** je dodala opciono polje `fxmg` (§3.2).
+
 ### 5.1. Verzionisanje šeme
 
 Prati semantičko verzionisanje:
@@ -193,10 +199,10 @@ Prati semantičko verzionisanje:
 
 ### 5.3. Primer evolucije šeme
 
-Verzija 1.0.0 → 1.1.0 (dodavanje opcionog polja hierarchy):
+Od jedne sporedne verzije do sledeće (dodavanje opcionog polja hierarchy):
 ```json fds:ignore a hypothetical next version illustrating how an optional field arrives; no published muscle-category schema has hierarchy
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.x.0",
   "id": "cat.legs",
   "canonical": { "name": "Legs", "slug": "legs" },
   "hierarchy": {
@@ -243,7 +249,7 @@ graph LR
 ## 8. Referenca JSON šeme
 
 Kompletna JSON šema dostupna je na:
-- **Kategorija mišića**: `/specification/schemas/muscle/muscle-category/v1.0.0/muscle-category.schema.json`
+- **Kategorija mišića**: `/specification/schemas/muscle/muscle-category/v1.1.0/muscle-category.schema.json`
 
 ## Agregacija toplotnih mapa (informativno)
 
@@ -259,20 +265,21 @@ Validirajte pomoću Ajv (Draft 2020-12):
 
 ```
 npx --package=ajv-cli --package=ajv-formats ajv validate --spec=draft2020 -c ajv-formats \
-  -s specification/schemas/muscle/muscle-category/v1.0.0/muscle-category.schema.json \
-  -d specification/schemas/muscle/muscle-category/v1.0.0/muscle-category.example.json
+  -s specification/schemas/muscle/muscle-category/v1.1.0/muscle-category.schema.json \
+  -d specification/schemas/muscle/muscle-category/v1.1.0/muscle-category.example.json
 ```
 
 ## 9. Primer implementacije
 
 ### 9.1. Kompletan zapis kategorije mišića „Legs“
 
-Na osnovu referentne implementacije (`/specification/schemas/muscle/muscle-category/v1.0.0/muscle-category.example.json`):
+Na osnovu referentne implementacije (`/specification/schemas/muscle/muscle-category/v1.1.0/muscle-category.example.json`):
 
 ```json fds:document entity=muscle-category
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "id": "cat.legs",
+  "fxmg": "FXMG=1.0/a:hip.flex+buttock+hamstring+quadriceps-femoris+sartorius+tensor-fasciae-latae+thigh.medial+tibialis-anterior+triceps-surae",
   "canonical": { 
     "name": "Legs", 
     "slug": "legs",

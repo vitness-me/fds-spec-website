@@ -4,15 +4,15 @@ description: JSON Schema for a single prescribed training session — blocks, ex
 sidebar_position: 8
 ---
 
-# Workout Schema (v1.1.0)
+# Workout Schema (v1.2.0)
 
 A workout is **one prescribed session**: what is done, in what order, grouped how, and how each item is prescribed.
 
 ## Schema Location
 
-**URL:** `https://spec.vitness.me/schemas/workout/v1.1.0/workout.schema.json`
+**URL:** `https://spec.vitness.me/schemas/workout/v1.2.0/workout.schema.json`
 
-**Download:** [workout.schema.json](https://spec.vitness.me/schemas/workout/v1.1.0/workout.schema.json)
+**Download:** [workout.schema.json](https://spec.vitness.me/schemas/workout/v1.2.0/workout.schema.json)
 
 `v1.0.0` remains published and frozen at its own URL. 1.1.0 is purely additive, so every 1.0.0 document validates against it unchanged.
 
@@ -74,7 +74,7 @@ From 1.1.0 a set also carries `zone`. Load, reps, tempo and rest were always sta
 ## Worked examples
 
 <!-- fds:count examples:workout=46 scenarios:workout=46 -->
-Forty-six sessions are published alongside the schema — one for every set and rep scheme in the coverage matrix, one for every grouping structure from a single exercise to a chipper, and one for every cardio and endurance scenario. Each is indexed in [the fixture README](https://spec.vitness.me/schemas/workout/v1.1.0/README.md).
+Forty-six sessions are published alongside the schema — one for every set and rep scheme in the coverage matrix, one for every grouping structure from a single exercise to a chipper, and one for every cardio and endurance scenario. Each is indexed in [the fixture README](https://spec.vitness.me/schemas/workout/v1.2.0/README.md).
 
 The grouping set is the real test of the claim above: if any structure had needed a field the schema lacked, the abstraction would be cut in the wrong place.
 
@@ -86,6 +86,7 @@ The grouping set is the real test of the claim above: if any structure had neede
 - `blocks[].role` — what a block is for, recommended in the [block-role registry](https://spec.vitness.me/registries/block-role.registry.json)
 - `items[].alternatives[]` — substitutions the author sanctions in advance, distinct from one an athlete makes mid-session
 - `items[].repStyle` — range of motion and rep composition, for partials and one-and-a-half reps
+- `items[].exercise` and `items[].alternatives[]` — exercise references, each optionally carrying its [exercise key](/docs/core-concepts/structural-keys/exercise-key) in `fxi`; muscle and equipment references in `targets` and `equipment` may carry `fxm`, `fxmg` and `fxe`
 
 ## Specification
 

@@ -1,0 +1,1506 @@
+{
+  "registry": "muscle-key",
+  "version": "1.0.0",
+  "key": "FXM=1.0",
+  "description": "The muscle and part codes of the muscle key, each derived from its term in the Foundational Model of Anatomy (FMA 5.1.0) and anchored to its FMA id, with the Uberon id where Uberon has the structure. A muscle with parts is exactly the union of its parts.",
+  "policy": "closed",
+  "governs": [
+    {
+      "source": "specification/schema-sources/muscle/v1.1.0/muscle.schema.json",
+      "pointer": "fxm"
+    }
+  ],
+  "sources": [
+    {
+      "name": "Foundational Model of Anatomy Ontology (FMA)",
+      "version": "5.1.0",
+      "publisher": "Structural Informatics Group, University of Washington",
+      "url": "http://si.washington.edu/projects/fma",
+      "license": "CC-BY-3.0",
+      "licenseName": "Creative Commons Attribution 3.0 Unported",
+      "licenseUrl": "https://creativecommons.org/licenses/by/3.0/",
+      "used": "Term labels and FMA ids, and the members of each FMA set"
+    },
+    {
+      "name": "Uberon (Uber-anatomy ontology)",
+      "version": "2026-11-05",
+      "publisher": "The Uberon editors, OBO Foundry",
+      "url": "http://uberon.org",
+      "license": "CC-BY-3.0",
+      "licenseName": "Creative Commons Attribution 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/3.0/",
+      "used": "Term labels and Uberon ids, and the parts of erector spinae"
+    }
+  ],
+  "attribution": "The labels and ids in anchors and members are quoted unchanged from the Foundational Model of Anatomy Ontology (FMA) 5.1.0, University of Washington, under CC BY 3.0 Unported, and from Uberon, release 2026-11-05, under CC BY 3.0. The codes are FDS's own, written from the FMA labels: lowercased and hyphenated, without the word \"muscle\".",
+  "muscles": [
+    {
+      "code": "deltoid",
+      "name": "Deltoid",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:32521",
+          "label": "Deltoid"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0001476",
+          "label": "deltoid"
+        }
+      ],
+      "parts": [
+        {
+          "code": "clavicular",
+          "key": "FXM=1.0/deltoid.clavicular",
+          "name": "Clavicular part of deltoid",
+          "anchors": [
+            {
+              "system": "FMA",
+              "id": "FMA:34677",
+              "label": "Clavicular part of deltoid"
+            }
+          ],
+          "uberonNote": "Uberon names the whole deltoid (UBERON:0001476), not its parts."
+        },
+        {
+          "code": "acromial",
+          "key": "FXM=1.0/deltoid.acromial",
+          "name": "Acromial part of deltoid",
+          "anchors": [
+            {
+              "system": "FMA",
+              "id": "FMA:34678",
+              "label": "Acromial part of deltoid"
+            }
+          ],
+          "uberonNote": "Uberon names the whole deltoid (UBERON:0001476), not its parts."
+        },
+        {
+          "code": "spinal",
+          "key": "FXM=1.0/deltoid.spinal",
+          "name": "Spinal part of deltoid",
+          "anchors": [
+            {
+              "system": "FMA",
+              "id": "FMA:34679",
+              "label": "Spinal part of deltoid"
+            }
+          ],
+          "uberonNote": "Uberon names the whole deltoid (UBERON:0001476), not its parts."
+        }
+      ]
+    },
+    {
+      "code": "pectoralis-major",
+      "name": "Pectoralis major",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:9627",
+          "label": "Pectoralis major"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0002381",
+          "label": "pectoralis major"
+        }
+      ],
+      "parts": [
+        {
+          "code": "clavicular",
+          "key": "FXM=1.0/pectoralis-major.clavicular",
+          "name": "Clavicular part of pectoralis major",
+          "anchors": [
+            {
+              "system": "FMA",
+              "id": "FMA:34687",
+              "label": "Clavicular part of pectoralis major"
+            }
+          ],
+          "uberonNote": "Uberon names the whole pectoralis major (UBERON:0002381), not its parts."
+        },
+        {
+          "code": "sternocostal",
+          "key": "FXM=1.0/pectoralis-major.sternocostal",
+          "name": "Sternocostal part of pectoralis major",
+          "anchors": [
+            {
+              "system": "FMA",
+              "id": "FMA:34696",
+              "label": "Sternocostal part of pectoralis major"
+            }
+          ],
+          "uberonNote": "Uberon names the whole pectoralis major (UBERON:0002381), not its parts."
+        },
+        {
+          "code": "abdominal",
+          "key": "FXM=1.0/pectoralis-major.abdominal",
+          "name": "Abdominal part of pectoralis major",
+          "anchors": [
+            {
+              "system": "FMA",
+              "id": "FMA:34699",
+              "label": "Abdominal part of pectoralis major"
+            }
+          ],
+          "uberonNote": "Uberon names the whole pectoralis major (UBERON:0002381), not its parts."
+        }
+      ]
+    },
+    {
+      "code": "trapezius",
+      "name": "Trapezius",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:9626",
+          "label": "Trapezius"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0002380",
+          "label": "trapezius muscle"
+        }
+      ],
+      "parts": [
+        {
+          "code": "descending",
+          "key": "FXM=1.0/trapezius.descending",
+          "name": "Descending part of trapezius",
+          "anchors": [
+            {
+              "system": "FMA",
+              "id": "FMA:32557",
+              "label": "Descending part of trapezius"
+            }
+          ],
+          "uberonNote": "Uberon names the whole trapezius (UBERON:0002380), not its parts."
+        },
+        {
+          "code": "transverse",
+          "key": "FXM=1.0/trapezius.transverse",
+          "name": "Transverse part of trapezius",
+          "anchors": [
+            {
+              "system": "FMA",
+              "id": "FMA:32556",
+              "label": "Transverse part of trapezius"
+            }
+          ],
+          "uberonNote": "Uberon names the whole trapezius (UBERON:0002380), not its parts."
+        },
+        {
+          "code": "ascending",
+          "key": "FXM=1.0/trapezius.ascending",
+          "name": "Ascending part of trapezius",
+          "anchors": [
+            {
+              "system": "FMA",
+              "id": "FMA:32555",
+              "label": "Ascending part of trapezius"
+            }
+          ],
+          "uberonNote": "Uberon names the whole trapezius (UBERON:0002380), not its parts."
+        }
+      ]
+    },
+    {
+      "code": "latissimus-dorsi",
+      "name": "Latissimus dorsi",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:13357",
+          "label": "Latissimus dorsi"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0001112",
+          "label": "latissimus dorsi muscle"
+        }
+      ]
+    },
+    {
+      "code": "rhomboid-major",
+      "name": "Rhomboid major",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:13379",
+          "label": "Rhomboid major"
+        }
+      ],
+      "uberonNote": "Uberon has one term, rhomboid (UBERON:0005621), for both rhomboid muscles."
+    },
+    {
+      "code": "rhomboid-minor",
+      "name": "Rhomboid minor",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:13380",
+          "label": "Rhomboid minor"
+        }
+      ],
+      "uberonNote": "Uberon has one term, rhomboid (UBERON:0005621), for both rhomboid muscles."
+    },
+    {
+      "code": "biceps-brachii",
+      "name": "Biceps brachii",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:37670",
+          "label": "Biceps brachii"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0001507",
+          "label": "biceps brachii"
+        }
+      ],
+      "parts": [
+        {
+          "code": "long",
+          "key": "FXM=1.0/biceps-brachii.long",
+          "name": "Long head of biceps brachii",
+          "anchors": [
+            {
+              "system": "FMA",
+              "id": "FMA:37683",
+              "label": "Long head of biceps brachii"
+            },
+            {
+              "system": "UBERON",
+              "id": "UBERON:0007168",
+              "label": "long head of biceps brachii"
+            }
+          ]
+        },
+        {
+          "code": "short",
+          "key": "FXM=1.0/biceps-brachii.short",
+          "name": "Short head of biceps brachii",
+          "anchors": [
+            {
+              "system": "FMA",
+              "id": "FMA:37682",
+              "label": "Short head of biceps brachii"
+            },
+            {
+              "system": "UBERON",
+              "id": "UBERON:0007169",
+              "label": "short head of biceps brachii"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "code": "brachialis",
+      "name": "Brachialis",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:37667",
+          "label": "Brachialis"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0001506",
+          "label": "brachialis muscle"
+        }
+      ]
+    },
+    {
+      "code": "brachioradialis",
+      "name": "Brachioradialis",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:38485",
+          "label": "Brachioradialis"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0011011",
+          "label": "brachioradialis"
+        }
+      ]
+    },
+    {
+      "code": "triceps-brachii",
+      "name": "Triceps brachii",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:37688",
+          "label": "Triceps brachii"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0001509",
+          "label": "triceps brachii"
+        }
+      ],
+      "parts": [
+        {
+          "code": "long",
+          "key": "FXM=1.0/triceps-brachii.long",
+          "name": "Long head of triceps brachii",
+          "anchors": [
+            {
+              "system": "FMA",
+              "id": "FMA:37692",
+              "label": "Long head of triceps brachii"
+            }
+          ],
+          "uberonNote": "Uberon names the whole triceps brachii (UBERON:0001509), not its heads."
+        },
+        {
+          "code": "lateral",
+          "key": "FXM=1.0/triceps-brachii.lateral",
+          "name": "Lateral head of triceps brachii",
+          "anchors": [
+            {
+              "system": "FMA",
+              "id": "FMA:37694",
+              "label": "Lateral head of triceps brachii"
+            }
+          ],
+          "uberonNote": "Uberon names the whole triceps brachii (UBERON:0001509), not its heads."
+        },
+        {
+          "code": "medial",
+          "key": "FXM=1.0/triceps-brachii.medial",
+          "name": "Medial head of triceps brachii",
+          "anchors": [
+            {
+              "system": "FMA",
+              "id": "FMA:37693",
+              "label": "Medial head of triceps brachii"
+            }
+          ],
+          "uberonNote": "Uberon names the whole triceps brachii (UBERON:0001509), not its heads."
+        }
+      ]
+    },
+    {
+      "code": "rectus-abdominis",
+      "name": "Rectus abdominis",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:9628",
+          "label": "Rectus abdominis"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0002382",
+          "label": "rectus abdominis muscle"
+        }
+      ]
+    },
+    {
+      "code": "external-oblique",
+      "name": "External oblique",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:13335",
+          "label": "External oblique"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0005442",
+          "label": "abdominal external oblique muscle"
+        }
+      ]
+    },
+    {
+      "code": "internal-oblique",
+      "name": "Internal oblique",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:13891",
+          "label": "Internal oblique"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0005454",
+          "label": "abdominal internal oblique muscle"
+        }
+      ]
+    },
+    {
+      "code": "serratus-anterior",
+      "name": "Serratus anterior",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:13397",
+          "label": "Serratus anterior"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0001125",
+          "label": "serratus ventralis"
+        }
+      ]
+    },
+    {
+      "code": "iliocostalis",
+      "name": "Iliocostalis",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:77177",
+          "label": "Iliocostalis"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0002251",
+          "label": "iliocostalis muscle"
+        }
+      ]
+    },
+    {
+      "code": "longissimus",
+      "name": "Longissimus",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:77178",
+          "label": "Longissimus"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0000392",
+          "label": "longissimus muscle"
+        }
+      ]
+    },
+    {
+      "code": "spinalis",
+      "name": "Spinalis",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:77179",
+          "label": "Spinalis"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0011013",
+          "label": "spinalis muscle"
+        }
+      ]
+    },
+    {
+      "code": "quadratus-lumborum",
+      "name": "Quadratus lumborum",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:15569",
+          "label": "Quadratus lumborum"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0001220",
+          "label": "quadratus lumborum"
+        }
+      ]
+    },
+    {
+      "code": "gluteus-maximus",
+      "name": "Gluteus maximus",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:22314",
+          "label": "Gluteus maximus"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0001370",
+          "label": "gluteus maximus"
+        }
+      ]
+    },
+    {
+      "code": "gluteus-medius",
+      "name": "Gluteus medius",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:22315",
+          "label": "Gluteus medius"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0001371",
+          "label": "gluteus medius"
+        }
+      ]
+    },
+    {
+      "code": "gluteus-minimus",
+      "name": "Gluteus minimus",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:22317",
+          "label": "Gluteus minimus"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0008521",
+          "label": "gluteus minimus"
+        }
+      ]
+    },
+    {
+      "code": "tensor-fasciae-latae",
+      "name": "Tensor fasciae latae",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:22423",
+          "label": "Tensor fasciae latae"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0001376",
+          "label": "tensor fasciae latae muscle"
+        }
+      ]
+    },
+    {
+      "code": "biceps-femoris",
+      "name": "Biceps femoris",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:22356",
+          "label": "Biceps femoris"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0001374",
+          "label": "biceps femoris"
+        }
+      ]
+    },
+    {
+      "code": "semitendinosus",
+      "name": "Semitendinosus",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:22357",
+          "label": "Semitendinosus"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0001375",
+          "label": "semitendinosus"
+        }
+      ]
+    },
+    {
+      "code": "semimembranosus",
+      "name": "Semimembranosus",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:22438",
+          "label": "Semimembranosus"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0001381",
+          "label": "semimembranosus muscle"
+        }
+      ]
+    },
+    {
+      "code": "rectus-femoris",
+      "name": "Rectus femoris",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:22430",
+          "label": "Rectus femoris"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0001378",
+          "label": "rectus femoris"
+        }
+      ]
+    },
+    {
+      "code": "vastus-lateralis",
+      "name": "Vastus lateralis",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:22431",
+          "label": "Vastus lateralis"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0001379",
+          "label": "vastus lateralis"
+        }
+      ]
+    },
+    {
+      "code": "vastus-medialis",
+      "name": "Vastus medialis",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:22432",
+          "label": "Vastus medialis"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0001380",
+          "label": "vastus medialis"
+        }
+      ]
+    },
+    {
+      "code": "vastus-intermedius",
+      "name": "Vastus intermedius",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:22433",
+          "label": "Vastus intermedius"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0014847",
+          "label": "vastus intermedius"
+        }
+      ]
+    },
+    {
+      "code": "adductor-longus",
+      "name": "Adductor longus",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:22441",
+          "label": "Adductor longus"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0000303",
+          "label": "adductor longus"
+        }
+      ]
+    },
+    {
+      "code": "adductor-brevis",
+      "name": "Adductor brevis",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:22442",
+          "label": "Adductor brevis"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0000368",
+          "label": "adductor brevis"
+        }
+      ]
+    },
+    {
+      "code": "adductor-magnus",
+      "name": "Adductor magnus",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:22443",
+          "label": "Adductor magnus"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0000370",
+          "label": "adductor magnus"
+        }
+      ]
+    },
+    {
+      "code": "gracilis",
+      "name": "Gracilis",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:43882",
+          "label": "Gracilis"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0000950",
+          "label": "gracilis"
+        }
+      ]
+    },
+    {
+      "code": "pectineus",
+      "name": "Pectineus",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:22440",
+          "label": "Pectineus"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0001382",
+          "label": "pectineus muscle"
+        }
+      ]
+    },
+    {
+      "code": "psoas-major",
+      "name": "Psoas major",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:18060",
+          "label": "Psoas major"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0001298",
+          "label": "psoas major muscle"
+        }
+      ]
+    },
+    {
+      "code": "iliacus",
+      "name": "Iliacus",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:22310",
+          "label": "Iliacus"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0001369",
+          "label": "iliacus muscle"
+        }
+      ]
+    },
+    {
+      "code": "sartorius",
+      "name": "Sartorius",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:22353",
+          "label": "Sartorius"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0001373",
+          "label": "sartorius muscle"
+        }
+      ]
+    },
+    {
+      "code": "gastrocnemius",
+      "name": "Gastrocnemius",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:22541",
+          "label": "Gastrocnemius"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0001388",
+          "label": "gastrocnemius"
+        }
+      ],
+      "parts": [
+        {
+          "code": "medial",
+          "key": "FXM=1.0/gastrocnemius.medial",
+          "name": "Medial head of gastrocnemius",
+          "anchors": [
+            {
+              "system": "FMA",
+              "id": "FMA:45956",
+              "label": "Medial head of gastrocnemius"
+            },
+            {
+              "system": "UBERON",
+              "id": "UBERON:0011907",
+              "label": "gastrocnemius medialis"
+            }
+          ]
+        },
+        {
+          "code": "lateral",
+          "key": "FXM=1.0/gastrocnemius.lateral",
+          "name": "Lateral head of gastrocnemius",
+          "anchors": [
+            {
+              "system": "FMA",
+              "id": "FMA:45959",
+              "label": "Lateral head of gastrocnemius"
+            },
+            {
+              "system": "UBERON",
+              "id": "UBERON:0011908",
+              "label": "gastrocnemius lateralis"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "code": "soleus",
+      "name": "Soleus",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:22542",
+          "label": "Soleus"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0001389",
+          "label": "soleus muscle"
+        }
+      ]
+    },
+    {
+      "code": "tibialis-anterior",
+      "name": "Tibialis anterior",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:22532",
+          "label": "Tibialis anterior"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0001385",
+          "label": "tibialis anterior"
+        }
+      ]
+    },
+    {
+      "code": "sternocleidomastoid",
+      "name": "Sternocleidomastoid",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:13407",
+          "label": "Sternocleidomastoid"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0001128",
+          "label": "sternocleidomastoid"
+        }
+      ]
+    },
+    {
+      "code": "splenius-capitis",
+      "name": "Splenius capitis",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:22653",
+          "label": "Splenius capitis"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0000711",
+          "label": "splenius capitis"
+        }
+      ]
+    },
+    {
+      "code": "semispinalis-capitis",
+      "name": "Semispinalis capitis",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:22830",
+          "label": "Semispinalis capitis"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0001409",
+          "label": "semispinalis capitis"
+        }
+      ]
+    },
+    {
+      "code": "flexor-carpi-radialis",
+      "name": "Flexor carpi radialis",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:38459",
+          "label": "Flexor carpi radialis"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0001521",
+          "label": "flexor carpi radialis muscle"
+        }
+      ]
+    },
+    {
+      "code": "flexor-carpi-ulnaris",
+      "name": "Flexor carpi ulnaris",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:38465",
+          "label": "Flexor carpi ulnaris"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0001522",
+          "label": "flexor carpi ulnaris muscle"
+        }
+      ]
+    },
+    {
+      "code": "palmaris-longus",
+      "name": "Palmaris longus",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:38462",
+          "label": "Palmaris longus"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0016493",
+          "label": "palmaris longus muscle"
+        }
+      ]
+    },
+    {
+      "code": "extensor-carpi-radialis-longus",
+      "name": "Extensor carpi radialis longus",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:38494",
+          "label": "Extensor carpi radialis longus"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0001524",
+          "label": "extensor carpi radialis longus muscle"
+        }
+      ]
+    },
+    {
+      "code": "extensor-carpi-radialis-brevis",
+      "name": "Extensor carpi radialis brevis",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:38497",
+          "label": "Extensor carpi radialis brevis"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0001525",
+          "label": "extensor carpi radialis brevis muscle"
+        }
+      ]
+    },
+    {
+      "code": "extensor-carpi-ulnaris",
+      "name": "Extensor carpi ulnaris",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:38506",
+          "label": "Extensor carpi ulnaris"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0001526",
+          "label": "extensor carpi ulnaris muscle"
+        }
+      ]
+    },
+    {
+      "code": "transversus-abdominis",
+      "name": "Transversus abdominis",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:15570",
+          "label": "Transversus abdominis"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0001221",
+          "label": "transversus abdominis muscle"
+        }
+      ]
+    },
+    {
+      "code": "pyramidalis",
+      "name": "Pyramidalis",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:15568",
+          "label": "Pyramidalis"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0011016",
+          "label": "pyramidalis"
+        }
+      ]
+    },
+    {
+      "code": "pectoralis-minor",
+      "name": "Pectoralis minor",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:13109",
+          "label": "Pectoralis minor"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0001100",
+          "label": "pectoralis minor"
+        }
+      ]
+    },
+    {
+      "code": "subclavius",
+      "name": "Subclavius",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:13410",
+          "label": "Subclavius"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0008779",
+          "label": "subclavius"
+        }
+      ]
+    },
+    {
+      "code": "supraspinatus",
+      "name": "Supraspinatus",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:9629",
+          "label": "Supraspinatus"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0002383",
+          "label": "supraspinatus muscle"
+        }
+      ]
+    },
+    {
+      "code": "infraspinatus",
+      "name": "Infraspinatus",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:32546",
+          "label": "Infraspinatus"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0001477",
+          "label": "infraspinatus muscle"
+        }
+      ]
+    },
+    {
+      "code": "teres-minor",
+      "name": "Teres minor",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:32550",
+          "label": "Teres minor"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0010496",
+          "label": "teres minor muscle"
+        }
+      ]
+    },
+    {
+      "code": "teres-major",
+      "name": "Teres major",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:32549",
+          "label": "Teres major"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0001478",
+          "label": "teres major muscle"
+        }
+      ]
+    },
+    {
+      "code": "subscapularis",
+      "name": "Subscapularis",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:13413",
+          "label": "Subscapularis"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0001129",
+          "label": "subscapularis muscle"
+        }
+      ]
+    },
+    {
+      "code": "coracobrachialis",
+      "name": "Coracobrachialis",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:37664",
+          "label": "Coracobrachialis"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0001505",
+          "label": "coracobrachialis muscle"
+        }
+      ]
+    },
+    {
+      "code": "articularis-cubiti",
+      "name": "Articularis cubiti",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:37701",
+          "label": "Articularis cubiti"
+        }
+      ],
+      "uberonNote": "Uberon has no term for the articularis cubiti."
+    },
+    {
+      "code": "anconeus",
+      "name": "Anconeus",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:37704",
+          "label": "Anconeus"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0002989",
+          "label": "anconeus muscle"
+        }
+      ]
+    },
+    {
+      "code": "pronator-teres",
+      "name": "Pronator teres",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:38450",
+          "label": "Pronator teres"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0001520",
+          "label": "pronator teres"
+        }
+      ]
+    },
+    {
+      "code": "flexor-digitorum-superficialis",
+      "name": "Flexor digitorum superficialis",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:38469",
+          "label": "Flexor digitorum superficialis"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0003222",
+          "label": "flexor digitorum superficialis"
+        }
+      ]
+    },
+    {
+      "code": "pronator-quadratus",
+      "name": "Pronator quadratus",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:38453",
+          "label": "Pronator quadratus"
+        }
+      ],
+      "uberonNote": "Uberon has no term for the pronator quadratus."
+    },
+    {
+      "code": "flexor-digitorum-profundus",
+      "name": "Flexor digitorum profundus",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:38478",
+          "label": "Flexor digitorum profundus"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0001523",
+          "label": "flexor digitorum profundus"
+        }
+      ]
+    },
+    {
+      "code": "flexor-pollicis-longus",
+      "name": "Flexor pollicis longus",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:38481",
+          "label": "Flexor pollicis longus"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0008446",
+          "label": "flexor pollicis longus muscle"
+        }
+      ]
+    },
+    {
+      "code": "extensor-digitorum",
+      "name": "Extensor digitorum",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:38500",
+          "label": "Extensor digitorum"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0007612",
+          "label": "extensor digitorum communis"
+        }
+      ]
+    },
+    {
+      "code": "extensor-digiti-minimi",
+      "name": "Extensor digiti minimi",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:38503",
+          "label": "Extensor digiti minimi"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0007614",
+          "label": "extensor digiti minimi muscle"
+        }
+      ]
+    },
+    {
+      "code": "supinator",
+      "name": "Supinator",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:38512",
+          "label": "Supinator"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0003228",
+          "label": "supinator muscle"
+        }
+      ]
+    },
+    {
+      "code": "abductor-pollicis-longus",
+      "name": "Abductor pollicis longus",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:38515",
+          "label": "Abductor pollicis longus"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0001527",
+          "label": "abductor pollicis longus"
+        }
+      ]
+    },
+    {
+      "code": "extensor-pollicis-brevis",
+      "name": "Extensor pollicis brevis",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:38518",
+          "label": "Extensor pollicis brevis"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0017618",
+          "label": "extensor pollicis brevis muscle"
+        }
+      ]
+    },
+    {
+      "code": "extensor-pollicis-longus",
+      "name": "Extensor pollicis longus",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:38521",
+          "label": "Extensor pollicis longus"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0003234",
+          "label": "extensor pollicis longus muscle"
+        }
+      ]
+    },
+    {
+      "code": "extensor-indicis",
+      "name": "Extensor indicis",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:38524",
+          "label": "Extensor indicis"
+        }
+      ],
+      "uberonNote": "Uberon has no term for the extensor indicis."
+    },
+    {
+      "code": "adductor-minimus",
+      "name": "Adductor minimus",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:43885",
+          "label": "Adductor minimus"
+        }
+      ],
+      "uberonNote": "Uberon has no term for the adductor minimus."
+    },
+    {
+      "code": "articularis-genus",
+      "name": "Articularis genus",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:22437",
+          "label": "Articularis genus"
+        }
+      ],
+      "uberonNote": "Uberon has no term for the articularis genus."
+    },
+    {
+      "code": "extensor-hallucis-longus",
+      "name": "Extensor hallucis longus",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:22533",
+          "label": "Extensor hallucis longus"
+        }
+      ],
+      "uberonNote": "Uberon has no term for the extensor hallucis longus."
+    },
+    {
+      "code": "extensor-digitorum-longus",
+      "name": "Extensor digitorum longus",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:22534",
+          "label": "Extensor digitorum longus"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0001386",
+          "label": "extensor digitorum longus"
+        }
+      ]
+    },
+    {
+      "code": "fibularis-tertius",
+      "name": "Fibularis tertius",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:22538",
+          "label": "Fibularis tertius"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0010524",
+          "label": "fibularis tertius"
+        }
+      ]
+    },
+    {
+      "code": "plantaris",
+      "name": "Plantaris",
+      "anchors": [
+        {
+          "system": "FMA",
+          "id": "FMA:22543",
+          "label": "Plantaris"
+        },
+        {
+          "system": "UBERON",
+          "id": "UBERON:0011905",
+          "label": "plantaris"
+        }
+      ]
+    }
+  ]
+}

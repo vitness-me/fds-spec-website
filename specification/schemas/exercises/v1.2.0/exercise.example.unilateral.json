@@ -1,0 +1,53 @@
+{
+  "schemaVersion": "1.2.0",
+  "exerciseId": "00000000-0000-4000-8000-000000000004",
+  "fxi": "FXI=1.0S/m:hip.ext+kn.ext/o:standing/f:split/s:box/l:none/x:u",
+  "canonical": {
+    "name": "Bulgarian Split Squat",
+    "slug": "bulgarian-split-squat",
+    "aliases": ["Rear-Foot-Elevated Split Squat"],
+    "localized": [ { "lang": "en", "name": "Bulgarian Split Squat" } ]
+  },
+  "classification": {
+    "exerciseType": "strength",
+    "movement": "lunge",
+    "mechanics": "compound",
+    "force": "push",
+    "level": "intermediate",
+    "unilateral": true,
+    "kineticChain": "closed",
+    "tags": ["lower-body", "unilateral"]
+  },
+  "targets": {
+    "primary": [
+      { "id": "mus.rectusFemoris", "name": "Rectus Femoris", "categoryId": "cat.quadriceps", "fxm": "FXM=1.0/rectus-femoris", "fxmg": "FXMG=1.0/quadriceps-femoris" },
+      { "id": "mus.vastusLateralis", "name": "Vastus Lateralis", "categoryId": "cat.quadriceps", "fxm": "FXM=1.0/vastus-lateralis", "fxmg": "FXMG=1.0/quadriceps-femoris" },
+      { "id": "mus.vastusMedialis", "name": "Vastus Medialis", "categoryId": "cat.quadriceps", "fxm": "FXM=1.0/vastus-medialis", "fxmg": "FXMG=1.0/quadriceps-femoris" },
+      { "id": "mus.vastusIntermedius", "name": "Vastus Intermedius", "categoryId": "cat.quadriceps", "fxm": "FXM=1.0/vastus-intermedius", "fxmg": "FXMG=1.0/quadriceps-femoris" }
+    ],
+    "secondary": [
+      { "id": "mus.gluteusMaximus", "name": "Gluteus Maximus", "categoryId": "cat.glutes", "fxm": "FXM=1.0/gluteus-maximus", "fxmg": "FXMG=1.0/buttock" },
+      { "id": "mus.bicepsFemoris", "name": "Biceps Femoris", "categoryId": "cat.hamstrings", "fxm": "FXM=1.0/biceps-femoris", "fxmg": "FXMG=1.0/hamstring" },
+      { "id": "mus.semitendinosus", "name": "Semitendinosus", "categoryId": "cat.hamstrings", "fxm": "FXM=1.0/semitendinosus", "fxmg": "FXMG=1.0/hamstring" },
+      { "id": "mus.semimembranosus", "name": "Semimembranosus", "categoryId": "cat.hamstrings", "fxm": "FXM=1.0/semimembranosus", "fxmg": "FXMG=1.0/hamstring" }
+    ]
+  },
+  "equipment": {
+    "optional": [ { "id": "eq.dumbbell", "name": "Dumbbell", "fxe": "FXE=1.0S/k:imp/f:bell.dumb" } ]
+  },
+  "relations": [
+    { "type": "unilateralPair", "targetId": "urn:slug:split-squat" }
+  ],
+  "metrics": {
+    "primary": { "type": "reps", "unit": "count" },
+    "secondary": [ { "type": "weight", "unit": "kg" } ]
+  },
+  "metadata": {
+    "createdAt": "2025-09-03T00:00:00Z",
+    "updatedAt": "2025-09-03T00:00:00Z",
+    "status": "active",
+    "source": "vitness.core",
+    "version": "1.0.0"
+  }
+}
+

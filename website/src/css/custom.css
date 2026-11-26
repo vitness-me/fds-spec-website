@@ -863,3 +863,111 @@ a[class*='searchResult'][class*='cursor'] {
    syntax colors exist — a hex here would silently fork it. (A Dracula-style
    override block used to live here, which is why dark-mode code looked like
    a third, undocumented theme.) */
+
+/* Structural key anatomy figure: one key broken into its parts, each part
+   labelled underneath. Colours come from the syntax palette above, so the
+   figure follows the colour mode with the code blocks. Parts wrap on narrow
+   screens instead of scrolling. */
+.key-anatomy {
+  margin: 1.5rem 0;
+  padding: 1rem;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: var(--ifm-global-radius);
+  background: var(--fds-code-bg);
+}
+
+.key-anatomy__key {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 0.75rem 0.25rem;
+}
+
+.key-anatomy__part {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.key-anatomy__part code,
+.key-anatomy__slash code {
+  font-size: 1rem;
+  padding: 0.2rem 0.45rem;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  background: transparent;
+  color: var(--fds-code-fg);
+}
+
+.key-anatomy__slash code {
+  border-color: transparent;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.key-anatomy__label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--ifm-color-emphasis-700);
+}
+
+.key-anatomy figcaption {
+  margin-top: 1rem;
+  font-size: 0.8rem;
+  color: var(--ifm-color-emphasis-700);
+}
+
+.key-anatomy .ka-letter {
+  color: var(--fds-code-key);
+  font-weight: 700;
+}
+
+.key-anatomy .ka-code {
+  color: var(--fds-code-value);
+}
+
+.key-anatomy .ka-sym {
+  color: var(--fds-code-dim);
+}
+
+.key-anatomy .ka-flag {
+  color: var(--fds-code-key);
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+/* A key pair: an exercise key beside the key of its equipment, the code they
+   share outlined in both. One column on narrow screens. */
+.key-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem 1.5rem;
+  align-items: start;
+}
+
+.key-pair + .key-pair {
+  margin-top: 1.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--ifm-color-emphasis-300);
+}
+
+.key-pair__title {
+  margin-bottom: 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--ifm-color-emphasis-800);
+}
+
+.key-anatomy .ka-shared {
+  outline: 2px solid var(--ifm-color-primary);
+  outline-offset: 1px;
+  border-radius: 2px;
+}
+
+@media (max-width: 768px) {
+  .key-pair {
+    grid-template-columns: 1fr;
+  }
+}

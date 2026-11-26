@@ -1,0 +1,86 @@
+{
+  "schemaVersion": "1.2.0",
+  "workoutId": "00000000-0000-4000-8000-000000000107",
+  "canonical": {
+    "name": "Barbell Complex",
+    "slug": "barbell-complex"
+  },
+  "classification": {
+    "workoutType": "conditioning"
+  },
+  "structure": {
+    "blocks": [
+      {
+        "id": "b1",
+        "mode": "circuit",
+        "items": [
+          {
+            "id": "i1",
+            "exercise": {
+              "id": "ex.powerClean",
+              "name": "Power Clean",
+              "fxi": "FXI=1.0S/m:ank.pf+hip.ext+kn.ext>el.flex>hip.ext-+kn.ext-/o:standing/l:bar.straight@hands"
+            },
+            "reps": {
+              "kind": "fixed",
+              "value": 6
+            }
+          },
+          {
+            "id": "i2",
+            "exercise": {
+              "id": "ex.frontSquat",
+              "name": "Front Squat",
+              "fxi": "FXI=1.0S/m:hip.ext+kn.ext/o:standing/l:bar.straight@shoulders"
+            },
+            "reps": {
+              "kind": "fixed",
+              "value": 6
+            }
+          },
+          {
+            "id": "i3",
+            "exercise": {
+              "id": "ex.pushPress",
+              "name": "Push Press",
+              "fxi": "FXI=1.0S/m:el.ext+hip.ext-+kn.ext-+sh.flex/o:standing/l:bar.straight@shoulders"
+            },
+            "reps": {
+              "kind": "fixed",
+              "value": 6
+            }
+          },
+          {
+            "id": "i4",
+            "exercise": {
+              "id": "ex.romanianDeadlift",
+              "name": "Romanian Deadlift",
+              "fxi": "FXI=1.0S/m:hip.ext/o:standing/l:bar.straight@hands"
+            },
+            "reps": {
+              "kind": "fixed",
+              "value": 6
+            }
+          }
+        ],
+        "role": "conditioning",
+        "modeParams": {
+          "rounds": 4
+        },
+        "rest": {
+          "method": "fixed",
+          "appliesTo": "round",
+          "value": 2,
+          "unit": "min"
+        },
+        "notes": "One barbell, one load, no rest between movements \u2014 rest falls only between rounds."
+      }
+    ]
+  },
+  "metadata": {
+    "createdAt": "2026-08-09T00:00:00Z",
+    "updatedAt": "2026-08-09T00:00:00Z",
+    "status": "active",
+    "source": "vitness.core"
+  }
+}

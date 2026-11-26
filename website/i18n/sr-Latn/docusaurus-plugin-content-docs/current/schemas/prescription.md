@@ -4,7 +4,7 @@ description: Koliko opterećenja, koliko ponavljanja, kojim tempom, koliko odmor
 sidebar_position: 7
 ---
 
-# Primitivi preskripcije (v1.0.0)
+# Primitivi preskripcije (v1.1.0)
 
 Preskripcija odgovara na četiri pitanja o seriji: **koliko opterećenja, koliko ponavljanja, kojim tempom i koliko odmora.** Sve u FDS-u što propisuje rad kombinuje ove definicije, pa serija unutar samostalnog treninga i ista serija unutar dvanaestonedeljnog programa znače potpuno isto.
 
@@ -18,7 +18,7 @@ Ono prema čemu validirate jeste *definicija unutar nje*. Svaka objavljena datot
 
 Transformator ne nosi ovu šemu iz istog razloga. On validira entitete, a biblioteka definicija to nije.
 
-**URL:** `https://spec.vitness.me/schemas/prescription/v1.0.0/prescription.schema.json`
+**URL:** `https://spec.vitness.me/schemas/prescription/v1.1.0/prescription.schema.json`
 
 ## Definicije
 
@@ -34,6 +34,8 @@ Transformator ne nosi ovu šemu iz istog razloga. On validira entitete, a biblio
 | `intensityZone` | Zona u imenovanom sistemu — srčani ritam, snaga, tempo kretanja, doživljeni napor |
 | `setScheme` | Imenovani obrazac preko serija, sa svojim parametrima |
 | `progressionRule` | Kada se preskripcija menja, i kako |
+
+Referenca `equipment` u opterećenju `bandResistance` može nositi [strukturni ključ](/docs/core-concepts/structural-keys/equipment-key) trake u `fxe`.
 
 ## Dva pravila koja vredi pročitati pre implementacije
 
@@ -65,7 +67,7 @@ Implementacije koje proširuju ove unije moraju očuvati tu disjunktnost.
 
 ## Razrađeni primeri
 
-Uz šemu je objavljeno 69 datoteka primera, po jedna za svaku definiciju i po jedna za svaku vrednost diskriminatora, svaka imenovana prema onome što demonstrira i indeksirana u [README datoteka primera](https://spec.vitness.me/schemas/prescription/v1.0.0/README.md).
+Uz šemu je objavljeno 69 datoteka primera, po jedna za svaku definiciju i po jedna za svaku vrednost diskriminatora, svaka imenovana prema onome što demonstrira i indeksirana u [README datoteka primera](https://spec.vitness.me/schemas/prescription/v1.1.0/README.md).
 
 Uključeni su i negativni primeri — dokumenti koji **moraju** biti odbačeni. Šema koja prihvata sve prolazi svaki pozitivan test.
 

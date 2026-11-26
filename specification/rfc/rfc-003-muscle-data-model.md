@@ -1,8 +1,8 @@
 # RFC-003: Muscle Data Model Specification
 
 **Status**: Draft
-**Version**: 0.1.0
-**Date**: 2025-09-09
+**Version**: 0.2.0
+**Date**: 2026-11-26
 **Authors**: VITNESS Team
 **Category**: Standards Track
 
@@ -61,14 +61,15 @@ All compliant muscle data **MUST** include these fields:
 
 ```json fds:document entity=muscle
 {
-  "schemaVersion": "1.0.0",
-  "id": "mus.quadriceps",
+  "schemaVersion": "1.1.0",
+  "id": "mus.rectusFemoris",
+  "fxm": "FXM=1.0/rectus-femoris",
   "canonical": {
-    "name": "Quadriceps",
-    "slug": "quadriceps"
+    "name": "Rectus Femoris",
+    "slug": "rectus-femoris"
   },
   "classification": {
-    "categoryId": "cat.legs",
+    "categoryId": "cat.quadriceps",
     "region": "lower-front"
   },
   "metadata": {
@@ -86,10 +87,11 @@ Commonly supported optional fields that enhance interoperability:
 
 ```json fds:fragment entity=muscle partial
 {
+  "fxm": "FXM=1.0/rectus-femoris",
   "canonical": {
-    "aliases": ["Quads"],
+    "aliases": ["Rec Fem"],
     "localized": [
-      { "lang": "sr", "name": "Kvadriceps" }
+      { "lang": "sr", "name": "Pravi mišić buta" }
     ]
   },
   "classification": {
@@ -111,6 +113,8 @@ Commonly supported optional fields that enhance interoperability:
   }
 }
 ```
+
+`fxm` is the muscle's structural key: one muscle, or one part of it, named by its anatomical term, such as `FXM=1.0/latissimus-dorsi`. It is not an identifier; `id` stays the record's identity. The schema checks only its header, `FXM=1.0/`. See [Muscle key](../core-concepts/structural-keys/muscle-key).
 
 ### 3.3. Extension Mechanisms
 
@@ -134,7 +138,7 @@ For complex platform-unique data structures:
 {
   "extensions": {
     "x:anatomy": {
-      "origin": "Anterior superior iliac spine, femur",
+      "origin": "Anterior inferior iliac spine, ilium above the acetabulum",
       "insertion": "Patella, tibial tuberosity",
       "innervation": "Femoral nerve"
     }
@@ -151,11 +155,11 @@ For complex platform-unique data structures:
 ```json fds:fragment entity=muscle
 {
   "canonical": {
-    "name": "Quadriceps",
-    "slug": "quadriceps",
-    "aliases": ["Quads"],
+    "name": "Rectus Femoris",
+    "slug": "rectus-femoris",
+    "aliases": ["Rec Fem"],
     "localized": [
-      { "lang": "sr", "name": "Kvadriceps" }
+      { "lang": "sr", "name": "Pravi mišić buta" }
     ]
   }
 }
@@ -168,7 +172,7 @@ For complex platform-unique data structures:
 ```json fds:fragment entity=muscle
 {
   "classification": {
-    "categoryId": "cat.legs",
+    "categoryId": "cat.quadriceps",
     "region": "lower-front",
     "laterality": "bilateral",
     "tags": ["major-muscle", "lower-body"]
@@ -205,7 +209,7 @@ The `laterality` field describes symmetry characteristics:
   "media": [
     {
       "type": "image",
-      "uri": "https://cdn.example.com/anatomy/quadriceps.jpg"
+      "uri": "https://cdn.example.com/anatomy/rectus-femoris.jpg"
     }
   ]
 }
@@ -237,6 +241,8 @@ Notes:
 
 ## 5. Versioning and Compatibility
 
+**1.1.0** added the optional `fxm` (§3.2).
+
 ### 5.1. Schema Versioning
 
 Following semantic versioning:
@@ -253,12 +259,12 @@ Following semantic versioning:
 
 ### 5.3. Schema Evolution Example
 
-Version 1.0.0 → 1.1.0 (Adding optional biomechanical field):
+From one minor version to the next (Adding optional biomechanical field):
 ```json fds:ignore a hypothetical next version illustrating how an optional field arrives; no published muscle schema has biomechanics
 {
-  "schemaVersion": "1.1.0",
-  "id": "mus.quadriceps",
-  "canonical": { "name": "Quadriceps", "slug": "quadriceps" },
+  "schemaVersion": "1.x.0",
+  "id": "mus.rectusFemoris",
+  "canonical": { "name": "Rectus Femoris", "slug": "rectus-femoris" },
   "biomechanics": {
     "primaryActions": ["knee-extension", "hip-flexion"],
     "forceDirection": "linear"
@@ -302,7 +308,7 @@ graph LR
 ## 8. JSON Schema Reference
 
 Complete JSON Schema available at:
-- **Muscle**: `/specification/schemas/muscle/v1.0.0/muscle.schema.json`
+- **Muscle**: `/specification/schemas/muscle/v1.1.0/muscle.schema.json`
 - **Body Atlas**: `/specification/schemas/atlas/v1.1.0/body-atlas.schema.json`
 
 ## 8.1. Validation
@@ -311,30 +317,31 @@ Validate with Ajv (Draft 2020-12):
 
 ```
 npx --package=ajv-cli --package=ajv-formats ajv validate --spec=draft2020 -c ajv-formats \
-  -s specification/schemas/muscle/v1.0.0/muscle.schema.json \
-  -d specification/schemas/muscle/v1.0.0/muscle.example.json
+  -s specification/schemas/muscle/v1.1.0/muscle.schema.json \
+  -d specification/schemas/muscle/v1.1.0/muscle.example.json
 ```
 
 ## 9. Example Implementation
 
-### 9.1. Complete Quadriceps Muscle Record
+### 9.1. Complete Rectus Femoris Muscle Record
 
-Based on reference implementation (`/specification/schemas/muscle/v1.0.0/muscle.example.json`):
+Based on reference implementation (`/specification/schemas/muscle/v1.1.0/muscle.example.json`):
 
 ```json
 {
-  "schemaVersion": "1.0.0",
-  "id": "mus.quadriceps",
+  "schemaVersion": "1.1.0",
+  "id": "mus.rectusFemoris",
+  "fxm": "FXM=1.0/rectus-femoris",
   "canonical": { 
-    "name": "Quadriceps", 
-    "slug": "quadriceps",
-    "aliases": ["Quads"],
+    "name": "Rectus Femoris", 
+    "slug": "rectus-femoris",
+    "aliases": ["Rec Fem"],
     "localized": [
-      { "lang": "sr", "name": "Kvadriceps" }
+      { "lang": "sr", "name": "Pravi mišić buta" }
     ]
   },
   "classification": { 
-    "categoryId": "cat.legs", 
+    "categoryId": "cat.quadriceps", 
     "region": "lower-front", 
     "laterality": "bilateral"
   },
@@ -353,7 +360,7 @@ Based on reference implementation (`/specification/schemas/muscle/v1.0.0/muscle.
   },
   "extensions": {
     "x:anatomy": {
-      "origin": "Anterior superior iliac spine, femur",
+      "origin": "Anterior inferior iliac spine, ilium above the acetabulum",
       "insertion": "Patella, tibial tuberosity",
       "innervation": "Femoral nerve"
     }

@@ -1,0 +1,53 @@
+{
+  "schemaVersion": "1.1.0",
+  "id": "mus.rectusFemoris",
+  "fxm": "FXM=1.0/rectus-femoris",
+  "canonical": { 
+    "name": "Rectus Femoris", 
+    "slug": "rectus-femoris",
+    "description": "The one quadriceps muscle that crosses the hip as well as the knee, so it both extends the knee and flexes the hip",
+    "aliases": ["Rec Fem"],
+    "localized": [
+      { 
+        "lang": "sr", 
+        "name": "Pravi mišić buta",
+        "description": "Једини мишић квадрицепса који прелази и кук и колено, па испружа колено и савија кук"
+      }
+    ]
+  },
+  "classification": { 
+    "categoryId": "cat.quadriceps", 
+    "region": "lower-front", 
+    "laterality": "bilateral"
+  },
+  "heatmap": {
+    "atlasId": "atlas.body.v1",
+    "regions": [
+      { "areaId": "thigh.left.anterior", "weight": 1.0 },
+      { "areaId": "thigh.right.anterior", "weight": 1.0 }
+    ]
+  },
+  "media": [],
+  "attributes": {
+    "fiberType": "mixed",
+    "size": "large",
+    "function": "knee-extension"
+  },
+  "extensions": {
+    "x:anatomy": {
+      "origin": "Anterior inferior iliac spine, ilium above the acetabulum",
+      "insertion": "Patella, tibial tuberosity",
+      "innervation": "Femoral nerve"
+    }
+  },
+  "metadata": {
+    "createdAt": "2025-01-01T00:00:00Z",
+    "updatedAt": "2025-09-03T00:00:00Z",
+    "source": "vitness.registry",
+    "status": "active",
+    "externalRefs": [
+      { "system": "platform-a", "id": "mus-rectus-femoris-001" },
+      { "system": "legacy-system", "id": "muscle_rectus_femoris" }
+    ]
+  }
+}

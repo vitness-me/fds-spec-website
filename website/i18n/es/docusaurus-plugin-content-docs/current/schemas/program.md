@@ -4,15 +4,15 @@ description: JSON Schema de un programa de entrenamiento — ciclos, semanas, ub
 sidebar_position: 9
 ---
 
-# Esquema de programa (v1.0.0)
+# Esquema de programa (v1.1.0)
 
 Un programa coloca sesiones en el tiempo: ciclos, semanas, días y las reglas por las que la prescripción cambia a medida que el plan avanza.
 
 ## Ubicación del esquema
 
-**URL:** `https://spec.vitness.me/schemas/program/v1.0.0/program.schema.json`
+**URL:** `https://spec.vitness.me/schemas/program/v1.1.0/program.schema.json`
 
-**Descarga:** [program.schema.json](https://spec.vitness.me/schemas/program/v1.0.0/program.schema.json)
+**Descarga:** [program.schema.json](https://spec.vitness.me/schemas/program/v1.1.0/program.schema.json)
 
 ## Un cronograma de referencias, no un contenedor
 
@@ -59,7 +59,7 @@ Esto es lo que un implementador tiene más probabilidades de intentar "arreglar"
 
 La consecuencia aceptada: **un programa completamente personalizado no puede hacer el *round-trip* como un solo documento autocontenido.** La exportación es el plan más un contexto de resolución separado. Esa contrapartida es deliberada.
 
-Un *slot* se identifica por su `exercise` — un `percent1RM` nombra el levantamiento mediante `referenceExerciseId`, y el *slot* que aplica es el que nombra ese ejercicio. El `id` propio del *slot* es un identificador local para citarlo desde una regla o una anulación.
+Un *slot* se identifica por su `exercise` — un `percent1RM` nombra el levantamiento mediante `referenceExerciseId`, y el *slot* que aplica es el que nombra ese ejercicio. El `id` propio del *slot* es un identificador local para citarlo desde una regla o una anulación. El `exercise` del *slot* puede llevar la [clave estructural](/docs/core-concepts/structural-keys/exercise-key) del ejercicio en `fxi`.
 
 ## La ramificación, y el límite de los planes adaptativos
 
@@ -74,7 +74,7 @@ La programación adaptativa se divide en dos, y solo una mitad es portable. **La
 ## Ejemplos resueltos
 
 <!-- fds:count examples:program=18 scenarios:program=18 -->
-Se publican 18 programas junto al esquema — uno por cada modelo de periodización de la matriz de cobertura y uno por cada estructura de cronograma, indexados en [el README de los archivos de ejemplo](https://spec.vitness.me/schemas/program/v1.0.0/README.md).
+Se publican 18 programas junto al esquema — uno por cada modelo de periodización de la matriz de cobertura y uno por cada estructura de cronograma, indexados en [el README de los archivos de ejemplo](https://spec.vitness.me/schemas/program/v1.1.0/README.md).
 
 Ninguno de ellos contiene una serie, una repetición ni una carga. Esa es la afirmación de arriba, demostrada en lugar de afirmada.
 

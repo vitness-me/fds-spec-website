@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Documents release 1.6.0: the optional structural keys `fxi`, `fxe`, `fxm`
+  and `fxmg` on their records, and on the references that name an exercise, a
+  piece of equipment or a muscle.
 - Documents release 1.5.0: body-atlas 1.1.0 and the optional `license` and
   `attribution` on a view's asset.
 

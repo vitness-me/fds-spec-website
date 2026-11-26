@@ -20,7 +20,7 @@ Objavljeno je 8 RFC dokumenata:
 <!-- fds:covers rfcs -->
 | RFC | Specifikuje |
 |---|---|
-| [RFC-001 — Model podataka o vežbi](/docs/specifications/rfc-001-exercise-data-model) | Entitet vežbe: identitet, klasifikacija, ciljni mišići i metrike. |
+| [RFC-001 — Model podataka o vežbi](/docs/specifications/rfc-001-exercise-data-model) | Entitet vežbe: identitet, klasifikacija, ciljani mišići i metrike. |
 | [RFC-002 — Model podataka o opremi](/docs/specifications/rfc-002-equipment-data-model) | Entitet opreme: šta je mašina ili sprava, iskazano pojmovima po kojima drugi sistem može da postupa. |
 | [RFC-003 — Model podataka o mišiću](/docs/specifications/rfc-003-muscle-data-model) | Entitet mišića: vokabular anatomije koji vežbe ciljaju. |
 | [RFC-004 — Model podataka o kategoriji mišića](/docs/specifications/rfc-004-muscle-category-data-model) | Entitet kategorije mišića: grupacije u koje se mišići objedinjuju. |

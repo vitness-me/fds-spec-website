@@ -1,8 +1,8 @@
 # RFC-002: Equipment Data Model Specification
 
 **Status**: Draft
-**Version**: 0.1.0
-**Date**: 2025-09-09
+**Version**: 0.2.0
+**Date**: 2026-11-26
 **Authors**: VITNESS Team
 **Category**: Standards Track
 
@@ -59,8 +59,9 @@ All compliant equipment data **MUST** include these fields:
 
 ```json fds:document entity=equipment
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.2.0",
   "id": "eq.barbell",
+  "fxe": "FXE=1.0S/k:imp/f:bar.straight",
   "canonical": {
     "name": "Barbell",
     "slug": "barbell"
@@ -80,6 +81,7 @@ Commonly supported optional fields that enhance interoperability:
 
 ```json fds:fragment entity=equipment partial
 {
+  "fxe": "FXE=1.0S/k:imp/f:bar.straight",
   "canonical": {
     "abbreviation": "BB",
     "aliases": ["Olympic Bar"],
@@ -98,6 +100,8 @@ Commonly supported optional fields that enhance interoperability:
   ]
 }
 ```
+
+`fxe` is the equipment's structural key: a string that describes what kind of equipment it is and its form, in codes FDS publishes, so two catalogs can find the same equipment whatever they call it. A record carries the whole key, including any extended layers, which record how the equipment is built, and the flag `N` that marks a key carrying them. It is not an identifier; `id` stays the record's identity. The schema checks only its header, `FXE=1.0S/` or `FXE=1.0N/`. See [Equipment key](../core-concepts/structural-keys/equipment-key).
 
 ### 3.3. Extension Mechanisms
 
@@ -207,6 +211,8 @@ This is the counterpart to `exercise.loading` (RFC-001 §4.6): the exercise stat
 
 ## 5. Versioning and Compatibility
 
+**1.2.0** added the optional `fxe` (§3.2).
+
 ### 5.1. Schema Versioning
 
 Following semantic versioning:
@@ -223,10 +229,10 @@ Following semantic versioning:
 
 ### 5.3. Schema Evolution Example
 
-Version 1.0.0 → 1.1.0 (Adding optional certification field):
+From one minor version to the next (Adding optional certification field):
 ```json fds:ignore a hypothetical next version illustrating how an optional field arrives; no published equipment schema has certification
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.x.0",
   "id": "eq.barbell",
   "canonical": { "name": "Barbell", "slug": "barbell" },
   "certification": {
@@ -273,7 +279,7 @@ graph LR
 ## 8. JSON Schema Reference
 
 Complete JSON Schema available at:
-- **Equipment**: `/specification/schemas/equipment/v1.1.0/equipment.schema.json`
+- **Equipment**: `/specification/schemas/equipment/v1.2.0/equipment.schema.json`
 
 ## 8.1. Validation
 
@@ -281,20 +287,21 @@ Validate with Ajv (Draft 2020-12):
 
 ```
 npx --package=ajv-cli --package=ajv-formats ajv validate --spec=draft2020 -c ajv-formats \
-  -s specification/schemas/equipment/v1.1.0/equipment.schema.json \
-  -d specification/schemas/equipment/v1.1.0/equipment.example.json
+  -s specification/schemas/equipment/v1.2.0/equipment.schema.json \
+  -d specification/schemas/equipment/v1.2.0/equipment.example.json
 ```
 
 ## 9. Example Implementation
 
 ### 9.1. Complete Barbell Equipment Record
 
-Based on reference implementation (`/specification/schemas/equipment/v1.1.0/equipment.example.json`):
+Based on reference implementation (`/specification/schemas/equipment/v1.2.0/equipment.example.json`):
 
 ```json fds:document entity=equipment
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.2.0",
   "id": "eq.barbell",
+  "fxe": "FXE=1.0S/k:imp/f:bar.straight",
   "canonical": { 
     "name": "Barbell", 
     "slug": "barbell", 

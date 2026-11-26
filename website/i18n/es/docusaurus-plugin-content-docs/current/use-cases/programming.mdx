@@ -6,13 +6,13 @@ usecase_promise: Un programa apunta a sesiones; se corrige una sesión y queda c
 usecase_family: composition
 usecase_audiences: [coach, researcher]
 usecase_sources:
-  - specification/schemas/program/v1.0.0/program.linear.example.json
-  - specification/schemas/program/v1.0.0/program.percentage-waves.example.json
+  - specification/schemas/program/v1.1.0/program.linear.example.json
+  - specification/schemas/program/v1.1.0/program.percentage-waves.example.json
 ---
 
 import {SpecExample, BeforeAfter, Panel, Audience, NextSteps, Next} from '@site/docs/use-cases/_shared/UseCase';
-import linear from '@site/../specification/schemas/program/v1.0.0/program.linear.example.json';
-import waves from '@site/../specification/schemas/program/v1.0.0/program.percentage-waves.example.json';
+import linear from '@site/../specification/schemas/program/v1.1.0/program.linear.example.json';
+import waves from '@site/../specification/schemas/program/v1.1.0/program.percentage-waves.example.json';
 
 # Planificar doce semanas sin copiar una sesión treinta y seis veces
 
@@ -41,7 +41,7 @@ La progresión lineal es toda la metodología en una sola regla: agregar carga c
 que se completan todas las repeticiones. Las dos semanas son idénticas — la carga se
 mueve, el plan no — y los días apuntan a una sesión de entrenamiento por referencia.
 
-<SpecExample source="specification/schemas/program/v1.0.0/program.linear.example.json" data={linear}>
+<SpecExample source="specification/schemas/program/v1.1.0/program.linear.example.json" data={linear}>
   Cada día es una referencia `workout` con un `name` desnormalizado. Ni una serie,
   repetición o carga aparece en el programa — viven en la sesión a la que apunta.
 </SpecExample>
@@ -49,7 +49,7 @@ mueve, el plan no — y los días apuntan a una sesión de entrenamiento por ref
 La misma estructura escala a una ola al estilo 5/3/1 — y sigue sin llevar los números
 de ningún atleta.
 
-<SpecExample source="specification/schemas/program/v1.0.0/program.percentage-waves.example.json" data={waves}>
+<SpecExample source="specification/schemas/program/v1.1.0/program.percentage-waves.example.json" data={waves}>
   Los slots de máximo de entrenamiento declaran a partir de qué levantamientos se
   computa el plan; `overrides` lleva la ola. Ningún *valor* de máximo de entrenamiento
   aparece en parte alguna del documento.

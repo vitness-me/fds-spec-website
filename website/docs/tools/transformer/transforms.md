@@ -8,6 +8,8 @@ sidebar_position: 6
 
 The FDS Transformer includes a set of built-in transform functions for common data manipulation tasks. These can be used in the `transform` property of field mappings.
 
+The Transformer doesn't fill the structural keys (`fxi`, `fxe`, `fxm`, `fxmg`); add them yourself if you want them. See [Structural Keys](../../core-concepts/structural-keys.md).
+
 ## Transform Reference
 
 ### `slugify`
