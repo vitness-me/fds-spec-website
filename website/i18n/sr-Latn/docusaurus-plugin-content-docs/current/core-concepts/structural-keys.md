@@ -11,9 +11,9 @@ Strukturni ključ je kratak string koji opisuje vežbu, komad opreme, mišić il
 
 Katalozi danas pronalaze zapise jedan drugog po imenu, a imena loše putuju.
 
-- Jedna vežba ima mnogo imena. „Dumbbell curl“, „standing DB curl“ i „bicep curl“ su isti pokret, a teretana za njega može imati i svoje kućno ime.
-- Imena se menjaju sa jezikom. „Curl con mancuerna“ je ista vežba, a engleski katalog nema načina da to prepozna.
-- Jedno ime može značiti više stvari. „Row“ može biti veslanje na sajli, veslanje sa šipkom ili trening na spravi za veslanje.
+- Jedna vežba ima mnogo imena. „Pregib sa bučicama“, „stojeći pregib za biceps“ i „biceps sa bučicama“ su isti pokret, a teretana za njega može imati i svoje kućno ime.
+- Imena se menjaju sa jezikom. „Pregib sa bučicom“, „Dumbbell curl“ i „Curl con mancuerna“ su ista vežba, a katalog na srpskom to ne može da zna.
+- Jedno ime može značiti više stvari. „Veslanje“ može biti veslanje na sajli, veslanje sa šipkom ili trening na spravi za veslanje.
 
 Uparivanje po imenu svodi se na sličnost stringova, prevođenje i nagađanje, i svaki par kataloga ponavlja taj posao. Kada neko pređe u drugu aplikaciju, njegova istorija treninga stiže vezana za imena koja nova aplikacija možda ne prepoznaje.
 
@@ -23,7 +23,7 @@ Ključ opisuje samu stvar. Sastoji se od slojeva, a svaki sloj beleži jednu dim
 
 `FXI=1.0S/m:el.flex/o:standing/l:bell.dumb@hands`
 
-Čita se kao fleksija lakta, u stojećem stavu, sa bučicom u rukama. Španski i engleski katalog mogu da napišu isti ključ, jer ključ ne zavisi od imena ni u jednom od njih.
+Čita se kao fleksija lakta, u stojećem stavu, sa bučicom u rukama. Srpski i engleski katalog mogu da napišu isti ključ, jer ključ ne zavisi od imena ni u jednom od njih.
 
 FDS objavljuje kako se ključevi grade i liste kodova iz kojih se uzimaju. Ne objavljuje ključeve ni za jednu vežbu, mišić ili komad opreme, jer je FDS standard, a ne katalog. Svaki vlasnik piše ključeve za sopstvene zapise.
 

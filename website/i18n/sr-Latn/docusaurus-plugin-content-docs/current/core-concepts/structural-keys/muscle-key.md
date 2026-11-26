@@ -104,7 +104,7 @@ Kod mišića je FMA termin, prepisan:
 | Semitendinosus | `semitendinosus` |
 | Longissimus | `longissimus` |
 
-Svakodnevno ime mišića ne menja njegov kod. „Latovi“ su `latissimus-dorsi`, a isto važi i za „dorsal ancho“ u španskom katalogu.
+Svakodnevno ime mišića ne menja njegov kod. „Latovi“ su `latissimus-dorsi`, a isto važi i za „lats“ u engleskom katalogu i „dorsal ancho“ u španskom.
 
 FMA termin za skup mišića nije mišić. Erector spinae muscle group je kategorija, `FXMG=1.0/erector-spinae`, a njeni članovi su mišići: `FXM=1.0/iliocostalis`, `FXM=1.0/longissimus` i `FXM=1.0/spinalis`.
 
@@ -177,19 +177,19 @@ Katalog navodi „Bočni deltoidi“.
 |---|---|
 | Termin | Bočna strana ramena u FMA je akromijalni deo deltoidnog mišića |
 | Mišić | Deltoid: `deltoid` |
-| Deo | Acromial part of deltoid: `acromial`, a ne reč iz teretane „lateral“ |
+| Deo | Acromial part of deltoid: `acromial`, a ne reč iz teretane „lateralni“ |
 
 `FXM=1.0/deltoid.acromial`
 
-### Erector spinae
+### Erektori kičme {#erector-spinae}
 
-Katalog navodi „Erector spinae“ i „Longissimus“ kao dve stavke.
+Katalog navodi „Erektori kičme“ i „Najduži mišić leđa“ kao dve stavke.
 
 | Korak | Odluka |
 |---|---|
 | Termin | FMA ima Erector spinae muscle group, skup mišića, i Longissimus, mišić |
-| Erector spinae | Skup je kategorija: stavka postaje zapis kategorije sa `FXMG=1.0/erector-spinae` u svom `fxmg`. Zapis mišića nikada ne nosi `fxmg` |
-| Longissimus | Mišić: `longissimus` |
+| Erektori kičme | Skup je kategorija: stavka postaje zapis kategorije sa `FXMG=1.0/erector-spinae` u svom `fxmg`. Zapis mišića nikada ne nosi `fxmg` |
+| Najduži mišić leđa | Mišić: `longissimus` |
 
 `FXM=1.0/longissimus`
 

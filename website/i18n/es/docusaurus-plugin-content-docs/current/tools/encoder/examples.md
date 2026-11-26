@@ -198,7 +198,7 @@ fds-encoder check --records specification/schemas/exercises/v1.2.0/exercise.exam
 
 ## Ejemplo 3: Comparar dos ejercicios de catálogos distintos {#example-3-compare-two-exercises-from-different-catalogs}
 
-El catálogo A llama a un ejercicio "Standing DB Curl" y le pone la clave `FXI=1.0S/m:el.flex/o:standing/l:bell.dumb@hands`. El catálogo B llama a uno "Curl con mancuerna" y no dice si se hace de pie o sentado, así que su clave deja la posición del cuerpo en `?`.
+El catálogo A llama a un ejercicio "Curl de pie con mancuerna" y le pone la clave `FXI=1.0S/m:el.flex/o:standing/l:bell.dumb@hands`. El catálogo B llama a uno "Dumbbell curl" y no dice si se hace de pie o sentado, así que su clave deja la posición del cuerpo en `?`.
 
 ```bash
 fds-encoder compare 'FXI=1.0S/m:el.flex/o:standing/l:bell.dumb@hands' 'FXI=1.0S/m:el.flex/o:?/l:bell.dumb@hands'
@@ -210,7 +210,7 @@ more-specific: A is more specific  {"m":"equal","o":"narrower","k":"equal","f":"
 
 A es más específica: todas las capas son iguales salvo la posición del cuerpo, que A acota. El ejercicio de B puede ser el de A, y una persona lo confirma.
 
-El "Seated Dumbbell Curl" del catálogo B es un ejercicio distinto:
+El "Curl sentado con mancuerna" del catálogo B es un ejercicio distinto:
 
 ```bash
 fds-encoder compare 'FXI=1.0S/m:el.flex/o:standing/l:bell.dumb@hands' 'FXI=1.0S/m:el.flex/o:seated/l:bell.dumb@hands'

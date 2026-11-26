@@ -219,7 +219,7 @@ Svaki primer polazi od stavke kataloga i određuje ključ korak po korak.
 
 ## Ključevi u zapisima {#keys-in-records}
 
-Zapis kategorije mišića nosi svoj ključ u `fxmg`. Grupa kao što je „Hamstrings“ je zapis kategorije, a ne zapis mišića:
+Zapis kategorije mišića nosi svoj ključ u `fxmg`. Grupa kao što je „Zadnja loža“ je zapis kategorije, a ne zapis mišića:
 
 ```json fds:ignore muscle category record excerpt showing the fxmg field
 {
@@ -305,7 +305,7 @@ Kategorije su definisane svojim članovima, pa pronalaze jedna drugu, svoje miš
 
 Pokret u zglobu u ključu vežbe i pokret kategorije su isti kod, pa vežba vodi pravo do mišića koje trenira, kao što njen kod opterećenja vodi do ključa njene opreme.
 
-Da biste uparili kategorije dva kataloga, uporedite njihove ključeve. „Lower back“ jednog kataloga je `FXMG=1.0/erector-spinae+quadratus-lumborum`, a „Erector spinae“ drugog je `FXMG=1.0/erector-spinae`. Drugi je specifičniji: prvi sadrži i quadratus lumborum.
+Da biste uparili kategorije dva kataloga, uporedite njihove ključeve. „Donji deo leđa“ jednog kataloga je `FXMG=1.0/erector-spinae+quadratus-lumborum`, a „Erektori kičme“ drugog su `FXMG=1.0/erector-spinae`. Drugi je specifičniji: prvi sadrži i quadratus lumborum.
 
 Da biste mišiće jednog kataloga grupisali pod njegove sopstvene kategorije, smestite svaki ključ mišića u svaki ključ kategorije. `FXM=1.0/longissimus` je u `FXMG=1.0/erector-spinae`, a `FXM=1.0/trapezius` je delimično u srednjem delu leđa.
 

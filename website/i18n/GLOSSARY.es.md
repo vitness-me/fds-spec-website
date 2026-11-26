@@ -227,3 +227,15 @@ En las cadenas de la interfaz se usan comillas inglesas ("…"); las angulares
 | prime mover | motor principal | «los motores principales de la flexión de cadera» |
 | Encoder | FDS Encoder | nombre propio; sin traducir, masculino: «el Encoder» |
 | conformance case | caso de conformidad | véase *conformance* más arriba |
+
+## Nombres en los ejemplos
+
+En la prosa, los ejercicios, el equipamiento y los músculos llevan el nombre
+asentado en español, el que usa quien entrena en un gimnasio, no una
+traducción palabra por palabra del nombre inglés: «curl con mancuerna»,
+«jalón al pecho», «dorsales». Donde el inglés cita un nombre de otro idioma
+para mostrar que los nombres cambian con el idioma, se conserva el contraste y
+se reestructura la frase: el nombre en español es el conocido, y los de otros
+idiomas, el inglés incluido, son los extranjeros. Las claves, los códigos, los
+nombres de campos, los bloques JSON y los comandos no cambian; los ejemplos
+JSON quedan idénticos al inglés, incluidos los valores de `name`.

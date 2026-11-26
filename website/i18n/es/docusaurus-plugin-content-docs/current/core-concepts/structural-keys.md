@@ -11,9 +11,9 @@ Una clave estructural es una cadena corta que describe un ejercicio, un equipami
 
 Hoy los catálogos encuentran los registros de otros catálogos por el nombre, y los nombres viajan mal.
 
-- Un ejercicio tiene muchos nombres. "Dumbbell curl", "standing DB curl" y "bicep curl" son el mismo movimiento, y un gimnasio puede usar además un nombre propio de la casa.
-- Los nombres cambian con el idioma. "Curl con mancuerna" es el mismo ejercicio, y un catálogo en inglés no tiene forma de saberlo.
-- Un nombre puede significar varias cosas. "Row" puede ser un remo en polea, un remo con barra o una sesión en una máquina de remo.
+- Un ejercicio tiene muchos nombres. "Curl de bíceps con mancuernas", "curl de pie con mancuerna" y "bíceps con mancuerna" son el mismo movimiento, y un gimnasio puede usar además un nombre propio de la casa.
+- Los nombres cambian con el idioma. "Curl con mancuerna", "Dumbbell curl" y "Pregib sa bučicom" son el mismo ejercicio, y un catálogo en español no tiene forma de saberlo.
+- Un nombre puede significar varias cosas. "Remo" puede ser un remo en polea, un remo con barra o una sesión en una máquina de remo.
 
 Emparejar por nombre se reduce a similitud de cadenas, traducción y conjeturas, y cada par de catálogos repite ese trabajo. Cuando alguien se cambia a otra aplicación, su historial de entrenamiento llega atado a nombres que la nueva aplicación quizá no reconozca.
 

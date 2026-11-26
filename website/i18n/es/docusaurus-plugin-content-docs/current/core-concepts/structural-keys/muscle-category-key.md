@@ -219,7 +219,7 @@ Cada ejemplo parte de una entrada de catálogo y decide la clave paso a paso.
 
 ## Claves en los registros {#keys-in-records}
 
-Un registro de categoría muscular lleva su clave en `fxmg`. Un grupo como "Hamstrings" es un registro de categoría, no un registro de músculo:
+Un registro de categoría muscular lleva su clave en `fxmg`. Un grupo como "Isquiotibiales" es un registro de categoría, no un registro de músculo:
 
 ```json fds:ignore muscle category record excerpt showing the fxmg field
 {
@@ -305,7 +305,7 @@ Las categorías se definen por sus miembros, así que se encuentran entre sí, e
 
 La acción articular de una clave de ejercicio y la acción de una categoría son el mismo código, así que un ejercicio lleva directamente a los músculos que entrena, igual que su código de carga lleva a su clave de equipamiento.
 
-Para emparejar las categorías de dos catálogos, se comparan sus claves. La "Lower back" de un catálogo es `FXMG=1.0/erector-spinae+quadratus-lumborum` y la "Erector spinae" de otro es `FXMG=1.0/erector-spinae`. La segunda es más específica: la primera también contiene el cuadrado lumbar.
+Para emparejar las categorías de dos catálogos, se comparan sus claves. La "Zona lumbar" de un catálogo es `FXMG=1.0/erector-spinae+quadratus-lumborum` y el "Erector de la columna" de otro es `FXMG=1.0/erector-spinae`. La segunda clave es más específica: la primera también contiene el cuadrado lumbar.
 
 Para agrupar los músculos de un catálogo bajo sus propias categorías, se sitúa cada clave de músculo en cada clave de categoría. `FXM=1.0/longissimus` está dentro de `FXMG=1.0/erector-spinae`, y `FXM=1.0/trapezius` está parcialmente dentro de la espalda media.
 

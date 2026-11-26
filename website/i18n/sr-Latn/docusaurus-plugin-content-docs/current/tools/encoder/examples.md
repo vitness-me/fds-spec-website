@@ -198,7 +198,7 @@ fds-encoder check --records specification/schemas/exercises/v1.2.0/exercise.exam
 
 ## Primer 3: Poređenje dve vežbe iz različitih kataloga {#example-3-compare-two-exercises-from-different-catalogs}
 
-Katalog A zove jednu vežbu „Standing DB Curl“ i daje joj ključ `FXI=1.0S/m:el.flex/o:standing/l:bell.dumb@hands`. Katalog B zove jednu „Curl con mancuerna“ i ne kaže da li se izvodi u stojećem stavu ili u sedu, pa njen ključ ostavlja položaj tela na `?`.
+Katalog A zove jednu vežbu „Stojeći pregib sa bučicom“ i daje joj ključ `FXI=1.0S/m:el.flex/o:standing/l:bell.dumb@hands`. Katalog B zove jednu „Curl con mancuerna“ i ne kaže da li se izvodi u stojećem stavu ili u sedu, pa njen ključ ostavlja položaj tela na `?`.
 
 ```bash
 fds-encoder compare 'FXI=1.0S/m:el.flex/o:standing/l:bell.dumb@hands' 'FXI=1.0S/m:el.flex/o:?/l:bell.dumb@hands'
@@ -210,7 +210,7 @@ more-specific: A is more specific  {"m":"equal","o":"narrower","k":"equal","f":"
 
 A je specifičniji: svaki sloj je jednak osim položaja tela, koji A sužava. Vežba iz B može biti vežba iz A, a to potvrđuje osoba.
 
-„Seated Dumbbell Curl“ iz kataloga B je druga vežba:
+„Sedeći pregib sa bučicom“ iz kataloga B je druga vežba:
 
 ```bash
 fds-encoder compare 'FXI=1.0S/m:el.flex/o:standing/l:bell.dumb@hands' 'FXI=1.0S/m:el.flex/o:seated/l:bell.dumb@hands'

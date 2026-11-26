@@ -254,3 +254,14 @@ polja šema, komande i identifikatori se ne prevode.
 | conformance case | slučaj usaglašenosti | *conformance* → „usaglašenost“ već zabeleženo |
 | curl / lunge / row / pulldown | pregib / iskorak / veslanje / povlačenje | imena vežbi u prozi; `name` u JSON blokovima se ne prevodi |
 | qualifier (ključa kategorije) | odrednica | `<region>.<qualifier>`; „region“ kao kod atlasa |
+
+## Imena u primerima
+
+U prozi vežbe, oprema i mišići nose ustaljeno srpsko ime, ono koje koristi
+neko ko trenira u teretani, a ne doslovan prevod engleskog imena: „pregib sa
+bučicom“, „povlačenje na lat spravi“, „latovi“. Gde engleski tekst navodi ime
+na drugom jeziku da bi pokazao da se imena menjaju sa jezikom, kontrast ostaje,
+a rečenica se preuređuje: srpsko ime je poznato, a imena na drugim jezicima,
+uključujući engleski, jesu strana. Ključevi, kodovi, imena polja, JSON blokovi
+i komande se ne menjaju; JSON primeri ostaju identični engleskim, uključujući
+vrednosti `name`.

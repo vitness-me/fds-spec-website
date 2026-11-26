@@ -104,7 +104,7 @@ El código del músculo es el término de FMA, reescrito:
 | Semitendinosus | `semitendinosus` |
 | Longissimus | `longissimus` |
 
-El nombre cotidiano de un músculo no cambia su código. "Lats" es `latissimus-dorsi`, y también lo es "dorsal ancho" en un catálogo en español.
+El nombre cotidiano de un músculo no cambia su código. "Dorsales" es `latissimus-dorsi`, y también lo son "lats" en un catálogo en inglés y "latovi" en uno en serbio.
 
 Un término de FMA para un conjunto de músculos no es un músculo. El Erector spinae muscle group es una categoría, `FXMG=1.0/erector-spinae`, y sus miembros son músculos: `FXM=1.0/iliocostalis`, `FXM=1.0/longissimus` y `FXM=1.0/spinalis`.
 
@@ -148,7 +148,7 @@ Cada ejemplo parte de una entrada de catálogo y decide la clave paso a paso.
 
 ### Bíceps {#biceps}
 
-Un catálogo lista "Biceps".
+Un catálogo lista "Bíceps".
 
 | Paso | Decisión |
 |---|---|
@@ -160,7 +160,7 @@ Un catálogo lista "Biceps".
 
 ### Cabeza larga del bíceps {#long-head-of-the-biceps}
 
-Un catálogo lista "Biceps, long head" como entrada propia.
+Un catálogo lista "Bíceps, cabeza larga" como entrada propia.
 
 | Paso | Decisión |
 |---|---|
@@ -171,7 +171,7 @@ Un catálogo lista "Biceps, long head" como entrada propia.
 
 ### Deltoides lateral {#side-delts}
 
-Un catálogo lista "Side delts".
+Un catálogo lista "Deltoides laterales".
 
 | Paso | Decisión |
 |---|---|
@@ -183,19 +183,19 @@ Un catálogo lista "Side delts".
 
 ### Erector de la columna {#erector-spinae}
 
-Un catálogo lista "Erector spinae" y "Longissimus" como dos entradas.
+Un catálogo lista "Erector de la columna" y "Longísimo" como dos entradas.
 
 | Paso | Decisión |
 |---|---|
 | Término | FMA tiene Erector spinae muscle group, un conjunto de músculos, y Longissimus, un músculo |
-| Erector spinae | Un conjunto es una categoría: la entrada pasa a ser un registro de categoría con `FXMG=1.0/erector-spinae` en su `fxmg`. Un registro de músculo nunca lleva `fxmg` |
-| Longissimus | Un músculo: `longissimus` |
+| Erector de la columna | Un conjunto es una categoría: la entrada pasa a ser un registro de categoría con `FXMG=1.0/erector-spinae` en su `fxmg`. Un registro de músculo nunca lleva `fxmg` |
+| Longísimo | Un músculo: `longissimus` |
 
 `FXM=1.0/longissimus`
 
 ### Dorsales {#lats}
 
-Un catálogo lista "Lats".
+Un catálogo lista "Dorsales".
 
 | Paso | Decisión |
 |---|---|
