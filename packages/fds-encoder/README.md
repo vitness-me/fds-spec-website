@@ -67,7 +67,11 @@ npm run test:run
 npm run build
 ```
 
-`test/parity.test.ts` runs a large set of keys, comparisons, cross-checks, builds and matches through this package and through the VITNESS reference tool and requires identical results. It imports the reference tool from its path (`FDS_ENCODER_REFERENCE` overrides it) and is skipped where the path doesn't exist.
+`test/parity.test.ts` runs a large set of keys, comparisons, cross-checks, builds and matches through this package and through the VITNESS reference tool and requires identical results. It imports the reference tool from the directory in `FDS_ENCODER_REFERENCE`, and is skipped when the variable is unset:
+
+```bash
+FDS_ENCODER_REFERENCE=/path/to/reference/tool npm run test:run
+```
 
 ## Licence
 

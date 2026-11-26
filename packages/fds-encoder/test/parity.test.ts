@@ -1,8 +1,7 @@
 // Parity with the reference tool. Every key, comparison, cross-check, build and match below runs through both the
-// package and the reference tool, and the results must be identical. The reference tool is imported from its path;
-// when the path is missing, as it is in CI, the whole file is skipped.
+// package and the reference tool, and the results must be identical. The reference tool is imported from the path in
+// FDS_ENCODER_REFERENCE; when the variable is unset, as it is in CI, the whole file is skipped.
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
-import { homedir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, test } from 'vitest';
@@ -21,9 +20,8 @@ import { match } from '../src/match';
 import type { MatchEntry, MatchResult } from '../src/match';
 import { parseFxe, parseFxi } from '../src/syntax';
 
-const REF = process.env.FDS_ENCODER_REFERENCE
-  ?? join(homedir(), '.t3/worktrees/exercises-api/t3-ef77874b-e4e4e604f42ff093/frontend/tools/fxi');
-const present = existsSync(join(REF, 'syntax.ts'));
+const REF = process.env.FDS_ENCODER_REFERENCE ?? '';
+const present = REF !== '' && existsSync(join(REF, 'syntax.ts'));
 const PKG = fileURLToPath(new URL('..', import.meta.url));
 const REPO = join(PKG, '../..');
 
@@ -139,7 +137,7 @@ const warningCode = (message: string): string => WARNING_CODE.find(([re]) => re.
 
 describe.skipIf(!present)('parity with the reference tool', async () => {
   // A skipped suite is still collected; without the reference tool there is nothing to import.
-  if (!present) { test.skip(`the reference tool is not at ${REF}`, () => {}); return; }
+  if (!present) { test.skip(REF === '' ? 'FDS_ENCODER_REFERENCE is not set' : `the reference tool is not at ${REF}`, () => {}); return; }
   const R = {
     alphabet: await load('alphabet.ts'), syntax: await load('syntax.ts'), compare: await load('compare.ts'), crosscheck: await load('crosscheck.ts'),
     fxm: await load('fxm.ts'), fxmg: await load('fxmg.ts'), fxmAlphabet: await load('fxm-alphabet.ts'), fxmgAlphabet: await load('fxmg-alphabet.ts'),
