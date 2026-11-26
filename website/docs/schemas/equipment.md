@@ -4,7 +4,7 @@ description: JSON Schema for equipment data model
 sidebar_position: 3
 ---
 
-# Equipment Schema (v1.1.0)
+# Equipment Schema (v1.2.0)
 
 The Equipment schema defines fitness equipment entities with classification, metadata, and extensible attributes.
 

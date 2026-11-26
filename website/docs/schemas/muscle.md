@@ -4,7 +4,7 @@ description: JSON Schema for muscle data model
 sidebar_position: 4
 ---
 
-# Muscle Schema (v1.0.0)
+# Muscle Schema (v1.1.0)
 
 The Muscle schema defines anatomical muscle entities with classification, heatmap visualization data, and metadata.
 

@@ -22,7 +22,7 @@ checkKey('FXE=1.0S/k:robot').issues;
 // [{ code: 'unknown-kind', message: '"robot" is not an FXE kind.', at: 'k:robot' }]
 
 writeKey('FXMG=1.0/thigh.posterior+hamstring'); // 'FXMG=1.0/hamstring'
-keyType('FXM=1.0/deltoid.anterior');           // 'FXM'
+keyType('FXM=1.0/deltoid.clavicular');         // 'FXM'
 
 try {
   writeKey('FXE=1.0S/k:robot');
@@ -243,7 +243,7 @@ The result's `kind` is `identical`, `confirm` or `absent`, as in [`fds-encoder m
 import { buildRegistries, codes } from '@vitness/fds-encoder';
 
 codes.FXE_KINDS.mac;
-// 'Dedicated machine: a guided mechanism with fixed body interfaces, built for one movement.'
+// 'Strength machine: a guided mechanism with fixed body contacts, built for one movement.'
 
 Object.keys(buildRegistries());
 // ['exercise-key.registry.json', 'equipment-key.registry.json', 'body-points.registry.json',

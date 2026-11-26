@@ -292,9 +292,9 @@ export const FXE_KINDS: Glossary = {
   imp: 'Implement: a free object moved, held or worn.',
   sup: 'Support: a surface or frame the body rests on, hangs from or pushes against. It does not carry the load.',
   acc: 'Accessory: a handle, strap, belt, mat, towel or marker. It never defines the exercise.',
-  stn: 'Station: a guide or anchor with a general interface used for many movements: cable column, Smith machine, landmine.',
-  mac: 'Dedicated machine: a guided mechanism with fixed body interfaces, built for one movement.',
-  erg: 'Cyclic machine: repeats whole cycles (cardio).',
+  stn: 'Station: a guide or anchor used for many movements: cable column, Smith machine, landmine.',
+  mac: 'Strength machine: a guided mechanism with fixed body contacts, built for one movement.',
+  erg: 'Cardio machine: repeats whole cycles.',
 };
 export type FxeKind = 'none' | 'imp' | 'sup' | 'acc' | 'stn' | 'mac' | 'erg';
 

@@ -4,7 +4,7 @@ description: JSON Schema for muscle category data model
 sidebar_position: 5
 ---
 
-# Muscle Category Schema (v1.0.0)
+# Muscle Category Schema (v1.1.0)
 
 The Muscle Category schema defines groupings and categorizations of muscles with flexible tagging and metadata.
 

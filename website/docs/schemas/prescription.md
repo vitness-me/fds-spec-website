@@ -4,7 +4,7 @@ description: How much load, how many reps, what tempo, how much rest — the sha
 sidebar_position: 7
 ---
 
-# Prescription Primitives (v1.0.0)
+# Prescription Primitives (v1.1.0)
 
 Prescription answers four questions about a set: **how much load, how many repetitions, at what tempo, and how much rest.** Everything in FDS that prescribes work composes these definitions, so a set inside a standalone workout and the same set inside a twelve-week program mean exactly the same thing.
 

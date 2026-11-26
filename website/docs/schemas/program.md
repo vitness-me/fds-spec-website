@@ -4,7 +4,7 @@ description: JSON Schema for a training program — cycles, weeks, day placement
 sidebar_position: 9
 ---
 
-# Program Schema (v1.0.0)
+# Program Schema (v1.1.0)
 
 A program places sessions in time: cycles, weeks, days, and the rules by which the prescription changes as the plan advances.
 

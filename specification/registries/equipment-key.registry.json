@@ -149,7 +149,7 @@
     },
     {
       "value": "stn",
-      "description": "Station: a guide or anchor with a general interface used for many movements: cable column, Smith machine, landmine.",
+      "description": "Station: a guide or anchor used for many movements: cable column, Smith machine, landmine.",
       "standardLayers": [
         "f"
       ],
@@ -161,7 +161,7 @@
     },
     {
       "value": "mac",
-      "description": "Dedicated machine: a guided mechanism with fixed body interfaces, built for one movement.",
+      "description": "Strength machine: a guided mechanism with fixed body contacts, built for one movement.",
       "standardLayers": [
         "l",
         "s",
@@ -176,7 +176,7 @@
     },
     {
       "value": "erg",
-      "description": "Cyclic machine: repeats whole cycles (cardio).",
+      "description": "Cardio machine: repeats whole cycles.",
       "standardLayers": [
         "c",
         "l",

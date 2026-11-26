@@ -449,7 +449,7 @@ An exercise key and an [equipment key](./equipment-key.md#equipment-keys-in-exer
 | Body points | After `@` in load and support | A machine's load interface (`l`) | [Body points](#body-points) |
 | Body positions | Orientation (`o`) | A machine's posture (`s`) | [Orientation](#orientation-o) |
 
-The rowing machine below shows all three: the rowing machine is held `@hands` and starts `seated`, and its equipment key writes `l:hands` and `s:seated`.
+The rowing machine below shows all three: rowing on it is held `@hands` and starts `seated`, and its equipment key writes `l:hands` and `s:seated`.
 
 <figure className="key-anatomy">
   <div className="key-pair">

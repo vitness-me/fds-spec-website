@@ -4,7 +4,7 @@ description: JSON Schema for a single prescribed training session — blocks, ex
 sidebar_position: 8
 ---
 
-# Workout Schema (v1.1.0)
+# Workout Schema (v1.2.0)
 
 A workout is **one prescribed session**: what is done, in what order, grouped how, and how each item is prescribed.
 

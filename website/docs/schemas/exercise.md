@@ -4,7 +4,7 @@ description: JSON Schema for exercise data model
 sidebar_position: 2
 ---
 
-# Exercise Schema (v1.1.0)
+# Exercise Schema (v1.2.0)
 
 The Exercise schema defines the core data model for fitness exercises. It includes classification, muscle targets, equipment requirements, and media assets.
 

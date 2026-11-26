@@ -109,7 +109,13 @@ Two keys of one type give one of four results:
 | `overlap` | Neither is more specific, and they may describe the same thing |
 | `different` | They can't describe the same thing |
 
-Exercise and equipment keys print each layer's relation, read as "A is … than B": `equal`, `narrower`, `broader`, `open` (both leave it at `?`) or `contradicts`.
+Exercise and equipment keys also print each layer's relation:
+
+- `equal`: A and B say the same.
+- `narrower`: A says more than B.
+- `broader`: A says less than B.
+- `open`: both leave it at `?`.
+- `contradicts`: A and B can't both be true.
 
 ```bash
 fds-encoder compare 'FXI=1.0S/m:el.flex/o:standing/l:bell.dumb@hands' 'FXI=1.0S/m:el.flex/o:?/l:bell.dumb@hands'

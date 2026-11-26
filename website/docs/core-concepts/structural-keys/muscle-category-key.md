@@ -115,15 +115,15 @@ The `.` means the same thing in both keys: the named part of the thing before it
 
 ## Members
 
-Every code has a set of members, and comparison works on them. The members of an anatomy code are fixed by the anatomy reference, so every owner gets the same list. The members of an action category are each owner's judgement of the prime movers.
+Every code has a set of members, and comparison works on them. The members of an anatomy code are fixed by the anatomy reference, and the members of an action category are the prime movers FDS publishes for it in the category registry, so every owner gets the same list.
 
 - **A set or compartment** has the muscles FMA lists for its term, written as muscle keys with the side dropped. `FXMG=1.0/hamstring` has `FXM=1.0/biceps-femoris`, `FXM=1.0/semitendinosus` and `FXM=1.0/semimembranosus`.
 - **A set can hold sets.** The thigh holds the quadriceps femoris, which holds four muscles. Follow the members down until you reach muscle keys.
 - **A set FMA lists no members for** takes them from Uberon. FMA lists none for the erector spinae, so its members are the three muscles Uberon lists as its parts. The entire musculature, `FXMG=1.0/entire`, holds every muscle.
-- **An action** has the prime movers of that joint action. `FXMG=1.0/a:hip.flex` has `FXM=1.0/psoas-major`, `FXM=1.0/iliacus` and `FXM=1.0/rectus-femoris`. Sartorius and tensor fasciae latae help flex the hip, but they aren't prime movers, so they aren't members. There are 40 action categories, one for each joint action of the exercise key except ankle eversion, `ank.ev`, so `FXMG=1.0/a:ank.ev` isn't a key, and none for circling.
+- **An action** has the prime movers of that joint action, as [`muscle-category-key.registry.json`](https://spec.vitness.me/registries/muscle-category-key.registry.json) lists them. `FXMG=1.0/a:hip.flex` has `FXM=1.0/psoas-major`, `FXM=1.0/iliacus` and `FXM=1.0/rectus-femoris`. Sartorius and tensor fasciae latae help flex the hip, but they aren't prime movers, so they aren't members. There are 40 action categories, one for each joint action of the exercise key except ankle eversion, `ank.ev`, so `FXMG=1.0/a:ank.ev` isn't a key, and none for circling.
 - **A union** has everything its terms cover. A term is a category code or a muscle key's code, with or without a part.
 
-An owner who means something other than the FMA set writes a union. It never reuses the FMA code with its own member list. An owner whose hip flexors include sartorius and tensor fasciae latae writes `FXMG=1.0/a:hip.flex+sartorius+tensor-fasciae-latae`.
+An owner who means something other than the FMA set, or who reads an action's prime movers differently, writes a union. It never reuses the code with its own member list. An owner whose hip flexors include sartorius and tensor fasciae latae writes `FXMG=1.0/a:hip.flex+sartorius+tensor-fasciae-latae`.
 
 Two FMA terms can have the same members. `FXMG=1.0/hamstring` and `FXMG=1.0/thigh.posterior` (Musculature of posterior compartment of thigh, FMA:51036) both hold the three hamstrings. Both keys are valid, and they compare as the same.
 
