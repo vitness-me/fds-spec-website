@@ -128,7 +128,19 @@ function codeProblems(pages, known) {
 // A key runs to the quote, backtick, space or bracket that closes it. `,`, `>` and `|` are symbols inside a key; a
 // table cell writes `|` as `\|`.
 const KEY = /(FX(?:MG|M|I|E)=[^\s`'")<…\]\\]+)/g;
-function keyProblems(sources) {
+
+/**
+ * A key that ends in a pattern (`l:bell.*`, `FXM=1.0/deltoid.*`) with the pattern replaced by a code it matches, so the
+ * rest of the key is checked too. Undefined when no code starts that way.
+ */
+function patternInstance(key, known) {
+  const m = /([a-z][a-z0-9-]*(?:\.[a-z0-9-]+)*)\.\*$/.exec(key);
+  if (m === null) return undefined;
+  const code = [...known].sort().find((k) => k.startsWith(`${m[1]}.`));
+  return code === undefined ? undefined : key.slice(0, m.index) + code;
+}
+
+function keyProblems(sources, known) {
   const problems = [];
   let count = 0;
   for (const [where, text] of Object.entries(sources)) {
@@ -136,10 +148,13 @@ function keyProblems(sources) {
     for (const m of body.matchAll(KEY)) {
       const key = m[1].replace(/[.;:,]+$/, '');
       const next = body[m.index + m[1].length] ?? '';
-      // A header alone (`FXI=1.0`), a pattern (`<joint>`, `…`) or a search (`deltoid.*`) is not a key.
-      if (!/=\d+\.\d+[SN]?\/./.test(key) || next === '<' || next === '…' || key.endsWith('.*') || DELIBERATELY_WRONG.has(key)) continue;
+      // A header alone (`FXI=1.0`) or a placeholder (`<joint>`, `…`) is not a key. A key ending in a pattern
+      // (`deltoid.*`) is checked with the pattern filled in.
+      if (!/=\d+\.\d+[SN]?\/./.test(key) || next === '<' || next === '…' || DELIBERATELY_WRONG.has(key)) continue;
       count++;
-      const c = encoder.checkKey(key);
+      const checked = key.endsWith('.*') ? patternInstance(key, known) : key;
+      if (checked === undefined) { problems.push(`${where}: ${key}: no code matches the pattern.`); continue; }
+      const c = encoder.checkKey(checked);
       if (!c.ok) problems.push(`${where}: ${key} does not check: ${c.issues.map((i) => i.message).join(' ')}`);
     }
   }
@@ -181,11 +196,16 @@ if (process.argv.includes('--self-test')) {
   expectFail('registries (missing)', registryProblems(generated, (f) => (f === first ? undefined : text(generated[f]))));
   expectFail('codes', codeProblems({ 'page.md': '| `bell.dumbb` | A typo |' }, known).problems);
   expectFail('codes (layer value)', codeProblems({ 'page.md': '| `l:bar.straight@backside` | x |' }, known).problems);
-  expectFail('keys', keyProblems({ 'page.md': 'A key `FXI=1.0S/m:el.bend/o:standing/l:none` here.' }).problems);
-  expectFail('keys (muscle)', keyProblems({ 'page.md': '`FXM=1.0/lats`' }).problems);
+  expectFail('keys', keyProblems({ 'page.md': 'A key `FXI=1.0S/m:el.bend/o:standing/l:none` here.' }, known).problems);
+  expectFail('keys (muscle)', keyProblems({ 'page.md': '`FXM=1.0/lats`' }, known).problems);
+  // A key ending in a pattern is still checked before the pattern, and the pattern must match a code.
+  expectFail('keys (pattern, bad motion)', keyProblems({ 'page.md': '`FXI=1.0S/m:el.bend/o:standing/l:bell.*`' }, known).problems);
+  expectFail('keys (pattern, bad motion before a good pattern)', keyProblems({ 'page.md': '`FXI=1.0S/m:el.bend/o:standing/l:bell.dumb@hands/h:arms.*`' }, known).problems);
+  expectFail('keys (pattern, no code)', keyProblems({ 'page.md': '`FXM=1.0/nomuscle.*`' }, known).problems);
+  if (keyProblems({ 'page.md': '`FXI=1.0S/m:el.flex/o:standing/l:bell.dumb@hands/h:arms.*` `FXM=1.0/deltoid.*`' }, known).problems.length > 0) failures.push('keys rejected a valid pattern');
   // Each key is valid up to a , > or | and broken after it: a check that stops at the separator passes all three.
   const separated = '`FXI=1.0S/o:standing/l:none/m:el.flex>el.bend` `FXI=1.0S/m:=sp.flex/o:prone/l:none/s:floor@feet,nope` `FXI=1.0S/o:prone/l:none/m:=sp.flex\\|hip.bend`';
-  if (keyProblems({ 'page.md': separated }).problems.length !== 3) failures.push('keys are checked only up to a , > or |');
+  if (keyProblems({ 'page.md': separated }, known).problems.length !== 3) failures.push('keys are checked only up to a , > or |');
   expectFail('links', linkProblems({ ...pages, 'muscle-key.md': '' }));
   if (codeProblems({ 'page.md': '| `m:hip.ext+kn.ext` | `l:bell.dumb@hands` | `x:rc@legs+u@arms` | `bell.*` | `FXMG=1.0/a:hip.flex` |' }, known).problems.length > 0) failures.push('codes rejected valid codes');
   if (failures.length > 0) { console.error(failures.join('\n')); process.exit(1); }
@@ -197,7 +217,7 @@ const problems = [];
 problems.push(...registryProblems(generated, readRegistry));
 const codes = codeProblems(pages, known);
 problems.push(...codes.problems);
-const keys = keyProblems({ ...Object.fromEntries(Object.entries(pages).map(([p, b]) => [`website/docs/core-concepts/structural-keys/${p}`, b])), 'website/docs/core-concepts/structural-keys.md': readFileSync(join(ROOT, 'website/docs/core-concepts/structural-keys.md'), 'utf8'), ...examples });
+const keys = keyProblems({ ...Object.fromEntries(Object.entries(pages).map(([p, b]) => [`website/docs/core-concepts/structural-keys/${p}`, b])), 'website/docs/core-concepts/structural-keys.md': readFileSync(join(ROOT, 'website/docs/core-concepts/structural-keys.md'), 'utf8'), ...examples }, known);
 problems.push(...keys.problems);
 problems.push(...linkProblems(pages));
 

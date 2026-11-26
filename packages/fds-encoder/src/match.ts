@@ -2,7 +2,7 @@
 // list of candidates for a person to confirm. A key finds candidates; it never proves two records are the same.
 import { FXI_STANDARD_LAYERS } from './alphabet';
 import type { FxiLayer } from './alphabet';
-import { compareKeys } from './keys';
+import { checkKey, compareKeys, KeyError } from './keys';
 import type { KeyComparison, KeyResult } from './keys';
 
 /**
@@ -25,12 +25,13 @@ export type Candidate =
 /**
  * `identical`: exactly one library entry has the same key (and, when both carry one, the same equipment key); it is
  * also the first candidate. `confirm`: a person picks from the candidates; `why` says why none is identical.
- * `absent`: the library is empty.
+ * `absent`: the library is empty. `warnings`, present only when there are some, says when the query's key or
+ * equipment key does not check: such a key matches nothing, so the candidates come by name alone.
  */
 export type MatchResult =
-  | { readonly kind: 'identical'; readonly id: string; readonly candidates: readonly Candidate[] }
-  | { readonly kind: 'confirm'; readonly candidates: readonly Candidate[]; readonly why: string }
-  | { readonly kind: 'absent' };
+  | { readonly kind: 'identical'; readonly id: string; readonly candidates: readonly Candidate[]; readonly warnings?: readonly string[] }
+  | { readonly kind: 'confirm'; readonly candidates: readonly Candidate[]; readonly why: string; readonly warnings?: readonly string[] }
+  | { readonly kind: 'absent'; readonly warnings?: readonly string[] };
 
 export interface MatchOptions {
   /** Length of the candidate list. Default 3. */
@@ -41,8 +42,9 @@ export interface MatchOptions {
 function compareOrDifferent(a: string, b: string): KeyComparison {
   try {
     return compareKeys(a, b);
-  } catch {
-    return { type: 'FXI', result: 'different' };
+  } catch (err) {
+    if (err instanceof KeyError) return { type: 'FXI', result: 'different' };
+    throw err;
   }
 }
 
@@ -114,7 +116,12 @@ function nearLayer(c: KeyComparison): FxiLayer | undefined {
  */
 export function match(query: MatchEntry, library: readonly MatchEntry[], options: MatchOptions | number = {}): MatchResult {
   const top = typeof options === 'number' ? options : options.top ?? 3;
-  if (library.length === 0) return { kind: 'absent' };
+  const warnings: string[] = [];
+  const own = checkKey(query.key);
+  if (!own.ok) warnings.push(`The key ${query.key} does not check (${own.issues.map((i) => i.message).join(' ')}), so it matches by name only.`);
+  if (hasFxe(query) && !checkKey(query.fxe).ok) warnings.push(`The equipment key ${query.fxe} does not check, so it ranks nothing.`);
+  const warned = <T extends MatchResult>(r: T): T => (warnings.length === 0 ? r : { ...r, warnings });
+  if (library.length === 0) return warned({ kind: 'absent' });
   const queryName = nameTokens(query.name);
   const scored: Scored[] = library.map((row, i) => {
     const cmp = compareOrDifferent(query.key, row.key);
@@ -142,11 +149,11 @@ export function match(query: MatchEntry, library: readonly MatchEntry[], options
   }
 
   const same = found.filter(({ s }) => s.cmp.result === 'same');
-  if (same.length > 1) return { kind: 'confirm', candidates, why: 'several library entries have the same key' };
-  if (same.length === 0) return { kind: 'confirm', candidates, why: 'no library entry has the same key' };
+  if (same.length > 1) return warned({ kind: 'confirm', candidates, why: 'several library entries have the same key' });
+  if (same.length === 0) return warned({ kind: 'confirm', candidates, why: own.ok ? 'no library entry has the same key' : 'the key does not check' });
   const only = same[0]!.s.row;
   if (hasFxe(query) && hasFxe(only) && compareOrDifferent(query.fxe, only.fxe).result !== 'same') {
-    return { kind: 'confirm', candidates, why: 'the equipment keys are not the same' };
+    return warned({ kind: 'confirm', candidates, why: 'the equipment keys are not the same' });
   }
-  return { kind: 'identical', id: only.id, candidates };
+  return warned({ kind: 'identical', id: only.id, candidates });
 }

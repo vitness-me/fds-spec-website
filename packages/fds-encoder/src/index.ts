@@ -15,7 +15,7 @@ export { expandFxm, formatFxm, FXM_PREFIX, FXM_VOCABULARY, fxmTerm, parseFxm } f
 export type { FxmKey, FxmVocabulary, ParsedFxm } from './fxm';
 export {
   buildFxmgIndex, expandFxmg, expandMuscleKey, FXMG_PREFIX, FXMG_VOCABULARY, fxmgCategoriesOf, fxmgKeys, fxmgMembers, fxmgTerm, fxmInFxmg,
-  gradeFxmgText, parseFxmg,
+  parseFxmg,
 } from './fxmg';
 export type { FxmgKey, FxmgTerm, FxmInFxmg, ParsedFxmg } from './fxmg';
 

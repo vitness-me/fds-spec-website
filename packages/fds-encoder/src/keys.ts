@@ -82,13 +82,11 @@ function fromLayers(type: 'FXI' | 'FXE', r: CompareResult): KeyComparison {
  * a muscle key in a category key, use `fxmInFxmg`.
  */
 export function compareKeys(a: string, b: string): KeyComparison {
-  const ca = checkKey(a);
-  const cb = checkKey(b);
-  for (const [text, c] of [[a, ca], [b, cb]] as const) {
-    if (!c.ok) throw new KeyError(`${text.trim()}: ${c.issues.map((i) => i.message).join('; ')}`, c.issues);
-  }
-  if (ca.type !== cb.type) throw new KeyError(`A ${ca.type} key and a ${cb.type} key do not compare.`);
-  switch (ca.type) {
+  writeKey(a);
+  writeKey(b);
+  const [ta, tb] = [keyType(a), keyType(b)];
+  if (ta !== tb) throw new KeyError(`A ${ta} key and a ${tb} key do not compare.`);
+  switch (ta) {
     case 'FXI': return fromLayers('FXI', compareFxi(a, b));
     case 'FXE': return fromLayers('FXE', compareFxe(a, b));
     case 'FXM': {

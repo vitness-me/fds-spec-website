@@ -29,6 +29,45 @@ describe('recordKeys', () => {
   });
 });
 
+describe('where keys are read', () => {
+  test('a property name with a dot or a bracket never breaks the walk, and a key under it is still written', () => {
+    const record = { ...CURL, 'x.y': { fxi: 'FXI=1.0S/m:el.flex' }, targets: { primary: [{ id: 'm', 'a.b[0]': 1, fxm: 'FXM=1.0S/biceps-brachii' }] } };
+    const c = checkRecord(record);
+    expect(c.problems).toEqual([]);
+    expect(c.rewritten).toEqual([{ path: 'targets.primary[0].fxm', from: 'FXM=1.0S/biceps-brachii', to: 'FXM=1.0/biceps-brachii' }]);
+    expect((c.record as { targets: { primary: { fxm: string }[] } }).targets.primary[0]!.fxm).toBe('FXM=1.0/biceps-brachii');
+    expect(recordKeys({ equipment: { required: [{ 'odd.name': true, fxe: 'FXE=1.0S/k:none' }] } })).toEqual([{ path: 'equipment.required[0].fxe', field: 'fxe', key: 'FXE=1.0S/k:none' }]);
+  });
+  test('only the record\'s own key field and the key fields of its references are keys', () => {
+    const record = {
+      ...CURL,
+      metadata: { fxi: 'not a key' },
+      extensions: { vendor: { exercise: { fxi: 'FXI=1.0N/m:el.flex/o:standing/l:bell.dumb@hands' } } },
+      attributes: { fxe: 'FXE=1.0/k:none' },
+      canonical: { name: 'Dumbbell Curl', fxi: 'free text' },
+      equipment: { required: [{ id: 'eq.dumbbell', fxe: 'FXE=1.0S/k:imp/f:bell.dumb', fxi: 'FXI=1.0N/m:el.flex' }] },
+      targets: { primary: [{ id: 'mus.bicepsBrachii', fxm: 'FXM=1.0/biceps-brachii', fxe: 'not a key' }] },
+    };
+    expect(recordKeys(record).map((k) => k.path)).toEqual(['fxi', 'targets.primary[0].fxm', 'equipment.required[0].fxe']);
+    const c = checkRecord(record);
+    expect([c.problems, c.rewritten]).toEqual([[], []]);
+    expect(c.record).toEqual(record);
+  });
+  test('an exercise reference holds fxi, and an equipment reference anywhere holds fxe', () => {
+    const workout = {
+      blocks: [{ items: [{ exercise: { id: 'ex.curl', fxi: 'FXI=1.0N/m:el.flex/o:standing/l:bell.dumb@hands' }, alternatives: [{ id: 'ex.hammer', fxi: 'FXI=1.0S/m:el.flex/o:standing/l:bell.dumb@hands/g:ne', fxe: 'x' }] }] }],
+      load: { equipment: { id: 'eq.dumbbell', fxe: 'FXE=1.0/k:imp/f:bell.dumb' } },
+    };
+    expect(recordKeys(workout).map((k) => k.path)).toEqual(['blocks[0].items[0].exercise.fxi', 'blocks[0].items[0].alternatives[0].fxi', 'load.equipment.fxe']);
+    expect(checkRecord(workout).rewritten.map((r) => r.path)).toEqual(['blocks[0].items[0].exercise.fxi', 'load.equipment.fxe']);
+  });
+  test('properties inherited from Object.prototype are never key fields', () => {
+    expect(recordKeys({ constructor: 'FXI=1.0S/m:el.flex/o:standing/l:none', toString: 'x' })).toEqual([]);
+    expect(matchEntryOf({ id: 'x', constructor: 'FXI=1.0S/m:el.flex/o:standing/l:none' })).toBeUndefined();
+    expect(matchEntryOf(JSON.parse('{"id":"x","fxi":"FXI=1.0S/m:el.flex/o:standing/l:none","__proto__":{"name":"inherited"}}'))).toEqual({ id: 'x', key: 'FXI=1.0S/m:el.flex/o:standing/l:none' });
+  });
+});
+
 describe('checkRecord', () => {
   test('a consistent record has no problems or warnings and comes back unchanged', () => {
     const c = checkRecord(CURL);

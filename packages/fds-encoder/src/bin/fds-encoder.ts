@@ -1,4 +1,5 @@
 #!/usr/bin/env node
-import { runCli } from '../cli';
+import { main, onOutputError } from '../cli';
 
-runCli(process.argv.slice(2)).then((code) => { process.exitCode = code; });
+process.stdout.on('error', onOutputError((code) => process.exit(code)));
+main(process.argv.slice(2)).then((code) => { process.exitCode = code; });

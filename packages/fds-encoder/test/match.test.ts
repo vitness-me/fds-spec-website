@@ -174,6 +174,27 @@ describe('other key types', () => {
   });
 });
 
+describe('a query key that does not check', () => {
+  test('matches by name only, with a warning, and never as identical', () => {
+    const library = [row('lib.squat', BACK_SQUAT, { name: 'Back squat' }), row('lib.curl', CURL, { name: 'Curl' })];
+    const r = match(row('q', 'FXI=1.0S/m:hip.bend/o:standing/l:bar.straight@back', { name: 'Back squat' }), library);
+    expect(r.kind).toBe('confirm');
+    expect(candidates(r)).toEqual([{ id: 'lib.squat', via: 'name' }, { id: 'lib.curl', via: 'name' }]);
+    expect(r.kind === 'confirm' && r.why).toBe('the key does not check');
+    expect(r.warnings).toHaveLength(1);
+    expect(r.warnings![0]).toMatch(/^The key FXI=1\.0S\/m:hip\.bend.* does not check .*, so it matches by name only\.$/);
+  });
+  test('an equipment key that does not check is warned about too; a good query has no warnings', () => {
+    expect(match(query({ fxe: 'FXE=1.0S/k:robot' }), [row('lib', BACK_SQUAT)]).warnings).toEqual(['The equipment key FXE=1.0S/k:robot does not check, so it ranks nothing.']);
+    expect(match(query(), [row('lib', BACK_SQUAT)])).not.toHaveProperty('warnings');
+    expect(match(row('q', 'FXI=1.0S/m:?'), []).warnings).toHaveLength(1);
+  });
+  test('an error other than a key that does not check is not swallowed', () => {
+    const bad = { id: 'lib', key: 42 } as unknown as MatchEntry;
+    expect(() => match(query(), [bad])).toThrow(TypeError);
+  });
+});
+
 describe('name similarity', () => {
   test('case, accents, punctuation and filler words do not count', () => {
     expect(nameSimilarity('Sentadilla trasera con barra', 'sentadílla trasera, barra!')).toBe(1);

@@ -347,7 +347,8 @@ describe.skipIf(!present)('parity with the reference tool', async () => {
       n++;
       const mine = match(query, library, { top });
       const theirs = fromReference(R.match.match(asReference(query), library.map(asReference), { top }));
-      const shape = mine.kind === 'identical' ? { kind: 'identical', id: mine.id } : mine.kind === 'confirm' ? { kind: 'confirm', candidates: mine.candidates } : mine;
+      // warnings are the package's own diagnostics; the reference tool has none.
+      const shape = mine.kind === 'identical' ? { kind: 'identical', id: mine.id } : mine.kind === 'confirm' ? { kind: 'confirm', candidates: mine.candidates } : { kind: 'absent' };
       if (JSON.stringify(shape) !== JSON.stringify(theirs)) diff.push({ query, library, top, mine: shape, theirs });
     }
     console.log(`parity matches: ${n}`);

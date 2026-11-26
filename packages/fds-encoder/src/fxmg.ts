@@ -275,36 +275,6 @@ export function gradeFxmg(a: string, b: string, vocabulary: FxmgVocabulary = FXM
   return { grade: 'overlap', shared };
 }
 
-/** What the text of two canonical keys shows without a vocabulary. */
-export type FxmgTextGrade = 'same' | { readonly grade: 'more-specific'; readonly specific: 'a' | 'b' };
-
-const bodyOf = (input: string): string[] | undefined => {
-  const head = FXMG_HEAD.exec(input.trim());
-  return head === null ? undefined : (head[4] ?? '').split('+');
-};
-
-/**
- * Compares two canonical keys from their text alone: identical text is `same`; a compartment is more specific than
- * its region (`thigh.medial` against `thigh`); a union is more specific than a union holding all of its terms and
- * more. Any other pair needs the members, and gives `undefined`.
- */
-export function gradeFxmgText(a: string, b: string): FxmgTextGrade | undefined {
-  const left = bodyOf(a);
-  const right = bodyOf(b);
-  if (left === undefined || right === undefined) return undefined;
-  if (left.join('+') === right.join('+')) return 'same';
-  const within = (inner: string, outer: string): boolean => !inner.startsWith('a:') && inner.startsWith(`${outer}.`);
-  if (left.length === 1 && right.length === 1) {
-    if (within(left[0]!, right[0]!)) return { grade: 'more-specific', specific: 'a' };
-    if (within(right[0]!, left[0]!)) return { grade: 'more-specific', specific: 'b' };
-    return undefined;
-  }
-  const subset = (inner: readonly string[], outer: readonly string[]): boolean => inner.length < outer.length && inner.every((t) => outer.includes(t));
-  if (subset(left, right)) return { grade: 'more-specific', specific: 'a' };
-  if (subset(right, left)) return { grade: 'more-specific', specific: 'b' };
-  return undefined;
-}
-
 /** Whether a muscle key is inside a category: all its leaves (`in`), some (`partly-in`) or none (`not-in`). */
 export interface FxmInFxmg {
   readonly relation: 'in' | 'partly-in' | 'not-in';

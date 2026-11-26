@@ -3,13 +3,16 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { describe, expect, test } from 'vitest';
 import pkg from '../package.json';
-import { runCli } from '../src/cli';
+import { EventEmitter } from 'node:events';
+import { existsSync, mkdirSync, readdirSync } from 'node:fs';
+import { main, onOutputError, runCli } from '../src/cli';
+import type { CliIo } from '../src/cli';
 import { exercise } from './helpers';
 
-async function cli(args: string[], lines: string[] = []): Promise<{ code: number; out: string; err: string }> {
+async function cli(args: string[], lines: string[] = [], run: (args: string[], io: CliIo) => Promise<number> = runCli): Promise<{ code: number; out: string; err: string }> {
   let out = '';
   let err = '';
-  const code = await runCli(args, {
+  const code = await run(args, {
     out: (t) => { out += t; },
     err: (t) => { err += t; },
     lines: async function* () { yield* lines; },
@@ -103,3 +106,88 @@ describe('fds-encoder', () => {
     expect((await cli(['match', 'x.json'])).code).toBe(2);
   });
 });
+
+describe('check --records --write', () => {
+  test('changes only the rewritten key strings: numbers, spacing and order stay as written', async () => {
+    const text = '{\n  "id": "cat.hamstrings",\n  "big": 12345678901234567890,\n  "ratio": 1.50,\n  "fxmg":   "FXMG=1.0/thigh.posterior+hamstring" ,\n  "canonical": {"name":"Hamstrings"}\n}\n';
+    const records = join(dir, 'precise.json');
+    writeFileSync(records, text);
+    const out = join(dir, 'precise.out.json');
+    expect((await cli(['check', '--records', records, '--write', out])).code).toBe(0);
+    expect(readFileSync(out, 'utf8')).toBe(text.replace('"FXMG=1.0/thigh.posterior+hamstring"', '"FXMG=1.0/hamstring"'));
+  });
+  test('a list of records: each key is found by its record, and an unchanged file is written byte for byte', async () => {
+    const text = '[ {"id":"a","fxm":"FXM=1.0S/biceps-brachii","n":1e3}, {"id":"b","fxm":"FXM=1.0/biceps-brachii","x":-0.0} ]';
+    const records = join(dir, 'list.json');
+    writeFileSync(records, text);
+    const out = join(dir, 'list.out.json');
+    await cli(['check', '--records', records, '--write', out]);
+    expect(readFileSync(out, 'utf8')).toBe(text.replace('FXM=1.0S/biceps-brachii', 'FXM=1.0/biceps-brachii'));
+    const same = join(dir, 'same.json');
+    writeFileSync(same, '{"id":"b",  "fxm":"FXM=1.0/biceps-brachii", "w": 2.000}');
+    await cli(['check', '--records', same, '--write', out]);
+    expect(readFileSync(out, 'utf8')).toBe('{"id":"b",  "fxm":"FXM=1.0/biceps-brachii", "w": 2.000}');
+  });
+});
+
+describe('errors', () => {
+  test('a file that cannot be read gets one line naming it and what is wrong', async () => {
+    expect(await cli(['check', '--records', dir])).toEqual({ code: 1, out: '', err: `${dir}: is a directory, not a file.\n` });
+    expect(await cli(['check', '--records', join(dir, 'missing.json')])).toEqual({ code: 1, out: '', err: `${join(dir, 'missing.json')}: no such file.\n` });
+    expect(await cli(['build', join(dir, 'missing.json', 'x.json')])).toMatchObject({ code: 1, err: `${join(dir, 'missing.json', 'x.json')}: no such file.\n` });
+    const notJson = join(dir, 'not.json');
+    writeFileSync(notJson, '{ nope');
+    const r = await cli(['build', notJson]);
+    expect(r.code).toBe(1);
+    expect(r.err).toMatch(new RegExp(`^${notJson.replaceAll('/', '\\/').replaceAll('.', '\\.')} is not valid JSON: .+\n$`));
+  });
+  test('a file that cannot be written is reported the same way', async () => {
+    const records = file('ok.json', [{ id: 'm', fxm: 'FXM=1.0S/biceps-brachii' }]);
+    const r = await cli(['check', '--records', records, '--write', dir]);
+    expect([r.code, r.err]).toEqual([1, `${dir}: is a directory, not a file.\n`]);
+  });
+  test('main prints any other error as one line and exits 1; a closed output pipe exits 0 quietly', async () => {
+    const throwing = (e: Error) => async (_: string[], io: CliIo) => main(['--version'], { ...io, out: () => { throw e; } });
+    expect(await cli([], [], throwing(new TypeError('boom\n  at somewhere')))).toEqual({ code: 1, out: '', err: 'fds-encoder: boom\n' });
+    expect(await cli([], [], throwing(Object.assign(new Error('write EPIPE'), { code: 'EPIPE' })))).toEqual({ code: 0, out: '', err: '' });
+  });
+  test('an EPIPE on standard output ends the program quietly; another output error is one line and exit 1', () => {
+    const codes: number[] = [];
+    let err = '';
+    const stdout = new EventEmitter();
+    stdout.on('error', onOutputError((c) => codes.push(c), (t) => { err += t; }));
+    stdout.emit('error', Object.assign(new Error('write EPIPE'), { code: 'EPIPE' }));
+    stdout.emit('error', Object.assign(new Error('write EIO'), { code: 'EIO' }));
+    expect([codes, err]).toEqual([[0, 1], 'fds-encoder: write EIO\n']);
+  });
+});
+
+describe('ask', () => {
+  test('a rows file that is not a list of rows, or an answers file that is not a list of entries, is one clear line', async () => {
+    const rows = file('bad-rows.json', { id: 'x' });
+    expect(await cli(['ask', rows])).toEqual({ code: 1, out: '', err: `${rows}: The rows file must hold a list of rows.\n` });
+    const unnamed = file('unnamed-rows.json', [{ id: 'x' }]);
+    expect((await cli(['ask', unnamed])).err).toBe(`${unnamed}: row 1 (x): needs a non-empty string "name".\n`);
+    const answers = file('bad-answers.json', [{ answers: {} }]);
+    expect(await cli(['ask', '--out', answers])).toEqual({ code: 1, out: '', err: `${answers} holds no answers file: it holds a list of entries, each with a string "id".\n` });
+  });
+  test('at the end of input, ask says the row in progress was not saved, and exits 1', async () => {
+    const out = join(dir, 'ended.json');
+    const r = await cli(['ask', '--out', out], ['1', 'usual']);
+    expect(r.code).toBe(1);
+    expect(r.out).toContain(`The input ended before row key-1 was finished: its answers were not saved. The rows finished before it are in ${out}.`);
+    expect(existsSync(out)).toBe(false);
+    expect((await cli(['ask'], ['1'])).out).toContain('Nothing was saved: run with --out <answers.json> to keep answers.');
+  });
+  test('ask --out writes the answers file whole, through a temporary file it then removes', async () => {
+    const sub = join(dir, 'atomic');
+    mkdirSync(sub);
+    const out = join(sub, 'answers.json');
+    writeFileSync(out, '[]');
+    const lines = ['1', 'usual', '1', 'usual', 'el', 'flex', 'usual', 'usual', 'standing', 'implement', 'bell.dumb', 'hands', 'usual', ''];
+    expect((await cli(['ask', '--out', out], lines)).code).toBe(0);
+    expect(JSON.parse(readFileSync(out, 'utf8'))[0].id).toBe('key-1');
+    expect(readdirSync(sub)).toEqual(['answers.json']);
+  });
+});
+

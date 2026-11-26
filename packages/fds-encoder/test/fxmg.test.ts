@@ -17,7 +17,6 @@ import {
   FXMG_VOCABULARY,
   fxmInFxmg,
   gradeFxmg,
-  gradeFxmgText,
   parseFxmg,
 } from '../src/fxmg';
 
@@ -158,26 +157,6 @@ describe('comparing two category keys', () => {
     expect(gradeFxmg(g('triceps-surae'), g('pectoral'))).toEqual({ grade: 'different', shared: [] });
     expect(gradeFxmg(g('quadriceps-femoris'), g('a:hip.flex'))).toEqual({ grade: 'overlap', shared: ['rectus-femoris'] });
   });
-
-  test('the text alone settles identical keys, a compartment against its region and a union against a larger union', () => {
-    expect(gradeFxmgText(g('hamstring'), g('hamstring'))).toBe('same');
-    expect(gradeFxmgText(g('thigh.medial'), g('thigh'))).toEqual({ grade: 'more-specific', specific: 'a' });
-    expect(gradeFxmgText(g('forearm'), g('forearm.posterior.superficial'))).toEqual({ grade: 'more-specific', specific: 'b' });
-    expect(gradeFxmgText(g('erector-spinae'), g('erector-spinae+quadratus-lumborum'))).toEqual({ grade: 'more-specific', specific: 'a' });
-    expect(gradeFxmgText(g('hamstring'), g('thigh.posterior'))).toBeUndefined();
-    expect(gradeFxmgText(g('thigh'), g('thighbone'))).toBeUndefined();
-  });
-
-  test('every text shortcut agrees with the leaves', () => {
-    const keys = [...FXMG_VOCABULARY.sets.keys()].map(g);
-    for (const a of keys) for (const b of keys) {
-      const text = gradeFxmgText(a, b);
-      if (text === undefined) continue;
-      const leaves = gradeFxmg(a, b);
-      if (text === 'same') expect(leaves.grade, `${a} ${b}`).toBe('same');
-      else expect(leaves, `${a} ${b}`).toMatchObject(text);
-    }
-  });
 });
 
 describe('a muscle in a category', () => {
@@ -229,7 +208,7 @@ describe('the shipped vocabulary', () => {
     for (const set of FXMG_SETS) {
       expect(set.anchors[0]?.system, set.code).toBe('FMA');
       expect(set.anchors.filter((a) => a.system === 'FMA').length, set.code).toBe(1);
-      expect(set.anchors.some((a) => a.system === 'UBERON') !== (set.uberonGap !== undefined), set.code).toBe(true);
+      expect(set.anchors.some((a) => a.system === 'UBERON') !== (set.uberonNote !== undefined), set.code).toBe(true);
     }
   });
 
@@ -237,7 +216,7 @@ describe('the shipped vocabulary', () => {
     for (const set of FXMG_SETS) {
       for (const member of set.members) expect(member.source?.id, `${set.code} ${member.key}`).toMatch(/^(FMA:\d+|UBERON:\d{7})$/);
       const fromFma = set.members.every((member) => member.relation === 'member' || member.relation === 'regional_part');
-      expect(fromFma !== (set.derivation !== undefined), set.code).toBe(true);
+      expect(fromFma !== (set.membersSource !== undefined), set.code).toBe(true);
     }
   });
 

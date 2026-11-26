@@ -123,14 +123,13 @@ if run_job schemas; then
   try "every matrix scenario has an example" npm run check:scenarios
   try "recommended values are in a registry" npm run check:registries
 
-  # The key registries check reads the built encoder. The encoder job above
-  # builds it, but this job runs standalone too, so build on demand.
-  if [[ ! -f packages/fds-encoder/dist/index.js ]]; then
-    step "build the encoder for the key registries"
-    if npm --prefix packages/fds-encoder ci --no-fund --no-audit >/dev/null 2>&1 &&
-       npm --prefix packages/fds-encoder run build >/dev/null 2>&1; then ok
-    else bad "build the encoder for the key registries"; fi
+  # The key registries and conformance checks read the built encoder. A dist
+  # left over from an earlier build passes or fails them against old code, so
+  # this job always builds it from the current source.
+  if [[ ! -d packages/fds-encoder/node_modules ]]; then
+    try "install the encoder" npm --prefix packages/fds-encoder ci --no-fund --no-audit
   fi
+  try "build the encoder for the key registries" npm --prefix packages/fds-encoder run build
   try "key registries match the encoder and the pages" npm run check:keys
   try "the encoder passes the conformance cases" npm run check:conformance
   try "skill knowledge names real fields" npm run check:skill
