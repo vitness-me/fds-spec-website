@@ -93,6 +93,26 @@ npm --prefix packages/fds-encoder run typecheck
 npm --prefix packages/fds-encoder run test:run
 ```
 
+## Troubleshooting
+
+**`fds-encoder: command not found`.** The command isn't on your path. Run `npm install -g ./packages/fds-encoder` from the root of the checkout, and check that npm's global folder is on your path: `npm prefix -g` prints it, and the command lives in its `bin` folder. Or run the built file directly: `node packages/fds-encoder/dist/bin/fds-encoder.js`.
+
+**The conformance script says `dist/index.js does not exist`.** `node scripts/check-conformance.mjs` and `npm run check:keys` read the built package, `packages/fds-encoder/dist`, and stop with exit code 2 when it isn't there:
+
+```text
+…/packages/fds-encoder/dist/index.js does not exist. Build the encoder first:
+  npm --prefix packages/fds-encoder ci && npm --prefix packages/fds-encoder run build
+```
+
+Build it first:
+
+```bash
+npm --prefix packages/fds-encoder ci
+npm --prefix packages/fds-encoder run build
+```
+
+Build again after you change the package or pull new commits: a `dist` from an earlier build checks the earlier code.
+
 ## Next steps
 
 - [CLI Reference](./cli-reference.md): every command and flag.

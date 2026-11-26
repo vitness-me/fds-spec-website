@@ -43,21 +43,35 @@ compareKeys('FXI=1.0S/m:el.flex/o:standing/l:bell.dumb@hands', 'FXI=1.0S/m:el.fl
 | `writeKey(text)` | The written form, or throws a `KeyError` that lists every issue |
 | `keyType(text)` | `'FXI'`, `'FXE'`, `'FXM'`, `'FXMG'`, or `undefined` |
 | `compareKeys(a, b)` | `{ type, result, specific?, layers?, shared? }`. `result` is `same`, `more-specific`, `overlap` or `different`. Exercise and equipment keys give `layers`; muscle and category keys give `shared`. Throws a `KeyError` when a key doesn't check or the types differ |
+| `KeyError` | The error `writeKey` and `compareKeys` throw. Its `issues` list what is wrong |
 
 `parseFxi`, `parseFxe`, `parseFxm` and `parseFxmg` give the parsed layers and terms of one key type. `standardFxi` and `standardFxe` drop the extended layers and give the standard part of a key.
 
 ```typescript
-import { parseFxi, standardFxe } from '@vitness/fds-encoder';
+import { parseFxi, parseFxm, standardFxe } from '@vitness/fds-encoder';
 
 parseFxi('FXI=1.0S/o:standing/m:el.flex/l:bell.dumb@hands').layers;
 // { m: 'el.flex', o: 'standing', l: 'bell.dumb@hands' }
 
-standardFxe('FXE=1.0S/k:imp/f:bar.ez'); // 'FXE=1.0S/k:imp/f:bar.ez'
+parseFxm('FXM=1.0S/biceps-brachii.long').key;
+// { kind: 'part', muscle: 'biceps-brachii', part: 'long' }
+
+standardFxe('FXE=1.0N/k:mac/l:ankles/s:prone/m:kn.flex/r:plate/c:arc'); // 'FXE=1.0S/k:mac/l:ankles/s:prone/m:kn.flex'
 ```
+
+| Function | Returns |
+|----------|---------|
+| `parseFxi(text)` | `{ ok, issues, canonical, layers, flag }`. `canonical` is the written form and `layers` holds each layer's value |
+| `parseFxe(text)` | `{ ok, issues, canonical, configs, flag }`. `configs` lists each configuration's kind `k` and layers; a combination machine has several |
+| `parseFxm(text)` | `{ ok, issues, canonical, key }`. `key` is a muscle, `{ kind: 'muscle', muscle }`, or a part, `{ kind: 'part', muscle, part }` |
+| `parseFxmg(text)` | `{ ok, issues, canonical, key }`. `key.terms` lists the categories and muscles of the union |
+| `standardFxi(text)`, `standardFxe(text)` | The standard part of a key: the written form without its extended layers. Throws for a key that doesn't check |
+| `formatFxm(key)` | The text of a parsed muscle key: `formatFxm(parseFxm('FXM=1.0/deltoid.acromial').key)` is `'FXM=1.0/deltoid.acromial'` |
+| `FXM_PREFIX`, `FXMG_PREFIX` | The headers every muscle and category key starts with: `'FXM=1.0/'` and `'FXMG=1.0/'` |
 
 ## Exercise and equipment
 
-`crossCheck(fxi, fxe)` checks an exercise key against the key of its equipment. An empty list means they agree. The warning codes are `invalid`, `main-equipment`, `feet-implied`, `posture`, `load-interface` and `off-design`. [Checking an exercise against its equipment](../../core-concepts/structural-keys/equipment-key.md#checking-an-exercise-against-its-equipment), on the equipment key page, says when each check fails.
+`crossCheck(fxi, fxe)` checks an exercise key against the key of its equipment. An empty list means they agree. The warning codes are `invalid`, `main-equipment`, `posture`, `load-interface` and `off-design`. [Checking an exercise against its equipment](../../core-concepts/structural-keys/equipment-key.md#checking-an-exercise-against-its-equipment), on the equipment key page, says when each check fails.
 
 ```typescript
 import { crossCheck, mainEquipment, parseFxi } from '@vitness/fds-encoder';
@@ -70,6 +84,11 @@ crossCheck(squat, 'FXE=1.0S/k:imp/f:bell.dumb')[0].code; // 'main-equipment'
 mainEquipment(parseFxi(squat).layers ?? {});
 // { token: 'bar.straight', fxe: 'FXE=1.0S/k:imp/f:bar.straight' }
 ```
+
+| Function | Returns |
+|----------|---------|
+| `crossCheck(fxi, fxe)` | A list of `{ code, message }`, empty when the two keys agree |
+| `mainEquipment(layers)` | An exercise's main equipment from its `l` and `s` layers: `{ token, fxe }`, the exercise-key code that names it, when one does, and the equipment key it stands for |
 
 ## Muscles and categories
 
@@ -93,8 +112,12 @@ fxmgCategoriesOf('FXM=1.0/semitendinosus');
 | `fxmgCategoriesOf(fxm, index?)` | Every category the muscle is wholly in. Pass an index from `buildFxmgIndex()` when you call it many times |
 | `buildFxmgIndex()` | A map from each muscle and part to every category that holds it |
 | `expandFxm(fxm)`, `expandFxmg(fxmg)` | The muscles and parts a key covers, without the prefix: `expandFxm('FXM=1.0/biceps-brachii')` is `['biceps-brachii.long', 'biceps-brachii.short']` |
+| `expandMuscleKey(key)` | The same for either a muscle key or a category key |
+| `fxmTerm(fxm)` | The term a muscle key names: `{ name, anchors, uberonNote? }`. `anchors` are its FMA and Uberon terms; `uberonNote` says what Uberon has when it has no term for the structure |
+| `fxmgTerm(fxmg)` | The term a key of one category names: `{ name, anchors, members }` |
+| `fxmgKeys()` | Every category key, sorted: 66 of them, from `'FXMG=1.0/a:ank.df'` |
 
-The data behind them is exported too: `FXM_MUSCLES` (the muscles and their parts, with their anatomy ontology terms), `FXMG_SETS` (the named sets), `FXMG_ACTIONS` (one category for each joint action) and `ACTION_PRIME_MOVERS` (each joint action's prime movers).
+The data behind them is exported too: `FXM_MUSCLES` (the muscles and their parts, with their anatomy ontology terms), `FXMG_SETS` (the named sets), `FXMG_ACTIONS` (one category for each joint action) and `ACTION_PRIME_MOVERS` (each joint action's prime movers). `FXM_VOCABULARY` and `FXMG_VOCABULARY` are the same data indexed for lookup; every muscle and category function takes one as its last, optional argument. The anatomy labels and ids come from FMA and Uberon under CC BY: [Sources and licences](../../core-concepts/structural-keys/muscle-key.md#sources-and-licences) gives each source and its licence.
 
 ## Building keys
 
@@ -120,6 +143,8 @@ try {
 | Export | Does |
 |--------|------|
 | `build(entry)` | Builds `{ id, fxi, fxe, path }`. `path` lists the questions asked, in order. Throws an `AnswerError` whose `problems` say what to fix |
+| `AnswerError` | The error `build` throws for answers that are missing, invalid or contradictory. `entryId` and `problems` say which entry and what to fix |
+| `InternalError` | The error `build` throws when it writes a key its own check refuses. It is a defect in the Encoder, never in the answers |
 | `buildWith(id, provide)` | Builds from any answer source: `provide(question, reading)` returns the answer to each question on the path |
 | `openOptions(question, reading)` | The options of a question that apply, given the answers so far. A form shows only these |
 | `QUESTIONS`, `QUESTION_BY_ID`, `FLOW`, `FACTS` | The questions, by order and by id, the whole flow as one JSON-ready object, and the facts its conditions use |
@@ -139,7 +164,7 @@ next.state.answers;  // { subject: 'usual' }
 
 ## Records
 
-These read and write only the key fields `fxi`, `fxe`, `fxm` and `fxmg`, on a record and on its references. Anything else a platform keeps about a key, such as who wrote it or a confirmed link, belongs in `attributes` or `extensions`.
+These read and write only the record's own key field and the key fields of the references it holds: `fxi` on an exercise reference (`exercise`, `alternatives[]`), `fxe` on an equipment reference (`equipment`, `equipment.required[]`, `equipment.optional[]`), and `fxm` and `fxmg` on a muscle reference (`targets.primary[]`, `targets.secondary[]`). A field with one of those names anywhere else is not a key and is never read or written, and nothing under `metadata`, `attributes` or `extensions` is. Anything else a platform keeps about a key, such as who wrote it or a confirmed link, belongs in `attributes` or `extensions`.
 
 ```typescript
 import { checkRecord, matchEntryOf, recordKeys } from '@vitness/fds-encoder';
@@ -149,6 +174,7 @@ const record = {
   fxi: 'FXI=1.0S/o:standing/m:el.flex/l:bell.dumb@hands',
   canonical: { name: 'Dumbbell Curl' },
   equipment: { required: [{ id: 'eq-1', name: 'Dumbbell', fxe: 'FXE=1.0S/k:imp/f:bell.dumb' }] },
+  metadata: { fxi: 'not a key' },
 };
 
 recordKeys(record).map((k) => k.path); // ['fxi', 'equipment.required[0].fxe']
@@ -165,9 +191,9 @@ matchEntryOf(record);
 
 | Function | Returns |
 |----------|---------|
-| `recordKeys(record)` | Every key in the record, as `{ path, field, key }`, in document order |
+| `recordKeys(record)` | Every key in the record, as `{ path, field, key }`, in document order. A property name that isn't a plain word is quoted in the path: `["a.b"]` |
 | `checkRecord(record)` | `{ problems, warnings, rewritten, record }`. `record` is a copy with every key that checks in its written form |
-| `matchEntryOf(record)` | The record as a match entry, or `undefined` when it has no key of its own or no id |
+| `matchEntryOf(record)` | The record as a match entry, or `undefined` when it has no key of its own or no id. Only the record's own properties count |
 | `KEY_FIELDS` | The four key fields and the key type each holds |
 
 ## Matching
@@ -195,6 +221,18 @@ match({ id: 'imp-2', key: 'FXI=1.0S/m:el.flex/o:?/l:bell.dumb@hands', name: 'Dum
 nameSimilarity('Dumbbell Curl', 'Dumbbell Biceps Curl'); // 0.8
 ```
 
+An entry whose key doesn't check matches nothing by its key, so its candidates come by name alone. The result then carries `warnings`, which say so:
+
+```typescript
+match({ id: 'imp-3', key: 'FXI=1.0S/m:el.bend/o:standing/l:bell.dumb@hands', name: 'Dumbbell Curl' }, library, { top: 1 });
+// {
+//   kind: 'confirm',
+//   candidates: [{ id: 'lib-1', via: 'name' }],
+//   why: 'the key does not check',
+//   warnings: ['The key FXI=1.0S/m:el.bend/o:standing/l:bell.dumb@hands does not check, so it matches by name only: "el.bend" is not a joint action.'],
+// }
+```
+
 The result's `kind` is `identical`, `confirm` or `absent`, as in [`fds-encoder match`](./cli-reference.md#match). `top` is the length of the candidate list, 3 by default. `nameSimilarity` scores two names from 0 to 1 and orders candidates that tie on their keys.
 
 ## Code lists and registries
@@ -211,6 +249,19 @@ Object.keys(buildRegistries());
 // ['exercise-key.registry.json', 'equipment-key.registry.json', 'body-points.registry.json',
 //  'body-positions.registry.json', 'muscle-key.registry.json', 'muscle-category-key.registry.json']
 ```
+
+## Types
+
+The package ships the TypeScript types of everything above:
+
+| Area | Types |
+|------|-------|
+| Keys | `CheckedKey`, `KeyComparison`, `KeyResult`, `KeyType`, `Issue`, `LayerRelation` |
+| Exercise and equipment keys | `ParsedFxi`, `ParsedFxe`, `FxeConfig`, `MainEquipment` |
+| Muscle and category keys | `FxmKey`, `ParsedFxm`, `FxmVocabulary`, `FxmgKey`, `FxmgTerm`, `ParsedFxmg`, `FxmInFxmg`, `Anchor`, `FxmMuscle`, `FxmPart`, `FxmgSet`, `FxmgMember`, `FxmgAction` |
+| Records and matching | `RecordKey`, `RecordCheck`, `RecordIssue`, `KeyField`, `MatchEntry`, `MatchOptions`, `MatchResult`, `Candidate` |
+| Building keys | `Answer`, `Answers`, `Built`, `Entry`, `Provider`, `Cond`, `FactId`, `FlowOption`, `FlowQuestion`, `AskRow`, `AskState`, `AskStep` |
+| Registries | `Registry` |
 
 ## See also
 

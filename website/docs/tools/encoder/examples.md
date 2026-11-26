@@ -220,7 +220,7 @@ fds-encoder compare 'FXI=1.0S/m:el.flex/o:standing/l:bell.dumb@hands' 'FXI=1.0S/
 different  {"m":"equal","o":"contradicts","k":"equal","f":"equal","s":"equal","l":"equal","x":"equal","g":"equal","r":"equal","h":"equal","p":"equal"}
 ```
 
-Keys that differ only in how they are written compare as `same`:
+Keys that have the same written form compare as `same`:
 
 ```bash
 fds-encoder compare 'FXI=1.0S/o:standing/m:el.flex/l:bell.dumb@hands' 'FXI=1.0S/m:el.flex/o:standing/l:bell.dumb@hands'

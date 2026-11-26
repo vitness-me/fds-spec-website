@@ -20,8 +20,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   answers, and an interactive `ask` session.
 - **Matching.** A record against a library of keyed records: an identical key
   first, then a short ranked list.
-- **Records.** Reads and writes only `fxi`, `fxe`, `fxm` and `fxmg` on FDS
-  records and their references.
+- **Records.** Reads and writes only a record's own key field and the key
+  fields of its exercise, equipment and muscle references. `check --records
+  --write` changes only the rewritten key strings in the file.
 - **Code registries.** `buildRegistries()` generates the six registries
   published under `specification/registries/`.
 - **CLI** `fds-encoder`: `check`, `compare`, `questions`, `ask`, `build` and

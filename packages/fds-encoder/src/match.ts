@@ -118,7 +118,7 @@ export function match(query: MatchEntry, library: readonly MatchEntry[], options
   const top = typeof options === 'number' ? options : options.top ?? 3;
   const warnings: string[] = [];
   const own = checkKey(query.key);
-  if (!own.ok) warnings.push(`The key ${query.key} does not check (${own.issues.map((i) => i.message).join(' ')}), so it matches by name only.`);
+  if (!own.ok) warnings.push(`The key ${query.key} does not check, so it matches by name only: ${own.issues.map((i) => i.message).join(' ')}`);
   if (hasFxe(query) && !checkKey(query.fxe).ok) warnings.push(`The equipment key ${query.fxe} does not check, so it ranks nothing.`);
   const warned = <T extends MatchResult>(r: T): T => (warnings.length === 0 ? r : { ...r, warnings });
   if (library.length === 0) return warned({ kind: 'absent' });

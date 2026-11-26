@@ -155,7 +155,7 @@ export function gradeFxm(a: string, b: string, vocabulary: FxmVocabulary = FXM_V
   return { grade: 'overlaps', shared };
 }
 
-/** The vocabulary term a valid key names: its name, its anchors and its UBERON gap. */
+/** The vocabulary term a valid key names: its name, its anchors and, where Uberon lacks the structure, its Uberon note. */
 export function fxmTerm(input: string, vocabulary: FxmVocabulary = FXM_VOCABULARY): { name: string; anchors: readonly Anchor[]; uberonNote?: string } {
   const key = keyOrThrow(input, vocabulary);
   const muscle = vocabulary.muscles.get(key.muscle)!;

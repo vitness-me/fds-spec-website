@@ -182,7 +182,7 @@ describe('a query key that does not check', () => {
     expect(candidates(r)).toEqual([{ id: 'lib.squat', via: 'name' }, { id: 'lib.curl', via: 'name' }]);
     expect(r.kind === 'confirm' && r.why).toBe('the key does not check');
     expect(r.warnings).toHaveLength(1);
-    expect(r.warnings![0]).toMatch(/^The key FXI=1\.0S\/m:hip\.bend.* does not check .*, so it matches by name only\.$/);
+    expect(r.warnings![0]).toBe('The key FXI=1.0S/m:hip.bend/o:standing/l:bar.straight@back does not check, so it matches by name only: "hip.bend" is not a joint action.');
   });
   test('an equipment key that does not check is warned about too; a good query has no warnings', () => {
     expect(match(query({ fxe: 'FXE=1.0S/k:robot' }), [row('lib', BACK_SQUAT)]).warnings).toEqual(['The equipment key FXE=1.0S/k:robot does not check, so it ranks nothing.']);

@@ -68,9 +68,9 @@ fds-encoder check --records <file.json> [--write <out.json>]
 | Flag | Description |
 |------|-------------|
 | `--records <file.json>` | A file holding one FDS record, or a list of records |
-| `--write <out.json>` | Saves the records with every key that checks in its written form. Nothing else in a record changes |
+| `--write <out.json>` | Saves the records with every key that checks in its written form. Only those key strings change: numbers, spacing and every other value stay exactly as the input file wrote them. The file is written whole, through a temporary file renamed into place |
 
-The command reads `fxi`, `fxe`, `fxm` and `fxmg` on each record and on the references it holds, such as `equipment.required[0].fxe` or `targets.primary[0].fxm`. For each record it reports:
+The command reads each record's own key field, and the key fields of the references it holds: `fxi` on an exercise reference, `fxe` on an equipment reference such as `equipment.required[0].fxe`, and `fxm` and `fxmg` on a muscle reference such as `targets.primary[0].fxm`. A field with one of those names anywhere else, under `metadata`, `attributes` or `extensions` among them, isn't a key and is left as it is. For each record it reports:
 
 - **written form**: a key that checks but isn't in its written form, with the written form below it.
 - **warning**: two keys that check but disagree. An exercise key is checked against the key of its main equipment among `equipment.required`. A muscle reference's `fxm` is checked to be in its `fxmg`.
@@ -104,7 +104,7 @@ Two keys of one type give one of four results:
 
 | Result | Meaning |
 |--------|---------|
-| `same` | They describe the same thing |
+| `same` | Same written form, with nothing left at `?` |
 | `more-specific` | One describes part of what the other does, and nothing outside it. The output says which, `A` or `B` |
 | `overlap` | Neither is more specific, and they may describe the same thing |
 | `different` | They can't describe the same thing |
@@ -192,7 +192,7 @@ fds-encoder ask [rows.json] [--out <answers.json>]
 | Argument or flag | Description |
 |------------------|-------------|
 | `rows.json` | The records to key. Without it, `ask` keys one record called `key-1` |
-| `--out <answers.json>` | Saves the answers after each row. A rerun with the same file continues at the first row without an answer |
+| `--out <answers.json>` | Saves the answers after each row. A rerun with the same file continues at the first row without an answer. Each save writes the whole file through a temporary file, so an interrupted save never leaves part of one |
 
 A rows file is a list of rows. Each row has an `id` and a `name`, and may have `alsoCalled`, `text` and `media` (one link or a list of links). The command shows them above the questions. [Example 1](./examples.md#example-1-key-an-exercise) has a rows file.
 
@@ -208,6 +208,12 @@ At a question:
 | Enter | Shows the question again |
 
 When a row is complete, `ask` prints its answers and keys. Enter keeps the row and moves on, `r` redoes it, `b` goes back one question and `q` stops without keeping it. [Example 1](./examples.md#example-1-key-an-exercise) shows a whole session.
+
+When the input ends before the session does, as when answers are piped from a file that runs out, `ask` says the row in progress was not saved and exits with 1:
+
+```text
+The input ended before row key-1 was finished: its answers were not saved. The rows finished before it are in answers.json.
+```
 
 ### `build`
 
@@ -268,7 +274,7 @@ fds-encoder build answers.json
 
 For an exercise, `fxe` is the key of its main equipment. For equipment on its own, `fxi` is `null` and `fxe` is its whole key.
 
-An entry whose answers are missing, invalid or contradictory is left out of the output. Its id and what to fix go to standard error, and the command exits with 1. An entry that answers only `subject` prints:
+The keys go to standard output, as one JSON list of the entries that build. An entry whose answers are missing, invalid or contradictory is left out of that list: its id and what to fix go to standard error, and the command exits with 1. An entry that answers only `subject` prints this on standard error:
 
 ```text
 ex-103:
@@ -293,7 +299,7 @@ fds-encoder match <records.json> --library <records.json> [--top <n>]
 | `--library <records.json>` | The records to match them against | Required |
 | `--top <n>` | How many candidates to list for each record | `3` |
 
-Each record is read by its own key (`fxi`, `fxe`, `fxm` or `fxmg`, the first present), its id (`exerciseId` or `id`) and its name (`canonical.name`, else `name`). An exercise also brings the key of its main required equipment. A record with no key or no id is reported on standard error and skipped. A record is matched only against library records with the same type of key.
+Each record is read by its own key (`fxi`, `fxe`, `fxm` or `fxmg`, the first present), its id (`exerciseId` or `id`) and its name (`canonical.name`, else `name`). An exercise also brings the key of its main required equipment. A record with no key or no id is reported on standard error and skipped. A record whose key doesn't check is reported on standard error too, and matched by name only; its result carries `warnings`, which say so. A record is matched only against library records with the same type of key.
 
 ```bash
 fds-encoder match imports.json --library library.json --top 1
@@ -370,8 +376,12 @@ fds-encoder --version
 | Code | Meaning |
 |------|---------|
 | `0` | Success |
-| `1` | A key, record or answer doesn't check, two keys don't compare, or a file is missing or isn't JSON |
+| `1` | A key, record or answer doesn't check, two keys don't compare, a file can't be read or written or isn't JSON, the input ends before `ask` finishes, or the command fails for any other reason. Each error is one line on standard error |
 | `2` | A usage error: a missing argument, an unknown command or a bad flag value |
+
+When the reader of standard output closes it early, as `fds-encoder questions | head` does, the command stops quietly with 0.
+
+Results go to standard output: the written keys and record reports of `check`, the result of `compare`, the JSON of `build`, `questions` and `match`, and the session of `ask`. Errors, usage messages and the problems of entries that don't build go to standard error, with the warnings of `match`.
 
 ## See also
 

@@ -31,7 +31,7 @@ node scripts/check-conformance.mjs
 
 ```text
 conformance cases against @vitness/fds-encoder
-  syntax             831/831 passed
+  syntax             848/848 passed
   compare            67/67 passed
   build              73/73 passed
   exerciseEquipment  32/32 passed
@@ -80,7 +80,7 @@ node scripts/check-conformance.mjs --adapter ./my-adapter.mjs
 
 ```text
 conformance cases against my implementation
-  syntax             831/831 passed
+  syntax             848/848 passed
   compare            67/67 passed
   build              0/73 passed, 73 skipped
   exerciseEquipment  32/32 passed
@@ -93,7 +93,7 @@ When a case fails, the command lists it with what the case expects and what the 
 
 ```text
 conformance cases against my implementation
-  syntax             831/831 passed
+  syntax             848/848 passed
   compare            67/67 passed
   build              0/73 passed, 73 skipped
   exerciseEquipment  32/32 passed
@@ -109,6 +109,20 @@ conformance cases against my implementation
 ```
 
 Look a case up by its `id` in the case file to read what it checks.
+
+## Check the runner itself
+
+`--self-test` gives the runner a wrong answer in each group in turn and checks that the group fails, and only that group. It proves the runner catches a wrong result before you trust a green report:
+
+```bash
+node scripts/check-conformance.mjs --self-test
+```
+
+```text
+  ok    self-test — every group fails on a wrong answer, and only that group
+```
+
+`npm run check:conformance` runs the self-test, then the cases against the FDS Encoder.
 
 ## Reasons for invalid keys
 

@@ -38,7 +38,7 @@ The FDS Encoder is a command line tool and a TypeScript library for the four [st
 
 - **Core Concepts.** The [Structural Keys](../../core-concepts/structural-keys.md) pages are the rules. The Encoder follows them and reports, in plain words, where a key breaks one.
 - **The Transformer.** The [FDS Transformer](/docs/tools/transformer) turns your source data into FDS records. It doesn't fill the key fields. Run the Encoder on its output to add or check them.
-- **Your records.** The Encoder reads and writes only `fxi`, `fxe`, `fxm` and `fxmg`, on a record and on the references it holds. Everything else in the record stays as it was. A link you confirm between two records belongs in your own data, in `attributes` or `extensions`. The Encoder doesn't read or write it.
+- **Your records.** The Encoder reads and writes only a record's own key field and the key fields of the references it holds. Everything else in the record stays as it was, down to the spacing and the number literals. A link you confirm between two records belongs in your own data, in `attributes` or `extensions`. The Encoder doesn't read or write it.
 
 ## Quick start
 
@@ -61,6 +61,21 @@ ok   FXI=1.0S/m:el.flex/o:standing/l:bell.dumb@hands
 ```
 
 The key checks, and the Encoder prints it with its layers in the standard order.
+
+## Programmatic usage
+
+The same operations are a TypeScript library. Install the package [in your project](./installation.md#use-the-library-in-a-project), then:
+
+```typescript
+import { checkKey, compareKeys } from '@vitness/fds-encoder';
+
+checkKey('FXI=1.0S/o:standing/m:el.flex/l:bell.dumb@hands').written;
+// 'FXI=1.0S/m:el.flex/o:standing/l:bell.dumb@hands'
+
+compareKeys('FXM=1.0/biceps-brachii.long', 'FXM=1.0/biceps-brachii').result; // 'more-specific'
+```
+
+The [Library API](./library-api.md) lists every export.
 
 ## What's next?
 
