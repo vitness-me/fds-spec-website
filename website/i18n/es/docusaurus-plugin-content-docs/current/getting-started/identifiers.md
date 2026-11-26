@@ -83,4 +83,4 @@ Todas las entidades de FDS admiten un arreglo opcional `externalRefs` dentro del
 }
 ```
 
-Esta estructura está disponible en todas las entidades de FDS: ejercicio, equipamiento, músculo, categoría de músculo y atlas corporal
+Esta estructura está disponible en todas las entidades de FDS: ejercicio, equipamiento, músculo, categoría muscular y atlas corporal

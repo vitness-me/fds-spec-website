@@ -265,6 +265,8 @@ Un programa es dato de referencia y no contiene datos personales por construcci�
 
 Cada `trainingMaxSlot` transporta un `exercise`, un `method` que nombra cómo quien llama deriva el valor — `testedOneRepMax`, `estimatedOneRepMax`, `percentOfOneRepMax`, `recentBest` o `callerSupplied` — y un `id` opcional. Un `percent` acompaña a `percentOfOneRepMax`: un máximo de entrenamiento fijado en el 90% de un máximo real es la convención del 5/3/1. `notes` puede explicar una regla de la casa.
 
+El levantamiento es una referencia de ejercicio del RFC-001 en `exercise`, y puede llevar la clave estructural del ejercicio en `fxi`. Véase [Clave de ejercicio](../core-concepts/structural-keys/exercise-key).
+
 El `id` es un identificador local, para que una regla de progresión o un override de día puedan citar el *slot*. Los objetivos de carga no lo usan. Un `percent1RM` nombra el levantamiento a través de `referenceExerciseId`, y el *slot* que aplica es aquel cuyo `exercise` nombra — la coincidencia es por el ejercicio, no por el identificador propio del *slot*. Un productor que emite un *slot* para un levantamiento que ninguna prescripción referencia ha declarado un requisito que el plan no tiene, y los consumidores DEBERÍAN advertir en lugar de exigir el valor.
 
 **Una implementación conforme NO DEBE extender esta estructura con el valor en sí.** Esto se declara de forma normativa porque es lo que un implementador tiene más probabilidades de intentar "arreglar". El *slot* se lee como un objeto al que le falta un campo, y agregarlo parece hacer los programas autocontenidos sin costo alguno.

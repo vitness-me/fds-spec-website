@@ -4,7 +4,7 @@ description: JSON šema za model podataka kategorije mišića
 sidebar_position: 5
 ---
 
-# Šema kategorije mišića (v1.0.0)
+# Šema kategorije mišića (v1.1.0)
 
 Šema kategorije mišića definiše grupisanja i kategorizacije mišića sa fleksibilnim označavanjem i metapodacima.
 
@@ -28,6 +28,7 @@ Za detaljne informacije o modelu podataka kategorije mišića pogledajte [RFC-00
 
 - `id`: UUID identifikator
 - `schemaVersion`: string verzije (npr. "1.0.0")
+- `fxmg`: opcioni [ključ kategorije mišića](/docs/core-concepts/structural-keys/muscle-category-key), strukturni ključ kategorije
 - `canonical`: standardizovano imenovanje sa slug vrednošću i alijasima
 - `classification`: oznake kategorije i atributi
 - `metadata`: status, vremenske oznake, autorstvo

@@ -140,6 +140,8 @@ Esto refleja el RFC-006 §3.3 y por la misma razón. Ejecutar en silencio una es
 
 `id` y `exercise` son obligatorios; todo lo demás es prescripción.
 
+`exercise`, igual que cada entrada de `alternatives[]`, es una referencia de ejercicio del RFC-001, y puede llevar la clave estructural del ejercicio en `fxi`. Véase [Clave de ejercicio](../core-concepts/structural-keys/exercise-key).
+
 `alternatives[]` lista las sustituciones **que el autor autoriza por adelantado** — equipamiento no disponible, movimiento contraindicado, una regresión para un atleta menos experimentado. Es parte de la prescripción y viaja con la sesión de entrenamiento.
 
 Esto es distinto de una sustitución que un atleta hace durante una sesión, que es dato ejecutado y pertenece al RFC-009. La distinción importa porque los dos responden preguntas distintas: `alternatives[]` dice qué considera equivalente el autor; una sustitución registrada dice qué ocurrió. Colapsarlas haría irrecuperable la intención de un programa a partir de su historial de ejecución.
@@ -203,6 +205,8 @@ Un consumidor que no puede aplicar un ajuste — sin control de pendiente en el 
 ### 4.7. Resúmenes agregados derivados
 
 `targets` y `equipment` resumen lo que la sesión entrena y necesita. Ambos son **opcionales y orientativos**.
+
+Sus entradas son referencias de músculo y de equipamiento del RFC-001, y pueden llevar las mismas claves estructurales: `fxm` y `fxmg` en un músculo, `fxe` en un equipamiento.
 
 Un consumidor NO DEBE tratar a ninguno de los dos como autoritativo por encima de recorrer los elementos. Son datos derivados que pueden estar ausentes, desactualizados o calculados bajo supuestos que el consumidor no comparte — un resumen agregado producido antes de que un elemento fuera sustituido ya no describe la sesión. Existen para los listados y el filtrado, donde recalcular a lo largo de una biblioteca es costoso y las respuestas aproximadas son aceptables.
 

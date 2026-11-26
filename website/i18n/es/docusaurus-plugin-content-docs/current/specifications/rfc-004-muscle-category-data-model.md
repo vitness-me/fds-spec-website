@@ -104,6 +104,8 @@ Campos opcionales comúnmente admitidos que mejoran la interoperabilidad:
 }
 ```
 
+`fxmg` es la clave estructural de la categoría muscular: el conjunto de músculos que contiene la categoría, nombrado por la anatomía, por una acción articular o como una unión de estos y de músculos o partes sueltos. No es un identificador; `id` sigue siendo la identidad del registro. El esquema solo comprueba su encabezado, `FXMG=1.0/`. Véase [Clave de categoría muscular](../core-concepts/structural-keys/muscle-category-key).
+
 ### 3.3. Mecanismos de extensión
 
 Dos puntos de extensión para datos específicos de cada plataforma:

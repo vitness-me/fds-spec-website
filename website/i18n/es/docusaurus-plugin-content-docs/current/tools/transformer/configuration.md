@@ -106,7 +106,7 @@ Configura las fuentes de registros para búsquedas. Los registros proporcionan d
 
 > **Nota:** Se deben proporcionar archivos de registro propios. El transformador no incluye registros preconstruidos.
 
-> **`remote` necesita una `url`.** FDS publica músculos, equipamiento y categorías de músculos solo como *catálogos ilustrativos*: muestran la forma que sirve un proveedor, y nada en FDS exige sus entradas. Sus ids no pertenecen a ningún proveedor, y una búsqueda en registro escribe un id directamente en la salida, así que no hay una fuente remota predeterminada a la que recurrir. `source: "remote"` sin `url` falla al cargar en lugar de descargar. Se debe nombrar el catálogo deseado.
+> **`remote` necesita una `url`.** FDS publica músculos, equipamiento y categorías musculares solo como *catálogos ilustrativos*: muestran la forma que sirve un proveedor, y nada en FDS exige sus entradas. Sus ids no pertenecen a ningún proveedor, y una búsqueda en registro escribe un id directamente en la salida, así que no hay una fuente remota predeterminada a la que recurrir. `source: "remote"` sin `url` falla al cargar en lugar de descargar. Se debe nombrar el catálogo deseado.
 
 ---
 

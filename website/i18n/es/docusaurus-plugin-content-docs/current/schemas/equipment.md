@@ -4,7 +4,7 @@ description: JSON Schema del modelo de datos de equipamiento
 sidebar_position: 3
 ---
 
-# Esquema de equipamiento (v1.1.0)
+# Esquema de equipamiento (v1.2.0)
 
 El esquema de equipamiento define entidades de equipamiento de fitness con clasificación, metadatos y atributos extensibles.
 
@@ -27,6 +27,7 @@ Para información detallada sobre el modelo de datos de equipamiento, véase [RF
 
 - `id`: identificador UUID
 - `schemaVersion`: cadena de versión (p. ej., "1.0.0")
+- `fxe`: [clave de equipamiento](/docs/core-concepts/structural-keys/equipment-key) opcional, la clave estructural del equipamiento
 - `canonical`: nomenclatura estandarizada con slug y alias
 - `classification`: tipo y categoría del equipamiento
 - `attributes`: almacenamiento flexible de pares clave-valor para propiedades específicas del equipamiento

@@ -8,7 +8,7 @@ sidebar_position: 8
 
 Ovaj vodič pruža kompletne primere korišćenja FDS Transformera od početka do kraja za uobičajene tokove rada.
 
-Transformer ne popunjava strukturne ključeve (`fxi`, `fxe`, `fxm`, `fxmg`); dodajte ih sami ako su vam potrebni. Pogledajte [Strukturni ključevi](../../core-concepts/structural-keys).
+Transformator ne popunjava strukturne ključeve (`fxi`, `fxe`, `fxm`, `fxmg`); dodajte ih sami ako su vam potrebni. Pogledajte [Strukturni ključevi](../../core-concepts/structural-keys.md).
 
 ## Primer 1: Osnovna transformacija
 

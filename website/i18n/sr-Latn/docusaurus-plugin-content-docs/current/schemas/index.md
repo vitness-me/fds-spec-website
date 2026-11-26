@@ -30,22 +30,22 @@ Ne postoji `muscle/v1.6.0/` i neće postojati osim ako se sam muscle ne promeni.
 ## Entiteti
 
 ### [Šema vežbe](/docs/schemas/exercise) — v1.2.0
-Osnovni model podataka vežbe sa klasifikacijom, ciljanim mišićima, opremom, metrikama i medijskim sadržajima.
+Osnovni model podataka vežbe sa klasifikacijom, ciljanim mišićima, opremom, metrikama i medijskim sadržajima. 1.2.0 je dodala opcione [strukturne ključeve](/docs/core-concepts/structural-keys): `fxi` na vežbi, `fxm` i `fxmg` na njenim referencama na mišiće, `fxe` na njenim referencama na opremu.
 
 **Šema:** `/schemas/exercises/v1.2.0/exercise.schema.json`
 
 ### [Šema opreme](/docs/schemas/equipment) — v1.2.0
-Definicije fitnes opreme sa klasifikacijom, karakteristikama opterećivanja i metapodacima.
+Definicije fitnes opreme sa klasifikacijom, karakteristikama opterećivanja i metapodacima. 1.2.0 je dodala opcioni strukturni ključ `fxe`.
 
 **Šema:** `/schemas/equipment/v1.2.0/equipment.schema.json`
 
 ### [Šema mišića](/docs/schemas/muscle) — v1.1.0
-Definicije anatomskih mišića sa podrškom za vizualizaciju toplotnom mapom.
+Definicije anatomskih mišića sa podrškom za vizualizaciju toplotnom mapom. 1.1.0 je dodala opcioni strukturni ključ `fxm`.
 
 **Šema:** `/schemas/muscle/v1.1.0/muscle.schema.json`
 
 ### [Šema kategorije mišića](/docs/schemas/muscle-category) — v1.1.0
-Struktura grupisanja i kategorizacije mišića.
+Struktura grupisanja i kategorizacije mišića. 1.1.0 je dodala opcioni strukturni ključ `fxmg`.
 
 **Šema:** `/schemas/muscle/muscle-category/v1.1.0/muscle-category.schema.json`
 
@@ -55,19 +55,19 @@ Struktura vizualizacije tela sa prikazima i oblastima. 1.1.0 je dodala opcionu l
 **Šema:** `/schemas/atlas/v1.1.0/body-atlas.schema.json`
 
 ### [Šema treninga](/docs/schemas/workout) — v1.2.0
-Jedan propisan trening: blokovi stavki, režim izvršavanja po bloku i preskripcija po seriji. 1.1.0 je dodala zone intenziteta po seriji i podešavanja mašina (RFC-007 §6).
+Jedan propisan trening: blokovi stavki, režim izvršavanja po bloku i preskripcija po seriji. 1.1.0 je dodala zone intenziteta po seriji i podešavanja mašina (RFC-007 §6). 1.2.0 omogućava da njene reference na vežbe, mišiće i opremu nose svoje strukturne ključeve.
 
 **Šema:** `/schemas/workout/v1.2.0/workout.schema.json`
 
 ### [Šema programa](/docs/schemas/program) — v1.1.0
-Raspored referenci na treninge kroz vreme: ciklusi, nedelje, raspoređivanje dana, progresija i grananje.
+Raspored referenci na treninge kroz vreme: ciklusi, nedelje, raspoređivanje dana, progresija i grananje. 1.1.0 omogućava da referenca na vežbu u slotu trenažnog maksimuma nosi svoj `fxi`.
 
 **Šema:** `/schemas/program/v1.1.0/program.schema.json`
 
 ## Biblioteke definicija
 
 ### [Primitivi preskripcije](/docs/schemas/prescription) — v1.1.0
-Opterećenje, ponavljanja, tempo, odmor, zone intenziteta, šeme serija i pravila progresije — definicije koje treninzi i programi kombinuju.
+Opterećenje, ponavljanja, tempo, odmor, zone intenziteta, šeme serija i pravila progresije — definicije koje treninzi i programi kombinuju. 1.1.0 omogućava da referenca na opremu u opterećenju elastičnom trakom nosi svoj `fxe`.
 
 **Šema:** `/schemas/prescription/v1.1.0/prescription.schema.json`
 
@@ -107,15 +107,15 @@ Verzija 1.1.0 zahteva `provider` u unosu modela: provajdera obogaćivanja koji j
 
 ### Pre strukturnih ključeva
 
-| Schema | Version | Superseded by | Named by releases |
+| Šema | Verzija | Zamenjena verzijom | Imenovana u izdanjima |
 |---|---|---|---|
-| `/schemas/exercises/v1.1.0/exercise.schema.json` | 1.1.0 | 1.2.0 | 1.1.0 through 1.5.0 |
-| `/schemas/equipment/v1.1.0/equipment.schema.json` | 1.1.0 | 1.2.0 | 1.1.0 through 1.5.0 |
-| `/schemas/muscle/v1.0.0/muscle.schema.json` | 1.0.0 | 1.1.0 | 1.0.0 through 1.5.0 |
-| `/schemas/muscle/muscle-category/v1.0.0/muscle-category.schema.json` | 1.0.0 | 1.1.0 | 1.0.0 through 1.5.0 |
-| `/schemas/prescription/v1.0.0/prescription.schema.json` | 1.0.0 | 1.1.0 | 1.2.0 through 1.5.0 |
-| `/schemas/workout/v1.1.0/workout.schema.json` | 1.1.0 | 1.2.0 | 1.4.0 and 1.5.0 |
-| `/schemas/program/v1.0.0/program.schema.json` | 1.0.0 | 1.1.0 | 1.3.0 through 1.5.0 |
+| `/schemas/exercises/v1.1.0/exercise.schema.json` | 1.1.0 | 1.2.0 | od 1.1.0 do 1.5.0 |
+| `/schemas/equipment/v1.1.0/equipment.schema.json` | 1.1.0 | 1.2.0 | od 1.1.0 do 1.5.0 |
+| `/schemas/muscle/v1.0.0/muscle.schema.json` | 1.0.0 | 1.1.0 | od 1.0.0 do 1.5.0 |
+| `/schemas/muscle/muscle-category/v1.0.0/muscle-category.schema.json` | 1.0.0 | 1.1.0 | od 1.0.0 do 1.5.0 |
+| `/schemas/prescription/v1.0.0/prescription.schema.json` | 1.0.0 | 1.1.0 | od 1.2.0 do 1.5.0 |
+| `/schemas/workout/v1.1.0/workout.schema.json` | 1.1.0 | 1.2.0 | 1.4.0 i 1.5.0 |
+| `/schemas/program/v1.0.0/program.schema.json` | 1.0.0 | 1.1.0 | od 1.3.0 do 1.5.0 |
 
 Izdanje 1.6.0 zamenilo je ovih sedam verzija dodavanjem opcionih strukturnih ključeva. Svaka ostaje objavljena i zamrznuta, jer klijent fiksiran na izdanje koje je imenuje mora i dalje moći da je razrešava. Ne gradite prema njima: svaki dokument validan pod nekom od njih validan je i pod njenom naslednicom, pošto su ključevi opcioni. Primeri su uz aktuelne verzije.
 

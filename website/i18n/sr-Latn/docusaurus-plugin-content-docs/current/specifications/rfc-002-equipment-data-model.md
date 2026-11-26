@@ -108,6 +108,8 @@ Uobičajeno podržana opciona polja koja unapređuju interoperabilnost:
 }
 ```
 
+`fxe` je strukturni ključ opreme: string koji opisuje koja je vrsta opreme i njen oblik, kodovima koje FDS objavljuje, pa dva kataloga mogu da pronađu istu opremu kako god je zvali. Zapis nosi ceo ključ, uključujući eventualne proširene slojeve, koji beleže kako je oprema građena, i zastavicu `N` koja označava ključ koji ih nosi. On nije identifikator; `id` ostaje identitet zapisa. Šema proverava samo njegovo zaglavlje, `FXE=1.0S/` ili `FXE=1.0N/`. Pogledajte [Ključ opreme](../core-concepts/structural-keys/equipment-key).
+
 ### 3.3. Mehanizmi ekstenzija
 
 Dve tačke proširenja za podatke specifične za platformu:
@@ -232,7 +234,7 @@ Prema semantičkom verzionisanju:
 
 ### 5.3. Primer evolucije šeme
 
-Od jedne manje verzije do sledeće (dodavanje opcionog polja za sertifikaciju):
+Od jedne sporedne verzije do sledeće (dodavanje opcionog polja za sertifikaciju):
 ```json fds:ignore a hypothetical next version illustrating how an optional field arrives; no published equipment schema has certification
 {
   "schemaVersion": "1.x.0",

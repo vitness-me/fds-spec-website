@@ -4,7 +4,7 @@ description: JSON šema za model podataka vežbe
 sidebar_position: 2
 ---
 
-# Šema vežbe (v1.1.0)
+# Šema vežbe (v1.2.0)
 
 Šema vežbe definiše osnovni model podataka za fitnes vežbe. Uključuje klasifikaciju, ciljane mišiće, zahteve za opremom i medijske sadržaje.
 
@@ -31,9 +31,10 @@ Za detaljne informacije o modelu podataka vežbe pogledajte [RFC-001: Model poda
 
 - `id`: UUID identifikator
 - `schemaVersion`: string verzije (npr. "1.0.0")
+- `fxi`: opcioni [ključ vežbe](/docs/core-concepts/structural-keys/exercise-key), strukturni ključ vežbe
 - `canonical`: standardizovano imenovanje sa slug vrednošću i alijasima
 - `classification`: tip vežbe, mehanika, sila, nivo, kinetički lanac
-- `targets`: primarni i sekundarni ciljani mišići sa nivoima aktivacije
-- `equipment`: obavezna, opciona i alternativna oprema
+- `targets`: primarni i sekundarni ciljani mišići sa nivoima aktivacije; svaka referenca može nositi `fxm` mišića i `fxmg` njegove kategorije
+- `equipment`: obavezna, opciona i alternativna oprema; svaka referenca može nositi svoj `fxe`
 - `media`: slike, video-zapisi i dijagrami
 - `metadata`: status, vremenske oznake, autorstvo

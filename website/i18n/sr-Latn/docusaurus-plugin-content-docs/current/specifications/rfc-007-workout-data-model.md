@@ -140,6 +140,8 @@ Ovo preslikava RFC-006 §3.3 i iz istog razloga. Tiho izvršavanje neprepoznate 
 
 `id` i `exercise` su obavezni; sve ostalo je preskripcija.
 
+`exercise`, kao i svaki unos u `alternatives[]`, jeste referenca na vežbu iz RFC-001 i može nositi strukturni ključ vežbe u `fxi`. Pogledajte [Ključ vežbe](../core-concepts/structural-keys/exercise-key).
+
 `alternatives[]` navodi zamene **koje autor unapred odobrava** — oprema nedostupna, pokret kontraindikovan, regresija za manje iskusnog sportistu. To je deo preskripcije i putuje sa treningom.
 
 Ovo je različito od zamene koju sportista napravi tokom treninga, što su podaci o izvedenom i pripadaju RFC-009. Razlika je bitna jer to dvoje odgovara na različita pitanja: `alternatives[]` kaže šta autor smatra ekvivalentnim; zabeležena zamena kaže šta se dogodilo. Njihovo sažimanje učinilo bi nameru programa nepovratnom iz istorije njegovog izvršavanja.
@@ -203,6 +205,8 @@ Konzument koji ne može da primeni podešavanje — nema kontrole nagiba na opre
 ### 4.7. Izvedeni zbirni prikazi
 
 `targets` i `equipment` sumiraju šta trening trenira i šta mu je potrebno. Oba su **opciona i savetodavna**.
+
+Njihovi unosi su reference na mišiće i opremu iz RFC-001 i mogu nositi iste strukturne ključeve: `fxm` i `fxmg` na mišiću, `fxe` na komadu opreme.
 
 Konzument NE SME da tretira nijedno od njih kao merodavno u odnosu na obilazak stavki. To su izvedeni podaci koji mogu biti odsutni, zastareli ili izračunati pod pretpostavkama koje konzument ne deli — zbirni prikaz proizveden pre nego što je stavka zamenjena više ne opisuje trening. Postoje za izlistavanje i filtriranje, gde je preračunavanje preko cele biblioteke skupo, a približni odgovori prihvatljivi.
 

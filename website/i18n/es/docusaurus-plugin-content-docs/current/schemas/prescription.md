@@ -4,7 +4,7 @@ description: Cuánta carga, cuántas repeticiones, a qué tempo, cuánto descans
 sidebar_position: 7
 ---
 
-# Primitivas de prescripción (v1.0.0)
+# Primitivas de prescripción (v1.1.0)
 
 La prescripción responde cuatro preguntas sobre una serie: **cuánta carga, cuántas repeticiones, a qué tempo y cuánto descanso.** Todo lo que en FDS prescribe trabajo compone estas definiciones, de modo que una serie dentro de una sesión de entrenamiento independiente y la misma serie dentro de un programa de doce semanas significan exactamente lo mismo.
 
@@ -34,6 +34,8 @@ El transformador no incluye este esquema por la misma razón. Valida entidades, 
 | `intensityZone` | Una zona en un sistema con nombre — frecuencia cardíaca, potencia, ritmo, percepción |
 | `setScheme` | Un patrón con nombre a lo largo de las series, con sus parámetros |
 | `progressionRule` | Cuándo cambia la prescripción, y cómo |
+
+La referencia `equipment` de una carga `bandResistance` puede llevar la [clave estructural](/docs/core-concepts/structural-keys/equipment-key) de la banda en `fxe`.
 
 ## Dos reglas que vale la pena leer antes de implementar
 

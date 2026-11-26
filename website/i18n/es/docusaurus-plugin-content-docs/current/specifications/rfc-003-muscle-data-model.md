@@ -121,6 +121,8 @@ Campos opcionales comúnmente admitidos que mejoran la interoperabilidad:
 }
 ```
 
+`fxm` es la clave estructural del músculo: un músculo, o una parte de él, nombrado por su término anatómico, como `FXM=1.0/latissimus-dorsi`. No es un identificador; `id` sigue siendo la identidad del registro. El esquema solo comprueba su encabezado, `FXM=1.0/`. Véase [Clave de músculo](../core-concepts/structural-keys/muscle-key).
+
 ### 3.3. Mecanismos de extensión
 
 Dos puntos de extensión para datos específicos de plataforma:

@@ -117,6 +117,8 @@ Pet opcionih polja nosi najveći deo onoga što implementacija zaista prikazuje.
 
 Imajte na umu da su `constraints.progressions` i `constraints.regressions` opisi u slobodnom tekstu, dok je unos u `relations` tipa `progression` veza ka drugoj vežbi. Oba postoje zato što autor često zna *da* je neki pokret teži pre nego što se taj teži pokret nađe u katalogu.
 
+`fxi` je strukturni ključ vežbe: string koji opisuje kako se telo kreće, njegov položaj i čime se kreće, kodovima koje FDS objavljuje, pa dva kataloga mogu da pronađu istu vežbu kako god je zvali. On pronalazi kandidate i nije identifikator; `exerciseId` ostaje identitet zapisa. Šema proverava samo njegovo zaglavlje, `FXI=1.0S/` ili `FXI=1.0N/`. Pogledajte [Ključ vežbe](../core-concepts/structural-keys/exercise-key).
+
 ```json fds:fragment entity=exercise
 {
   "fxi": "FXI=1.0S/m:hip.ext+kn.ext/o:standing/l:bar.straight@back",
@@ -230,6 +232,8 @@ Za složene strukture podataka jedinstvene za platformu:
 
 `targets.primary` navodi mišiće zbog kojih se vežba bira i obavezno je; `targets.secondary` navodi one koji su smisleno uključeni, ali nisu poenta pokreta. Svaki unos je referenca na mišić — `id`, prikazni `name` i `categoryId` grupe kojoj pripada — denormalizovana da bi konzument mogao da prikaže vežbu bez razrešavanja kataloga mišića.
 
+Referenca na mišić može nositi i strukturni ključ mišića u `fxm` i ključ njegove kategorije u `fxmg`. Pogledajte [Ključ mišića](../core-concepts/structural-keys/muscle-key) i [Ključ kategorije mišića](../core-concepts/structural-keys/muscle-category-key).
+
 Ta podela je važna svemu što izračunava obim treninga po mišiću: računanje sekundarnog učešća kao primarnog naduvava obim na način koji se uvećava kroz čitav program.
 
 ```json fds:fragment entity=exercise
@@ -255,6 +259,8 @@ Ta podela je važna svemu što izračunava obim treninga po mišiću: računanje
 ### 4.4. Reference na opremu
 
 `equipment.required` je ono bez čega pokret ne može da se izvede; `equipment.optional` je ono što menja doživljaj, ali ne i vežbu. Svaki unos denormalizuje `id` i `name` iz istog razloga iz kog to čine ciljni mišići.
+
+Referenca na opremu može nositi i strukturni ključ opreme u `fxe`, istu vrednost kao u zapisu opreme. Pogledajte [Ključ opreme](../core-concepts/structural-keys/equipment-key).
 
 ```json fds:fragment entity=exercise
 {
@@ -342,7 +348,7 @@ Prema semantičkom verzionisanju:
 
 ### 5.3. Primer evolucije šeme
 
-Od jedne manje verzije do sledeće (dodavanje opcionog polja):
+Od jedne sporedne verzije do sledeće (dodavanje opcionog polja):
 ```json fds:ignore a hypothetical next version illustrating how an optional field arrives; no published exercise schema has newOptionalField
 {
   "schemaVersion": "1.x.0",

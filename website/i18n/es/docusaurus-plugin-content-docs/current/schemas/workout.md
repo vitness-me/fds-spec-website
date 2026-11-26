@@ -4,7 +4,7 @@ description: JSON Schema de una sola sesión de entrenamiento prescrita — bloq
 sidebar_position: 8
 ---
 
-# Esquema de sesión de entrenamiento (v1.1.0)
+# Esquema de sesión de entrenamiento (v1.2.0)
 
 Una sesión de entrenamiento es **una sesión prescrita**: qué se hace, en qué orden, agrupado cómo, y cómo se prescribe cada elemento.
 
@@ -86,6 +86,7 @@ El conjunto de agrupaciones es la verdadera prueba de la afirmación de arriba: 
 - `blocks[].role` — para qué sirve un bloque, con valores recomendados en el [registro de roles de bloque](https://spec.vitness.me/registries/block-role.registry.json)
 - `items[].alternatives[]` — sustituciones que el autor sanciona de antemano, distintas de la que un atleta hace a mitad de sesión
 - `items[].repStyle` — rango de movimiento y composición de la repetición, para repeticiones parciales y de una y media
+- `items[].exercise` y `items[].alternatives[]` — referencias de ejercicio, cada una con su [clave de ejercicio](/docs/core-concepts/structural-keys/exercise-key) opcional en `fxi`; las referencias de músculo y de equipamiento en `targets` y `equipment` pueden llevar `fxm`, `fxmg` y `fxe`
 
 ## Especificación
 

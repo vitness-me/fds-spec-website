@@ -121,6 +121,8 @@ Uobičajeno podržana opciona polja koja unapređuju interoperabilnost:
 }
 ```
 
+`fxm` je strukturni ključ mišića: jedan mišić, ili jedan njegov deo, imenovan svojim anatomskim terminom, kao `FXM=1.0/latissimus-dorsi`. On nije identifikator; `id` ostaje identitet zapisa. Šema proverava samo njegovo zaglavlje, `FXM=1.0/`. Pogledajte [Ključ mišića](../core-concepts/structural-keys/muscle-key).
+
 ### 3.3. Mehanizmi ekstenzija
 
 Dve tačke ekstenzija za podatke specifične za platformu:
@@ -262,7 +264,7 @@ Prema semantičkom verzionisanju:
 
 ### 5.3. Primer evolucije šeme
 
-Od jedne manje verzije do sledeće (dodavanje opcionog biomehaničkog polja):
+Od jedne sporedne verzije do sledeće (dodavanje opcionog biomehaničkog polja):
 ```json fds:ignore a hypothetical next version illustrating how an optional field arrives; no published muscle schema has biomechanics
 {
   "schemaVersion": "1.x.0",

@@ -108,6 +108,8 @@ Campos opcionales comúnmente admitidos que mejoran la interoperabilidad:
 }
 ```
 
+`fxe` es la clave estructural del equipamiento: una cadena que describe qué clase de equipamiento es y su forma, en códigos que FDS publica, de modo que dos catálogos puedan encontrar el mismo equipamiento sin importar cómo lo llame cada uno. Un registro lleva la clave completa, incluidas las capas extendidas que tenga, que registran cómo está construido el equipamiento, y el indicador `N` que marca una clave que las lleva. No es un identificador; `id` sigue siendo la identidad del registro. El esquema solo comprueba su encabezado, `FXE=1.0S/` o `FXE=1.0N/`. Véase [Clave de equipamiento](../core-concepts/structural-keys/equipment-key).
+
 ### 3.3. Mecanismos de extensión
 
 Dos puntos de extensión para datos específicos de plataforma:

@@ -29,7 +29,7 @@ Estos muestran la forma que sirve un proveedor: un arreglo de documentos de enti
 
 - **Equipamiento**: [`equipment.registry.example.json`](https://spec.vitness.me/registries/equipment.registry.example.json)
 - **Músculos**: [`muscles.registry.example.json`](https://spec.vitness.me/registries/muscles.registry.example.json)
-- **Categorías de músculos**: [`muscle-categories.registry.example.json`](https://spec.vitness.me/registries/muscle-categories.registry.example.json)
+- **Categorías musculares**: [`muscle-categories.registry.example.json`](https://spec.vitness.me/registries/muscle-categories.registry.example.json)
 
 El `.example.` en el nombre del archivo es la distinción: un archivo llamado `*.registry.json` es el registro; un archivo llamado `*.registry.example.json` es un ejemplo de uno. Véase el [README de registros](https://spec.vitness.me/registries/README.md) para las reglas completas.
 
@@ -60,7 +60,7 @@ Se publican 137 documentos de ejemplo, cada uno servido desde la misma ruta vers
 - Un segundo músculo que lleva alias localizados junto a sus regiones
 
 <!-- fds:count examples:muscle-category=2 -->
-### Ejemplos de categoría de músculo (2)
+### Ejemplos de categoría muscular (2)
 - Una categoría de nivel superior con descripciones localizadas y etiquetas de clasificación
 - Una categoría para un grupo de músculos, el cuádriceps
 

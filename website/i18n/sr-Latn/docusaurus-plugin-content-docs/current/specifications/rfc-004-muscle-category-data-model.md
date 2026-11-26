@@ -104,6 +104,8 @@ Uobičajeno podržana opciona polja koja unapređuju interoperabilnost:
 }
 ```
 
+`fxmg` je strukturni ključ kategorije mišića: skup mišića koje kategorija sadrži, imenovan po anatomiji, po pokretu u zglobu ili kao unija njih i pojedinačnih mišića ili delova. On nije identifikator; `id` ostaje identitet zapisa. Šema proverava samo njegovo zaglavlje, `FXMG=1.0/`. Pogledajte [Ključ kategorije mišića](../core-concepts/structural-keys/muscle-category-key).
+
 ### 3.3. Mehanizmi ekstenzija
 
 Dve tačke ekstenzija za podatke specifične za platformu:
@@ -195,7 +197,7 @@ Prati semantičko verzionisanje:
 
 ### 5.3. Primer evolucije šeme
 
-Od jedne manje verzije do sledeće (dodavanje opcionog polja hierarchy):
+Od jedne sporedne verzije do sledeće (dodavanje opcionog polja hierarchy):
 ```json fds:ignore a hypothetical next version illustrating how an optional field arrives; no published muscle-category schema has hierarchy
 {
   "schemaVersion": "1.x.0",

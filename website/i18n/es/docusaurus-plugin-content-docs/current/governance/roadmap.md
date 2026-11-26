@@ -10,7 +10,7 @@ Lo que FDS cubre hoy, lo que viene después y — la parte que la mayoría de la
 
 ## Publicado
 
-**RFC-001 a RFC-005** — el catálogo. Los ejercicios, y los registros que estos referencian: el equipamiento, los músculos, las categorías de músculos y el atlas corporal que vincula los músculos a una anatomía visual.
+**RFC-001 a RFC-005** — el catálogo. Los ejercicios, y los registros que estos referencian: el equipamiento, los músculos, las categorías musculares y el atlas corporal que vincula los músculos a una anatomía visual.
 
 **RFC-006 Primitivas de prescripción** — una biblioteca de definiciones en lugar de una entidad. Carga, repeticiones, tempo, descanso, zonas de intensidad, esquemas de series y reglas de progresión, definidos una sola vez para que una serie signifique lo mismo dondequiera que aparezca.
 

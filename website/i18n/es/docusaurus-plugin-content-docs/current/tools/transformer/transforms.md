@@ -8,7 +8,7 @@ sidebar_position: 6
 
 El FDS Transformer incluye un conjunto de funciones de transformación integradas para tareas comunes de manipulación de datos. Se pueden usar en la propiedad `transform` de los mapeos de campos.
 
-El Transformer no rellena las claves estructurales (`fxi`, `fxe`, `fxm`, `fxmg`); añádelas tú si las necesitas. Consulta [Claves estructurales](../../core-concepts/structural-keys).
+El Transformer no rellena las claves estructurales (`fxi`, `fxe`, `fxm`, `fxmg`); añádalas usted si las necesita. Véase [Claves estructurales](../../core-concepts/structural-keys).
 
 ## Referencia de transformaciones
 

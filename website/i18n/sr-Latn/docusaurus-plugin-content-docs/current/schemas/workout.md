@@ -4,7 +4,7 @@ description: JSON šema za jedan propisan trening — blokovi, režimi izvršava
 sidebar_position: 8
 ---
 
-# Šema treninga (v1.1.0)
+# Šema treninga (v1.2.0)
 
 Trening je **jedna propisana celina rada**: šta se radi, kojim redosledom, kako je grupisano i kako je svaka stavka propisana.
 
@@ -86,6 +86,7 @@ Skup grupisanja je pravi test gornje tvrdnje: da je ijednoj strukturi zatrebalo 
 - `blocks[].role` — čemu blok služi, preporuke u [registru uloga blokova](https://spec.vitness.me/registries/block-role.registry.json)
 - `items[].alternatives[]` — zamene koje autor unapred odobrava, različite od one koju sportista napravi usred treninga
 - `items[].repStyle` — obim pokreta i sastav ponavljanja, za parcijalna ponavljanja i ponavljanja „jedan i po“
+- `items[].exercise` i `items[].alternatives[]` — reference na vežbe, od kojih svaka opciono nosi svoj [ključ vežbe](/docs/core-concepts/structural-keys/exercise-key) u `fxi`; reference na mišiće i opremu u `targets` i `equipment` mogu nositi `fxm`, `fxmg` i `fxe`
 
 ## Specifikacija
 

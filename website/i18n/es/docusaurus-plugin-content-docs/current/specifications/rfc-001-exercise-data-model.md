@@ -117,6 +117,8 @@ Cinco campos opcionales transportan la mayor parte de lo que una implementación
 
 Téngase en cuenta que `constraints.progressions` y `constraints.regressions` son descripciones de texto libre, mientras que una entrada de `relations` de tipo `progression` es un enlace a otro ejercicio. Ambos existen porque un autor a menudo sabe *que* un movimiento es más difícil antes de que el movimiento más difícil esté en el catálogo.
 
+`fxi` es la clave estructural del ejercicio: una cadena que describe cómo se mueve el cuerpo, su posición y con qué se mueve, en códigos que FDS publica, de modo que dos catálogos puedan encontrar el mismo ejercicio sin importar cómo lo llame cada uno. Sirve para encontrar candidatos y no es un identificador; `exerciseId` sigue siendo la identidad del registro. El esquema solo comprueba su encabezado, `FXI=1.0S/` o `FXI=1.0N/`. Véase [Clave de ejercicio](../core-concepts/structural-keys/exercise-key).
+
 ```json fds:fragment entity=exercise
 {
   "fxi": "FXI=1.0S/m:hip.ext+kn.ext/o:standing/l:bar.straight@back",
@@ -230,6 +232,8 @@ Para estructuras de datos complejas y exclusivas de una plataforma:
 
 `targets.primary` enumera los músculos por los que se elige el ejercicio y es obligatorio; `targets.secondary` enumera los que participan de manera significativa pero no son el propósito del movimiento. Cada entrada es una referencia de músculo — un `id`, un `name` para mostrar y el `categoryId` del grupo al que pertenece — desnormalizada para que un consumidor pueda renderizar el ejercicio sin resolver el catálogo de músculos.
 
+Una referencia de músculo también puede llevar la clave estructural del músculo en `fxm` y la de su categoría en `fxmg`. Véanse [Clave de músculo](../core-concepts/structural-keys/muscle-key) y [Clave de categoría muscular](../core-concepts/structural-keys/muscle-category-key).
+
 La división importa para cualquier cosa que calcule el volumen de entrenamiento por músculo: contar la participación secundaria como primaria infla el volumen de una manera que se acumula a lo largo de un programa.
 
 ```json fds:fragment entity=exercise
@@ -255,6 +259,8 @@ La división importa para cualquier cosa que calcule el volumen de entrenamiento
 ### 4.4. Referencias de equipamiento
 
 `equipment.required` es aquello sin lo cual el movimiento no puede realizarse; `equipment.optional` es lo que cambia la experiencia pero no el ejercicio. Cada entrada desnormaliza un `id` y un `name` por la misma razón que lo hacen los músculos objetivo.
+
+Una referencia de equipamiento también puede llevar la clave estructural del equipamiento en `fxe`, el mismo valor que tiene el registro del equipamiento. Véase [Clave de equipamiento](../core-concepts/structural-keys/equipment-key).
 
 ```json fds:fragment entity=exercise
 {

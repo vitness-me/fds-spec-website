@@ -128,6 +128,8 @@ Trece métodos definidos más la rama de compatibilidad hacia adelante. Todos lo
 | `autoregulated` | `progressionRuleRef` | No — necesita el estado de la regla |
 | `none` | — | Sí |
 
+El `equipment` de `bandResistance` es una referencia de equipamiento del RFC-001, y puede llevar la clave estructural de la banda en `fxe`. Véase [Clave de equipamiento](../core-concepts/structural-keys/equipment-key).
+
 Tres de estos transportan una semántica que un consumidor puede malinterpretar de un modo que la validación no puede detectar:
 
 **`percent1RM` con `referenceExerciseId`** expresa "70% de tu repetición máxima (1RM) de sentadilla trasera" en un ejercicio que no es la sentadilla trasera — el caso común en el trabajo accesorio y en los programas dirigidos por porcentajes donde cada levantamiento se escala a partir de unos pocos levantamientos de referencia. Si está ausente, la referencia es el propio ejercicio prescrito.

@@ -20,7 +20,7 @@ Un lanzamiento nombra un *conjunto* de versiones de entidades, no una versión q
 | [Ejercicio](/docs/schemas/exercise) | 1.2.0 | `/schemas/exercises/v1.2.0/exercise.schema.json` |
 | [Equipamiento](/docs/schemas/equipment) | 1.2.0 | `/schemas/equipment/v1.2.0/equipment.schema.json` |
 | [Músculo](/docs/schemas/muscle) | 1.1.0 | `/schemas/muscle/v1.1.0/muscle.schema.json` |
-| [Categoría de músculos](/docs/schemas/muscle-category) | 1.1.0 | `/schemas/muscle/muscle-category/v1.1.0/muscle-category.schema.json` |
+| [Categoría muscular](/docs/schemas/muscle-category) | 1.1.0 | `/schemas/muscle/muscle-category/v1.1.0/muscle-category.schema.json` |
 | [Atlas corporal](/docs/schemas/body-atlas) | 1.1.0 | `/schemas/atlas/v1.1.0/body-atlas.schema.json` |
 | [Sesión de entrenamiento](/docs/schemas/workout) | 1.2.0 | `/schemas/workout/v1.2.0/workout.schema.json` |
 | [Programa](/docs/schemas/program) | 1.1.0 | `/schemas/program/v1.1.0/program.schema.json` |
@@ -30,22 +30,22 @@ No existe `muscle/v1.6.0/`, y no existirá a menos que muscle mismo cambie. Cons
 ## Las entidades
 
 ### [Esquema de ejercicio](/docs/schemas/exercise) — v1.2.0
-El modelo de datos central de ejercicios, con clasificación, objetivos, equipamiento, métricas y medios.
+El modelo de datos central de ejercicios, con clasificación, objetivos, equipamiento, métricas y medios. La 1.2.0 agregó las [claves estructurales](/docs/core-concepts/structural-keys) opcionales: `fxi` en el ejercicio, `fxm` y `fxmg` en sus referencias de músculo, `fxe` en sus referencias de equipamiento.
 
 **Esquema:** `/schemas/exercises/v1.2.0/exercise.schema.json`
 
 ### [Esquema de equipamiento](/docs/schemas/equipment) — v1.2.0
-Definiciones de equipamiento de fitness con clasificación, características de carga y metadatos.
+Definiciones de equipamiento de fitness con clasificación, características de carga y metadatos. La 1.2.0 agregó la clave estructural opcional `fxe`.
 
 **Esquema:** `/schemas/equipment/v1.2.0/equipment.schema.json`
 
 ### [Esquema de músculo](/docs/schemas/muscle) — v1.1.0
-Definiciones anatómicas de músculos con visualización de mapa de calor.
+Definiciones anatómicas de músculos con visualización de mapa de calor. La 1.1.0 agregó la clave estructural opcional `fxm`.
 
 **Esquema:** `/schemas/muscle/v1.1.0/muscle.schema.json`
 
-### [Esquema de categoría de músculos](/docs/schemas/muscle-category) — v1.1.0
-Estructura de agrupación y categorización de músculos.
+### [Esquema de categoría muscular](/docs/schemas/muscle-category) — v1.1.0
+Estructura de agrupación y categorización de músculos. La 1.1.0 agregó la clave estructural opcional `fxmg`.
 
 **Esquema:** `/schemas/muscle/muscle-category/v1.1.0/muscle-category.schema.json`
 
@@ -55,19 +55,19 @@ Estructura de visualización del cuerpo con vistas y áreas. La 1.1.0 agregó un
 **Esquema:** `/schemas/atlas/v1.1.0/body-atlas.schema.json`
 
 ### [Esquema de sesión de entrenamiento](/docs/schemas/workout) — v1.2.0
-Una sesión prescrita: bloques de elementos, un modo de ejecución por bloque y una prescripción por serie. La 1.1.0 agregó zonas de intensidad por serie y ajustes de máquina (RFC-007 §6).
+Una sesión prescrita: bloques de elementos, un modo de ejecución por bloque y una prescripción por serie. La 1.1.0 agregó zonas de intensidad por serie y ajustes de máquina (RFC-007 §6). La 1.2.0 permite que sus referencias de ejercicio, de músculo y de equipamiento lleven sus claves estructurales.
 
 **Esquema:** `/schemas/workout/v1.2.0/workout.schema.json`
 
 ### [Esquema de programa](/docs/schemas/program) — v1.1.0
-Un cronograma de referencias a sesiones de entrenamiento a lo largo del tiempo: ciclos, semanas, ubicación de días, progresión y ramificación.
+Un cronograma de referencias a sesiones de entrenamiento a lo largo del tiempo: ciclos, semanas, ubicación de días, progresión y ramificación. La 1.1.0 permite que la referencia de ejercicio de un *slot* de máximo de entrenamiento lleve su `fxi`.
 
 **Esquema:** `/schemas/program/v1.1.0/program.schema.json`
 
 ## Bibliotecas de definiciones
 
 ### [Primitivas de prescripción](/docs/schemas/prescription) — v1.1.0
-Carga, repeticiones, tempo, descanso, zonas de intensidad, esquemas de series y reglas de progresión — las definiciones que las sesiones de entrenamiento y los programas componen.
+Carga, repeticiones, tempo, descanso, zonas de intensidad, esquemas de series y reglas de progresión — las definiciones que las sesiones de entrenamiento y los programas componen. La 1.1.0 permite que la referencia de equipamiento de una carga de resistencia de banda lleve su `fxe`.
 
 **Esquema:** `/schemas/prescription/v1.1.0/prescription.schema.json`
 
@@ -107,17 +107,17 @@ La 1.1.0 exige `provider` en la entrada de un modelo: el proveedor de enriquecim
 
 ### Antes de las claves estructurales
 
-| Schema | Version | Superseded by | Named by releases |
+| Esquema | Versión | Sustituido por | Nombrado por los lanzamientos |
 |---|---|---|---|
-| `/schemas/exercises/v1.1.0/exercise.schema.json` | 1.1.0 | 1.2.0 | 1.1.0 through 1.5.0 |
-| `/schemas/equipment/v1.1.0/equipment.schema.json` | 1.1.0 | 1.2.0 | 1.1.0 through 1.5.0 |
-| `/schemas/muscle/v1.0.0/muscle.schema.json` | 1.0.0 | 1.1.0 | 1.0.0 through 1.5.0 |
-| `/schemas/muscle/muscle-category/v1.0.0/muscle-category.schema.json` | 1.0.0 | 1.1.0 | 1.0.0 through 1.5.0 |
-| `/schemas/prescription/v1.0.0/prescription.schema.json` | 1.0.0 | 1.1.0 | 1.2.0 through 1.5.0 |
-| `/schemas/workout/v1.1.0/workout.schema.json` | 1.1.0 | 1.2.0 | 1.4.0 and 1.5.0 |
-| `/schemas/program/v1.0.0/program.schema.json` | 1.0.0 | 1.1.0 | 1.3.0 through 1.5.0 |
+| `/schemas/exercises/v1.1.0/exercise.schema.json` | 1.1.0 | 1.2.0 | 1.1.0 a 1.5.0 |
+| `/schemas/equipment/v1.1.0/equipment.schema.json` | 1.1.0 | 1.2.0 | 1.1.0 a 1.5.0 |
+| `/schemas/muscle/v1.0.0/muscle.schema.json` | 1.0.0 | 1.1.0 | 1.0.0 a 1.5.0 |
+| `/schemas/muscle/muscle-category/v1.0.0/muscle-category.schema.json` | 1.0.0 | 1.1.0 | 1.0.0 a 1.5.0 |
+| `/schemas/prescription/v1.0.0/prescription.schema.json` | 1.0.0 | 1.1.0 | 1.2.0 a 1.5.0 |
+| `/schemas/workout/v1.1.0/workout.schema.json` | 1.1.0 | 1.2.0 | 1.4.0 y 1.5.0 |
+| `/schemas/program/v1.0.0/program.schema.json` | 1.0.0 | 1.1.0 | 1.3.0 a 1.5.0 |
 
-El lanzamiento 1.6.0 sustituyó estas siete versiones al agregar las claves estructurales opcionales. Cada una sigue publicada y congelada, porque un cliente fijado a un lanzamiento que la nombra debe poder seguir resolviéndola. No construir contra ellas: todo documento válido bajo una de ellas es válido bajo su sucesora, ya que las claves son opcionales. Los ejemplos están junto a las versiones actuales.
+El lanzamiento 1.6.0 sustituyó estas siete versiones al agregar las claves estructurales opcionales. Cada una sigue publicada y congelada, porque un cliente fijado a un lanzamiento que la nombra debe poder seguir resolviéndola. No construir contra ellas: todo documento válido bajo una de ellas es válido bajo su sucesora, ya que las claves son opcionales. Los ejemplos resueltos están junto a las versiones actuales.
 
 ### Mapeo del Transformer — v1.2.0
 

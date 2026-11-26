@@ -13,6 +13,41 @@ Format je inspirisan pristupom Keep a Changelog, a projekat se pridržava semant
 ## [Neobjavljeno]
 - Politika imenskog prostora ekstenzija (nacrt) i odeljci o usaglašenosti (planirano).
 
+## Izdanje šeme — exercise 1.2.0, equipment 1.2.0, workout 1.2.0, muscle 1.1.0, muscle-category 1.1.0, prescription 1.1.0, program 1.1.0 (2026-11-26)
+
+### Dodato
+- Opcioni strukturni ključevi, svaki string čiji obrazac proverava samo
+  zaglavlje: `fxi` na vežbi (exercise 1.2.0), `fxe` na komadu opreme
+  (equipment 1.2.0), `fxm` na mišiću (muscle 1.1.0) i `fxmg` na kategoriji
+  mišića (muscle-category 1.1.0). Ključ opisuje stvar kodovima koje standard
+  objavljuje, pa dva kataloga mogu da pronađu isti zapis kako god ga zvali.
+  Nije identifikator. Pogledajte Osnovni koncepti → Strukturni ključevi.
+- Isti ključevi na svakoj referenci koja imenuje vežbu, komad opreme ili mišić
+  preko ID-ja i imena: `fxi` na referenci na vežbu, `fxe` na referenci na
+  opremu, i `fxm` sa `fxmg` kategorije mišića na referenci na mišić. Nose ih
+  exercise, workout, program i opterećenje elastičnom trakom iz biblioteke
+  preskripcija.
+
+### Izmenjeno
+- Izdanje **1.6.0** imenuje exercise, equipment i workout na 1.2.0, a muscle,
+  muscle-category, prescription i program na 1.1.0. Body-atlas ostaje na
+  1.1.0.
+- Transformator uključuje izdanje 1.6.0 i podrazumevano ga koristi. Izdanja od
+  1.0.0 do 1.5.0 ostaju uključena.
+- Primeri se premeštaju pored svojih novih šema i nose ključeve onoga što
+  imenuju. Primeri imenuju pojedinačne mišiće; grupa kao što je kvadriceps je
+  zapis kategorije mišića sa `fxmg`.
+
+### Kompatibilnost
+- Čisto aditivno. Svaki dokument validan pod prethodnim verzijama validira se
+  prema novim nepromenjen; dokument koji koristi ključ prethodne šeme
+  odbacuju, i upravo to ovo čini verzijom, a ne izmenom.
+- **`exercises/v1.1.0/`, `equipment/v1.1.0/`, `muscle/v1.0.0/`,
+  `muscle/muscle-category/v1.0.0/`, `prescription/v1.0.0/`, `workout/v1.1.0/`
+  i `program/v1.0.0/` ostaju objavljeni i zamrznuti.** Izdanja do 1.5.0 ih
+  imenuju, a klijent fiksiran na bilo koje od tih izdanja mora i dalje moći da
+  ih razrešava.
+
 ## Izdanje šeme — body-atlas 1.1.0 (2026-11-14)
 
 ### Dodato

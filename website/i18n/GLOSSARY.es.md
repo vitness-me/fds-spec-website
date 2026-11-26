@@ -197,3 +197,31 @@ En las cadenas de la interfaz se usan comillas inglesas ("…"); las angulares
 | wearable | wearable | «dispositivos wearables» |
 | Standards Track | Standards Track | nombre del proceso RFC; sin traducir |
 | RFC 2119 en plural | DEBEN / DEBERÍAN | la concordancia flexiona la palabra clave, nunca la modalidad |
+| structural key | clave estructural | los campos `fxi`, `fxe`, `fxm`, `fxmg` y los encabezados (`FXI=1.0S`…) no se traducen |
+| exercise key / equipment key | clave de ejercicio / clave de equipamiento | |
+| muscle key / muscle category key | clave de músculo / clave de categoría muscular | |
+| layer | capa | «la capa de carga», «capas extendidas» |
+| dimension | dimensión | |
+| code | código | los códigos (`el.flex`, `bell.dumb`…) no se traducen |
+| symbol | símbolo | |
+| flag (S / N) | indicador | el valor `S` o `N` no se traduce |
+| header | encabezado | |
+| body point / hold point | punto corporal / punto de sujeción | los valores (`hands`, `feet`…) no se traducen |
+| body position | posición corporal | |
+| form (`f`) | forma | |
+| kind (`k`) | clase | nunca «tipo», que traduce *type* (`classification.type`) |
+| implement | implemento | |
+| support | apoyo | la clase `sup` y la capa `s` de la clave de ejercicio |
+| station | estación | `cable`, `smith`, `landmine` |
+| strength machine / cardio machine | máquina de fuerza / máquina de cardio | |
+| accessory | accesorio | |
+| load interface / posture / track | interfaz de carga / postura / guía | capas de la clave de equipamiento |
+| same / more specific / different / overlap | igual / más específico / distinto / solapamiento | resultados de comparación; los valores `same`, `more-specific`… no se traducen. «se solapan» como verbo |
+| in / partly in / not in | dentro / parcialmente dentro / fuera | un músculo en una categoría; los valores `in`, `partly-in`, `not-in` no se traducen |
+| owner | propietario | quien escribe las claves de sus propios registros |
+| member | miembro | los miembros de una categoría |
+| union | unión | |
+| compartment | compartimento | |
+| prime mover | motor principal | «los motores principales de la flexión de cadera» |
+| Encoder | FDS Encoder | nombre propio; sin traducir, masculino: «el Encoder» |
+| conformance case | caso de conformidad | véase *conformance* más arriba |

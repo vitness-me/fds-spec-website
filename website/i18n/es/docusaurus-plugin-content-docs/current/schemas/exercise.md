@@ -4,7 +4,7 @@ description: JSON Schema del modelo de datos de ejercicio
 sidebar_position: 2
 ---
 
-# Esquema de ejercicio (v1.1.0)
+# Esquema de ejercicio (v1.2.0)
 
 El esquema de ejercicio define el modelo de datos central para ejercicios de fitness. Incluye clasificación, músculos objetivo, requisitos de equipamiento y recursos de medios.
 
@@ -31,9 +31,10 @@ Para información detallada sobre el modelo de datos de ejercicio, véase [RFC-0
 
 - `id`: identificador UUID
 - `schemaVersion`: cadena de versión (p. ej., "1.0.0")
+- `fxi`: [clave de ejercicio](/docs/core-concepts/structural-keys/exercise-key) opcional, la clave estructural del ejercicio
 - `canonical`: nomenclatura estandarizada con slug y alias
 - `classification`: tipo de ejercicio, mecánica, fuerza, nivel, cadena cinética
-- `targets`: músculos objetivo primarios y secundarios con niveles de activación
-- `equipment`: equipamiento obligatorio, opcional y alternativo
+- `targets`: músculos objetivo primarios y secundarios con niveles de activación; cada referencia puede llevar el `fxm` del músculo y el `fxmg` de su categoría
+- `equipment`: equipamiento obligatorio, opcional y alternativo; cada referencia puede llevar su `fxe`
 - `media`: imágenes, videos y diagramas
 - `metadata`: estado, marcas de tiempo, autoría

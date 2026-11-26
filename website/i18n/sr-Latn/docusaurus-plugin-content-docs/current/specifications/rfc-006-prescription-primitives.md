@@ -128,6 +128,8 @@ Trinaest definisanih metoda plus grana unapredne kompatibilnosti. Sve metode osi
 | `autoregulated` | `progressionRuleRef` | Ne — potrebno je stanje pravila |
 | `none` | — | Da |
 
+`equipment` u `bandResistance` je referenca na opremu iz RFC-001 i može nositi strukturni ključ trake u `fxe`. Pogledajte [Ključ opreme](../core-concepts/structural-keys/equipment-key).
+
 Tri od njih nose semantiku koju konzument može pogrešno shvatiti na način koji validacija ne može da uhvati:
 
 **`percent1RM` sa `referenceExerciseId`** izražava „70% vašeg maksimuma za jedno ponavljanje u zadnjem čučnju“ na vežbi koja nije zadnji čučanj — uobičajen slučaj u pomoćnom radu i u programima vođenim procentima, gde se svako dizanje skalira prema nekoliko referentnih dizanja. Kada je odsutan, referenca je sama propisana vežba.
