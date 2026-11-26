@@ -259,19 +259,18 @@ export function describeProperty(entry, root) {
     s = { ...target, ...own, $ref: target.$ref };
   }
   const via = [...seen][0];
-  const pick = (k) => (s[k] === undefined ? undefined : s[k]);
   const itemType = isPlainObject(s.items) ? s.items.type ?? (s.items.$ref ? `ref ${s.items.$ref}` : undefined) : undefined;
   return {
     label: propertyLabel(entry.path),
     required: entry.required,
-    type: pick('type') ?? (s.oneOf ? 'oneOf' : s.anyOf ? 'anyOf' : undefined),
+    type: s.type ?? (s.oneOf ? 'oneOf' : s.anyOf ? 'anyOf' : undefined),
     itemType,
-    ref: via ?? pick('$ref'),
-    pattern: pick('pattern') ?? (isPlainObject(s.items) ? s.items.pattern : undefined),
-    format: pick('format'),
-    enum: pick('enum'),
-    const: pick('const'),
-    description: pick('description'),
+    ref: via ?? s.$ref,
+    pattern: s.pattern ?? (isPlainObject(s.items) ? s.items.pattern : undefined),
+    format: s.format,
+    enum: s.enum,
+    const: s.const,
+    description: s.description,
   };
 }
 

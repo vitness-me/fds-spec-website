@@ -40,11 +40,13 @@ import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { mkdir, readdir, rm, writeFile } from 'node:fs/promises';
 import { basename, dirname, join, resolve } from 'node:path';
 import { parseArgs } from 'node:util';
+import { MANIFEST_PATH, PUBLISHED_DIRS, indexManifest } from './lib/releases.mjs';
 import {
   KEY_FIELDS,
   deepEqual,
   diffLines,
   formatPath,
+  isPlainObject,
   jsonDiff,
   keyFieldOccurrences,
   summarizeSchemaChange,
@@ -64,11 +66,10 @@ if (opts['self-test']) {
   process.exit(selfTest());
 }
 
-const SCHEMAS_DIR = 'specification/schemas/';
-const MANIFEST = 'specification/releases.json';
+const SCHEMAS_DIR = `${PUBLISHED_DIRS.schemas}/`;
 const SCANNED_ROOTS = ['specification', 'website/docs', 'README.md', 'SCHEMAS.md'];
 const MARKER = '.schema-review-output';
-let prepared = false;
+const isSchemaFile = (p) => p.startsWith(SCHEMAS_DIR) && p.endsWith('.schema.json');
 
 let Ajv;
 let addFormats;
@@ -80,7 +81,9 @@ try {
   process.exit(1);
 }
 
-const repo = resolve(opts.repo.replace(/^~(?=\/)/, process.env.HOME));
+const expandHome = (p) => resolve(p.replace(/^~(?=\/)/, process.env.HOME));
+const repo = expandHome(opts.repo);
+const outDir = expandHome(opts.out);
 const git = (...args) =>
   execFileSync('git', ['-C', repo, ...args], { encoding: 'utf8', maxBuffer: 1 << 28, stdio: ['ignore', 'pipe', 'pipe'] });
 
@@ -145,23 +148,16 @@ const parse = (text, where) => {
   }
 };
 
-const baseManifest = base.read(MANIFEST) ? parse(base.read(MANIFEST), MANIFEST).value : null;
-const headManifest = head.read(MANIFEST) ? parse(head.read(MANIFEST), MANIFEST).value : null;
-
-/** published path → { name, kind, status } from either manifest. */
-function manifestIndex(manifest) {
-  const map = new Map();
-  for (const [name, entry] of Object.entries(manifest?.schemas ?? {})) {
-    for (const [version, rec] of Object.entries(entry.versions ?? {})) {
-      if (rec.path) map.set(rec.path, { name, kind: entry.kind, status: rec.status, frozen: rec.frozen, version });
-    }
-  }
-  return map;
-}
-const baseIndex = manifestIndex(baseManifest);
-const headIndex = manifestIndex(headManifest);
+const baseManifestText = base.read(MANIFEST_PATH) ?? '';
+const headManifestText = head.read(MANIFEST_PATH) ?? '';
+const baseManifest = baseManifestText ? parse(baseManifestText, MANIFEST_PATH).value : null;
+const headManifest = headManifestText ? parse(headManifestText, MANIFEST_PATH).value : null;
+const baseIndex = indexManifest(baseManifest ?? {}).byPath;
+const headIndex = indexManifest(headManifest ?? {}).byPath;
 
 const VERSION_DIR = /\/v(\d+\.\d+\.\d+)\//;
+/** A path with its `vX.Y.Z` directory set aside, shared by every version of one schema. */
+const familyOf = (path) => path.replace(/(^|\/)v\d+\.\d+\.\d+(?=\/|$)/, '$1{v}');
 const cmpVersion = (a, b) => {
   const pa = a.split('.').map(Number);
   const pb = b.split('.').map(Number);
@@ -172,21 +168,20 @@ const cmpVersion = (a, b) => {
 /** A published schema file, described by its place in the tree. */
 function schemaInfo(path) {
   const rel = path.slice(SCHEMAS_DIR.length);
-  const m = rel.match(VERSION_DIR) ?? `/${rel}`.match(VERSION_DIR);
-  const version = m ? m[1] : '?';
-  const family = rel.replace(/(^|\/)v\d+\.\d+\.\d+\//, '$1{v}/');
+  const version = `/${rel}`.match(VERSION_DIR)?.[1] ?? '?';
+  const family = familyOf(rel);
   const meta = headIndex.get(rel) ?? baseIndex.get(rel);
   const name = meta?.name ?? basename(rel).replace(/\.schema\.json$/, '');
   return { path, rel, version, family, name, kind: meta?.kind ?? 'unlisted', dir: dirname(path) };
 }
 
-const schemaFiles = (tree) => tree.files.filter((p) => p.startsWith(SCHEMAS_DIR) && p.endsWith('.schema.json')).map(schemaInfo);
+const schemaFiles = (tree) => tree.files.filter(isSchemaFile).map(schemaInfo);
 const baseSchemas = schemaFiles(base);
 const headSchemas = schemaFiles(head);
 const baseByPath = new Map(baseSchemas.map((s) => [s.path, s]));
 const headByPath = new Map(headSchemas.map((s) => [s.path, s]));
 
-const changes = []; // { status: 'added' | 'changed', old?, new }
+const changes = []; // { status: 'edited in place' | 'new version' | 'new schema', old?, new }
 const unchanged = [];
 for (const s of headSchemas) {
   if (baseByPath.has(s.path)) {
@@ -246,7 +241,7 @@ function validateWith(compiled, doc, expectInvalid = false) {
     : compiled.validate.errors.map(
         (e) => `${e.instancePath || '(root)'} ${e.message}${Object.keys(e.params ?? {}).length ? ` ${JSON.stringify(e.params)}` : ''}`
       );
-  if (expectInvalid) return { ok: !valid, rejected: !valid, errors: valid ? ['accepted, but this fixture must be rejected'] : [] , reasons: errors };
+  if (expectInvalid) return { ok: !valid, errors: valid ? ['accepted, but this fixture must be rejected'] : [], reasons: errors };
   return { ok: valid, errors };
 }
 
@@ -267,8 +262,7 @@ function examplesIn(tree, info) {
   const re = exampleRe(info);
   return tree.files.filter((p) => {
     if (!p.startsWith(SCHEMAS_DIR) || !re.test(basename(p))) return false;
-    const dirFamily = dirname(p.slice(SCHEMAS_DIR.length)).replace(/(^|\/)v\d+\.\d+\.\d+$/, '$1{v}');
-    return dirFamily === dirname(info.family);
+    return familyOf(dirname(p.slice(SCHEMAS_DIR.length))) === dirname(info.family);
   });
 }
 
@@ -299,7 +293,7 @@ function docBlocks(tree, shapes) {
       const marked = info.match(/fds:document\s+entity=([\w-]+)/)?.[1];
       let entity = marked;
       const doc = parsed.value;
-      if (!entity && isRecord(doc)) {
+      if (!entity && isPlainObject(doc)) {
         if (typeof doc.$schema === 'string') entity = shapes.byId.get(doc.$schema);
         if (!entity && 'schemaVersion' in doc) {
           const keys = Object.keys(doc);
@@ -314,7 +308,6 @@ function docBlocks(tree, shapes) {
   }
   return found;
 }
-const isRecord = (x) => x !== null && typeof x === 'object' && !Array.isArray(x);
 
 // Current entity shapes on the head side, for attributing unmarked doc blocks.
 const shapes = { byName: new Map(), byId: new Map() };
@@ -337,7 +330,9 @@ const compact = (v, max = 400) => {
   const s = v === undefined ? 'undefined' : JSON.stringify(v);
   return s.length > max ? `${s.slice(0, max)}…` : s;
 };
-const KEY_RE = new RegExp(`^"(${KEY_FIELDS.join('|')})"$`);
+const KEY_ALT = KEY_FIELDS.join('|');
+const KEY_RE = new RegExp(`^"(${KEY_ALT})"$`);
+const KEY_LINE_RE = new RegExp(`^(\\s*)"(${KEY_ALT})"\\s*:\\s*(.*)$`);
 
 /** One line of pretty JSON with light token colouring and the key fields marked. */
 function jsonLine(line) {
@@ -363,7 +358,7 @@ function markedLines(text) {
   const lines = text.split('\n');
   const marked = new Array(lines.length).fill(false);
   for (let i = 0; i < lines.length; i++) {
-    const m = lines[i].match(new RegExp(`^(\\s*)"(${KEY_FIELDS.join('|')})"\\s*:\\s*(.*)$`));
+    const m = lines[i].match(KEY_LINE_RE);
     if (!m) continue;
     marked[i] = true;
     if (/[[{]$/.test(m[3])) {
@@ -392,10 +387,7 @@ function codeView(text, { search = true } = {}) {
 
 /** Side-by-side line diff, unchanged runs folded; stacks into one column on a phone. */
 function sideBySide(oldText, newText, { context = 3, foldMin = 8 } = {}) {
-  const a = oldText.split('\n');
-  const b = newText.split('\n');
-  const am = markedLines(oldText);
-  const bm = markedLines(newText);
+  const lines = { l: markedLines(oldText), r: markedLines(newText) };
   const rows = [];
   let dels = [];
   let adds = [];
@@ -423,8 +415,8 @@ function sideBySide(oldText, newText, { context = 3, foldMin = 8 } = {}) {
   const cell = (side, idx, cls) =>
     idx === undefined
       ? `<div class="c ${side} empty"></div>`
-      : `<div class="c ${side} ${cls}${(side === 'l' ? am : bm)[idx].fx ? ' fxl' : ''}"><span class="no">${idx + 1}</span>` +
-        `<span class="t">${jsonLine((side === 'l' ? a : b)[idx]) || ' '}</span></div>`;
+      : `<div class="c ${side} ${cls}${lines[side][idx].fx ? ' fxl' : ''}"><span class="no">${idx + 1}</span>` +
+        `<span class="t">${jsonLine(lines[side][idx].text) || ' '}</span></div>`;
   const rowHtml = (r) =>
     r.kind === 'eq'
       ? `<div class="row eq">${cell('l', r.l, '')}${cell('r', r.r, '')}</div>`
@@ -578,13 +570,13 @@ const pretty = (text) => {
 
 // ── Per-schema pages ─────────────────────────────────────────────────────────
 
+await prepareOutDir();
 const results = [];
 for (const c of changes) {
   const oldText = c.old ? base.read(c.old.path) : null;
   const newText = head.read(c.new.path);
-  const oldParsed = oldText === null ? null : parse(oldText, c.old.path);
   const newParsed = parse(newText, c.new.path);
-  const oldSchema = oldParsed?.value ?? null;
+  const oldSchema = oldText === null ? null : parse(oldText, c.old.path).value ?? null;
   const newSchema = newParsed.value ?? null;
   const summary = summarizeSchemaChange(oldSchema, newSchema);
   const oldValidator = validators(oldSchema);
@@ -746,8 +738,6 @@ function manifestSummary(a, b) {
   return notes;
 }
 
-const baseManifestText = base.read(MANIFEST) ?? '';
-const headManifestText = head.read(MANIFEST) ?? '';
 let manifestHtml;
 if (baseManifestText === headManifestText) manifestHtml = '<p class="muted">Unchanged.</p>';
 else {
@@ -765,10 +755,10 @@ const otherChanged = git('diff', '--name-status', ...diffArgs, '--', 'specificat
   .split('\n')
   .filter(Boolean)
   .map((l) => l.split('\t'))
-  .filter(([, p]) => !(p.startsWith(SCHEMAS_DIR) && p.endsWith('.schema.json')) && p !== MANIFEST);
+  .filter(([, p]) => !isSchemaFile(p) && p !== MANIFEST_PATH);
 if (!opts.head) {
   for (const p of git('ls-files', '--others', '--exclude-standard', '--', 'specification').split('\n').filter(Boolean)) {
-    if (!(p.startsWith(SCHEMAS_DIR) && p.endsWith('.schema.json'))) otherChanged.push(['?', p]);
+    if (!isSchemaFile(p)) otherChanged.push(['?', p]);
   }
 }
 
@@ -797,7 +787,7 @@ const indexBody =
   (removedSchemas.length
     ? `<h2>Removed schemas (${removedSchemas.length})</h2><ul>${removedSchemas.map((s) => `<li><code>${esc(s.path)}</code> (${esc(s.name)} ${esc(s.version)})</li>`).join('')}</ul>`
     : '') +
-  `<h2>Release manifest</h2><p class="meta"><code>${MANIFEST}</code></p>${manifestHtml}` +
+  `<h2>Release manifest</h2><p class="meta"><code>${MANIFEST_PATH}</code></p>${manifestHtml}` +
   `<h2>Other specification changes (${otherChanged.length})</h2>` +
   (otherChanged.length
     ? `<details class="box"><summary>${otherChanged.length} file${otherChanged.length === 1 ? '' : 's'} under specification/</summary><ul>${otherChanged
@@ -811,35 +801,30 @@ const indexBody =
 await writeOut('index.html', page('Schema review', indexBody));
 console.log(
   `schema-review: ${changes.length} changed, ${removedSchemas.length} removed, ${unchanged.length} unchanged; ` +
-    `manifest ${baseManifestText === headManifestText ? 'unchanged' : 'changed'} → ${join(outDir(), 'index.html')}`
+    `manifest ${baseManifestText === headManifestText ? 'unchanged' : 'changed'} → ${join(outDir, 'index.html')}`
 );
 
 // ── Output ───────────────────────────────────────────────────────────────────
 
-function outDir() {
-  return resolve(opts.out.replace(/^~(?=\/)/, process.env.HOME));
+/**
+ * Empties the output directory, but only one this script made (it carries a
+ * marker file) or an empty one, and marks it as this script's.
+ */
+async function prepareOutDir() {
+  if (existsSync(outDir)) {
+    const entries = await readdir(outDir);
+    if (entries.length && !entries.includes(MARKER)) {
+      console.error(`schema-review: ${outDir} exists and was not written by this script; choose another --out`);
+      process.exit(1);
+    }
+    for (const e of entries) await rm(join(outDir, e), { recursive: true, force: true });
+  }
+  await mkdir(outDir, { recursive: true });
+  await writeFile(join(outDir, MARKER), 'Written by scripts/schema-review.mjs; emptied on every run.\n');
 }
 
-/**
- * Writes one page. The first write empties the output directory, but only one
- * this script made (it carries a marker file) or an empty one.
- */
-async function writeOut(name, html) {
-  const dir = outDir();
-  if (!prepared) {
-    if (existsSync(dir)) {
-      const entries = await readdir(dir);
-      if (entries.length && !entries.includes(MARKER)) {
-        console.error(`schema-review: ${dir} exists and was not written by this script; choose another --out`);
-        process.exit(1);
-      }
-      for (const e of entries) await rm(join(dir, e), { recursive: true, force: true });
-    }
-    await mkdir(dir, { recursive: true });
-    await writeFile(join(dir, MARKER), 'Written by scripts/schema-review.mjs; emptied on every run.\n');
-    prepared = true;
-  }
-  await writeFile(join(dir, name), html);
+function writeOut(name, html) {
+  return writeFile(join(outDir, name), html);
 }
 
 // ── self-test ────────────────────────────────────────────────────────────────
