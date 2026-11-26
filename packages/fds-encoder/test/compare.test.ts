@@ -52,8 +52,9 @@ describe('FXI compare', () => {
   test('defaults are values: the explicit default code equals the absent layer', () => {
     expect(compare(BASE, `${BASE}/k:limbs/f:level/x:b/g:pr+w-m+st-m/h:none/p:usual`).relation).toBe('identical');
   });
-  test('o and l have no published default: left out they are ?', () => {
-    expect(compare('FXI=1.0S/m:el.flex', 'FXI=1.0S/m:el.flex/o:standing/l:bell.dumb@hands').relation).toBe('refined-by');
+  test('o and l have no default: a key must write them, ? when unknown', () => {
+    expect(compare('FXI=1.0S/m:el.flex', 'FXI=1.0S/m:el.flex/o:standing/l:bell.dumb@hands').relation).toBe('invalid');
+    expect(compare('FXI=1.0S/m:el.flex/o:?/l:?', 'FXI=1.0S/m:el.flex/o:standing/l:bell.dumb@hands').relation).toBe('refined-by');
   });
   test('range codes unify as an open set', () => {
     const dl = 'FXI=1.0S/m:hip.ext+kn.ext/o:standing/l:bar.straight@hands';

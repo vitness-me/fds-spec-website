@@ -79,6 +79,8 @@ export function parseFxi(input: string): ParsedFxi {
 
   const L: Partial<Record<FxiLayer, string>> = {};
   if (!raw.has('m')) log.add('missing-motion', 'The motion layer (m) is required; write m:? if it is unknown.');
+  if (!raw.has('o')) log.add('missing-orientation', 'The orientation layer (o) is required; write o:? if it is unknown.');
+  if (!raw.has('l')) log.add('missing-load', 'The load layer (l) is required; write l:? if it is unknown.');
   L.m = readMotion(raw.get('m') ?? UNKNOWN, log);
   L.o = readSequence(raw.get('o') ?? UNKNOWN, ORIENTATIONS, 'an orientation', log);
   const start = L.o === UNKNOWN || L.o === GENERIC ? UNKNOWN : L.o.split('>')[0]!;

@@ -26,7 +26,13 @@ describe('canonicalisation', () => {
     expect(a).toBe('FXI=1.0S/m:el.ext+sh.hadd/o:prone/s:floor@feet,hands/l:none/g:w-t');
     expect(canon(a)).toBe(a);
   });
-  test('writes o and l as ? when left out', () => expect(canon('FXI=1.0/m:el.flex')).toBe('FXI=1.0S/m:el.flex/o:?/l:?'));
+  test('requires m, o and l, and keeps a written ?', () => {
+    expect(issues('FXI=1.0/o:standing/l:none')).toContain('missing-motion');
+    expect(issues('FXI=1.0/m:el.flex/l:none')).toContain('missing-orientation');
+    expect(issues('FXI=1.0/m:el.flex/o:standing')).toContain('missing-load');
+    expect(issues('FXI=1.0/m:el.flex')).toEqual(['missing-orientation', 'missing-load']);
+    expect(canon('FXI=1.0/m:?/o:?/l:?')).toBe('FXI=1.0S/m:?/o:?/l:?');
+  });
   test('drops implied points and a bare floor', () => {
     expect(canon('FXI=1.0/m:el.ext+sh.flex/o:prone.pike/s:floor@feet,hands/l:none')).toBe('FXI=1.0S/m:el.ext+sh.flex/o:prone.pike/l:none');
     expect(canon('FXI=1.0/m:hip.ext/o:standing/s:floor@feet/l:none')).toBe('FXI=1.0S/m:hip.ext/o:standing/l:none');
