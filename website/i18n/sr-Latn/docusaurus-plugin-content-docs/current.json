@@ -3,6 +3,10 @@
     "message": "Osnovni koncepti",
     "description": "The label for category 'Core Concepts' in sidebar 'mainSidebar'"
   },
+  "sidebar.mainSidebar.category.FDS Encoder": {
+    "message": "FDS Encoder",
+    "description": "The label for category 'FDS Encoder' in sidebar 'mainSidebar'"
+  },
   "sidebar.mainSidebar.category.FDS Transformer": {
     "message": "FDS Transformer",
     "description": "The label for category 'FDS Transformer' in sidebar 'mainSidebar'"

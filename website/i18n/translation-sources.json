@@ -1,7 +1,7 @@
 {
   "es": {
     "code.json": "571ab516715737571efd66953b46ab986b152f325f0ecb7bac8cbec7daa97497",
-    "docusaurus-plugin-content-docs/current.json": "f559383c50eae1d158b6e04bdbaf02dccd54ee0e91caadc76efc23f9744bd10b",
+    "docusaurus-plugin-content-docs/current.json": "d59a24653349d760f43a776101bb4521d143183bfa13484f83928849685187d3",
     "docusaurus-plugin-content-docs/current/core-concepts/discovery.md": "8e3593ac664530de7176c253ed2d0f1bc1eaa343efb63a14f0b6cdbc824dfafa",
     "docusaurus-plugin-content-docs/current/core-concepts/extensions.md": "566b60d5ff8d1915c4013a58a71718f6f8db222d46e41a6412bf08a1efe1a158",
     "docusaurus-plugin-content-docs/current/core-concepts/internationalization.md": "88fe4021ea8bb89290eced4c873b135d7b549d6bfefa0a05163b233af02af012",
@@ -54,7 +54,7 @@
   },
   "sr-Latn": {
     "code.json": "571ab516715737571efd66953b46ab986b152f325f0ecb7bac8cbec7daa97497",
-    "docusaurus-plugin-content-docs/current.json": "f559383c50eae1d158b6e04bdbaf02dccd54ee0e91caadc76efc23f9744bd10b",
+    "docusaurus-plugin-content-docs/current.json": "d59a24653349d760f43a776101bb4521d143183bfa13484f83928849685187d3",
     "docusaurus-plugin-content-docs/current/core-concepts/discovery.md": "8e3593ac664530de7176c253ed2d0f1bc1eaa343efb63a14f0b6cdbc824dfafa",
     "docusaurus-plugin-content-docs/current/core-concepts/extensions.md": "566b60d5ff8d1915c4013a58a71718f6f8db222d46e41a6412bf08a1efe1a158",
     "docusaurus-plugin-content-docs/current/core-concepts/internationalization.md": "88fe4021ea8bb89290eced4c873b135d7b549d6bfefa0a05163b233af02af012",

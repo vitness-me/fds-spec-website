@@ -766,6 +766,4 @@ Every exercise the first search finds is more specific than this key. The barbel
 
 ## Building keys
 
-You can write a key by hand by following this page, or generate one with the FDS Encoder.
-
-<!-- TODO: link the Encoder page under Tools once it exists. -->
+You can write a key by hand by following this page, or generate one with the [FDS Encoder](../../tools/encoder/index.md).

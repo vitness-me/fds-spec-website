@@ -303,6 +303,4 @@ To group a catalog's muscles under its own categories, place each muscle key in 
 
 ## Building keys
 
-You can write a key by hand by following this page, or generate one with the FDS Encoder.
-
-<!-- TODO: link the Encoder page under Tools once it exists. -->
+You can write a key by hand by following this page, or generate one with the [FDS Encoder](../../tools/encoder/index.md).

@@ -789,6 +789,4 @@ An exercise key uses the same codes, so the same searches find exercises: `l` ho
 
 ## Building keys
 
-You can write a key by hand by following this page, or generate one with the FDS Encoder.
-
-<!-- TODO: link the Encoder page under Tools once it exists. -->
+You can write a key by hand by following this page, or generate one with the [FDS Encoder](../../tools/encoder/index.md).

@@ -61,14 +61,12 @@ The same fields also appear wherever a record refers to an exercise, a muscle or
 
 ## Using keys
 
-To link two catalogs, compare the keys of their records and collect the candidates. An identical key is a strong match. Otherwise a person picks the right record from a short list. Keep each confirmed link in your own data, in `attributes` or `extensions`, so nobody has to find it again. You can write keys by hand by following each key's composition pattern, or generate them with the FDS Encoder.
+To link two catalogs, compare the keys of their records and collect the candidates. An identical key is a strong match. Otherwise a person picks the right record from a short list. Keep each confirmed link in your own data, in `attributes` or `extensions`, so nobody has to find it again. You can write keys by hand by following each key's composition pattern, or generate them with the [FDS Encoder](../tools/encoder/index.md).
 
 ## Where to go next
-
-<!-- TODO: link the Encoder page under Tools once it exists. -->
 
 - [Exercise key](./structural-keys/exercise-key.md): how `fxi` is built, its dimensions and codes.
 - [Equipment key](./structural-keys/equipment-key.md): how `fxe` is built.
 - [Muscle key](./structural-keys/muscle-key.md): how `fxm` is built.
 - [Muscle category key](./structural-keys/muscle-category-key.md): how `fxmg` is built.
-- Tools → Encoder: generate keys for your own records.
+- [FDS Encoder](../tools/encoder/index.md): build, check, compare and match keys for your own records.

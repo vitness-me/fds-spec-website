@@ -127,6 +127,19 @@ const sidebars: SidebarsConfig = {
             'tools/transformer/examples',
           ],
         },
+        {
+          type: 'category',
+          label: 'FDS Encoder',
+          collapsed: false,
+          items: [
+            'tools/encoder/index',
+            'tools/encoder/installation',
+            'tools/encoder/cli-reference',
+            'tools/encoder/library-api',
+            'tools/encoder/examples',
+            'tools/encoder/conformance',
+          ],
+        },
       ],
     },
     {
