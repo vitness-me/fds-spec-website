@@ -52,15 +52,24 @@ import {
   summarizeSchemaChange,
 } from './lib/schema-diff.mjs';
 
-const { values: opts } = parseArgs({
-  options: {
-    repo: { type: 'string', default: process.cwd() },
-    base: { type: 'string', default: 'origin/main' },
-    head: { type: 'string' },
-    out: { type: 'string', default: join(process.cwd(), '.schema-review') },
-    'self-test': { type: 'boolean', default: false },
-  },
-});
+function readOptions() {
+  try {
+    return parseArgs({
+      options: {
+        repo: { type: 'string', default: process.cwd() },
+        base: { type: 'string', default: 'origin/main' },
+        head: { type: 'string' },
+        out: { type: 'string', default: join(process.cwd(), '.schema-review') },
+        'self-test': { type: 'boolean', default: false },
+      },
+    }).values;
+  } catch (err) {
+    console.error(`schema-review: ${err.message}`);
+    process.exit(2);
+  }
+}
+
+const opts = readOptions();
 
 if (opts['self-test']) {
   process.exit(selfTest());
