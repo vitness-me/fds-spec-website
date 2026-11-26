@@ -112,6 +112,12 @@ describe('fds-encoder', () => {
     expect(await cli(['check', '--records', '--write', join(dir, 'w.json')])).toEqual({ code: 2, out: '', err: 'check --records needs a file: --records <file.json>.\n' });
     expect(await cli(['check', '--records', records, '--write'])).toEqual({ code: 2, out: '', err: '--write needs a path: --write <out.json>.\n' });
   });
+
+  test('check --write without --records is a usage error, not a key', async () => {
+    const out = join(dir, 'unwritten.json');
+    expect(await cli(['check', '--write', out, 'FXM=1.0/deltoid'])).toEqual({ code: 2, out: '', err: '--write needs --records: check --records <file.json> --write <out.json>.\n' });
+    expect(existsSync(out)).toBe(false);
+  });
 });
 
 describe('check --records --write', () => {

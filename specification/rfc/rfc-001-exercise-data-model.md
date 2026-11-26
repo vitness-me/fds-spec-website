@@ -325,7 +325,7 @@ Consumers MUST NOT reject an exercise that omits `loading`. Absence means unstat
 
 ## 5. Versioning and Compatibility
 
-**1.2.0** adds the optional `fxi` (§3.2), `fxm` and `fxmg` on a muscle reference (§4.3), and `fxe` on an equipment reference (§4.4).
+**1.2.0** added the optional `fxi` (§3.2), `fxm` and `fxmg` on a muscle reference (§4.3), and `fxe` on an equipment reference (§4.4).
 
 ### 5.1. Schema Versioning
 

@@ -1,4 +1,7 @@
 // The muscle categories a muscle category key (FXMG) may name. The published registry is generated from this file.
+// The anchor labels and ids, and the members of each FMA set, are quoted unchanged from the Foundational Model of
+// Anatomy Ontology (FMA) 5.1.0, University of Washington, under CC BY 3.0 Unported, and from Uberon, release
+// 2026-11-05, under CC BY 3.0.
 import { JOINT_ACTIONS } from './alphabet';
 import { fma, FXM_MUSCLES, noTerm, uberon } from './fxm-alphabet';
 import { FXM_PREFIX, FXMG_PREFIX } from './headers';

@@ -181,7 +181,7 @@ For complex platform-unique data structures:
 
 ## 5. Versioning and Compatibility
 
-**1.1.0** adds the optional `fxmg` (§3.2).
+**1.1.0** added the optional `fxmg` (§3.2).
 
 ### 5.1. Schema Versioning
 

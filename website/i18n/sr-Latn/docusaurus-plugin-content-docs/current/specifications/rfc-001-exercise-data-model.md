@@ -332,7 +332,7 @@ Konzumenti NE SMEJU da odbace vežbu koja izostavlja `loading`. Odsustvo znači 
 
 ## 5. Verzionisanje i kompatibilnost
 
-**1.2.0** dodaje opciono polje `fxi` (§3.2), `fxm` i `fxmg` na referenci mišića (§4.3) i `fxe` na referenci opreme (§4.4).
+**1.2.0** je dodala opciono polje `fxi` (§3.2), `fxm` i `fxmg` na referenci mišića (§4.3) i `fxe` na referenci opreme (§4.4).
 
 ### 5.1. Verzionisanje šema
 

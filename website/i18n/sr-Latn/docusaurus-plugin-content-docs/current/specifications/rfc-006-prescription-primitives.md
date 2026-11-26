@@ -252,7 +252,7 @@ Dodavanje metode u diskriminisanu uniju je SPOREDNA izmena: dokumenti važeći p
 
 Uklanjanje metode, ili sužavanje postojećeg sadržaja, je GLAVNA izmena.
 
-**1.1.0** dodaje opciono polje `fxe` na opremi za `bandResistance` (§4.1).
+**1.1.0** je dodala opciono polje `fxe` na opremi za `bandResistance` (§4.1).
 
 ## 7. Smernice za implementaciju
 

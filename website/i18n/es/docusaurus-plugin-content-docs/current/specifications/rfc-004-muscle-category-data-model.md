@@ -181,7 +181,7 @@ Para estructuras de datos complejas únicas de una plataforma:
 
 ## 5. Versionado y compatibilidad
 
-**1.1.0** agrega el campo opcional `fxmg` (§3.2).
+**1.1.0** agregó el campo opcional `fxmg` (§3.2).
 
 ### 5.1. Versionado del esquema
 

@@ -301,6 +301,7 @@ async function dispatch(args: readonly string[]): Promise<number> {
       if (out === null) { warn('--write needs a path: --write <out.json>.'); return 2; }
       return checkRecords(records, out);
     }
+    if (rest.includes('--write')) { warn('--write needs --records: check --records <file.json> --write <out.json>.'); return 2; }
     if (rest.length === 0) { warn('check needs at least one key, or --records <file.json>.'); return 2; }
     return check(rest);
   }

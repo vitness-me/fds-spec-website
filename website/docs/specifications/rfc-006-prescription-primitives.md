@@ -252,7 +252,7 @@ Adding a method to a discriminated union is a MINOR change: documents valid unde
 
 Removing a method, or narrowing an existing payload, is a MAJOR change.
 
-**1.1.0** adds the optional `fxe` on the equipment of `bandResistance` (§4.1).
+**1.1.0** added the optional `fxe` on the equipment of `bandResistance` (§4.1).
 
 ## 7. Implementation Guidance
 

@@ -253,7 +253,7 @@ Agregar un `mode` es un cambio MENOR: los documentos válidos bajo la versión a
 
 **1.1.0** agregó `settings` en elementos y series, y `zone` en una serie. Ambas son adiciones opcionales a objetos cerrados, de modo que todo documento 1.0.0 sigue siendo válido sin cambios — pero un documento 1.1.0 que use cualquiera de las dos es rechazado por el esquema 1.0.0, que es lo que hace de esto una versión y no una edición. `workout/v1.0.0/workout.schema.json` permanece publicado y congelado; los lanzamientos 1.2.0 y 1.3.0 declaran workout en 1.0.0 y siguen resolviendo. El lanzamiento 1.4.0 es el primero que lo declara en 1.1.0.
 
-**1.2.0** agrega el campo opcional `fxi` en una referencia de ejercicio (§4.3), y `fxm`, `fxmg` y `fxe` en las referencias de músculo y de equipamiento de los totales derivados (§4.7).
+**1.2.0** agregó el campo opcional `fxi` en una referencia de ejercicio (§4.3), y `fxm`, `fxmg` y `fxe` en las referencias de músculo y de equipamiento de los totales derivados (§4.7).
 
 Las entidades versionan de forma independiente. Una nueva versión de workout no obliga a moverse a exercise, a equipment ni a la biblioteca de prescripción, y ninguna de sus versiones obliga a esta.
 

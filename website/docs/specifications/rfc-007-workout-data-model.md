@@ -253,7 +253,7 @@ Adding a `mode` is a MINOR change: documents valid under the old version remain 
 
 **1.1.0** added `settings` on items and sets, and `zone` on a set. Both are optional additions to closed objects, so every 1.0.0 document remains valid unchanged — but a 1.1.0 document using either is rejected by the 1.0.0 schema, which is what makes this a version rather than an edit. `workout/v1.0.0/workout.schema.json` stays published and frozen; releases 1.2.0 and 1.3.0 declare workout at 1.0.0 and continue to resolve. Release 1.4.0 is the first to declare it at 1.1.0.
 
-**1.2.0** adds the optional `fxi` on an exercise reference (§4.3), and `fxm`, `fxmg` and `fxe` on the muscle and equipment references of the rollups (§4.7).
+**1.2.0** added the optional `fxi` on an exercise reference (§4.3), and `fxm`, `fxmg` and `fxe` on the muscle and equipment references of the rollups (§4.7).
 
 Entities version independently. A new workout version does not oblige exercise, equipment or the prescription library to move, and none of their versions oblige this one.
 

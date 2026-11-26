@@ -140,7 +140,7 @@ Keys are optional, so a record without one is still valid FDS.
 
 The schema checks only the header, `FXM=1.0/`. The Encoder checks the rest of the key: one of the two forms, and lowercase codes joined by hyphens. The schema can't check that a muscle code was derived correctly from the FMA term, or that a part code names a part FMA has.
 
-That is the price of publishing a rule instead of a list. Two owners can write different keys for one muscle and both pass the schema. One owner reads FMA and writes `FXM=1.0/deltoid.acromial` for the side delt. Another goes by the gym name and writes `FXM=1.0/deltoid.lateral`. Both keys are well formed, the comparison says they are different, and only a person who checks the FMA term can tell which one follows the rule. Following the derivation is what makes keys from different owners meet.
+That is the price of publishing a rule instead of a list. Two owners can write different keys for one muscle and both pass the schema. One owner reads FMA and writes `FXM=1.0/deltoid.acromial` for the side delt. Another goes by the gym name and writes `FXM=1.0/deltoid.lateral`. Both keys pass the schema, but only the first passes the Encoder: FMA names no `lateral` part of the deltoid. Following the derivation is what makes keys from different owners meet.
 
 ## Worked examples
 

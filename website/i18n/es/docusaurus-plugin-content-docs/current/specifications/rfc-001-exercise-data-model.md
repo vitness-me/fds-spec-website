@@ -332,7 +332,7 @@ Los consumidores NO DEBEN rechazar un ejercicio que omite `loading`. La ausencia
 
 ## 5. Versionado y compatibilidad
 
-**1.2.0** agrega el campo opcional `fxi` (§3.2), `fxm` y `fxmg` en una referencia de músculo (§4.3), y `fxe` en una referencia de equipamiento (§4.4).
+**1.2.0** agregó el campo opcional `fxi` (§3.2), `fxm` y `fxmg` en una referencia de músculo (§4.3), y `fxe` en una referencia de equipamiento (§4.4).
 
 ### 5.1. Versionado de esquemas
 

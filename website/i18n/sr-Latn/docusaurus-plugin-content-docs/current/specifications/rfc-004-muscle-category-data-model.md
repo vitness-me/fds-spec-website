@@ -181,7 +181,7 @@ Za složene strukture podataka jedinstvene za platformu:
 
 ## 5. Verzionisanje i kompatibilnost
 
-**1.1.0** dodaje opciono polje `fxmg` (§3.2).
+**1.1.0** je dodala opciono polje `fxmg` (§3.2).
 
 ### 5.1. Verzionisanje šeme
 

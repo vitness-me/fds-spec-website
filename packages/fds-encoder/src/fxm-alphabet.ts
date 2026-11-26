@@ -1,4 +1,6 @@
 // The muscles and parts a muscle key (FXM) may name. The published registry is generated from this file.
+// The anchor labels and ids are quoted unchanged from the Foundational Model of Anatomy Ontology (FMA) 5.1.0,
+// University of Washington, under CC BY 3.0 Unported, and from Uberon, release 2026-11-05, under CC BY 3.0.
 
 /** An identifier for the same structure in an open anatomy ontology. */
 export interface Anchor {

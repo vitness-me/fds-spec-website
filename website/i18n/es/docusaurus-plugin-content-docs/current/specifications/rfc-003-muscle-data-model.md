@@ -248,7 +248,7 @@ Notas:
 
 ## 5. Versionado y compatibilidad
 
-**1.1.0** agrega el campo opcional `fxm` (§3.2).
+**1.1.0** agregó el campo opcional `fxm` (§3.2).
 
 ### 5.1. Versionado de esquemas
 

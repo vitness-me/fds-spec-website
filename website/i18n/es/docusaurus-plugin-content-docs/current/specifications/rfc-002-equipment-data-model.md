@@ -218,7 +218,7 @@ Esta es la contraparte de `exercise.loading` (RFC-001 §4.6): el ejercicio decla
 
 ## 5. Versionado y compatibilidad
 
-**1.2.0** agrega el campo opcional `fxe` (§3.2).
+**1.2.0** agregó el campo opcional `fxe` (§3.2).
 
 ### 5.1. Versionado de esquemas
 

@@ -252,7 +252,7 @@ Agregar un método a una unión discriminada es un cambio MENOR: los documentos 
 
 Eliminar un método, o estrechar una carga útil existente, es un cambio MAYOR.
 
-**1.1.0** agrega el campo opcional `fxe` en el equipamiento de `bandResistance` (§4.1).
+**1.1.0** agregó el campo opcional `fxe` en el equipamiento de `bandResistance` (§4.1).
 
 ## 7. Guía de implementación
 

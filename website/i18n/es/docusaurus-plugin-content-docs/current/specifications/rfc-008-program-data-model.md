@@ -235,7 +235,7 @@ Agregar un `schedule.model`, un `intent` de ciclo, un `kind` de condición o un 
 
 Las entidades versionan de forma independiente. Una nueva versión de program no obliga a moverse a workout, a exercise ni a la biblioteca de prescripción, y ninguna de sus versiones obliga a esta.
 
-**1.1.0** agrega el campo opcional `fxi` en la referencia de ejercicio de un máximo de entrenamiento (§8.1).
+**1.1.0** agregó el campo opcional `fxi` en la referencia de ejercicio de un máximo de entrenamiento (§8.1).
 
 ## 7. Guía de implementación
 

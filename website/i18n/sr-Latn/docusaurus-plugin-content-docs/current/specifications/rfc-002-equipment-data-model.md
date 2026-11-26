@@ -218,7 +218,7 @@ Ovo je pandan objektu `exercise.loading` (RFC-001 §4.6): vežba iskazuje *da li
 
 ## 5. Verzionisanje i kompatibilnost
 
-**1.2.0** dodaje opciono polje `fxe` (§3.2).
+**1.2.0** je dodala opciono polje `fxe` (§3.2).
 
 ### 5.1. Verzionisanje šema
 

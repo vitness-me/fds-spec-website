@@ -253,7 +253,7 @@ Dodavanje `mode` vrednosti je SPOREDNA izmena: dokumenti važeći pod starom ver
 
 **1.1.0** je dodala `settings` na stavkama i serijama, i `zone` na seriji. Oba su opciona dodavanja zatvorenim objektima, pa svaki 1.0.0 dokument ostaje važeći nepromenjen — ali 1.1.0 dokument koji koristi bilo koje od njih biva odbačen od strane 1.0.0 šeme, što je ono što ovo čini verzijom, a ne izmenom. `workout/v1.0.0/workout.schema.json` ostaje objavljena i zamrznuta; izdanja 1.2.0 i 1.3.0 deklarišu workout na 1.0.0 i nastavljaju da se razrešavaju. Izdanje 1.4.0 je prvo koje ga deklariše na 1.1.0.
 
-**1.2.0** dodaje opciono polje `fxi` na referenci vežbe (§4.3), i `fxm`, `fxmg` i `fxe` na referencama mišića i opreme u izvedenim zbirovima (§4.7).
+**1.2.0** je dodala opciono polje `fxi` na referenci vežbe (§4.3), i `fxm`, `fxmg` i `fxe` na referencama mišića i opreme u izvedenim zbirovima (§4.7).
 
 Entiteti se verzionišu nezavisno. Nova verzija treninga ne obavezuje vežbu, opremu ni biblioteku preskripcije da se pomere, i nijedna od njihovih verzija ne obavezuje ovu.
 

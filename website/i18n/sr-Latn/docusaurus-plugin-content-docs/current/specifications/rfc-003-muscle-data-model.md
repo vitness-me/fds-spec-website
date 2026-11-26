@@ -248,7 +248,7 @@ Napomene:
 
 ## 5. Verzionisanje i kompatibilnost
 
-**1.1.0** dodaje opciono polje `fxm` (§3.2).
+**1.1.0** je dodala opciono polje `fxm` (§3.2).
 
 ### 5.1. Verzionisanje šeme
 

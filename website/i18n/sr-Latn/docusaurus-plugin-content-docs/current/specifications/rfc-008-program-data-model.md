@@ -235,7 +235,7 @@ Dodavanje `schedule.model` vrednosti, namere ciklusa, `kind` vrednosti uslova il
 
 Entiteti se verzionišu nezavisno. Nova verzija programa ne obavezuje trening, vežbu ni biblioteku preskripcije da se pomere, i nijedna od njihovih verzija ne obavezuje ovu.
 
-**1.1.0** dodaje opciono polje `fxi` na referenci vežbe za trenažni maksimum (§8.1).
+**1.1.0** je dodala opciono polje `fxi` na referenci vežbe za trenažni maksimum (§8.1).
 
 ## 7. Smernice za implementaciju
 

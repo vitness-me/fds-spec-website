@@ -235,7 +235,7 @@ Adding a `schedule.model`, a `cycle` intent, a condition `kind` or a `relations`
 
 Entities version independently. A new program version does not oblige workout, exercise or the prescription library to move, and none of their versions oblige this one.
 
-**1.1.0** adds the optional `fxi` on the exercise reference of a training max (§8.1).
+**1.1.0** added the optional `fxi` on the exercise reference of a training max (§8.1).
 
 ## 7. Implementation Guidance
 
