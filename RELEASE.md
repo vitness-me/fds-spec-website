@@ -1,11 +1,11 @@
 # Release runbook
 
-Four things get shipped from this repository, and they ship differently:
+Three things get shipped from this repository, and they ship differently:
 
 1. a schema or specification change merged to `main`;
 2. a new FDS **spec release**;
-3. the npm package `@vitness/fds-transformer`;
-4. the npm package `@vitness/fds-skill`.
+3. the npm packages `@vitness/fds-transformer`, `@vitness/fds-skill` and
+   `@vitness/fds-encoder`.
 
 Each flow below says what is automatic, what needs a human, what proves the step
 worked, and what cannot be undone.
@@ -114,8 +114,8 @@ Everything else in this document can be undone with another commit.
    exception, and the rule is the opposite — see *A superseded version stays
    served*, below.
 
-Pushing a tag is *not* on this list — a tag can be deleted. What the tag triggers
-is on the list, and it happens within about a minute.
+Merging a version bump is how act 3 happens: the publish workflow runs on the
+push to `main` and publishes within minutes, with no further step.
 
 ---
 
@@ -478,99 +478,90 @@ post-deploy run waits before checking and retries twice before failing.
 
 ---
 
-## Flow 3 — publishing `@vitness/fds-transformer`
+## Flow 3 — publishing an npm package
+
+`@vitness/fds-transformer`, `@vitness/fds-skill` and `@vitness/fds-encoder` are
+published by `.github/workflows/publish.yml`, automatically, on every push to
+`main`. A package is published when the version in its `package.json` is not on
+npm yet. Bumping the version is the release; there is no tag to push.
 
 ### Order matters
 
-If this release of the package is meant to target a new FDS release, **cut the
-spec release first and let it merge to `main`** (flow 2). The package's bundled
-schemas, its release map and its default target release are all generated from
-`specification/releases.json`, and the publish gate opens the tarball and asks
-the packed build to resolve *every* release the manifest names with `fetch`
-disabled. A package built from a commit whose manifest and bundles disagree fails
-there.
+If this release of the transformer is meant to target a new FDS release, **cut
+the spec release first and let it merge to `main`** (flow 2). The package's
+bundled schemas, its release map and its default target release are all
+generated from `specification/releases.json`, and the publish gate opens the
+tarball and asks the packed build to resolve *every* release the manifest names
+with `fetch` disabled. A package built from a commit whose manifest and bundles
+disagree fails there. The skill documents a release, so it follows the same
+order.
 
-### 1. Bump the version on `main`
+### 1. Bump the version — the human gate
 
-The package version lives in `packages/fds-transformer/package.json`. Bump it,
-update `packages/fds-transformer/CHANGELOG.md`, and land it through a normal pull
-request (flow 1). Note that a new FDS release moves the transformer's default
-target release, which is a behaviour change and deserves at least a minor bump.
+In one pull request, for each package being released:
 
-### 2. Dry run — the only rehearsal available
+- bump `version` in `packages/<dir>/package.json`, and the two copies of it at
+  the top of `packages/<dir>/package-lock.json`;
+- move the `## [Unreleased]` entries of `packages/<dir>/CHANGELOG.md` under a new
+  `## [<version>] - <date>` heading. That section becomes the GitHub release
+  notes;
+- update any document that quotes the package's version.
 
-```bash
-gh workflow run publish-transformer.yml -f dry_run=true
-```
+A new FDS release moves the transformer's default target release, which is a
+behaviour change and deserves at least a minor bump. Land it through flow 1.
+**Merging is the publish.** Nothing asks again.
 
-This runs the full workflow and skips only `npm publish`. Every gate below still
-executes — including the credential check, which performs the same OIDC token
-exchange the real publish would and fails if it comes back empty. That last part
-is new, and it is the whole reason this rehearsal is worth running: `npm publish`
-was the only step that authenticated, `dry_run: true` skipped it, and so a green
-dry run said nothing whatever about whether a publish could. Five of them could
-not.
-
-> **`-f dry_run=true` is not optional.** The input defaults to `false`, so
-> dispatching this workflow without it **publishes**. Worse, the step that checks
-> the tag version against `package.json` only runs on a tag push, so a dispatch
-> publishes whatever `package.json` currently says with nothing cross-checking
-> it. Both existing releases of this package were published exactly that way.
-> Type the flag.
-
-### 3. Tag and push — the human gate
+### 2. Dry run — optional, and safe by default
 
 ```bash
-git fetch origin
-git checkout main
-git pull --ff-only
-git tag fds-transformer@<version>          # must equal package.json exactly
-
-# Nothing else will check this. Both lines must print something.
-git branch --contains fds-transformer@<version> --list main
-node -p "require('./packages/fds-transformer/package.json').version"
-
-git push origin fds-transformer@<version>
+gh workflow run publish.yml --ref <branch>
 ```
 
-**The tag push is the entire human gate.** The `npm` deployment environment has
-no required reviewers and no branch policy, so nothing stands between the push
-and the registry except the workflow's own checks. There is no tag ruleset
-either: a tag on a commit that is *not* on `main` will publish just as happily,
-and nothing in the workflow looks at ancestry — which is why the two lines above
-are in this block.
+`dry_run` defaults to **true** for a dispatch, so this publishes nothing. On a
+branch whose versions are not on npm yet it runs every gate below and the
+credential check, which performs the real OIDC token exchange and stops before
+the write — so a green dry run proves the credential as well as the contents.
+A dispatch with `dry_run` unticked publishes, and only from `main`; from any
+other ref the plan job stops it.
 
 ### What the workflow does on its own
 
-Two jobs. The first installs from the lockfile with `npm ci`, typechecks, tests
-and builds. The second installs the same locked tree, rebuilds, then:
+Three jobs.
 
-- runs `scripts/check-packages.mjs --self-test` followed by the real check, which
-  opens the tarball and verifies the licence text is present, that every declared
-  entry point resolves and *loads*, that no shipped document points at a path
-  only this checkout has, and that the packed build resolves every release
-  offline;
-- lists the tarball and asserts the entry points and the mapping schema are in
-  it;
-- for a tag push, extracts the version from the tag and **fails if it does not
-  match `package.json`**;
-- proves it can authenticate before it writes: `scripts/check-publish-auth.mjs`
-  runs `npm publish --dry-run` twice — once with the runner's id-token request
-  variables removed, which must leave npm reporting itself logged out, and once
-  as the job really is, which must not. The pair establishes that the only
-  credential in play is the one this run mints, and it runs on the dry-run path
-  as well;
-- publishes with `--access public --provenance`.
+1. **Plan** runs `scripts/publish-plan.mjs`. For every package under
+   `packages/` that is not `private`, it asks npm whether the version in its
+   `package.json` exists. An exact match is skipped; nothing else is. A version
+   that is not on npm must also be releasable, or the run fails before anything
+   is built: higher than npm's `latest`, a `## [<version>]` section in its
+   CHANGELOG, and no existing tag `<dir>@<version>`. An npm error other than a
+   404 fails the plan rather than reading as "nothing is published".
+2. **Build**, one leg per package due, on CI's Node: `npm ci` from the lockfile,
+   typecheck and tests where the package has them, `check:skill` for the skill,
+   `check:versions`, `scripts/check-packages.mjs` (licence text, entry points
+   that resolve and load, no checkout-only paths, the transformer resolving
+   every release offline), then `npm pack` once, a list of required files, and a
+   check that no source map names an absolute path. The tarball is kept as an
+   artifact.
+3. **Publish**, one leg per package, on a **GitHub-hosted** runner: npm trusted
+   publishing accepts nothing else (see *Credentials on npmjs.com*). It upgrades
+   npm, runs `scripts/check-publish-auth.mjs` — the runner is GitHub-hosted, no
+   configured credential exists, and the OIDC exchange returns one — and then
+   publishes **the tarball the build job checked** with `--provenance`. Then it
+   creates the tag `<dir>@<version>` on the commit it published from, and a
+   GitHub release with the CHANGELOG section as its notes.
 
-Note what it does **not** run: the schema, mirror, version and document gates
-from CI. Publish from a commit that is on `main` and green, and you get them; tag
-something else and you do not.
+Legs are independent: one package failing does not stop another.
+
+Note what it does **not** run: the schema, mirror and document gates from CI.
+`main` only takes a commit whose required checks passed, so a push to `main`
+has them.
 
 **Proof:**
 
 ```bash
-npm view @vitness/fds-transformer version
-npm view @vitness/fds-transformer dist.attestations
+npm view @vitness/<package> version
+npm view @vitness/<package> dist.attestations
+gh release view <dir>@<version>
 ```
 
 The second should show a `provenance` predicate. A published version with no
@@ -578,78 +569,84 @@ attestation did not come from this workflow.
 
 **Irreversible:** immediately. That version number is spent.
 
----
+### If a publish fails
 
-## Flow 4 — publishing `@vitness/fds-skill`
+The version stays unpublished, so the next push to `main` tries it again — or
+dispatch the workflow from `main` with `dry_run` unticked. A credential failure
+says which of the cases below it is; fix it on npmjs.com and re-run. A failure
+after the publish but before the release leaves a version on npm with no tag:
+the plan then skips it, and the release is created by hand with the
+`gh release create` line in the workflow's last step.
 
-Same shape, different gates, and the difference is the point: the skill is a
-knowledge base an assistant answers from, so a wrong field name in it does not
-raise an error — it produces confident, specific, invalid output that the person
-asking cannot distinguish from the truth. Publishing freezes that into a release.
+### Credentials on npmjs.com
 
-### 1. Bump the version on `main`
+The workflow references no secret. Every package authenticates by **trusted
+publishing**: npm exchanges the run's GitHub OIDC token for a short-lived
+publish credential, if the package names this workflow as its trusted
+publisher. That setting lives on npmjs.com, not in this repository, and only a
+package owner can change it. It also has a limit: npm attaches a trusted
+publisher to a package that already exists, so a package's **first** version is
+published by hand.
 
-`packages/fds-skill/package.json`, landed through a normal pull request.
+What npm matches, case-sensitive, exactly:
 
-The package **must** have a `packages/fds-skill/package-lock.json`. Publishing
-installs with `npm ci` so the published tree is the checked tree. If it is ever
-missing, the workflow stops before `setup-node` with the command that fixes it:
+| Field | Value |
+|---|---|
+| Publisher | GitHub Actions |
+| Organization or user | `vitness-me` |
+| Repository | `fds-spec-website` |
+| Workflow filename | `publish.yml` (the filename only) |
+| Environment | *empty* — the publish job declares none |
 
-```bash
-cd packages/fds-skill && npm install --package-lock-only
-```
+The run must also be on a GitHub-hosted runner. GitHub marks every runner it
+does not host — Blacksmith's included — `self-hosted` in the OIDC token, and npm
+refuses those whatever the settings say.
 
-### 2. Dry run
+**Checklist for a package owner.** Do the first three items no more than two
+days before the merge that publishes: npm expires a new trusted publisher that
+has not completed a publish within two days.
 
-```bash
-gh workflow run publish-skill.yml -f dry_run=true
-```
+1. **Each package already on npm** (`@vitness/fds-transformer`,
+   `@vitness/fds-skill`): on npmjs.com, open the package → **Settings** →
+   **Trusted Publisher**. Remove any entry that names another workflow file,
+   then add one with the values in the table. Allow `npm publish`. Or, with an
+   npm new enough to have `npm trust`:
 
-The same warning as flow 3: the input defaults to `false`, and a dispatch skips
-the tag-versus-`package.json` check because that step only runs on a tag push.
+   ```bash
+   npx npm@11 trust list @vitness/<package>
+   npx npm@11 trust github @vitness/<package> --repo vitness-me/fds-spec-website --file publish.yml --allow-publish
+   ```
 
-### 3. Tag and push — the human gate
+2. **A package that is not on npm yet** (`@vitness/fds-encoder` until its first
+   version is out): publish that version by hand from the commit that bumped
+   it, signed in as an owner with two-factor authentication:
 
-```bash
-git fetch origin
-git checkout main
-git pull --ff-only
-git tag fds-skill@<version>                # must equal package.json exactly
+   ```bash
+   git fetch origin && git checkout <commit on main>
+   cd packages/<dir> && npm ci
+   npm publish --access public
+   ```
 
-# Nothing else will check this. Both lines must print something.
-git branch --contains fds-skill@<version> --list main
-node -p "require('./packages/fds-skill/package.json').version"
+   `prepack` builds it. This version has no provenance attestation, which only
+   a CI publish can make. Then attach the trusted publisher as in item 1, and
+   create the tag and release the workflow would have:
 
-git push origin fds-skill@<version>
-```
+   ```bash
+   gh release create <dir>@<version> --target <commit> --title "@vitness/<package> <version>" --notes "<the CHANGELOG section>"
+   ```
 
-The same caveats as flow 3: no environment reviewers, no tag ruleset, no check
-that the tagged commit is on `main`.
+   The workflow skips a version that is already on npm, so the run on `main`
+   for that commit is a no-op for this package. If it ran first, it failed
+   with "not on npm yet"; publishing by hand settles it.
 
-### What the workflow does on its own
+3. **Optional, once a publish has gone through:** on each package, **Settings**
+   → **Publishing access** → *Require two-factor authentication and disallow
+   tokens*. Trusted publishing keeps working, and a leaked token cannot publish.
 
-A `gates` job that runs, against the repository:
-
-- `npm run check:skill` — every field name the knowledge base uses exists
-  somewhere in the standard, and every schema URL it quotes resolves to a
-  published file;
-- `npm run check:versions` — every version fact in the tree matches the release
-  manifest. Publishing is exactly when a stale version claim stops being fixable.
-
-Then a `publish` job that requires the lockfile, installs with `npm ci`, runs the
-tarball checks (`check-packages`, plus an explicit assertion that `SKILL.md`, the
-`knowledge/` files and the `prompts/` files are in the tarball), matches the tag
-against `package.json`, proves it can authenticate (`check-publish-auth`, as in
-flow 3 — on the dry-run path too), and publishes with provenance.
-
-**Proof:**
-
-```bash
-npm view @vitness/fds-skill version
-npm view @vitness/fds-skill dist.attestations
-```
-
-**Irreversible:** immediately.
+When the credential is missing, the publish leg fails before the write, naming
+the case: a self-hosted runner; a package that is not on npm yet; or an exchange
+that returned nothing, with the four values this run presented to compare
+against the table. It never reaches the registry's 404.
 
 ---
 
@@ -741,17 +738,14 @@ will be nothing at all while `main` is red.
 
 Stated rather than papered over.
 
-- **npm authentication.** Neither publish workflow references a secret. There is
-  a repository secret named `NPM_TOKEN` and nothing uses it. Publishing therefore
-  depends on trusted publishing being configured for these packages on
-  npmjs.org — settings that live outside this repository and cannot be read from
-  it. If a publish ever fails with an authentication error, the fix is on
-  npmjs.org, not here. What the repository can do, and now does, is say so before
-  the write instead of after it: the credential check fails with the four fields
-  — organization or user, repository, workflow filename, environment — read off
-  the run itself, to be compared against the trusted publisher on npmjs.org.
-- **Who may push a tag.** Repository collaborator permissions are not visible in
-  the tree. No ruleset restricts tags.
+- **npm authentication.** The publish workflow references no secret; it
+  depends on trusted publishing being configured for each package on
+  npmjs.com — settings that live outside this repository and cannot be read from
+  it. *Credentials on npmjs.com*, in flow 3, says what they must be. What the
+  repository can do, and does, is check before the write: the credential check
+  fails with the case it found and the four values the run presented.
+- **Who may merge to `main`.** Repository collaborator permissions are not
+  visible in the tree, and merging a version bump publishes.
 - **How long a deploy takes to reach every edge.** `Published URLs` waits before
   checking for exactly this reason, and retries twice more before failing. If it
   is red once and green on a re-run, the deployment was slow; if it is red three

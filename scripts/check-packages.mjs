@@ -38,7 +38,7 @@
  * ── Five rules ───────────────────────────────────────────────────────────────
  *
  *   1. LOCKFILE.  A package has exactly one lockfile and it is
- *      `package-lock.json`. CI, both publish workflows and `ci-local.sh` all
+ *      `package-lock.json`. CI, the publish workflow and `ci-local.sh` all
  *      install with `npm ci`; a `pnpm-lock.yaml` beside it is a second answer
  *      to the same question that nothing reads and nothing rechecks. A package
  *      with no lockfile fails `npm ci` outright, which is how the skill was

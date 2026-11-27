@@ -48,7 +48,15 @@
  * exchange had failed, and turned a self-describing ENEEDAUTH into a 404 about
  * a package name. That is what five attempts were spent chasing.
  *
- * ── the two rules, and why they are a pair ───────────────────────────────────
+ * ── why the exchange failed ──────────────────────────────────────────────────
+ *
+ * The publish jobs ran on Blacksmith runners, which GitHub registers as
+ * self-hosted, and every id-token they minted said `runner_environment:
+ * self-hosted`. npm trusted publishing accepts GitHub-hosted runners only, so
+ * the exchange could not succeed whatever npmjs.com was configured with. The
+ * runner rule below checks that first, so the case names itself.
+ *
+ * ── the two probe rules, and why they are a pair ─────────────────────────────
  *
  * Both are the same probe: `npm publish --dry-run`, which runs the real OIDC
  * exchange (the call in publish.js is not guarded by dry-run) and stops short of
@@ -132,6 +140,22 @@ function atLeast(version, floor) {
 
 const saysNotLoggedIn = (output) => NOT_LOGGED_IN.test(output);
 
+/**
+ * Rule 0: the job runs on a GitHub-hosted runner. npm trusted publishing does
+ * not accept self-hosted runners, and GitHub marks every runner it does not
+ * host, Blacksmith's included, `runner_environment: self-hosted` in the
+ * id-token. The exchange is then refused whatever npmjs.com is configured with.
+ */
+function runnerProblems(runnerEnvironment) {
+  if (runnerEnvironment === 'github-hosted') return [];
+  return [
+    `this job runs on a ${runnerEnvironment || 'runner of unknown kind'}, not a GitHub-hosted runner.\n` +
+      '    npm trusted publishing accepts id-tokens from GitHub-hosted runners only, so the exchange\n' +
+      '    is refused here however the trusted publisher on npmjs.com is configured. Run the publish\n' +
+      '    job on `ubuntu-latest`.',
+  ];
+}
+
 /** Rule 1: the CONTROL run must find npm with no credential at all. */
 function controlProblems(output) {
   if (saysNotLoggedIn(output)) return [];
@@ -153,8 +177,21 @@ function controlProblems(output) {
 function probeProblems(output, context = {}) {
   if (!saysNotLoggedIn(output)) return [];
 
-  const { packageName, owner, repository, workflowFile, environment, nodeVersion } = context;
+  const { packageName, owner, repository, workflowFile, environment, nodeVersion, onRegistry } = context;
   const said = (output.match(/^.*oidc.*$/gim) || []).map((line) => `      ${line.trim()}`);
+
+  if (onRegistry === false) {
+    return [
+      `${packageName ?? 'this package'} is not on npm yet, and trusted publishing cannot create a package.\n` +
+        '    npm attaches a trusted publisher to a package that already exists, so the first version\n' +
+        '    is published by an owner, by hand, and every later one by this workflow. RELEASE.md,\n' +
+        '    "Credentials on npmjs.com", has the commands. The workflow to name afterwards:\n' +
+        `      organization or user  ${owner ?? '(unknown)'}\n` +
+        `      repository            ${repository ?? '(unknown)'}\n` +
+        `      workflow filename     ${workflowFile ?? '(unknown)'}\n` +
+        `      environment           ${environment || '(unknown)'}`,
+    ];
+  }
 
   return [
     `the OIDC exchange produced no credential, so publishing ${packageName ?? 'this package'} would fail.\n` +
@@ -218,6 +255,19 @@ function selfTest() {
     'the probe flagged a run in which npm held a credential.'
   );
 
+  // A package npm has never seen gets the first-publish diagnosis, not the
+  // trusted-publisher one: there is no package page to configure yet.
+  const [unpublished] = probeProblems(noCredential, { packageName: '@vitness/fds-x', onRegistry: false });
+  expect(
+    unpublished?.includes('not on npm yet'),
+    'a package that is not on npm was diagnosed as a trusted-publisher mismatch.'
+  );
+
+  // Only a GitHub-hosted runner can do the exchange.
+  expect(runnerProblems('github-hosted').length === 0, 'a GitHub-hosted runner was refused.');
+  expect(runnerProblems('self-hosted').length === 1, 'a self-hosted runner was accepted.');
+  expect(runnerProblems(undefined).length === 1, 'a runner of unknown kind was accepted.');
+
   // The npm floor, either side of the version the exchange landed in.
   for (const [version, supported] of [
     ['10.8.2', false], // what Node 20 ships, and what the first four attempts ran
@@ -238,11 +288,11 @@ function selfTest() {
     packageName: '@vitness/fds-transformer',
     owner: 'vitness-me',
     repository: 'fds-spec-website',
-    workflowFile: 'publish-transformer.yml',
-    environment: '(empty — publish-transformer.yml declares no environment)',
+    workflowFile: 'publish.yml',
+    environment: '(empty — publish.yml declares no environment)',
     nodeVersion: '20.20.0',
   });
-  for (const needed of ['vitness-me', 'fds-spec-website', 'publish-transformer.yml', NODE_FLOOR]) {
+  for (const needed of ['vitness-me', 'fds-spec-website', 'publish.yml', NODE_FLOOR]) {
     expect(diagnosis?.includes(needed), `the diagnosis did not mention ${needed}.`);
   }
 
@@ -263,6 +313,13 @@ function dryRunPublish(cwd, env) {
     fail([`could not run npm in ${cwd}: ${result.error.message}`]);
   }
   return `${result.stdout ?? ''}${result.stderr ?? ''}`;
+}
+
+/** Whether npm has the package at all: true, false on E404, undefined when npm could not say. */
+function onRegistry(packageName) {
+  const result = spawnSync('npm', ['view', packageName, 'name'], { encoding: 'utf8' });
+  if (result.status === 0) return true;
+  return /\bE404\b/.test(`${result.stdout ?? ''}${result.stderr ?? ''}`) ? false : undefined;
 }
 
 function check(packageDir) {
@@ -301,8 +358,11 @@ function check(packageDir) {
       : '(unknown — could not read the workflow)';
 
   const npmVersion = spawnSync('npm', ['--version'], { encoding: 'utf8' }).stdout?.trim();
-  console.log(`  npm ${npmVersion}, Node ${nodeVersion}`);
+  console.log(`  npm ${npmVersion}, Node ${nodeVersion}, ${process.env.RUNNER_ENVIRONMENT ?? 'unknown'} runner`);
   console.log(`  publishing ${packageName} as ${owner}/${repository} via ${workflowFile}`);
+
+  const runner = runnerProblems(process.env.RUNNER_ENVIRONMENT);
+  if (runner.length) fail(runner);
 
   if (!npmVersion || !atLeast(npmVersion, NPM_FLOOR)) {
     fail([
@@ -339,6 +399,7 @@ function check(packageDir) {
     workflowFile,
     environment,
     nodeVersion,
+    onRegistry: onRegistry(packageName),
   });
   if (probe.length) fail(probe);
   ok(`the OIDC exchange returned a publish credential for ${packageName}`);
