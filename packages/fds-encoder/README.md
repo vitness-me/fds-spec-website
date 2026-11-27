@@ -11,6 +11,15 @@ Check, write, compare and build the structural keys of the Fitness Data Standard
 
 The key pages of the specification say how each key is built. The code lists the encoder checks against are published as registries under `specification/registries/`, generated from this package.
 
+## Install
+
+```bash
+npm install -g @vitness/fds-encoder   # the fds-encoder command
+npm install @vitness/fds-encoder      # the library, in a project
+```
+
+Node.js 20 or later. The package is an ES module and ships its TypeScript types.
+
 ## Command line
 
 ```bash

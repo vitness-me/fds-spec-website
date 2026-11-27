@@ -237,12 +237,14 @@ jobs:
       - name: Verify every version claim matches the release manifest
         run: npm run check:versions
 
-      # Only the self-test runs here. The gate itself drives a real OIDC exchange
-      # and belongs to the publish workflows; what CI can still hold is that its
-      # rules fail on the recorded runs they claim to catch — including the one
-      # that produced five E404s.
+      # Only the self-tests run here. The gates themselves ask the registry and
+      # drive a real OIDC exchange, and belong to the publish workflow; what CI
+      # can still hold is that their rules fail on the cases they claim to catch.
       - name: Verify the publish-credential rules can fail
         run: npm run check:publish-auth
+
+      - name: Verify the publish plan skips and refuses what it should
+        run: npm run check:publish-plan
 
       # The schema review tool is run by hand against a branch; its self-test
       # holds the change summary and the ref checks it states.

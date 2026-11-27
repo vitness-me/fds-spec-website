@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-11-26
+
+The first release. The 0.0.1 on npm before it is a deprecated placeholder
+that created the package name.
+
 ### Added
 
 - **The four structural keys.** Check, write in standard form and compare

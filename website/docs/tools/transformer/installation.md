@@ -32,7 +32,7 @@ Verify installation:
 
 ```bash
 fds-transformer --version
-# 0.1.0
+# 0.3.0
 ```
 
 ### Local Project Installation

@@ -2,85 +2,47 @@
 /**
  * The publish job proves it can authenticate before it tries to publish.
  *
- * Five publish attempts failed with the same error, and every gate in both
- * publish workflows was green for all five:
+ * The publish job authenticates by npm trusted publishing: no token, an OIDC
+ * exchange the npm CLI performs at publish time. That exchange never throws.
+ * When it fails, npm carries on with whatever credential it already has, and a
+ * placeholder credential (the one `registry-url:` on actions/setup-node writes)
+ * turns the failure into an E404 about the package name instead of an
+ * ENEEDAUTH about being logged out. The gates that open and run the tarball
+ * need no credential, so none of them can see this. This check can.
  *
- *   npm error code E404
- *   npm error 404 Not Found - PUT https://registry.npmjs.org/@vitness%2ffds-transformer
- *   npm error 404 The requested resource '@vitness/fds-transformer@0.2.0' could not be
- *   npm error 404 found or you do not have permission to access it.
+ * ── the rules ────────────────────────────────────────────────────────────────
  *
- * The gates could not have caught it. They pack the tarball, open it, run what
- * is inside and compare it against the release manifest — every one of them
- * reads or executes files, and none of them needs a credential. The only step
- * that authenticates is `npm publish` itself, and the dry-run path skips it. So
- * the proof gate proved everything except the thing that was broken, and
- * `dry_run: true` was structurally incapable of ever finding it.
+ *   RUNNER.   The job runs on a GitHub-hosted runner. npm trusted publishing
+ *             refuses id-tokens marked `runner_environment: self-hosted`, which
+ *             is every runner GitHub does not host, Blacksmith's included.
  *
- * ── what the 404 actually was ────────────────────────────────────────────────
+ *   NPM.      The npm CLI is at least the documented floor for trusted
+ *             publishing. Below it there is no exchange at all.
  *
- * This job publishes by trusted publishing: no token, an OIDC exchange the npm
- * CLI performs at publish time. In npm's implementation (lib/utils/oidc.js, and
- * its one call site at lib/commands/publish.js) that exchange:
+ *   CONTROL.  `npm publish --dry-run` with the id-token request variables
+ *             removed must report "requires you to be logged in". Otherwise a
+ *             configured credential exists, and it would hide a failed exchange.
  *
- *   - is attempted unconditionally on GitHub Actions when `id-token: write` is
- *     granted. A credential already configured does NOT suppress it — the
- *     function takes no interest in existing config, and on success it
- *     overwrites `//registry/:_authToken` with the token it obtained;
- *   - never throws. Every failure path logs at verbose or silly and returns
- *     `undefined`, because OIDC is optional and npm must still work without it.
+ *   PROBE.    The same dry run with the real environment must not report it.
+ *             The control established that the only credential available is a
+ *             minted one, so silence here means the exchange succeeded.
  *
- * Publish then reads `getCredentialsByURI(registry)`. With no credential it
- * raises ENEEDAUTH — "This command requires you to be logged in to …" — which
- * names the problem. With any credential it proceeds.
- *
- * `registry-url:` on actions/setup-node@v4 supplies one. It writes
- * `//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}` into a temporary npmrc
- * and exports `NODE_AUTH_TOKEN=XXXXX-XXXXX-XXXXX-XXXXX` when the workflow does
- * not set one (actions/setup-node@v4 src/authutil.ts; main has since made that
- * export conditional). Nothing in either workflow sets NODE_AUTH_TOKEN, so npm
- * held a placeholder, skipped ENEEDAUTH, and PUT the tarball with a credential
- * that authenticates as nobody. The registry answers 404 rather than 403 so an
- * anonymous caller cannot probe which packages exist — meaning the message
- * everyone read as "wrong package name" meant "not authenticated".
- *
- * So the placeholder did not cause the exchange to fail. It hid that the
- * exchange had failed, and turned a self-describing ENEEDAUTH into a 404 about
- * a package name. That is what five attempts were spent chasing.
- *
- * ── the two rules, and why they are a pair ───────────────────────────────────
- *
- * Both are the same probe: `npm publish --dry-run`, which runs the real OIDC
- * exchange (the call in publish.js is not guarded by dry-run) and stops short of
- * the write. Neither rule alone proves anything.
- *
- *   CONTROL. Run it with the id-token request variables removed, so no token can
- *   possibly be minted, and require npm to say it is not logged in. If it stays
- *   quiet, a credential exists that the exchange did not produce — a configured
- *   one, which will mask the next failure exactly as it masked this one.
- *
- *   PROBE. Run it with the real environment and require npm not to say it. Since
- *   the control just established that the only credential available is a minted
- *   one, silence here means the exchange succeeded.
- *
- * The pair also keeps the gate honest about itself. Both rules turn on one
- * string of npm's, `requires you to be logged in`; if npm ever rewords it, the
- * control fails on the next run and says so, rather than the probe passing
- * because it found nothing. A recorded needle that is re-proved on every run.
+ * Both probes run the real exchange (npm does not skip it on `--dry-run`) and
+ * stop before the write. Both turn on one sentence of npm's; if npm rewords it,
+ * the control fails and says so, rather than the probe passing on nothing.
  *
  * ── running it ───────────────────────────────────────────────────────────────
  *
- *   node scripts/check-publish-auth.mjs packages/fds-transformer
+ *   node scripts/check-publish-auth.mjs packages/fds-transformer [--exists true|false]
  *   node scripts/check-publish-auth.mjs --self-test   prove the rules can fail
  *
- * The full check drives a real exchange against the registry, so it only means
- * anything inside GitHub Actions and refuses to run elsewhere. `--self-test` is
- * offline and runs in CI: it hands the rules two recorded npm 11.19.0
- * transcripts, one from a run with no credential configured and one from a run
- * with setup-node's npmrc and its placeholder token, and requires each rule to
- * fail on the transcript that should fail it. Those files are transcripts, not
- * expectations — nothing is derived from their contents but the presence or
- * absence of that one sentence.
+ * `--exists` is whether the package is on npm at all, as the publish plan found
+ * it; `false` turns a failed exchange into the first-publish diagnosis. The full
+ * check needs a real id-token, so it refuses to run outside GitHub Actions.
+ * `--self-test` is offline: it hands the rules two recorded npm 11.19.0
+ * transcripts, one with no credential configured and one with setup-node's
+ * npmrc and its placeholder token, and requires each rule to fail on the one
+ * that should fail it.
  */
 
 import { spawnSync } from 'node:child_process';
@@ -132,6 +94,22 @@ function atLeast(version, floor) {
 
 const saysNotLoggedIn = (output) => NOT_LOGGED_IN.test(output);
 
+/**
+ * Rule 0: the job runs on a GitHub-hosted runner. npm trusted publishing does
+ * not accept self-hosted runners, and GitHub marks every runner it does not
+ * host, Blacksmith's included, `runner_environment: self-hosted` in the
+ * id-token. The exchange is then refused whatever npmjs.com is configured with.
+ */
+function runnerProblems(runnerEnvironment) {
+  if (runnerEnvironment === 'github-hosted') return [];
+  return [
+    `this job runs on a ${runnerEnvironment || 'runner of unknown kind'}, not a GitHub-hosted runner.\n` +
+      '    npm trusted publishing accepts id-tokens from GitHub-hosted runners only, so the exchange\n' +
+      '    is refused here however the trusted publisher on npmjs.com is configured. Run the publish\n' +
+      '    job on `ubuntu-latest`.',
+  ];
+}
+
 /** Rule 1: the CONTROL run must find npm with no credential at all. */
 function controlProblems(output) {
   if (saysNotLoggedIn(output)) return [];
@@ -153,8 +131,21 @@ function controlProblems(output) {
 function probeProblems(output, context = {}) {
   if (!saysNotLoggedIn(output)) return [];
 
-  const { packageName, owner, repository, workflowFile, environment, nodeVersion } = context;
+  const { packageName, owner, repository, workflowFile, environment, nodeVersion, onRegistry } = context;
   const said = (output.match(/^.*oidc.*$/gim) || []).map((line) => `      ${line.trim()}`);
+
+  if (onRegistry === false) {
+    return [
+      `${packageName ?? 'this package'} is not on npm yet, and trusted publishing cannot create a package.\n` +
+        '    npm attaches a trusted publisher to a package that already exists, so an owner first\n' +
+        '    publishes a placeholder 0.0.1 by hand, and this workflow publishes every release after it.\n' +
+        '    RELEASE.md, "First publish of a new package", has the commands. The trusted publisher:\n' +
+        `      organization or user  ${owner ?? '(unknown)'}\n` +
+        `      repository            ${repository ?? '(unknown)'}\n` +
+        `      workflow filename     ${workflowFile ?? '(unknown)'}\n` +
+        `      environment           ${environment || '(unknown)'}`,
+    ];
+  }
 
   return [
     `the OIDC exchange produced no credential, so publishing ${packageName ?? 'this package'} would fail.\n` +
@@ -181,12 +172,10 @@ function probeProblems(output, context = {}) {
 
 // ── self-test ────────────────────────────────────────────────────────────────
 //
-// The rules are pure functions over npm's output, so they can be handed output
-// from a run that was really broken. Both transcripts below are real npm 11.19.0
-// runs of `npm publish --dry-run --ignore-scripts` against packages/fds-transformer:
-// one with an empty npmrc, one with the npmrc actions/setup-node@v4 writes and
-// the placeholder NODE_AUTH_TOKEN it exports. The second is byte-for-byte the
-// configuration that produced the five E404s.
+// Both transcripts are npm 11.19.0 runs of `npm publish --dry-run
+// --ignore-scripts` against packages/fds-transformer: one with an empty npmrc,
+// one with the npmrc actions/setup-node@v4 writes and the placeholder
+// NODE_AUTH_TOKEN it exports.
 
 function selfTest() {
   const transcript = (name) => readFileSync(join(FIXTURES, name), 'utf8');
@@ -218,9 +207,22 @@ function selfTest() {
     'the probe flagged a run in which npm held a credential.'
   );
 
+  // A package npm has never seen gets the first-publish diagnosis, not the
+  // trusted-publisher one: there is no package page to configure yet.
+  const [unpublished] = probeProblems(noCredential, { packageName: '@vitness/fds-x', onRegistry: false });
+  expect(
+    unpublished?.includes('not on npm yet'),
+    'a package that is not on npm was diagnosed as a trusted-publisher mismatch.'
+  );
+
+  // Only a GitHub-hosted runner can do the exchange.
+  expect(runnerProblems('github-hosted').length === 0, 'a GitHub-hosted runner was refused.');
+  expect(runnerProblems('self-hosted').length === 1, 'a self-hosted runner was accepted.');
+  expect(runnerProblems(undefined).length === 1, 'a runner of unknown kind was accepted.');
+
   // The npm floor, either side of the version the exchange landed in.
   for (const [version, supported] of [
-    ['10.8.2', false], // what Node 20 ships, and what the first four attempts ran
+    ['10.8.2', false], // what Node 20 ships
     ['11.5.0', false],
     ['11.5.1', true],
     ['11.19.0', true],
@@ -238,11 +240,11 @@ function selfTest() {
     packageName: '@vitness/fds-transformer',
     owner: 'vitness-me',
     repository: 'fds-spec-website',
-    workflowFile: 'publish-transformer.yml',
-    environment: '(empty — publish-transformer.yml declares no environment)',
+    workflowFile: 'publish.yml',
+    environment: 'npm',
     nodeVersion: '20.20.0',
   });
-  for (const needed of ['vitness-me', 'fds-spec-website', 'publish-transformer.yml', NODE_FLOOR]) {
+  for (const needed of ['vitness-me', 'fds-spec-website', 'publish.yml', 'npm', NODE_FLOOR]) {
     expect(diagnosis?.includes(needed), `the diagnosis did not mention ${needed}.`);
   }
 
@@ -265,7 +267,7 @@ function dryRunPublish(cwd, env) {
   return `${result.stdout ?? ''}${result.stderr ?? ''}`;
 }
 
-function check(packageDir) {
+function check(packageDir, exists) {
   const root = join(ROOT, packageDir);
   const manifest = join(root, 'package.json');
   if (!existsSync(manifest)) {
@@ -289,20 +291,20 @@ function check(packageDir) {
   const nodeVersion = process.versions.node;
 
   // npm's environment field must match the `environment:` of the job that
-  // publishes, and an environment claim in the token where npm expects none is
-  // itself a 404. Read it off the workflow rather than stating it here, so this
-  // stays true the day one is added.
+  // publishes. Read off the workflow, so this stays true when it changes.
   const workflow = join(ROOT, '.github/workflows', workflowFile ?? '');
-  const environment =
+  const declared =
     workflowFile && existsSync(workflow)
-      ? /^\s*environment:/m.test(readFileSync(workflow, 'utf8'))
-        ? `(this workflow declares an environment — it must match the publish job's)`
-        : `(empty — ${workflowFile} declares no environment)`
-      : '(unknown — could not read the workflow)';
+      ? readFileSync(workflow, 'utf8').match(/^\s*environment:\s*([\w.-]+)\s*$/m)?.[1]
+      : undefined;
+  const environment = declared ?? `(empty — ${workflowFile || 'the workflow'} declares no environment)`;
 
   const npmVersion = spawnSync('npm', ['--version'], { encoding: 'utf8' }).stdout?.trim();
-  console.log(`  npm ${npmVersion}, Node ${nodeVersion}`);
+  console.log(`  npm ${npmVersion}, Node ${nodeVersion}, ${process.env.RUNNER_ENVIRONMENT ?? 'unknown'} runner`);
   console.log(`  publishing ${packageName} as ${owner}/${repository} via ${workflowFile}`);
+
+  const runner = runnerProblems(process.env.RUNNER_ENVIRONMENT);
+  if (runner.length) fail(runner);
 
   if (!npmVersion || !atLeast(npmVersion, NPM_FLOOR)) {
     fail([
@@ -339,6 +341,7 @@ function check(packageDir) {
     workflowFile,
     environment,
     nodeVersion,
+    onRegistry: exists,
   });
   if (probe.length) fail(probe);
   ok(`the OIDC exchange returned a publish credential for ${packageName}`);
@@ -351,8 +354,11 @@ if (process.argv.includes('--self-test')) {
   process.exit(0);
 }
 
-const target = process.argv.slice(2).find((argument) => !argument.startsWith('-'));
+const args = process.argv.slice(2);
+const existsFlag = args.indexOf('--exists');
+const exists = existsFlag === -1 ? undefined : args[existsFlag + 1] === 'true';
+const target = args.find((argument, index) => !argument.startsWith('-') && (existsFlag === -1 || index !== existsFlag + 1));
 if (!target) {
   fail(['no package directory given, e.g. `node scripts/check-publish-auth.mjs packages/fds-transformer`.']);
 }
-check(target);
+check(target, exists);

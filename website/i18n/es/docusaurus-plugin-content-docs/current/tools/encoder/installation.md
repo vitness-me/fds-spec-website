@@ -1,18 +1,17 @@
 ---
 title: Instalación
-description: Ejecutar el FDS Encoder desde una copia local del repositorio de la especificación
+description: Instalar el FDS Encoder desde npm
 sidebar_position: 2
 ---
 
 # Instalación
 
-El FDS Encoder no está en npm. Se ejecuta desde una copia local del [repositorio de la especificación](https://github.com/vitness-me/fds-spec-website), donde vive en `packages/fds-encoder`.
+El FDS Encoder es el paquete de npm `@vitness/fds-encoder`. Le da el comando `fds-encoder` y una biblioteca.
 
 ## Requisitos {#requirements}
 
 - **Node.js:** 20.0.0 o superior
-- **npm**
-- **git**
+- **npm**, **pnpm** o **yarn**
 
 Compruebe su versión de Node.js:
 
@@ -20,39 +19,15 @@ Compruebe su versión de Node.js:
 node --version
 ```
 
-## Construir el paquete {#build-the-package}
+## Instalar el comando {#install-the-command}
 
-Clone el repositorio y construya el paquete. Los comandos de esta página se ejecutan desde la raíz de la copia local.
+Instale el paquete de forma global para poner `fds-encoder` en su ruta:
 
-```bash
-git clone https://github.com/vitness-me/fds-spec-website.git
-cd fds-spec-website
-npm --prefix packages/fds-encoder ci
-npm --prefix packages/fds-encoder run build
-```
+<PackageManagerTabs packages="@vitness/fds-encoder" global />
 
-La compilación escribe la biblioteca en `packages/fds-encoder/dist/index.js` y el comando en `packages/fds-encoder/dist/bin/fds-encoder.js`.
-
-## Ejecutar el comando {#run-the-command}
-
-### Sin instalar {#without-installing}
-
-Ejecute el archivo compilado con Node.js:
+Compruebe que se ejecuta:
 
 ```bash
-node packages/fds-encoder/dist/bin/fds-encoder.js --version
-```
-
-```text
-0.1.0
-```
-
-### Como `fds-encoder` {#as-fds-encoder}
-
-Instale el paquete desde su carpeta para poner `fds-encoder` en su ruta:
-
-```bash
-npm install -g ./packages/fds-encoder
 fds-encoder --version
 ```
 
@@ -60,9 +35,19 @@ fds-encoder --version
 0.1.0
 ```
 
-npm enlaza el comando global a la carpeta, así que una compilación posterior lo actualiza. Las demás páginas de esta sección escriben `fds-encoder`. Si no lo instaló, escriba `node packages/fds-encoder/dist/bin/fds-encoder.js` en su lugar.
+Las demás páginas de esta sección escriben `fds-encoder`.
 
-Para quitar el comando:
+### Ejecutarlo sin instalar {#run-it-without-installing}
+
+<PackageManagerTabs
+  command={{
+    pnpm: "pnpm dlx @vitness/fds-encoder --version",
+    npm: "npx @vitness/fds-encoder --version",
+    yarn: "yarn dlx @vitness/fds-encoder --version",
+  }}
+/>
+
+### Quitarlo {#remove-it}
 
 ```bash
 npm uninstall -g @vitness/fds-encoder
@@ -70,11 +55,9 @@ npm uninstall -g @vitness/fds-encoder
 
 ## Usar la biblioteca en un proyecto {#use-the-library-in-a-project}
 
-Instale el paquete desde la copia local en su proyecto, por su ruta:
+Agregue el paquete a su proyecto:
 
-```bash
-npm install /path/to/fds-spec-website/packages/fds-encoder
-```
+<PackageManagerTabs packages="@vitness/fds-encoder" />
 
 Luego impórtelo:
 
@@ -84,9 +67,22 @@ import { checkKey } from '@vitness/fds-encoder';
 console.log(checkKey('FXM=1.0/biceps-brachii.long').ok); // true
 ```
 
-El paquete es un módulo ES e incluye sus tipos de TypeScript. npm enlaza su proyecto a la carpeta, así que construya el paquete antes de importarlo. Una compilación posterior actualiza también su proyecto.
+El paquete es un módulo ES e incluye sus tipos de TypeScript.
 
-## Ejecutar las comprobaciones propias del paquete {#run-the-packages-own-checks}
+## Trabajar en el propio Encoder {#work-on-the-encoder-itself}
+
+El paquete vive en `packages/fds-encoder` del [repositorio de la especificación](https://github.com/vitness-me/fds-spec-website). Constrúyalo desde una copia local para modificarlo, o para ejecutar los casos de conformidad contra su compilación. Los comandos siguientes se ejecutan desde la raíz de la copia local.
+
+```bash
+git clone https://github.com/vitness-me/fds-spec-website.git
+cd fds-spec-website
+npm --prefix packages/fds-encoder ci
+npm --prefix packages/fds-encoder run build
+```
+
+La compilación escribe la biblioteca en `packages/fds-encoder/dist/index.js` y el comando en `packages/fds-encoder/dist/bin/fds-encoder.js`. Ejecute el comando compilado con `node packages/fds-encoder/dist/bin/fds-encoder.js`.
+
+Ejecute las comprobaciones propias del paquete:
 
 ```bash
 npm --prefix packages/fds-encoder run typecheck
@@ -95,9 +91,9 @@ npm --prefix packages/fds-encoder run test:run
 
 ## Solución de problemas {#troubleshooting}
 
-**`fds-encoder: command not found`.** El comando no está en su ruta. Ejecute `npm install -g ./packages/fds-encoder` desde la raíz de la copia local, y compruebe que la carpeta global de npm está en su ruta: `npm prefix -g` la imprime, y el comando vive en su carpeta `bin`. O ejecute directamente el archivo compilado: `node packages/fds-encoder/dist/bin/fds-encoder.js`.
+**`fds-encoder: command not found`.** El comando no está en su ruta. Instálelo de forma global y compruebe que la carpeta global de npm está en su ruta: `npm prefix -g` la imprime, y el comando vive en su carpeta `bin`. O ejecútelo sin instalar, con `npx @vitness/fds-encoder`.
 
-**El script de conformidad dice `dist/index.js does not exist`.** `node scripts/check-conformance.mjs` y `npm run check:keys` leen el paquete compilado, `packages/fds-encoder/dist`, y se detienen con el código de salida 2 cuando no está:
+**El script de conformidad dice `dist/index.js does not exist`.** `node scripts/check-conformance.mjs` y `npm run check:keys` leen el paquete compilado en una copia local, `packages/fds-encoder/dist`, y se detienen con el código de salida 2 cuando no está:
 
 ```text
 …/packages/fds-encoder/dist/index.js does not exist. Build the encoder first:
