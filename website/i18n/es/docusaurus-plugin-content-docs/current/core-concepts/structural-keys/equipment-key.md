@@ -74,9 +74,9 @@ Una prensa de piernas de discos, con el carro sobre una guía a 45°, tiene esta
 | Interfaz de carga | `l:feet` | La parte móvil se encuentra con el cuerpo en los pies, sobre una plataforma. |
 | Postura | `s:supine.incline` | El usuario se tumba boca arriba sobre una almohadilla de espalda inclinada, con la cabeza más alta que la cadera. |
 | Movimiento | `m:push.fwd` | La plataforma se empuja alejándola de la parte delantera del tronco. |
-| Fuente de resistencia | `r:plate` | La resistencia son discos cargados. |
-| Restricción | `c:line` | La parte móvil corre sobre una guía recta. |
-| Ángulo de guía | `g:incl` | La guía está inclinada. |
+| Fuente de resistencia | `r:plate` | De discos: la resistencia son discos cargados. |
+| Restricción | `c:line` | El carro corre sobre una guía recta. |
+| Ángulo de guía | `g:incl` | La guía está inclinada a 45°. |
 
 Las cuatro primeras capas son la parte estándar de la clave, `FXE=1.0S/k:mac/l:feet/s:supine.incline/m:push.fwd`. Dice lo que dice cualquier prensa de piernas a 45°; una prensa de piernas sentada, con el asiento erguido, es `s:seated`. Las tres últimas son capas extendidas: detalles de construcción de esta máquina de los que no depende un ejercicio hecho en ella. El campo `fxe` contiene la clave completa (véase [Claves en los registros](#keys-in-records)).
 
@@ -413,7 +413,8 @@ Diseño (`a`, para `stn` y `mac`):
 
 Reglas:
 
-- Una capa extendida se escribe solo cuando se declara. Nada de lo que registra un ejercicio depende de ella.
+- Una capa extendida se escribe solo cuando la descripción la declara. Nada de lo que registra un ejercicio depende de ella.
+- La prensa de piernas del [principio de esta página](#anatomy-of-the-key) declara sus tres capas extendidas: de discos es `r:plate`, el carro es `c:line` y la guía a 45° es `g:incl`.
 - Una máquina de palanca es `c:arc` con `r:plate`. Una máquina de carro es `c:line` con `r:plate`. Una sentadilla péndulo es `c:arc`.
 - Los códigos de diseño se unen con `+`: `a:conv+iso`.
 

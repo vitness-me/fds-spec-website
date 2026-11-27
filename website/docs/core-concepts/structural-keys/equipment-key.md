@@ -74,9 +74,9 @@ A plate-loaded leg press, with the sled on a 45° track, has this key:
 | Load interface | `l:feet` | The moving part meets the body at the feet, on a foot plate. |
 | Posture | `s:supine.incline` | The user lies face up on an inclined back pad, head higher than hips. |
 | Motion | `m:push.fwd` | The foot plate is pushed away from the front of the trunk. |
-| Drive | `r:plate` | The resistance is loaded plates. |
-| Constraint | `c:line` | The moving part runs on a straight track. |
-| Guide angle | `g:incl` | The track is inclined. |
+| Drive | `r:plate` | Plate-loaded: the resistance is loaded plates. |
+| Constraint | `c:line` | The sled runs on a straight track. |
+| Guide angle | `g:incl` | The track is inclined at 45°. |
 
 The first four layers are the standard part of the key, `FXE=1.0S/k:mac/l:feet/s:supine.incline/m:push.fwd`. It says what any 45° leg press says; a seated leg press, with an upright seat, is `s:seated`. The last three are extended layers: build details of this machine that an exercise done on it doesn't depend on. The `fxe` field holds the whole key (see [Keys in records](#keys-in-records)).
 
@@ -413,7 +413,8 @@ Design (`a`, for `stn` and `mac`):
 
 Rules:
 
-- Write an extended layer only when it is stated. Nothing an exercise records depends on it.
+- Write an extended layer only when the description states it. Nothing an exercise records depends on it.
+- The leg press at the [top of this page](#anatomy-of-the-key) states all three of its extended layers: plate-loaded is `r:plate`, the sled is `c:line`, and the 45° track is `g:incl`.
 - A lever machine is `c:arc` with `r:plate`. A sled machine is `c:line` with `r:plate`. A pendulum squat is `c:arc`.
 - Design codes join with `+`: `a:conv+iso`.
 
