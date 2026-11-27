@@ -234,9 +234,9 @@ Support names each surface with its [equipment code](#equipment-in-an-exercise-k
 Rules:
 
 - Write each surface that bears the body's weight, or that a limb is braced on, beyond what the orientation implies. After the surface, write `@` and the points on it, leaving out the points the orientation implies.
-- Never write a bare floor, a mat, the seat or bench under a seated body, or a machine's own seat and pads. An unstable seat (`ball.stab`, `dome`, `board.bal`, `roller.foam`) is written.
+- Never write a bare floor, a mat, the seat or bench under a seated body, or a machine's own seat, pads or handles, which the machine in `l` covers. An unstable seat (`ball.stab`, `dome`, `board.bal`, `roller.foam`) is written.
 - When the trunk rests on nothing, as in a plank or a push-up, list every point that bears weight: `s:floor@feet,forearms`. A face-up body hanging from its hands keeps `floor@feet` too: an inverted row is `s:bar.fixed@hands+floor@feet`.
-- Feet on the floor are never written under a seated body, or under a face-up body lying on a bench, ball or roller. Feet on anything else are written: a seated exercise with the feet on a ball keeps `ball.stab@feet`.
+- Feet on the floor are never written under a seated body, or under a face-up body lying on a bench, ball or roller. Feet on a machine's own foot plate aren't written either: a seated cable row is `m:el.flex+sh.ext/o:seated/l:mac@hands`. Feet on anything else are written: a seated exercise with the feet on a ball keeps `ball.stab@feet`.
 - Surfaces under different points are separate items: feet on a ball and hands on the floor is `s:ball.stab@feet+floor@hands`.
 - A box, step, bench or platform under raised hands or feet is `box`, unless the exercise names the surface.
 - `dome` is a BOSU with the side not stated. Write `dome.up` or `dome.down` when the side is known.
@@ -280,6 +280,7 @@ Two hold points are not body points, and are written only in load:
 Rules:
 
 - List every piece of equipment that loads the working muscles, each with `@` and where it is held: `l:bar.straight@back`.
+- A free weight resting on the front of the shoulders (the front rack) or on one shoulder is held `@shoulders`: a front squat, thruster, push press or jerk, and a barbell or kettlebell press from the rack. A standing barbell overhead press is `m:el.ext+sh.flex/o:standing/l:bar.straight@shoulders`. Dumbbells at the shoulders are held `@hands`, so a dumbbell thruster or front squat is `@hands`, and so is a Smith bar press.
 - `none` means no equipment. It stands alone and takes no hold point: a weighted dip is `l:plate@waist`, not `none` beside a plate.
 - A strength machine is `mac`. It has no more specific code, because the exercise's own motion already says what the machine guides. A cardio machine is `erg`, or `erg.` and its motion when that is known: `erg.row`. The record's [equipment key](./equipment-key.md#keys-in-records) says which machine.
 - A support code is never written in `l`.
@@ -322,7 +323,7 @@ Rules:
 - Join one position's elements with `+`: `g:ne+w-n`. A grip that changes within the rep is a sequence: `g:su>pr`.
 - Width applies to hands on an implement and on a support: a diamond push-up is `w-t`.
 - Stance is written only for a standing start, or when the feet push a machine's foot plate.
-- A grip the implement forces is still the grip: a rope attachment is `ne`. The trap bar's `ne` is the one exception and is never written.
+- A grip the implement forces is still the grip: a rope attachment is `ne`, and a V-handle or another close neutral handle is `g:ne+w-n`. A seated cable row with a V-handle is `m:el.flex+sh.ext/o:seated/l:mac@hands/g:ne+w-n`. The trap bar's `ne` is the one exception and is never written.
 
 ### Range and start (`r`)
 

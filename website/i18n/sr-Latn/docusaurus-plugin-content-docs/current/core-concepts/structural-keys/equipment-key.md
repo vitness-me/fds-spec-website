@@ -74,11 +74,11 @@ Potisak nogama sa diskovima, sa sankama na stazi od 45°, ima ovaj ključ:
 | Interfejs opterećenja | `l:feet` | Pokretni deo dodiruje telo na stopalima, na ploči za stopala. |
 | Položaj | `s:supine.incline` | Korisnik leži licem nagore na kosom jastuku za leđa, glava više od kukova. |
 | Pokret | `m:push.fwd` | Ploča za stopala potiskuje se od prednje strane trupa. |
-| Pogon | `r:plate` | Otpor daju diskovi. |
-| Vođenje | `c:line` | Pokretni deo ide po pravoj stazi. |
-| Ugao vođice | `g:incl` | Staza je nagnuta. |
+| Pogon | `r:plate` | Sa diskovima: otpor daju diskovi. |
+| Vođenje | `c:line` | Sanke idu po pravoj stazi. |
+| Ugao vođice | `g:incl` | Staza je nagnuta pod 45°. |
 
-Prva četiri sloja su standardni deo ključa, `FXE=1.0S/k:mac/l:feet/s:supine.incline/m:push.fwd`. On kaže ono što kaže svaki potisak nogama pod 45°; potisak nogama u sedu, sa uspravnim sedištem, je `s:seated`. Poslednja tri su prošireni slojevi: detalji konstrukcije ove sprave od kojih vežba na njoj ne zavisi. Polje `fxe` sadrži ceo ključ (pogledajte [Ključevi u zapisima](#keys-in-records)).
+Prva četiri sloja su standardni deo ključa, `FXE=1.0S/k:mac/l:feet/s:supine.incline/m:push.fwd`. On kaže ono što kaže svaki potisak nogama pod 45°; potisak nogama u sedu, sa uspravnim sedištem, je `s:seated`. Poslednja tri su prošireni slojevi, svaki naveden u opisu: detalji konstrukcije ove sprave od kojih vežba na njoj ne zavisi. Polje `fxe` sadrži ceo ključ (pogledajte [Ključevi u zapisima](#keys-in-records)).
 
 Slojevi su razdvojeni znakom `/`. Svaki sloj je njegovo slovo, `:` i vrednost sastavljena od kodova i simbola.
 
@@ -413,7 +413,7 @@ Konstrukcija (`a`, za `stn` i `mac`):
 
 Pravila:
 
-- Prošireni sloj pišite samo kada je naveden. Ništa što vežba beleži ne zavisi od njega.
+- Prošireni sloj pišite samo kada ga opis navodi. Ništa što vežba beleži ne zavisi od njega.
 - Sprava sa polugom je `c:arc` sa `r:plate`. Sprava sa sankama je `c:line` sa `r:plate`. Pendulum čučanj je `c:arc`.
 - Kodovi konstrukcije spajaju se znakom `+`: `a:conv+iso`.
 
