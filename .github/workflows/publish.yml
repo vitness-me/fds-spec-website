@@ -5,17 +5,28 @@ name: Publish packages
 # is the release; there is no tag to push. A merge that changes no version
 # publishes nothing.
 #
-# For each package that is due, in its own leg so one failure stops only that
-# package:
+# Each package goes through its own chain, and one package's failure stops only
+# that package:
 #
-#   1. build — install from the lockfile, typecheck, test, run the package's own
-#      gates, pack the tarball and check what is in it;
-#   2. publish — publish that same tarball with provenance, by npm trusted
-#      publishing, then create the tag `<dir>@<version>` and its GitHub release
-#      from the CHANGELOG section for the version.
+#   1. plan — one job, every package decided on its own by
+#      scripts/publish-plan.mjs. A package it refuses fails the plan job, and
+#      the packages it accepted still go ahead;
+#   2. build — install from the lockfile, typecheck, test, run the package's own
+#      gates, pack the tarball and keep it as an artifact;
+#   3. publish — fetch that package's tarball (no tarball: its build leg
+#      failed, and it stops here) and publish it by npm trusted publishing,
+#      which adds provenance. A version already on npm is not published again;
+#   4. release — create the tag `<dir>@<version>` and its GitHub release from
+#      the CHANGELOG section, for each package its publish leg published.
 #
-# npm's trusted publisher for every package names this file, `publish.yml`, and
-# no environment. RELEASE.md, "Credentials on npmjs.com", says how to set it.
+# A re-run heals: a version already on npm skips the publish and still gets its
+# missing tag and release.
+#
+# Only `main` publishes. The plan refuses a real publish from any other ref, and
+# the publish job runs in the GitHub environment `npm`, whose deployment
+# branches are limited to `main`. npm's trusted publisher for every package
+# names this file, `publish.yml`, and the environment `npm`. RELEASE.md,
+# "Credentials on npmjs.com", says how to set both.
 
 on:
   push:
@@ -23,15 +34,15 @@ on:
   workflow_dispatch:
     inputs:
       dry_run:
-        description: 'Dry run: every gate and the credential check, nothing published'
+        description: 'Dry run: every gate and, from main, the credential check; nothing published'
         required: false
         default: true
         type: boolean
 
-# One publish at a time, and never cancelled halfway: a cancelled run can leave
-# a version on npm with no tag or release.
+# Pushes and dispatches queue in separate groups, because GitHub keeps one
+# pending run per group and a dispatch must never replace a pending push run.
 concurrency:
-  group: publish-packages
+  group: publish-${{ github.event_name == 'push' && 'push' || format('dispatch-{0}', github.ref) }}
   cancel-in-progress: false
 
 permissions:
@@ -45,9 +56,12 @@ jobs:
   plan:
     name: Plan — versions not on npm
     runs-on: blacksmith-4vcpu-ubuntu-2404
+    permissions:
+      contents: read
+      actions: read  # read the `npm` environment's deployment branch rule
     outputs:
-      packages: ${{ steps.plan.outputs.packages }}
-      any: ${{ steps.plan.outputs.any }}
+      publish: ${{ steps.plan.outputs.publish }}
+      release: ${{ steps.plan.outputs.release }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -63,24 +77,39 @@ jobs:
           echo "::error::A real publish runs from main only, and this run is on ${GITHUB_REF}. Dispatch it again with dry_run ticked, or from main."
           exit 1
 
+      - name: Every version claim matches the release manifest
+        run: npm run check:versions
+
+      # From main the publish job runs in the `npm` environment, so the plan
+      # checks that environment first and refuses everything without it.
       - name: Decide what to publish
         id: plan
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          ENVIRONMENT_FLAG: ${{ github.ref == 'refs/heads/main' && '--environment npm' || '' }}
         run: |
           node scripts/publish-plan.mjs --self-test
-          node scripts/publish-plan.mjs --github
+          # shellcheck disable=SC2086
+          node scripts/publish-plan.mjs --github $ENVIRONMENT_FLAG
+
+      - name: Refuse unreleasable packages
+        if: steps.plan.outputs.refused != '0'
+        run: |
+          echo "::error::${{ steps.plan.outputs.refused }} package(s) refused; the annotations above say why. Every other package goes ahead."
+          exit 1
 
   build:
-    name: Build — ${{ matrix.package }}
+    name: Build — ${{ matrix.package.dir }}
     needs: plan
-    if: needs.plan.outputs.any == 'true'
+    if: ${{ !cancelled() && startsWith(needs.plan.outputs.publish, '[{') }}
     runs-on: blacksmith-4vcpu-ubuntu-2404
     strategy:
       fail-fast: false
       matrix:
-        package: ${{ fromJSON(needs.plan.outputs.packages) }}
+        package: ${{ fromJSON(needs.plan.outputs.publish) }}
     defaults:
       run:
-        working-directory: packages/${{ matrix.package }}
+        working-directory: packages/${{ matrix.package.dir }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -92,7 +121,7 @@ jobs:
         with:
           node-version: 20
           cache: npm
-          cache-dependency-path: packages/${{ matrix.package }}/package-lock.json
+          cache-dependency-path: packages/${{ matrix.package.dir }}/package-lock.json
 
       - name: Install dependencies
         run: npm ci
@@ -107,27 +136,24 @@ jobs:
       # that does not exist produces confident, invalid output, not an error.
       # check:skill validates its examples, which needs Ajv at the root.
       - name: The skill names fields that exist
-        if: matrix.package == 'fds-skill'
+        if: matrix.package.dir == 'fds-skill'
         working-directory: .
         run: |
           npm install --no-save ajv@8 ajv-formats@3
           npm run check:skill
 
-      - name: Every version claim matches the release manifest
-        working-directory: .
-        run: npm run check:versions
-
-      # Opens the tarball and runs it: the licence text is there, every entry
-      # point resolves and loads, no shipped document points at a path only
-      # this checkout has, and the transformer resolves every release offline.
+      # Opens the tarball and runs it: the licence text and every declared file
+      # are there, every entry point resolves and loads, no shipped document
+      # points at a path only this checkout has, no source map names a build
+      # machine path, and the transformer resolves every release offline.
       - name: The package contains what it claims
         working-directory: .
         run: |
           node scripts/check-packages.mjs --self-test
-          node scripts/check-packages.mjs "${{ matrix.package }}"
+          node scripts/check-packages.mjs "${{ matrix.package.dir }}"
 
-      # The tarball that is published, packed once here. `npm pack` runs
-      # `prepack`, so the build is part of it.
+      # The tarball that is published. `npm pack` runs `prepack`, so the build
+      # is part of it.
       - name: Pack
         run: |
           set -euo pipefail
@@ -136,62 +162,59 @@ jobs:
           npm pack --pack-destination "$dest" >/dev/null
           tarball="$(find "$dest" -maxdepth 1 -name '*.tgz')"
           [ -f "$tarball" ] || { echo "::error::npm pack produced no tarball in $dest"; exit 1; }
-          tar -tzf "$tarball" | sort > "$RUNNER_TEMP/contents"
-          sed 's/^/  /' "$RUNNER_TEMP/contents"
-
-          case "${{ matrix.package }}" in
-            fds-transformer) required="package/dist/index.js package/dist/index.d.ts package/dist/bin/fds-transformer.js package/schemas/mapping.schema.json" ;;
-            fds-skill)       required="package/SKILL.md package/knowledge/schemas.md package/knowledge/mappings.md package/knowledge/enrichment.md package/prompts/exercise-classification.md" ;;
-            fds-encoder)     required="package/dist/index.js package/dist/index.d.ts package/dist/bin/fds-encoder.js" ;;
-            *)               required="package/package.json" ;;
-          esac
-          required="$required package/package.json package/LICENSE package/README.md package/CHANGELOG.md"
-
-          missing=0
-          for path in $required; do
-            grep -qx "$path" "$RUNNER_TEMP/contents" || { echo "::error::$path is missing from the tarball."; missing=1; }
-          done
-
-          # A source map names the files it was built from. They must be the
-          # package's own sources, relative, never a path on the build machine.
-          mkdir -p "$RUNNER_TEMP/unpacked"
-          tar -xzf "$tarball" -C "$RUNNER_TEMP/unpacked"
-          if grep -rlE '"sources":\[[^]]*"(/|[A-Za-z]:\\|file:)' "$RUNNER_TEMP/unpacked" --include='*.map'; then
-            echo "::error::a source map in the tarball names an absolute path."
-            missing=1
-          fi
-          [ "$missing" -eq 0 ]
+          tar -tzf "$tarball" | sort | sed 's/^/  /'
           mv "$tarball" "$RUNNER_TEMP/package.tgz"
 
       - name: Keep the tarball for the publish job
         uses: actions/upload-artifact@v4
         with:
-          name: tarball-${{ matrix.package }}
+          name: tarball-${{ matrix.package.dir }}
           path: ${{ runner.temp }}/package.tgz
           if-no-files-found: error
           retention-days: 7
 
   publish:
-    name: Publish — ${{ matrix.package }}
+    name: Publish — ${{ matrix.package.dir }}
     needs: [plan, build]
-    if: needs.plan.outputs.any == 'true'
+    if: ${{ !cancelled() && github.ref == 'refs/heads/main' && startsWith(needs.plan.outputs.publish, '[{') }}
     # GitHub-hosted, not Blacksmith. npm trusted publishing refuses id-tokens
     # from any runner GitHub does not host, and Blacksmith runners are
     # self-hosted to GitHub.
     runs-on: ubuntu-latest
+    # Deployment branches limited to `main`, and named in npm's trusted
+    # publisher, so no other ref can mint a token npm accepts.
+    environment: npm
     strategy:
       fail-fast: false
       matrix:
-        package: ${{ fromJSON(needs.plan.outputs.packages) }}
+        package: ${{ fromJSON(needs.plan.outputs.publish) }}
     permissions:
-      contents: write  # the tag and the GitHub release
-      id-token: write  # the npm trusted-publishing exchange and provenance
+      contents: read
+      id-token: write  # the npm trusted-publishing exchange
     defaults:
       run:
-        working-directory: packages/${{ matrix.package }}
+        working-directory: packages/${{ matrix.package.dir }}
+    env:
+      NAME: ${{ matrix.package.name }}
+      VERSION: ${{ matrix.package.version }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      # The artifact exists only when this package's own build leg passed.
+      - name: Fetch the tarball the build job checked
+        id: tarball
+        continue-on-error: true
+        uses: actions/download-artifact@v4
+        with:
+          name: tarball-${{ matrix.package.dir }}
+          path: ${{ runner.temp }}/pack
+
+      - name: Its build leg passed
+        if: steps.tarball.outcome != 'success'
+        run: |
+          echo "::error::The build leg for ${NAME} failed, so ${NAME} ${VERSION} is not published. Fix it and re-run the failed jobs."
+          exit 1
 
       # No `registry-url:`. actions/setup-node writes an npmrc with a
       # placeholder token when it is set, and npm then answers a failed
@@ -204,51 +227,116 @@ jobs:
           node-version: 24
 
       - name: Use an npm new enough for trusted publishing
-        run: npm install -g npm@11
+        run: npm install -g npm@11.21.3
 
-      - name: Fetch the tarball the build job checked
-        uses: actions/download-artifact@v4
-        with:
-          name: tarball-${{ matrix.package }}
-          path: ${{ runner.temp }}/pack
+      # Asked again here rather than taken from the plan: on a re-run the plan's
+      # answer is from the first attempt, and the version may have gone out since.
+      - name: Is this version already on npm
+        id: registry
+        run: |
+          set -euo pipefail
+          if [ "$(npm view "${NAME}@${VERSION}" version 2>/dev/null || true)" = "$VERSION" ]; then
+            echo "::notice::${NAME} ${VERSION} is already on npm; not publishing it again."
+            echo "published=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "published=false" >> "$GITHUB_OUTPUT"
+          fi
 
       # Runs on the dry-run path too: it performs the real OIDC exchange and
       # stops before the write, so a green dry run proves the credential.
       - name: The publish can authenticate
+        if: steps.registry.outputs.published != 'true'
         working-directory: .
         run: |
           node scripts/check-publish-auth.mjs --self-test
-          node scripts/check-publish-auth.mjs "packages/${{ matrix.package }}"
+          node scripts/check-publish-auth.mjs "packages/${{ matrix.package.dir }}" --exists "${{ matrix.package.exists }}"
 
       - name: Publish to npm
-        if: env.DRY_RUN != 'true'
-        run: npm publish "$RUNNER_TEMP/pack/package.tgz" --access public --provenance
+        if: env.DRY_RUN != 'true' && steps.registry.outputs.published != 'true'
+        run: npm publish "$RUNNER_TEMP/pack/package.tgz" --access public
 
       - name: Dry run — what would be published
-        if: env.DRY_RUN == 'true'
+        if: env.DRY_RUN == 'true' && steps.registry.outputs.published != 'true'
         run: npm publish "$RUNNER_TEMP/pack/package.tgz" --access public --dry-run
 
-      - name: Tag and release
+      # Tells the release leg for this package that the version is on npm.
+      - name: Record the publish
         if: env.DRY_RUN != 'true'
+        run: echo "${NAME}@${VERSION}" > "$RUNNER_TEMP/published.txt"
+
+      - name: Keep the record for the release job
+        if: env.DRY_RUN != 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: published-${{ matrix.package.dir }}
+          path: ${{ runner.temp }}/published.txt
+          if-no-files-found: error
+          retention-days: 7
+
+  release:
+    name: Release — ${{ matrix.package.dir }}
+    needs: [plan, publish]
+    if: >-
+      ${{ !cancelled()
+          && (github.event_name == 'push' || inputs.dry_run == false)
+          && startsWith(needs.plan.outputs.release, '[{') }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        package: ${{ fromJSON(needs.plan.outputs.release) }}
+    permissions:
+      contents: write  # the tag and the GitHub release
+    defaults:
+      run:
+        working-directory: packages/${{ matrix.package.dir }}
+    env:
+      NAME: ${{ matrix.package.name }}
+      VERSION: ${{ matrix.package.version }}
+      TAG: ${{ matrix.package.dir }}@${{ matrix.package.version }}
+    steps:
+      # A package the plan found already on npm has no publish leg in this run.
+      # Every other package is released only if its publish leg recorded it.
+      - name: Fetch the publish record
+        id: record
+        if: matrix.package.publish
+        continue-on-error: true
+        uses: actions/download-artifact@v4
+        with:
+          name: published-${{ matrix.package.dir }}
+          path: ${{ runner.temp }}/record
+
+      - name: Its publish leg published
+        if: matrix.package.publish && steps.record.outcome != 'success'
+        working-directory: .
+        run: |
+          echo "::error::${NAME} ${VERSION} was not published in this run, so it gets no tag or release."
+          exit 1
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Tag and release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          name="$(node -p "require('./package.json').name")"
-          version="$(node -p "require('./package.json').version")"
-          tag="${{ matrix.package }}@${version}"
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo "::notice::The release ${TAG} already exists."
+            exit 0
+          fi
 
           # The CHANGELOG section for this version, without its heading. The
           # plan already refused a version with no section.
-          awk -v v="$version" '
+          awk -v v="$VERSION" '
             index($0, "## [" v "]") == 1 { found = 1; next }
             found && /^## \[/ { exit }
             found { print }
           ' CHANGELOG.md > "$RUNNER_TEMP/notes.md"
 
-          gh release create "$tag" \
+          gh release create "$TAG" \
             --target "$GITHUB_SHA" \
-            --title "${name} ${version}" \
+            --title "${NAME} ${VERSION}" \
             --notes-file "$RUNNER_TEMP/notes.md" \
             --latest=false
-          echo "Published https://www.npmjs.com/package/${name}/v/${version} and released ${tag}."
+          echo "Published https://www.npmjs.com/package/${NAME}/v/${VERSION} and released ${TAG}."

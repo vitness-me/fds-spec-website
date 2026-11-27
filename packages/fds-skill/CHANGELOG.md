@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.3.0] - 2026-11-26
 
+The first version on npm since 0.1.0. 0.2.0 was never published, so upgrading
+from 0.1.0 also brings the 0.2.0 changes below.
+
 ### Changed
 
 - Documents release 1.6.0: the optional structural keys `fxi`, `fxe`, `fxm`
@@ -121,6 +124,6 @@ Everything under Fixed is that failure mode.
   enrichment prompts, and one worked example of each of a source schema, a
   mapping configuration and a transformed result.
 
-[Unreleased]: https://github.com/vitness-me/fds-spec-website/compare/fds-skill@0.2.0...HEAD
-[0.2.0]: https://github.com/vitness-me/fds-spec-website/compare/fds-skill@0.1.0...fds-skill@0.2.0
+[Unreleased]: https://github.com/vitness-me/fds-spec-website/compare/fds-skill@0.3.0...HEAD
+[0.3.0]: https://github.com/vitness-me/fds-spec-website/compare/fds-skill@0.1.0...fds-skill@0.3.0
 [0.1.0]: https://github.com/vitness-me/fds-spec-website/releases/tag/fds-skill@0.1.0

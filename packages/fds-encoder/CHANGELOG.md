@@ -9,7 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.1.0] - 2026-11-26
 
-The first release, and the first on npm.
+The first release. The 0.0.1 on npm before it is a deprecated placeholder
+that created the package name.
 
 ### Added
 

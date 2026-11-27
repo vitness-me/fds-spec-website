@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.3.0] - 2026-11-26
 
+The first version on npm since 0.1.0. 0.2.0 was tagged but never published,
+so upgrading from 0.1.0 also brings the 0.2.0 changes below.
+
 ### Added
 
 - **`provider: "claude-code"` enriches through the local `claude` CLI on a
@@ -97,11 +100,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   record skips only the tiers its checkpoint already holds, so a tier that
   failed is retried. Checkpoints written by 0.2.0 do not match and are ignored.
 
-- **Release 1.6.0 is bundled and is the default**, where 0.2.0 defaulted to
-  1.4.0. It names exercise, equipment and workout 1.2.0, and muscle,
-  muscle-category, prescription and program 1.1.0, which add the optional
-  structural keys on records and references. 1.0.0 through 1.5.0 stay
-  bundled; pin one to keep validating against it.
+- **Release 1.6.0 is bundled and is the default.** It names exercise,
+  equipment and workout 1.2.0, and muscle, muscle-category, prescription and
+  program 1.1.0, which add the optional structural keys on records and
+  references. 1.0.0 through 1.5.0 stay bundled; pin one to keep validating
+  against it.
 - **Release 1.5.0 is bundled.** It names body-atlas 1.1.0, which adds
   optional `license` and `attribution` on a view's asset.
 - **A refusal, a reply cut off at the token limit, or a reply that fails its
@@ -344,7 +347,8 @@ the default release moved from 1.0.0 to 1.4.0.
 - ESM-only package with full type definitions
 - Zero runtime dependencies on external schema fetching (bundled fallback)
 
-[Unreleased]: https://github.com/vitness-me/fds-spec-website/compare/fds-transformer@0.2.0...HEAD
+[Unreleased]: https://github.com/vitness-me/fds-spec-website/compare/fds-transformer@0.3.0...HEAD
+[0.3.0]: https://github.com/vitness-me/fds-spec-website/compare/fds-transformer@0.2.0...fds-transformer@0.3.0
 [0.2.0]: https://github.com/vitness-me/fds-spec-website/compare/fds-transformer@0.1.0...fds-transformer@0.2.0
 [0.1.0]: https://github.com/vitness-me/fds-spec-website/releases/tag/fds-transformer@0.1.0
 [registries-readme]: https://github.com/vitness-me/fds-spec-website/blob/main/specification/registries/README.md

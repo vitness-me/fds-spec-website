@@ -35,7 +35,7 @@
  * refuses to look at files at all. It installs the tarball and asks it to do
  * the thing.
  *
- * ── Five rules ───────────────────────────────────────────────────────────────
+ * ── Seven rules ──────────────────────────────────────────────────────────────
  *
  *   1. LOCKFILE.  A package has exactly one lockfile and it is
  *      `package-lock.json`. CI, the publish workflow and `ci-local.sh` all
@@ -78,6 +78,13 @@
  *      stricter with no edit here. This is the rule that would have caught the
  *      dead `dist/` copies, and it is deliberately behavioural: it asserts what
  *      a consumer gets, not which files are present.
+ *
+ *   6. DECLARED FILES.  Every entry in the manifest's `files` matches at least
+ *      one file in the tarball, and `README.md` ships. Read off the manifest, so
+ *      a package that declares a new directory is held to it with no edit here.
+ *
+ *   7. SOURCE MAPS.  A shipped source map names its sources by relative path,
+ *      never by a path on the machine that built it.
  *
  * ── Why a tarball on every pull request ──────────────────────────────────────
  *
@@ -418,6 +425,58 @@ function shippedPathProblems({ name, entries, read, repoFiles }) {
   return problems;
 }
 
+/** `files` pattern to a matcher over tarball paths: `*` within a segment, `**` across them. */
+function filesMatcher(pattern) {
+  const clean = pattern.replace(/^\.\//, '').replace(/\/+$/, '');
+  const source = clean
+    .split(/(\*\*|\*)/)
+    .map((part) => (part === '**' ? '.*' : part === '*' ? '[^/]*' : part.replace(/[.+?^${}()|[\]\\]/g, '\\$&')))
+    .join('');
+  const exact = new RegExp(`^${source}$`);
+  const under = new RegExp(`^${source}/`);
+  return (entry) => exact.test(entry) || under.test(entry);
+}
+
+/** Rule 6. */
+function declaredFileProblems({ name, json, entries }) {
+  const problems = [];
+  for (const pattern of json.files ?? []) {
+    if (pattern.startsWith('!')) continue;
+    const matches = filesMatcher(pattern);
+    if (!entries.some(matches)) {
+      problems.push(
+        `${name}: package.json "files" lists ${JSON.stringify(pattern)} and nothing in the tarball matches it.\n` +
+          '    Either the build did not produce it, or the entry is stale. Fix the build, or remove the entry.'
+      );
+    }
+  }
+  if (!entries.includes('README.md')) {
+    problems.push(`${name}: the tarball carries no README.md, so the package page on npm is empty. Add packages/${name}/README.md.`);
+  }
+  return problems;
+}
+
+/** Rule 7. */
+function sourceMapProblems({ name, entries, read }) {
+  const absolute = /^(\/|[A-Za-z]:[\\/]|file:)/;
+  return entries
+    .filter((entry) => entry.endsWith('.map'))
+    .filter((entry) => {
+      let sources;
+      try {
+        sources = JSON.parse(read(entry) ?? '{}').sources ?? [];
+      } catch {
+        return false;
+      }
+      return sources.some((source) => absolute.test(source));
+    })
+    .map(
+      (entry) =>
+        `${name}: ${entry} names a source by absolute path, which is a path on the build machine.\n` +
+        '    Build source maps with paths relative to the map file.'
+    );
+}
+
 /** Rule 1. Filesystem rather than tarball: a lockfile is never packed. */
 async function lockfileProblems(name) {
   const dir = join(ROOT, 'packages', name);
@@ -449,9 +508,9 @@ async function lockfileProblems(name) {
 
 // ── self-test ────────────────────────────────────────────────────────────────
 //
-// The four rules above are pure, so they can be handed a package that is wrong
-// on purpose. Each case is a defect that was really on `main`; a run that passes
-// has therefore also failed, four times, in the ways it claims to catch.
+// The rules that read a described tarball are pure, so they can be handed a
+// package that is wrong on purpose. A run that passes has therefore also failed
+// in each of the ways it claims to catch.
 
 /**
  * The one rule that cannot be handed a fixture, because it runs one.
@@ -512,9 +571,15 @@ function selfTest() {
       exports: { './knowledge/*': './knowledge/*' },
       bin: { tool: './dist/bin/tool.js' },
       types: './dist/index.d.ts',
+      files: ['dist', 'knowledge/*.md', 'LICENSE'],
     },
-    entries: ['LICENSE', 'README.md', 'dist/bin/tool.js', 'dist/index.d.ts', 'knowledge/a.md'],
-    read: (path) => (path === 'dist/bin/tool.js' ? '#!/usr/bin/env node\n' : ''),
+    entries: ['LICENSE', 'README.md', 'dist/bin/tool.js', 'dist/index.d.ts', 'dist/index.js.map', 'knowledge/a.md'],
+    read: (path) =>
+      path === 'dist/bin/tool.js'
+        ? '#!/usr/bin/env node\n'
+        : path === 'dist/index.js.map'
+          ? '{"sources":["../src/index.ts"]}'
+          : '',
     repoFiles,
   };
 
@@ -524,6 +589,9 @@ function selfTest() {
     ['an entry point absent from the tarball', entryPointProblems, { ...clean, json: { ...clean.json, main: './dist/index.js' } }],
     ['an exports pattern over a directory that does not ship', entryPointProblems, { ...clean, json: { ...clean.json, exports: { './prompts/*': './prompts/*' } } }],
     ['a bin with no shebang', entryPointProblems, { ...clean, read: () => 'import x from "y";\n' }],
+    ['a "files" entry that matches nothing in the tarball', declaredFileProblems, { ...clean, json: { ...clean.json, files: ['dist', 'schemas'] } }],
+    ['a tarball with no README.md', declaredFileProblems, { ...clean, entries: clean.entries.filter((entry) => entry !== 'README.md') }],
+    ['a source map naming an absolute path', sourceMapProblems, { ...clean, entries: [...clean.entries, 'dist/index.js.map'], read: (path) => (path === 'dist/index.js.map' ? '{"sources":["/home/runner/work/src/index.ts"]}' : '#!/usr/bin/env node\n') }],
     ['a shipped document pointing at a repository-only path', shippedPathProblems, { ...clean, entries: [...clean.entries, 'CLAUDE.md'], read: (path) => (path === 'CLAUDE.md' ? 'See `/specification/releases.json` for versions.\n' : '#!/usr/bin/env node\n') }],
   ];
 
@@ -536,6 +604,8 @@ function selfTest() {
     ...licenceProblems(clean),
     ...entryPointProblems(clean),
     ...shippedPathProblems(clean),
+    ...declaredFileProblems(clean),
+    ...sourceMapProblems(clean),
   ];
   for (const problem of noise) silent.push(`a clean fixture was flagged: ${problem.split('\n')[0]}`);
 
@@ -597,7 +667,7 @@ async function describe(name, root) {
 
   const contents = new Map();
   for (const entry of entries) {
-    if (!/\.(md|js|mjs|cjs|json|txt)$/.test(entry) && entry !== 'LICENSE') continue;
+    if (!/\.(md|js|mjs|cjs|json|txt|map)$/.test(entry) && entry !== 'LICENSE') continue;
     contents.set(entry, await readFile(join(root, entry), 'utf8'));
   }
 
@@ -758,6 +828,8 @@ try {
     problems.push(...licenceProblems(described));
     problems.push(...entryPointProblems(described));
     problems.push(...shippedPathProblems({ ...described, repoFiles }));
+    problems.push(...declaredFileProblems(described));
+    problems.push(...sourceMapProblems(described));
 
     // Rule 5 applies to whichever package claims to work offline, and the claim
     // is a directory of bundled schemas in its source — not a package name
