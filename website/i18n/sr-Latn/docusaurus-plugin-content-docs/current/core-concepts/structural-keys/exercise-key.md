@@ -240,7 +240,7 @@ Oslonac imenuje svaku površinu njenim [kodom opreme](#equipment-in-an-exercise-
 Pravila:
 
 - Pišite svaku površinu koja nosi težinu tela, ili na koju je ud oslonjen, preko onoga što orijentacija podrazumeva. Posle površine napišite `@` i tačke na njoj, izostavljajući tačke koje orijentacija podrazumeva.
-- Nikada ne pišite goli pod, prostirku, sedište ili klupu ispod tela u sedu, niti sopstveno sedište, jastuke, ručke ili ploču za stopala sprave, koje pokriva sprava u `l`. Nestabilno sedište (`ball.stab`, `dome`, `board.bal`, `roller.foam`) se piše.
+- Nikada ne pišite goli pod, prostirku, sedište ili klupu ispod tela u sedu, niti sopstveno sedište, jastuke ili ručke sprave, koje pokriva sprava u `l`. Nestabilno sedište (`ball.stab`, `dome`, `board.bal`, `roller.foam`) se piše.
 - Kada trup ne leži ni na čemu, kao u planku ili skleku, navedite svaku tačku koja nosi težinu: `s:floor@feet,forearms`. Telo licem nagore koje visi o šakama takođe zadržava `floor@feet`: obrnuto veslanje je `s:bar.fixed@hands+floor@feet`.
 - Stopala na podu nikada se ne pišu ispod tela u sedu, niti ispod tela licem nagore koje leži na klupi, lopti ili fom roleru. Stopala na sopstvenoj ploči za stopala sprave takođe se ne pišu: veslanje na sajli u sedu je `m:el.flex+sh.ext/o:seated/l:mac@hands`. Stopala na bilo čemu drugom se pišu: vežba u sedu sa stopalima na lopti zadržava `ball.stab@feet`.
 - Površine ispod različitih tačaka su zasebne stavke: stopala na lopti i šake na podu je `s:ball.stab@feet+floor@hands`.
@@ -286,7 +286,7 @@ Dve tačke držanja nisu tačke tela i pišu se samo u opterećenju:
 Pravila:
 
 - Navedite svaki komad opreme koji opterećuje radne mišiće, svaki sa `@` i mestom gde se drži: `l:bar.straight@back`.
-- Slobodni teg koji leži na prednjoj strani ramena (front rack) ili na jednom ramenu drži se `@shoulders`: prednji čučanj, thruster, push press ili izbačaj, i potisak šipke ili girje sa prednje strane ramena. Vojnički potisak, sa šipkom u stojećem stavu, je `m:el.ext+sh.flex/o:standing/l:bar.straight@shoulders`. Potisak bučicama ili na Smit spravi drži se `@hands`.
+- Slobodni teg koji leži na prednjoj strani ramena (prednji položaj na ramenima) ili na jednom ramenu drži se `@shoulders`: prednji čučanj, thruster, push press ili izbačaj, i potisak šipke ili girje sa prednje strane ramena. Vojnički potisak, sa šipkom u stojećem stavu, je `m:el.ext+sh.flex/o:standing/l:bar.straight@shoulders`. Bučice na ramenima drže se `@hands`, pa je thruster ili prednji čučanj sa bučicama `@hands`, kao i potisak na Smit spravi.
 - `none` znači bez opreme. Stoji sam i ne uzima tačku držanja: propadanje sa tegom je `l:plate@waist`, a ne `none` pored diska.
 - Sprava za snagu je `mac`. Nema specifičnijeg koda, jer sopstveni pokret vežbe već kaže šta sprava vodi. Kardio sprava je `erg`, ili `erg.` i njen pokret kada je poznat: `erg.row`. [Ključ opreme](./equipment-key.md#keys-in-records) zapisa kaže o kojoj je spravi reč.
 - Kod oslonca nikada se ne piše u `l`.
@@ -329,7 +329,7 @@ Pravila:
 - Elemente jednog položaja spojite znakom `+`: `g:ne+w-n`. Hvat koji se menja unutar ponavljanja je niz: `g:su>pr`.
 - Širina važi za šake na rekvizitu i na osloncu: dijamant sklek je `w-t`.
 - Stav se piše samo za početak u stojećem stavu, ili kada stopala potiskuju ploču za stopala sprave.
-- Hvat koji rekvizit nameće i dalje je hvat: nastavak sa užetom je `ne`, a V-ručka ili druga ručka za uzak neutralni hvat je `g:ne+w-n`, ili `g:ne+w-t` kada se šake dodiruju. Veslanje na sajli u sedu sa V-ručkom je `m:el.flex+sh.ext/o:seated/l:mac@hands/g:ne+w-n`. `ne` trap šipke je jedini izuzetak i nikada se ne piše.
+- Hvat koji rekvizit nameće i dalje je hvat: nastavak sa užetom je `ne`, a V-ručka ili druga ručka za uzak neutralni hvat je `g:ne+w-n`. Veslanje na sajli u sedu sa V-ručkom je `m:el.flex+sh.ext/o:seated/l:mac@hands/g:ne+w-n`. `ne` trap šipke je jedini izuzetak i nikada se ne piše.
 
 ### Obim i početak (`r`) {#range-and-start-r}
 

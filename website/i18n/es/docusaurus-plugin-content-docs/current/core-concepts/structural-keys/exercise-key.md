@@ -240,7 +240,7 @@ El apoyo nombra cada superficie con su [código de equipamiento](#equipment-in-a
 Reglas:
 
 - Se escribe cada superficie que soporta el peso del cuerpo, o en la que se apoya una extremidad, más allá de lo que implica la orientación. Después de la superficie se escribe `@` y los puntos sobre ella, omitiendo los puntos que implica la orientación.
-- Nunca se escribe un suelo sin más, una colchoneta, el asiento o el banco bajo un cuerpo sentado, ni el asiento, las almohadillas, las asas o la plataforma propios de una máquina, que cubre la máquina en `l`. Un asiento inestable (`ball.stab`, `dome`, `board.bal`, `roller.foam`) sí se escribe.
+- Nunca se escribe un suelo sin más, una colchoneta, el asiento o el banco bajo un cuerpo sentado, ni el asiento, las almohadillas o las asas propios de una máquina, que cubre la máquina en `l`. Un asiento inestable (`ball.stab`, `dome`, `board.bal`, `roller.foam`) sí se escribe.
 - Cuando el tronco no descansa sobre nada, como en una plancha o una flexión de brazos, se listan todos los puntos que soportan peso: `s:floor@feet,forearms`. Un cuerpo boca arriba colgado de las manos también conserva `floor@feet`: un remo invertido es `s:bar.fixed@hands+floor@feet`.
 - Los pies en el suelo nunca se escriben bajo un cuerpo sentado, ni bajo un cuerpo boca arriba tumbado sobre un banco, un balón o un rodillo. Los pies sobre la plataforma propia de una máquina tampoco se escriben: un remo en polea sentado es `m:el.flex+sh.ext/o:seated/l:mac@hands`. Los pies sobre cualquier otra cosa sí se escriben: un ejercicio sentado con los pies sobre un balón conserva `ball.stab@feet`.
 - Las superficies bajo puntos distintos son elementos separados: los pies sobre un balón y las manos en el suelo es `s:ball.stab@feet+floor@hands`.
@@ -286,7 +286,7 @@ Dos puntos de sujeción no son puntos corporales, y se escriben solo en la carga
 Reglas:
 
 - Se lista cada equipamiento que carga los músculos que trabajan, cada uno con `@` y el lugar donde se sujeta: `l:bar.straight@back`.
-- Un peso libre apoyado en la parte delantera de los hombros (el rack frontal) o sobre un hombro se sujeta `@shoulders`: una sentadilla frontal, un thruster, un push press o un jerk, y un press con barra o con pesa rusa desde el rack. Un press militar de pie con barra es `m:el.ext+sh.flex/o:standing/l:bar.straight@shoulders`. Un press con mancuernas o en máquina Smith se sujeta `@hands`.
+- Un peso libre apoyado en la parte delantera de los hombros (el rack frontal) o sobre un hombro se sujeta `@shoulders`: una sentadilla frontal, un thruster, un push press o un jerk, y un press con barra o con pesa rusa desde el rack. Un press militar de pie con barra es `m:el.ext+sh.flex/o:standing/l:bar.straight@shoulders`. Las mancuernas a la altura de los hombros se sujetan `@hands`, así que un thruster o una sentadilla frontal con mancuernas es `@hands`, y también un press en máquina Smith.
 - `none` significa sin equipamiento. Va solo y no lleva punto de sujeción: un fondo lastrado es `l:plate@waist`, no `none` junto a un disco.
 - Una máquina de fuerza es `mac`. No tiene un código más específico, porque el propio movimiento del ejercicio ya dice lo que la máquina guía. Una máquina de cardio es `erg`, o `erg.` y su movimiento cuando se conoce: `erg.row`. La [clave de equipamiento](./equipment-key.md#keys-in-records) del registro dice qué máquina es.
 - Un código de apoyo nunca se escribe en `l`.
@@ -329,7 +329,7 @@ Reglas:
 - Los elementos de una posición se unen con `+`: `g:ne+w-n`. Un agarre que cambia dentro de la repetición es una secuencia: `g:su>pr`.
 - La anchura se aplica a las manos sobre un implemento y sobre un apoyo: una flexión diamante es `w-t`.
 - La base se escribe solo para un inicio de pie, o cuando los pies empujan la plataforma de una máquina.
-- Un agarre que el implemento impone sigue siendo el agarre: una cuerda en la polea es `ne`, y un triángulo (barra en V) u otra asa neutra de agarre cerrado es `g:ne+w-n`, o `g:ne+w-t` cuando las manos se tocan. Un remo en polea sentado con triángulo es `m:el.flex+sh.ext/o:seated/l:mac@hands/g:ne+w-n`. El `ne` de la barra hexagonal es la única excepción y nunca se escribe.
+- Un agarre que el implemento impone sigue siendo el agarre: una cuerda en la polea es `ne`, y un triángulo (barra en V) u otra asa neutra de agarre cerrado es `g:ne+w-n`. Un remo en polea sentado con triángulo es `m:el.flex+sh.ext/o:seated/l:mac@hands/g:ne+w-n`. El `ne` de la barra hexagonal es la única excepción y nunca se escribe.
 
 ### Recorrido e inicio (`r`) {#range-and-start-r}
 
