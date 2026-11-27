@@ -357,7 +357,7 @@ if (process.argv.includes('--self-test')) {
 const args = process.argv.slice(2);
 const existsFlag = args.indexOf('--exists');
 const exists = existsFlag === -1 ? undefined : args[existsFlag + 1] === 'true';
-const target = args.find((argument, index) => !argument.startsWith('-') && index !== existsFlag + 1);
+const target = args.find((argument, index) => !argument.startsWith('-') && (existsFlag === -1 || index !== existsFlag + 1));
 if (!target) {
   fail(['no package directory given, e.g. `node scripts/check-publish-auth.mjs packages/fds-transformer`.']);
 }

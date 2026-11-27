@@ -39,10 +39,11 @@ on:
         default: true
         type: boolean
 
-# Pushes and dispatches queue in separate groups, because GitHub keeps one
-# pending run per group and a dispatch must never replace a pending push run.
+# Pushes and real dispatches share one group, so two runs never publish the same
+# version at once. Dry runs queue apart, because GitHub keeps one pending run per
+# group and a dry run must never replace a pending push run.
 concurrency:
-  group: publish-${{ github.event_name == 'push' && 'push' || format('dispatch-{0}', github.ref) }}
+  group: publish-${{ (github.event_name == 'push' || inputs.dry_run == false) && 'publish' || format('dry-run-{0}', github.ref) }}
   cancel-in-progress: false
 
 permissions:
