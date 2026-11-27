@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-11-26
+
+The first release, and the first on npm.
+
 ### Added
 
 - **The four structural keys.** Check, write in standard form and compare

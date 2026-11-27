@@ -42,12 +42,10 @@ El FDS Encoder es una herramienta de línea de comandos y una biblioteca de Type
 
 ## Inicio rápido {#quick-start}
 
-Desde una copia local del [repositorio de la especificación](https://github.com/vitness-me/fds-spec-website), construya el paquete e instale su comando:
+Instale el comando desde npm:
 
 ```bash
-npm --prefix packages/fds-encoder ci
-npm --prefix packages/fds-encoder run build
-npm install -g ./packages/fds-encoder
+npm install -g @vitness/fds-encoder
 ```
 
 Compruebe una clave:

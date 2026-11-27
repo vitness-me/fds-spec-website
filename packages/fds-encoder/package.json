@@ -1,7 +1,6 @@
 {
   "name": "@vitness/fds-encoder",
   "version": "0.1.0",
-  "private": true,
   "description": "Check, write, compare and build the structural keys of the Fitness Data Standard (FDS): exercise, equipment, muscle and muscle category keys",
   "type": "module",
   "main": "./dist/index.js",
@@ -46,6 +45,10 @@
   },
   "engines": {
     "node": ">=20.0.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
   },
   "devDependencies": {
     "@types/node": "^22.10.6",

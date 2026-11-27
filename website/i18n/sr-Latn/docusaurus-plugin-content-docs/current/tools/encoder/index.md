@@ -42,12 +42,10 @@ FDS Encoder je alat za komandnu liniju i TypeScript biblioteka za četiri [struk
 
 ## Brzi početak {#quick-start}
 
-Iz klona [repozitorijuma specifikacije](https://github.com/vitness-me/fds-spec-website) izgradite paket i instalirajte njegovu komandu:
+Instalirajte komandu sa npm-a:
 
 ```bash
-npm --prefix packages/fds-encoder ci
-npm --prefix packages/fds-encoder run build
-npm install -g ./packages/fds-encoder
+npm install -g @vitness/fds-encoder
 ```
 
 Proverite ključ:

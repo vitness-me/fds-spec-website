@@ -42,12 +42,10 @@ The FDS Encoder is a command line tool and a TypeScript library for the four [st
 
 ## Quick start
 
-From a checkout of the [specification repository](https://github.com/vitness-me/fds-spec-website), build the package and install its command:
+Install the command from npm:
 
 ```bash
-npm --prefix packages/fds-encoder ci
-npm --prefix packages/fds-encoder run build
-npm install -g ./packages/fds-encoder
+npm install -g @vitness/fds-encoder
 ```
 
 Check a key:

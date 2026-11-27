@@ -1,18 +1,17 @@
 ---
 title: Instalacija
-description: Pokretanje alata FDS Encoder iz klona repozitorijuma specifikacije
+description: Instalacija alata FDS Encoder sa npm-a
 sidebar_position: 2
 ---
 
 # Instalacija
 
-FDS Encoder nije na npm-u. Pokrećete ga iz klona [repozitorijuma specifikacije](https://github.com/vitness-me/fds-spec-website), gde se nalazi u `packages/fds-encoder`.
+FDS Encoder je npm paket `@vitness/fds-encoder`. Daje vam komandu `fds-encoder` i biblioteku.
 
 ## Zahtevi {#requirements}
 
 - **Node.js:** 20.0.0 ili noviji
-- **npm**
-- **git**
+- **npm**, **pnpm** ili **yarn**
 
 Proverite svoju verziju Node.js-a:
 
@@ -20,39 +19,15 @@ Proverite svoju verziju Node.js-a:
 node --version
 ```
 
-## Izgradnja paketa {#build-the-package}
+## Instaliranje komande {#install-the-command}
 
-Klonirajte repozitorijum i izgradite paket. Komande na ovoj stranici pokreću se iz korena klona.
+Instalirajte paket globalno da biste `fds-encoder` stavili na putanju:
 
-```bash
-git clone https://github.com/vitness-me/fds-spec-website.git
-cd fds-spec-website
-npm --prefix packages/fds-encoder ci
-npm --prefix packages/fds-encoder run build
-```
+<PackageManagerTabs packages="@vitness/fds-encoder" global />
 
-Build upisuje biblioteku u `packages/fds-encoder/dist/index.js`, a komandu u `packages/fds-encoder/dist/bin/fds-encoder.js`.
-
-## Pokretanje komande {#run-the-command}
-
-### Bez instaliranja {#without-installing}
-
-Pokrenite izgrađenu datoteku pomoću Node.js-a:
+Proverite da se pokreće:
 
 ```bash
-node packages/fds-encoder/dist/bin/fds-encoder.js --version
-```
-
-```text
-0.1.0
-```
-
-### Kao `fds-encoder` {#as-fds-encoder}
-
-Instalirajte paket iz njegove fascikle da biste `fds-encoder` stavili na putanju:
-
-```bash
-npm install -g ./packages/fds-encoder
 fds-encoder --version
 ```
 
@@ -60,9 +35,19 @@ fds-encoder --version
 0.1.0
 ```
 
-npm povezuje globalnu komandu sa fasciklom, pa je kasniji build ažurira. Ostale stranice u ovom odeljku pišu `fds-encoder`. Ako ga niste instalirali, umesto toga pišite `node packages/fds-encoder/dist/bin/fds-encoder.js`.
+Ostale stranice u ovom odeljku pišu `fds-encoder`.
 
-Da biste uklonili komandu:
+### Pokretanje bez instaliranja {#run-it-without-installing}
+
+<PackageManagerTabs
+  command={{
+    pnpm: "pnpm dlx @vitness/fds-encoder --version",
+    npm: "npx @vitness/fds-encoder --version",
+    yarn: "yarn dlx @vitness/fds-encoder --version",
+  }}
+/>
+
+### Uklanjanje {#remove-it}
 
 ```bash
 npm uninstall -g @vitness/fds-encoder
@@ -70,11 +55,9 @@ npm uninstall -g @vitness/fds-encoder
 
 ## Korišćenje biblioteke u projektu {#use-the-library-in-a-project}
 
-Instalirajte paket iz klona u svoj projekat, po njegovoj putanji:
+Dodajte paket u svoj projekat:
 
-```bash
-npm install /path/to/fds-spec-website/packages/fds-encoder
-```
+<PackageManagerTabs packages="@vitness/fds-encoder" />
 
 Zatim ga uvezite:
 
@@ -84,9 +67,22 @@ import { checkKey } from '@vitness/fds-encoder';
 console.log(checkKey('FXM=1.0/biceps-brachii.long').ok); // true
 ```
 
-Paket je ES modul i isporučuje svoje TypeScript tipove. npm povezuje vaš projekat sa fasciklom, pa izgradite paket pre nego što ga uvezete. Kasniji build ažurira i vaš projekat.
+Paket je ES modul i isporučuje svoje TypeScript tipove.
 
-## Pokretanje sopstvenih provera paketa {#run-the-packages-own-checks}
+## Rad na samom enkoderu {#work-on-the-encoder-itself}
+
+Paket se nalazi u `packages/fds-encoder` [repozitorijuma specifikacije](https://github.com/vitness-me/fds-spec-website). Izgradite ga iz klona da biste ga menjali ili da biste pokrenuli slučajeve usaglašenosti nad svojim buildom. Komande ispod pokreću se iz korena klona.
+
+```bash
+git clone https://github.com/vitness-me/fds-spec-website.git
+cd fds-spec-website
+npm --prefix packages/fds-encoder ci
+npm --prefix packages/fds-encoder run build
+```
+
+Build upisuje biblioteku u `packages/fds-encoder/dist/index.js`, a komandu u `packages/fds-encoder/dist/bin/fds-encoder.js`. Izgrađenu komandu pokrenite sa `node packages/fds-encoder/dist/bin/fds-encoder.js`.
+
+Pokrenite sopstvene provere paketa:
 
 ```bash
 npm --prefix packages/fds-encoder run typecheck
@@ -95,9 +91,9 @@ npm --prefix packages/fds-encoder run test:run
 
 ## Rešavanje problema {#troubleshooting}
 
-**`fds-encoder: command not found`.** Komanda nije na vašoj putanji. Pokrenite `npm install -g ./packages/fds-encoder` iz korena klona i proverite da je globalna fascikla npm-a na vašoj putanji: `npm prefix -g` je ispisuje, a komanda se nalazi u njenoj fascikli `bin`. Ili pokrenite izgrađenu datoteku direktno: `node packages/fds-encoder/dist/bin/fds-encoder.js`.
+**`fds-encoder: command not found`.** Komanda nije na vašoj putanji. Instalirajte je globalno i proverite da je globalna fascikla npm-a na vašoj putanji: `npm prefix -g` je ispisuje, a komanda se nalazi u njenoj fascikli `bin`. Ili je pokrenite bez instaliranja, sa `npx @vitness/fds-encoder`.
 
-**Skripta za usaglašenost kaže `dist/index.js does not exist`.** `node scripts/check-conformance.mjs` i `npm run check:keys` čitaju izgrađeni paket, `packages/fds-encoder/dist`, i zaustavljaju se sa izlaznim kodom 2 kada ga nema:
+**Skripta za usaglašenost kaže `dist/index.js does not exist`.** `node scripts/check-conformance.mjs` i `npm run check:keys` čitaju izgrađeni paket u klonu, `packages/fds-encoder/dist`, i zaustavljaju se sa izlaznim kodom 2 kada ga nema:
 
 ```text
 …/packages/fds-encoder/dist/index.js does not exist. Build the encoder first:

@@ -116,9 +116,10 @@ the exceptions — those are hand-written.
 |---|---|
 | [`@vitness/fds-transformer`](./packages/fds-transformer) | CLI and library that maps a source catalog onto FDS, optionally enriches it, and validates the result against schemas it bundles — offline. [Docs](https://spec.vitness.me/docs/tools/transformer). |
 | [`@vitness/fds-skill`](./packages/fds-skill) | The knowledge base an AI assistant loads to answer questions about FDS and produce documents that validate. |
+| [`@vitness/fds-encoder`](./packages/fds-encoder) | CLI and library that checks, writes, compares and builds the structural keys `fxi`, `fxe`, `fxm` and `fxmg`, and matches keyed records across catalogs. [Docs](https://spec.vitness.me/docs/tools/encoder). |
 
-Both are published from tags, by workflow, from `main` — see
-[`RELEASE.md`](./RELEASE.md).
+All three are on npm. Merging a version bump to `main` publishes that package,
+with provenance, and tags and releases it — see [`RELEASE.md`](./RELEASE.md).
 
 ## Development
 
